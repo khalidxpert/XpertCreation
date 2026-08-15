@@ -1,0 +1,25 @@
+# Secrets. Never commit this file.
+.env
+*.env
+!.env.example
+
+# Environment
+venv/
+__pycache__/
+*.py[cod]
+*.so
+
+# Django
+*.sqlite3
+staticfiles/
+media/
+*.log
+
+# Backups the patch scripts leave behind
+*.bak_*
+*.orig
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
