@@ -91,9 +91,11 @@ def start(request):
         return Response({"detail": "No exercise available."},
                         status=status.HTTP_404_NOT_FOUND)
 
-    # Abandoned runs are cleared so a user cannot keep several open and submit
-    # whichever produced the best number.
-    Session.objects.filter(user=request.user, finished_at__isnull=True).delete()
+    # Only one run may be open at a time - otherwise somebody could keep
+    # several going and submit whichever produced the best number. The old one
+    # is closed rather than deleted, so it still shows in the history.
+    Session.objects.filter(user=request.user, finished_at__isnull=True)\
+        .update(finished_at=timezone.now())
 
     s = Session.open(request.user, drill, client_ip(request))
     return Response({
@@ -211,4 +213,67 @@ def my_stats(request):
         "badge": st.badge, "lessons_done": st.lessons_done or [],
         "recent": [{"wpm": s.wpm, "accuracy": s.accuracy, "mode": s.mode,
                     "at": s.created_at.strftime("%d %b %H:%M")} for s in recent],
+    })
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def resume(request):
+    """
+    Is there a run still open, and how far in was it?
+
+    Answers with the drill and how long it has been sitting there, so the page
+    can offer to carry on rather than silently throwing the attempt away.
+    """
+    s = (Session.objects.filter(user=request.user, finished_at__isnull=True)
+         .select_related("drill").first())
+    if not s:
+        return Response({"open": False})
+
+    if s.elapsed > Session.MAX_SECONDS:
+        s.finished_at = timezone.now()
+        s.save(update_fields=["finished_at"])
+        return Response({"open": False, "expired": True})
+
+    return Response({
+        "open": True,
+        "token": s.token,
+        "elapsed": int(s.elapsed),
+        "drill": {"id": s.drill.id, "kind": s.drill.kind, "title": s.drill.title,
+                  "hint": s.drill.hint, "lang": s.drill.lang,
+                  "content": s.drill.content},
+    })
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def abandon(request):
+    """Give up on the open run without recording a score."""
+    n = (Session.objects.filter(user=request.user, finished_at__isnull=True)
+         .update(finished_at=timezone.now()))
+    return Response({"closed": n})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def progress(request):
+    """
+    Which drill to offer next: the first one in the current level that has not
+    been passed yet. Somebody coming back after a week should not have to
+    remember where they were.
+    """
+    st, _ = Stats.objects.get_or_create(user=request.user)
+    done = set(st.lessons_done or [])
+
+    nxt = (Drill.objects.filter(kind=Drill.LESSON, is_active=True)
+           .exclude(id__in=done).order_by("level", "order", "id").first())
+
+    total = Drill.objects.filter(kind=Drill.LESSON, is_active=True).count()
+    return Response({
+        "done": len(done),
+        "total": total,
+        "percent": round(len(done) / total * 100) if total else 0,
+        "next": ({"id": nxt.id, "title": nxt.title, "level": nxt.level}
+                 if nxt else None),
+        "finished_all": nxt is None and total > 0,
     })

@@ -74,6 +74,9 @@ class Stats(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 related_name="game_stats")
     played = models.PositiveIntegerField(default=0)
+    # Points accumulate across every finished game. best_* keeps the single
+    # best run; this is the running total, which is what a player watches.
+    total_points = models.PositiveIntegerField(default=0)
     won = models.PositiveIntegerField(default=0)
     best_memory = models.PositiveIntegerField(default=0)
     best_tictac = models.PositiveIntegerField(default=0)
@@ -91,6 +94,7 @@ class Stats(models.Model):
         self.longest_streak = max(self.longest_streak, self.current_streak)
 
         self.played += 1
+        self.total_points += score.points
         if score.won:
             self.won += 1
         if score.game == Score.MEMORY:

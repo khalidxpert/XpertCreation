@@ -12,7 +12,8 @@ from rest_framework.throttling import SimpleRateThrottle
 from .models import Score, Session, Stats
 
 # Memory: pairs per level, and the emoji they are drawn from.
-PAIRS = {"easy": 6, "medium": 8, "hard": 12}
+# Six pairs was over in twenty seconds. These give a real game.
+PAIRS = {"easy": 8, "medium": 12, "hard": 18}
 FACES = ["🍎","🍌","🍇","🍓","🍊","🍉","🥝","🍑","🥑","🍒","🥕","🌽",
          "🐶","🐱","🦊","🐼","🦁","🐸","🐵","🦉","🐢","🦋","🐬","🦄"]
 
@@ -119,6 +120,7 @@ def memory_flip(request):
         out.update({
             "points": points, "seconds": secs,
             "personal_best": best, "is_best": points >= best,
+            "total_points": st.total_points,
             "breakdown": [
                 {"label": "Pairs found", "value": str(pairs)},
                 {"label": "Moves taken", "value": "%d (best possible %d)"
@@ -254,8 +256,10 @@ def tictac_move(request):
     s.state["board"] = board
     s.save(update_fields=["state"])
 
+    # Only on a win. Sending it on every move let the page draw a line
+    # through a game that had not finished.
     out = {"board": board, "bot_cell": bot_cell, "result": result,
-           "win_line": winning_line(board)}
+           "win_line": winning_line(board) if result in ("win", "lose") else None}
 
     if result:
         secs = int(s.elapsed)
@@ -268,13 +272,14 @@ def tictac_move(request):
 
         score = Score.objects.create(user=request.user, game=Score.TICTAC,
                                      level=s.level, points=points, seconds=secs,
-                                     moves=sum(1 for x in board if x),
+                                     moves=sum(1 for x in board if x == you),
                                      won=(result == "win"))
         st, _ = Stats.objects.get_or_create(user=request.user)
         st.record(score)
         out.update({
             "points": points, "streak": st.current_streak,
             "won_total": st.won, "played_total": st.played,
+            "total_points": st.total_points,
             "breakdown": [
                 {"label": "Result", "value": {"win": "Won", "draw": "Drawn",
                                               "lose": "Lost"}[result]},
@@ -326,5 +331,6 @@ def my_stats(request):
     return Response({
         "played": st.played, "won": st.won,
         "best_memory": st.best_memory, "best_tictac": st.best_tictac,
+        "total_points": st.total_points,
         "streak": st.current_streak, "longest_streak": st.longest_streak,
     })
