@@ -386,6 +386,7 @@ def home_card(request):
         "email": u.email,
         "avatar": u.avatar,
         "zodiac": zodiac_sign(u.birth_day, u.birth_month),
+        "vibe": u.vibe,
         "birthday_today": is_birthday,
         "turning": turning,
         "has_birthday": bool(u.birth_day and u.birth_month),
@@ -434,3 +435,20 @@ def set_birthday(request):
     return Response({"day": day, "month": month, "year": year,
                      "zodiac": zodiac_sign(day, month),
                      "show_birthday": request.user.show_birthday})
+
+
+# The twelve the quiz can produce. Anything else is refused, so a stray value
+# cannot end up being pasted into a page later.
+VIBES = ["dragon", "phoenix", "siren", "dracula", "witch", "ghost",
+         "werewolf", "elf", "unicorn", "kraken", "griffin", "dodo"]
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def set_vibe(request):
+    key = str(request.data.get("vibe") or "").strip().lower()[:20]
+    if key and key not in VIBES:
+        return _err("Unknown vibe.")
+    request.user.vibe = key
+    request.user.save(update_fields=["vibe"])
+    return Response({"vibe": key})

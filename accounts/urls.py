@@ -23,6 +23,7 @@ urlpatterns = [
     path("avatars/", views.avatars, name="avatars"),
     path("home/", views.home_card, name="home-card"),
     path("birthday/", views.set_birthday, name="set-birthday"),
+    path("vibe/", views.set_vibe, name="set-vibe"),
     path("avatar/", views.set_avatar, name="set-avatar"),
     path("privacy/", views.set_privacy, name="set-privacy"),
 ]

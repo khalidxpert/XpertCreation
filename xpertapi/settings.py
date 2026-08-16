@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "reminders",
     "weather",
     "games",
+    "news",
 ]
 
 MIDDLEWARE = [
@@ -189,6 +190,8 @@ REST_FRAMEWORK = {
         # Answers are cached for ten minutes, so this is far more
         # than anyone needs and still bounds a scraper.
         "weather": "60/hour",
+        # Cached for fifteen minutes, so this only bounds a scraper.
+        "news": "60/hour",
         # Starting a game is cheap; this only bounds a script that
         # tries to farm the leaderboard by opening games in a loop.
         "games": "120/hour",

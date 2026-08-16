@@ -64,6 +64,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     birth_year = models.PositiveSmallIntegerField(null=True, blank=True)
     show_birthday = models.BooleanField(default=False)
 
+    # Result of the vibe quiz. A short key, so the creatures can be renamed or
+    # replaced without touching a single stored row.
+    vibe = models.CharField(max_length=20, blank=True, default="")
+
     # A leaderboard is public in a way a certificate is not: a certificate
     # shows a name to whoever holds its number, a board shows it to everyone.
     hide_from_leaderboard = models.BooleanField(
