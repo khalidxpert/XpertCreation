@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     "weather",
     "games",
     "news",
+    "reviews",
+    "geo",
 ]
 
 MIDDLEWARE = [
@@ -192,6 +194,11 @@ REST_FRAMEWORK = {
         "weather": "60/hour",
         # Cached for fifteen minutes, so this only bounds a scraper.
         "news": "60/hour",
+        # One review per module per person, so this only stops
+        # somebody hammering the endpoint.
+        "reviews": "30/hour",
+        "geo": "120/hour",
+        "feedback": "5/day",
         # Starting a game is cheap; this only bounds a script that
         # tries to farm the leaderboard by opening games in a loop.
         "games": "120/hour",
@@ -251,6 +258,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
 OPENWEATHER_KEY = env("OPENWEATHER_KEY")
+
+FEEDBACK_TO = env("FEEDBACK_TO", "khalid@xpertcreation.com")
 
 SITE_URL = env("SITE_URL", "https://learn.xpertcreation.com")
 CERTIFICATE_SIGNATURE_URL = env("CERTIFICATE_SIGNATURE_URL", "/brand/signature.jpg")

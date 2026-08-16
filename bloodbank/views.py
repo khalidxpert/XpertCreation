@@ -538,3 +538,41 @@ def match(request, pk):
     return Response({"request": {"id": r.id, "blood_group": r.blood_group,
                                  "city": r.city, "hospital": r.hospital},
                      "matches": rows[:60], "count": len(rows)})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([SearchThrottle])
+def open_requests(request):
+    """
+    Requests still looking for blood, from everyone.
+
+    No name, no phone number: those belong to the person who posted, and this
+    is a public-facing list. A donor who wants to help can see the need and
+    register; the requester still chooses who gets their number.
+    """
+    BloodRequest.objects.filter(status=BloodRequest.OPEN,
+                                expires_at__lt=timezone.now()).update(status=BloodRequest.EXPIRED)
+
+    city = clean_city(request.GET.get("city"))
+    qs = BloodRequest.objects.filter(status=BloodRequest.OPEN,
+                                     expires_at__gt=timezone.now())
+    if city:
+        qs = qs.filter(city__iexact=city)
+
+    # Most urgent first, then newest.
+    order = {"critical": 0, "urgent": 1, "normal": 2}
+    rows = sorted(qs.select_related("requester")[:60],
+                  key=lambda r: (order.get(r.urgency, 3), -r.created_at.timestamp()))
+
+    return Response({"requests": [{
+        "id": r.id,
+        "blood_group": r.blood_group,
+        "units": r.units,
+        "city": r.city,
+        "hospital": r.hospital,
+        "urgency": r.urgency,
+        "note": r.note[:200],
+        "created": r.created_at.strftime("%d %b %H:%M"),
+        "mine": r.requester_id == request.user.id,
+    } for r in rows], "count": len(rows)})

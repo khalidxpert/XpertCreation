@@ -11,6 +11,7 @@ urlpatterns = [
     path("stats/", views.stats, name="stats"),
 
     path("requests/", views.requests_view, name="requests"),
+    path("open/", views.open_requests, name="open-requests"),
     path("requests/<int:pk>/", views.request_detail, name="request-detail"),
     path("requests/<int:pk>/close/", views.close_request, name="close-request"),
 

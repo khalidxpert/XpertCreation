@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import SimpleRateThrottle
 
 from . import emails
 from .models import EmailCode, User
@@ -92,6 +93,7 @@ def register(request):
                 signup_ip=ip,
                 birth_day=data.get("birth_day") or None,
                 birth_month=data.get("birth_month") or None,
+                signup_country=(request.META.get("HTTP_CF_IPCOUNTRY") or "")[:2].upper(),
             )
 
     _, raw = EmailCode.issue(user, EmailCode.VERIFY, ip=ip)
@@ -440,7 +442,7 @@ def set_birthday(request):
 # The twelve the quiz can produce. Anything else is refused, so a stray value
 # cannot end up being pasted into a page later.
 VIBES = ["dragon", "phoenix", "siren", "dracula", "witch", "ghost",
-         "werewolf", "elf", "unicorn", "kraken", "griffin", "dodo"]
+         "werewolf", "elf", "dodo"]
 
 
 @api_view(["POST"])
@@ -452,3 +454,82 @@ def set_vibe(request):
     request.user.vibe = key
     request.user.save(update_fields=["vibe"])
     return Response({"vibe": key})
+
+
+FEEDBACK_KINDS = {
+    "feature": "Feature request",
+    "bug": "Something is broken",
+    "complaint": "Complaint",
+    "suggestion": "Suggestion",
+    "other": "Other",
+}
+
+
+class FeedbackThrottle(SimpleRateThrottle):
+    """Five a day. Enough for anyone with something to say, few enough that
+    the inbox cannot be flooded."""
+    scope = "feedback"
+
+    def get_cache_key(self, request, view):
+        ident = (request.user.pk if request.user.is_authenticated
+                 else self.get_ident(request))
+        return self.cache_format % {"scope": self.scope, "ident": ident}
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@throttle_classes([FeedbackThrottle])
+def feedback(request):
+    """body: { kind, message, email (only needed when signed out) }"""
+    kind = request.data.get("kind")
+    if kind not in FEEDBACK_KINDS:
+        kind = "other"
+
+    message = str(request.data.get("message") or "").strip()
+    if len(message) < 10:
+        return _err("Tell us a bit more - at least a sentence.")
+    message = message[:4000]
+
+    if request.user.is_authenticated:
+        who = (request.user.full_name or "").strip() or request.user.email.split("@")[0]
+        reply_to = request.user.email
+        account = "Signed in as %s (id %s)" % (request.user.email, request.user.pk)
+    else:
+        reply_to = str(request.data.get("email") or "").strip()[:200]
+        if "@" not in reply_to or "." not in reply_to.split("@")[-1]:
+            return _err("Leave an email address so we can reply.")
+        who = reply_to.split("@")[0]
+        account = "Not signed in"
+
+    from django.conf import settings
+    from django.core.mail import EmailMessage
+
+    body = (
+        "%s\n"
+        "From: %s\n"
+        "Reply to: %s\n"
+        "%s\n"
+        "Page: %s\n"
+        "\n"
+        "%s\n"
+    ) % (FEEDBACK_KINDS[kind], who, reply_to, account,
+         str(request.data.get("page") or "-")[:200], message)
+
+    try:
+        msg = EmailMessage(
+            subject="[%s] from %s" % (FEEDBACK_KINDS[kind], who),
+            body=body,
+            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+            to=[getattr(settings, "FEEDBACK_TO", "khalid@xpertcreation.com")],
+            # So hitting reply in the mail client answers the person, not us.
+            reply_to=[reply_to],
+        )
+        msg.send(fail_silently=False)
+    except Exception:
+        log.exception("Feedback email failed")
+        return Response({"detail": "Could not send that just now. "
+                                   "Please try again in a few minutes."},
+                        status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    return Response({"detail": "Thank you. It has gone straight to the CEO."},
+                    status=status.HTTP_201_CREATED)

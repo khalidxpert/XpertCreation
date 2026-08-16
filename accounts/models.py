@@ -68,6 +68,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     # replaced without touching a single stored row.
     vibe = models.CharField(max_length=20, blank=True, default="")
 
+    # Two-letter country, from Cloudflare's header at sign-up. Not the IP -
+    # a country is enough to say where members are, and an address is not
+    # something worth keeping.
+    signup_country = models.CharField(max_length=2, blank=True, default="")
+
     # A leaderboard is public in a way a certificate is not: a certificate
     # shows a name to whoever holds its number, a board shows it to everyone.
     hide_from_leaderboard = models.BooleanField(
