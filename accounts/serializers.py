@@ -99,7 +99,7 @@ class MeSerializer(serializers.ModelSerializer):
             "can_order", "daily_limit_pkr", "preferred_lang", "date_joined",
             "hide_from_leaderboard", "avatar",
             "birth_day", "birth_month", "birth_year", "show_birthday",
-            "vibe",
+            "vibe", "is_moderator",
         ]
         read_only_fields = [
             "id", "email", "is_email_verified", "can_order",

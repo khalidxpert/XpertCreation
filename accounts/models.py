@@ -73,6 +73,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     # something worth keeping.
     signup_country = models.CharField(max_length=2, blank=True, default="")
 
+    # Can publish or reject review comments, and nothing else. Appointed by
+    # the super admin; the flag alone grants no other access.
+    is_moderator = models.BooleanField(
+        default=False,
+        help_text="Can moderate review comments. Cannot appoint others.")
+    moderator_since = models.DateTimeField(null=True, blank=True)
+
     # A leaderboard is public in a way a certificate is not: a certificate
     # shows a name to whoever holds its number, a board shows it to everyone.
     hide_from_leaderboard = models.BooleanField(

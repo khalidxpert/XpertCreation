@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "news",
     "reviews",
     "geo",
+    "moderation",
 ]
 
 MIDDLEWARE = [

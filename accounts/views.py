@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.db import transaction
 from django.middleware.csrf import get_token
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, throttle_classes
@@ -533,3 +534,110 @@ def feedback(request):
 
     return Response({"detail": "Thank you. It has gone straight to the CEO."},
                     status=status.HTTP_201_CREATED)
+
+
+# ---------------------------------------------------------- moderation
+
+def is_super(user):
+    """The one account that can appoint and remove moderators."""
+    return user.is_authenticated and user.is_superuser
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_role(request):
+    """What this account may do. Drives which links the site shows."""
+    u = request.user
+    pending = 0
+    if u.is_moderator or u.is_superuser:
+        from reviews.models import Review
+        pending = Review.objects.filter(state=Review.PENDING).exclude(comment="").count()
+    return Response({
+        "moderator": bool(u.is_moderator or u.is_superuser),
+        "super": bool(u.is_superuser),
+        "pending": pending,
+    })
+
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def moderators(request):
+    """List, appoint and remove. Super admin only."""
+    if not is_super(request.user):
+        return _err("Not allowed.", status.HTTP_403_FORBIDDEN)
+
+    User = get_user_model()
+
+    if request.method == "GET":
+        rows = User.objects.filter(is_moderator=True).order_by("moderator_since")
+        return Response({"moderators": [{
+            "id": m.id, "email": m.email,
+            "name": (m.full_name or "").strip() or m.email.split("@")[0],
+            "avatar": m.avatar,
+            "since": m.moderator_since.strftime("%d %b %Y") if m.moderator_since else "\u2014",
+        } for m in rows]})
+
+    email = str(request.data.get("email") or "").strip().lower()
+    make = bool(request.data.get("make", True))
+
+    target = User.objects.filter(email__iexact=email).first()
+    if not target:
+        return _err("No account with that email. They have to sign up first.")
+    if target.is_superuser and not make:
+        return _err("The super admin cannot be removed.")
+
+    target.is_moderator = make
+    target.moderator_since = timezone.now() if make else None
+    target.save(update_fields=["is_moderator", "moderator_since"])
+
+    log.info("Moderator %s: %s by %s",
+             "added" if make else "removed", target.email, request.user.email)
+
+    return Response({"detail": "%s is %s a moderator."
+                     % ((target.full_name or target.email.split("@")[0]),
+                        "now" if make else "no longer")})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def review_queue(request):
+    """Comments waiting to be read. Moderators and the super admin."""
+    u = request.user
+    if not (u.is_moderator or u.is_superuser):
+        return _err("Not allowed.", status.HTTP_403_FORBIDDEN)
+
+    from reviews.models import Review
+    rows = (Review.objects.filter(state=Review.PENDING).exclude(comment="")
+            .select_related("user").order_by("created_at")[:50])
+
+    return Response({"queue": [{
+        "id": r.id, "module": r.module, "stars": r.stars, "comment": r.comment,
+        "name": (r.user.full_name or "").strip() or r.user.email.split("@")[0],
+        "when": r.created_at.strftime("%d %b %H:%M"),
+    } for r in rows]})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def review_decide(request, pk):
+    """body: { publish: true|false }"""
+    u = request.user
+    if not (u.is_moderator or u.is_superuser):
+        return _err("Not allowed.", status.HTTP_403_FORBIDDEN)
+
+    from reviews.models import Review
+    r = Review.objects.filter(id=pk).first()
+    if not r:
+        return _err("Not found.", status.HTTP_404_NOT_FOUND)
+
+    publish = bool(request.data.get("publish"))
+    r.state = Review.PUBLISHED if publish else Review.REJECTED
+    r.reviewed_at = timezone.now()
+    r.save(update_fields=["state", "reviewed_at"])
+
+    # Rejecting removes the words, never the rating: the person still gets
+    # their say on how good the thing was.
+    log.info("Review %s %s by %s", r.id,
+             "published" if publish else "rejected", u.email)
+    return Response({"detail": "Published." if publish else "Rejected. "
+                     "Their star rating still counts."})

@@ -25,6 +25,10 @@ urlpatterns = [
     path("birthday/", views.set_birthday, name="set-birthday"),
     path("vibe/", views.set_vibe, name="set-vibe"),
     path("feedback/", views.feedback, name="feedback"),
+    path("role/", views.my_role, name="my-role"),
+    path("moderators/", views.moderators, name="moderators"),
+    path("queue/", views.review_queue, name="review-queue"),
+    path("queue/<int:pk>/", views.review_decide, name="review-decide"),
     path("avatar/", views.set_avatar, name="set-avatar"),
     path("privacy/", views.set_privacy, name="set-privacy"),
 ]
