@@ -73,6 +73,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     # something worth keeping.
     signup_country = models.CharField(max_length=2, blank=True, default="")
 
+    # Shown to a donation or blood requester only after the owner accepts -
+    # never before. Kept separate from the login phone: someone may want
+    # WhatsApp contact without giving that number for anything else.
+    whatsapp = models.CharField(max_length=20, blank=True, default="")
+    show_whatsapp_on_accept = models.BooleanField(default=False)
+
     # Can publish or reject review comments, and nothing else. Appointed by
     # the super admin; the flag alone grants no other access.
     is_moderator = models.BooleanField(

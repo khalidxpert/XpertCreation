@@ -4,7 +4,7 @@ import random
 from datetime import timedelta
 
 from django.conf import settings
-from django.db import transaction
+from django.db import models, transaction
 from django.db.models import Count, Q
 from django.http import Http404
 from django.shortcuts import render
@@ -17,6 +17,7 @@ from rest_framework.throttling import SimpleRateThrottle
 
 from .models import (
     Answer, Attempt, Certificate, Choice, Course, Lesson, LessonProgress, Question,
+    VideoPost, VideoVote,
 )
 
 
@@ -251,16 +252,25 @@ def submit_quiz(request, slug):
         cert = None
         if attempt.passed:
             name = (request.user.full_name or "").strip() or request.user.email.split("@")[0]
+            # A review of the course unlocks the certificate. Anyone who
+            # reviewed it before passing is not asked twice.
+            from reviews.models import Review as _Review
+            reviewed = _Review.objects.filter(
+                user=request.user, module="course",
+                course=attempt.course.slug).exists()
             cert, _created = Certificate.objects.get_or_create(
                 user=request.user, course=attempt.course,
                 defaults={"attempt": attempt, "holder_name": name,
                           "course_title": attempt.course.title,
-                          "score_percent": attempt.percent})
+                          "score_percent": attempt.percent,
+                          "review_ok": reviewed})
 
     return Response({
         "score": score, "total": attempt.total, "percent": attempt.percent,
         "pass_percent": attempt.course.pass_percent, "passed": attempt.passed,
-        "certificate_serial": cert.serial if cert else None,
+        "certificate_serial": cert.serial if (cert and cert.review_ok) else None,
+        "review_needed": bool(cert and not cert.review_ok),
+        "review_course": attempt.course.slug,
         "retry_in_minutes": None if attempt.passed else Attempt.COOLDOWN_MINUTES,
         "review": review,
     })
@@ -271,7 +281,9 @@ def submit_quiz(request, slug):
 def my_certificates(request):
     rows = Certificate.objects.filter(user=request.user, revoked=False)
     return Response({"certificates": [{
-        "serial": c.serial, "course": c.course.slug, "course_title": c.course_title,
+        "serial": c.serial if c.review_ok else None,
+        "review_needed": not c.review_ok,
+        "course": c.course.slug, "course_title": c.course_title,
         "holder_name": c.holder_name, "score_percent": c.score_percent,
         "issued_at": c.issued_at.date().isoformat(),
     } for c in rows]})
@@ -286,7 +298,8 @@ def verify(request, serial):
     real. Only what an employer needs is returned: no email, no user id.
     """
     cert = Certificate.objects.filter(serial=serial.upper().strip()).first()
-    if not cert:
+    # A certificate still waiting on its review is not issued yet.
+    if not cert or not cert.review_ok:
         return Response({"valid": False, "detail": "No certificate with that serial."},
                         status=status.HTTP_404_NOT_FOUND)
     if cert.revoked:
@@ -336,7 +349,7 @@ def certificate_page(request, serial):
     """
     cert = Certificate.objects.filter(
         serial=serial.upper().strip()).select_related("course").first()
-    if not cert:
+    if not cert or not cert.review_ok:
         raise Http404("No certificate with that number.")
 
     verify_url = "%s/certificate/%s/" % (_site_url(), cert.serial)
@@ -405,3 +418,612 @@ def learners(request):
 
     return Response({"top": out, "me": me,
                      "total_lessons": total_lessons, "total_courses": total_courses})
+
+# ------------------------------------------------------------------ videos
+#
+# Community video library. Anyone who has finished a course can add a
+# link; a moderator decides whether it goes live; everyone else votes.
+
+import re as _re
+
+# What the embed needs, pulled out of whatever form of link was pasted.
+# People paste watch links, share links, shorts links and sometimes the
+# embed code itself, so all of them have to work.
+_YT = [
+    _re.compile(r"(?:youtube\.com/watch\?(?:.*&)?v=)([A-Za-z0-9_-]{11})"),
+    _re.compile(r"(?:youtu\.be/)([A-Za-z0-9_-]{11})"),
+    _re.compile(r"(?:youtube\.com/embed/)([A-Za-z0-9_-]{11})"),
+    _re.compile(r"(?:youtube\.com/shorts/)([A-Za-z0-9_-]{11})"),
+    # Live streams and their recordings sit on a different path.
+    _re.compile(r"(?:youtube\.com/live/)([A-Za-z0-9_-]{11})"),
+    _re.compile(r"(?:youtube-nocookie\.com/embed/)([A-Za-z0-9_-]{11})"),
+]
+_VM = _re.compile(r"vimeo\.com/(?:video/)?(\d{6,12})")
+
+MAX_PENDING = 3          # one person cannot flood the queue overnight
+
+
+def _verr(msg, code=status.HTTP_400_BAD_REQUEST):
+    """Short error reply for the video endpoints. The rest of this file
+    writes these inline; this just saves repeating three lines sixteen
+    times below."""
+    return Response({"detail": msg}, status=code)
+
+
+def _parse_video(url):
+    """Give back (source, id) or (None, None). Only these two sites are
+    accepted - anything else is a link we cannot embed or vouch for."""
+    url = (url or "").strip()
+    if not url:
+        return None, None
+    for rx in _YT:
+        m = rx.search(url)
+        if m:
+            return VideoPost.YOUTUBE, m.group(1)
+    m = _VM.search(url)
+    if m:
+        return VideoPost.VIMEO, m.group(1)
+    # A bare 11-character id, since people paste those too
+    if _re.fullmatch(r"[A-Za-z0-9_-]{11}", url):
+        return VideoPost.YOUTUBE, url
+    return None, None
+
+
+def _video_json(p, me=None, my_votes=None):
+    mine = None
+    if my_votes is not None:
+        mine = my_votes.get(p.id)
+    elif me is not None and me.is_authenticated:
+        v = VideoVote.objects.filter(post=p, user=me).first()
+        mine = v.value if v else None
+    return {
+        "id": p.id,
+        "course": p.course,
+        "title": p.title,
+        "note": p.note,
+        "source": p.source,
+        "video_id": p.video_id,
+        "embed": p.embed_url,
+        "watch": p.watch_url,
+        "thumb": p.thumb_url,
+        "up": p.up,
+        "down": p.down,
+        "views": p.views,
+        "my_vote": mine,
+        "author": (p.author.full_name or p.author.email.split("@")[0]),
+        "author_id": p.author_id,
+        "state": p.state,
+        "note_back": p.decision_note,
+        "created_at": p.created_at.isoformat(),
+    }
+
+
+def _finished_any_course(user):
+    """Has this person finished at least one course?
+
+    Not gatekeeping for its own sake: a spammer will not sit through ten
+    lessons, and a real learner has already done it without noticing.
+    """
+    try:
+        from academy.models import Certificate
+        if Certificate.objects.filter(user=user).exists():
+            return True
+    except Exception:
+        pass
+    try:
+        # No "done" flag - a row here means that lesson was completed.
+        # Five finished lessons is enough to show somebody is real.
+        from academy.models import LessonProgress
+        return LessonProgress.objects.filter(user=user).count() >= 5
+    except Exception:
+        return False
+
+
+# ------------------------------------------------------------------ vetting
+#
+# Two checks before a submission reaches the queue. Neither replaces a
+# moderator looking - they only cut the obvious cases so the queue stays
+# short enough to read properly.
+
+# Safe to find anywhere: no ordinary English word contains these.
+_BAD_ANY = {
+    "porn", "pornhub", "xvideos", "xnxx", "xhamster", "redtube", "hentai",
+    "onlyfans", "camgirl", "masturbat", "blowjob", "creampie", "gangbang",
+    "prostitut", "brothel", "bukkake", "cumshot", "deepthroat", "handjob",
+    "nsfw", "bdsm", "fetish", "stripper",
+}
+
+# These must match a whole word. "Analysis" contains anal, "Essex"
+# contains sex, "Dickens" contains dick - a filter that blocks those is
+# worse than no filter at all.
+_BAD_WORD = {
+    "sex", "sexy", "sexual", "nude", "nudes", "naked", "xxx", "milf",
+    "escort", "erotic", "erotica", "orgasm", "boobs", "tits", "dick",
+    "penis", "vagina", "anal", "fuck", "fucking", "fucked", "slut",
+    "whore",
+}
+
+# Letters swapped in to slip past. Folding them back catches the lazy.
+_LEET = str.maketrans({"0": "o", "1": "i", "3": "e", "4": "a", "5": "s",
+                       "7": "t", "@": "a", "$": "s", "!": "i", "|": "i"})
+
+
+def _looks_dirty(text):
+    """True if the wording trips the list. A false positive only means a
+    human looks at it, which was going to happen anyway."""
+    if not text:
+        return False
+    flat = text.lower().translate(_LEET)
+    if any(w in flat for w in _BAD_ANY):
+        return True
+    if set(_re.findall(r"[a-z]+", flat)) & _BAD_WORD:
+        return True
+    # "P O R N" and "p.o.r.n" fold to the same thing. Checked only
+    # against the unambiguous list, because squashing "analysis of"
+    # gives "analysisof", which contains anal.
+    squashed = _re.sub(r"[^a-z]", "", flat)
+    if len(squashed) <= 40 and any(w in squashed for w in _BAD_ANY):
+        return True
+    if len(squashed) <= 12 and squashed in _BAD_WORD:
+        return True
+    return False
+
+
+def _real_title(source, vid):
+    """Ask the site what the video is actually called.
+
+    The word list only sees the title somebody typed. This sees the one
+    the video really has - the difference between catching a clean title
+    on a filthy video and not catching it.
+
+    oEmbed needs no key and no quota. If it is slow or down we carry on;
+    a moderator still has to look, so a missing check costs nothing.
+    """
+    import json as _json
+    import urllib.request as _url
+
+    if source == VideoPost.VIMEO:
+        api = "https://vimeo.com/api/oembed.json?url=https://vimeo.com/%s" % vid
+    else:
+        api = ("https://www.youtube.com/oembed?format=json&url="
+               "https://www.youtube.com/watch?v=%s" % vid)
+    try:
+        req = _url.Request(api, headers={"User-Agent": "XpertAcademy/1.0"})
+        with _url.urlopen(req, timeout=6) as r:
+            data = _json.loads(r.read().decode("utf-8", "replace"))
+        return (data.get("title") or ""), (data.get("author_name") or "")
+    except Exception:
+        return None, None
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def videos_list(request):
+    """Published videos for one course, best first."""
+    course = str(request.GET.get("course") or "").strip()[:32]
+    if not course:
+        return _verr("Which course?")
+
+    qs = VideoPost.objects.filter(course=course, state=VideoPost.LIVE)
+    posts = list(qs.select_related("author")[:60])
+
+    # One query for the reader's own votes rather than one per video
+    my_votes = {}
+    if request.user.is_authenticated and posts:
+        for v in VideoVote.objects.filter(post__in=posts, user=request.user):
+            my_votes[v.post_id] = v.value
+
+    posts.sort(key=lambda p: (-p.score, -p.up, -p.created_at.timestamp()))
+
+    # Each author's role, worked out once per author, not once per video
+    from .badges import role_for as _role_for
+    _roles = {}
+    for p in posts:
+        if p.author_id in _roles:
+            continue
+        try:
+            ro = _role_for(_badge_stats(p.author))
+            _roles[p.author_id] = {"key": ro["key"], "title": ro["title"],
+                                   "icon": ro["icon"]}
+        except Exception:
+            _roles[p.author_id] = None
+    return Response({
+        "course": course,
+        "count": len(posts),
+        "videos": [dict(_video_json(p, my_votes=my_votes),
+                        author_role=_roles.get(p.author_id)) for p in posts],
+    })
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def videos_add(request):
+    """body: { course, url, title, note }"""
+    course = str(request.data.get("course") or "").strip()[:32]
+    url = str(request.data.get("url") or "").strip()[:400]
+    title = str(request.data.get("title") or "").strip()[:140]
+    note = str(request.data.get("note") or "").strip()[:1000]
+
+    if not course:
+        return _verr("Which course is this for?")
+    if not title:
+        return _verr("Give it a title.")
+    if len(title) < 6:
+        return _verr("That title is too short to be useful.")
+
+    source, vid = _parse_video(url)
+    if not vid:
+        return _verr("That link is not one we can show. YouTube or Vimeo only.")
+
+    if _looks_dirty(title) or _looks_dirty(note):
+        return _verr("That wording is not allowed here.")
+
+    # The words somebody types are their own. This is what the
+    # video is really called - the only check that catches a
+    # clean title on a filthy video.
+    real, channel = _real_title(source, vid)
+    if real is None:
+        return _verr("Could not reach that video. Check the link works.")
+    if _looks_dirty(real) or _looks_dirty(channel):
+        return _verr("That video is not suitable for this site.")
+
+    if not _finished_any_course(request.user):
+        return _verr("Finish one course first, then you can add to the library.",
+                    status.HTTP_403_FORBIDDEN)
+
+    pending = VideoPost.objects.filter(author=request.user,
+                                       state=VideoPost.PENDING).count()
+    if pending >= MAX_PENDING:
+        return _verr("You have %d waiting to be checked. Wait for those "
+                    "before adding more." % pending)
+
+    # The same video twice in one course helps nobody
+    dupe = VideoPost.objects.filter(course=course, video_id=vid).exclude(
+        state=VideoPost.REJECTED).first()
+    if dupe:
+        return _verr("That video is already in this course.")
+
+    p = VideoPost.objects.create(
+        course=course, author=request.user, title=title, note=note,
+        source=source, video_id=vid)
+
+    return Response({"ok": True, "id": p.id,
+                     "detail": "Thanks. A moderator will look at it shortly."})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def videos_vote(request, pk):
+    """body: { value: 1 | -1 | 0 }   0 takes the vote back."""
+    p = VideoPost.objects.filter(pk=pk, state=VideoPost.LIVE).first()
+    if not p:
+        return _verr("No such video.", status.HTTP_404_NOT_FOUND)
+
+    try:
+        value = int(request.data.get("value"))
+    except (TypeError, ValueError):
+        return _verr("Helpful or not?")
+    if value not in (1, -1, 0):
+        return _verr("Helpful or not?")
+
+    if p.author_id == request.user.id:
+        return _verr("You cannot vote on your own.")
+
+    existing = VideoVote.objects.filter(post=p, user=request.user).first()
+
+    if value == 0:
+        if existing:
+            if existing.value == VideoVote.UP:
+                p.up = max(0, p.up - 1)
+            else:
+                p.down = max(0, p.down - 1)
+            existing.delete()
+            p.save(update_fields=["up", "down"])
+    elif existing:
+        if existing.value != value:
+            # Moved from one side to the other
+            if value == VideoVote.UP:
+                p.up += 1
+                p.down = max(0, p.down - 1)
+            else:
+                p.down += 1
+                p.up = max(0, p.up - 1)
+            existing.value = value
+            existing.save(update_fields=["value"])
+            p.save(update_fields=["up", "down"])
+    else:
+        VideoVote.objects.create(post=p, user=request.user, value=value)
+        if value == VideoVote.UP:
+            p.up += 1
+        else:
+            p.down += 1
+        p.save(update_fields=["up", "down"])
+
+    p.refresh_from_db()
+    return Response({"up": p.up, "down": p.down,
+                     "my_vote": None if value == 0 else value})
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def videos_seen(request, pk):
+    """Someone opened it. Counted loosely - this is a popularity hint,
+    not an audited figure, so no attempt is made to stop repeats."""
+    VideoPost.objects.filter(pk=pk, state=VideoPost.LIVE).update(
+        views=models.F("views") + 1)
+    return Response({"ok": True})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def videos_mine(request):
+    """What this person has submitted, whatever state it is in."""
+    posts = VideoPost.objects.filter(author=request.user)[:50]
+    return Response({"videos": [_video_json(p) for p in posts]})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def videos_queue(request):
+    """Waiting to be checked. Moderators only."""
+    if not (request.user.is_moderator or request.user.is_staff):
+        return _verr("Moderators only.", status.HTTP_403_FORBIDDEN)
+    posts = VideoPost.objects.filter(state=VideoPost.PENDING
+                                     ).select_related("author")[:100]
+    return Response({"count": len(posts),
+                     "videos": [_video_json(p) for p in posts]})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def videos_decide(request, pk):
+    """body: { action: "live" | "rejected", note }"""
+    if not (request.user.is_moderator or request.user.is_staff):
+        return _verr("Moderators only.", status.HTTP_403_FORBIDDEN)
+
+    p = VideoPost.objects.filter(pk=pk).first()
+    if not p:
+        return _verr("No such video.", status.HTTP_404_NOT_FOUND)
+
+    action = str(request.data.get("action") or "").strip()
+    if action not in (VideoPost.LIVE, VideoPost.REJECTED):
+        return _verr("Publish it or turn it down.")
+
+    p.state = action
+    p.decision_note = str(request.data.get("note") or "").strip()[:300]
+    p.decided_by = request.user
+    p.decided_at = timezone.now()
+    p.save(update_fields=["state", "decision_note", "decided_by", "decided_at"])
+
+    return Response({"ok": True, "state": p.state})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def videos_edit(request, pk):
+    """body: { title, note }
+
+    Only the person who sent it, and only while it is waiting. Letting
+    the words change after a moderator published it would make the check
+    meaningless.
+    """
+    p = VideoPost.objects.filter(pk=pk, author=request.user).first()
+    if not p:
+        return _verr("Not yours, or gone.", status.HTTP_404_NOT_FOUND)
+    if p.state != VideoPost.PENDING:
+        return _verr("That one has been looked at already. Send a new one "
+                     "if it needs changing.")
+
+    title = str(request.data.get("title") or "").strip()[:140]
+    note = str(request.data.get("note") or "").strip()[:1000]
+    if len(title) < 6:
+        return _verr("That title is too short to be useful.")
+    if _looks_dirty(title) or _looks_dirty(note):
+        return _verr("That wording is not allowed here.")
+
+    p.title = title
+    p.note = note
+    p.save(update_fields=["title", "note"])
+    return Response({"ok": True, "video": _video_json(p)})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def videos_delete(request, pk):
+    """Take back something still waiting."""
+    p = VideoPost.objects.filter(pk=pk, author=request.user).first()
+    if not p:
+        return _verr("Not yours, or gone.", status.HTTP_404_NOT_FOUND)
+    if p.state != VideoPost.PENDING:
+        return _verr("Only ones still waiting can be taken back.")
+    p.delete()
+    return Response({"ok": True})
+
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def course_review(request):
+    """body: { course, stars, clarity, pace, comment }
+
+    The review that unlocks a certificate. Only somebody who passed the
+    course can send one, so every course rating comes from a learner who
+    actually finished it.
+    """
+    from reviews.models import Review
+
+    slug = str(request.data.get("course") or "").strip()[:32]
+    cert = (Certificate.objects.filter(user=request.user, course__slug=slug,
+                                       revoked=False)
+            .select_related("course").first())
+    if not cert:
+        return Response({"detail": "Finish the course and pass its quiz first."},
+                        status=status.HTTP_403_FORBIDDEN)
+
+    try:
+        stars = int(request.data.get("stars"))
+    except (TypeError, ValueError):
+        stars = 0
+    if stars < 1 or stars > 5:
+        return Response({"detail": "Pick from one to five stars."},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    def small(key):
+        try:
+            v = int(request.data.get(key))
+        except (TypeError, ValueError):
+            return None
+        return v if 1 <= v <= 3 else None
+
+    comment = str(request.data.get("comment") or "").strip()[:600]
+    dirty = globals().get("_looks_dirty")
+    if comment and dirty and dirty(comment):
+        return Response({"detail": "That wording is not allowed here."},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    r, _new = Review.objects.get_or_create(
+        user=request.user, module="course", course=slug,
+        defaults={"stars": stars})
+    r.stars = stars
+    r.clarity = small("clarity")
+    r.pace = small("pace")
+    r.comment = comment
+    # Stars can carry nothing harmful, so they go up at once. Words wait.
+    r.state = Review.PENDING if comment else Review.PUBLISHED
+    r.save()
+
+    if not cert.review_ok:
+        cert.review_ok = True
+        cert.save(update_fields=["review_ok"])
+
+    return Response({"ok": True, "serial": cert.serial,
+                     "course_title": cert.course_title,
+                     "comment_pending": r.state == Review.PENDING})
+
+
+# ------------------------------------------------------------------ badges
+
+LANG_SLUGS = ("korean", "japanese", "turkish", "german", "french", "alquran")
+
+
+def _badge_stats(user):
+    """The numbers roles and medals are worked out from. Every one is
+    something the person did - nothing counts time spent on a page."""
+    from django.db.models import Sum
+    from reviews.models import Review
+    from .badges import best_streak
+
+    days = []
+    for tstamp in LessonProgress.objects.filter(user=user).values_list(
+            "completed_at", flat=True):
+        try:
+            days.append(timezone.localtime(tstamp).date())
+        except Exception:
+            days.append(tstamp.date())
+
+    good = Certificate.objects.filter(user=user, revoked=False, review_ok=True)
+    live = VideoPost.objects.filter(author=user, state=VideoPost.LIVE)
+    return {
+        "lessons": len(days),
+        "certs": good.count(),
+        "streak": best_streak(days),
+        "videos": live.count(),
+        "helpful": live.aggregate(n=Sum("up"))["n"] or 0,
+        "reviews": Review.objects.filter(user=user, module="course").count(),
+        "polyglot": good.filter(course__slug__in=LANG_SLUGS).count(),
+    }
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_badges(request):
+    from .badges import summary
+    s = _badge_stats(request.user)
+    out = summary(s)
+    out["stats"] = s
+    # Send every step, not only the next one, so the page can show what
+    # each medal takes rather than keeping it a secret.
+    from .badges import FAMILIES
+    steps = {f["id"]: f["steps"] for f in FAMILIES}
+    for f in out["families"]:
+        f["steps"] = steps.get(f["id"], [])
+    return Response(out)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def badge_board(request):
+    """Who has collected the most medals.
+
+    Worked out from the same numbers as everybody's own badge page, so
+    nobody can be ahead by a rule that is not written down. Held for
+    five minutes: a leaderboard that is five minutes old is fine, and
+    rebuilding it on every visit is not.
+    """
+    from django.contrib.auth import get_user_model
+    from django.core.cache import cache
+    from reviews.models import Review
+    from .badges import summary, best_streak
+
+    ready = cache.get("xc_badge_board")
+    if ready is not None:
+        return Response(ready)
+
+    lessons, days = {}, {}
+    for uid, ts in LessonProgress.objects.values_list("user_id", "completed_at"):
+        lessons[uid] = lessons.get(uid, 0) + 1
+        try:
+            d = timezone.localtime(ts).date()
+        except Exception:
+            d = ts.date()
+        days.setdefault(uid, set()).add(d)
+
+    certs, poly = {}, {}
+    for uid, slug in Certificate.objects.filter(
+            revoked=False, review_ok=True).values_list("user_id", "course__slug"):
+        certs[uid] = certs.get(uid, 0) + 1
+        if slug in LANG_SLUGS:
+            poly[uid] = poly.get(uid, 0) + 1
+
+    vids, helpful = {}, {}
+    for uid, up in VideoPost.objects.filter(
+            state=VideoPost.LIVE).values_list("author_id", "up"):
+        vids[uid] = vids.get(uid, 0) + 1
+        helpful[uid] = helpful.get(uid, 0) + (up or 0)
+
+    revs = {}
+    for uid in Review.objects.filter(module="course").values_list("user_id", flat=True):
+        revs[uid] = revs.get(uid, 0) + 1
+
+    rows = []
+    for uid in set(lessons) | set(certs) | set(vids) | set(revs):
+        s = {"lessons": lessons.get(uid, 0), "certs": certs.get(uid, 0),
+             "streak": best_streak(days.get(uid, [])), "videos": vids.get(uid, 0),
+             "helpful": helpful.get(uid, 0), "reviews": revs.get(uid, 0),
+             "polyglot": poly.get(uid, 0)}
+        rows.append((uid, summary(s), s))
+
+    rows.sort(key=lambda x: (-x[1]["earned"], -x[2]["certs"], -x[2]["lessons"]))
+    rows = rows[:20]
+
+    people = {u.id: u for u in get_user_model().objects.filter(
+        id__in=[r[0] for r in rows])}
+
+    board = []
+    for uid, r, s in rows:
+        u = people.get(uid)
+        if not u:
+            continue
+        # Anyone who asked to stay off the leaderboard keeps their place
+        # but not their name.
+        hide = getattr(u, "hide_from_leaderboard", False)
+        board.append({
+            "name": "Private" if hide
+                    else ((u.full_name or "").strip() or u.email.split("@")[0]),
+            "role": r["role"]["title"], "icon": r["role"]["icon"],
+            "medals": r["earned"], "certs": s["certs"], "lessons": s["lessons"],
+        })
+
+    out = {"board": board}
+    cache.set("xc_badge_board", out, 300)
+    return Response(out)

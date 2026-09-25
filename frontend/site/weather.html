@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Weather for any city in the world — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Today's conditions and a five-day forecast for as many cities as you like, side by side. Temperature, feels-like, humidity, wind, sunrise and sunset.">
+<link rel="canonical" href="https://xpertcreation.com/weather">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Weather for any city in the world — XpertCreation">
+<meta property="og:description" content="Today's conditions and a five-day forecast for as many cities as you like, side by side. Temperature, feels-like, humidity, wind, sunrise and sunset.">
+<meta property="og:url" content="https://xpertcreation.com/weather">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Weather for any city in the world — XpertCreation">
+<meta name="twitter:description" content="Today's conditions and a five-day forecast for as many cities as you like, side by side. Temperature, feels-like, humidity, wind, sunrise and sunset.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Weather for any city in the world","url":"https://xpertcreation.com/weather","description":"Today's conditions and a five-day forecast for as many cities as you like, side by side. Temperature, feels-like, humidity, wind, sunrise and sunset.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<!-- seo:end -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="apple-touch-icon" href="/brand/icon-180.png">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --brand:#1B4DFF;--sky:#0EA5E9;--line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--paper);pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px)}
+.bg .a{width:480px;height:480px;background:#0EA5E9;top:-190px;left:-130px;opacity:.22}
+.bg .b{width:400px;height:400px;background:#1B4DFF;bottom:-160px;right:-130px;opacity:.14}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.9);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top .chip{width:40px;height:40px;border-radius:9px;background:#14151A;display:block}
+.top .chip.gone{display:none}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);
+  border:1px solid var(--line);display:grid;place-items:center;color:var(--ink-soft);flex:0 0 auto}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:20px 16px 60px;flex:1}
+
+.search{position:relative;margin-bottom:18px}
+.search input{width:100%;padding:15px 16px;border:1.5px solid var(--line);border-radius:16px;
+  background:var(--card);font-size:15.5px;outline:none;font-family:inherit}
+.search input:focus{border-color:var(--brand)}
+.sug{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;background:var(--card);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;display:none;
+  box-shadow:0 12px 34px rgba(13,20,36,.14)}
+.sug.on{display:block}
+.sug div{padding:12px 15px;cursor:pointer;font-size:14px;border-top:1px solid var(--line)}
+.sug div:first-child{border-top:none}
+.sug div:hover{background:var(--paper)}
+.sug small{color:var(--ink-soft);font-size:12px}
+
+/* ---------- one card per city ---------- */
+.wxcard{margin-bottom:14px}
+.wxcard .now{position:relative;cursor:pointer;transition:transform .14s}
+.wxcard .now:active{transform:scale(.995)}
+.wxcard .rmcity{position:absolute;top:12px;right:14px;z-index:3;width:28px;height:28px;
+  border-radius:99px;background:rgba(255,255,255,.18);color:#fff;font-size:17px;
+  line-height:1;display:grid;place-items:center;border:none;cursor:pointer}
+.wxcard .rmcity:hover{background:rgba(255,255,255,.32)}
+.wxcard .more{margin-top:12px;font-size:12.5px;opacity:.8;font-weight:600}
+.wxcard.open .more{opacity:.55}
+.wxcard .fc{display:none}
+.wxcard.open .fc{display:block}
+.wxcard .now.loading,.wxcard .now.err{opacity:.75}
+.wxcard .now.err{background:linear-gradient(150deg,#64748B,#334155)}
+
+.now{background:linear-gradient(150deg,#0EA5E9,#1B4DFF);color:#fff;border-radius:24px;
+  padding:26px 22px;margin-bottom:16px;box-shadow:0 14px 40px rgba(14,165,233,.3)}
+.now .place{font-size:13.5px;opacity:.9;font-weight:600;letter-spacing:.02em}
+.now .big{display:flex;align-items:flex-start;gap:6px;margin-top:6px}
+.now .big b{font-family:var(--display);font-weight:800;font-size:66px;letter-spacing:-.05em;line-height:.95}
+.now .big span{font-size:22px;font-weight:700;margin-top:6px}
+.now .desc{font-size:16px;font-weight:600;margin-top:4px}
+.now .row{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap}
+.now .row div{font-size:12.5px;opacity:.92}
+.now .row b{display:block;font-family:var(--display);font-size:17px;font-weight:800;
+  letter-spacing:-.02em;margin-top:1px}
+
+.head{display:flex;align-items:baseline;gap:10px;margin:24px 2px 12px}
+.head h3{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.026em}
+.head small{font-size:12px;color:var(--ink-soft)}
+
+.day{display:flex;align-items:center;gap:13px;padding:14px 16px;background:var(--card);
+  border:1px solid var(--line);border-radius:16px;margin-bottom:8px}
+.day .dn{width:56px;flex:0 0 auto}
+.day .dn b{display:block;font-size:14px;font-weight:700}
+.day .dn small{display:block;font-size:11px;color:var(--ink-soft);font-family:var(--mono)}
+.day .ic{font-size:24px;flex:0 0 auto;width:34px;text-align:center}
+.day .ds{flex:1;min-width:0;font-size:13.5px;color:var(--ink-soft);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.day .rain{font-size:11.5px;color:var(--sky);font-weight:700;white-space:nowrap;
+  font-family:var(--mono)}
+.day .tt{text-align:right;flex:0 0 auto;font-family:var(--display);letter-spacing:-.02em}
+.day .tt b{font-weight:800;font-size:16px}
+.day .tt span{font-weight:600;font-size:14px;color:var(--ink-soft);margin-left:5px}
+
+.note{background:var(--card);border:1px dashed var(--line);border-radius:16px;padding:22px;
+  text-align:center;color:var(--ink-soft);font-size:13.5px;line-height:1.6}
+.credit{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-top:20px;line-height:1.6}
+
+/* ---------- rating ---------- */
+.rate{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:20px;
+  padding:20px;margin-top:28px}
+.rate .top2{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rate .big2{font-family:var(--display),system-ui;font-weight:800;font-size:36px;
+  letter-spacing:-.04em;line-height:1}
+.rate .out{font-size:12.5px;color:var(--ink-soft,#5A657C)}
+.rate .top2 .t2{flex:1;min-width:120px}
+.rate .stars{font-size:17px;letter-spacing:2px;color:#F59E0B}
+.rate h4{font-family:var(--display),system-ui;font-weight:800;font-size:15px;
+  letter-spacing:-.02em;margin-bottom:4px}
+.rate .pick2{display:flex;gap:6px;margin-top:14px}
+.rate .pick2 button{width:44px;height:44px;border-radius:13px;background:var(--paper,#F6F7FB);
+  border:1.5px solid var(--line,#E4E8F2);font-size:21px;cursor:pointer;line-height:1;
+  transition:transform .14s,border-color .14s;padding:0}
+.rate .pick2 button:hover{transform:scale(1.08)}
+.rate .pick2 button.on{background:#FEF3C7;border-color:#F59E0B}
+.rate textarea{width:100%;margin-top:12px;padding:12px 13px;border:1.5px solid var(--line,#E4E8F2);
+  border-radius:13px;background:var(--paper,#F6F7FB);font-size:14.5px;font-family:inherit;
+  outline:none;resize:vertical;min-height:74px}
+.rate textarea:focus{border-color:var(--brand,#1B4DFF);background:#fff}
+.rate .send{margin-top:10px;padding:12px 24px;border-radius:13px;background:var(--ink,#0D1424);
+  color:#fff;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:inherit}
+.rate .send:disabled{opacity:.4;cursor:default}
+.rate .said{font-size:13px;color:#00734F;font-weight:600;margin-top:10px}
+.rate .said.wait{color:var(--warn,#B45309)}
+.rate .list2{margin-top:18px;display:grid;gap:10px}
+.rate .r2{padding:13px;border-radius:14px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2)}
+.rate .r2 .hd{display:flex;align-items:center;gap:9px}
+.rate .r2 .hd b{font-size:13.5px;font-weight:700;flex:1}
+.rate .r2 .hd .s{font-size:12px;color:#F59E0B;letter-spacing:1px}
+.rate .r2 .hd small{font-size:11px;color:var(--ink-soft,#5A657C)}
+.rate .r2 p{font-size:13.5px;line-height:1.6;margin-top:7px}
+.rate .none2{font-size:13px;color:var(--ink-soft,#5A657C);margin-top:14px}
+
+/* ---------- phone layout ---------- */
+@media (max-width: 560px){
+  /* Nothing may be wider than the screen. One stray element makes the whole
+     page scroll sideways, which feels broken even when nothing else is. */
+  html, body{overflow-x:hidden;max-width:100vw}
+
+  .top, .topbar{padding:10px 12px;gap:6px}
+  .top b, .topbar b, .brandbar b{font-size:15px}
+  .top .chip, .topbar .chip, .brandbar img{width:28px;height:28px}
+
+  /* The wordmark goes; the logo alone is enough on a small screen. */
+  .brandbar b{display:none}
+
+  .gear{width:36px;height:36px}
+  .langwrap{padding:4px 7px 4px 8px}
+  .langwrap select, .langwrap #langSel{max-width:60px;font-size:12.5px}
+  .acctbtn, .who{max-width:96px;font-size:11.5px;padding:5px 10px 5px 5px}
+  .acctbtn img, .acctbtn .ini{width:21px;height:21px;font-size:10px}
+
+  /* Cards to the edge, with the padding on the page instead. */
+  .wrap{padding-left:14px;padding-right:14px}
+  .hello{padding:18px 16px;border-radius:20px}
+  .hello .t b{font-size:19px}
+  .hellolines .ln{flex-wrap:wrap;gap:4px}
+  .hellolines .ln .k{min-width:78px;font-size:12.5px}
+  .hellolines .ln .v{font-size:13.5px}
+  .hellolines .today2{font-size:14.5px}
+
+  .grid2{grid-template-columns:1fr 1fr;gap:9px}
+  .tiles{gap:9px}
+  .slide{min-height:200px;padding:20px}
+  .slide h3{font-size:22px}
+  .about{padding:20px 16px}
+  .about .contact{grid-template-columns:1fr;gap:8px}
+  .about .contact a{display:flex;align-items:center;gap:12px;text-align:left;padding:12px}
+  .about .contact .ic2{margin:0}
+  .about .pic{width:66px;height:66px;border-radius:20px}
+
+  .row, .row3b, .two{grid-template-columns:1fr}
+  .row3b .swap{width:100%;height:38px}
+  .keys{gap:5px}
+  .keys button{padding:12px 0;font-size:14px}
+}
+
+@media (max-width: 380px){
+  .grid2{grid-template-columns:1fr}
+  .hello .av{width:48px;height:48px}
+  .hello .t b{font-size:17px}
+}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+</style>
+</head>
+<body>
+<div class="bg"><i class="a"></i><i class="b"></i></div>
+
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img class="chip" src="/brand/icon-64.png" alt="" onerror="this.classList.add('gone')">
+    <b>Weather</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap">
+  <div class="search">
+    <input id="q" placeholder="Add a city — anywhere in the world" autocomplete="off" spellcheck="false">
+    <div class="sug" id="sug"></div>
+  </div>
+  <div id="app"><div class="note">Loading…</div></div>
+  <p class="credit">Forecast by open-meteo.com</p>
+<section class="rate" id="ratebox"></section></div>
+
+<script>
+(function(){
+  "use strict";
+  var API = "/api/weather";
+  var timer = null;
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  var ICONS = {"01":"\u2600\ufe0f","02":"\ud83c\udf24\ufe0f","03":"\u26c5",
+    "04":"\u2601\ufe0f","09":"\ud83c\udf27\ufe0f","10":"\ud83c\udf26\ufe0f",
+    "11":"\u26c8\ufe0f","13":"\ud83c\udf28\ufe0f","50":"\ud83c\udf2b\ufe0f"};
+
+  function dayName(iso, i){
+    if (i === 0) return "Today";
+    if (i === 1) return "Tomorrow";
+    var d = new Date(iso + "T12:00:00");
+    return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()];
+  }
+
+  /* One card per city. Compact by default - with six cities open you want
+     to see six temperatures, not six five-day tables - and the forecast
+     unfolds when a card is tapped. */
+  function cardHtml(w, key, open){
+    var h = '<div class="wxcard' + (open ? " open" : "") + '" data-key="' + esc(key) + '">'
+      + '<div class="now" data-toggle>'
+      + '<button class="rmcity" data-rm="' + esc(key) + '" aria-label="Remove">&times;</button>'
+      + '<div class="place">' + esc(w.city)
+      + (w.country ? ", " + esc(w.country) : "") + '</div>'
+      + '<div class="big"><b>' + w.temp + '</b><span>\u00b0C</span></div>'
+      + '<div class="desc">' + (ICONS[w.icon] || "") + " " + esc(w.description) + '</div>'
+      + '<div class="row">'
+      + '<div>Feels like<b>' + w.feels + '\u00b0</b></div>'
+      + '<div>Humidity<b>' + (w.humidity == null ? "\u2014" : w.humidity + "%") + '</b></div>'
+      + '<div>Wind<b>' + w.wind + ' km/h</b></div>'
+      + (w.days && w.days[0] ? '<div>Sunrise<b>' + esc(w.days[0].sunrise) + '</b></div>'
+                             + '<div>Sunset<b>' + esc(w.days[0].sunset) + '</b></div>' : '')
+      + '</div>'
+      + (w.days && w.days.length ? '<div class="more">Five-day forecast \u25be</div>' : '')
+      + '</div>';
+
+    if (w.days && w.days.length){
+      h += '<div class="fc">'
+        + '<div class="head"><h3>Next five days</h3><small>'
+        + esc(w.timezone || "") + '</small></div>';
+      w.days.forEach(function(d, i){
+        h += '<div class="day">'
+          + '<span class="dn"><b>' + dayName(d.date, i) + '</b>'
+          + '<small>' + d.date.slice(8) + "/" + d.date.slice(5,7) + '</small></span>'
+          + '<span class="ic">' + (ICONS[d.icon] || "") + '</span>'
+          + '<span class="ds">' + esc(d.description) + '</span>'
+          + (d.rain ? '<span class="rain">' + d.rain + '%</span>' : '')
+          + '<span class="tt"><b>' + d.max + '\u00b0</b><span>' + d.min + '\u00b0</span></span>'
+          + '</div>';
+      });
+      h += '</div>';
+    }
+    return h + '</div>';
+  }
+
+  /* ---------- the set of cities, kept on the device ---------- */
+  var cities = [];
+  var data = {};          /* city -> last forecast fetched */
+  var openCard = null;
+
+  function saveCities(){
+    try { localStorage.setItem("wx_cities", JSON.stringify(cities)); } catch(e){}
+  }
+
+  function loadSaved(){
+    var list = null;
+    try {
+      var raw = localStorage.getItem("wx_cities");
+      if (raw) list = JSON.parse(raw);
+    } catch(e){ list = null; }
+
+    if (!Array.isArray(list) || !list.length){
+      /* carry over whatever the old single-city version remembered */
+      var one = null;
+      try { one = localStorage.getItem("wx_city"); } catch(e){}
+      list = one ? [one] : [];
+    }
+    cities = list.filter(function(c){ return typeof c === "string" && c; }).slice(0, 20);
+  }
+
+  function paint(){
+    var app = document.getElementById("app");
+    if (!cities.length){
+      app.innerHTML = '<div class="note">No cities yet. Search for one above '
+        + 'and it will be added here.</div>';
+      return;
+    }
+    app.innerHTML = cities.map(function(c){
+      var w = data[c];
+      if (w === "error"){
+        return '<div class="wxcard"><div class="now err"><button class="rmcity" data-rm="'
+          + esc(c) + '" aria-label="Remove">&times;</button>'
+          + '<div class="place">' + esc(c) + '</div>'
+          + '<div class="desc">Could not load this one.</div></div></div>';
+      }
+      if (!w){
+        return '<div class="wxcard"><div class="now loading">'
+          + '<div class="place">' + esc(c) + '</div>'
+          + '<div class="desc">Loading\u2026</div></div></div>';
+      }
+      return cardHtml(w, c, openCard === c);
+    }).join("");
+  }
+
+  function fetchCity(name){
+    return fetch(API + "/?city=" + encodeURIComponent(name), {credentials:"same-origin"})
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+      .then(function(r){
+        data[name] = r.ok ? r.d : "error";
+        paint();
+      })
+      .catch(function(){ data[name] = "error"; paint(); });
+  }
+
+  function addCity(name){
+    name = String(name || "").trim();
+    if (!name) return;
+    /* case-insensitive, so "lahore" does not sit beside "Lahore" */
+    var already = cities.some(function(c){ return c.toLowerCase() === name.toLowerCase(); });
+    if (already){
+      openCard = cities.filter(function(c){
+        return c.toLowerCase() === name.toLowerCase();
+      })[0];
+      paint();
+      return;
+    }
+    if (cities.length >= 20) return;
+    cities.push(name);
+    saveCities();
+    paint();
+    fetchCity(name);
+  }
+
+  function removeCity(name){
+    cities = cities.filter(function(c){ return c !== name; });
+    delete data[name];
+    if (openCard === name) openCard = null;
+    saveCities();
+    paint();
+  }
+
+  document.addEventListener("click", function(e){
+    var rm = e.target.closest("[data-rm]");
+    if (rm){
+      e.stopPropagation();
+      removeCity(rm.getAttribute("data-rm"));
+      return;
+    }
+    var card = e.target.closest(".wxcard[data-key]");
+    if (card && e.target.closest("[data-toggle]")){
+      var k = card.getAttribute("data-key");
+      openCard = (openCard === k) ? null : k;
+      paint();
+    }
+  });
+
+  // suggestions
+  var q = document.getElementById("q");
+  var sug = document.getElementById("sug");
+
+  q.addEventListener("input", function(){
+    clearTimeout(timer);
+    var v = q.value.trim();
+    if (v.length < 2){ sug.classList.remove("on"); return; }
+    timer = setTimeout(function(){
+      fetch(API + "/cities/?q=" + encodeURIComponent(v), {credentials:"same-origin"})
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          var rows = d.cities || [];
+          if (!rows.length){ sug.classList.remove("on"); return; }
+          sug.innerHTML = rows.map(function(c){
+            return '<div data-lat="' + c.lat + '" data-lon="' + c.lon
+              + '" data-name="' + esc(c.name) + '">' + esc(c.name)
+              + ' <small>' + esc([c.admin, c.country].filter(Boolean).join(", ")) + '</small></div>';
+          }).join("");
+          sug.classList.add("on");
+        })
+        .catch(function(){});
+    }, 280);
+  });
+
+  sug.addEventListener("click", function(e){
+    var d = e.target.closest("[data-lat]");
+    if (!d) return;
+    sug.classList.remove("on");
+    q.value = "";
+    addCity(d.getAttribute("data-name"));
+  });
+
+  q.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && q.value.trim().length > 1){
+      sug.classList.remove("on");
+      var v = q.value.trim();
+      q.value = "";
+      addCity(v);
+    }
+  });
+
+  document.addEventListener("click", function(e){
+    if (!e.target.closest(".search")) sug.classList.remove("on");
+  });
+
+  // Whatever was saved, then anything named in the address, then Lahore for
+  // a first visit. No location prompt on arrival: asking for someone's
+  // position before they have asked for anything is a good way to have them
+  // tap Block and never see it again.
+  loadSaved();
+  var wanted = new URLSearchParams(location.search).get("city");
+  if (wanted && !cities.some(function(c){ return c.toLowerCase() === wanted.toLowerCase(); })){
+    cities.unshift(wanted);
+  }
+  if (!cities.length) cities = ["Lahore"];
+  saveCities();
+  paint();
+  cities.forEach(fetchCity);
+
+})();
+</script>
+
+<script>
+/* Registers the worker that makes the site open without a connection.
+   Failure here is not worth reporting: the site works either way. */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  });
+}
+</script>
+
+<script>
+/* Ratings. Stars go live at once; a written comment waits to be read, because
+   a star cannot carry abuse or a spam link and a sentence can. */
+(function(){
+  var MODULE = "weather";
+  var wrap = document.getElementById("ratebox");
+  if (!wrap) return;
+
+  var picked = 0, mine = null, busy = false;
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+  function stars(n){
+    return "\u2605".repeat(Math.round(n)) + "\u2606".repeat(5 - Math.round(n));
+  }
+
+  function draw(d){
+    var h = '<div class="top2">';
+    if (d.count){
+      h += '<span class="big2">' + d.average + '</span>'
+        + '<span class="t2"><span class="stars">' + stars(d.average) + '</span>'
+        + '<span class="out" style="display:block">out of 5, from '
+        + d.count + (d.count === 1 ? ' person' : ' people') + '</span></span>';
+    } else {
+      h += '<span class="t2"><h4>Rate this</h4>'
+        + '<span class="out">Nobody has rated it yet.</span></span>';
+    }
+    h += '</div>';
+
+    h += '<h4 style="margin-top:16px">'
+      + (mine ? "Your rating" : "How was it?") + '</h4>'
+      + '<div class="pick2">';
+    for (var i = 1; i <= 5; i++){
+      h += '<button data-star="' + i + '" class="'
+        + (i <= picked ? "on" : "") + '">'
+        + (i <= picked ? "\u2605" : "\u2606") + '</button>';
+    }
+    h += '</div>'
+      + '<textarea id="rcomment" maxlength="600" placeholder="Say a bit more '
+      + '(optional)">' + esc(mine && mine.comment ? mine.comment : "") + '</textarea>'
+      + '<button class="send" id="rsend"' + (picked ? "" : " disabled") + '>'
+      + (mine ? "Update" : "Send") + '</button>';
+
+    if (mine && mine.state === "pending"){
+      h += '<p class="said wait">Your rating counts already. '
+        + 'The comment appears once we have read it.</p>';
+    }
+
+    if (d.reviews && d.reviews.length){
+      h += '<div class="list2">';
+      d.reviews.forEach(function(r){
+        h += '<div class="r2"><div class="hd">'
+          + '<b>' + esc(r.name) + '</b>'
+          + '<span class="s">' + stars(r.stars) + '</span>'
+          + '<small>' + esc(r.when) + '</small></div>'
+          + '<p>' + esc(r.comment) + '</p></div>';
+      });
+      h += '</div>';
+    }
+
+    wrap.innerHTML = h;
+  }
+
+  function load(){
+    fetch("/api/reviews/" + MODULE + "/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        mine = d.mine || null;
+        picked = mine ? mine.stars : 0;
+        draw(d);
+      })
+      .catch(function(){});
+  }
+
+  wrap.addEventListener("click", function(e){
+    var st = e.target.closest("[data-star]");
+    if (st){
+      picked = parseInt(st.getAttribute("data-star"), 10);
+      var btns = wrap.querySelectorAll("[data-star]");
+      btns.forEach(function(b, i){
+        var on = (i + 1) <= picked;
+        b.classList.toggle("on", on);
+        b.textContent = on ? "\u2605" : "\u2606";
+      });
+      var send = document.getElementById("rsend");
+      if (send) send.disabled = false;
+      return;
+    }
+
+    if (e.target.id === "rsend"){
+      if (busy || !picked) return;
+      busy = true;
+      e.target.disabled = true;
+      var box = document.getElementById("rcomment");
+      fetch("/api/reviews/" + MODULE + "/mine/", {
+        method: "POST", credentials: "same-origin",
+        headers: {"Content-Type":"application/json", "X-CSRFToken": cookie("xc_csrf")},
+        body: JSON.stringify({stars: picked, comment: box ? box.value : ""})
+      })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+      .then(function(res){
+        busy = false;
+        if (!res.ok){
+          alert(res.d.detail || "Could not save that.");
+          return;
+        }
+        load();
+      })
+      .catch(function(){ busy = false; });
+    }
+  });
+
+  load();
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

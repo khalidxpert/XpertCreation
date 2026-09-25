@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.xpertcreation.app",
+    "sha256_cert_fingerprints": [
+      "47:28:60:61:53:98:16:8B:2E:29:78:04:A8:5E:FB:59:9B:CF:E4:58:8F:07:AF:21:96:DE:1D:20:9C:A5:D3:49"
+    ]
+  }
+}]

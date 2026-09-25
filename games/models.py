@@ -102,3 +102,62 @@ class Stats(models.Model):
         else:
             self.best_tictac = max(self.best_tictac, score.points)
         self.save()
+
+class Room(models.Model):
+    """
+    Do khiladiyon ka khel, do alag device par.
+
+    Chaal server se guzarti hai taake dono ko ek hi halat mile aur baari ka
+    faisla ek jagah ho. Tic-tac-toe ki chaal yahin jaanchi jati hai (nau
+    khane, aasan). Chess ki chaal browser mein jaanchi jati hai — uska
+    engine JavaScript mein hai aur usay Python mein dobara likhna alag
+    kaam hai. Dostana khel ke liye ye kaafi hai; agar kabhi inaam ya
+    leaderboard jura to engine server par lana parega.
+    """
+    OPEN = "open"          # banaya gaya, doosre ka intezar
+    PLAYING = "playing"
+    OVER = "over"
+
+    code = models.CharField(max_length=8, unique=True, db_index=True)
+    game = models.CharField(max_length=10)          # "chess" ya "tictac"
+    host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                             related_name="rooms_hosted")
+    guest = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                              related_name="rooms_joined", null=True, blank=True)
+    stage = models.CharField(max_length=10, default=OPEN)
+    # Khel ki poori halat. Chess: {fen-jaisi cheez, moves[]}. Tictac: {cells}.
+    state = models.JSONField(default=dict)
+    turn = models.CharField(max_length=8, default="host")   # host ya guest
+    result = models.CharField(max_length=20, blank=True, default="")
+    created_at = models.DateTimeField(default=timezone.now)
+    moved_at = models.DateTimeField(default=timezone.now)
+
+    # Each side stamps this every time it asks for the state. Silence
+    # means they closed the tab, and the other one deserves to be told
+    # rather than sitting there waiting for a move.
+    host_seen = models.DateTimeField(null=True, blank=True)
+    guest_seen = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    AWAY_SECONDS = 30
+
+    def here(self, side):
+        """Was this side asking for the state a moment ago?"""
+        seen = self.host_seen if side == "host" else self.guest_seen
+        if not seen:
+            return False
+        return (timezone.now() - seen).total_seconds() <= self.AWAY_SECONDS
+
+    @property
+    def stale(self):
+        """Aadha ghanta khamoshi ke baad room chhor diya gaya samjha jaye."""
+        return (timezone.now() - self.moved_at).total_seconds() > 60 * 30
+
+    def side_of(self, user):
+        if self.host_id == user.id:
+            return "host"
+        if self.guest_id and self.guest_id == user.id:
+            return "guest"
+        return None

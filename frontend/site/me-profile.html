@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>My profile — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Build your professional profile on XpertCreation.">
+<link rel="canonical" href="https://xpertcreation.com/me/profile">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="My profile — XpertCreation">
+<meta property="og:description" content="Build your professional profile on XpertCreation.">
+<meta property="og:url" content="https://xpertcreation.com/me/profile">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="My profile — XpertCreation">
+<meta name="twitter:description" content="Build your professional profile on XpertCreation.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "My profile", "url": "https://xpertcreation.com/me/profile", "description": "Build your professional profile on XpertCreation.", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "XpertCreation", "url": "https://xpertcreation.com", "logo": "https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --go:#00B37E;--bad:#DC2626;--line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:9px}
+
+.member{display:flex;align-items:center;gap:14px;padding:15px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;margin-bottom:10px}
+.member .av3{width:54px;height:54px;border-radius:17px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.member .ph3{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;font-size:21px;flex:0 0 auto}
+.member .t{flex:1;min-width:0}
+.member .t b{display:block;font-size:15px;font-weight:700}
+.member .t small{display:block;font-size:12.5px;color:var(--brand);font-weight:600;margin-top:2px}
+.member .soc{display:flex;gap:7px}
+.member .soc a{width:34px;height:34px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:15px}
+
+.apply2{background:var(--card);border:1px dashed var(--line);border-radius:18px;
+  padding:18px;text-align:center;margin-top:22px}
+.apply2 b{display:block;font-size:14.5px;font-weight:700}
+.apply2 p{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+.apply2 button{margin-top:13px;padding:12px 24px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:13.5px}
+
+#appform{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:18px;margin-top:14px}
+#appform.on{display:block}
+#appform label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:12px 0 5px}
+#appform label:first-of-type{margin-top:0}
+#appform textarea,#appform input{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:14.5px;font-family:inherit;outline:none}
+#appform textarea{min-height:90px;resize:vertical}
+#appform textarea:focus,#appform input:focus{border-color:var(--brand);background:#fff}
+#appform .hint3{font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+#appform .go6{width:100%;margin-top:14px;padding:13px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:14px}
+.appstate{padding:13px 15px;border-radius:14px;font-size:13.5px;margin-top:14px;line-height:1.55}
+.appstate.pending{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.appstate.accepted{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.3);color:#00734F}
+.appstate.declined{background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>My profile</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap net">
+<style>.acctabs{display:flex;gap:6px;margin:0 0 14px;padding:4px;background:var(--paper,#F6F7FB);border:1px solid var(--line,#E4E8F2);border-radius:14px}.acctabs a{flex:1;text-align:center;padding:9px 10px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink-soft,#5A657C)}.acctabs a.on{background:var(--card,#fff);color:var(--ink,#0D1424);box-shadow:0 1px 3px rgba(13,20,36,.1)}</style>
+  <div class="acctabs"><a href="/account">Account</a><a class="on" href="/me/profile">Professional profile</a></div>
+  <h1>My profile</h1>
+  <p class="lead" id="lead">Loading&hellip;</p>
+  <div id="requests"></div>
+  <div id="plist"></div>
+  <div id="main"></div>
+  <datalist id="citylist"></datalist>
+  <datalist id="skilllist"></datalist>
+</div>
+<style>
+.net .card{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:16px}
+.net .av{width:56px;height:56px;border-radius:16px;object-fit:cover;flex:0 0 auto;background:var(--paper,#F6F7FB)}
+.net .av.big{width:84px;height:84px;border-radius:24px}
+.net .av.ph{display:grid;place-items:center;font-weight:800;font-size:22px;color:var(--brand,#1B4DFF)}
+.net .av.big.ph{font-size:32px}
+.net .tick{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#1D9BF0;
+  color:#fff;font-size:11px;vertical-align:2px;margin-left:4px}
+.net .fl{vertical-align:-1px;border-radius:2px;margin-right:4px}
+.net .btn{display:inline-block;padding:9px 14px;border-radius:11px;border:1px solid var(--line,#E4E8F2);
+  background:var(--card,#fff);color:var(--ink,#0D1424);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.net .btn.pri{background:var(--brand,#1B4DFF);border-color:var(--brand,#1B4DFF);color:#fff}
+.net .btn.ok{background:var(--go,#00B37E);border-color:var(--go,#00B37E);color:#fff}
+.net .btn.sm{padding:6px 10px;font-size:13px}
+.net .btn[disabled]{opacity:.6;cursor:default}
+.net .muted{color:var(--ink-soft,#5A657C);font-size:13.5px}
+.net .chip{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2);font-size:13px;margin:3px 4px 3px 0}
+.net .otw{display:inline-block;padding:3px 9px;border-radius:999px;background:#E7F8F1;color:#00875F;font-size:12px;font-weight:700}
+.net input,.net textarea,.net select{width:100%;padding:10px 12px;border:1px solid var(--line,#E4E8F2);border-radius:11px;
+  font:inherit;background:var(--card,#fff);color:var(--ink,#0D1424);box-sizing:border-box}
+.net input[type=checkbox]{width:auto}
+.net label{display:block;font-size:12.5px;font-weight:700;margin:12px 0 5px;color:var(--ink-soft,#5A657C)}
+.net label.inl{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink,#0D1424)}
+.net .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.net .msg{min-height:18px;font-size:13.5px;margin-top:8px}
+.net .msg.bad{color:var(--bad,#DC2626)}
+.net .msg.good{color:var(--go,#00B37E)}
+.net h2{font-size:17px;margin:22px 0 10px}
+.net .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.net .stats{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:14px}
+.net .item{padding:12px 0;border-top:1px solid var(--line,#E4E8F2)}
+.net .item:first-child{border-top:0;padding-top:0}
+.net .sk{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line,#E4E8F2)}
+.net .sk:first-child{border-top:0;padding-top:0}
+.net .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:10px}
+.net .pcard{display:flex;gap:12px;text-decoration:none;color:inherit}
+.net .bar{height:8px;border-radius:99px;background:var(--paper,#F6F7FB);overflow:hidden;margin:8px 0}
+.net .bar i{display:block;height:100%;background:#1D9BF0}
+@media (max-width:520px){.net .row2{grid-template-columns:1fr}}
+</style>
+<script src="/js/geo-1.js"></script>
+<script src="/js/socials-1.js"></script>
+<script>
+(function(){
+  var NET = "/api/network";
+  function cookie(n){
+    var m = document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)"));
+    return m ? decodeURIComponent(m[1]) : "";
+  }
+  function api(path, opt){
+    opt = opt || {};
+    var h = {"Accept": "application/json"};
+    var init = {method: opt.method || "GET", credentials: "same-origin", headers: h};
+    if (opt.body !== undefined){ h["Content-Type"] = "application/json"; init.body = JSON.stringify(opt.body); }
+    if (init.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch(NET + path, init).then(function(r){
+      return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, status: r.status, data: d || {}}; });
+    }).catch(function(){ return {ok: false, status: 0, data: {detail: "No connection. Try again."}}; });
+  }
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+  function flag(c){
+    c = String(c || "").toLowerCase();
+    return /^[a-z]{2}$/.test(c) ? "<img class='fl' src='/flags/" + c + ".png' alt='' width='18' height='13' onerror='this.remove()'>" : "";
+  }
+  function avatar(p, big){
+    var cls = "av" + (big ? " big" : "");
+    if (p.avatar_url) return "<img class='" + cls + "' src='" + esc(p.avatar_url) + "' alt=''>";
+    return "<span class='" + cls + " ph'>" + esc((p.name || "?").charAt(0).toUpperCase()) + "</span>";
+  }
+  function tick(v){ return v ? "<span class='tick' title='Verified'>\u2714</span>" : ""; }
+  function say(el, text, kind){
+    if (!el) return;
+    el.className = "msg" + (kind ? " " + kind : "");
+    el.textContent = text || "";
+  }
+  var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function when(m, y){ return y ? (m ? MONTHS[m - 1] + " " : "") + y : ""; }
+  var PK_CITIES = ["Lahore","Karachi","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta",
+    "Gujranwala","Sialkot","Hyderabad","Bahawalpur","Sargodha","Sukkur","Larkana","Sheikhupura","Rahim Yar Khan",
+    "Jhang","Dera Ghazi Khan","Gujrat","Sahiwal","Wah Cantt","Mardan","Kasur","Okara","Mingora","Nawabshah",
+    "Chiniot","Kotri","Kamoke","Hafizabad","Sadiqabad","Mirpur Khas","Burewala","Kohat","Khanewal",
+    "Dera Ismail Khan","Turbat","Muzaffargarh","Abbottabad","Mandi Bahauddin","Shikarpur","Jacobabad","Jhelum",
+    "Khanpur","Khairpur","Khuzdar","Pakpattan","Hub","Daska","Gojra","Muridke","Bahawalnagar","Jaranwala",
+    "Chishtian","Muzaffarabad","Mirpur","Attock","Vehari","Chakwal","Kamalia","Wazirabad","Mansehra","Layyah",
+    "Swabi","Taxila","Nowshera","Khushab","Mianwali","Gilgit","Skardu","Gwadar","Charsadda","Haripur","Narowal",
+    "Toba Tek Singh","Lodhran","Bhakkar","Murree","Dubai","Abu Dhabi","Sharjah","Riyadh","Jeddah","Dammam","Doha",
+    "Muscat","Kuwait City","Manama","London","Manchester","Birmingham","Bradford","Glasgow","Toronto","Mississauga",
+    "New York","Houston","Chicago","Sydney","Melbourne","Berlin","Frankfurt","Milan","Barcelona","Kuala Lumpur"];
+  function fillCities(extra){
+    var dl = document.getElementById("citylist");
+    if (!dl) return;
+    var seen = {}, all = [];
+    (extra || []).concat(PK_CITIES).forEach(function(c){
+      var k = String(c || "").trim();
+      if (k && !seen[k.toLowerCase()]){ seen[k.toLowerCase()] = 1; all.push(k); }
+    });
+    dl.innerHTML = all.map(function(c){ return "<option value='" + esc(c) + "'>"; }).join("");
+  }
+  fillCities([]);
+  api("/cities/").then(function(r){
+    if (r.ok && r.data.cities) fillCities(r.data.cities.map(function(x){ return x.city; }));
+  });
+  // Followers, following and connections open as a list, with Message beside each connection.
+  function showPeople(which){
+    var box = document.getElementById("plist");
+    if (!box) return;
+    box.innerHTML = "<p class='muted'>Loading\u2026</p>";
+    api("/me/people/" + which + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = "<p class='msg bad'>" + esc(r.data.detail || "Could not load.") + "</p>"; return; }
+      var title = {followers: "Your followers", following: "People you follow", connections: "Your connections"}[which];
+      var list = r.data.people || [];
+      box.innerHTML = "<h2>" + title + " (" + list.length + ")</h2><div class='card'>" + (list.length ? list.map(function(p){
+        var name = p.slug ? "<a href='/in/" + encodeURIComponent(p.slug) + "' style='color:inherit'>" + esc(p.name) + "</a>" : esc(p.name);
+        return "<div class='sk'><div style='display:flex;gap:10px;align-items:center;min-width:0'>" + avatar(p)
+          + "<div><b>" + name + "</b>" + tick(p.verified) + "<div class='muted'>" + esc(p.headline || "") + "</div></div></div>"
+          + (which === "connections" && p.slug ? "<button class='btn sm pri' data-msg='" + esc(p.slug) + "'>Message</button>" : "")
+          + "</div>";
+      }).join("") : "<p class='muted' style='margin:0'>Nobody here yet.</p>") + "</div>";
+      box.scrollIntoView({behavior: "smooth"});
+    });
+  }
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("[data-list]");
+    if (a){ e.preventDefault(); showPeople(a.getAttribute("data-list")); return; }
+    var m = e.target.closest("[data-msg]");
+    if (m){
+      m.disabled = true;
+      api("/in/" + encodeURIComponent(m.getAttribute("data-msg")) + "/message/", {method: "POST", body: {}}).then(function(r){
+        if (r.ok){ location.href = "/chat/" + r.data.id; return; }
+        m.disabled = false;
+        alert(r.data.detail || "Could not open the chat.");
+      });
+    }
+  });
+  if (/^#(connections|followers|following)$/.test(location.hash)) setTimeout(function(){ showPeople(location.hash.slice(1)); }, 400);
+
+  // Skills come from one list, so "Excel", "excel" and "MS Excel" do not end up as three skills.
+  var SKILLS = ["API Development", "AWS", "Accounting", "Administration", "Adobe After Effects", "Adobe Illustrator", "Adobe InDesign", "Adobe Photoshop", "Adobe Premiere Pro", "Agile", "Android Development", "Angular", "Animation", "Arabic", "Architecture", "Artificial Intelligence", "AutoCAD", "Automation", "Azure", "Banking", "Bash", "Blockchain", "Bookkeeping", "Brand Management", "Business Analysis", "Business Development", "C", "C#", "C++", "Call Center", "Canva", "Carpentry", "Cash Handling", "Chemistry", "Civil Engineering", "Cloud Computing", "Coaching", "Communication", "Computer Hardware", "Computer Networking", "Construction", "Content Writing", "Copywriting", "CorelDRAW", "Counselling", "Customer Service", "Cyber Security", "Data Analysis", "Data Entry", "Data Science", "Database Design", "Digital Marketing", "Django", "Django REST Framework", "Docker", "Driving", "E-commerce", "Education", "Electrical Engineering", "Electrician", "Email Marketing", "English", "Event Management", "Excel Formulas", "Facebook Ads", "Fashion Design", "Figma", "Finance", "Financial Analysis", "Firebase", "Flutter", "French", "Front-end Development", "Full Stack Development", "Game Development", "German", "Git", "GitHub", "Google Ads", "Google Sheets", "Graphic Design", "HTML and CSS", "Hardware Repair", "Healthcare", "Human Resources", "IT Support", "Illustration", "Import and Export", "Inventory Management", "Java", "JavaScript", "Journalism", "Kotlin", "Laravel", "Leadership", "Legal Research", "Linux", "Linux Server Administration", "Logistics", "Machine Learning", "Management", "Marketing", "Mathematics", "Mechanical Engineering", "Medical Coding", "Microsoft Access", "Microsoft Excel", "Microsoft Office", "Microsoft Outlook", "Microsoft PowerPoint", "Microsoft Word", "Mobile App Development", "MongoDB", "Motion Graphics", "MySQL", "Negotiation", "Networking", "Next.js", "Nginx", "Node.js", "Nursing", "Office Management", "Online Teaching", "Operations", "PHP", "Payroll", "Pharmacy", "Photography", "Physics", "Pi Network", "Plumbing", "PostgreSQL", "Power BI", "Presentation Skills", "Printing", "Problem Solving", "Procurement", "Product Management", "Project Management", "Proofreading", "Public Speaking", "Punjabi", "Python", "QuickBooks", "Quran Teaching", "REST APIs", "React", "React Native", "Real Estate", "Recruitment", "Redis", "Research", "Retail", "Ruby", "SAP", "SQL", "Sales", "Search Engine Optimization", "Shopify", "Social Media Management", "Software Testing", "Solar Installation", "Spanish", "Statistics", "Stock Management", "Supply Chain", "Swift", "Tailoring", "Tally", "Teaching", "Team Management", "Technical Support", "Telemarketing", "Translation", "Travel and Tourism", "Turkish", "TypeScript", "Typing", "UI Design", "UX Design", "Unity", "Urdu", "Urdu Typing", "VBA", "Video Editing", "Virtual Assistant", "Vue.js", "Web Design", "Web Development", "WooCommerce", "WordPress", "Writing", "YouTube", "iOS Development", "jQuery"];
+  (function(){
+    var dl = document.getElementById("skilllist");
+    if (dl) dl.innerHTML = SKILLS.map(function(s){ return "<option value='" + esc(s) + "'>"; }).join("");
+  })();
+  function addSkill(){
+    var val = String(v("sk") || "").trim(), m = document.getElementById("m-sk");
+    var hit = SKILLS.filter(function(s){ return s.toLowerCase() === val.toLowerCase(); })[0];
+    if (!hit){
+      say(m, val ? "Pick the skill from the list that opens as you type." : "Start typing a skill, then pick it from the list.", "bad");
+      return;
+    }
+    run("/me/skills/", {name: hit}, "m-sk");
+  }
+  // Live preview: the card other members see in Connect, redrawn as the form changes.
+  function preview(){
+    var el = document.getElementById("pv");
+    if (!el || !P) return;
+    var hl = v("hl"), ct = v("ct"), vis = v("vis");
+    var sk = (P.skills || []).slice(0, 3).map(function(s){ return "<span class='chip'>" + esc(s.name) + "</span>"; }).join("");
+    el.innerHTML = "<div class='card pcard' style='max-width:440px'>" + avatar(P)
+      + "<div style='min-width:0'><b>" + esc(P.name) + "</b>" + tick(P.verified)
+      + "<div class='muted' style='margin:2px 0 6px'>" + (hl ? esc(hl) : "<i>Your headline shows here</i>") + "</div>"
+      + "<div class='muted'>" + flag(P.country) + esc(ct) + (on("otw") ? " <span class='otw'>Open to work</span>" : "") + "</div>"
+      + "<div style='margin-top:6px'>" + (sk || "<span class='muted'><i>Your top skills show here</i></span>") + "</div></div></div>"
+      + "<p class='muted' style='margin:8px 0 0'>" + ({public: "Anyone can see this, and Google can find it.",
+          members: "Signed-in members can see this.", hidden: "Only you can see this right now."}[vis] || "")
+      + (hl ? "" : " Add a headline, or you will not appear in the Connect list.") + " Press Save to keep changes.</p>";
+  }
+  document.addEventListener("input", function(e){ if (e.target && /^(hl|ct|ot)$/.test(e.target.id)) preview(); });
+  document.addEventListener("change", function(e){ if (e.target && /^(otw|vis)$/.test(e.target.id)) preview(); });
+
+  fetch("/api/auth/csrf/", {credentials: "same-origin"}).catch(function(){});
+
+  var P = null, main = document.getElementById("main");
+  var editExp = null, editEdu = null;
+
+  function v(id){ var el = document.getElementById(id); return el ? el.value : ""; }
+  function on(id){ var el = document.getElementById(id); return !!(el && el.checked); }
+  // LinkedIn and GitHub: people type the username, we store the full link.
+  var BASES = {li: "https://www.linkedin.com/in/", gh: "https://github.com/"};
+  function handle(url, k){
+    url = String(url || "").trim();
+    var m = k === "li" ? url.match(/linkedin\.com\/in\/([^\/?#]+)/i) : url.match(/github\.com\/([^\/?#]+)/i);
+    return m ? decodeURIComponent(m[1]) : url.replace(/^@/, "");
+  }
+  function link(val, k){
+    var h = handle(val, k).replace(/^@/, "").trim();
+    return h ? BASES[k] + encodeURIComponent(h) : "";
+  }
+  (function(){
+    var st = document.createElement("style");
+    st.textContent = ".net .pre{display:flex;align-items:center;border:1px solid var(--line,#E4E8F2);border-radius:11px;"
+      + "overflow:hidden;background:var(--card,#fff)}.net .pre span{padding:0 4px 0 12px;color:var(--ink-soft,#5A657C);"
+      + "font-size:14px;white-space:nowrap}.net .pre input{border:0;border-radius:0;padding-left:2px}";
+    document.head.appendChild(st);
+  })();
+
+  function monthOpts(sel){
+    var h = "<option value=''>Month</option>";
+    for (var i = 1; i <= 12; i++) h += "<option value='" + i + "'" + (sel == i ? " selected" : "") + ">" + MONTHS[i - 1] + "</option>";
+    return h;
+  }
+
+  function loadRequests(){
+    api("/me/requests/").then(function(r){
+      var box = document.getElementById("requests");
+      if (!r.ok || !r.data.requests || !r.data.requests.length){ box.innerHTML = ""; return; }
+      box.innerHTML = "<h2>Connection requests</h2><div class='card'>" + r.data.requests.map(function(q){
+        return "<div class='sk'><div style='display:flex;gap:10px;align-items:center;min-width:0'>" + avatar(q)
+          + "<div><b>" + (q.slug ? "<a href='/in/" + encodeURIComponent(q.slug) + "' style='color:inherit'>" + esc(q.name) + "</a>" : esc(q.name))
+          + "</b><div class='muted'>" + esc(q.headline || "") + "</div></div></div>"
+          + "<div style='display:flex;gap:6px'><button class='btn sm ok' data-req='" + q.id + "' data-do='accept'>Accept</button>"
+          + "<button class='btn sm' data-req='" + q.id + "' data-do='decline'>Decline</button></div></div>";
+      }).join("") + "</div>";
+      if (location.hash === "#requests") box.scrollIntoView({behavior: "smooth"});
+    });
+  }
+
+  function load(){
+    api("/me/").then(function(r){
+      if (!r.ok){
+        document.getElementById("lead").innerHTML = r.status === 403 || r.status === 401
+          ? "Sign in to build your profile. <a href='/login'>Sign in</a> or <a href='/register'>create an account</a>."
+          : esc(r.data.detail || "Could not load your profile.");
+        return;
+      }
+      P = r.data;
+      draw();
+    });
+    loadRequests();
+  }
+
+  function draw(){
+    document.getElementById("lead").innerHTML = "Your address: <a href='/in/" + encodeURIComponent(P.slug) + "'>xpertcreation.com/in/"
+      + esc(P.slug) + "</a> \u00b7 <a href='#plist' data-list='followers'><b>" + P.followers + "</b> followers</a> \u00b7 <a href='#plist' data-list='following'><b>" + P.following + "</b> following</a> \u00b7 <a href='#plist' data-list='connections'><b>" + P.connections + "</b> connections</a>";
+
+    var vis = P.visibility || "members";
+    var h = "<h2>Preview</h2><div id='pv'></div><h2>About you</h2><div class='card'>"
+      + "<label for='hl'>Headline</label><input id='hl' maxlength='120' placeholder='e.g. Excel trainer and VBA developer' value='" + esc(P.headline) + "'>"
+      + "<label>Where you live</label><div id='geo'></div><p class='muted' style='font-size:12px;margin-top:6px'>Place lists: <a href='https://github.com/dr5hn/countries-states-cities-database' target='_blank' rel='noopener'>countries-states-cities-database</a> (ODbL).</p>"
+      + "<input type='hidden' id='cc' value='" + esc(P.country || "") + "'><input type='hidden' id='stt' value='" + esc(P.state || "") + "'>"
+      + "<input type='hidden' id='ct' value='" + esc(P.city) + "'>"
+      + "<div class='row2'>"
+      + "<div><label for='vis'>Who can see your profile</label><select id='vis'>"
+      + "<option value='public'" + (vis === "public" ? " selected" : "") + ">Everyone, and Google</option>"
+      + "<option value='members'" + (vis === "members" ? " selected" : "") + ">Signed-in members</option>"
+      + "<option value='hidden'" + (vis === "hidden" ? " selected" : "") + ">Only me</option></select></div></div>"
+      + "<label for='ab'>About</label><textarea id='ab' rows='5' maxlength='2000'>" + esc(P.about) + "</textarea>"
+      + "<label class='inl'><input type='checkbox' id='otw'" + (P.open_to_work ? " checked" : "") + "> I am open to work</label>"
+      + "<input id='ot' maxlength='120' placeholder='What kind of work? e.g. Freelance, full-time, remote' value='" + esc(P.open_to) + "' style='margin-top:6px'>"
+      + "<div class='row2'><div><label for='ws'>Website</label><input id='ws' maxlength='200' value='" + esc(P.website) + "'></div>"
+      + "<div><label for='li'>LinkedIn username</label><div class='pre'><span>linkedin.com/in/</span><input id='li' maxlength='100' placeholder='your-name' value='" + esc(handle(P.linkedin, 'li')) + "'></div></div></div>"
+      + "<label for='gh'>GitHub username</label><div class='pre'><span>github.com/</span><input id='gh' maxlength='60' placeholder='your-name' value='" + esc(handle(P.github, 'gh')) + "'></div>"
+      + "<div class='acts'><button class='btn pri' data-act='save'>Save</button>"
+      + "<a class='btn' href='/in/" + encodeURIComponent(P.slug) + "'>See it as others do</a></div>"
+      + "<div class='msg' id='m-about'></div></div>";
+
+    h += "<h2 id='socials'>Social links</h2><div class='card'>" + (window.socialInputs ? socialInputs(P.socials || {}) : "")
+      + "<div class='acts'><button class='btn pri' data-act='save'>Save</button></div></div>";
+    h += "<h2>Skills</h2><div class='card'><div>" + (P.skills.length ? P.skills.map(function(s){
+        return "<span class='chip'>" + esc(s.name) + (s.count ? " \u00b7 " + s.count : "")
+          + " <a href='#' data-skdel='" + s.id + "' title='Remove' style='color:var(--bad,#DC2626);text-decoration:none'>\u00d7</a></span>";
+      }).join("") : "<span class='muted'>No skills yet.</span>") + "</div>"
+      + "<div style='display:flex;gap:8px;margin-top:10px'><input id='sk' list='skilllist' autocomplete='off' maxlength='40' placeholder='Start typing, e.g. Exc, then pick'>"
+      + "<button class='btn' data-act='addskill'>Add</button></div><div class='msg' id='m-sk'></div></div>";
+
+    h += "<h2>Experience</h2><div class='card'>" + (P.experience.length ? P.experience.map(function(x){
+        return "<div class='item'><b>" + esc(x.title) + "</b>" + (x.company ? " \u00b7 " + esc(x.company) : "")
+          + "<div class='muted'>" + when(x.start_month, x.start_year) + " \u2013 " + (x.current ? "Present" : when(x.end_month, x.end_year))
+          + "</div><div class='acts' style='margin-top:6px'><button class='btn sm' data-expedit='" + x.id + "'>Edit</button>"
+          + "<button class='btn sm' data-expdel='" + x.id + "'>Remove</button></div></div>";
+      }).join("") : "<p class='muted' style='margin:0'>No jobs added yet.</p>")
+      + "<div id='expform'></div><div class='acts'><button class='btn' data-act='newexp'>Add a job</button></div></div>";
+
+    h += "<h2>Education</h2><div class='card'>" + (P.education.length ? P.education.map(function(e){
+        return "<div class='item'><b>" + esc(e.school) + "</b><div class='muted'>" + [e.degree, e.field].filter(Boolean).map(esc).join(", ")
+          + "</div><div class='acts' style='margin-top:6px'><button class='btn sm' data-eduedit='" + e.id + "'>Edit</button>"
+          + "<button class='btn sm' data-edudel='" + e.id + "'>Remove</button></div></div>";
+      }).join("") : "<p class='muted' style='margin:0'>No education added yet.</p>")
+      + "<div id='eduform'></div><div class='acts'><button class='btn' data-act='newedu'>Add education</button></div></div>";
+
+    var t = P.tick || {needed: 1000};
+    var pct = Math.min(100, Math.round(100 * P.followers / (t.needed || 1000)));
+    h += "<h2>Blue tick</h2><div class='card'>";
+    if (P.verified) h += "<b>You have the blue tick</b> <span class='tick'>\u2714</span>";
+    else if (t.pending) h += "<b>Your request is being reviewed.</b><p class='muted'>You will get a notification when it is decided.</p>";
+    else {
+      h += "<div>" + P.followers + " of " + t.needed + " followers</div><div class='bar'><i style='width:" + pct + "%'></i></div>"
+        + "<p class='muted'>With " + t.needed + " followers you can apply. Each request is checked by hand.</p>";
+      if (t.can_apply) h += "<button class='btn pri' data-act='tick'>Apply for the blue tick</button>";
+    }
+    h += "<div class='msg' id='m-tick'></div></div>";
+
+    main.innerHTML = h;
+    if (window.GeoPicker) GeoPicker(document.getElementById("geo"), {country: P.country, state: P.state, city: P.city,
+      onChange: function(g){
+        document.getElementById("cc").value = g.country;
+        document.getElementById("stt").value = g.state;
+        document.getElementById("ct").value = g.city;
+        P.country = g.country;
+        if (typeof preview === "function") preview();
+      }});
+    if (location.hash === "#socials"){ var soc = document.getElementById("socials"); if (soc) setTimeout(function(){ soc.scrollIntoView({behavior: "smooth"}); }, 200); }
+    preview();
+    if (editExp) expForm(editExp);
+    if (editEdu) eduForm(editEdu);
+  }
+
+  function expForm(x){
+    editExp = x;
+    var yr = new Date().getFullYear();
+    document.getElementById("expform").innerHTML = "<div class='item' style='border-top:1px solid var(--line,#E4E8F2);padding-top:12px'>"
+      + "<label for='xt'>Job title</label><input id='xt' maxlength='100' value='" + esc(x.title || "") + "'>"
+      + "<div class='row2'><div><label for='xc'>Company</label><input id='xc' maxlength='100' value='" + esc(x.company || "") + "'></div>"
+      + "<div><label for='xci'>City</label><input id='xci' maxlength='60' value='" + esc(x.city || "") + "'></div></div>"
+      + "<label>Started</label><div class='row2'><select id='xsm'>" + monthOpts(x.start_month) + "</select>"
+      + "<input id='xsy' type='number' min='1950' max='" + (yr + 1) + "' placeholder='Year' value='" + (x.start_year || "") + "'></div>"
+      + "<label class='inl'><input type='checkbox' id='xcur'" + (x.id && x.current ? " checked" : "") + "> I still work here</label>"
+      + "<div id='xend'><label>Ended</label><div class='row2'><select id='xem'>" + monthOpts(x.end_month) + "</select>"
+      + "<input id='xey' type='number' min='1950' max='" + (yr + 1) + "' placeholder='Year' value='" + (x.end_year || "") + "'></div></div>"
+      + "<label for='xd'>What you did (optional)</label><textarea id='xd' rows='3' maxlength='1000'>" + esc(x.description || "") + "</textarea>"
+      + "<div class='acts'><button class='btn pri' data-act='saveexp'>Save job</button><button class='btn' data-act='cancelexp'>Cancel</button></div>"
+      + "<div class='msg' id='m-exp'></div></div>";
+    var cur = document.getElementById("xcur");
+    function sync(){ document.getElementById("xend").style.display = cur.checked ? "none" : ""; }
+    cur.onchange = sync;
+    sync();
+  }
+
+  function eduForm(e){
+    editEdu = e;
+    document.getElementById("eduform").innerHTML = "<div class='item' style='border-top:1px solid var(--line,#E4E8F2);padding-top:12px'>"
+      + "<label for='es'>School, college or university</label><input id='es' maxlength='120' value='" + esc(e.school || "") + "'>"
+      + "<div class='row2'><div><label for='ed'>Degree</label><input id='ed' maxlength='100' placeholder='e.g. BS, FSc, Matric' value='" + esc(e.degree || "") + "'></div>"
+      + "<div><label for='ef'>Subject</label><input id='ef' maxlength='100' value='" + esc(e.field || "") + "'></div></div>"
+      + "<div class='row2'><div><label for='esy'>From</label><input id='esy' type='number' min='1950' placeholder='Year' value='" + (e.start_year || "") + "'></div>"
+      + "<div><label for='eey'>To</label><input id='eey' type='number' min='1950' placeholder='Year' value='" + (e.end_year || "") + "'></div></div>"
+      + "<div class='acts'><button class='btn pri' data-act='saveedu'>Save</button><button class='btn' data-act='canceledu'>Cancel</button></div>"
+      + "<div class='msg' id='m-edu'></div></div>";
+  }
+
+  function run(path, body, msgId, okText, after){
+    var m = document.getElementById(msgId);
+    say(m, "Saving\u2026");
+    api(path, {method: "POST", body: body || {}}).then(function(r){
+      if (!r.ok){ say(document.getElementById(msgId), r.data.detail || "Could not save.", "bad"); return; }
+      if (after) after();
+      P = r.data;
+      draw();
+      if (okText) say(document.getElementById(msgId), okText, "good");
+    });
+  }
+
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("[data-act],[data-skdel],[data-expedit],[data-expdel],[data-eduedit],[data-edudel],[data-req]");
+    if (!a || !main.contains(a) && !document.getElementById("requests").contains(a)) return;
+    e.preventDefault();
+    var act = a.getAttribute("data-act");
+    if (a.hasAttribute("data-req")){
+      a.disabled = true;
+      api("/me/requests/" + a.getAttribute("data-req") + "/" + a.getAttribute("data-do") + "/", {method: "POST", body: {}})
+        .then(function(){ load(); });
+      return;
+    }
+    if (a.hasAttribute("data-skdel")) return run("/me/skills/" + a.getAttribute("data-skdel") + "/delete/", {}, "m-sk");
+    if (a.hasAttribute("data-expdel")){
+      if (confirm("Remove this job?")) run("/me/experience/" + a.getAttribute("data-expdel") + "/delete/", {}, "m-exp");
+      return;
+    }
+    if (a.hasAttribute("data-edudel")){
+      if (confirm("Remove this entry?")) run("/me/education/" + a.getAttribute("data-edudel") + "/delete/", {}, "m-edu");
+      return;
+    }
+    if (a.hasAttribute("data-expedit")){
+      var id = +a.getAttribute("data-expedit");
+      expForm(P.experience.filter(function(x){ return x.id === id; })[0] || {});
+      return;
+    }
+    if (a.hasAttribute("data-eduedit")){
+      var id2 = +a.getAttribute("data-eduedit");
+      eduForm(P.education.filter(function(x){ return x.id === id2; })[0] || {});
+      return;
+    }
+    if (act === "save") return run("/me/", {
+      headline: v("hl"), city: v("ct"), country: v("cc"), state: v("stt"), socials: (window.socialValues ? socialValues() : undefined), about: v("ab"), open_to_work: on("otw"), open_to: v("ot"),
+      visibility: v("vis"), website: v("ws"), linkedin: link(v("li"), "li"), github: link(v("gh"), "gh")}, "m-about", "Saved.");
+    if (act === "addskill") return addSkill();
+    if (act === "newexp") return expForm({});
+    if (act === "cancelexp"){ editExp = null; document.getElementById("expform").innerHTML = ""; return; }
+    if (act === "saveexp") return run("/me/experience/", {
+      id: editExp && editExp.id, title: v("xt"), company: v("xc"), city: v("xci"),
+      start_month: v("xsm"), start_year: v("xsy"), current: on("xcur"),
+      end_month: v("xem"), end_year: v("xey"), description: v("xd")}, "m-exp", "", function(){ editExp = null; });
+    if (act === "newedu") return eduForm({});
+    if (act === "canceledu"){ editEdu = null; document.getElementById("eduform").innerHTML = ""; return; }
+    if (act === "saveedu") return run("/me/education/", {
+      id: editEdu && editEdu.id, school: v("es"), degree: v("ed"), field: v("ef"),
+      start_year: v("esy"), end_year: v("eey")}, "m-edu", "", function(){ editEdu = null; });
+    if (act === "tick") return run("/me/tick/", {}, "m-tick", "Sent. You will hear back soon.");
+  });
+
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && e.target && e.target.id === "sk"){
+      e.preventDefault();
+      addSkill();
+    }
+  });
+
+  load();
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Learn and use</h5>
+      <ul>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/games">Games</a></li>
+        <li><a href="/money">Money</a></li>
+        <li><a href="/business">Business</a></li>
+        <li><a href="/blood">Blood bank</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+</body>
+</html>

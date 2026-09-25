@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Birthday reminders — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Keep the birthdays that matter in one place and get reminded before the day, not after it.">
+<link rel="canonical" href="https://xpertcreation.com/birthdays">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Birthday reminders — XpertCreation">
+<meta property="og:description" content="Keep the birthdays that matter in one place and get reminded before the day, not after it.">
+<meta property="og:url" content="https://xpertcreation.com/birthdays">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Birthday reminders — XpertCreation">
+<meta name="twitter:description" content="Keep the birthdays that matter in one place and get reminded before the day, not after it.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Birthday reminders","url":"https://xpertcreation.com/birthdays","description":"Keep the birthdays that matter in one place and get reminded before the day, not after it.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<!-- seo:end -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="apple-touch-icon" href="/brand/icon-180.png">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --brand:#1B4DFF;--cake:#DB2777;--go:#00B37E;--line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--paper);pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px)}
+.bg .a{width:440px;height:440px;background:#DB2777;top:-170px;right:-120px;opacity:.18}
+.bg .b{width:400px;height:400px;background:#1B4DFF;bottom:-160px;left:-130px;opacity:.15}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:rgba(246,247,251,.9);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top .chip{width:40px;height:40px;border-radius:9px;background:#14151A;display:block}
+.top .chip.gone{display:none}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.top .who{padding:7px 13px;border-radius:999px;background:var(--ink);color:#fff;font-size:12.5px;
+  font-weight:700;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top .who.out{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+
+.wrap{width:100%;max-width:720px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(25px,6vw,34px);letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14.5px;color:var(--ink-soft);margin-top:9px;max-width:52ch}
+.head{display:flex;align-items:baseline;gap:10px;margin:26px 2px 12px}
+.head h3{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.026em}
+.head small{font-size:12px;color:var(--ink-soft)}
+.head .more{margin-left:auto;font-size:13px;font-weight:700;color:var(--brand)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:12px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin-bottom:5px}
+.fld input,.fld select{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:15px;outline:none;font-family:inherit}
+.fld input:focus,.fld select:focus{border-color:var(--brand);background:var(--card)}
+.fld .note{font-size:11.5px;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+.row3{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;padding:14px;border-radius:13px;background:var(--cake);color:#fff;
+  font-weight:700;font-size:15px;margin-top:4px}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.4}
+
+.bd{display:flex;align-items:center;gap:13px;padding:14px;border-radius:16px;
+  background:var(--card);border:1px solid var(--line);margin-bottom:9px}
+.bd.today{border-color:var(--cake);background:linear-gradient(180deg,rgba(219,39,119,.06),transparent)}
+.bd .d{width:50px;flex:0 0 auto;text-align:center;border-radius:13px;
+  background:var(--paper);border:1px solid var(--line);padding:7px 0}
+.bd.today .d{background:var(--cake);border-color:var(--cake);color:#fff}
+.bd .d b{display:block;font-family:var(--display);font-weight:800;font-size:19px;
+  letter-spacing:-.03em;line-height:1}
+.bd .d span{display:block;font-size:9.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;margin-top:2px;opacity:.8}
+.bd .t{flex:1;min-width:0}
+.bd .t b{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.bd .t small{display:block;font-size:12px;color:var(--ink-soft);margin-top:2px}
+.bd .away{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);
+  white-space:nowrap;text-align:right}
+.bd .away b{display:block;font-family:var(--display);font-size:17px;color:var(--ink);
+  letter-spacing:-.03em;line-height:1.2}
+.bd .x{width:32px;height:32px;border-radius:10px;background:var(--paper);
+  border:1px solid var(--line);color:var(--ink-soft);flex:0 0 auto;font-size:15px}
+
+.acts{display:flex;gap:8px;margin-top:10px}
+.acts a{flex:1;text-align:center;padding:10px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);font-size:12.5px;font-weight:700;color:var(--ink)}
+
+.msg{padding:12px 14px;border-radius:12px;font-size:13.5px;margin-bottom:14px;line-height:1.55}
+.msg.err{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.msg.ok{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.32);color:#00734F}
+.note2{background:var(--card);border:1px dashed var(--line);border-radius:15px;padding:20px;
+  text-align:center;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+.note2 button{margin-top:12px;padding:11px 22px;border-radius:12px;background:var(--brand);
+  color:#fff;font-weight:700;font-size:13.5px}
+.privacy{background:rgba(27,77,255,.05);border:1px solid rgba(27,77,255,.2);border-radius:14px;
+  padding:14px;font-size:13px;line-height:1.6;margin-bottom:16px}
+.privacy b{display:block;margin-bottom:5px}
+
+/* floating support button */
+.wafab{position:fixed;z-index:80;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));
+  width:52px;height:52px;border-radius:17px;background:#25D366;display:grid;place-items:center;
+  box-shadow:0 8px 24px rgba(37,211,102,.4);transition:transform .16s}
+.wafab:active{transform:scale(.93)}
+.wafab svg{width:27px;height:27px;fill:#fff}
+body.rtl .wafab{right:auto;left:16px}
+@media(min-width:1100px){
+  .wafab{right:calc(50% - 520px);}
+  body.rtl .wafab{left:calc(50% - 520px);right:auto}
+}
+
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;
+  color:var(--ink-soft,#5A657C);flex:0 0 auto;transition:color .15s,border-color .15s}
+.gear:hover{color:var(--ink,#0D1424);border-color:var(--ink-soft,#5A657C)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.langwrap{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 11px;
+  border-radius:999px;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2)}
+.langwrap svg{width:16px;height:16px;fill:none;stroke:var(--ink-soft,#5A657C);
+  stroke-width:1.7;flex:0 0 auto}
+.langwrap select,.langwrap #langSel{border:none!important;background:none!important;
+  padding:2px 18px 2px 0!important;max-width:104px}
+
+.fld input::placeholder,.fld select::placeholder{color:#A8B0C0;font-weight:400}
+.bd .away b{font-size:17px}
+.bd .away span{display:block;font-size:9.5px;color:var(--ink-soft);letter-spacing:.05em;
+  text-transform:uppercase;margin-top:1px}
+.bd .edit{width:32px;height:32px;border-radius:10px;background:var(--paper);
+  border:1px solid var(--line);color:var(--ink-soft);flex:0 0 auto;font-size:14px}
+
+/* ---------- rating ---------- */
+.rate{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:20px;
+  padding:20px;margin-top:28px}
+.rate .top2{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rate .big2{font-family:var(--display),system-ui;font-weight:800;font-size:36px;
+  letter-spacing:-.04em;line-height:1}
+.rate .out{font-size:12.5px;color:var(--ink-soft,#5A657C)}
+.rate .top2 .t2{flex:1;min-width:120px}
+.rate .stars{font-size:17px;letter-spacing:2px;color:#F59E0B}
+.rate h4{font-family:var(--display),system-ui;font-weight:800;font-size:15px;
+  letter-spacing:-.02em;margin-bottom:4px}
+.rate .pick2{display:flex;gap:6px;margin-top:14px}
+.rate .pick2 button{width:44px;height:44px;border-radius:13px;background:var(--paper,#F6F7FB);
+  border:1.5px solid var(--line,#E4E8F2);font-size:21px;cursor:pointer;line-height:1;
+  transition:transform .14s,border-color .14s;padding:0}
+.rate .pick2 button:hover{transform:scale(1.08)}
+.rate .pick2 button.on{background:#FEF3C7;border-color:#F59E0B}
+.rate textarea{width:100%;margin-top:12px;padding:12px 13px;border:1.5px solid var(--line,#E4E8F2);
+  border-radius:13px;background:var(--paper,#F6F7FB);font-size:14.5px;font-family:inherit;
+  outline:none;resize:vertical;min-height:74px}
+.rate textarea:focus{border-color:var(--brand,#1B4DFF);background:#fff}
+.rate .send{margin-top:10px;padding:12px 24px;border-radius:13px;background:var(--ink,#0D1424);
+  color:#fff;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:inherit}
+.rate .send:disabled{opacity:.4;cursor:default}
+.rate .said{font-size:13px;color:#00734F;font-weight:600;margin-top:10px}
+.rate .said.wait{color:var(--warn,#B45309)}
+.rate .list2{margin-top:18px;display:grid;gap:10px}
+.rate .r2{padding:13px;border-radius:14px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2)}
+.rate .r2 .hd{display:flex;align-items:center;gap:9px}
+.rate .r2 .hd b{font-size:13.5px;font-weight:700;flex:1}
+.rate .r2 .hd .s{font-size:12px;color:#F59E0B;letter-spacing:1px}
+.rate .r2 .hd small{font-size:11px;color:var(--ink-soft,#5A657C)}
+.rate .r2 p{font-size:13.5px;line-height:1.6;margin-top:7px}
+.rate .none2{font-size:13px;color:var(--ink-soft,#5A657C);margin-top:14px}
+
+/* ---------- phone layout ---------- */
+@media (max-width: 560px){
+  /* Nothing may be wider than the screen. One stray element makes the whole
+     page scroll sideways, which feels broken even when nothing else is. */
+  html, body{overflow-x:hidden;max-width:100vw}
+
+  .top, .topbar{padding:10px 12px;gap:6px}
+  .top b, .topbar b, .brandbar b{font-size:15px}
+  .top .chip, .topbar .chip, .brandbar img{width:28px;height:28px}
+
+  /* The wordmark goes; the logo alone is enough on a small screen. */
+  .brandbar b{display:none}
+
+  .gear{width:36px;height:36px}
+  .langwrap{padding:4px 7px 4px 8px}
+  .langwrap select, .langwrap #langSel{max-width:60px;font-size:12.5px}
+  .acctbtn, .who{max-width:96px;font-size:11.5px;padding:5px 10px 5px 5px}
+  .acctbtn img, .acctbtn .ini{width:21px;height:21px;font-size:10px}
+
+  /* Cards to the edge, with the padding on the page instead. */
+  .wrap{padding-left:14px;padding-right:14px}
+  .hello{padding:18px 16px;border-radius:20px}
+  .hello .t b{font-size:19px}
+  .hellolines .ln{flex-wrap:wrap;gap:4px}
+  .hellolines .ln .k{min-width:78px;font-size:12.5px}
+  .hellolines .ln .v{font-size:13.5px}
+  .hellolines .today2{font-size:14.5px}
+
+  .grid2{grid-template-columns:1fr 1fr;gap:9px}
+  .tiles{gap:9px}
+  .slide{min-height:200px;padding:20px}
+  .slide h3{font-size:22px}
+  .about{padding:20px 16px}
+  .about .contact{grid-template-columns:1fr;gap:8px}
+  .about .contact a{display:flex;align-items:center;gap:12px;text-align:left;padding:12px}
+  .about .contact .ic2{margin:0}
+  .about .pic{width:66px;height:66px;border-radius:20px}
+
+  .row, .row3b, .two{grid-template-columns:1fr}
+  .row3b .swap{width:100%;height:38px}
+  .keys{gap:5px}
+  .keys button{padding:12px 0;font-size:14px}
+}
+
+@media (max-width: 380px){
+  .grid2{grid-template-columns:1fr}
+  .hello .av{width:48px;height:48px}
+  .hello .t b{font-size:17px}
+}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<div class="bg"><i class="a"></i><i class="b"></i></div>
+
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img class="chip" src="/brand/icon-64.png" alt="" onerror="this.classList.add('gone')">
+    <b>Birthdays</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+  <a class="gear" href="https://xpertcreation.com/account" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></a>
+    <button class="who out" id="who">Sign in</button>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap"><div id="app"></div><section class="rate" id="ratebox"></section></div>
+
+<script>
+(function(){
+  "use strict";
+  var API = "/api/reminders";
+  var me = null, data = null, msg = "", msgType = "err", editing = null, adding = false;
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+  function api(p, o){
+    o = o || {};
+    var h = {"Content-Type":"application/json"};
+    if (o.method && o.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch(API + p, {method:o.method||"GET", headers:h, credentials:"same-origin",
+      body:o.body ? JSON.stringify(o.body) : undefined})
+      .then(function(r){ return r.json().catch(function(){return{};})
+        .then(function(d){ return {ok:r.ok, data:d}; }); })
+      .catch(function(){ return {ok:false, data:{detail:"Network error."}}; });
+  }
+  function val(id){ var e=document.getElementById(id); return e?String(e.value||"").trim():""; }
+  function say(m, k){ msg = m; msgType = k || "err"; view(); }
+
+  function paintWho(){
+    var b=document.getElementById("who");
+    if(me){ b.textContent=(me.full_name||me.email.split("@")[0]).slice(0,16); b.className="who"; }
+    else { b.textContent="Sign in"; b.className="who out"; }
+  }
+  document.getElementById("who").addEventListener("click", function(){
+    location.href = me ? "https://xpertcreation.com/account"
+      : "https://xpertcreation.com/login?next=" + encodeURIComponent(location.href);
+  });
+
+  function form(b){
+    b = b || {};
+    var months = (data.months || []).map(function(m){
+      return '<option value="'+m.value+'"'+(b.month===m.value?' selected':'')+'>'
+        + esc(m.label) + '</option>'; }).join("");
+    var rels = (data.relations || []).map(function(r){
+      return '<option value="'+r.value+'"'+(b.relation===r.value?' selected':'')+'>'
+        + esc(r.label) + '</option>'; }).join("");
+
+    return '<div class="card">'
+      + '<div class="fld"><label for="fName">Whose birthday</label>'
+      + '<input id="fName" value="'+esc(b.name||"")+'" placeholder="Enter name"></div>'
+      + '<div class="row3">'
+      + '<div class="fld"><label for="fDay">Day</label>'
+      + '<input id="fDay" type="number" min="1" max="31" value="'+(b.day||"")+'"></div>'
+      + '<div class="fld"><label for="fMonth">Month</label><select id="fMonth">'+months+'</select></div>'
+      + '<div class="fld"><label for="fYear">Year</label>'
+      + '<input id="fYear" type="number" min="1900" placeholder="—" value="'+(b.year||"")+'"></div>'
+      + '</div>'
+      + '<p class="note" style="margin:-6px 0 12px;font-size:11.5px;color:var(--ink-soft)">'
+      + 'Year is optional. Leave it blank if you would rather not record an age.</p>'
+      + '<div class="fld"><label for="fRel">Relation</label><select id="fRel">'+rels+'</select></div>'
+      + '<div class="row2">'
+      + '<div class="fld"><label for="fPhone">Phone (optional)</label>'
+      + '<input id="fPhone" value="'+esc(b.phone||"")+'" placeholder="+92300…"></div>'
+      + '<div class="fld"><label for="fEmail">Email (optional)</label>'
+      + '<input id="fEmail" type="email" value="'+esc(b.email||"")+'"></div></div>'
+      + '<div class="fld"><label for="fNote">Note (optional)</label>'
+      + '<input id="fNote" value="'+esc(b.note||"")+'" placeholder="Likes chocolate cake"></div>'
+      + '<div class="fld"><label for="fBefore">Remind me</label>'
+      + '<select id="fBefore">'
+      + [1,2,3,5,7,14].map(function(n){
+          return '<option value="'+n+'"'+((b.days_before||3)===n?' selected':'')+'>'
+            + n + ' day' + (n>1?'s':'') + ' before</option>'; }).join("")
+      + '</select><p class="note">You also get a reminder on the day itself.</p></div>'
+      + '<button class="btn" data-act="save">' + (b.id ? "Save changes" : "Add birthday") + '</button>'
+      + '<button class="btn ghost" data-act="cancel">Cancel</button>'
+      + '</div>';
+  }
+
+  function card(b){
+    var mn = (data.months || []).filter(function(m){ return m.value === b.month; })[0];
+    var away = b.days_away === 0 ? "today" : b.days_away + (b.days_away === 1 ? " day" : " days");
+    return '<div class="bd' + (b.days_away === 0 ? " today" : "") + '">'
+      + '<span class="d"><b>' + b.day + '</b><span>' + esc((mn ? mn.label : "").slice(0,3)) + '</span></span>'
+      + '<span class="t"><b>' + esc(b.name) + '</b><small>'
+      + esc((data.relations.filter(function(r){ return r.value === b.relation; })[0] || {}).label || "")
+      + (b.turning ? " · turning " + b.turning : "")
+      + (b.note ? " · " + esc(b.note) : "") + '</small></span>'
+      + '<span class="away">'
+      + (b.days_away === 0
+          ? '<b>&#127874;</b><span>today</span>'
+          : '<b>' + b.days_away + '</b><span>'
+            + (b.days_away === 1 ? "day to go" : "days to go") + '</span>')
+      + '</span>'
+      + '<button class="edit" data-edit="' + b.id + '" aria-label="Edit">&#9998;</button>'
+      + '<button class="x" data-del="' + b.id + '" aria-label="Remove">&times;</button>'
+      + '</div>'
+      + (b.days_away <= 3 && (b.phone || b.email)
+          ? '<div class="acts" style="margin:-4px 0 12px">'
+            + (b.phone ? '<a href="tel:'+esc(b.phone)+'">Call</a>'
+                       + '<a href="https://wa.me/'+esc(b.phone.replace(/\D/g,""))
+                       + '" target="_blank" rel="noopener">WhatsApp</a>' : '')
+            + (b.email ? '<a href="mailto:'+esc(b.email)+'">Email</a>' : '')
+            + '</div>' : '');
+  }
+
+  function view(){
+    var app = document.getElementById("app");
+    if (!me){
+      app.innerHTML = '<h1>Birthday reminders</h1>'
+        + '<p class="lead">Save the birthdays you keep forgetting. We email you three days '
+        + 'before, and again on the day.</p>'
+        + '<div class="note2" style="margin-top:20px">Sign in to save birthdays.'
+        + '<br><button data-act="signin">Sign in</button></div>';
+      return;
+    }
+    if (!data){ app.innerHTML = '<div class="note2">Loading…</div>'; return; }
+
+    var h = '<h1>Birthday reminders</h1>'
+      + '<p class="lead">We email you before each one. Nobody else is contacted.</p>';
+    if (msg) h += '<div class="msg ' + msgType + '" style="margin-top:16px">' + esc(msg) + '</div>';
+
+    if (adding || editing){
+      h += '<div class="head"><h3>' + (editing ? "Edit" : "New birthday") + '</h3></div>'
+        + form(editing);
+      app.innerHTML = h;
+      return;
+    }
+
+    h += '<div class="privacy" style="margin-top:16px"><b>These details stay with you</b>'
+      + 'We never message the person whose birthday it is — they did not sign up here. '
+      + 'Reminders come to you only.</div>'
+      + '<button class="btn" data-act="add">Add a birthday</button>';
+
+    if (data.today.length){
+      h += '<div class="head"><h3>&#127874; Today</h3></div>';
+      data.today.forEach(function(b){ h += card(b); });
+    }
+    if (data.soon.length){
+      h += '<div class="head"><h3>Coming up</h3><small>next 30 days</small></div>';
+      data.soon.forEach(function(b){ h += card(b); });
+    }
+
+    var rest = data.all.filter(function(b){ return b.days_away > 30; });
+    if (rest.length){
+      h += '<div class="head"><h3>Later in the year</h3><small>' + rest.length + '</small></div>';
+      rest.forEach(function(b){ h += card(b); });
+    }
+
+    if (!data.count){
+      h += '<div class="note2" style="margin-top:14px">Nothing saved yet. '
+        + 'Add the first one above.</div>';
+    }
+    app.innerHTML = h;
+  }
+
+  document.getElementById("app").addEventListener("click", function(e){
+    var ed = e.target.closest("[data-edit]");
+    if (ed){
+      var id = parseInt(ed.getAttribute("data-edit"), 10);
+      editing = data.all.filter(function(x){ return x.id === id; })[0] || null;
+      adding = false; msg = "";
+      return view();
+    }
+
+    var del = e.target.closest("[data-del]");
+    if (del){
+      if (!confirm("Remove this birthday?")) return;
+      return api("/birthdays/" + del.getAttribute("data-del") + "/", {method:"DELETE"})
+        .then(function(){ load(); });
+    }
+    var a = e.target.closest("[data-act]");
+    if (!a) return;
+    var act = a.getAttribute("data-act");
+
+    if (act === "signin"){
+      location.href = "https://xpertcreation.com/login?next=" + encodeURIComponent(location.href);
+    } else if (act === "add"){ adding = true; editing = null; msg = ""; view(); }
+    else if (act === "cancel"){ adding = false; editing = null; msg = ""; view(); }
+    else if (act === "save"){ save(); }
+  });
+
+  function save(){
+    // Read every field before anything re-renders, or the values are gone.
+    var body = {
+      name: val("fName"), day: val("fDay"), month: val("fMonth"),
+      year: val("fYear"), relation: val("fRel"), phone: val("fPhone"),
+      email: val("fEmail"), note: val("fNote"), days_before: val("fBefore"),
+      remind_on_day: true,
+    };
+    var path = editing ? "/birthdays/" + editing.id + "/" : "/birthdays/";
+    api(path, {method:"POST", body:body}).then(function(r){
+      if (!r.ok) return say(r.data.detail || "Could not save.");
+      adding = false; editing = null;
+      load();
+      say("Saved.", "ok");
+    });
+  }
+
+  function load(){
+    return api("/birthdays/").then(function(r){
+      if (r.ok) data = r.data;
+      view();
+    });
+  }
+
+  fetch("/api/auth/csrf/", {credentials:"same-origin"});
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){ me = u; paintWho(); return me ? load() : view(); });
+})();
+</script>
+
+<a class="wafab" href="https://wa.me/923009462916" target="_blank" rel="noopener"
+   aria-label="Message support on WhatsApp" title="Message support on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.5 12.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.9-.4-1.7-.9-2.4-1.6-.6-.7-1.1-1.4-1.4-2.2-.1-.2-.1-.4.1-.5.2-.2.4-.5.6-.7.1-.2.2-.3.1-.5-.1-.3-.7-1.8-.9-2.1-.1-.3-.3-.3-.5-.3h-.6c-.2 0-.5.1-.7.4-.6.6-1 1.4-.9 2.3 0 1.1.4 2.1 1 3 1 1.6 2.3 2.9 3.9 3.8.6.3 1.2.6 1.9.7.6.2 1.3.2 2 .1.8-.2 1.5-.7 1.9-1.4.2-.4.2-.8.1-1.2 0-.1-.1-.2-.3-.3z"/></svg>
+</a>
+
+<script>
+/* Registers the worker that makes the site open without a connection.
+   Failure here is not worth reporting: the site works either way. */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  });
+}
+</script>
+
+<script>
+/* Ratings. Stars go live at once; a written comment waits to be read, because
+   a star cannot carry abuse or a spam link and a sentence can. */
+(function(){
+  var MODULE = "birthdays";
+  var wrap = document.getElementById("ratebox");
+  if (!wrap) return;
+
+  var picked = 0, mine = null, busy = false;
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+  function stars(n){
+    return "\u2605".repeat(Math.round(n)) + "\u2606".repeat(5 - Math.round(n));
+  }
+
+  function draw(d){
+    var h = '<div class="top2">';
+    if (d.count){
+      h += '<span class="big2">' + d.average + '</span>'
+        + '<span class="t2"><span class="stars">' + stars(d.average) + '</span>'
+        + '<span class="out" style="display:block">out of 5, from '
+        + d.count + (d.count === 1 ? ' person' : ' people') + '</span></span>';
+    } else {
+      h += '<span class="t2"><h4>Rate this</h4>'
+        + '<span class="out">Nobody has rated it yet.</span></span>';
+    }
+    h += '</div>';
+
+    h += '<h4 style="margin-top:16px">'
+      + (mine ? "Your rating" : "How was it?") + '</h4>'
+      + '<div class="pick2">';
+    for (var i = 1; i <= 5; i++){
+      h += '<button data-star="' + i + '" class="'
+        + (i <= picked ? "on" : "") + '">'
+        + (i <= picked ? "\u2605" : "\u2606") + '</button>';
+    }
+    h += '</div>'
+      + '<textarea id="rcomment" maxlength="600" placeholder="Say a bit more '
+      + '(optional)">' + esc(mine && mine.comment ? mine.comment : "") + '</textarea>'
+      + '<button class="send" id="rsend"' + (picked ? "" : " disabled") + '>'
+      + (mine ? "Update" : "Send") + '</button>';
+
+    if (mine && mine.state === "pending"){
+      h += '<p class="said wait">Your rating counts already. '
+        + 'The comment appears once we have read it.</p>';
+    }
+
+    if (d.reviews && d.reviews.length){
+      h += '<div class="list2">';
+      d.reviews.forEach(function(r){
+        h += '<div class="r2"><div class="hd">'
+          + '<b>' + esc(r.name) + '</b>'
+          + '<span class="s">' + stars(r.stars) + '</span>'
+          + '<small>' + esc(r.when) + '</small></div>'
+          + '<p>' + esc(r.comment) + '</p></div>';
+      });
+      h += '</div>';
+    }
+
+    wrap.innerHTML = h;
+  }
+
+  function load(){
+    fetch("/api/reviews/" + MODULE + "/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        mine = d.mine || null;
+        picked = mine ? mine.stars : 0;
+        draw(d);
+      })
+      .catch(function(){});
+  }
+
+  wrap.addEventListener("click", function(e){
+    var st = e.target.closest("[data-star]");
+    if (st){
+      picked = parseInt(st.getAttribute("data-star"), 10);
+      var btns = wrap.querySelectorAll("[data-star]");
+      btns.forEach(function(b, i){
+        var on = (i + 1) <= picked;
+        b.classList.toggle("on", on);
+        b.textContent = on ? "\u2605" : "\u2606";
+      });
+      var send = document.getElementById("rsend");
+      if (send) send.disabled = false;
+      return;
+    }
+
+    if (e.target.id === "rsend"){
+      if (busy || !picked) return;
+      busy = true;
+      e.target.disabled = true;
+      var box = document.getElementById("rcomment");
+      fetch("/api/reviews/" + MODULE + "/mine/", {
+        method: "POST", credentials: "same-origin",
+        headers: {"Content-Type":"application/json", "X-CSRFToken": cookie("xc_csrf")},
+        body: JSON.stringify({stars: picked, comment: box ? box.value : ""})
+      })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+      .then(function(res){
+        busy = false;
+        if (!res.ok){
+          alert(res.d.detail || "Could not save that.");
+          return;
+        }
+        load();
+      })
+      .catch(function(){ busy = false; });
+    }
+  });
+
+  load();
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Learn and use</h5>
+      <ul>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/people">Connect</a></li>
+        <li><a href="/pets">Pets</a></li>
+        <li><a href="/shows">Shows</a></li>
+        <li><a href="/docs">Guide</a></li>
+        <li><a href="/games">Games</a></li>
+        <li><a href="/money">Money</a></li>
+        <li><a href="/business">Business</a></li>
+        <li><a href="/blood">Blood bank</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+</body>
+</html>

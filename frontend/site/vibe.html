@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>What's your vibe? — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="A light quiz that gives you a vibe for the day, and something to share.">
+<link rel="canonical" href="https://xpertcreation.com/vibe">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="What's your vibe? — XpertCreation">
+<meta property="og:description" content="A light quiz that gives you a vibe for the day, and something to share.">
+<meta property="og:url" content="https://xpertcreation.com/vibe">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What's your vibe? — XpertCreation">
+<meta name="twitter:description" content="A light quiz that gives you a vibe for the day, and something to share.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"What's your vibe?","url":"https://xpertcreation.com/vibe","description":"A light quiz that gives you a vibe for the day, and something to share.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="apple-touch-icon" href="/brand/icon-180.png">
+<meta name="theme-color" content="#14151A">
+<meta property="og:title" content="What's your vibe?">
+<meta property="og:description" content="Eight questions. Twelve creatures. Find out which one you give off.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --brand:#1B4DFF;--magic:#7C3AED;--line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--paper);pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px)}
+.bg .a{width:480px;height:480px;background:#7C3AED;top:-180px;right:-130px;opacity:.22}
+.bg .b{width:420px;height:420px;background:#DB2777;bottom:-160px;left:-130px;opacity:.16}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.9);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top .chip{width:40px;height:40px;border-radius:9px;background:#14151A;display:block}
+.top .chip.gone{display:none}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft);flex:0 0 auto}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:600px;margin:0 auto;padding:24px 16px 60px;flex:1}
+
+/* ---- intro ---- */
+.intro{text-align:center;padding:20px 0}
+.intro .orb{font-size:64px;line-height:1;animation:float 3.2s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.intro h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,8vw,44px);
+  letter-spacing:-.04em;line-height:1.05;margin-top:14px}
+.intro p{font-size:15px;color:var(--ink-soft);margin-top:12px;max-width:34ch;
+  margin-left:auto;margin-right:auto;line-height:1.6}
+.intro .go{margin-top:26px;padding:16px 34px;border-radius:16px;
+  background:linear-gradient(135deg,#7C3AED,#DB2777);color:#fff;font-weight:800;font-size:16px;
+  box-shadow:0 10px 30px rgba(124,58,237,.32)}
+.creatures{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px;
+  font-size:24px;opacity:.55}
+
+/* ---- question ---- */
+.qbar{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.qbar .track{flex:1;height:7px;border-radius:99px;background:var(--card);
+  border:1px solid var(--line);overflow:hidden}
+.qbar .track i{display:block;height:100%;background:linear-gradient(90deg,#7C3AED,#DB2777);
+  transition:width .35s cubic-bezier(.22,1,.36,1)}
+.qbar .n{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.qtext{font-family:var(--display);font-weight:800;font-size:clamp(21px,5.4vw,27px);
+  letter-spacing:-.03em;line-height:1.25;margin-bottom:20px}
+.opts{display:grid;gap:10px}
+.opt{padding:16px 18px;border-radius:16px;background:var(--card);border:1.5px solid var(--line);
+  font-size:15px;line-height:1.5;text-align:left;transition:transform .14s,border-color .16s;
+  cursor:pointer}
+.opt:hover{border-color:var(--magic)}
+.opt:active{transform:scale(.985)}
+.back{margin-top:18px;font-size:13.5px;color:var(--ink-soft);font-weight:600}
+
+/* ---- result ---- */
+.card2{position:relative;overflow:hidden;border-radius:26px;padding:32px 24px;color:#fff;
+  text-align:center;background:linear-gradient(150deg,var(--c1),var(--c2));
+  box-shadow:0 14px 40px rgba(13,20,36,.24)}
+.card2::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 15% -10%,rgba(255,255,255,.34),transparent 58%)}
+.card2 .ghost2{position:absolute;right:-24px;bottom:-30px;font-size:150px;line-height:1;
+  opacity:.16;transform:rotate(-10deg);pointer-events:none}
+.card2 .lbl{position:relative;z-index:2;font-size:11px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;opacity:.85}
+.card2 .big{position:relative;z-index:2;font-size:72px;line-height:1;margin:12px 0 4px}
+.card2 h2{position:relative;z-index:2;font-family:var(--display);font-weight:800;
+  font-size:34px;letter-spacing:-.04em}
+.card2 .line{position:relative;z-index:2;font-size:16px;font-weight:600;margin-top:8px;opacity:.95}
+.card2 .desc{position:relative;z-index:2;font-size:14.5px;line-height:1.7;margin-top:16px;
+  opacity:.92;text-align:left}
+
+.acts{display:grid;gap:9px;margin-top:18px}
+@media(min-width:460px){.acts{grid-template-columns:1fr 1fr}}
+.acts button,.acts a{padding:15px;border-radius:14px;font-weight:700;font-size:14.5px;
+  text-align:center;background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.acts .share{background:var(--ink);color:#fff;border-color:var(--ink)}
+.copied{text-align:center;font-size:13px;color:#00734F;font-weight:700;margin-top:10px;
+  display:none}
+.copied.on{display:block}
+
+.others{margin-top:26px}
+.others h4{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.02em;
+  margin-bottom:11px}
+.orow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.orow span{aspect-ratio:1;border-radius:14px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;font-size:24px}
+.orow span.hit{background:linear-gradient(150deg,#7C3AED,#DB2777);border-color:transparent}
+.small{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:16px;line-height:1.6}
+
+/* ---------- rating ---------- */
+.rate{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:20px;
+  padding:20px;margin-top:28px}
+.rate .top2{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rate .big2{font-family:var(--display),system-ui;font-weight:800;font-size:36px;
+  letter-spacing:-.04em;line-height:1}
+.rate .out{font-size:12.5px;color:var(--ink-soft,#5A657C)}
+.rate .top2 .t2{flex:1;min-width:120px}
+.rate .stars{font-size:17px;letter-spacing:2px;color:#F59E0B}
+.rate h4{font-family:var(--display),system-ui;font-weight:800;font-size:15px;
+  letter-spacing:-.02em;margin-bottom:4px}
+.rate .pick2{display:flex;gap:6px;margin-top:14px}
+.rate .pick2 button{width:44px;height:44px;border-radius:13px;background:var(--paper,#F6F7FB);
+  border:1.5px solid var(--line,#E4E8F2);font-size:21px;cursor:pointer;line-height:1;
+  transition:transform .14s,border-color .14s;padding:0}
+.rate .pick2 button:hover{transform:scale(1.08)}
+.rate .pick2 button.on{background:#FEF3C7;border-color:#F59E0B}
+.rate textarea{width:100%;margin-top:12px;padding:12px 13px;border:1.5px solid var(--line,#E4E8F2);
+  border-radius:13px;background:var(--paper,#F6F7FB);font-size:14.5px;font-family:inherit;
+  outline:none;resize:vertical;min-height:74px}
+.rate textarea:focus{border-color:var(--brand,#1B4DFF);background:#fff}
+.rate .send{margin-top:10px;padding:12px 24px;border-radius:13px;background:var(--ink,#0D1424);
+  color:#fff;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:inherit}
+.rate .send:disabled{opacity:.4;cursor:default}
+.rate .said{font-size:13px;color:#00734F;font-weight:600;margin-top:10px}
+.rate .said.wait{color:var(--warn,#B45309)}
+.rate .list2{margin-top:18px;display:grid;gap:10px}
+.rate .r2{padding:13px;border-radius:14px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2)}
+.rate .r2 .hd{display:flex;align-items:center;gap:9px}
+.rate .r2 .hd b{font-size:13.5px;font-weight:700;flex:1}
+.rate .r2 .hd .s{font-size:12px;color:#F59E0B;letter-spacing:1px}
+.rate .r2 .hd small{font-size:11px;color:var(--ink-soft,#5A657C)}
+.rate .r2 p{font-size:13.5px;line-height:1.6;margin-top:7px}
+.rate .none2{font-size:13px;color:var(--ink-soft,#5A657C);margin-top:14px}
+
+/* ---------- phone layout ---------- */
+@media (max-width: 560px){
+  /* Nothing may be wider than the screen. One stray element makes the whole
+     page scroll sideways, which feels broken even when nothing else is. */
+  html, body{overflow-x:hidden;max-width:100vw}
+
+  .top, .topbar{padding:10px 12px;gap:6px}
+  .top b, .topbar b, .brandbar b{font-size:15px}
+  .top .chip, .topbar .chip, .brandbar img{width:28px;height:28px}
+
+  /* The wordmark goes; the logo alone is enough on a small screen. */
+  .brandbar b{display:none}
+
+  .gear{width:36px;height:36px}
+  .langwrap{padding:4px 7px 4px 8px}
+  .langwrap select, .langwrap #langSel{max-width:60px;font-size:12.5px}
+  .acctbtn, .who{max-width:96px;font-size:11.5px;padding:5px 10px 5px 5px}
+  .acctbtn img, .acctbtn .ini{width:21px;height:21px;font-size:10px}
+
+  /* Cards to the edge, with the padding on the page instead. */
+  .wrap{padding-left:14px;padding-right:14px}
+  .hello{padding:18px 16px;border-radius:20px}
+  .hello .t b{font-size:19px}
+  .hellolines .ln{flex-wrap:wrap;gap:4px}
+  .hellolines .ln .k{min-width:78px;font-size:12.5px}
+  .hellolines .ln .v{font-size:13.5px}
+  .hellolines .today2{font-size:14.5px}
+
+  .grid2{grid-template-columns:1fr 1fr;gap:9px}
+  .tiles{gap:9px}
+  .slide{min-height:200px;padding:20px}
+  .slide h3{font-size:22px}
+  .about{padding:20px 16px}
+  .about .contact{grid-template-columns:1fr;gap:8px}
+  .about .contact a{display:flex;align-items:center;gap:12px;text-align:left;padding:12px}
+  .about .contact .ic2{margin:0}
+  .about .pic{width:66px;height:66px;border-radius:20px}
+
+  .row, .row3b, .two{grid-template-columns:1fr}
+  .row3b .swap{width:100%;height:38px}
+  .keys{gap:5px}
+  .keys button{padding:12px 0;font-size:14px}
+}
+
+@media (max-width: 380px){
+  .grid2{grid-template-columns:1fr}
+  .hello .av{width:48px;height:48px}
+  .hello .t b{font-size:17px}
+}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+</style>
+</head>
+<body>
+<div class="bg"><i class="a"></i><i class="b"></i></div>
+
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img class="chip" src="/brand/icon-64.png" alt="" onerror="this.classList.add('gone')">
+    <b>Vibe check</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap"><div id="app"></div><section class="rate" id="ratebox"></section></div>
+
+<script>
+(function(){
+  "use strict";
+  var DATA = null, step = -1, picks = [], result = null;
+  var savedVibe = null, confirmedRetake = false;
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+
+  function saveVibe(key){
+    fetch("/api/auth/vibe/", {
+      method: "POST", credentials: "same-origin",
+      headers: {"Content-Type":"application/json", "X-CSRFToken": cookie("xc_csrf")},
+      body: JSON.stringify({vibe: key})
+    }).catch(function(){});   // signed out: the local copy still works
+  }
+
+  function intro(){
+    var faces = Object.keys(DATA.vibes).map(function(k){ return DATA.vibes[k].emoji; });
+    return '<div class="intro"><div class="orb">\ud83d\udd2e</div>'
+      + '<h1>What\u2019s your vibe?</h1>'
+      + '<p>Eight questions. Twelve creatures. One of them is you \u2014 '
+      + 'and it is probably not the one you are hoping for.</p>'
+      + '<button class="go" data-act="start">Start \u2192</button>'
+      + '<div class="creatures">' + faces.join(" ") + '</div></div>';
+  }
+
+  function question(){
+    var q = DATA.questions[step];
+    var pct = Math.round(step / DATA.questions.length * 100);
+    return '<div class="qbar"><div class="track"><i style="width:' + pct + '%"></i></div>'
+      + '<span class="n">' + (step + 1) + ' / ' + DATA.questions.length + '</span></div>'
+      + '<p class="qtext">' + esc(q.q) + '</p>'
+      + '<div class="opts">' + q.a.map(function(a, i){
+          return '<button class="opt" data-pick="' + i + '">' + esc(a.t) + '</button>';
+        }).join("") + '</div>'
+      + (step > 0 ? '<button class="back" data-act="back">\u2190 Back</button>' : '');
+  }
+
+  function score(){
+    // Each answer votes for two creatures. Ties break towards the creature
+    // picked earliest, so the first answers still count for something.
+    var tally = {}, order = {};
+    picks.forEach(function(p, qi){
+      DATA.questions[qi].a[p].v.forEach(function(k){
+        tally[k] = (tally[k] || 0) + 1;
+        if (order[k] === undefined) order[k] = qi;
+      });
+    });
+    var best = null;
+    Object.keys(tally).forEach(function(k){
+      if (!best || tally[k] > tally[best]
+          || (tally[k] === tally[best] && order[k] < order[best])) best = k;
+    });
+    return { key: best, tally: tally };
+  }
+
+  function resultView(){
+    var v = DATA.vibes[result.key];
+    var others = Object.keys(DATA.vibes);
+
+    return '<div class="card2" style="--c1:' + v.c1 + ';--c2:' + v.c2 + '">'
+      + '<span class="ghost2">' + v.emoji + '</span>'
+      + '<p class="lbl">Your vibe</p>'
+      + '<div class="big">' + v.emoji + '</div>'
+      + '<h2>' + esc(v.name) + '</h2>'
+      + '<p class="line">' + esc(v.line) + '</p>'
+      + '<p class="desc">' + esc(v.desc) + '</p></div>'
+      + '<div class="acts">'
+      + '<button class="share" data-act="share">Share my vibe \ud83d\udcf2</button>'
+      + '<button data-act="again">Take it again</button></div>'
+      + '<p class="copied" id="copied">Link copied</p>'
+      + '<div class="others"><h4>The other eleven</h4><div class="orow">'
+      + others.map(function(k){
+          return '<span class="' + (k === result.key ? "hit" : "") + '" title="'
+            + esc(DATA.vibes[k].name) + '">' + DATA.vibes[k].emoji + '</span>';
+        }).join("") + '</div></div>'
+      + '<p class="small">This is a quiz, not a personality test. '
+      + 'It means exactly as much as you want it to.</p>';
+  }
+
+  function render(){
+    var app = document.getElementById("app");
+    if (step === -1) app.innerHTML = intro();
+    else if (result) app.innerHTML = resultView();
+    else app.innerHTML = question();
+    window.scrollTo(0, 0);
+  }
+
+  document.getElementById("app").addEventListener("click", function(e){
+    var p = e.target.closest("[data-pick]");
+    if (p){
+      picks[step] = parseInt(p.getAttribute("data-pick"), 10);
+      step++;
+      if (step >= DATA.questions.length){
+        result = score();
+        savedVibe = result.key;
+        try { localStorage.setItem("xc_vibe", result.key); } catch(e){}
+        // Also on the account, so it follows the person to their other devices.
+        saveVibe(result.key);
+        history.replaceState(null, "", "/vibe?v=" + result.key);
+      }
+      return render();
+    }
+
+    var a = e.target.closest("[data-act]");
+    if (!a) return;
+    var act = a.getAttribute("data-act");
+
+    if (act === "start"){
+      // Somebody who already has a result probably arrived by accident.
+      // Ask before wiping it.
+      if (savedVibe && DATA.vibes[savedVibe] && !confirmedRetake){
+        confirmedRetake = true;
+        result = { key: savedVibe, tally: {} };
+        return render();
+      }
+      step = 0; picks = []; result = null; return render();
+    }
+    if (act === "back"){ step = Math.max(0, step - 1); return render(); }
+    if (act === "again"){
+      // People absolutely will retake this until they get the one they wanted,
+      // which is fine - but not by accident.
+      if (savedVibe && !confirm("You already have a vibe. Take the quiz again?")){
+        return;
+      }
+      step = 0; picks = []; result = null;
+      try { localStorage.removeItem("xc_vibe"); } catch(e){}
+      saveVibe("");
+      savedVibe = null;
+      history.replaceState(null, "", "/vibe");
+      return render();
+    }
+    if (act === "share"){
+      var v = DATA.vibes[result.key];
+      var text = "I got " + v.emoji + " " + v.name + " \u2014 " + v.line;
+      var url = location.origin + "/vibe";
+      if (navigator.share){
+        navigator.share({ title: "What's your vibe?", text: text, url: url })
+          .catch(function(){});
+      } else if (navigator.clipboard){
+        navigator.clipboard.writeText(text + "\n" + url).then(function(){
+          var c = document.getElementById("copied");
+          c.classList.add("on");
+          setTimeout(function(){ c.classList.remove("on"); }, 2200);
+        }).catch(function(){});
+      }
+    }
+  });
+
+  fetch("/brand/vibes.json", {credentials:"same-origin"})
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){
+      DATA = d;
+      // A shared link opens straight on that creature, which is the whole
+      // point of sharing one.
+      try { savedVibe = localStorage.getItem("xc_vibe"); } catch(e){}
+
+      // The account is the source of truth; the local copy is only a fallback
+      // for people who are not signed in.
+      fetch("/api/auth/home/", {credentials:"same-origin"})
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(u){
+          if (u && u.vibe && DATA.vibes[u.vibe] && u.vibe !== savedVibe){
+            savedVibe = u.vibe;
+            try { localStorage.setItem("xc_vibe", u.vibe); } catch(e){}
+            if (!new URLSearchParams(location.search).get("v")){
+              result = { key: u.vibe, tally: {} }; step = 0; render();
+            }
+          }
+        }).catch(function(){});
+      var q = new URLSearchParams(location.search).get("v");
+      if (q && DATA.vibes[q]){ result = { key: q, tally: {} }; step = 0; }
+      else if (savedVibe && DATA.vibes[savedVibe]){
+        result = { key: savedVibe, tally: {} }; step = 0;
+      }
+      render();
+    })
+    .catch(function(){
+      document.getElementById("app").innerHTML =
+        '<div class="intro"><p>Could not load the quiz. Try again in a moment.</p></div>';
+    });
+})();
+</script>
+
+<script>
+/* Registers the worker that makes the site open without a connection.
+   Failure here is not worth reporting: the site works either way. */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  });
+}
+</script>
+
+<script>
+/* Ratings. Stars go live at once; a written comment waits to be read, because
+   a star cannot carry abuse or a spam link and a sentence can. */
+(function(){
+  var MODULE = "vibe";
+  var wrap = document.getElementById("ratebox");
+  if (!wrap) return;
+
+  var picked = 0, mine = null, busy = false;
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+  function stars(n){
+    return "\u2605".repeat(Math.round(n)) + "\u2606".repeat(5 - Math.round(n));
+  }
+
+  function draw(d){
+    var h = '<div class="top2">';
+    if (d.count){
+      h += '<span class="big2">' + d.average + '</span>'
+        + '<span class="t2"><span class="stars">' + stars(d.average) + '</span>'
+        + '<span class="out" style="display:block">out of 5, from '
+        + d.count + (d.count === 1 ? ' person' : ' people') + '</span></span>';
+    } else {
+      h += '<span class="t2"><h4>Rate this</h4>'
+        + '<span class="out">Nobody has rated it yet.</span></span>';
+    }
+    h += '</div>';
+
+    h += '<h4 style="margin-top:16px">'
+      + (mine ? "Your rating" : "How was it?") + '</h4>'
+      + '<div class="pick2">';
+    for (var i = 1; i <= 5; i++){
+      h += '<button data-star="' + i + '" class="'
+        + (i <= picked ? "on" : "") + '">'
+        + (i <= picked ? "\u2605" : "\u2606") + '</button>';
+    }
+    h += '</div>'
+      + '<textarea id="rcomment" maxlength="600" placeholder="Say a bit more '
+      + '(optional)">' + esc(mine && mine.comment ? mine.comment : "") + '</textarea>'
+      + '<button class="send" id="rsend"' + (picked ? "" : " disabled") + '>'
+      + (mine ? "Update" : "Send") + '</button>';
+
+    if (mine && mine.state === "pending"){
+      h += '<p class="said wait">Your rating counts already. '
+        + 'The comment appears once we have read it.</p>';
+    }
+
+    if (d.reviews && d.reviews.length){
+      h += '<div class="list2">';
+      d.reviews.forEach(function(r){
+        h += '<div class="r2"><div class="hd">'
+          + '<b>' + esc(r.name) + '</b>'
+          + '<span class="s">' + stars(r.stars) + '</span>'
+          + '<small>' + esc(r.when) + '</small></div>'
+          + '<p>' + esc(r.comment) + '</p></div>';
+      });
+      h += '</div>';
+    }
+
+    wrap.innerHTML = h;
+  }
+
+  function load(){
+    fetch("/api/reviews/" + MODULE + "/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        mine = d.mine || null;
+        picked = mine ? mine.stars : 0;
+        draw(d);
+      })
+      .catch(function(){});
+  }
+
+  wrap.addEventListener("click", function(e){
+    var st = e.target.closest("[data-star]");
+    if (st){
+      picked = parseInt(st.getAttribute("data-star"), 10);
+      var btns = wrap.querySelectorAll("[data-star]");
+      btns.forEach(function(b, i){
+        var on = (i + 1) <= picked;
+        b.classList.toggle("on", on);
+        b.textContent = on ? "\u2605" : "\u2606";
+      });
+      var send = document.getElementById("rsend");
+      if (send) send.disabled = false;
+      return;
+    }
+
+    if (e.target.id === "rsend"){
+      if (busy || !picked) return;
+      busy = true;
+      e.target.disabled = true;
+      var box = document.getElementById("rcomment");
+      fetch("/api/reviews/" + MODULE + "/mine/", {
+        method: "POST", credentials: "same-origin",
+        headers: {"Content-Type":"application/json", "X-CSRFToken": cookie("xc_csrf")},
+        body: JSON.stringify({stars: picked, comment: box ? box.value : ""})
+      })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+      .then(function(res){
+        busy = false;
+        if (!res.ok){
+          alert(res.d.detail || "Could not save that.");
+          return;
+        }
+        load();
+      })
+      .catch(function(){ busy = false; });
+    }
+  });
+
+  load();
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

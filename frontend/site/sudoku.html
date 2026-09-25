@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sudoku &mdash; XpertCreation</title>
+<meta name="description" content="Fill the grid so every row, column and box has one to nine. Three levels, and every puzzle has exactly one answer.">
+<link rel="canonical" href="https://xpertcreation.com/sudoku">
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#F6F7FB">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --line:#E4E8F2;--brand:#1B4DFF;--danger:#E11D48;
+  --given:#0D1424;--mine2:#1B4DFF;--sel:#DCE6FF;--peer:#EEF3FF;--same:#CFE0FF;
+  --display:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--display);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent}
+.top{position:sticky;top:0;z-index:20;background:rgba(246,247,251,.93);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .in{max-width:480px;margin:0 auto;padding:11px 15px;display:flex;
+  align-items:center;gap:10px}
+.top img{width:28px;height:28px;border-radius:9px}
+.top b{font-weight:800;font-size:15px;letter-spacing:-.02em}
+.top .sp{flex:1}
+.top a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:7px 12px;
+  border-radius:10px;border:1px solid var(--line);background:var(--card)}
+.wrap{max-width:480px;margin:0 auto;padding:12px 15px 30px}
+
+.lv{display:flex;gap:7px;margin-bottom:10px}
+.lv button{flex:1;padding:10px 8px;border-radius:12px;font-size:13px;
+  font-weight:700;border:1.5px solid var(--line);background:var(--card);
+  color:var(--ink-soft);cursor:pointer}
+.lv button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+.hud{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.hud .m{flex:1;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:8px 12px;font-size:11px;color:var(--ink-soft);
+  font-weight:600}
+.hud .m b{display:block;font-size:18px;color:var(--ink);font-weight:800;
+  line-height:1.25;font-variant-numeric:tabular-nums}
+
+.boardwrap{position:relative}
+.grid{display:grid;grid-template-columns:repeat(9,1fr);aspect-ratio:1;
+  background:var(--ink);gap:1px;padding:2px;border-radius:12px;
+  touch-action:manipulation;overflow:hidden}
+.c{background:var(--card);display:grid;place-items:center;cursor:pointer;
+  font-weight:700;font-size:min(5.4vw,23px);user-select:none;position:relative;
+  line-height:1}
+.c.given{font-weight:800;color:var(--given)}
+.c.own{color:var(--mine2)}
+.c.bad{color:var(--danger)}
+.c.sel{background:var(--sel)}
+.c.peer{background:var(--peer)}
+.c.same{background:var(--same)}
+/* Teen ke tukron ki moti lakeerein */
+.c.br{box-shadow:inset -2px 0 0 0 var(--ink)}
+.c.bb{box-shadow:inset 0 -2px 0 0 var(--ink)}
+.c.br.bb{box-shadow:inset -2px 0 0 0 var(--ink), inset 0 -2px 0 0 var(--ink)}
+.c .notes{position:absolute;inset:2px;display:grid;
+  grid-template-columns:repeat(3,1fr);font-size:min(2.3vw,10px);
+  color:var(--ink-soft);font-weight:700;place-items:center;pointer-events:none}
+
+.pad{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;margin-top:12px}
+.pad button{aspect-ratio:1;border-radius:10px;border:1.5px solid var(--line);
+  background:var(--card);font-size:min(5vw,20px);font-weight:800;
+  cursor:pointer;color:var(--ink);padding:0;display:grid;place-items:center}
+.pad button:hover{border-color:var(--brand);color:var(--brand)}
+.pad button.done{opacity:.3}
+
+.acts{display:flex;gap:7px;margin-top:10px}
+.acts button{flex:1;padding:11px 6px;border-radius:12px;font-size:12.5px;
+  font-weight:700;border:1.5px solid var(--line);background:var(--card);
+  color:var(--ink);cursor:pointer}
+.acts button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.acts button:disabled{opacity:.4;cursor:default}
+
+.over{position:absolute;inset:0;display:grid;place-items:center;z-index:5;
+  background:rgba(246,247,251,.94);border-radius:12px;text-align:center;
+  padding:20px}
+.over .e{font-size:38px}
+.over h2{font-weight:800;font-size:22px;letter-spacing:-.03em;margin-top:6px}
+.over p{color:var(--ink-soft);font-size:14px;margin-top:4px}
+.over button{margin-top:14px;padding:12px 24px;border-radius:13px;border:none;
+  background:var(--brand);color:#fff;font-size:15px;font-weight:800;cursor:pointer}
+
+.busy{position:absolute;inset:0;display:grid;place-items:center;z-index:6;
+  background:rgba(246,247,251,.92);border-radius:12px;font-weight:700;
+  color:var(--ink-soft)}
+.note{background:var(--card);border:1px dashed var(--line);border-radius:16px;
+  padding:14px;margin-top:14px;font-size:13px;color:var(--ink-soft)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Sudoku</b>
+    <span class="sp"></span>
+    <a href="/games">All games</a>
+  </div>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap">
+  <div class="lv" id="lv">
+    <button type="button" data-l="easy">Easy</button>
+    <button type="button" data-l="medium" class="on">Medium</button>
+    <button type="button" data-l="hard">Hard</button>
+  </div>
+
+  <div class="hud">
+    <span class="m">Time<b id="time">0:00</b></span>
+    <span class="m">Mistakes<b id="errs">0</b></span>
+    <span class="m">Left<b id="left">0</b></span>
+    <span class="m">Best<b id="best">&mdash;</b></span>
+  </div>
+
+  <div class="boardwrap" id="bw">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="pad" id="pad"></div>
+
+  <div class="acts">
+    <button type="button" id="undo" disabled>Undo</button>
+    <button type="button" id="erase">Erase</button>
+    <button type="button" id="pencil">Notes</button>
+    <button type="button" id="hint">Hint</button>
+    <button type="button" id="again">New</button>
+  </div>
+
+  <div class="note">
+    Every row, every column and every three-by-three box needs one to nine,
+    with nothing repeated. Turn on Notes to pencil in small numbers.
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* Sudoku ka engine - pehle alag likh kar test karta hoon, phir safe mein
+     daalunga. Asal cheez do hain: mukammal grid banana, aur us mein se
+     khane hatate waqt ye yaqeen rakhna ke hal ab bhi sirf EK hai. */
+
+  function blank(){ return new Array(81).fill(0); }
+
+  function rowOf(i){ return Math.floor(i / 9); }
+  function colOf(i){ return i % 9; }
+  function boxOf(i){ return Math.floor(rowOf(i) / 3) * 3 + Math.floor(colOf(i) / 3); }
+
+  function okHere(g, i, v){
+    var r = rowOf(i), c = colOf(i), b = boxOf(i);
+    for (var j = 0; j < 81; j++){
+      if (j === i || !g[j]) continue;
+      if (g[j] !== v) continue;
+      if (rowOf(j) === r || colOf(j) === c || boxOf(j) === b) return false;
+    }
+    return true;
+  }
+
+  function shuffle(a, rng){
+    for (var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(rng() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* Mukammal grid. Khali khana chunte waqt "sab se kam imkaan wala"
+     chunte hain - us se backtracking bahut kam hoti hai. */
+  function solve(g, rng, countOnly, limit){
+    var found = 0;
+
+    function step(){
+      var best = -1, bestOpts = null;
+      for (var i = 0; i < 81; i++){
+        if (g[i]) continue;
+        var opts = [];
+        for (var v = 1; v <= 9; v++) if (okHere(g, i, v)) opts.push(v);
+        if (!opts.length) return false;
+        if (!bestOpts || opts.length < bestOpts.length){
+          best = i; bestOpts = opts;
+          if (opts.length === 1) break;
+        }
+      }
+      if (best === -1){
+        found++;
+        return !countOnly || found >= limit;
+      }
+      if (rng) shuffle(bestOpts, rng);
+      for (var k = 0; k < bestOpts.length; k++){
+        g[best] = bestOpts[k];
+        if (step()) return true;
+        g[best] = 0;
+      }
+      return false;
+    }
+
+    var done = step();
+    return countOnly ? found : done;
+  }
+
+  function countSolutions(g){
+    var copy = g.slice();
+    return solve(copy, null, true, 2);
+  }
+
+  function full(rng){
+    var g = blank();
+    solve(g, rng, false);
+    return g;
+  }
+
+  /* Khane hatate hain, magar har dafa dekh kar ke hal ab bhi ek hi hai.
+     Jori mein hatate hain (aamne saamne) - us se puzzle dekhne mein
+     khoobsurat lagta hai aur banane mein tez bhi. */
+  function carve(sol, keep, rng){
+    var g = sol.slice();
+    var order = shuffle(Array.from({length: 81}, function(_, i){ return i; }), rng);
+    var removed = 0;
+    var want = 81 - keep;
+
+    for (var n = 0; n < order.length && removed < want; n++){
+      var i = order[n];
+      if (!g[i]) continue;
+      var mirror = 80 - i;
+      var save1 = g[i], save2 = g[mirror];
+      g[i] = 0;
+      if (mirror !== i) g[mirror] = 0;
+      if (countSolutions(g) !== 1){
+        g[i] = save1;
+        if (mirror !== i) g[mirror] = save2;
+      } else {
+        removed += (mirror === i) ? 1 : 2;
+      }
+    }
+    return g;
+  }
+
+  function mulberry(seed){
+    return function(){
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ---------------- khelna ---------------- */
+
+  var KEEP = {easy: 40, medium: 32, hard: 27};
+  var level = "medium";
+
+  var puzzle = [], sol = [], cells = [], notes = [];
+  var sel = -1, errs = 0, done = false, pencil = false;
+  var hist = [], t0 = 0, tick = null, hints = 0;
+
+  try {
+    var l = localStorage.getItem("xc_sud_level");
+    if (KEEP[l]) level = l;
+  } catch(e){}
+
+  function bestKey(){ return "xc_sud_best_" + level; }
+  function getBest(){
+    try {
+      var v = parseInt(localStorage.getItem(bestKey()) || "0", 10);
+      return v > 0 ? v : 0;
+    } catch(e){ return 0; }
+  }
+  function mmss(s){
+    return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  }
+  function elapsed(){ return t0 ? Math.floor((Date.now() - t0) / 1000) : 0; }
+  function stopClock(){ if (tick){ clearInterval(tick); tick = null; } }
+  function startClock(){
+    stopClock();
+    t0 = Date.now();
+    tick = setInterval(function(){
+      document.getElementById("time").textContent = mmss(elapsed());
+    }, 500);
+  }
+
+  function peers(i){
+    var out = [];
+    for (var j = 0; j < 81; j++){
+      if (j === i) continue;
+      if (rowOf(j) === rowOf(i) || colOf(j) === colOf(i) || boxOf(j) === boxOf(i))
+        out.push(j);
+    }
+    return out;
+  }
+
+  /* Ghalat kya hai - us khane ka adad kisi peer se takra raha ho */
+  function clashes(i){
+    var v = cells[i];
+    if (!v) return false;
+    var p = peers(i);
+    for (var k = 0; k < p.length; k++) if (cells[p[k]] === v) return true;
+    return false;
+  }
+
+  function leftCount(){
+    var n = 0;
+    for (var i = 0; i < 81; i++) if (!cells[i]) n++;
+    return n;
+  }
+
+  function draw(){
+    var g = document.getElementById("grid");
+    var h = "";
+    var selVal = sel >= 0 ? cells[sel] : 0;
+    var pr = sel >= 0 ? peers(sel) : [];
+
+    for (var i = 0; i < 81; i++){
+      var cls = "c";
+      var r = rowOf(i), c = colOf(i);
+      if (c === 2 || c === 5) cls += " br";
+      if (r === 2 || r === 5) cls += " bb";
+      if (puzzle[i]) cls += " given";
+      else if (cells[i]) cls += " own";
+      if (cells[i] && !puzzle[i] && clashes(i)) cls += " bad";
+      if (i === sel) cls += " sel";
+      else if (sel >= 0 && pr.indexOf(i) !== -1) cls += " peer";
+      else if (selVal && cells[i] === selVal) cls += " same";
+
+      var inner = "";
+      if (cells[i]){
+        inner = String(cells[i]);
+      } else if (notes[i] && notes[i].length){
+        inner = '<span class="notes">';
+        for (var v = 1; v <= 9; v++){
+          inner += "<span>" + (notes[i].indexOf(v) !== -1 ? v : "") + "</span>";
+        }
+        inner += "</span>";
+      }
+      h += '<div class="' + cls + '" data-i="' + i + '">' + inner + '</div>';
+    }
+    g.innerHTML = h;
+
+    // Pad: jo adad nau dafa lag chuka ho wo halka
+    var used = {};
+    for (var k = 0; k < 81; k++) if (cells[k]) used[cells[k]] = (used[cells[k]] || 0) + 1;
+    var ph = "";
+    for (var n = 1; n <= 9; n++){
+      ph += '<button type="button" data-n="' + n + '"'
+        + (used[n] >= 9 ? ' class="done"' : '') + '>' + n + '</button>';
+    }
+    document.getElementById("pad").innerHTML = ph;
+
+    document.getElementById("errs").textContent = errs;
+    document.getElementById("left").textContent = leftCount();
+    var b = getBest();
+    document.getElementById("best").textContent = b ? mmss(b) : "\u2014";
+    document.getElementById("undo").disabled = !hist.length || done;
+    document.getElementById("pencil").classList.toggle("on", pencil);
+  }
+
+  function put(i, v){
+    if (done || puzzle[i]) return;
+    hist.push({i: i, was: cells[i], notes: (notes[i] || []).slice()});
+    if (hist.length > 200) hist.shift();
+
+    if (pencil && v){
+      cells[i] = 0;
+      notes[i] = notes[i] || [];
+      var at = notes[i].indexOf(v);
+      if (at === -1) notes[i].push(v); else notes[i].splice(at, 1);
+      draw();
+      return;
+    }
+
+    cells[i] = v;
+    notes[i] = [];
+    if (v){
+      // Ghalat adad ginte hain, magar rokte nahi - log apni ghalti
+      // khud dhoondhna pasand karte hain
+      if (v !== sol[i]) errs++;
+      // Us adad ke peers ke notes se wo adad hata dete hain
+      peers(i).forEach(function(j){
+        if (notes[j]){
+          var k2 = notes[j].indexOf(v);
+          if (k2 !== -1) notes[j].splice(k2, 1);
+        }
+      });
+    }
+    draw();
+    checkDone();
+  }
+
+  function checkDone(){
+    for (var i = 0; i < 81; i++) if (cells[i] !== sol[i]) return;
+    done = true;
+    stopClock();
+    var secs = elapsed();
+    var b = getBest();
+    // Hint lene par best time mein shumar nahi - warna record bemani
+    if (!hints && (!b || secs < b)){
+      try { localStorage.setItem(bestKey(), String(secs)); } catch(e){}
+    }
+    draw();
+    setTimeout(function(){ finish(secs); }, 350);
+  }
+
+  function finish(secs){
+    var bw = document.getElementById("bw");
+    if (bw.querySelector(".over")) return;
+    var b = getBest();
+    var d = document.createElement("div");
+    d.className = "over";
+    d.innerHTML = '<div><div class="e">\ud83c\udf89</div><h2>Solved</h2>'
+      + '<p>' + mmss(secs)
+      + (errs ? ", " + errs + (errs === 1 ? " mistake" : " mistakes") : ", clean")
+      + (hints ? ", " + hints + (hints === 1 ? " hint" : " hints") : "")
+      + (!hints && b === secs ? " \u2014 your best yet." : ".") + '</p>'
+      + '<button type="button" id="ng">New puzzle</button></div>';
+    bw.appendChild(d);
+    d.querySelector("#ng").addEventListener("click", make);
+  }
+
+  function make(){
+    var o = document.querySelector(".over");
+    if (o) o.remove();
+    stopClock();
+
+    var bw = document.getElementById("bw");
+    var b = document.createElement("div");
+    b.className = "busy";
+    b.textContent = "Making a puzzle\u2026";
+    bw.appendChild(b);
+
+    // Banane mein thora waqt lagta hai; pehle "making" dikha dete hain
+    // warna safa jam gaya lagta hai
+    setTimeout(function(){
+      var rng = Math.random;
+      sol = full(rng);
+      puzzle = carve(sol, KEEP[level], rng);
+      cells = puzzle.slice();
+      notes = [];
+      for (var i = 0; i < 81; i++) notes.push([]);
+      sel = -1; errs = 0; done = false; hist = []; hints = 0;
+      b.remove();
+      draw();
+      startClock();
+    }, 30);
+  }
+
+  document.getElementById("grid").addEventListener("click", function(e){
+    var c = e.target.closest("[data-i]");
+    if (!c) return;
+    sel = parseInt(c.getAttribute("data-i"), 10);
+    draw();
+  });
+
+  document.getElementById("pad").addEventListener("click", function(e){
+    var b = e.target.closest("[data-n]");
+    if (!b || sel < 0) return;
+    put(sel, parseInt(b.getAttribute("data-n"), 10));
+  });
+
+  document.getElementById("erase").addEventListener("click", function(){
+    if (sel < 0) return;
+    put(sel, 0);
+  });
+
+  document.getElementById("pencil").addEventListener("click", function(){
+    pencil = !pencil;
+    draw();
+  });
+
+  document.getElementById("undo").addEventListener("click", function(){
+    if (!hist.length || done) return;
+    var last = hist.pop();
+    cells[last.i] = last.was;
+    notes[last.i] = last.notes;
+    sel = last.i;
+    draw();
+  });
+
+  document.getElementById("hint").addEventListener("click", function(){
+    if (done) return;
+    // Chuna hua khana, warna koi bhi khali
+    var i = (sel >= 0 && !cells[sel]) ? sel : -1;
+    if (i === -1){
+      for (var k = 0; k < 81; k++) if (!cells[k]){ i = k; break; }
+    }
+    if (i === -1) return;
+    hints++;
+    sel = i;
+    hist.push({i: i, was: cells[i], notes: (notes[i] || []).slice()});
+    cells[i] = sol[i];
+    notes[i] = [];
+    draw();
+    checkDone();
+  });
+
+  document.getElementById("again").addEventListener("click", make);
+
+  document.getElementById("lv").addEventListener("click", function(e){
+    var b = e.target.closest("[data-l]");
+    if (!b) return;
+    level = b.getAttribute("data-l");
+    try { localStorage.setItem("xc_sud_level", level); } catch(err){}
+    document.querySelectorAll("[data-l]").forEach(function(x){
+      x.classList.toggle("on", x === b);
+    });
+    make();
+  });
+
+  document.addEventListener("keydown", function(e){
+    if (done) return;
+    if (/^[1-9]$/.test(e.key) && sel >= 0){ put(sel, +e.key); return; }
+    if ((e.key === "Backspace" || e.key === "Delete" || e.key === "0")
+        && sel >= 0){ e.preventDefault(); put(sel, 0); return; }
+    var move = {ArrowUp: -9, ArrowDown: 9, ArrowLeft: -1, ArrowRight: 1}[e.key];
+    if (move !== undefined && sel >= 0){
+      e.preventDefault();
+      var n = sel + move;
+      // Qatar ke kinare par na phisle
+      if (move === -1 && colOf(sel) === 0) return;
+      if (move === 1 && colOf(sel) === 8) return;
+      if (n >= 0 && n < 81){ sel = n; draw(); }
+    }
+  });
+
+  document.querySelectorAll("[data-l]").forEach(function(x){
+    x.classList.toggle("on", x.getAttribute("data-l") === level);
+  });
+  make();
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Learn and use</h5>
+      <ul>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/people">Connect</a></li>
+        <li><a href="/pets">Pets</a></li>
+        <li><a href="/shows">Shows</a></li>
+        <li><a href="/docs">Guide</a></li>
+        <li><a href="/games">Games</a></li>
+        <li><a href="/money">Money</a></li>
+        <li><a href="/business">Business</a></li>
+        <li><a href="/blood">Blood bank</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+</body>
+</html>

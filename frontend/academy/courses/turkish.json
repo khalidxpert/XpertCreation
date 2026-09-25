@@ -1,0 +1,1231 @@
+{
+ "day-1": {
+  "t": "Day 1 - Saying hello, and how Turkish sounds",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Greet someone and say goodbye",
+     "Say please, thank you and sorry",
+     "Read Turkish out loud without guessing"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Turkish spelling never lies"
+   },
+   {
+    "k": "p",
+    "v": "Every letter has one sound and keeps it. Read a Turkish word the way it is written and you have said it correctly. There is nothing like the English through, though and thought."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "c = j in jam",
+     "ç = ch in chair",
+     "ş = sh in ship",
+     "g = always hard, as in go",
+     "j = s in measure",
+     "y = y in yes"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Two letters look unfamiliar but are easy. The i without a dot is written ı and sounds like the a at the end of sofa. The ğ is never pronounced on its own - it just stretches the vowel before it, so dağ (mountain) comes out as daa."
+   },
+   {
+    "k": "h",
+    "v": "2) Six greetings"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Merhaba = Hello",
+     "Günaydın = Good morning",
+     "İyi günler = Good day",
+     "İyi akşamlar = Good evening",
+     "Hoşça kalın = Goodbye, said by the one leaving",
+     "Güle güle = Goodbye, said by the one staying"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Those last two are not interchangeable. The person walking out says hoşça kalın (stay well). The person staying says güle güle (go smiling). Say the wrong one and people will smile at you."
+   },
+   {
+    "k": "h",
+    "v": "3) The words you will use most"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Lütfen = Please",
+     "Teşekkür ederim = Thank you",
+     "Sağ ol = Thanks, informal",
+     "Rica ederim = You're welcome",
+     "Affedersiniz = Excuse me",
+     "Özür dilerim = I'm sorry",
+     "Evet = Yes",
+     "Hayır = No",
+     "Tamam = OK"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Teşekkür ederim is a mouthful at first. Turks often shorten it to teşekkürler, and nobody minds."
+   },
+   {
+    "k": "h",
+    "v": "4) Asking how someone is"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Nasılsınız? = How are you? (polite)",
+     "İyiyim, teşekkür ederim = I'm well, thank you",
+     "Siz nasılsınız? = And you?",
+     "Fena değil = Not bad"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Siz is the polite you. Use it with anyone you have just met, anyone older, and anyone serving you. Turkish has a familiar form too, which comes on day 3."
+   },
+   {
+    "k": "h",
+    "v": "5) Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Say this conversation out loud twice.|Merhaba! Nasılsınız?|İyiyim, teşekkür ederim. Siz nasılsınız?|Ben de iyiyim. Teşekkürler.|Hoşça kalın!|Güle güle!"
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Read the six greetings out loud five times",
+     "Learn which goodbye belongs to who",
+     "Say teşekkür ederim until it stops feeling long"
+    ]
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 - Numbers, and asking what things cost",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Count to a hundred",
+     "Ask a price and understand the answer",
+     "Say how many you want"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) One to ten"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "bir = one",
+     "iki = two",
+     "üç = three",
+     "dört = four",
+     "beş = five",
+     "altı = six",
+     "yedi = seven",
+     "sekiz = eight",
+     "dokuz = nine",
+     "on = ten"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Turkish numbers are built, not memorised"
+   },
+   {
+    "k": "p",
+    "v": "After ten there is nothing new to learn. You glue the words together in the order you say them in English, with no and, no hyphen, and no surprises."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "on bir = eleven, literally ten one",
+     "on beş = fifteen",
+     "yirmi = twenty",
+     "yirmi üç = twenty-three",
+     "otuz = thirty",
+     "kırk = forty",
+     "elli = fifty",
+     "altmış = sixty",
+     "yetmiş = seventy",
+     "seksen = eighty",
+     "doksan = ninety",
+     "yüz = hundred",
+     "bin = thousand"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "One hundred is just yüz, never bir yüz. Same with bin. But two hundred is iki yüz."
+   },
+   {
+    "k": "h",
+    "v": "3) Money"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "lira = the Turkish lira",
+     "kuruş = the small coin, a hundred to a lira",
+     "Kaç para? = How much?",
+     "Bu ne kadar? = How much is this?",
+     "Pahalı = Expensive",
+     "Ucuz = Cheap",
+     "Çok pahalı = Very expensive"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) In a shop"
+   },
+   {
+    "k": "steps",
+    "v": "A real exchange in a shop.|Affedersiniz, bu ne kadar?|Elli lira.|Çok pahalı. Kırk lira?|Tamam, kırk beş.|Tamam, aldım. Teşekkür ederim."
+   },
+   {
+    "k": "p",
+    "v": "Aldım means I'll take it, literally I took it. Turkish often uses the past where English uses the present - the decision is made, so it is done."
+   },
+   {
+    "k": "h",
+    "v": "5) How many"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "bir tane = one of them",
+     "iki tane = two of them",
+     "kaç tane? = how many?"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "After a number, the noun stays singular. Two teas is iki çay, never iki çaylar. The number already told you there were two."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Count out loud from one to twenty",
+     "Say your phone number in Turkish",
+     "Practise kaç para and çok pahalı"
+    ]
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 - Talking about yourself, and siz against sen",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Say your name, where you are from and what you do",
+     "Know when to use siz and when to use sen",
+     "Say I am, you are, this is"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The two yous"
+   },
+   {
+    "k": "p",
+    "v": "Turkish has two words for you, and picking the wrong one is the fastest way to sound rude or oddly stiff."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "siz = polite, or more than one person",
+     "sen = familiar, one person you know well"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Use siz with strangers, shopkeepers, officials, anyone older, and anyone at work. Use sen with friends, children, and family. If you are unsure, use siz - being slightly formal is never insulting, but sen to the wrong person is."
+   },
+   {
+    "k": "tip",
+    "v": "Turks often say sen diyelim, meaning let's use sen. That is an invitation to relax. Wait for it rather than assuming it."
+   },
+   {
+    "k": "h",
+    "v": "2) I am, you are"
+   },
+   {
+    "k": "p",
+    "v": "Turkish has no separate word for am or is. The ending on the word carries it."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ben Ali'yim = I am Ali",
+     "Siz Ayşe misiniz? = Are you Ayşe?",
+     "Bu Ahmet = This is Ahmet",
+     "Ben Pakistanlıyım = I am Pakistani",
+     "Ben doktorum = I am a doctor"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Notice there is no word for a. Ben doktorum is I am doctor, and that is correct Turkish."
+   },
+   {
+    "k": "h",
+    "v": "3) Where are you from"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Nerelisiniz? = Where are you from?",
+     "Pakistanlıyım = I'm from Pakistan",
+     "İstanbulluyum = I'm from Istanbul",
+     "Türkiye = Turkey",
+     "Türkçe = Turkish, the language",
+     "Türkçe bilmiyorum = I don't speak Turkish",
+     "Biraz Türkçe biliyorum = I speak a little Turkish"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "The ending -lı turns a place into a person from there. Pakistan becomes Pakistanlı, Lahor becomes Lahorlu. Which vowel you use depends on the word, and that is tomorrow's lesson."
+   },
+   {
+    "k": "h",
+    "v": "4) The words for people"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "ben = I",
+     "sen = you, familiar",
+     "o = he, she, it - all one word",
+     "biz = we",
+     "siz = you, polite or plural",
+     "onlar = they"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Turkish has no he or she. O covers both. Nobody will ever mistake a gender in Turkish because the language does not mark it."
+   },
+   {
+    "k": "h",
+    "v": "5) Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Introduce yourself.|Merhaba, ben Khalid.|Nerelisiniz?|Pakistanlıyım. Siz nerelisiniz?|Ben İstanbulluyum.|Memnun oldum. (Pleased to meet you.)|Ben de memnun oldum."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Say your own introduction out loud, three times",
+     "Decide which you would use with a shopkeeper, a friend, and a manager",
+     "Learn memnun oldum - you will use it constantly"
+    ]
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 - Vowel harmony, the rule behind everything",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand why endings change shape",
+     "Pick the right vowel without memorising each word",
+     "Make plurals"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. This is the most important lesson in the course."
+   },
+   {
+    "k": "h",
+    "v": "1) Why evler but kitaplar"
+   },
+   {
+    "k": "p",
+    "v": "Both mean the plural - houses and books. So why is one -ler and the other -lar? Because Turkish endings copy the vowel sound of the word they join. This is vowel harmony, and once you see it, half of Turkish grammar stops being memorisation."
+   },
+   {
+    "k": "h",
+    "v": "2) The two families"
+   },
+   {
+    "k": "p",
+    "v": "Every Turkish vowel belongs to one of two groups, decided by where your tongue sits."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Front vowels: e, i, ö, ü",
+     "Back vowels: a, ı, o, u"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Look at the last vowel of the word. If it is from the front group, the ending uses e. If from the back group, the ending uses a."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "ev (house), last vowel e, front = evler",
+     "kitap (book), last vowel a, back = kitaplar",
+     "göz (eye), last vowel ö, front = gözler",
+     "okul (school), last vowel u, back = okullar"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Try it yourself"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "çocuk (child) = çocuklar",
+     "öğretmen (teacher) = öğretmenler",
+     "araba (car) = arabalar",
+     "şehir (city) = şehirler",
+     "kapı (door) = kapılar"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Say them out loud. Your mouth will tell you when it is right long before your brain does - that is exactly why the rule exists. Turkish endings follow the path of least effort."
+   },
+   {
+    "k": "h",
+    "v": "4) The four-way version"
+   },
+   {
+    "k": "p",
+    "v": "Some endings have four shapes instead of two, using ı, i, u or ü. The same logic applies, just finer."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "after a or ı use ı",
+     "after e or i use i",
+     "after o or u use u",
+     "after ö or ü use ü"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "You met this yesterday without knowing. Pakistanlıyım has ı because Pakistan ends in a. İstanbulluyum has u because İstanbul ends in u."
+   },
+   {
+    "k": "h",
+    "v": "5) Plural practice"
+   },
+   {
+    "k": "steps",
+    "v": "Make these plural, then check.|ev - evler|kitap - kitaplar|çiçek (flower) - çiçekler|masa (table) - masalar|gün (day) - günler"
+   },
+   {
+    "k": "warn",
+    "v": "Do not add the plural after a number. Beş kitap, not beş kitaplar. Turkish thinks the number has done that job already."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Sort these by front or back: ev, kitap, okul, göz, araba, şehir",
+     "Make ten nouns plural",
+     "Say each one out loud and listen for whether it flows"
+    ]
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 - Food and ordering",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Order food and drink",
+     "Say I want and I would like",
+     "Ask for the bill"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Drinks"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "su = water",
+     "çay = tea",
+     "kahve = coffee",
+     "Türk kahvesi = Turkish coffee",
+     "ayran = a salty yoghurt drink",
+     "meyve suyu = fruit juice",
+     "süt = milk"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Çay is the national drink and arrives in a small tulip glass. It is offered constantly, in shops as much as cafes, and refusing the first glass is normal but refusing three in a row looks cold."
+   },
+   {
+    "k": "h",
+    "v": "2) Food"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "ekmek = bread",
+     "peynir = cheese",
+     "et = meat",
+     "tavuk = chicken",
+     "balık = fish",
+     "pilav = rice",
+     "çorba = soup",
+     "salata = salad",
+     "kahvaltı = breakfast",
+     "hesap = the bill"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Asking for things"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "İstiyorum = I want",
+     "Bir çay istiyorum = I want a tea",
+     "Bir çay lütfen = A tea please",
+     "Ne var? = What is there?",
+     "Var mı? = Is there any?",
+     "Çay var mı? = Do you have tea?",
+     "Var = There is",
+     "Yok = There isn't"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Var and yok do enormous work in Turkish. Var means there is or it exists; yok means there isn't. You will hear yok twenty times a day."
+   },
+   {
+    "k": "h",
+    "v": "4) At the table"
+   },
+   {
+    "k": "steps",
+    "v": "Ordering in a lokanta.|İyi günler. Ne var?|Çorba, tavuk, balık var.|Bir tavuk ve bir ayran lütfen.|Tabii. Başka bir şey?|Hayır, teşekkür ederim.|Afiyet olsun."
+   },
+   {
+    "k": "p",
+    "v": "Afiyet olsun is said before you eat and after you finish - it means may it do you good. The reply when someone has cooked for you is elinize sağlık, health to your hands."
+   },
+   {
+    "k": "h",
+    "v": "5) The bill"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hesap lütfen = The bill please",
+     "Ne kadar? = How much?",
+     "Kartla ödeyebilir miyim? = Can I pay by card?",
+     "Üstü kalsın = Keep the change"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Order a full meal out loud, starting from İyi günler",
+     "Learn var and yok until they come without thinking",
+     "Practise afiyet olsun"
+    ]
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 - Verbs, and saying what you do",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Recognise a Turkish verb",
+     "Say what you are doing now",
+     "Make a sentence negative"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Every verb ends in -mek or -mak"
+   },
+   {
+    "k": "p",
+    "v": "That is the dictionary form, like to go in English. Which one it takes is vowel harmony again - front vowels get -mek, back vowels get -mak."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "gitmek = to go",
+     "gelmek = to come",
+     "yapmak = to do, to make",
+     "almak = to take, to buy",
+     "vermek = to give",
+     "yemek = to eat",
+     "içmek = to drink",
+     "görmek = to see",
+     "bilmek = to know",
+     "istemek = to want"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) The verb comes last"
+   },
+   {
+    "k": "p",
+    "v": "This is the biggest change from English. Turkish puts the verb at the end of the sentence, always. Ben çay içiyorum is literally I tea drink."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ben çay içiyorum = I am drinking tea",
+     "O eve gidiyor = He is going home",
+     "Biz ekmek alıyoruz = We are buying bread"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Read a Turkish sentence to the end before deciding what it means. The verb at the end can change everything, including whether it is a negative."
+   },
+   {
+    "k": "h",
+    "v": "3) Happening now"
+   },
+   {
+    "k": "p",
+    "v": "Drop the -mek or -mak, add -iyor, then the personal ending. The vowel in -iyor follows harmony: -ıyor, -iyor, -uyor or -üyor."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "gidiyorum = I am going",
+     "gidiyorsun = you are going (sen)",
+     "gidiyor = he/she is going",
+     "gidiyoruz = we are going",
+     "gidiyorsunuz = you are going (siz)",
+     "gidiyorlar = they are going"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Saying no"
+   },
+   {
+    "k": "p",
+    "v": "Slip -mi- in before the ending. It harmonises too: -mı-, -mi-, -mu-, -mü-."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "gidiyorum = I am going",
+     "gitmiyorum = I am not going",
+     "biliyorum = I know",
+     "bilmiyorum = I don't know",
+     "istiyorum = I want",
+     "istemiyorum = I don't want"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Bilmiyorum is probably the single most useful word in this course. Learn it before anything else on this page."
+   },
+   {
+    "k": "h",
+    "v": "5) Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Say each one, then make it negative.|Çay içiyorum - Çay içmiyorum|Eve gidiyorum - Eve gitmiyorum|Türkçe biliyorum - Türkçe bilmiyorum"
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Learn the ten verbs",
+     "Say five things you are doing right now",
+     "Make each one negative"
+    ]
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 - Getting around",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ask where something is",
+     "Understand the answer",
+     "Use the endings for to, from and in"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Where"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Nerede? = Where is it?",
+     "Nereye? = Where to?",
+     "Nereden? = Where from?",
+     "burada = here",
+     "orada = there",
+     "sağ = right",
+     "sol = left",
+     "düz = straight on",
+     "yakın = near",
+     "uzak = far"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Three endings that replace prepositions"
+   },
+   {
+    "k": "p",
+    "v": "English puts a small word in front. Turkish puts an ending on the back. Same job, opposite end."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "-e or -a = to",
+     "-de or -da = in, at, on",
+     "-den or -dan = from"
+    ]
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "İstanbul'a = to Istanbul",
+     "İstanbul'da = in Istanbul",
+     "İstanbul'dan = from Istanbul",
+     "eve = to the house",
+     "evde = at home",
+     "evden = from the house"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Place names take an apostrophe before the ending. Ordinary nouns do not. İzmir'de, but okulda."
+   },
+   {
+    "k": "h",
+    "v": "3) Places"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "otel = hotel",
+     "havalimanı = airport",
+     "istasyon = station",
+     "otobüs = bus",
+     "taksi = taxi",
+     "eczane = pharmacy",
+     "hastane = hospital",
+     "banka = bank",
+     "tuvalet = toilet",
+     "çarşı = market"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Asking directions"
+   },
+   {
+    "k": "steps",
+    "v": "Stopping someone in the street.|Affedersiniz, eczane nerede?|Düz gidin, sonra sağa dönün.|Uzak mı?|Hayır, çok yakın. Beş dakika.|Çok teşekkür ederim."
+   },
+   {
+    "k": "p",
+    "v": "Gidin and dönün are the polite command forms - go, turn. With sen they would be git and dön."
+   },
+   {
+    "k": "h",
+    "v": "5) Useful on the road"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Kaç dakika? = How many minutes?",
+     "Sağa = to the right",
+     "Sola = to the left",
+     "Burada inecek var = Someone is getting off here",
+     "Durabilir misiniz? = Can you stop?"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ask where five different places are",
+     "Practise eve, evde, evden until the difference is automatic",
+     "Learn Affedersiniz as an opener"
+    ]
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 - Time and days",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Tell the time",
+     "Name the days and months",
+     "Say when something happens"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Days"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pazartesi = Monday",
+     "Salı = Tuesday",
+     "Çarşamba = Wednesday",
+     "Perşembe = Thursday",
+     "Cuma = Friday",
+     "Cumartesi = Saturday",
+     "Pazar = Sunday"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Pazar means Sunday and also market. Pazartesi is the day after Pazar, and Cumartesi the day after Cuma. The names tell you the order."
+   },
+   {
+    "k": "h",
+    "v": "2) Time words"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "bugün = today",
+     "yarın = tomorrow",
+     "dün = yesterday",
+     "şimdi = now",
+     "sonra = later",
+     "sabah = morning",
+     "öğle = midday",
+     "akşam = evening",
+     "gece = night",
+     "hafta = week",
+     "ay = month, and also moon",
+     "yıl = year"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) The clock"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Saat kaç? = What time is it?",
+     "Saat üç = It's three o'clock",
+     "Üç buçuk = Half past three",
+     "Üç çeyrek geçiyor = Quarter past three",
+     "Dörde çeyrek var = Quarter to four",
+     "Saat kaçta? = At what time?",
+     "Saat üçte = At three"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Notice geçiyor means passing and var means there is. Quarter past is a quarter passing; quarter to is a quarter remaining. Turkish counts towards the hour."
+   },
+   {
+    "k": "h",
+    "v": "4) Making an arrangement"
+   },
+   {
+    "k": "steps",
+    "v": "Fixing a meeting.|Yarın müsait misiniz?|Evet, müsaitim. Saat kaçta?|Saat ikide olur mu?|Olur. Nerede?|Ofiste. Görüşürüz."
+   },
+   {
+    "k": "p",
+    "v": "Olur mu? means will that do? and Olur means that works. Two of the most useful words in daily Turkish."
+   },
+   {
+    "k": "h",
+    "v": "5) Months"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ocak, Şubat, Mart = January, February, March",
+     "Nisan, Mayıs, Haziran = April, May, June",
+     "Temmuz, Ağustos, Eylül = July, August, September",
+     "Ekim, Kasım, Aralık = October, November, December"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Say today's day and date in Turkish",
+     "Tell the time five times through the day",
+     "Learn olur mu and olur"
+    ]
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 - Asking questions properly",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use the question word mi",
+     "Ask who, what, why and how",
+     "Handle not understanding"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The little word that makes a question"
+   },
+   {
+    "k": "p",
+    "v": "English changes the word order to ask. Turkish adds mi as a separate word at the end, and harmonises it: mi, mı, mu, mü."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Çay var = There is tea",
+     "Çay var mı? = Is there tea?",
+     "Bu iyi = This is good",
+     "Bu iyi mi? = Is this good?",
+     "Anladınız = You understood",
+     "Anladınız mı? = Did you understand?"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Mi is written as a separate word but pronounced joined on. It is never capitalised and never starts a sentence."
+   },
+   {
+    "k": "h",
+    "v": "2) Question words"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "ne = what",
+     "kim = who",
+     "nerede = where",
+     "ne zaman = when",
+     "neden = why",
+     "nasıl = how",
+     "kaç = how many",
+     "hangi = which"
+    ]
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Bu ne? = What is this?",
+     "O kim? = Who is that?",
+     "Ne zaman geliyorsunuz? = When are you coming?",
+     "Neden? = Why?",
+     "Nasıl gidiyoruz? = How are we going?"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) When you do not understand"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Anlamıyorum = I don't understand",
+     "Anladım = I understand, I got it",
+     "Tekrar eder misiniz? = Could you say that again?",
+     "Yavaş lütfen = Slowly please",
+     "İngilizce biliyor musunuz? = Do you speak English?",
+     "Ne demek? = What does that mean?",
+     "Nasıl denir? = How do you say it?"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Anlamıyorum and yavaş lütfen will carry you through most of your first month. People slow down happily when asked."
+   },
+   {
+    "k": "h",
+    "v": "4) Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Turn each into a question.|Çay var - Çay var mı?|Bu ucuz - Bu ucuz mu?|Türkçe biliyorsunuz - Türkçe biliyor musunuz?|Otel yakın - Otel yakın mı?"
+   },
+   {
+    "k": "h",
+    "v": "5) Getting help"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Yardım eder misiniz? = Could you help me?",
+     "Kayboldum = I'm lost",
+     "Bu nerede? = Where is this?",
+     "Telefonum yok = I have no phone",
+     "Acil = Urgent"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Turn ten statements into questions",
+     "Learn all eight question words",
+     "Practise anlamıyorum without hesitating"
+    ]
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 - Putting it together",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hold a short conversation start to finish",
+     "Review everything from the ten days",
+     "Know what to learn next"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) What you can now do"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Greet someone and leave politely",
+     "Count, ask prices and bargain",
+     "Introduce yourself and say where you are from",
+     "Order food and ask for the bill",
+     "Say what you are doing, and what you are not",
+     "Ask where something is and follow the answer",
+     "Tell the time and arrange to meet",
+     "Ask questions and say you did not understand"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) The three rules that matter"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Endings harmonise with the last vowel of the word",
+     "The verb goes at the end of the sentence",
+     "Endings replace English prepositions - eve, not to house"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Everything else in Turkish is built on these three. When a new ending appears, check its vowel against the word, and it will make sense."
+   },
+   {
+    "k": "h",
+    "v": "3) A full conversation"
+   },
+   {
+    "k": "steps",
+    "v": "Read it through twice, then cover the page and say it.|Merhaba! Nasılsınız?|İyiyim, teşekkür ederim. Siz?|Ben de iyiyim. Nerelisiniz?|Pakistanlıyım. İstanbul'da çalışıyorum.|Ne kadar zamandır buradasınız?|İki yıldır.|Türkçeniz çok iyi!|Teşekkür ederim, biraz biliyorum."
+   },
+   {
+    "k": "h",
+    "v": "4) Twenty words worth knowing cold"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "merhaba = hello",
+     "teşekkür ederim = thank you",
+     "lütfen = please",
+     "evet / hayır = yes / no",
+     "var / yok = there is / there isn't",
+     "tamam = OK",
+     "ne kadar = how much",
+     "nerede = where",
+     "bilmiyorum = I don't know",
+     "anlamıyorum = I don't understand",
+     "affedersiniz = excuse me",
+     "su = water",
+     "çay = tea",
+     "bugün = today",
+     "yarın = tomorrow",
+     "iyi = good",
+     "çok = very, a lot",
+     "biraz = a little",
+     "olur = that works",
+     "görüşürüz = see you"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) Where to go next"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "The past tense - geçmiş zaman - opens up telling stories",
+     "The -ecek future, for plans",
+     "The possessive endings: evim, evin, evi - my, your, his house",
+     "Listen to Turkish radio or a series with subtitles, even if you catch one word in ten"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "You will be understood long before you are correct. Turks are generous with anyone trying their language, and a wrong ending has never stopped anyone getting a cup of tea."
+   },
+   {
+    "k": "h",
+    "v": "Final homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hold the day 10 conversation without looking",
+     "Write five sentences about your own day",
+     "Take the quiz and claim your certificate"
+    ]
+   }
+  ]
+ }
+}

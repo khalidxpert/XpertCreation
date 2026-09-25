@@ -32,6 +32,13 @@ class Review(models.Model):
     stars = models.PositiveSmallIntegerField()
     comment = models.TextField(blank=True, default="", max_length=600)
 
+    # Empty for a module review. For a course review, the course - so a
+    # learner who finishes Python and then Turkish can review both.
+    course = models.CharField(max_length=32, blank=True, default="", db_index=True)
+    # Two quick answers on course reviews, 1 to 3. Empty everywhere else.
+    clarity = models.PositiveSmallIntegerField(null=True, blank=True)
+    pace = models.PositiveSmallIntegerField(null=True, blank=True)
+
     # Only applies to the comment. The stars count either way.
     state = models.CharField(max_length=10, choices=STATES, default=PENDING, db_index=True)
 
@@ -41,7 +48,9 @@ class Review(models.Model):
 
     class Meta:
         # One review per person per module: they can change it, not stack it.
-        unique_together = [("user", "module")]
+        # One review per person per module - and per course, for course
+        # reviews. They can change it, not stack it.
+        unique_together = [("user", "module", "course")]
         ordering = ["-created_at"]
         indexes = [models.Index(fields=["module", "state", "-created_at"])]
 

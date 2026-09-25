@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Build your avatar — XpertCreation</title>
+<meta name="description" content="Build your own avatar: face, hair, eyes, mouth and clothes.">
+<meta name="robots" content="noindex,follow">
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="manifest" href="/manifest.json">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --line:#E4E8F2;--brand:#1B4DFF;
+  --display:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--display);
+  line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+.top{position:sticky;top:0;z-index:20;background:rgba(246,247,251,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .in{max-width:760px;margin:0 auto;padding:12px 16px;display:flex;
+  align-items:center;gap:11px}
+.top img{width:30px;height:30px;border-radius:9px}
+.top b{font-weight:800;font-size:15.5px;letter-spacing:-.02em}
+.top .sp{flex:1}
+.top a.back{font-size:13.5px;color:var(--ink-soft);text-decoration:none;
+  padding:8px 13px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card)}
+.top a.back:hover{color:var(--ink);border-color:var(--ink-soft)}
+
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 120px}
+h1{font-size:24px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
+.lead{color:var(--ink-soft);font-size:14px;margin-top:6px;margin-bottom:18px}
+
+/* ---- preview ---- */
+.stage{background:var(--card);border:1px solid var(--line);border-radius:24px;
+  padding:22px;display:flex;flex-direction:column;align-items:center;gap:14px}
+#preview{width:190px;height:190px;border-radius:28px;overflow:hidden;
+  box-shadow:0 8px 26px rgba(13,20,36,.12)}
+#preview svg{display:block;width:100%;height:100%}
+.dice{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+.dice button{padding:9px 15px;border-radius:11px;font-size:13px;font-weight:700;
+  border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
+  cursor:pointer;transition:all .15s}
+.dice button:hover{border-color:var(--brand);color:var(--brand)}
+
+/* ---- parts ---- */
+.group{margin-top:22px}
+.group h2{font-size:12px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:9px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));
+  gap:9px}
+.opts button{aspect-ratio:1;border-radius:16px;background:var(--card);
+  border:2px solid var(--line);cursor:pointer;padding:5px;
+  transition:transform .14s,border-color .14s;overflow:hidden}
+.opts button:hover{transform:translateY(-2px)}
+.opts button.on{border-color:var(--brand);
+  box-shadow:0 4px 14px rgba(27,77,255,.2)}
+.opts button svg{display:block;width:100%;height:100%}
+.swatches{display:flex;gap:9px;flex-wrap:wrap}
+.swatches button{width:40px;height:40px;border-radius:13px;cursor:pointer;
+  border:2.5px solid transparent;transition:transform .14s}
+.swatches button:hover{transform:scale(1.08)}
+.swatches button.on{border-color:var(--ink);transform:scale(1.06)}
+
+/* ---- save bar ---- */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.bar .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:11px}
+.bar .msg{flex:1;font-size:13px;color:var(--ink-soft);min-width:0}
+.bar .msg.bad{color:#B91C1C}
+.bar button{padding:13px 24px;border-radius:13px;font-size:14.5px;
+  font-weight:800;border:none;cursor:pointer;white-space:nowrap}
+.bar .save{background:var(--brand);color:#fff;
+  box-shadow:0 4px 14px rgba(27,77,255,.28)}
+.bar .save:disabled{opacity:.55;cursor:default;box-shadow:none}
+
+.note{background:var(--card);border:1px dashed var(--line);border-radius:16px;
+  padding:18px;margin-top:20px;font-size:13.5px;color:var(--ink-soft)}
+.note a{color:var(--brand)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Build your avatar</b>
+    <span class="sp"></span>
+    <a class="back" href="/account">Back to account</a>
+  </div>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap">
+  <h1>Build your avatar</h1>
+  <p class="lead">Pick the pieces you like. Nothing is saved until you press
+  Save, and you can come back and build a new one whenever you want.</p>
+
+  <div class="stage">
+    <div id="preview"></div>
+    <div class="dice">
+      <button type="button" id="rand">Surprise me</button>
+      <button type="button" id="reset">Start over</button>
+    </div>
+  </div>
+
+  <div id="groups"></div>
+
+  <div class="note" id="signedout" style="display:none">
+    You need to be signed in to save an avatar.
+    <a href="/login">Sign in</a> and come back.
+  </div>
+</div>
+
+<div class="bar">
+  <div class="in">
+    <span class="msg" id="msg"></span>
+    <button class="save" id="save" type="button">Save as my picture</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ------------------------------------------------------------------
+     Har hissa apna SVG khud deta hai. Sab ek hi 200x200 grid par bane
+     hain, is liye jorne par theek baithte hain. Koi bahar ki library
+     nahi: is tarah licence bhi apna rehta hai aur kuch tootne ka
+     khatra nahi.
+     ------------------------------------------------------------------ */
+
+  var SKINS  = ["#F2D6C0","#E8BE9C","#D19E72","#A9714B","#7A4E32","#5A3722"];
+  var HAIRS  = ["#1B1B1F","#3B2A20","#6B4423","#A6641E","#C9A227","#8A8A94",
+                "#E8E4DE","#1B4DFF","#B02A8C","#0F766E"];
+  var SHIRTS = ["#1B4DFF","#0F766E","#7C3AED","#DB2777","#E11D48","#F59E0B",
+                "#0EA5E9","#0D1424","#00B37E","#B8892D"];
+  var BGS    = ["#EEF2FF","#ECFDF5","#FEF3C7","#FCE7F3","#E0F2FE","#F3F4F6",
+                "#0D1424","#1B4DFF","#0F766E","#7C3AED"];
+
+  /* ---- baal ---- */
+  var HAIR = [
+    {id:"none", d:function(){ return ""; }},
+    {id:"short", d:function(c){
+      return '<path d="M56 84c0-30 20-46 44-46s44 16 44 46c0 6-2 10-4 10'
+        + ' 2-16-10-30-40-30S58 78 60 94c-2 0-4-4-4-10z" fill="'+c+'"/>';
+    }},
+    {id:"crop", d:function(c){
+      return '<path d="M58 80c2-26 22-40 42-40s40 14 42 40c-6-14-20-22-42-22'
+        + 's-36 8-42 22z" fill="'+c+'"/>';
+    }},
+    {id:"wave", d:function(c){
+      return '<path d="M55 88c0-32 21-50 45-50s45 18 45 50c0 5-2 9-5 9'
+        + ' 1-9-3-14-8-11-5 3-9-2-14-5-6-4-13-2-19 1-6 3-13 5-18 2'
+        + '-5-3-9 2-8 11-3 0-5-4-5-9z" fill="'+c+'"/>';
+    }},
+    {id:"long", d:function(c){
+      return '<path d="M54 86c0-31 21-48 46-48s46 17 46 48v52c0 5-4 8-9 8'
+        + 'h-7V96c0-20-14-30-30-30S70 76 70 96v50h-7c-5 0-9-3-9-8z"'
+        + ' fill="'+c+'"/>';
+    }},
+    {id:"bun", d:function(c){
+      return '<circle cx="100" cy="30" r="15" fill="'+c+'"/>'
+        + '<path d="M57 84c0-30 20-46 43-46s43 16 43 46c0 6-2 10-4 10'
+        + ' 2-16-10-30-39-30S59 78 61 94c-2 0-4-4-4-10z" fill="'+c+'"/>';
+    }},
+    {id:"curls", d:function(c){
+      var s = "";
+      var pts = [[68,64,13],[86,52,15],[108,50,15],[130,62,13],[139,80,11],[61,80,11]];
+      for (var i=0;i<pts.length;i++){
+        s += '<circle cx="'+pts[i][0]+'" cy="'+pts[i][1]+'" r="'+pts[i][2]+'" fill="'+c+'"/>';
+      }
+      return s;
+    }},
+    {id:"cap", d:function(c){
+      return '<path d="M56 82c0-26 20-42 44-42s44 16 44 42H56z" fill="'+c+'"/>'
+        + '<rect x="48" y="80" width="104" height="10" rx="5" fill="'+c+'"/>'
+        + '<path d="M144 80h22c3 0 5 3 4 6l-2 4h-24z" fill="'+c+'"'
+        + ' opacity=".85"/>';
+    }}
+  ];
+
+  /* ---- aankhein ---- */
+  var EYES = [
+    {id:"dots", d:function(){
+      return '<circle cx="82" cy="104" r="5" fill="#0D1424"/>'
+        + '<circle cx="118" cy="104" r="5" fill="#0D1424"/>';
+    }},
+    {id:"open", d:function(){
+      return '<ellipse cx="82" cy="104" rx="8" ry="9" fill="#fff"/>'
+        + '<ellipse cx="118" cy="104" rx="8" ry="9" fill="#fff"/>'
+        + '<circle cx="82" cy="105" r="4.4" fill="#0D1424"/>'
+        + '<circle cx="118" cy="105" r="4.4" fill="#0D1424"/>';
+    }},
+    {id:"happy", d:function(){
+      return '<path d="M74 106c3-7 11-7 14 0" stroke="#0D1424" stroke-width="3.6"'
+        + ' fill="none" stroke-linecap="round"/>'
+        + '<path d="M112 106c3-7 11-7 14 0" stroke="#0D1424" stroke-width="3.6"'
+        + ' fill="none" stroke-linecap="round"/>';
+    }},
+    {id:"sleepy", d:function(){
+      return '<path d="M74 105h14" stroke="#0D1424" stroke-width="3.6"'
+        + ' stroke-linecap="round"/>'
+        + '<path d="M112 105h14" stroke="#0D1424" stroke-width="3.6"'
+        + ' stroke-linecap="round"/>';
+    }},
+    {id:"wink", d:function(){
+      return '<ellipse cx="82" cy="104" rx="8" ry="9" fill="#fff"/>'
+        + '<circle cx="82" cy="105" r="4.4" fill="#0D1424"/>'
+        + '<path d="M112 106c3-7 11-7 14 0" stroke="#0D1424" stroke-width="3.6"'
+        + ' fill="none" stroke-linecap="round"/>';
+    }},
+    {id:"glasses", d:function(){
+      return '<ellipse cx="82" cy="104" rx="8" ry="9" fill="#fff"/>'
+        + '<ellipse cx="118" cy="104" rx="8" ry="9" fill="#fff"/>'
+        + '<circle cx="82" cy="105" r="4.2" fill="#0D1424"/>'
+        + '<circle cx="118" cy="105" r="4.2" fill="#0D1424"/>'
+        + '<rect x="68" y="93" width="28" height="23" rx="8" fill="none"'
+        + ' stroke="#0D1424" stroke-width="3"/>'
+        + '<rect x="104" y="93" width="28" height="23" rx="8" fill="none"'
+        + ' stroke="#0D1424" stroke-width="3"/>'
+        + '<path d="M96 104h8" stroke="#0D1424" stroke-width="3"/>';
+    }}
+  ];
+
+  /* ---- moonh ---- */
+  var MOUTH = [
+    {id:"smile", d:function(){
+      return '<path d="M86 128c5 7 23 7 28 0" stroke="#0D1424" stroke-width="3.6"'
+        + ' fill="none" stroke-linecap="round"/>';
+    }},
+    {id:"grin", d:function(){
+      return '<path d="M84 124h32c0 11-7 17-16 17s-16-6-16-17z" fill="#0D1424"/>'
+        + '<path d="M89 124h22v5H89z" fill="#fff"/>';
+    }},
+    {id:"flat", d:function(){
+      return '<path d="M88 130h24" stroke="#0D1424" stroke-width="3.6"'
+        + ' stroke-linecap="round"/>';
+    }},
+    {id:"small", d:function(){
+      return '<circle cx="100" cy="130" r="5" fill="#0D1424"/>';
+    }},
+    {id:"beard", d:function(){
+      return '<path d="M70 112c0 26 13 40 30 40s30-14 30-40c0 0-6 18-30 18'
+        + 's-30-18-30-18z" fill="#3B2A20" opacity=".85"/>'
+        + '<path d="M86 128c5 6 23 6 28 0" stroke="#0D1424" stroke-width="3.4"'
+        + ' fill="none" stroke-linecap="round"/>';
+    }}
+  ];
+
+  /* ---- kapre ---- */
+  var CLOTH = [
+    {id:"round", d:function(c){
+      return '<path d="M52 200c0-26 21-40 48-40s48 14 48 40z" fill="'+c+'"/>'
+        + '<path d="M84 162c5 9 27 9 32 0" stroke="rgba(0,0,0,.18)"'
+        + ' stroke-width="3" fill="none"/>';
+    }},
+    {id:"collar", d:function(c){
+      return '<path d="M52 200c0-26 21-40 48-40s48 14 48 40z" fill="'+c+'"/>'
+        + '<path d="M86 160l14 16 14-16" fill="#fff" opacity=".9"/>';
+    }},
+    {id:"hoodie", d:function(c){
+      return '<path d="M50 200c0-28 22-42 50-42s50 14 50 42z" fill="'+c+'"/>'
+        + '<path d="M78 160c0 14 10 22 22 22s22-8 22-22c-6-3-14-4-22-4'
+        + 's-16 1-22 4z" fill="rgba(0,0,0,.16)"/>'
+        + '<path d="M96 182v18M104 182v18" stroke="rgba(255,255,255,.7)"'
+        + ' stroke-width="3" stroke-linecap="round"/>';
+    }},
+    {id:"vneck", d:function(c){
+      return '<path d="M52 200c0-26 21-40 48-40s48 14 48 40z" fill="'+c+'"/>'
+        + '<path d="M84 161l16 22 16-22" fill="none" stroke="rgba(0,0,0,.2)"'
+        + ' stroke-width="3.4" stroke-linecap="round"/>';
+    }},
+    {id:"suit", d:function(c){
+      return '<path d="M52 200c0-26 21-40 48-40s48 14 48 40z" fill="'+c+'"/>'
+        + '<path d="M100 160l-18 8 12 32z" fill="#fff" opacity=".92"/>'
+        + '<path d="M100 160l18 8-12 32z" fill="#fff" opacity=".92"/>'
+        + '<path d="M100 168l7 9-7 23-7-23z" fill="#B91C1C"/>';
+    }}
+  ];
+
+  /* ------------------------------------------------------------------
+     Halat, aur SVG banana
+     ------------------------------------------------------------------ */
+
+  var S = { bg:0, skin:1, hair:1, hairC:0, eyes:1, mouth:0, cloth:0, clothC:0 };
+
+  function svg(state, size){
+    var bg = BGS[state.bg];
+    var skin = SKINS[state.skin];
+    var hairC = HAIRS[state.hairC];
+    var clothC = SHIRTS[state.clothC];
+    var s = '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"';
+    if (size) s += ' width="' + size + '" height="' + size + '"';
+    s += '><rect width="200" height="200" fill="' + bg + '"/>';
+    // gardan
+    s += '<path d="M88 138h24v26H88z" fill="' + skin + '"/>';
+    s += '<path d="M88 138h24v12c-8 5-16 5-24 0z" fill="rgba(0,0,0,.12)"/>';
+    // kapre
+    s += CLOTH[state.cloth].d(clothC);
+    // kaan
+    s += '<circle cx="58" cy="108" r="9" fill="' + skin + '"/>';
+    s += '<circle cx="142" cy="108" r="9" fill="' + skin + '"/>';
+    // chehra
+    s += '<path d="M62 96c0-24 17-40 38-40s38 16 38 40v14c0 24-17 40-38 40'
+       + 's-38-16-38-40z" fill="' + skin + '"/>';
+    // moonh, aankhein, baal — is tarteeb mein
+    s += MOUTH[state.mouth].d();
+    s += EYES[state.eyes].d();
+    s += HAIR[state.hair].d(hairC);
+    s += '</svg>';
+    return s;
+  }
+
+  function draw(){
+    document.getElementById("preview").innerHTML = svg(S);
+    document.querySelectorAll("[data-part]").forEach(function(b){
+      var part = b.getAttribute("data-part");
+      var i = parseInt(b.getAttribute("data-i"), 10);
+      b.classList.toggle("on", S[part] === i);
+    });
+  }
+
+  /* ---- option ke chhote namoone ---- */
+  function thumb(part, i){
+    var t = {bg:5, skin:S.skin, hair:S.hair, hairC:S.hairC, eyes:S.eyes,
+             mouth:S.mouth, cloth:S.cloth, clothC:S.clothC};
+    t[part] = i;
+    if (part === "skin"){ t.hair = 0; t.eyes = 0; t.mouth = 0; }
+    return svg(t);
+  }
+
+  var GROUPS = [
+    {key:"hair",   name:"Hair",       list:HAIR,   kind:"shape"},
+    {key:"hairC",  name:"Hair colour",list:HAIRS,  kind:"colour"},
+    {key:"eyes",   name:"Eyes",       list:EYES,   kind:"shape"},
+    {key:"mouth",  name:"Mouth",      list:MOUTH,  kind:"shape"},
+    {key:"skin",   name:"Skin",       list:SKINS,  kind:"colour"},
+    {key:"cloth",  name:"Clothes",    list:CLOTH,  kind:"shape"},
+    {key:"clothC", name:"Clothes colour", list:SHIRTS, kind:"colour"},
+    {key:"bg",     name:"Background", list:BGS,    kind:"colour"}
+  ];
+
+  function build(){
+    var out = "";
+    GROUPS.forEach(function(g){
+      out += '<div class="group"><h2>' + g.name + '</h2>';
+      if (g.kind === "colour"){
+        out += '<div class="swatches">';
+        g.list.forEach(function(c, i){
+          out += '<button type="button" data-part="' + g.key + '" data-i="' + i
+               + '" style="background:' + c + '" aria-label="' + g.name
+               + ' ' + (i + 1) + '"></button>';
+        });
+      } else {
+        out += '<div class="opts">';
+        g.list.forEach(function(_, i){
+          out += '<button type="button" data-part="' + g.key + '" data-i="' + i
+               + '" aria-label="' + g.name + ' ' + (i + 1) + '">'
+               + thumb(g.key, i) + '</button>';
+        });
+      }
+      out += '</div></div>';
+    });
+    document.getElementById("groups").innerHTML = out;
+    draw();
+  }
+
+  document.getElementById("groups").addEventListener("click", function(e){
+    var b = e.target.closest("[data-part]");
+    if (!b) return;
+    S[b.getAttribute("data-part")] = parseInt(b.getAttribute("data-i"), 10);
+    // Baal ya khaal badalne par namoone bhi badalte hain, is liye dobara.
+    var p = b.getAttribute("data-part");
+    if (p === "skin" || p === "hairC" || p === "clothC") build();
+    else draw();
+  });
+
+  function rnd(n){ return Math.floor(Math.random() * n); }
+
+  document.getElementById("rand").addEventListener("click", function(){
+    S = { bg:rnd(BGS.length), skin:rnd(SKINS.length), hair:rnd(HAIR.length),
+          hairC:rnd(HAIRS.length), eyes:rnd(EYES.length),
+          mouth:rnd(MOUTH.length), cloth:rnd(CLOTH.length),
+          clothC:rnd(SHIRTS.length) };
+    build();
+  });
+
+  document.getElementById("reset").addEventListener("click", function(){
+    S = { bg:0, skin:1, hair:1, hairC:0, eyes:1, mouth:0, cloth:0, clothC:0 };
+    build();
+  });
+
+  /* ------------------------------------------------------------------
+     Save: SVG ko canvas par khinch kar PNG, phir wahi upload endpoint
+     jo tasveer ke liye hai. Is tarah avatar har jagah khud aa jata hai
+     aur database mein kisi nayi field ki zarurat nahi.
+     ------------------------------------------------------------------ */
+
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+
+  function say(text, bad){
+    var m = document.getElementById("msg");
+    m.textContent = text || "";
+    m.className = "msg" + (bad ? " bad" : "");
+  }
+
+  document.getElementById("save").addEventListener("click", function(){
+    var btn = this;
+    btn.disabled = true;
+    say("Saving\u2026");
+
+    var markup = svg(S, 400);
+    var img = new Image();
+    var blobUrl = URL.createObjectURL(
+      new Blob([markup], {type: "image/svg+xml;charset=utf-8"}));
+
+    img.onload = function(){
+      var c = document.createElement("canvas");
+      c.width = 400; c.height = 400;
+      var ctx = c.getContext("2d");
+      ctx.drawImage(img, 0, 0, 400, 400);
+      URL.revokeObjectURL(blobUrl);
+
+      c.toBlob(function(blob){
+        if (!blob){
+          say("Could not build the picture.", true);
+          btn.disabled = false;
+          return;
+        }
+        var fd = new FormData();
+        fd.append("file", blob, "avatar.png");
+        fetch("/api/auth/avatar/upload/", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {"X-CSRFToken": cookie("xc_csrf")},
+          body: fd
+        }).then(function(r){
+          return r.json().catch(function(){ return {}; })
+            .then(function(d){ return {ok: r.ok, data: d}; });
+        }).then(function(r){
+          if (!r.ok){
+            say(r.data.detail || "That did not save.", true);
+            btn.disabled = false;
+            return;
+          }
+          say("Saved. Taking you back\u2026");
+          setTimeout(function(){ location.href = "/account"; }, 700);
+        }).catch(function(){
+          say("Network error.", true);
+          btn.disabled = false;
+        });
+      }, "image/png");
+    };
+
+    img.onerror = function(){
+      URL.revokeObjectURL(blobUrl);
+      say("Could not build the picture.", true);
+      btn.disabled = false;
+    };
+
+    img.src = blobUrl;
+  });
+
+  /* Signed in hain ya nahi — save se pehle bata dena behtar hai. */
+  fetch("/api/auth/me/", {credentials: "same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u || !u.email){
+        document.getElementById("signedout").style.display = "block";
+        document.getElementById("save").disabled = true;
+      }
+    })
+    .catch(function(){});
+
+  build();
+})();
+</script>
+</body>
+</html>

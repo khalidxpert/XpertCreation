@@ -35,8 +35,17 @@ class ModApplication(models.Model):
 
 
 class Ticket(models.Model):
-    OPEN, ANSWERED, CLOSED = "open", "answered", "closed"
-    STATES = [(OPEN, "Open"), (ANSWERED, "Answered"), (CLOSED, "Closed")]
+    OPEN, IN_PROGRESS, ANSWERED, CLOSED = "open", "in_progress", "answered", "closed"
+    STATES = [(OPEN, "Open"), (IN_PROGRESS, "Being looked at"),
+             (ANSWERED, "Answered"), (CLOSED, "Closed")]
+
+    CATEGORIES = [
+        ("bug", "Something is broken"),
+        ("account", "Account or sign-in"),
+        ("content", "A course or a certificate"),
+        ("feature", "A feature I'd like"),
+        ("other", "Other"),
+    ]
 
     LOW, NORMAL, HIGH = "low", "normal", "high"
     PRIORITIES = [(LOW, "Low"), (NORMAL, "Normal"), (HIGH, "High")]
@@ -44,8 +53,9 @@ class Ticket(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              related_name="tickets")
     subject = models.CharField(max_length=200)
+    category = models.CharField(max_length=20, choices=CATEGORIES, default="other")
     priority = models.CharField(max_length=10, choices=PRIORITIES, default=NORMAL)
-    state = models.CharField(max_length=10, choices=STATES, default=OPEN, db_index=True)
+    state = models.CharField(max_length=15, choices=STATES, default=OPEN, db_index=True)
 
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)

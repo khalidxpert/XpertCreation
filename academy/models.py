@@ -166,6 +166,11 @@ class Certificate(models.Model):
     revoked = models.BooleanField(default=False)
     revoked_reason = models.CharField(max_length=200, blank=True, default="")
 
+    # Issued after the review gate went in: hidden until the holder reviews
+    # the course. Older certificates default to True - nobody loses one
+    # they already had.
+    review_ok = models.BooleanField(default=True)
+
     class Meta:
         ordering = ["-issued_at"]
         unique_together = [("user", "course")]
@@ -183,3 +188,115 @@ class Certificate(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.serial, self.holder_name)
+
+class VideoPost(models.Model):
+    """A video someone contributed to a course.
+
+    Only the link is kept, never the file. A hundred uploaded lessons
+    would fill the disk and then need converting for every device; a
+    YouTube link costs nothing and lets their abuse team carry the
+    weight instead of ours.
+
+    Nothing appears until a moderator approves it. Anonymous strangers
+    posting straight to a learning site ends one way.
+    """
+    PENDING, LIVE, REJECTED = "pending", "live", "rejected"
+    STATES = [(PENDING, "Waiting to be checked"),
+              (LIVE, "Published"),
+              (REJECTED, "Turned down")]
+
+    YOUTUBE, VIMEO = "youtube", "vimeo"
+    SOURCES = [(YOUTUBE, "YouTube"), (VIMEO, "Vimeo")]
+
+    course = models.CharField(max_length=32, db_index=True,
+                              help_text="Course id, e.g. python")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,
+                               on_delete=models.CASCADE,
+                               related_name="video_posts")
+
+    title = models.CharField(max_length=140)
+    note = models.TextField(blank=True, default="",
+                            help_text="What the video covers")
+
+    source = models.CharField(max_length=10, choices=SOURCES, default=YOUTUBE)
+    # The id only, not the whole URL. Whatever form of link was pasted,
+    # what is stored is the bit the embed needs - so a watch link, a
+    # share link and a shorts link all end up the same.
+    video_id = models.CharField(max_length=32)
+
+    state = models.CharField(max_length=10, choices=STATES, default=PENDING,
+                             db_index=True)
+    # Why it was turned down. The person who wrote it deserves a reason.
+    decision_note = models.CharField(max_length=300, blank=True, default="")
+    decided_by = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                   on_delete=models.SET_NULL,
+                                   null=True, blank=True,
+                                   related_name="videos_decided")
+    decided_at = models.DateTimeField(null=True, blank=True)
+
+    # Kept on the row rather than counted every time. A course page with
+    # thirty videos would otherwise run thirty counting queries.
+    up = models.PositiveIntegerField(default=0)
+    down = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0)
+
+    created_at = models.DateTimeField(default=timezone.now, db_index=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["course", "state"])]
+
+    def __str__(self):
+        return "%s (%s)" % (self.title, self.course)
+
+    @property
+    def score(self):
+        """Up minus down, but a video with 2 up and 0 down should not
+        outrank one with 40 up and 3 down. Subtracting a little for
+        uncertainty does that without needing anything clever."""
+        total = self.up + self.down
+        if not total:
+            return 0
+        return self.up - self.down - (2 if total < 5 else 0)
+
+    @property
+    def embed_url(self):
+        if self.source == self.VIMEO:
+            return "https://player.vimeo.com/video/%s" % self.video_id
+        # nocookie so a learner is not tracked for watching a lesson
+        return "https://www.youtube-nocookie.com/embed/%s" % self.video_id
+
+    @property
+    def watch_url(self):
+        if self.source == self.VIMEO:
+            return "https://vimeo.com/%s" % self.video_id
+        return "https://www.youtube.com/watch?v=%s" % self.video_id
+
+    @property
+    def thumb_url(self):
+        if self.source == self.VIMEO:
+            return ""
+        return "https://i.ytimg.com/vi/%s/mqdefault.jpg" % self.video_id
+
+
+class VideoVote(models.Model):
+    """One person, one video, one opinion - changeable.
+
+    A separate row rather than a counter so a vote can be taken back,
+    and so nobody can vote twice by pressing harder.
+    """
+    UP, DOWN = 1, -1
+
+    post = models.ForeignKey(VideoPost, on_delete=models.CASCADE,
+                             related_name="votes")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             related_name="video_votes")
+    value = models.SmallIntegerField(choices=[(UP, "Helpful"),
+                                              (DOWN, "Not helpful")])
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        # The database refuses a second vote, so no amount of clicking
+        # or racing gets round it.
+        unique_together = [("post", "user")]

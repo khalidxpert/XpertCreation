@@ -1,0 +1,1104 @@
+{
+ "day-1": {
+  "t": "Day 1 - Your first JavaScript",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print something and see it happen",
+     "Store a value and use it",
+     "Know the difference between let and const"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. Everything here runs in your browser already - JavaScript is the one language every browser speaks."
+   },
+   {
+    "k": "h",
+    "v": "1) console.log"
+   },
+   {
+    "k": "p",
+    "v": "This is how JavaScript shows you something. Press Run."
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(\"Hello\");\nconsole.log(\"My name is Khalid\");"
+   },
+   {
+    "k": "p",
+    "v": "Change the name and run it again. The box is yours - break it, fix it, that is what it is for."
+   },
+   {
+    "k": "h",
+    "v": "2) Storing a value"
+   },
+   {
+    "k": "run",
+    "v": "js\nlet name = \"Ayesha\";\nlet age = 30;\n\nconsole.log(name);\nconsole.log(age);"
+   },
+   {
+    "k": "p",
+    "v": "let makes a variable. No type to declare - JavaScript works it out from what you put in."
+   },
+   {
+    "k": "h",
+    "v": "3) let against const"
+   },
+   {
+    "k": "run",
+    "v": "js\nlet score = 10;\nscore = 20;\nconsole.log(score);\n\nconst city = \"Lahore\";\nconsole.log(city);"
+   },
+   {
+    "k": "p",
+    "v": "let can be changed later. const cannot. Try it:"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst city = \"Lahore\";\ncity = \"Karachi\";\nconsole.log(city);"
+   },
+   {
+    "k": "p",
+    "v": "TypeError: Assignment to constant variable. JavaScript refuses."
+   },
+   {
+    "k": "tip",
+    "v": "Use const by default and let only when you know the value must change. It is not fussiness - it means a wrong reassignment is caught by the machine instead of by you, later, in something that matters."
+   },
+   {
+    "k": "warn",
+    "v": "You will see var in older code and older tutorials. It behaves oddly in ways that caused real bugs for years. Do not use it. let and const replaced it and there is no reason to go back."
+   },
+   {
+    "k": "h",
+    "v": "4) Semicolons"
+   },
+   {
+    "k": "p",
+    "v": "JavaScript usually works out where a line ends without one. Usually. There are cases where it guesses wrong, and they are unpleasant to debug. Put them in and stop thinking about it."
+   },
+   {
+    "k": "h",
+    "v": "5) Your first error"
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(\"one\");\nconsole.log(tow);\nconsole.log(\"three\");"
+   },
+   {
+    "k": "p",
+    "v": "ReferenceError: tow is not defined. JavaScript has never heard of tow. Note that one printed and three did not - it stops where the error is."
+   },
+   {
+    "k": "h",
+    "v": "6) Comments"
+   },
+   {
+    "k": "run",
+    "v": "js\n// two slashes, and the rest of the line is ignored\nconst price = 250;   // this too\n\n/* several lines\n   like this */\n\nconsole.log(price);"
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print your name, city and age from three variables",
+     "Try changing a const and read the error",
+     "Make a deliberate typo and read that one too"
+    ]
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 - Numbers, text and the traps",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Do arithmetic",
+     "Join text together",
+     "Understand why == is dangerous"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Arithmetic"
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(10 + 3);\nconsole.log(10 - 3);\nconsole.log(10 * 3);\nconsole.log(10 / 3);\nconsole.log(10 % 3);\nconsole.log(10 ** 3);"
+   },
+   {
+    "k": "p",
+    "v": "% gives the remainder. n % 2 is 0 for even numbers and 1 for odd, which is how you test for even."
+   },
+   {
+    "k": "warn",
+    "v": "JavaScript has one kind of number, and division never gives a whole number automatically. 10 / 3 is 3.333..., and 9 / 3 is 3. If you need a whole number use Math.floor()."
+   },
+   {
+    "k": "h",
+    "v": "2) Text"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst first = \"Ali\";\nconst last = \"Khan\";\n\nconsole.log(first + \" \" + last);\nconsole.log(first.length);\nconsole.log(first.toUpperCase());"
+   },
+   {
+    "k": "h",
+    "v": "3) Template strings"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst name = \"Sana\";\nconst age = 25;\n\nconsole.log(`${name} is ${age} years old`);\nconsole.log(`Next year she will be ${age + 1}`);"
+   },
+   {
+    "k": "p",
+    "v": "Backticks, not quotes. Anything inside ${} gets worked out and dropped in. Use these instead of joining with plus - they are easier to read and harder to get wrong."
+   },
+   {
+    "k": "tip",
+    "v": "The backtick is usually the key left of 1, above Tab."
+   },
+   {
+    "k": "h",
+    "v": "4) The plus sign has two jobs"
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(5 + 3);\nconsole.log(\"5\" + 3);\nconsole.log(5 + \"3\");\nconsole.log(\"5\" - 3);"
+   },
+   {
+    "k": "warn",
+    "v": "\"5\" + 3 gives \"53\", because with text involved plus means join. But \"5\" - 3 gives 2, because minus has no other meaning so JavaScript converts the text to a number. This inconsistency is real, it is famous, and it causes bugs. When a number arrives as text, convert it yourself with Number()."
+   },
+   {
+    "k": "run",
+    "v": "js\nconst typed = \"30\";\n\nconsole.log(typed + 5);\nconsole.log(Number(typed) + 5);\nconsole.log(parseInt(typed) + 5);"
+   },
+   {
+    "k": "h",
+    "v": "5) == against ==="
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(5 == \"5\");\nconsole.log(5 === \"5\");\nconsole.log(0 == \"\");\nconsole.log(0 === \"\");\nconsole.log(null == undefined);\nconsole.log(null === undefined);"
+   },
+   {
+    "k": "p",
+    "v": "Two equals converts before comparing, so a number can equal a string. Three equals does not convert - different types are simply not equal."
+   },
+   {
+    "k": "warn",
+    "v": "Always use ===. The conversions == performs are surprising enough that experienced programmers get them wrong. There is no case in normal code where you need ==."
+   },
+   {
+    "k": "h",
+    "v": "6) Useful string methods"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst s = \"  Hello World  \";\n\nconsole.log(s.trim());\nconsole.log(s.trim().replace(\"World\", \"Lahore\"));\nconsole.log(\"one,two,three\".split(\",\"));\nconsole.log(\"Hello\".includes(\"ell\"));"
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print five comparisons using both == and ===",
+     "Build a sentence with a template string",
+     "Take \"100\" as text, convert it, and add 50"
+    ]
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 - Making decisions",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write an if",
+     "Chain conditions together",
+     "Know what counts as false"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) if and else"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst age = 20;\n\nif (age >= 18) {\n  console.log(\"Adult\");\n} else {\n  console.log(\"Not yet\");\n}"
+   },
+   {
+    "k": "p",
+    "v": "Round brackets hold the question, curly brackets hold what to do. Change 20 to 15 and run it again."
+   },
+   {
+    "k": "tip",
+    "v": "If you did the Python course: the idea is identical, but Python used a colon and indentation where JavaScript uses brackets. Indentation here is only for humans - the machine ignores it."
+   },
+   {
+    "k": "h",
+    "v": "2) More paths"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst marks = 72;\n\nif (marks >= 80) {\n  console.log(\"A\");\n} else if (marks >= 70) {\n  console.log(\"B\");\n} else if (marks >= 60) {\n  console.log(\"C\");\n} else {\n  console.log(\"Below C\");\n}"
+   },
+   {
+    "k": "p",
+    "v": "Order matters. Put 60 first and everything above 60 would get a C, because JavaScript stops at the first true one."
+   },
+   {
+    "k": "h",
+    "v": "3) and, or, not"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst age = 25;\nconst hasId = true;\n\nif (age >= 18 && hasId) {\n  console.log(\"Allowed in\");\n}\n\nif (age < 13 || age > 65) {\n  console.log(\"Discount\");\n}\n\nif (!hasId) {\n  console.log(\"Bring your card\");\n}"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "&& = and, both must be true",
+     "|| = or, one is enough",
+     "! = not, flips it"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) What counts as false"
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(Boolean(0));\nconsole.log(Boolean(\"\"));\nconsole.log(Boolean(null));\nconsole.log(Boolean(undefined));\nconsole.log(Boolean(NaN));\n\nconsole.log(Boolean(\"0\"));\nconsole.log(Boolean([]));"
+   },
+   {
+    "k": "warn",
+    "v": "Look at the last two. The text \"0\" is true because it is not empty. And an empty array is true as well, which surprises everybody. Only six things are false: false, 0, \"\", null, undefined and NaN."
+   },
+   {
+    "k": "h",
+    "v": "5) A shortcut worth knowing"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst name = \"\";\nconst shown = name || \"Guest\";\nconsole.log(shown);\n\nconst age = 0;\nconsole.log(age || 18);\nconsole.log(age ?? 18);"
+   },
+   {
+    "k": "p",
+    "v": "|| falls back when the left side is falsy - but 0 is falsy, so it replaces a real zero, which is usually wrong. ?? only falls back on null or undefined, which is nearly always what you meant."
+   },
+   {
+    "k": "h",
+    "v": "6) The short form"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst age = 20;\n\nconst status = age >= 18 ? \"adult\" : \"minor\";\nconsole.log(status);"
+   },
+   {
+    "k": "p",
+    "v": "Question mark then colon: if this, use that, otherwise the other. Good for one small choice, bad for anything longer - reach for if instead."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a grade checker with five bands",
+     "Test whether a number is even using %",
+     "Try || and ?? with a value of 0 and see the difference"
+    ]
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 - Loops",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Loop a set number of times",
+     "Loop while something is true",
+     "Get out early"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The classic for"
+   },
+   {
+    "k": "run",
+    "v": "js\nfor (let i = 0; i < 5; i++) {\n  console.log(i);\n}"
+   },
+   {
+    "k": "p",
+    "v": "Three parts separated by semicolons: where to start, how long to keep going, what to do each time round. i++ means add one to i."
+   },
+   {
+    "k": "warn",
+    "v": "It printed 0 to 4 - five numbers starting at zero. i < 5 stops before five. Counting from zero is everywhere in programming and it takes a while to feel natural."
+   },
+   {
+    "k": "run",
+    "v": "js\nfor (let i = 1; i <= 5; i++) {\n  console.log(i);\n}\n\nconsole.log(\"---\");\n\nfor (let i = 10; i > 0; i -= 2) {\n  console.log(i);\n}"
+   },
+   {
+    "k": "h",
+    "v": "2) while"
+   },
+   {
+    "k": "run",
+    "v": "js\nlet count = 3;\n\nwhile (count > 0) {\n  console.log(count);\n  count--;\n}\n\nconsole.log(\"Go\");"
+   },
+   {
+    "k": "p",
+    "v": "Use for when you know how many times. Use while when you do not."
+   },
+   {
+    "k": "h",
+    "v": "3) The loop that never ends"
+   },
+   {
+    "k": "p",
+    "v": "Run this. It is broken on purpose."
+   },
+   {
+    "k": "run",
+    "v": "js\nlet count = 3;\n\nwhile (count > 0) {\n  console.log(count);\n}\n\nconsole.log(\"never reached\");"
+   },
+   {
+    "k": "p",
+    "v": "The box stops it after three seconds. Nothing decreases count, so the condition stays true forever. Add count-- inside the loop and run it again."
+   },
+   {
+    "k": "warn",
+    "v": "On a real page this would freeze the whole tab. It is the single easiest way to hang a browser, and every beginner does it once."
+   },
+   {
+    "k": "h",
+    "v": "4) break and continue"
+   },
+   {
+    "k": "run",
+    "v": "js\nfor (let i = 1; i <= 10; i++) {\n  if (i === 5) break;\n  console.log(i);\n}\n\nconsole.log(\"---\");\n\nfor (let i = 1; i <= 10; i++) {\n  if (i % 2 === 0) continue;\n  console.log(i);\n}"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "break = leave the loop now",
+     "continue = skip the rest of this turn"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) Something useful"
+   },
+   {
+    "k": "run",
+    "v": "js\nlet total = 0;\n\nfor (let n = 1; n <= 100; n++) {\n  total += n;\n}\n\nconsole.log(`1 to 100 adds up to ${total}`);"
+   },
+   {
+    "k": "p",
+    "v": "total += n is short for total = total + n. There is -= and *= too."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print the 7 times table",
+     "Add up the even numbers from 1 to 50",
+     "Count down from 10 with a while loop"
+    ]
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 - Arrays",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hold many values under one name",
+     "Add, remove and find",
+     "Loop over them properly"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) An array"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst fruits = [\"apple\", \"banana\", \"mango\"];\n\nconsole.log(fruits);\nconsole.log(fruits.length);\nconsole.log(fruits[0]);\nconsole.log(fruits[2]);"
+   },
+   {
+    "k": "warn",
+    "v": "Counting starts at zero, so the third item is [2]. Ask for fruits[5] and you get undefined rather than an error - JavaScript will not stop you, which makes this mistake quieter and harder to find than in most languages."
+   },
+   {
+    "k": "h",
+    "v": "2) Adding and removing"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst nums = [3, 1, 4];\n\nnums.push(9);\nconsole.log(nums);\n\nnums.unshift(7);\nconsole.log(nums);\n\nconst last = nums.pop();\nconsole.log(last, nums);\n\nconst first = nums.shift();\nconsole.log(first, nums);"
+   },
+   {
+    "k": "tip",
+    "v": "const on an array stops you replacing the whole array, but not changing what is inside it. push still works. That surprises people - const is about the name, not the contents."
+   },
+   {
+    "k": "h",
+    "v": "3) Looping"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst prices = [120, 340, 90, 560];\n\nfor (const p of prices) {\n  console.log(p);\n}\n\nlet total = 0;\nfor (const p of prices) {\n  total += p;\n}\nconsole.log(`Total: ${total}`);"
+   },
+   {
+    "k": "p",
+    "v": "for...of walks the values directly. Cleaner than counting with an index, and harder to get wrong."
+   },
+   {
+    "k": "h",
+    "v": "4) The three methods you will use daily"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst nums = [1, 2, 3, 4, 5, 6];\n\nconst doubled = nums.map(n => n * 2);\nconsole.log(doubled);\n\nconst evens = nums.filter(n => n % 2 === 0);\nconsole.log(evens);\n\nconst sum = nums.reduce((a, b) => a + b, 0);\nconsole.log(sum);"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "map = same number of items, each one changed",
+     "filter = fewer items, the ones that pass",
+     "reduce = one value out of many"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "n => n * 2 is an arrow function - a small function written inline. Read it as: given n, give back n times two. These three methods are everywhere in real JavaScript, so it is worth running this box a few times with different numbers."
+   },
+   {
+    "k": "h",
+    "v": "5) Finding things"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst names = [\"Ali\", \"Sana\", \"Bilal\"];\n\nconsole.log(names.includes(\"Sana\"));\nconsole.log(names.indexOf(\"Bilal\"));\nconsole.log(names.find(n => n.length > 4));\nconsole.log(names.join(\", \"));"
+   },
+   {
+    "k": "h",
+    "v": "6) Sorting, and a trap"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst nums = [10, 9, 100, 2];\n\nconsole.log([...nums].sort());\nconsole.log([...nums].sort((a, b) => a - b));"
+   },
+   {
+    "k": "warn",
+    "v": "Plain sort() turns everything into text first, so 100 comes before 9 because \"1\" is before \"9\". For numbers you must pass (a, b) => a - b. This has bitten more people than any other array behaviour."
+   },
+   {
+    "k": "p",
+    "v": "The [...nums] makes a copy, because sort changes the original array rather than returning a new one."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make an array of five prices, find the total and the average",
+     "Use filter to get everything over 200",
+     "Sort a list of numbers correctly, then incorrectly, and compare"
+    ]
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 - Objects",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Keep related values together under names",
+     "Reach into them",
+     "Handle a name that is not there"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) An object"
+   },
+   {
+    "k": "p",
+    "v": "An array holds things in order. An object holds them by name - which is what you want for a person, a product, a setting."
+   },
+   {
+    "k": "run",
+    "v": "js\nconst person = {\n  name: \"Ali\",\n  age: 30,\n  city: \"Lahore\"\n};\n\nconsole.log(person.name);\nconsole.log(person[\"age\"]);\nconsole.log(person);"
+   },
+   {
+    "k": "p",
+    "v": "Dot notation reads better. The square brackets are for when the key is in a variable."
+   },
+   {
+    "k": "h",
+    "v": "2) Changing and adding"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst p = { name: \"Ali\", age: 30 };\n\np.age = 31;\np.city = \"Lahore\";\ndelete p.name;\n\nconsole.log(p);\nconsole.log(Object.keys(p));\nconsole.log(Object.values(p));"
+   },
+   {
+    "k": "h",
+    "v": "3) A name that is not there"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst p = { name: \"Ali\" };\n\nconsole.log(p.city);\nconsole.log(p.city.toUpperCase());"
+   },
+   {
+    "k": "p",
+    "v": "Asking for a missing key gives undefined quietly. Trying to use it then fails with: Cannot read properties of undefined. That second message is one of the most common errors in all of JavaScript, and it always means the same thing - something was not there and you used it anyway."
+   },
+   {
+    "k": "run",
+    "v": "js\nconst p = { name: \"Ali\" };\n\nconsole.log(p.city?.toUpperCase());\nconsole.log(p.city ?? \"not given\");\nconsole.log(\"city\" in p);"
+   },
+   {
+    "k": "tip",
+    "v": "The ?. is a question mark before the dot. It means: if this is missing, stop and give undefined rather than throwing. It saves a great deal of defensive code."
+   },
+   {
+    "k": "h",
+    "v": "4) Objects inside objects"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst order = {\n  id: 1024,\n  customer: { name: \"Sana\", city: \"Karachi\" },\n  items: [\"sugar\", \"rice\"]\n};\n\nconsole.log(order.customer.name);\nconsole.log(order.items[0]);\nconsole.log(order.items.length);"
+   },
+   {
+    "k": "h",
+    "v": "5) An array of objects"
+   },
+   {
+    "k": "p",
+    "v": "This is how real data almost always arrives - rows of records."
+   },
+   {
+    "k": "run",
+    "v": "js\nconst sales = [\n  { item: \"sugar\", qty: 3, price: 180 },\n  { item: \"rice\",  qty: 2, price: 340 },\n  { item: \"oil\",   qty: 1, price: 560 }\n];\n\nfor (const s of sales) {\n  console.log(`${s.item}: ${s.qty} x ${s.price}`);\n}\n\nconst total = sales.reduce((sum, s) => sum + s.qty * s.price, 0);\nconsole.log(`Total: ${total}`);"
+   },
+   {
+    "k": "h",
+    "v": "6) Pulling values out"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst person = { name: \"Ali\", age: 30, city: \"Lahore\" };\n\nconst { name, city } = person;\nconsole.log(name, city);\n\nconst [a, b] = [10, 20];\nconsole.log(a, b);"
+   },
+   {
+    "k": "p",
+    "v": "This is destructuring. It takes the named parts out into their own variables. You will see it constantly in React, so it is worth getting used to now."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make an object describing yourself and print three fields",
+     "Ask for a key that does not exist, then do it safely with ?.",
+     "Build an array of four products and total them with reduce"
+    ]
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 - Functions",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a function three different ways",
+     "Return a value and use it",
+     "Understand arrow functions"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The ordinary way"
+   },
+   {
+    "k": "run",
+    "v": "js\nfunction greet(name) {\n  return `Hello ${name}`;\n}\n\nconsole.log(greet(\"Ali\"));\nconsole.log(greet(\"Sana\"));"
+   },
+   {
+    "k": "h",
+    "v": "2) return against console.log"
+   },
+   {
+    "k": "run",
+    "v": "js\nfunction shows(n) {\n  console.log(n * 2);\n}\n\nfunction gives(n) {\n  return n * 2;\n}\n\nconst a = shows(5);\nconst b = gives(5);\n\nconsole.log(`a is ${a}`);\nconsole.log(`b is ${b}`);\nconsole.log(gives(5) + 1);"
+   },
+   {
+    "k": "warn",
+    "v": "console.log shows something on screen. return hands it back to whoever called. A function that only logs gives back undefined, and you cannot do arithmetic with undefined. This catches people for weeks."
+   },
+   {
+    "k": "h",
+    "v": "3) Arrow functions"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst greet = (name) => {\n  return `Hello ${name}`;\n};\n\nconst double = n => n * 2;\nconst add = (a, b) => a + b;\n\nconsole.log(greet(\"Ali\"));\nconsole.log(double(5));\nconsole.log(add(3, 4));"
+   },
+   {
+    "k": "p",
+    "v": "When the body is a single expression you can drop the brackets and the word return - the value falls out on its own. That is why n => n * 2 works."
+   },
+   {
+    "k": "h",
+    "v": "4) Functions passed to other functions"
+   },
+   {
+    "k": "p",
+    "v": "This is the part that makes JavaScript feel different. A function is a value - you can hand it to something else."
+   },
+   {
+    "k": "run",
+    "v": "js\nconst nums = [1, 2, 3, 4, 5];\n\nconsole.log(nums.map(n => n * n));\nconsole.log(nums.filter(n => n > 2));\n\nfunction twice(fn, value) {\n  return fn(fn(value));\n}\n\nconsole.log(twice(n => n + 10, 5));"
+   },
+   {
+    "k": "p",
+    "v": "twice takes a function and a value, and applies the function twice. That idea - passing behaviour around - is behind map, filter, event handlers and most of React."
+   },
+   {
+    "k": "h",
+    "v": "5) Defaults"
+   },
+   {
+    "k": "run",
+    "v": "js\nfunction gst(amount, rate = 18) {\n  return amount + (amount * rate / 100);\n}\n\nconsole.log(gst(1000));\nconsole.log(gst(1000, 5));\n\nconst prices = [500, 1200, 8000];\nprices.forEach(p => console.log(`${p} -> ${gst(p)}`));"
+   },
+   {
+    "k": "h",
+    "v": "6) Where names live"
+   },
+   {
+    "k": "run",
+    "v": "js\nlet total = 100;\n\nfunction change() {\n  let total = 5;\n  console.log(`inside: ${total}`);\n}\n\nchange();\nconsole.log(`outside: ${total}`);"
+   },
+   {
+    "k": "p",
+    "v": "The total inside belongs to the function. Setting it does not touch the one outside. That is deliberate - a function should not quietly reach out and change its surroundings."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a function that adds GST, as an arrow function",
+     "Write one that takes an array and returns the average",
+     "Write one that takes another function as an argument"
+    ]
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 - When things go wrong",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Read an error properly",
+     "Catch one instead of crashing",
+     "Know the three you will meet most"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The three common ones"
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(missingThing);"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst p = { name: \"Ali\" };\nconsole.log(p.address.city);"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst n = 5;\nn.toUpperCase();"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "ReferenceError = a name JavaScript has never seen",
+     "Cannot read properties of undefined = something was missing and you used it anyway",
+     "is not a function = you called something that is not one"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "The second is the most common error in JavaScript by a wide margin. It nearly always means a value further back was undefined - so look at where that thing came from, not at the line that failed."
+   },
+   {
+    "k": "h",
+    "v": "2) Catching"
+   },
+   {
+    "k": "run",
+    "v": "js\ntry {\n  const data = JSON.parse(\"not json at all\");\n  console.log(data);\n} catch (err) {\n  console.log(\"Could not read that:\", err.message);\n}\n\nconsole.log(\"still running\");"
+   },
+   {
+    "k": "p",
+    "v": "Without the try, the program stops there. With it, the catch runs and the rest carries on."
+   },
+   {
+    "k": "h",
+    "v": "3) Where it belongs"
+   },
+   {
+    "k": "run",
+    "v": "js\nfunction toNumber(text) {\n  const n = Number(text);\n  return isNaN(n) ? 0 : n;\n}\n\nfor (const v of [\"10\", \"abc\", \"25\", \"\"]) {\n  console.log(`${JSON.stringify(v)} -> ${toNumber(v)}`);\n}"
+   },
+   {
+    "k": "p",
+    "v": "Not everything needs a try. Number() does not throw - it gives NaN, so a check is simpler and clearer. Use try for things that genuinely throw: JSON.parse, network calls, anything outside your control."
+   },
+   {
+    "k": "warn",
+    "v": "Never write catch (e) {} with nothing inside. It swallows the error and leaves you with a program that misbehaves silently. At minimum, log it."
+   },
+   {
+    "k": "h",
+    "v": "4) Throwing your own"
+   },
+   {
+    "k": "run",
+    "v": "js\nfunction divide(a, b) {\n  if (b === 0) {\n    throw new Error(\"Cannot divide by zero\");\n  }\n  return a / b;\n}\n\nconsole.log(divide(10, 2));\n\ntry {\n  console.log(divide(10, 0));\n} catch (err) {\n  console.log(\"Caught:\", err.message);\n}"
+   },
+   {
+    "k": "p",
+    "v": "Throwing on bad input is better than returning something wrong. A wrong answer travels quietly through a program; an error stops where the problem is."
+   },
+   {
+    "k": "h",
+    "v": "5) NaN, the odd one"
+   },
+   {
+    "k": "run",
+    "v": "js\nconsole.log(Number(\"abc\"));\nconsole.log(0 / 0);\nconsole.log(NaN === NaN);\nconsole.log(isNaN(NaN));\nconsole.log(Number.isNaN(\"abc\"));"
+   },
+   {
+    "k": "warn",
+    "v": "NaN does not equal itself, so you cannot test for it with ===. Use Number.isNaN(). The older isNaN() converts first and says true for any text, which is rarely what you meant."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Cause each of the three errors and read them",
+     "Wrap a JSON.parse in try and catch",
+     "Write a function that throws on bad input"
+    ]
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 - Working with real data",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Filter, sort and total records",
+     "Group them",
+     "Chain methods together"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. This is where the last eight days start paying."
+   },
+   {
+    "k": "h",
+    "v": "1) The data"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst sales = [\n  { item: \"sugar\", qty: 3, price: 180, city: \"Lahore\" },\n  { item: \"rice\",  qty: 2, price: 340, city: \"Karachi\" },\n  { item: \"oil\",   qty: 1, price: 560, city: \"Lahore\" },\n  { item: \"tea\",   qty: 5, price: 750, city: \"Multan\" },\n  { item: \"salt\",  qty: 4, price: 60,  city: \"Karachi\" }\n];\n\nconsole.log(sales.length);\nconsole.log(sales[0].item);"
+   },
+   {
+    "k": "h",
+    "v": "2) Totals"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst sales = [\n  { item: \"sugar\", qty: 3, price: 180 },\n  { item: \"rice\",  qty: 2, price: 340 },\n  { item: \"oil\",   qty: 1, price: 560 }\n];\n\nconst total = sales.reduce((sum, s) => sum + s.qty * s.price, 0);\nconsole.log(`Total: ${total}`);\n\nconst qty = sales.reduce((n, s) => n + s.qty, 0);\nconsole.log(`Items sold: ${qty}`);"
+   },
+   {
+    "k": "p",
+    "v": "reduce takes a running value and each item, and gives back the new running value. The 0 at the end is where it starts. Forget that 0 and the first turn gets an object instead of a number."
+   },
+   {
+    "k": "h",
+    "v": "3) Filtering and sorting"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst sales = [\n  { item: \"sugar\", price: 180 },\n  { item: \"tea\",   price: 750 },\n  { item: \"rice\",  price: 340 },\n  { item: \"salt\",  price: 60 }\n];\n\nconst dear = sales.filter(s => s.price > 300);\nconsole.log(dear.map(s => s.item));\n\nconst sorted = [...sales].sort((a, b) => b.price - a.price);\nsorted.forEach(s => console.log(`${s.item}: ${s.price}`));"
+   },
+   {
+    "k": "p",
+    "v": "b.price - a.price sorts highest first. Swap them for lowest first. The [...sales] copies the array, because sort changes the original."
+   },
+   {
+    "k": "h",
+    "v": "4) Chaining"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst sales = [\n  { item: \"sugar\", qty: 3, price: 180 },\n  { item: \"rice\",  qty: 2, price: 340 },\n  { item: \"oil\",   qty: 1, price: 560 },\n  { item: \"tea\",   qty: 5, price: 750 }\n];\n\nconst result = sales\n  .filter(s => s.price > 200)\n  .map(s => ({ item: s.item, total: s.qty * s.price }))\n  .sort((a, b) => b.total - a.total);\n\nconsole.log(result);"
+   },
+   {
+    "k": "tip",
+    "v": "Note the brackets around ({ item: ... }). Without them JavaScript reads the curly brace as the start of a function body rather than an object, and you get undefined. This catches everybody once."
+   },
+   {
+    "k": "h",
+    "v": "5) Grouping"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst orders = [\n  { city: \"Lahore\",  amount: 1200 },\n  { city: \"Karachi\", amount: 800 },\n  { city: \"Lahore\",  amount: 450 },\n  { city: \"Karachi\", amount: 300 },\n  { city: \"Multan\",  amount: 950 }\n];\n\nconst totals = {};\nfor (const o of orders) {\n  totals[o.city] = (totals[o.city] || 0) + o.amount;\n}\n\nconsole.log(totals);\n\nfor (const [city, amount] of Object.entries(totals)) {\n  console.log(`${city}: ${amount}`);\n}"
+   },
+   {
+    "k": "p",
+    "v": "(totals[o.city] || 0) + o.amount is the whole trick: start at zero if this city is new, add to it otherwise. One line instead of an if."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Build six sales records and find the total",
+     "Get everything over 500, sorted by price",
+     "Group them by city and total each one"
+    ]
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 - Putting it together",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write one program using all ten days",
+     "See what comes next"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) What you can now do"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Store values with let and const",
+     "Work with numbers, text and template strings",
+     "Make decisions with if, else and ===",
+     "Repeat with for, while, break and continue",
+     "Hold data in arrays and objects",
+     "Use map, filter and reduce",
+     "Write functions, including arrow functions",
+     "Catch errors instead of crashing"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) A shop report"
+   },
+   {
+    "k": "run",
+    "v": "js\nconst sales = [\n  { item: \"sugar\", qty: 3, price: 180 },\n  { item: \"rice\",  qty: 2, price: 340 },\n  { item: \"oil\",   qty: 1, price: 560 },\n  { item: \"tea\",   qty: 5, price: 750 },\n  { item: \"salt\",  qty: 4, price: 60 }\n];\n\nconst lineTotal = s => s.qty * s.price;\nconst withGst = (amount, rate = 18) => amount + (amount * rate / 100);\nconst pad = (s, n) => String(s).padEnd(n);\nconst padL = (s, n) => String(s).padStart(n);\n\nconsole.log(\"ITEM        QTY   PRICE    TOTAL\");\nconsole.log(\"-\".repeat(36));\n\nconst rows = [...sales].sort((a, b) => lineTotal(b) - lineTotal(a));\n\nfor (const s of rows) {\n  console.log(\n    pad(s.item, 11) + padL(s.qty, 3) + padL(s.price, 8) + padL(lineTotal(s), 9)\n  );\n}\n\nconst grand = sales.reduce((sum, s) => sum + lineTotal(s), 0);\n\nconsole.log(\"-\".repeat(36));\nconsole.log(pad(\"Subtotal\", 22) + padL(grand, 9));\nconsole.log(pad(\"With GST\", 22) + padL(withGst(grand).toFixed(0), 9));\n\nconst biggest = rows[0];\nconsole.log(`\\nBiggest line: ${biggest.item}`);"
+   },
+   {
+    "k": "p",
+    "v": "padEnd and padStart line the columns up. toFixed(0) rounds the GST total to a whole number."
+   },
+   {
+    "k": "h",
+    "v": "3) Now change it"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Add two more items",
+     "Change the GST rate to 5",
+     "Show only lines over 500",
+     "Sort by item name instead of total"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) What this box cannot do"
+   },
+   {
+    "k": "p",
+    "v": "The code here runs in a worker, which has no page attached - so document, buttons and clicks are not available. That is on purpose: a worker can be stopped when a loop runs away, and code on a page cannot."
+   },
+   {
+    "k": "p",
+    "v": "Everything you have learnt works identically on a real page. The HTML and CSS course picks up there, with a preview you can click."
+   },
+   {
+    "k": "h",
+    "v": "5) What comes next"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "HTML and CSS - build pages and make this code do something visible",
+     "The DOM - finding and changing parts of a page",
+     "Fetch and async - getting data from a server",
+     "React - which is mostly the arrays, objects and functions from this course, arranged differently"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "6) Ten things to remember"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "const by default, let when it must change, never var",
+     "=== always, never ==",
+     "Counting starts at zero",
+     "\"5\" + 3 is \"53\" but \"5\" - 3 is 2",
+     "Only six values are falsy - an empty array is not one",
+     "sort() on numbers needs (a, b) => a - b",
+     "return hands back, console.log only shows",
+     "Cannot read properties of undefined means look further back",
+     "Template strings beat joining with plus",
+     "An arrow function with one expression returns it automatically"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Nobody learns to program by reading. Take the report above, break it, and fix it. The hour spent fixing something you broke teaches more than three hours of reading."
+   },
+   {
+    "k": "h",
+    "v": "Final homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Change the report to sort by item name",
+     "Add a discount function and use it",
+     "Take the quiz and claim your certificate"
+    ]
+   }
+  ]
+ }
+}

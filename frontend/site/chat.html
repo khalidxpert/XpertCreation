@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chat — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Your conversations on XpertCreation.">
+<link rel="canonical" href="https://xpertcreation.com/chat">
+<meta name="robots" content="noindex,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Chat — XpertCreation">
+<meta property="og:description" content="Your conversations on XpertCreation.">
+<meta property="og:url" content="https://xpertcreation.com/chat">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Chat — XpertCreation">
+<meta name="twitter:description" content="Your conversations on XpertCreation.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Chat","url":"https://xpertcreation.com/chat","description":"Your conversations on XpertCreation.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;--body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:16px 16px 20px;flex:1;
+  display:flex;flex-direction:column;min-height:0}
+h1{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03em}
+
+.trow2{display:flex;align-items:center;gap:11px;padding:13px;background:var(--card);
+  border:1px solid var(--line);border-radius:15px;margin-bottom:9px;cursor:pointer}
+.trow2 .av6{width:40px;height:40px;border-radius:13px;background:var(--brand);color:#fff;
+  display:grid;place-items:center;font-weight:800;flex:0 0 auto}
+.trow2 .t3{flex:1;min-width:0}
+.trow2 .t3 b{display:block;font-size:14px;font-weight:700}
+.trow2 .t3 small{display:block;font-size:12px;color:var(--ink-soft);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.trow2 .t3 .about2{display:block;font-size:11.5px;font-weight:600;font-style:normal;
+  color:var(--brand);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trow2 .badge2{min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:var(--brand);
+  color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center}
+
+.thread2{display:none;flex:1;flex-direction:column;min-height:0}
+.thread2.on{display:flex}
+.back3{padding:9px 15px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  font-size:13px;font-weight:600;margin-bottom:11px;align-self:flex-start}
+.msgs2{flex:1;overflow-y:auto;padding:4px 2px}
+.msg8{max-width:80%;padding:11px 14px;border-radius:16px;margin-bottom:9px;font-size:14px;line-height:1.5}
+.msg8.mine{margin-left:auto;background:var(--brand);color:#fff;border-radius:16px 16px 3px 16px}
+.msg8.theirs{background:var(--card);border:1px solid var(--line);border-radius:16px 16px 16px 3px}
+.msg8 small{display:block;font-size:10px;opacity:.65;margin-top:4px}
+.reply4{display:flex;gap:8px;padding-top:11px}
+.reply4 textarea{flex:1;padding:12px 13px;border:1.5px solid var(--line);border-radius:14px;
+  background:var(--card);font-size:14.5px;font-family:inherit;min-height:46px;max-height:120px;resize:none}
+.reply4 button{padding:0 20px;border-radius:14px;background:var(--ink);color:#fff;font-weight:700}
+.empty8{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Chat</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap">
+  <h1>Chat</h1>
+  <div id="list5" style="margin-top:14px"></div>
+  <div class="thread2" id="threadbox">
+    <button class="back3" data-back3>&larr; All chats</button>
+    <div class="msgs2" id="msgs3"></div>
+    <div class="reply4">
+      <textarea id="cinput" placeholder="Type a message"></textarea>
+      <button id="csend">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var threads = [], current = null;
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+  function api(p,o){
+    o=o||{};
+    var h={"Content-Type":"application/json"};
+    if(o.method&&o.method!=="GET") h["X-CSRFToken"]=cookie("xc_csrf");
+    return fetch("/api/notify"+p,{method:o.method||"GET",headers:h,credentials:"same-origin",
+      body:o.body?JSON.stringify(o.body):undefined})
+      .then(function(r){return r.json().catch(function(){return{};})
+        .then(function(d){return{ok:r.ok,data:d};});})
+      .catch(function(){return{ok:false,data:{}};});
+  }
+
+  function renderList(){
+    var box = document.getElementById("list5");
+    if (!threads.length){
+      box.innerHTML = '<div class="empty8">No conversations yet. A chat opens once a '
+        + 'donation or blood request is accepted.</div>';
+      return;
+    }
+    box.innerHTML = threads.map(function(t){
+      var sub = t.last || (t.about ? "About: " + t.about : "No messages yet");
+      return '<div class="trow2" data-open3="' + t.id + '">'
+        + '<span class="av6">' + esc(t.with.charAt(0).toUpperCase()) + '</span>'
+        + '<span class="t3"><b>' + esc(t.with) + '</b>'
+        + (t.about ? '<em class="about2">' + esc(t.about) + '</em>' : '')
+        + '<small>' + esc(sub) + '</small></span>'
+        + (t.unread ? '<span class="badge2">' + t.unread + '</span>' : '')
+        + '</div>';
+    }).join("");
+  }
+
+  function renderThread(t){
+    document.getElementById("threadbox").classList.add("on");
+    document.getElementById("list5").style.display = "none";
+    document.querySelector(".wrap > h1").textContent = t.with;
+    var box = document.getElementById("msgs3");
+    box.innerHTML = t.messages.map(function(m){
+      return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + '">' + esc(m.body)
+        + '<small>' + esc(m.when) + '</small></div>';
+    }).join("");
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function openThread(id){
+    return api("/threads/" + id + "/").then(function(r){
+      if (!r.ok) return;
+      current = r.data;
+      renderThread(current);
+    });
+  }
+
+  document.addEventListener("click", function(e){
+    var o = e.target.closest("[data-open3]");
+    if (o) return openThread(o.getAttribute("data-open3"));
+
+    if (e.target.closest("[data-back3]")){
+      document.getElementById("threadbox").classList.remove("on");
+      document.getElementById("list5").style.display = "";
+      document.querySelector(".wrap > h1").textContent = "Chat";
+      current = null;
+      loadList();
+      return;
+    }
+
+    if (e.target.id === "csend"){
+      var box = document.getElementById("cinput");
+      var body = box.value.trim();
+      if (!body || !current) return;
+      box.value = "";
+      api("/threads/" + current.id + "/", {method:"POST", body:{message: body}})
+        .then(function(){ return openThread(current.id); });
+    }
+  });
+
+  document.getElementById("cinput").addEventListener("keydown", function(e){
+    if (e.key === "Enter" && !e.shiftKey){
+      e.preventDefault();
+      document.getElementById("csend").click();
+    }
+  });
+
+  function loadList(){
+    return api("/threads/").then(function(r){
+      if (r.ok) threads = r.data.threads || [];
+      renderList();
+    });
+  }
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u){
+        document.getElementById("list5").innerHTML =
+          '<div class="empty8">Sign in to see your chats.</div>';
+        return;
+      }
+      var openId = new URLSearchParams(location.search).get("t")
+                  || location.pathname.split("/chat/")[1];
+      loadList().then(function(){ if (openId) openThread(openId); });
+    });
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

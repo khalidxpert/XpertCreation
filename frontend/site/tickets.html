@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Support — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Something not working? Open a ticket and we will get back to you.">
+<link rel="canonical" href="https://xpertcreation.com/support">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Support — XpertCreation">
+<meta property="og:description" content="Something not working? Open a ticket and we will get back to you.">
+<meta property="og:url" content="https://xpertcreation.com/support">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Support — XpertCreation">
+<meta name="twitter:description" content="Something not working? Open a ticket and we will get back to you.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Support","url":"https://xpertcreation.com/support","description":"Something not working? Open a ticket and we will get back to you.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --go:#00B37E;--bad:#DC2626;--warn:#B45309;--line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:680px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(24px,6vw,32px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:8px}
+
+.new2{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;
+  margin:18px 0}
+.new2 label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:11px 0 5px}
+.new2 label:first-of-type{margin-top:0}
+.new2 input,.new2 textarea{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:14.5px;font-family:inherit;outline:none}
+.new2 textarea{min-height:90px;resize:vertical}
+.new2 input:focus,.new2 textarea:focus{border-color:var(--brand);background:#fff}
+.new2 button{width:100%;margin-top:13px;padding:13px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:14px}
+.whoisbox{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 13px;border-radius:12px;background:var(--paper);margin-bottom:14px;
+  border:1px solid var(--line)}
+.whoisbox .wname{font-size:13.5px;font-weight:700}
+.whoisbox .wemail{font-size:12px;color:var(--ink-soft)}
+.trow2email{display:block;font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+
+.trow{display:flex;align-items:center;gap:11px;padding:14px;background:var(--card);
+  border:1px solid var(--line);border-radius:15px;margin-bottom:9px;cursor:pointer}
+.trow .st2{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.trow .st2.open{background:var(--warn)}
+.trow .st2.answered{background:var(--go)}
+.trow .st2.closed{background:var(--ink-soft)}
+.trow .t{flex:1;min-width:0}
+.trow .t b{display:block;font-size:14px;font-weight:700}
+.trow .t small{display:block;font-size:12px;color:var(--ink-soft);margin-top:2px}
+.trow .n2{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+
+.thread{display:none}
+.thread.on{display:block}
+.back2{padding:9px 15px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  font-size:13px;font-weight:600;margin-bottom:14px}
+.msg3{max-width:82%;padding:12px 14px;border-radius:15px;margin-bottom:10px;font-size:14px;
+  line-height:1.55}
+.msg3.mine{margin-left:auto;background:var(--brand);color:#fff;border-radius:15px 15px 3px 15px}
+.msg3.staff{background:var(--card);border:1px solid var(--line);border-radius:15px 15px 15px 3px}
+.msg3 small{display:block;font-size:10.5px;opacity:.7;margin-top:5px}
+.reply2{display:flex;gap:8px;margin-top:14px}
+.reply2 textarea{flex:1;padding:12px 13px;border:1.5px solid var(--line);border-radius:13px;
+  background:var(--paper);font-size:14.5px;font-family:inherit;min-height:50px;resize:vertical}
+.reply2 button{padding:0 20px;border-radius:13px;background:var(--ink);color:#fff;
+  font-weight:700;font-size:13.5px}
+.closebtn{margin-top:10px;padding:10px 16px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.empty5{text-align:center;padding:34px 20px;color:var(--ink-soft);font-size:13.5px;line-height:1.6}
+
+.catpick{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px}
+.catpick button{padding:8px 13px;border-radius:99px;background:var(--paper);
+  border:1.5px solid var(--line);font-size:12px;font-weight:600}
+.catpick button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.trow .cat2{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;
+  background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);white-space:nowrap}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Support</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap"><div id="app"><div class="empty5">Loading&#8230;</div></div></div>
+
+<script>
+(function(){
+  "use strict";
+  var me = null, list = [], open2 = null, isStaff = false;
+  var category = "other";
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+  function api(p,o){
+    o=o||{};
+    var h={"Content-Type":"application/json"};
+    if(o.method&&o.method!=="GET") h["X-CSRFToken"]=cookie("xc_csrf");
+    return fetch("/api/mod"+p,{method:o.method||"GET",headers:h,credentials:"same-origin",
+      body:o.body?JSON.stringify(o.body):undefined})
+      .then(function(r){return r.json().catch(function(){return{};})
+        .then(function(d){return{ok:r.ok,data:d};});})
+      .catch(function(){return{ok:false,data:{detail:"Network error."}};});
+  }
+
+  function renderList(){
+    var h = '<h1>Support</h1><p class="lead">'
+      + (isStaff ? "Tickets from members." : "Something not working? Tell us here.")
+      + '</p>';
+    h += '<div class="new2">';
+    if (!isStaff && me){
+      h += '<div class="whoisbox"><span class="wname">' + esc(me.full_name || me.email.split("@")[0]) + '</span>'
+        + '<span class="wemail">' + esc(me.email) + '</span></div>';
+    }
+    h += '<label for="tsub">Subject</label>'
+      + '<input id="tsub" placeholder="A short summary">'
+      + '<label>What kind of thing is this?</label>'
+      + '<div class="catpick" id="tcat">'
+      + [["bug","Bug"],["account","Account"],["content","Course"],["feature","Feature"],["other","Other"]].map(function(c, i){
+          return '<button class="' + (i === 4 ? "on" : "") + '" data-cat="' + c[0] + '">'
+            + c[1] + '</button>';
+        }).join("")
+      + '</div>'
+      + '<label for="tpri" style="margin-top:14px">Priority</label>'
+      + '<select id="tpri">'
+      + '<option value="low">Low \u2014 no rush</option>'
+      + '<option value="normal" selected>Normal</option>'
+      + '<option value="high">High \u2014 blocking me</option>'
+      + '</select>'
+      + '<label for="tmsg" style="margin-top:14px">What is going on?</label>'
+      + '<textarea id="tmsg" placeholder="As much detail as helps"></textarea>'
+      + '<button data-open>Open a ticket</button></div>';
+
+    if (!list.length){
+      h += '<div class="empty5">' + (isStaff ? "No open tickets." : "No tickets yet.") + '</div>';
+    } else {
+      list.forEach(function(t){
+        h += '<div class="trow" data-open2="' + t.id + '">'
+          + '<span class="st2 ' + t.state + '"></span>'
+          + '<span class="t"><b>' + esc(t.subject)
+          + (t.from ? ' \u2014 ' + esc(t.from) : '') + '</b>'
+          + (t.from_email ? '<span class="trow2email">' + esc(t.from_email) + '</span>' : '')
+          + '<small>' + esc(t.state) + ' \u00b7 ' + esc(t.updated) + '</small></span>'
+          + '<span class="n2">' + t.messages + '</span></div>';
+      });
+    }
+    document.getElementById("app").innerHTML = h;
+  }
+
+  function renderThread(t){
+    var h = '<button class="back2" data-back2>\u2190 All tickets</button>'
+      + '<h1 style="font-size:22px">' + esc(t.subject) + '</h1>'
+      + '<p class="lead">' + esc(t.from) + ' \u00b7 ' + esc(t.state) + '</p>'
+      + '<div style="margin-top:18px">';
+    t.messages.forEach(function(m){
+      var mine = isStaff ? m.staff : !m.staff;
+      h += '<div class="msg3 ' + (mine ? "mine" : "staff") + '">' + esc(m.body)
+        + '<small>' + esc(m.author) + ' \u00b7 ' + esc(m.when) + '</small></div>';
+    });
+    h += '</div>';
+    if (t.state !== "closed"){
+      h += '<div class="reply2"><textarea id="treply" placeholder="Write a reply"></textarea>'
+        + '<button data-reply="' + t.id + '">Send</button></div>'
+        + '<button class="closebtn" data-close2="' + t.id + '">Mark as resolved</button>';
+    } else {
+      h += '<button class="closebtn" data-close2="' + t.id + '" data-reopen="1">Reopen</button>';
+    }
+    document.getElementById("app").innerHTML = h;
+  }
+
+  document.addEventListener("click", function(e){
+    var cb = e.target.closest("[data-cat]");
+    if (cb){
+      category = cb.getAttribute("data-cat");
+      document.getElementById("tcat").querySelectorAll("button").forEach(function(b){
+        b.classList.toggle("on", b === cb);
+      });
+      return;
+    }
+
+    if (e.target.closest("[data-open]")){
+      var sub = document.getElementById("tsub").value.trim();
+      var msg = document.getElementById("tmsg").value.trim();
+      var pri = document.getElementById("tpri") ? document.getElementById("tpri").value : "normal";
+      if (!sub || !msg) return alert("Fill in both fields.");
+      return api("/tickets/", {method:"POST",
+        body:{subject:sub, message:msg, category:category, priority:pri}})
+        .then(function(r){
+          if (!r.ok) return alert(r.data.detail || "Could not send that.");
+          load();
+        });
+    }
+
+    var o = e.target.closest("[data-open2]");
+    if (o){
+      return api("/tickets/" + o.getAttribute("data-open2") + "/").then(function(r){
+        if (r.ok){ open2 = r.data; renderThread(open2); }
+      });
+    }
+
+    if (e.target.closest("[data-back2]")){ open2 = null; return renderList(); }
+
+    var rp = e.target.closest("[data-reply]");
+    if (rp){
+      var body = document.getElementById("treply").value.trim();
+      if (!body) return;
+      return api("/tickets/" + rp.getAttribute("data-reply") + "/",
+                 {method:"POST", body:{message:body}})
+        .then(function(){
+          return api("/tickets/" + rp.getAttribute("data-reply") + "/").then(function(r){
+            if (r.ok){ open2 = r.data; renderThread(open2); }
+          });
+        });
+    }
+
+    var cl = e.target.closest("[data-close2]");
+    if (cl){
+      var reopen = cl.hasAttribute("data-reopen");
+      return api("/tickets/" + cl.getAttribute("data-close2") + "/",
+                 {method:"POST", body:{close: !reopen}})
+        .then(function(){ open2 = null; load(); });
+    }
+  });
+
+  function load(){
+    return api("/tickets/").then(function(r){
+      if (r.ok){ list = r.data.tickets || []; isStaff = r.data.is_staff; }
+      renderList();
+    });
+  }
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      me = u;
+      if (!me){
+        document.getElementById("app").innerHTML =
+          '<h1>Support</h1><div class="empty5">Sign in to open a ticket.'
+          + '<br><br><a href="https://xpertcreation.com/login?next=' + encodeURIComponent(location.href)
+          + '" style="display:inline-block;padding:12px 24px;border-radius:13px;'
+          + 'background:#0D1424;color:#fff;font-weight:700">Sign in</a></div>';
+        return;
+      }
+      load();
+    });
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>XpertCreation — Free tools, learning and help, all in one place</title>
+<!-- seo:start -->
+<meta name="description" content="Prayer times, world clock, weather, 29 calculators, a blood donor network, a donation board, Word and Excel courses and games. Free to use, and most of it needs no account.">
+<link rel="canonical" href="https://xpertcreation.com/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="XpertCreation — Free tools, learning and help, all in one place">
+<meta property="og:description" content="Prayer times, world clock, weather, 29 calculators, a blood donor network, a donation board, Word and Excel courses and games. Free to use, and most of it needs no account.">
+<meta property="og:url" content="https://xpertcreation.com/">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="XpertCreation — Free tools, learning and help, all in one place">
+<meta name="twitter:description" content="Prayer times, world clock, weather, 29 calculators, a blood donor network, a donation board, Word and Excel courses and games. Free to use, and most of it needs no account.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"XpertCreation","url":"https://xpertcreation.com/","description":"Prayer times, world clock, weather, 29 calculators, a blood donor network, a donation board, Word and Excel courses and games. Free to use, and most of it needs no account.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"potentialAction":{"@type":"SearchAction","target":"https://xpertcreation.com/tools?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<!-- seo:end -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="icon" href="/brand/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/brand/icon-180.png">
+<meta name="theme-color" content="#14151A">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1424; --ink-soft:#5A657C; --paper:#F6F7FB; --card:#FFFFFF;
+  --brand:#1B4DFF; --hot:#FF4A3D; --go:#00B37E; --blood:#C0392B; --line:#E4E8F2;
+  --shadow:0 2px 4px rgba(13,20,36,.04), 0 12px 28px rgba(13,20,36,.07);
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;
+  --mono:"Space Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.55;overflow-x:hidden}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+.wrap{max-width:560px;margin:0 auto;position:relative}
+@media(min-width:820px){.wrap{max-width:960px}}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;
+  padding:12px 16px;background:rgba(246,247,251,.86);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .2s}
+.topbar.stuck{border-bottom-color:var(--line)}
+.logo{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.03em;display:flex;align-items:center;gap:7px}
+.logo img{height:26px;width:auto;max-width:130px;display:block;border-radius:6px}
+.logo .mark{width:26px;height:26px;border-radius:8px;background:var(--ink);display:grid;place-items:center;
+  color:#fff;font-size:13px;font-weight:800}
+.logo .mark.hide{display:none}
+.spacer{flex:1}
+#langSel{-webkit-appearance:none;appearance:none;padding:7px 26px 7px 11px;border-radius:999px;
+  background:var(--card) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' stroke='%235A657C' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>") no-repeat right 10px center;
+  border:1px solid var(--line);font-size:13px;font-weight:600;max-width:128px;text-overflow:ellipsis}
+.btn-in{padding:8px 15px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;font-weight:700}
+
+/* hero */
+.hero{padding:38px 20px 30px;text-align:center;position:relative;overflow:hidden}
+.hero .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--brand);margin-bottom:14px}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,8.4vw,50px);
+  line-height:1.02;letter-spacing:-.038em;max-width:15ch;margin:0 auto}
+.hero p{margin:14px auto 0;font-size:15px;color:var(--ink-soft);max-width:34ch;font-weight:500}
+.hero .acts{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+.hero .primary{padding:14px 26px;border-radius:999px;background:var(--brand);color:#fff;
+  font-weight:700;font-size:15px;box-shadow:0 8px 24px rgba(27,77,255,.3);transition:transform .15s}
+.hero .primary:active{transform:scale(.97)}
+.hero .ghost{padding:14px 24px;border-radius:999px;background:var(--card);
+  border:1px solid var(--line);font-weight:700;font-size:15px}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.2;z-index:-1}
+.blob.b1{width:300px;height:300px;background:var(--brand);top:-120px;left:-90px}
+.blob.b2{width:260px;height:260px;background:var(--blood);top:-60px;right:-110px}
+
+/* sections */
+.sec{padding:8px 16px 30px}
+.sec h2{font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.03em;margin-bottom:14px}
+
+/* product cards */
+.prod{background:var(--card);border:1px solid var(--line);border-radius:22px;
+  padding:18px;margin-bottom:12px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.prod::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--accent,var(--brand))}
+.prod .row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.prod .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  font-size:22px;background:var(--accent,var(--brand));color:#fff;flex:0 0 auto}
+.prod .nm{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.025em}
+.prod .badge{font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;
+  letter-spacing:.03em;white-space:nowrap}
+.badge.on{background:rgba(0,179,126,.13);color:#00875F}
+.badge.off{background:var(--paper);color:var(--ink-soft);border:1px solid var(--line)}
+.prod p{font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+.prod .go{display:inline-flex;align-items:center;gap:6px;margin-top:13px;
+  padding:11px 20px;border-radius:12px;background:var(--ink);color:#fff;font-size:13.5px;font-weight:700}
+.prod .go.dim{background:var(--paper);color:var(--ink-soft);border:1px solid var(--line)}
+
+/* why */
+.why{display:grid;gap:10px}
+@media(min-width:820px){.why{grid-template-columns:repeat(3,1fr)}}
+.wbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px}
+.wbox .e{font-size:20px;display:block;margin-bottom:8px}
+.wbox h4{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.wbox p{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.5}
+
+/* support */
+.support{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.support .hrs{font-size:12px;color:var(--ink-soft);font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:13px}
+.support .hrs .live{width:7px;height:7px;border-radius:99px;background:var(--go);box-shadow:0 0 0 4px rgba(0,179,126,.18);flex:0 0 auto}
+.sup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.sup{display:flex;flex-direction:column;align-items:center;gap:6px;padding:13px 6px;border-radius:14px;
+  background:var(--paper);border:1.5px solid var(--line);transition:transform .16s}
+.sup:active{transform:scale(.97)}
+.sup .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:16px;color:#fff}
+.sup.wa .ic{background:#25D366}
+.sup.tel .ic{background:var(--brand)}
+.sup.mail .ic{background:var(--ink)}
+.sup b{font-size:12.5px;font-weight:700}
+.sup small{font-size:10.5px;color:var(--ink-soft);font-family:var(--mono);direction:ltr}
+
+/* footer */
+footer{padding:24px 16px calc(30px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:14px}
+footer .links{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-soft);font-weight:600}
+footer .cr{font-size:11.5px;color:var(--ink-soft);margin-top:12px;line-height:1.6}
+
+/* fab */
+.fab{position:fixed;z-index:70;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));
+  width:52px;height:52px;border-radius:17px;background:#25D366;display:grid;place-items:center;
+  box-shadow:0 8px 24px rgba(37,211,102,.42);transition:transform .16s}
+.fab:active{transform:scale(.93)}
+.fab svg{width:27px;height:27px;fill:#fff}
+body.rtl .fab{right:auto;left:16px}
+
+/* languages */
+body.rtl{direction:rtl}
+body.rtl .hero,body.rtl .sec,body.rtl footer{text-align:initial}
+body.rtl .hero{text-align:center}
+body.f-ur{font-family:"Noto Nastaliq Urdu",var(--body);line-height:2.1}
+body.f-ur h1,body.f-ur h2,body.f-ur .nm{font-family:"Noto Nastaliq Urdu",var(--display);line-height:1.75;letter-spacing:0}
+body.f-ur h1{font-size:clamp(23px,6.2vw,34px)}
+body.f-ur .primary,body.f-ur .ghost,body.f-ur .go,body.f-ur .btn-in{line-height:1.9;padding-top:.7em;padding-bottom:.7em}
+body.f-ar{font-family:"Noto Naskh Arabic",var(--body);line-height:1.85}
+body.f-ar h1,body.f-ar h2,body.f-ar .nm{font-family:"Noto Naskh Arabic",var(--display);letter-spacing:0;line-height:1.5}
+body.f-hi{font-family:"Noto Sans Devanagari",var(--body)}
+body.f-bn{font-family:"Noto Sans Bengali",var(--body)}
+body.f-zh h1,body.f-zh h2{letter-spacing:0}
+body.f-long h1{font-size:clamp(26px,7vw,42px)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;
+  color:var(--ink-soft,#5A657C);flex:0 0 auto;transition:color .15s,border-color .15s}
+.gear:hover{color:var(--ink,#0D1424);border-color:var(--ink-soft,#5A657C)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.langwrap{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 11px;
+  border-radius:999px;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2)}
+.langwrap svg{width:16px;height:16px;fill:none;stroke:var(--ink-soft,#5A657C);
+  stroke-width:1.7;flex:0 0 auto}
+.langwrap select,.langwrap #langSel{border:none!important;background:none!important;
+  padding:2px 18px 2px 0!important;max-width:104px}
+
+.acctbtn{display:flex;align-items:center;gap:7px;padding:6px 13px 6px 7px;border-radius:999px;
+  background:var(--ink,#0D1424);color:#fff;font-size:12.5px;font-weight:700;
+  max-width:160px;overflow:hidden;white-space:nowrap;text-decoration:none}
+.acctbtn img{width:24px;height:24px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+  background:rgba(255,255,255,.2)}
+.acctbtn .ini{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.22);font-size:11px;flex:0 0 auto}
+.acctbtn span{overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- signed-in welcome ---------- */
+.hello{display:none;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:22px;padding:18px;margin:0 0 18px;
+  box-shadow:0 2px 4px rgba(13,20,36,.03),0 12px 30px rgba(13,20,36,.06)}
+.hello.on{display:block}
+.hello .who{display:flex;align-items:center;gap:14px}
+.hello .av{width:56px;height:56px;border-radius:18px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper,#F6F7FB);border:2px solid var(--line,#E4E8F2)}
+.hello .av.ph{display:grid;place-items:center;background:#0D1424;color:#fff;
+  font-weight:800;font-size:22px;border-color:#0D1424}
+.hello .t{flex:1;min-width:0}
+.hello .t b{display:block;font-family:var(--display);font-weight:800;font-size:20px;
+  letter-spacing:-.03em;line-height:1.2}
+.hello .t small{display:block;font-size:12.5px;color:var(--ink-soft,#5A657C);
+  margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hello .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.hello .chip2{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;
+  border-radius:999px;background:var(--paper,#F6F7FB);border:1px solid var(--line,#E4E8F2);
+  font-size:12.5px;font-weight:600;color:var(--ink,#0D1424)}
+.hello .chip2 b{font-weight:800}
+.hello .chip2.wx{background:linear-gradient(135deg,rgba(27,77,255,.09),rgba(27,77,255,.03));
+  border-color:rgba(27,77,255,.25)}
+
+/* ---------- birthday card ---------- */
+.bcard{position:relative;overflow:hidden;border-radius:22px;padding:26px 22px;margin:0 0 18px;
+  background:linear-gradient(135deg,#DB2777,#7C3AED 55%,#1B4DFF);color:#fff;
+  box-shadow:0 14px 40px rgba(219,39,119,.32)}
+.bcard h3{font-family:var(--display);font-weight:800;font-size:clamp(22px,5.6vw,30px);
+  letter-spacing:-.035em;line-height:1.15;position:relative;z-index:2}
+.bcard p{font-size:14.5px;line-height:1.6;margin-top:9px;opacity:.94;position:relative;z-index:2}
+.bcard .go2{display:inline-block;margin-top:16px;padding:12px 22px;border-radius:13px;
+  background:#fff;color:#0D1424;font-weight:700;font-size:14px;position:relative;z-index:2}
+.bcard .conf{position:absolute;top:-10px;font-size:18px;animation:fall linear infinite;
+  opacity:.85;pointer-events:none}
+@keyframes fall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:0}
+  10%{opacity:.9}
+  100%{transform:translateY(320px) rotate(420deg);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){ .bcard .conf{display:none} }
+
+/* ============ front page ============ */
+.brandbar{display:flex;align-items:center;gap:10px}
+.brandbar img{height:44px;width:auto;display:block;border-radius:10px}
+.brandbar img.gone{display:none}
+.brandbar b{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.035em}
+
+/* ---- slider ---- */
+.slidewrap{position:relative;margin:0 0 8px;overflow:hidden;border-radius:28px}
+.slides{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;
+  padding:4px 0 18px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.slides::-webkit-scrollbar{display:none}
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:start;
+  border-radius:28px;overflow:hidden;min-height:230px;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:24px;color:#fff;text-decoration:none;
+  background:linear-gradient(145deg,var(--c1),var(--c2));
+  box-shadow:0 10px 24px rgba(13,20,36,.14),0 24px 56px var(--glow);
+  transform:translateZ(0);transition:transform .22s}
+@media(min-width:700px){ .slide{flex-basis:100%} }
+/* No gap: with full-width slides a gap leaves a strip of the next card
+   showing, which is what made the third one unreachable. */
+.slides{gap:0}
+.slide{margin-right:0}
+.slide:active{transform:scale(.985)}
+/* light catching the top edge, so the card reads as an object */
+.slide::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 12% -10%,rgba(255,255,255,.42),transparent 55%)}
+/* the icon, blown up and faded into the corner */
+.slide .ghost{position:absolute;right:-14px;top:-18px;font-size:130px;line-height:1;
+  opacity:.17;pointer-events:none;transform:rotate(-9deg)}
+.slide .ic{position:relative;z-index:2;width:56px;height:56px;border-radius:18px;
+  background:rgba(255,255,255,.22);backdrop-filter:blur(6px);
+  display:grid;place-items:center;font-size:28px;margin-bottom:auto;
+  border:1px solid rgba(255,255,255,.3)}
+.slide .tag{position:relative;z-index:2;display:inline-block;align-self:flex-start;
+  font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.24);
+  border:1px solid rgba(255,255,255,.32);margin-bottom:9px}
+.slide h3{position:relative;z-index:2;font-family:var(--display);font-weight:800;
+  font-size:26px;letter-spacing:-.035em;line-height:1.1}
+.slide p{position:relative;z-index:2;font-size:13.5px;line-height:1.55;
+  opacity:.93;margin-top:6px;max-width:34ch}
+.slide .cta{position:relative;z-index:2;display:inline-flex;align-items:center;gap:7px;
+  align-self:flex-start;margin-top:15px;padding:12px 22px;border-radius:14px;
+  background:#fff;color:#0D1424;font-weight:800;font-size:14px}
+
+/* Banner slides: tasveer poora card bharti hai. Khari tasveerein bhi 3:2
+   mein baith jati hain, beech ka hissa rakh kar. */
+.slide.banner{padding:0;min-height:0;background:#0B1220;
+  aspect-ratio:3/2;display:block}
+.slide.banner::before{display:none}
+/* contain, cover nahi: tasveer poori dikhni chahiye. cover chhoti screen
+   par daayen baayen se kaat deta tha aur matn adha reh jata tha. */
+.slide.banner img{width:100%;height:100%;object-fit:contain;display:block;
+  border-radius:28px}
+@media(max-width:520px){ .slide.banner{aspect-ratio:3/2} }
+
+.dots{display:flex;gap:7px;justify-content:center;margin:2px 0 6px}
+.dots i{width:7px;height:7px;border-radius:99px;background:var(--line);transition:all .25s;cursor:pointer}
+.dots i.on{width:22px;background:var(--ink)}
+.swipehint{text-align:center;font-size:11.5px;color:var(--ink-soft);margin-bottom:6px}
+
+/* ---- app tiles ---- */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+@media(min-width:640px){ .tiles{grid-template-columns:repeat(3,1fr)} }
+.tile2{position:relative;overflow:hidden;border-radius:22px;padding:18px 16px 16px;
+  min-height:148px;display:flex;flex-direction:column;color:#fff;text-decoration:none;
+  background:linear-gradient(150deg,var(--c1),var(--c2));
+  box-shadow:0 6px 16px rgba(13,20,36,.1),0 16px 36px var(--glow);
+  transition:transform .18s,box-shadow .18s}
+.tile2:hover{transform:translateY(-3px);
+  box-shadow:0 10px 22px rgba(13,20,36,.14),0 26px 54px var(--glow)}
+.tile2:active{transform:scale(.98)}
+.tile2::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(110% 70% at 15% -12%,rgba(255,255,255,.4),transparent 58%)}
+.tile2 .ghost{position:absolute;right:-10px;bottom:-16px;font-size:80px;line-height:1;
+  opacity:.18;pointer-events:none;transform:rotate(-8deg)}
+.tile2 .ic{position:relative;z-index:2;width:44px;height:44px;border-radius:14px;
+  background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3);
+  display:grid;place-items:center;font-size:22px}
+.tile2 b{position:relative;z-index:2;font-family:var(--display);font-weight:800;
+  font-size:16px;letter-spacing:-.028em;margin-top:auto}
+.tile2 small{position:relative;z-index:2;font-size:11.5px;opacity:.9;margin-top:3px;
+  line-height:1.45}
+.tile2 .soon{position:absolute;top:12px;right:12px;z-index:3;font-size:9.5px;
+  font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:4px 9px;
+  border-radius:999px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.25)}
+
+/* Hover: card thora uthta hai, roshni sarakti hai, aur ek sheen guzarti hai. */
+.tile2 .ic,.tile2 .ghost{transition:transform .3s ease,opacity .3s ease}
+.tile2::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.26) 50%,transparent 62%);
+  transform:translateX(-125%);transition:transform .6s ease}
+.tile2:hover::after{transform:translateX(125%)}
+.tile2:hover .ic{transform:translateY(-2px) scale(1.06)}
+.tile2:hover .ghost{transform:rotate(-3deg) scale(1.09);opacity:.26}
+.tile2:focus-visible{outline:3px solid rgba(255,255,255,.85);outline-offset:3px}
+.slide .ic,.slide .ghost{transition:transform .32s ease,opacity .32s ease}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.2) 50%,transparent 60%);
+  transform:translateX(-125%);transition:transform .75s ease}
+.slide:hover::after{transform:translateX(125%)}
+.slide:hover .ghost{transform:rotate(-5deg) scale(1.06);opacity:.22}
+
+/* ---- partners ---- */
+.lead2{color:var(--ink-soft);font-size:14px;line-height:1.6;margin:-4px 0 16px;max-width:52ch}
+.pcard{display:flex;align-items:center;gap:15px;padding:18px;border-radius:20px;
+  background:var(--paper);border:1.5px solid var(--line);text-decoration:none;
+  color:var(--ink);transition:border-color .18s,transform .18s,box-shadow .18s}
+.pcard:hover{border-color:#1B4DFF;transform:translateY(-2px);
+  box-shadow:0 10px 26px rgba(27,77,255,.16)}
+.pcard .pico{flex:0 0 auto;width:50px;height:50px;border-radius:16px;display:grid;
+  place-items:center;font-size:25px;color:#fff;
+  background:linear-gradient(145deg,#1B4DFF,#0B2FB8)}
+.pcard .ptxt{flex:1;min-width:0}
+.pcard .ptxt b{display:block;font-family:var(--display);font-weight:800;font-size:17px;
+  letter-spacing:-.025em}
+.pcard .ptxt small{display:block;font-size:12.5px;color:var(--ink-soft);
+  line-height:1.55;margin-top:3px}
+.pcard .parr{flex:0 0 auto;color:var(--ink-soft);font-size:19px;
+  transition:transform .18s}
+.pcard:hover .parr{transform:translateX(4px);color:#1B4DFF}
+
+@media(prefers-reduced-motion:reduce){
+  .slide,.tile2{transition:none}
+  .tile2:hover{transform:none}
+  .tile2::after,.slide::after{display:none}
+  .pcard,.pcard .parr{transition:none}
+  .pcard:hover{transform:none}
+  .pcard:hover .parr{transform:none}
+  .tile2:hover .ic,.tile2:hover .ghost,.slide:hover .ghost{transform:none}
+}
+
+/* Signed in, the pitch is wasted space: the apps matter, not the sales copy. */
+body.signed-in .hero{display:none}
+/* Login se pehle settings ka koi kaam nahi — wo /account par le
+   jata hai jo login maangta hai. */
+#gearBtn{display:none}
+body.signed-in #gearBtn{display:grid}
+body.signed-in .hello{margin-top:4px}
+
+/* ---------- about ---------- */
+.about{background:var(--card);border:1px solid var(--line);border-radius:24px;
+  padding:26px 22px;margin-top:30px;
+  box-shadow:0 2px 4px rgba(13,20,36,.03),0 14px 34px rgba(13,20,36,.06)}
+.about .who2{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.about .pic{width:88px;height:88px;border-radius:26px;object-fit:cover;flex:0 0 auto;
+  border:3px solid var(--line);background:var(--paper)}
+.about .pic.ph{display:grid;place-items:center;font-family:var(--display);
+  font-weight:800;font-size:32px;color:#fff;background:#0D1424;border-color:#0D1424}
+.about .who2 .t{flex:1;min-width:180px}
+.about .who2 .t b{display:block;font-family:var(--display);font-weight:800;
+  font-size:20px;letter-spacing:-.03em;line-height:1.2}
+.about .who2 .t small{display:block;font-size:13px;color:var(--ink-soft);margin-top:3px}
+.about p{font-size:14.5px;line-height:1.7;color:var(--ink);margin-top:16px}
+.about .mcp{margin:18px 0 0;padding:12px;border:1px solid var(--line);border-radius:18px;background:var(--paper,transparent)}
+.about .mcp img{display:block;width:100%;max-width:760px;height:auto;margin:0 auto;border-radius:10px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;pointer-events:none}
+.about .mcp figcaption{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin-top:10px;text-align:center}
+.about .mcp figcaption b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:2px}
+.about .udemy{margin-top:14px;text-align:center}
+.about .udemy p{margin-top:0;color:var(--ink-soft)}
+.about .udemy a{display:inline-block;margin-top:10px;padding:11px 20px;border-radius:12px;background:#A435F0;color:#fff;font-weight:700;text-decoration:none}
+.about .stats2{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.about .stats2 span{padding:8px 14px;border-radius:999px;background:var(--paper);
+  border:1px solid var(--line);font-size:12.5px;font-weight:600}
+.about .stats2 b{font-family:var(--display);font-weight:800}
+.about .links2{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.about .links2 a{padding:11px 18px;border-radius:12px;background:var(--ink);color:#fff;
+  font-size:13px;font-weight:700}
+.about .links2 a.ghost2{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+
+/* ---------- welcome strip ---------- */
+.hello{position:relative;overflow:hidden;border-radius:26px;padding:22px;
+  background:linear-gradient(140deg,#0D1424,#1B2B4D 55%,#2D1B4D);color:#fff;
+  border:none;box-shadow:0 12px 34px rgba(13,20,36,.28)}
+.hello::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 12% -20%,rgba(255,255,255,.16),transparent 58%)}
+/* a few stars, because the sky reads better than a flat panel */
+.hello::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:radial-gradient(1.5px 1.5px at 18% 22%,#fff,transparent),
+    radial-gradient(1px 1px at 68% 14%,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 84% 46%,#fff,transparent),
+    radial-gradient(1px 1px at 32% 68%,#fff,transparent),
+    radial-gradient(1px 1px at 54% 84%,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 92% 76%,#fff,transparent)}
+
+.hello .who{position:relative;z-index:2;display:flex;align-items:center;gap:14px}
+/* Tasveer ab <a> ke andar hai. Link ki apni koi shakl nahi hoti, is
+   liye wo flex mein sikur jata tha aur click ka rakba bacha hi nahi. */
+.hello .who > a{flex:0 0 auto;display:block;line-height:0;border-radius:19px}
+.hello .avlink{flex:0 0 auto;display:block;line-height:0;border-radius:19px;
+  position:relative}
+.hello .avlink:hover{opacity:.86}
+.hello .avlink::after{content:"\270e";position:absolute;right:-2px;bottom:-2px;
+  width:20px;height:20px;border-radius:50%;background:var(--brand);color:#fff;
+  font-size:11px;display:grid;place-items:center;
+  border:2px solid rgba(255,255,255,.28)}
+.hello .flag{font-size:.86em;margin-left:5px;vertical-align:baseline}
+.hello .who > a:hover{opacity:.85}
+.hello .av{width:58px;height:58px;border-radius:19px;object-fit:cover;flex:0 0 auto;
+  border:2px solid rgba(255,255,255,.32);background:rgba(255,255,255,.1)}
+.hello .av.ph{display:grid;place-items:center;background:rgba(255,255,255,.18);
+  color:#fff;font-weight:800;font-size:23px;border-color:rgba(255,255,255,.32)}
+.hello .t{flex:1;min-width:0}
+.hello .t .greet{font-size:12.5px;opacity:.78;font-weight:600;letter-spacing:.02em}
+.hello .t b{display:block;font-family:var(--display);font-weight:800;font-size:22px;
+  letter-spacing:-.035em;line-height:1.15;margin-top:1px}
+.hello .t small{display:block;font-size:12px;opacity:.62;margin-top:2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.hellodate{position:relative;z-index:2;display:flex;align-items:baseline;gap:10px;
+  margin-top:16px;padding-top:15px;border-top:1px solid rgba(255,255,255,.14)}
+.hellodate .clock{font-family:var(--display);font-weight:800;font-size:30px;
+  letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
+.hellodate .ampm{font-size:12.5px;font-weight:700;opacity:.7;letter-spacing:.06em}
+.hellodate .day{margin-left:auto;text-align:right;font-size:12.5px;opacity:.8;
+  line-height:1.4}
+.hellodate .day b{display:block;font-weight:700;font-size:13.5px;opacity:1}
+
+.hello .chips{position:relative;z-index:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.hello .chip2{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;
+  border-radius:999px;background:rgba(255,255,255,.13);color:#fff;
+  border:1px solid rgba(255,255,255,.2);font-size:12.5px;font-weight:600;
+  text-decoration:none;transition:background .16s}
+.hello .chip2:hover{background:rgba(255,255,255,.22)}
+.hello .chip2 b{font-weight:800}
+.hello .chip2.wx{background:rgba(14,165,233,.26);border-color:rgba(14,165,233,.45)}
+.hello .chip2.vibe{background:rgba(124,58,237,.3);border-color:rgba(124,58,237,.5)}
+.hello .chip2.add{background:transparent;border-style:dashed;opacity:.8}
+
+/* readable on the dark card: 62% was too faint for 12px text */
+.hello .t small{opacity:.82;font-size:12.5px}
+.hellolines{position:relative;z-index:2;margin-top:14px;padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.14);display:grid;gap:7px}
+.hellolines .ln{display:flex;align-items:baseline;gap:8px;font-size:13.5px;line-height:1.5}
+.hellolines .ln .k{opacity:.68;flex:0 0 auto;min-width:86px}
+.hellolines .ln .v{font-weight:700;color:#fff;text-decoration:none}
+.hellolines .ln a.v{border-bottom:1px dotted rgba(255,255,255,.4)}
+.hellolines .ln .v.dim{font-weight:500;opacity:.72;border-bottom-style:dashed}
+.hellolines .today2{font-family:var(--display);font-weight:800;font-size:16px;
+  letter-spacing:-.02em}
+
+/* ---------- headlines ---------- */
+.news{display:none;margin-top:16px}
+.news.on{display:block}
+.news .nh{display:flex;align-items:baseline;gap:10px;margin:0 2px 10px}
+.news .nh h3{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.026em}
+.news .nh small{font-size:11.5px;color:var(--ink-soft)}
+.news .nh .more2{margin-left:auto;font-size:12px;font-weight:700;color:var(--brand);cursor:pointer}
+.newsrail{display:flex;gap:11px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none;
+  scroll-snap-type:x proximity}
+.newsrail::-webkit-scrollbar{display:none}
+.nitem{flex:0 0 78%;max-width:330px;scroll-snap-align:start;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;padding:15px;text-decoration:none;
+  color:var(--ink);display:flex;flex-direction:column;transition:border-color .16s}
+.nitem:hover{border-color:var(--brand)}
+@media(min-width:640px){ .nitem{flex-basis:46%} }
+.nitem .src{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--brand)}
+.nitem b{display:block;font-size:14.5px;font-weight:700;line-height:1.4;margin-top:6px;
+  letter-spacing:-.01em}
+.nitem small{display:block;font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-top:7px}
+.nitem .go3{margin-top:auto;padding-top:10px;font-size:11.5px;color:var(--ink-soft)}
+
+.about .contact{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px;
+  padding-top:18px;border-top:1px solid var(--line)}
+.about .contact a{padding:14px 8px;border-radius:14px;background:var(--paper);
+  border:1px solid var(--line);text-align:center;text-decoration:none;color:var(--ink);
+  transition:border-color .16s,transform .14s}
+.about .contact a:hover{border-color:var(--brand);transform:translateY(-2px)}
+.about .contact .ic2{width:38px;height:38px;border-radius:12px;margin:0 auto 8px;
+  display:grid;place-items:center;font-size:18px;color:#fff}
+.about .contact .wa .ic2{background:#25D366}
+.about .contact .ph .ic2{background:#1B4DFF}
+.about .contact .em .ic2{background:#0D1424}
+.about .contact b{display:block;font-size:13px;font-weight:700}
+.about .contact small{display:block;font-size:11px;color:var(--ink-soft);margin-top:3px;
+  font-family:var(--mono);overflow:hidden;text-overflow:ellipsis}
+.about .hours{font-size:12px;color:var(--ink-soft);margin-top:12px;text-align:center}
+.about .hours .dot3{display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#00B37E;margin-right:6px;vertical-align:1px}
+
+.hellolines .sharebtn{margin-left:8px;padding:4px 10px;border-radius:99px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.24);
+  font-size:11px;font-weight:700;color:#fff;cursor:pointer}
+.hellolines .sharebtn:hover{background:rgba(255,255,255,.26)}
+
+#installbar{position:fixed;left:14px;right:14px;bottom:14px;z-index:900;
+  display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:18px;
+  background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  box-shadow:0 12px 34px rgba(13,20,36,.2);
+  transform:translateY(140%);transition:transform .34s cubic-bezier(.22,1,.36,1)}
+#installbar.up{transform:translateY(0)}
+#installbar img{width:42px;height:42px;border-radius:13px;flex:0 0 auto}
+#installbar .t{flex:1;min-width:0}
+#installbar .t b{display:block;font-size:14px;font-weight:700}
+#installbar .t small{display:block;font-size:12px;color:var(--ink-soft,#5A657C);margin-top:2px}
+#installbar .yes{padding:10px 17px;border-radius:12px;background:var(--ink,#0D1424);
+  color:#fff;font-weight:700;font-size:13px;border:none;cursor:pointer;
+  white-space:nowrap;font-family:inherit}
+#installbar .no{width:32px;height:32px;border-radius:10px;background:transparent;
+  border:none;color:var(--ink-soft,#5A657C);font-size:20px;cursor:pointer;flex:0 0 auto}
+@media(min-width:640px){ #installbar{left:auto;right:20px;max-width:400px} }
+
+/* ---------- write to us ---------- */
+.about .writeus{display:block;margin-top:12px;padding:14px 16px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(27,77,255,.08),rgba(27,77,255,.02));
+  border:1px solid rgba(27,77,255,.28);text-decoration:none;color:var(--ink);
+  display:flex;align-items:center;gap:12px;transition:border-color .16s}
+.about .writeus:hover{border-color:var(--brand)}
+.about .writeus .e2{font-size:22px;flex:0 0 auto}
+.about .writeus .t3{flex:1}
+.about .writeus b{display:block;font-size:14px;font-weight:700}
+.about .writeus small{display:block;font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.about .writeus .ar2{color:var(--brand);font-weight:800}
+
+#fbwrap{position:fixed;inset:0;z-index:950;display:none;align-items:flex-end;
+  justify-content:center;background:rgba(13,20,36,.55);backdrop-filter:blur(3px)}
+#fbwrap.on{display:flex}
+@media(min-width:600px){ #fbwrap{align-items:center} }
+#fbform{width:100%;max-width:480px;background:var(--card);border-radius:24px 24px 0 0;
+  padding:22px;max-height:92vh;overflow-y:auto}
+@media(min-width:600px){ #fbform{border-radius:24px} }
+#fbform h3{font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.03em}
+#fbform .sub2{font-size:13.5px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+#fbform .kinds{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+#fbform .kinds button{padding:12px 10px;border-radius:13px;background:var(--paper);
+  border:1.5px solid var(--line);font-size:13.5px;font-weight:600;cursor:pointer;
+  font-family:inherit;color:var(--ink)}
+#fbform .kinds button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+#fbform label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:16px 0 5px}
+#fbform textarea,#fbform input{width:100%;padding:13px;border:1.5px solid var(--line);
+  border-radius:13px;background:var(--paper);font-size:15px;font-family:inherit;
+  outline:none;resize:vertical}
+#fbform textarea{min-height:120px}
+#fbform textarea:focus,#fbform input:focus{border-color:var(--brand);background:#fff}
+#fbform .acts2{display:flex;gap:9px;margin-top:18px}
+#fbform .acts2 button{flex:1;padding:14px;border-radius:14px;font-weight:700;font-size:14.5px;
+  border:none;cursor:pointer;font-family:inherit}
+#fbform .acts2 .go4{background:var(--ink);color:#fff}
+#fbform .acts2 .no2{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+#fbform .said2{padding:12px 14px;border-radius:12px;font-size:13.5px;margin-top:14px;
+  line-height:1.55;display:none}
+#fbform .said2.on{display:block}
+#fbform .said2.ok{background:rgba(0,179,126,.1);border:1px solid rgba(0,179,126,.3);color:#00734F}
+#fbform .said2.err{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+
+/* ---------- members footer ---------- */
+.geo{display:none;margin-top:30px;padding:20px;border-radius:22px;
+  background:var(--card,#fff);border:1px solid var(--line,#E4E8F2)}
+.geo.on{display:block}
+.geo .gh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.geo .gh h4{font-family:var(--display),system-ui;font-weight:800;font-size:16px;
+  letter-spacing:-.025em}
+.geo .gh .live{margin-left:auto;display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--ink-soft,#5A657C);font-weight:600}
+.geo .gh .live i{width:7px;height:7px;border-radius:50%;background:#00B37E;
+  animation:pulse2 2.2s ease-in-out infinite}
+@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.35}}
+.geo .tot{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.geo .tot span{padding:8px 13px;border-radius:999px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2);font-size:12.5px;font-weight:600}
+.geo .tot b{font-family:var(--display),system-ui;font-weight:800}
+.geo .flags{display:flex;gap:7px;flex-wrap:wrap}
+.geo .fl{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;
+  border-radius:12px;background:var(--paper,#F6F7FB);border:1px solid var(--line,#E4E8F2);
+  font-size:12.5px}
+.geo .fl.you{background:rgba(27,77,255,.08);border-color:rgba(27,77,255,.32)}
+.geo .fl .em3{font-size:16px;line-height:1}
+.geo .fl b{font-weight:700;font-family:var(--mono),monospace;font-size:12px}
+.geo .priv{font-size:11.5px;color:var(--ink-soft,#5A657C);margin-top:13px;line-height:1.55}
+
+/* ---------- phone layout ---------- */
+@media (max-width: 560px){
+  /* Nothing may be wider than the screen. One stray element makes the whole
+     page scroll sideways, which feels broken even when nothing else is. */
+  html, body{overflow-x:hidden;max-width:100vw}
+
+  .top, .topbar{padding:10px 12px;gap:6px}
+  .top b, .topbar b, .brandbar b{font-size:15px}
+  .top .chip, .topbar .chip, .brandbar img{width:28px;height:28px}
+
+  /* The wordmark goes; the logo alone is enough on a small screen. */
+  .brandbar b{display:none}
+
+  .gear{width:36px;height:36px}
+  .langwrap{padding:4px 7px 4px 8px}
+  .langwrap select, .langwrap #langSel{max-width:60px;font-size:12.5px}
+  /* Header mein wala dropdown .langwrap ke andar nahi hai, is liye upar
+     wala rule us par lagta hi nahi tha. Wo poori chaurai le kar
+     "Sign in" ko screen se bahar dhakel deta tha. */
+  header > #langSel{max-width:78px;font-size:12px;padding:7px 22px 7px 8px}
+  .btn-in{padding:8px 12px;font-size:12.5px;white-space:nowrap;flex:0 0 auto}
+  .acctbtn, .who{max-width:96px;font-size:11.5px;padding:5px 10px 5px 5px}
+  .acctbtn img, .acctbtn .ini{width:21px;height:21px;font-size:10px}
+
+  /* Cards to the edge, with the padding on the page instead. */
+  .wrap{padding-left:14px;padding-right:14px}
+  .hello{padding:18px 16px;border-radius:20px}
+  .hello .t b{font-size:19px}
+  .hellolines .ln{flex-wrap:wrap;gap:4px}
+  .hellolines .ln .k{min-width:78px;font-size:12.5px}
+  .hellolines .ln .v{font-size:13.5px}
+  .hellolines .today2{font-size:14.5px}
+
+  .grid2{grid-template-columns:1fr 1fr;gap:9px}
+  .tiles{gap:9px}
+  .slide{min-height:200px;padding:20px}
+  .slide h3{font-size:22px}
+  .about{padding:20px 16px}
+  .about .contact{grid-template-columns:1fr;gap:8px}
+  .about .contact a{display:flex;align-items:center;gap:12px;text-align:left;padding:12px}
+  .about .contact .ic2{margin:0}
+  .about .pic{width:66px;height:66px;border-radius:20px}
+
+  .row, .row3b, .two{grid-template-columns:1fr}
+  .row3b .swap{width:100%;height:38px}
+  .keys{gap:5px}
+  .keys button{padding:12px 0;font-size:14px}
+}
+
+@media (max-width: 380px){
+  .grid2{grid-template-columns:1fr}
+  .hello .av{width:48px;height:48px}
+  .hello .t b{font-size:17px}
+}
+
+/* The rail snaps now: a card either fills the screen or it does not, rather
+   than being left half cut at the edge. */
+.newsrail{scroll-snap-type:x mandatory;scroll-padding-left:2px}
+.nitem{scroll-snap-align:start;scroll-snap-stop:always}
+@media (max-width: 560px){
+  .newsrail{gap:10px;padding-right:14px}
+  .nitem{flex:0 0 88%;max-width:none}
+  .nitem b{font-size:14px}
+  .nitem small{font-size:12px;-webkit-line-clamp:3;display:-webkit-box;
+    -webkit-box-orient:vertical;overflow:hidden}
+}
+.news .nh{position:relative}
+.news .nh .more2{padding:5px 11px;border-radius:99px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2)}
+
+.modbar{display:none;align-items:center;gap:12px;padding:13px 16px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(180,83,9,.1),rgba(180,83,9,.03));
+  border:1px solid rgba(180,83,9,.32);margin-bottom:14px;text-decoration:none;color:var(--ink)}
+.modbar.on{display:flex}
+.modbar .e5{font-size:21px;flex:0 0 auto}
+.modbar .t{flex:1;min-width:0}
+.modbar .t b{display:block;font-size:14px;font-weight:700}
+.modbar .t small{display:block;font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.modbar .cnt2{padding:5px 11px;border-radius:99px;background:#B45309;color:#fff;
+  font-size:12px;font-weight:800;white-space:nowrap}
+
+/* The name badge must never wrap: a flex child sizes to its content unless
+   min-width is pinned to zero, so max-width alone was not stopping the wrap. */
+.acctbtn,.who{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  min-width:0;
+  flex-shrink:1;
+}
+.acctbtn span,.who span{
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;min-width:0;
+}
+@media(max-width:400px){
+  .acctbtn,.who{max-width:78px!important;font-size:11px!important}
+}
+/* ...but .who is also the big greeting block on the home card, and 78px is
+   narrower than its own avatar - which is why the name vanished on a phone
+   and left a picture with nothing beside it. Two classes beat one, so this
+   wins over the rule above without unpicking it. */
+.hello .who{
+  max-width:none!important;font-size:inherit!important;
+  white-space:normal!important;overflow:visible!important;
+}
+.hello .who .t{min-width:0;overflow:hidden}
+.hello .who .t b,.hello .who .t small,.hello .who .t .greet{
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;
+}
+
+.about .morelinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.about .morelinks a{padding:9px 15px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--ink)}
+.about .morelinks a:hover{border-color:var(--brand)}
+
+/* hello-fix-v1: flag beside the name, readable email */
+.hello .who .t b{display:flex;align-items:center;gap:7px;min-width:0}
+.hello .who .t b .flag{margin-left:0;flex:0 0 auto;line-height:0;font-size:1em}
+.hello .who .t b .flag img{display:block;width:22px;height:16px;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+.hello .who .t small{color:#fff;opacity:.92;font-family:var(--body);font-size:13.5px;font-weight:500;letter-spacing:.01em;margin-top:4px}
+.hello .quote{position:relative;z-index:2;font-size:12.5px;font-style:italic;
+  opacity:.72;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14);
+  line-height:1.5}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar" id="topbar">
+    <div class="logo">
+      <img src="/brand/logo-64.png" alt="" class="brandlogo" style="height:30px;border-radius:9px" onerror="this.style.display='none'">XpertCreation
+    </div>
+    <nav class="xnav"><a href="/academy/">Academy</a><a href="/tools">Tools</a><a href="/games">Games</a><a class="hide-s" href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Group</a></nav>
+    <div class="spacer"></div>
+    <a class="gear" href="/" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+    <a class="gear" id="gearBtn" href="/account" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></a>
+    <select id="langSel" aria-label="Language">
+      <option value="en">English</option><option value="de">Deutsch</option><option value="ur">اردو</option>
+      <option value="ar">العربية</option><option value="hi">हिन्दी</option>
+      <option value="bn">বাংলা</option><option value="zh">中文</option>
+      <option value="es">Español</option><option value="fr">Français</option>
+      <option value="pt">Português</option><option value="ru">Русский</option>
+      <option value="tr">Türkçe</option><option value="id">Indonesia</option>
+    </select>
+    <a class="btn-in" id="sessBtn" href="/login"><span data-i18n="signin">Sign in</span></a>
+  </header>
+
+  <div id="bday"></div>
+<a class="modbar" id="modlink" href="/moderate"><span class="e5">&#128737;&#65039;</span><span class="t"><b>Moderation</b><small id="modsub">Review comments waiting to be read</small></span><span class="cnt2" id="modcnt" hidden></span></a>
+<div class="hello" id="hello"></div>
+<div id="profdone"></div>
+<script>
+/* Profile completion nudge - only for signed-in members, hidden at 100% or for 3 days after "Later". */
+(function(){
+  var box = document.getElementById("profdone");
+  if (!box || !window.fetch) return;
+  try { if ((+localStorage.getItem("xc_profdone_later") || 0) > Date.now()) return; } catch (e) {}
+  fetch("/api/network/me/", {credentials: "same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(p){
+      if (!p) return;
+      var steps = [
+        ["Add a photo", !!p.avatar_url, "/account"],
+        ["Write a headline", !!p.headline, "/me/profile"],
+        ["Add your city", !!p.city, "/me/profile"],
+        ["Say a little about yourself", (p.about || "").length >= 40, "/me/profile"],
+        ["Add three skills", (p.skills || []).length >= 3, "/me/profile"],
+        ["Add a job", (p.experience || []).length >= 1, "/me/profile"],
+        ["Add your education", (p.education || []).length >= 1, "/me/profile"]
+      ];
+      var done = steps.filter(function(s){ return s[1]; }).length;
+      if (done === steps.length) return;
+      var pct = Math.round(100 * done / steps.length);
+      box.innerHTML = "<div style='margin:12px 0;padding:14px 16px;border:1px solid var(--line,#E4E8F2);border-radius:18px;background:var(--card,#fff)'>"
+        + "<div style='display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap'>"
+        + "<b>Your profile is " + pct + "% complete</b>"
+        + "<span style='display:flex;gap:12px;align-items:center'><a href='/me/profile' style='font-weight:700'>Finish it \u2192</a>"
+        + "<button type='button' id='pdlater' style='border:0;background:none;color:var(--ink-soft,#5A657C);cursor:pointer;font:inherit'>Later</button></span></div>"
+        + "<div style='height:8px;border-radius:99px;background:var(--paper,#F6F7FB);overflow:hidden;margin:10px 0'>"
+        + "<i style='display:block;height:100%;width:" + pct + "%;background:var(--go,#00B37E)'></i></div>"
+        + "<div style='display:flex;flex-wrap:wrap;gap:6px'>" + steps.filter(function(s){ return !s[1]; }).map(function(s){
+            return "<a href='" + s[2] + "' style='padding:4px 10px;border-radius:999px;border:1px solid var(--line,#E4E8F2);font-size:13px;text-decoration:none;color:var(--ink,#0D1424)'>+ " + s[0] + "</a>";
+          }).join("") + "</div>"
+        + "<p style='margin:10px 0 0;font-size:13px;color:var(--ink-soft,#5A657C)'>A complete profile shows up in Connect, where members can find, follow and endorse you.</p></div>";
+      var later = document.getElementById("pdlater");
+      if (later) later.onclick = function(){
+        try { localStorage.setItem("xc_profdone_later", String(Date.now() + 3 * 86400000)); } catch (e) {}
+        box.innerHTML = "";
+      };
+    })
+    .catch(function(){});
+})();
+</script>
+<section class="hero">
+    <div class="blob b1"></div><div class="blob b2"></div>
+    <p class="eyebrow" data-i18n="tag">Free courses. Free tools.</p>
+    <h1 data-i18n="h1">Learn Excel, Word and VBA &mdash; free</h1>
+    <p data-i18n="sub">Real courses with certificates, plus languages, 30+ everyday tools, a blood bank and games. Built in Lahore, open to everyone.</p>
+    <div class="acts">
+      <a class="primary" href="/academy/" data-i18n="heroCta1">Start learning</a>
+      <a class="ghost" href="/tools" data-i18n="heroCta2">Browse the tools</a>
+    </div>
+  </section>
+
+  <section class="sec" id="platforms">
+    <h2 data-i18n="secH">Our platforms</h2>
+
+    <div class="slidewrap">
+      <div class="slides" id="slides"></div>
+    </div>
+    <div class="dots" id="dots"></div>
+    <p class="swipehint" data-i18n="swipe">Swipe to see more</p>
+
+    <div class="head" style="margin-top:22px">
+      <h3 data-i18n="allApps">All apps</h3>
+    </div>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section class="sec">
+    <h2 data-i18n="whyH">One account, everywhere</h2>
+    <div class="why">
+      <div class="wbox"><span class="e">🔑</span><h4 data-i18n="w1">Sign up once</h4><p data-i18n="w1p">Your email and password work across every service.</p></div>
+      <div class="wbox"><span class="e">✉️</span><h4 data-i18n="w2">Confirmed email</h4><p data-i18n="w2p">We confirm the address before any order.</p></div>
+      <div class="wbox"><span class="e">🔒</span><h4 data-i18n="w3">Your data stays yours</h4><p data-i18n="w3p">We never sell your details.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="partners">
+    <h2>Partners</h2>
+    <p class="lead2">Platforms we build and run with our
+      partners, on their own sites.</p>
+    <a class="pcard" href="https://digitalbloomco.us" target="_blank" rel="noopener">
+      <span class="pico">&#9889;</span>
+      <span class="ptxt">
+        <b>Digital Bloomco</b>
+        <small>US-based mobile top-ups and global gift cards.
+          Jazz, Zong, Ufone and Telenor, plus Amazon, PlayStation and more.</small>
+      </span>
+      <span class="parr">&rarr;</span>
+    </a>
+  </section>
+
+  
+
+
+    <section class="about" id="about">
+      <div class="who2">
+        <img class="pic" src="/brand/ceo.jpg" alt="Syed Khalid Hussain Shah"
+             onerror="this.replaceWith(Object.assign(document.createElement('span'),
+                      {className:'pic ph',textContent:'K'}))">
+        <div class="t">
+          <b>Syed Khalid Hussain Shah</b>
+          <small>Founder and CEO, XpertCreation &middot; Lahore, Pakistan</small>
+        </div>
+      </div>
+
+      <figure class="mcp" oncontextmenu="return false">
+        <img src="/brand/mcp-display.jpg?v=2" alt="Microsoft Certified Professional certificate of Syed Khalid Hussain Shah"
+             width="1200" height="922" loading="lazy" draggable="false">
+        <figcaption><b>Microsoft Certified Professional</b>
+        This curriculum was prepared by Syed Khalid Hussain Shah, a Microsoft Certified Professional.</figcaption>
+      </figure>
+      <div class="udemy">
+        <p>Beyond the free courses here, Khalid also teaches on Udemy, where his courses reach
+        learners around the world.</p>
+        <a href="https://www.udemy.com/user/syed-khalid-hussain-shah/" target="_blank" rel="noopener">View Udemy profile &rarr;</a>
+      </div>
+
+      <p data-i18n="aboutText">XpertCreation is a technology company in Lahore,
+      registered with the FBR as a filing taxpayer and listed on Google Business
+      under the same name for several years.</p>
+      <p data-i18n="aboutText2">Our founder is a Microsoft Certified Professional
+      and a certified blockchain specialist. The idea behind this platform is
+      simple: nobody should be held back because they cannot afford a licence or
+      a course fee. Learn Excel, Word, PowerPoint and VBA. Learn a language. Use
+      the tools, play the games, find a blood donor. All of it free, and all of
+      it built here.</p>
+      <div class="stats2">
+        <span><b>12</b> courses</span>
+        <span><b>73</b> tools</span>
+        <span><b>13</b> languages</span>
+      </div>
+
+      <a class="writeus" href="#" data-open-fb>
+        <span class="e2">&#9997;&#65039;</span>
+        <span class="t3"><b>Request a feature, or tell us what is wrong</b>
+        <small>Goes straight to the CEO. Every message is read.</small></span>
+        <span class="ar2">&rarr;</span>
+      </a>
+
+      <div class="morelinks" id="morelinks"><a href="/support" id="supportlink">Get help &rarr;</a><a href="/team">Our team &rarr;</a></div>
+
+      <div class="contact">
+        <a class="wa" href="https://wa.me/923009462916" target="_blank" rel="noopener">
+          <span class="ic2">&#128172;</span><b>WhatsApp</b><small>+92 300 946 2916</small></a>
+        <a class="ph" href="tel:+923009462916">
+          <span class="ic2">&#128222;</span><b>Call</b><small>+92 300 946 2916</small></a>
+        <a class="em" href="mailto:khalid@xpertcreation.com">
+          <span class="ic2">&#9993;</span><b>Email</b><small>khalid@xpertcreation.com</small></a>
+      </div>
+      <p class="hours"><span class="dot3"></span>9am &ndash; 11pm, every day</p>
+
+      <div class="links2">
+        <a class="ghost2" href="https://learn.xpertcreation.com">Our courses</a>
+      </div>
+    </section>
+
+    <section class="geo" id="geobox"></section>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Learn and use</h5>
+      <ul>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/people">Connect</a></li>
+        <li><a href="/pets">Pets</a></li>
+        <li><a href="/shows">Shows</a></li>
+        <li><a href="/docs">Guide</a></li>
+        <li><a href="/games">Games</a></li>
+        <li><a href="/money">Money</a></li>
+        <li><a href="/business">Business</a></li>
+        <li><a href="/blood">Blood bank</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+</div>
+
+<a class="fab" href="https://wa.me/923009462916" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.5 12.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.9-.4-1.7-.9-2.4-1.6-.6-.7-1.1-1.4-1.4-2.2-.1-.2-.1-.4.1-.5.2-.2.4-.5.6-.7.1-.2.2-.3.1-.5-.1-.3-.7-1.8-.9-2.1-.1-.3-.3-.3-.5-.3h-.6c-.2 0-.5.1-.7.4-.6.6-1 1.4-.9 2.3 0 1.1.4 2.1 1 3 1 1.6 2.3 2.9 3.9 3.8.6.3 1.2.6 1.9.7.6.2 1.3.2 2 .1.8-.2 1.5-.7 1.9-1.4.2-.4.2-.8.1-1.2 0-.1-.1-.2-.3-.3z"/></svg>
+</a>
+
+<script>
+(function(){
+  "use strict";
+  // Chuni hui zaban yaad rehni chahiye. Pehle ye har page load par wapas
+  // English ho jati thi, to zaban chunne ka koi faida nahi tha.
+  var LANGS = ["en","de","ur","ar","hi","bn","zh","es","fr","pt","ru","tr","id"];
+  function startLang(){
+    try {
+      var saved = localStorage.getItem("xc_lang");
+      if (saved && LANGS.indexOf(saved) !== -1) return saved;
+    } catch (e) {}
+    // Pehli dafa: browser jo maange, agar wo humare paas hai.
+    var want = (navigator.language || "en").toLowerCase().split("-")[0];
+    return LANGS.indexOf(want) !== -1 ? want : "en";
+  }
+  var lang = startLang();
+  var T = {
+    d18:{en:"Conversations after a donation or blood request is accepted.",de:"Gespräche, nachdem eine Spende oder Blutanfrage angenommen wurde.",ur:"عطیہ یا خون کی درخواست قبول ہونے کے بعد گفتگو۔",ar:"محادثات بعد قبول طلب التبرع أو الدم.",hi:"दान या रक्त अनुरोध स्वीकार होने के बाद बातचीत।",bn:"দান বা রক্তের অনুরোধ গৃহীত হওয়ার পর কথোপকথন।",zh:"捐赠或献血请求被接受后的对话。",es:"Conversaciones tras aceptar una donación o solicitud de sangre.",fr:"Conversations après l'acceptation d'un don ou d'une demande de sang.",pt:"Conversas após aceitar uma doação ou pedido de sangue.",ru:"Переписка после принятия пожертвования или запроса крови.",tr:"Bağış veya kan talebi kabul edildikten sonraki sohbetler.",id:"Percakapan setelah donasi atau permintaan darah diterima."},
+    nMoney:{en:"Money",de:"Geld",ur:"حساب کتاب",ar:"المال",hi:"हिसाब-किताब",bn:"টাকা",zh:"记账",es:"Dinero",fr:"Argent",pt:"Dinheiro",ru:"Деньги",tr:"Para",id:"Uang"},
+    dMoney:{en:"Cash, wallets and bank balances in one place. Kept on your phone only.",de:"Bargeld, Wallets und Bankguthaben an einem Ort. Nur auf Ihrem Handy gespeichert.",ur:"نقد، والٹ اور بینک بیلنس ایک جگہ۔ صرف آپ کے فون پر محفوظ۔",ar:"النقد والمحافظ وأرصدة البنوك في مكان واحد. محفوظة على هاتفك فقط.",hi:"नकद, वॉलेट और बैंक बैलेंस एक जगह। केवल आपके फ़ोन पर सुरक्षित।",bn:"নগদ, ওয়ালেট আর ব্যাংক ব্যালেন্স এক জায়গায়। শুধু আপনার ফোনে রাখা।",zh:"现金、钱包和银行余额一目了然。只保存在您的手机上。",es:"Efectivo, billeteras y saldos bancarios en un solo lugar. Solo en tu teléfono.",fr:"Espèces, portefeuilles et soldes bancaires au même endroit. Uniquement sur votre téléphone.",pt:"Dinheiro, carteiras e saldos bancários num só lugar. Só no seu telefone.",ru:"Наличные, кошельки и банковские счета в одном месте. Хранится только на вашем телефоне.",tr:"Nakit, cüzdan ve banka bakiyeleri tek yerde. Yalnızca telefonunuzda saklanır.",id:"Uang tunai, dompet digital, dan saldo bank di satu tempat. Hanya tersimpan di ponsel Anda."},
+    nPeople:{en:"Connect",de:"Netzwerk",ur:"رابطہ",ar:"تواصل",hi:"कनेक्ट",bn:"সংযোগ",zh:"人脉",es:"Conectar",fr:"Réseau",pt:"Conectar",ru:"Связи",tr:"Bağlantı",id:"Koneksi"},
+    dPeople:{en:"Find members, connect, follow and endorse each other.",de:"Mitglieder finden, vernetzen, folgen und empfehlen.",ur:"ممبرز تلاش کریں، جڑیں، فالو کریں اور ایک دوسرے کی توثیق کریں۔",ar:"ابحث عن الأعضاء وتواصل معهم وتابعهم وأيّد مهاراتهم.",hi:"सदस्यों को खोजें, जुड़ें, फ़ॉलो करें और एक-दूसरे को एंडोर्स करें।",bn:"সদস্য খুঁজুন, যুক্ত হন, ফলো করুন এবং একে অপরকে সমর্থন করুন।",zh:"查找成员，建立联系，关注并互相认可技能。",es:"Encuentra miembros, conecta, sigue y recomienda sus habilidades.",fr:"Trouvez des membres, connectez-vous, suivez-les et recommandez leurs compétences.",pt:"Encontre membros, conecte-se, siga e recomende as habilidades uns dos outros.",ru:"Находите участников, общайтесь, подписывайтесь и подтверждайте навыки.",tr:"Üyeleri bul, bağlantı kur, takip et ve becerilerini onayla.",id:"Temukan anggota, terhubung, ikuti, dan dukung keahlian satu sama lain."},
+    nShows:{en:"Shows",de:"Serien & Filme",ur:"ڈرامے اور فلمیں",ar:"مسلسلات وأفلام",hi:"ड्रामे और फ़िल्में",bn:"নাটক ও সিনেমা",zh:"剧集与电影",es:"Series y cine",fr:"Séries et films",pt:"Séries e filmes",ru:"Сериалы и фильмы",tr:"Diziler ve filmler",id:"Drama & film"},
+    dShows:{en:"Pakistani and Indian dramas and films: stories, cast, trailers and reviews.",de:"Pakistanische und indische Serien und Filme: Handlung, Besetzung, Trailer, Bewertungen.",ur:"پاکستانی اور بھارتی ڈرامے اور فلمیں: کہانی، کاسٹ، ٹریلر اور ریویوز۔",ar:"مسلسلات وأفلام باكستانية وهندية: القصة والممثلون والإعلانات والمراجعات.",hi:"पाकिस्तानी और भारतीय ड्रामे और फ़िल्में: कहानी, कलाकार, ट्रेलर और रिव्यू।",bn:"পাকিস্তানি ও ভারতীয় নাটক ও সিনেমা: গল্প, অভিনেতা, ট্রেলার ও রিভিউ।",zh:"巴基斯坦和印度的剧集与电影：剧情、演员、预告片和评论。",es:"Series y películas de Pakistán e India: trama, reparto, tráileres y reseñas.",fr:"Séries et films pakistanais et indiens : histoire, distribution, bandes-annonces, avis.",pt:"Séries e filmes do Paquistão e da Índia: enredo, elenco, trailers e avaliações.",ru:"Пакистанские и индийские сериалы и фильмы: сюжет, актёры, трейлеры, отзывы.",tr:"Pakistan ve Hindistan dizi ve filmleri: konu, oyuncular, fragmanlar ve yorumlar.",id:"Drama dan film Pakistan dan India: cerita, pemeran, trailer, dan ulasan."},
+    nBiz:{en:"Business",de:"Betrieb",ur:"کاروبار",ar:"الأعمال",hi:"व्यापार",bn:"ব্যবসা",zh:"生意",es:"Negocio",fr:"Entreprise",pt:"Negócio",ru:"Бизнес",tr:"İşletme",id:"Bisnis"},
+    dBiz:{en:"Staff, stock and attendance for your shop or office. Kept on your device.",de:"Personal, Lager und Anwesenheit für Ihr Geschäft. Bleibt auf Ihrem Gerät.",ur:"دکان یا دفتر کے لیے ملازمین، اسٹاک اور حاضری۔ صرف آپ کے فون پر۔",ar:"الموظفون والمخزون والحضور لمتجرك أو مكتبك. على جهازك فقط.",hi:"दुकान या दफ़्तर के लिए कर्मचारी, स्टॉक और हाज़िरी। सिर्फ़ आपके डिवाइस पर।",bn:"দোকান বা অফিসের জন্য কর্মী, স্টক ও হাজিরা। শুধু আপনার ডিভাইসে।",zh:"为你的店铺或办公室管理员工、库存和考勤。数据只在你的设备上。",es:"Personal, inventario y asistencia para tu tienda u oficina. En tu dispositivo.",fr:"Personnel, stock et présence pour votre boutique ou bureau. Sur votre appareil.",pt:"Funcionários, estoque e presença para sua loja ou escritório. No seu aparelho.",ru:"Сотрудники, склад и учёт времени для магазина или офиса. Только на вашем устройстве.",tr:"Dükkanınız veya ofisiniz için personel, stok ve devam. Cihazınızda kalır.",id:"Karyawan, stok, dan absensi untuk toko atau kantor. Tersimpan di perangkat Anda."},
+    nPets:{en:"Pets",de:"Haustiere",ur:"پالتو جانور",ar:"الحيوانات الأليفة",hi:"पालतू जानवर",bn:"পোষা প্রাণী",zh:"宠物",es:"Mascotas",fr:"Animaux",pt:"Pets",ru:"Питомцы",tr:"Evcil hayvanlar",id:"Hewan peliharaan"},
+    dPets:{en:"Vaccine reminders, health records and a QR tag for your pet.",de:"Impf-Erinnerungen, Gesundheitsdaten und ein QR-Anhänger für Ihr Tier.",ur:"ویکسین کی یاد دہانی، صحت کا ریکارڈ اور آپ کے پالتو کے لیے QR ٹیگ۔",ar:"تذكير باللقاحات وسجل صحي وبطاقة QR لحيوانك الأليف.",hi:"टीकों की याद, सेहत का रिकॉर्ड और आपके पालतू के लिए QR टैग।",bn:"টিকার রিমাইন্ডার, স্বাস্থ্য রেকর্ড এবং আপনার পোষা প্রাণীর জন্য QR ট্যাগ।",zh:"疫苗提醒、健康记录和宠物二维码吊牌。",es:"Recordatorios de vacunas, historial de salud y una placa QR para tu mascota.",fr:"Rappels de vaccins, carnet de santé et médaille QR pour votre animal.",pt:"Lembretes de vacinas, registos de saúde e uma etiqueta QR para o seu pet.",ru:"Напоминания о прививках, медкарта и QR-жетон для питомца.",tr:"Aşı hatırlatmaları, sağlık kayıtları ve eviniz için QR künye.",id:"Pengingat vaksin, catatan kesehatan, dan tag QR untuk hewan Anda."},
+    n18:{en:"Chat",de:"Chat",ur:"چیٹ",ar:"الدردشة",hi:"चैट",bn:"চ্যাট",zh:"聊天",es:"Chat",fr:"Discussion",pt:"Chat",ru:"Чат",tr:"Sohbet",id:"Obrolan"},
+    d17:{en:"Clear the board by tapping arrows in the right order. Always solvable.",de:"Räume das Feld, indem du die Pfeile in der richtigen Reihenfolge antippst. Immer lösbar.",ur:"صحیح ترتیب میں تیر دبا کر بورڈ صاف کریں۔ ہمیشہ حل کے قابل۔",ar:"امسح اللوحة بالنقر على الأسهم بالترتيب الصحيح. قابل للحل دائمًا.",hi:"सही क्रम में तीर दबाकर बोर्ड साफ करें। हमेशा हल करने योग्य।",bn:"সঠিক ক্রমে তীর চেপে বোর্ড পরিষ্কার করুন। সর্বদা সমাধানযোগ্য।",zh:"按正确顺序点击箭头清空棋盘。始终可解。",es:"Despeja el tablero tocando las flechas en el orden correcto.",fr:"Videz le plateau en touchant les flèches dans le bon ordre.",pt:"Limpe o tabuleiro tocando nas setas na ordem certa.",ru:"Очистите поле, нажимая стрелки в правильном порядке.",tr:"Okları doğru sırayla dokunarak tahtayı temizleyin.",id:"Bersihkan papan dengan mengetuk panah dalam urutan yang benar."},
+    n17:{en:"Arrow Escape",de:"Arrow Escape",ur:"ایرو ایسکیپ",ar:"هروب الأسهم",hi:"ऐरो एस्केप",bn:"অ্যারো এস্কেপ",zh:"箭头逃脱",es:"Escape de flechas",fr:"Évasion de flèches",pt:"Fuga de setas",ru:"Побег стрелок",tr:"Ok Kaçışı",id:"Pelarian Panah"},
+    d16:{en:"Books, clothes and more, passed on to someone who needs them.",de:"Bücher, Kleidung und mehr — weitergegeben an jemanden, der sie braucht.",ur:"کتابیں، کپڑے اور مزید، ضرورت مند تک پہنچائیں۔",ar:"كتب وملابس والمزيد، تُهدى لمن يحتاجها.",hi:"किताबें, कपड़े और अधिक, ज़रूरतमंद तक पहुंचाएं।",bn:"বই, পোশাক এবং আরও, প্রয়োজনীয়দের কাছে পৌঁছে দিন।",zh:"书籍、衣物等，捐赠给有需要的人。",es:"Libros, ropa y más, para quien los necesite.",fr:"Livres, vêtements et plus, offerts à qui en a besoin.",pt:"Livros, roupas e mais, para quem precisa.",ru:"Книги, одежда и другое — тем, кому это нужно.",tr:"Kitaplar, kıyafetler ve daha fazlası, ihtiyacı olana.",id:"Buku, pakaian, dan lainnya, untuk yang membutuhkan."},
+    n16:{en:"Donate",de:"Spenden",ur:"عطیہ کریں",ar:"تبرع",hi:"दान करें",bn:"দান করুন",zh:"捐赠",es:"Donar",fr:"Faire un don",pt:"Doar",ru:"Пожертвовать",tr:"Bağış Yap",id:"Donasi"},
+    d15:{en:"Build your own digital visiting card with a QR code, and share it with anyone.",de:"Erstelle deine eigene digitale Visitenkarte mit QR-Code und teile sie mit jedem.",ur:"اپنا ڈیجیٹل وزیٹنگ کارڈ QR کوڈ کے ساتھ بنائیں، اور کسی کے ساتھ بھی شیئر کریں۔",ar:"أنشئ بطاقة عملك الرقمية مع رمز QR، وشاركها مع أي شخص.",hi:"QR कोड के साथ अपना डिजिटल विज़िटिंग कार्ड बनाएं, और किसी के साथ भी साझा करें।",bn:"QR কোড সহ আপনার নিজের ডিজিটাল ভিজিটিং কার্ড তৈরি করুন এবং যে কারো সাথে শেয়ার করুন।",zh:"创建带二维码的电子名片，随时与任何人分享。",es:"Crea tu propia tarjeta de presentación digital con código QR y compártela con quien quieras.",fr:"Créez votre propre carte de visite numérique avec un code QR, et partagez-la avec qui vous voulez.",pt:"Crie seu próprio cartão de visita digital com um código QR, e compartilhe com qualquer pessoa.",ru:"Создайте свою цифровую визитку с QR-кодом и делитесь ею с кем угодно.",tr:"QR kodlu kendi dijital kartvizitinizi oluşturun ve herkesle paylaşın.",id:"Buat kartu nama digital Anda sendiri dengan kode QR, dan bagikan ke siapa saja."},
+    n15:{en:"Visiting Card",de:"Visitenkarte",ur:"وزیٹنگ کارڈ",ar:"بطاقة العمل",hi:"विज़िटिंग कार्ड",bn:"ভিজিটিং কার্ড",zh:"名片",es:"Tarjeta de presentación",fr:"Carte de visite",pt:"Cartão de visita",ru:"Визитная карточка",tr:"Kartvizit",id:"Kartu Nama"},
+    d14:{en:"Something not working? Open a ticket and we'll reply here.",de:"Etwas funktioniert nicht? Eröffne ein Ticket, wir antworten hier.",ur:"کچھ کام نہیں کر رہا؟ ٹکٹ کھولیں، ہم یہیں جواب دیں گے۔",ar:"هل هناك خلل؟ افتح تذكرة وسنرد هنا.",hi:"कुछ काम नहीं कर रहा? टिकट खोलें, हम यहीं जवाब देंगे।",bn:"কিছু কাজ করছে না? টিকিট খুলুন, আমরা এখানেই উত্তর দেব।",zh:"遇到问题？提交工单，我们会在这里回复。",es:"¿Algo no funciona? Abre un ticket y responderemos aquí.",fr:"Un problème ? Ouvrez un ticket, nous répondrons ici.",pt:"Algo não está funcionando? Abra um chamado e responderemos aqui.",ru:"Что-то не работает? Откройте тикет, мы ответим здесь.",tr:"Bir şey mi bozuk? Talep açın, buradan yanıtlarız.",id:"Ada yang tidak berfungsi? Buka tiket, kami akan membalas di sini."},
+    n14:{en:"Support",de:"Hilfe",ur:"سپورٹ",ar:"الدعم",hi:"सहायता",bn:"সাপোর্ট",zh:"支持",es:"Soporte",fr:"Assistance",pt:"Suporte",ru:"Поддержка",tr:"Destek",id:"Dukungan"},
+    d13:{en:"Headlines from Dawn, Geo and BBC Urdu, and world news too.",de:"Schlagzeilen von Dawn, Geo und BBC Urdu, dazu Weltnachrichten.",ur:"ڈان، جیو اور بی بی سی اردو کی خبریں، اور دنیا بھر کی خبریں بھی۔",ar:"عناوين من داون وجيو وبي بي سي أردو، وأخبار العالم أيضًا.",hi:"डॉन, जियो और बीबीसी उर्दू की खबरें, और विश्व समाचार भी।",bn:"ডন, জিও ও বিবিসি উর্দুর খবর, এবং বিশ্ব সংবাদও।",zh:"来自 Dawn、Geo 和 BBC 乌尔都语的头条新闻，以及国际新闻。",es:"Titulares de Dawn, Geo y BBC Urdu, y noticias del mundo también.",fr:"Titres de Dawn, Geo et BBC Urdu, et l'actualité mondiale aussi.",pt:"Manchetes do Dawn, Geo e BBC Urdu, e notícias do mundo também.",ru:"Заголовки из Dawn, Geo и BBC Urdu, а также мировые новости.",tr:"Dawn, Geo ve BBC Urdu'dan başlıklar, ayrıca dünya haberleri.",id:"Berita utama dari Dawn, Geo, dan BBC Urdu, serta berita dunia."},
+    n13:{en:"News",de:"Nachrichten",ur:"خبریں",ar:"الأخبار",hi:"समाचार",bn:"সংবাদ",zh:"新闻",es:"Noticias",fr:"Actualités",pt:"Notícias",ru:"Новости",tr:"Haberler",id:"Berita"},
+    d12:{en:"70 tools: prayer times, world clock, QR codes, GPA, EMI, zakat, BMI, passport photo and more. Works offline.",de:"70 Werkzeuge: Gebetszeiten, Weltuhr, QR-Codes, Notendurchschnitt, Kredit, Zakat, BMI und mehr. Funktioniert offline.",ur:"٦٩ ٹولز: نماز کے اوقات، ورلڈ کلاک، QR کوڈ، قرض، زکوٰة، BMI اور مزید۔",ar:"٦٩ أداة: مواقيت الصلاة، الساعة العالمية، رموز QR، القرض، الزكاة، والمزيد.",hi:"69 टूल्स: नमाज़ का समय, वर्ल्ड क्लॉक, QR कोड, GPA, लोन, ज़कात, BMI और अधिक।",bn:"৬৯টি টুল: নামাজের সময়, ওয়ার্ল্ড ক্লক, QR কোড, GPA, োণ, যাকাত, BMI ও আরও।",zh:"69 个工具：祈祷时间、世界时钟、二维码、GPA、贷款、天课、BMI 等。",es:"70 herramientas: horas de oracion, reloj mundial, codigos QR, GPA, prestamo, zakat, IMC y mas.",fr:"70 outils : heures de priere, horloge mondiale, codes QR, moyenne, pret, zakat, IMC et plus.",pt:"70 ferramentas: horarios de oracao, relogio mundial, codigos QR, GPA, emprestimo, zakat, IMC e mais.",ru:"69 инструментов: время молитвы, мировые часы, QR-коды, GPA, кредит, закят, ИМТ и другое.",tr:"70 arac: namaz vakitleri, dunya saati, QR kodlari, GPA, kredi, zekat, VKI ve daha fazlasi.",id:"70 alat: waktu salat, jam dunia, kode QR, GPA, pinjaman, zakat, BMI, dan lainnya."},
+    n12:{en:"Tools",de:"Werkzeuge",ur:"ٹولز",ar:"أدوات",hi:"टूल्स",bn:"টুলস",zh:"工具",es:"Herramientas",fr:"Outils",pt:"Ferramentas",ru:"Инструменты",tr:"Araçlar",id:"Alat"},
+    aboutText2:{en:"Our founder is a Microsoft Certified Professional and a certified blockchain specialist. The idea behind this platform is simple: nobody should be held back because they cannot afford a licence or a course fee. Learn Excel, Word, PowerPoint and VBA. Learn a language. Use the tools, play the games, find a blood donor. All of it free, and all of it built here.",de:"Unser Gründer ist Microsoft Certified Professional und zertifizierter Blockchain-Spezialist. Der Gedanke dahinter ist einfach: Niemand soll scheitern, weil er sich eine Lizenz oder Kursgebühr nicht leisten kann. Alles hier ist kostenlos und wird hier gebaut.",ur:"ہمارے بانی مائیکروسافٹ سرٹیفائیڈ پروفیشنل اور سرٹیفائیڈ بلاک چین ماہر ہیں۔ سوچ سادہ ہے: کوئی اس لیے نہ رکے کہ لائسنس یا کورس کی فیس نہیں دے سکتا۔ یہاں سب کچھ مفت ہے اور یہیں بنا ہے۔",ar:"مؤسسنا محترف معتمد من مايكروسوفت ومتخصص معتمد في البلوك تشين. الفكرة بسيطة: ألا يتوقف أحد لأنه لا يقدر على ثمن ترخيص أو دورة. كل شيء هنا مجاني وصُنع هنا.",hi:"हमारे संस्थापक माइक्रोसॉफ्ट सर्टिफाइड प्रोफेशनल और सर्टिफाइड ब्लॉकचेन विशेषज्ञ हैं। सोच सरल है: कोई इसलिए न रुके कि लाइसेंस या कोर्स फीस नहीं दे सकता। यहाँ सब मुफ़्त है।",bn:"আমাদের প্রতিষ্ঠাতা মাইক্রোসফট সার্টিফাইড প্রফেশনাল ও সার্টিফাইড ব্লকচেইন বিশেষজ্ঞ। ভাবনাটি সহজ: লাইসেন্স বা কোর্স ফি দিতে না পারায় কেউ যেন আটকে না যায়। এখানে সবই বিনামূল্যে।",zh:"创始人是微软认证专家和区块链认证专家。理念很简单：不该有人因为付不起授权费或课程费而止步。这里的一切都免费。",es:"Nuestro fundador es Microsoft Certified Professional y especialista certificado en blockchain. La idea es simple: nadie debería quedarse atrás por no poder pagar una licencia o un curso. Todo aquí es gratis.",fr:"Notre fondateur est Microsoft Certified Professional et spécialiste certifié en blockchain. L'idée est simple : personne ne devrait être bloqué faute de pouvoir payer une licence ou un cours. Tout ici est gratuit.",pt:"O nosso fundador é Microsoft Certified Professional e especialista certificado em blockchain. A ideia é simples: ninguém deve ficar para trás por não poder pagar uma licença ou um curso. Aqui tudo é grátis.",ru:"Основатель — сертифицированный специалист Microsoft и по блокчейну. Идея проста: никто не должен остановиться из-за того, что не может оплатить лицензию или курс. Здесь всё бесплатно.",tr:"Kurucumuz Microsoft Sertifikalı Profesyonel ve sertifikalı blok zinciri uzmanıdır. Fikir basit: kimse lisans ya da kurs ücretini karşılayamadığı için geride kalmamalı. Burada her şey ücretsiz.",id:"Pendiri kami adalah Microsoft Certified Professional dan spesialis blockchain bersertifikat. Idenya sederhana: jangan sampai ada yang tertinggal karena tak mampu membayar lisensi atau kursus. Semua di sini gratis."},
+    aboutText:{en:"XpertCreation is a technology company in Lahore, registered with the FBR as a filing taxpayer and listed on Google Business under the same name for several years.",de:"XpertCreation ist ein Technologieunternehmen in Lahore, bei der FBR als steuerpflichtiges Unternehmen registriert und seit mehreren Jahren unter demselben Namen bei Google Business gelistet.",ur:"ایکسپرٹ کریئیشن لاہور کی ایک ٹیکنالوجی کمپنی ہے، ایف بی آر میں رجسٹرڈ اور ٹیکس گزار، اور کئی سال سے اسی نام سے گوگل بزنس پر موجود ہے۔",ar:"إكسبرت كرييشن شركة تقنية في لاهور، مسجّلة لدى FBR كدافع ضرائب ومدرجة على Google Business بالاسم نفسه منذ سنوات.",hi:"एक्सपर्टक्रिएशन लाहौर की एक टेक्नोलॉजी कंपनी है, FBR में पंजीकृत करदाता और कई वर्षों से इसी नाम से Google Business पर सूचीबद्ध।",bn:"এক্সপার্টক্রিয়েশন লাহোরের একটি প্রযুক্তি কোম্পানি, FBR-এ নিবন্ধিত করদাতা এবং কয়েক বছর ধরে একই নামে Google Business-এ তালিকাভুক্ত।",zh:"XpertCreation 是拉合尔的一家科技公司，已在 FBR 注册为纳税企业，并以同一名称在 Google Business 上登记多年。",es:"XpertCreation es una empresa tecnológica en Lahore, registrada en la FBR como contribuyente y listada en Google Business con el mismo nombre desde hace años.",fr:"XpertCreation est une entreprise technologique à Lahore, enregistrée auprès de la FBR comme contribuable et référencée sur Google Business sous le même nom depuis plusieurs années.",pt:"A XpertCreation é uma empresa de tecnologia em Lahore, registada na FBR como contribuinte e listada no Google Business com o mesmo nome há vários anos.",ru:"XpertCreation — технологическая компания в Лахоре, зарегистрированная в FBR как налогоплательщик и несколько лет представленная в Google Business под тем же названием.",tr:"XpertCreation, Lahor'da bir teknoloji şirketidir; FBR'ye vergi mükellefi olarak kayıtlı ve yıllardır aynı adla Google Business'ta listelenmektedir.",id:"XpertCreation adalah perusahaan teknologi di Lahore, terdaftar di FBR sebagai wajib pajak dan tercantum di Google Business dengan nama yang sama selama bertahun-tahun."},
+    d11:{en:"Eight questions, twelve mythical creatures. Find out which one you give off, then share it.",de:"Acht Fragen, zwölf Fabelwesen. Finde heraus, welches du ausstrahlst, und teile es.",ur:"آٹھ سوال، بارہ افسانوی مخلوقات۔ جانیں آپ کس جیسے ہیں، اور دوستوں کو بھیجیں۔",ar:"ثمانية أسئلة واثنتا عشرة مخلوقة أسطورية. اكتشف أيها تشبه.",hi:"आठ सवाल, बारह पौराणिक जीव। जानें आप किस जैसे हैं।",bn:"আটটি প্রশ্ন, বারোটি পৌরাণিক প্রাণী। জানুন আপনি কোনটির মতো।",zh:"八个问题，十二种神话生物。看看你是哪一种。",es:"Ocho preguntas, doce criaturas míticas. Descubre cuál eres.",fr:"Huit questions, douze créatures mythiques. Découvrez laquelle vous êtes.",pt:"Oito perguntas, doze criaturas míticas. Descubra qual é a sua.",ru:"Восемь вопросов, двенадцать мифических существ. Узнайте, кто вы.",tr:"Sekiz soru, on iki efsanevi yaratık. Hangisi olduğunuzu öğrenin.",id:"Delapan pertanyaan, dua belas makhluk mitos. Cari tahu yang mana Anda."},
+    n11:{en:"Vibe check",de:"Vibe-Check",ur:"وائب چیک",ar:"ما هي طاقتك؟",hi:"वाइब चेक",bn:"ভাইব চেক",zh:"气场测试",es:"Tu vibra",fr:"Ton vibe",pt:"Sua vibe",ru:"Твой вайб",tr:"Vibe testi",id:"Cek vibe"},
+    allApps:{en:"All apps",de:"Alle Apps",ur:"تمام ایپس",ar:"كل التطبيقات",hi:"सभी ऐप्स",bn:"সব অ্যাপ",zh:"全部应用",es:"Todas las apps",fr:"Toutes les apps",pt:"Todos os apps",ru:"Все приложения",tr:"Tüm uygulamalar",id:"Semua aplikasi"},
+    swipe:{en:"Swipe to see more",de:"Wischen für mehr",ur:"مزید دیکھنے کے لیے سوائپ کریں",ar:"اسحب لرؤية المزيد",hi:"और देखने के लिए स्वाइप करें",bn:"আরও দেখতে সোয়াইপ করুন",zh:"滑动查看更多",es:"Desliza para ver más",fr:"Balayez pour voir plus",pt:"Deslize para ver mais",ru:"Листайте дальше",tr:"Daha fazlası için kaydırın",id:"Geser untuk melihat lainnya"},
+    d10:{en:"Memory match and tic-tac-toe, with a leaderboard. Scores are worked out on the server, so they mean something.",de:"Memory und Tic-Tac-Toe, mit Bestenliste. Die Punkte werden auf dem Server berechnet, also zählen sie wirklich.",ur:"میموری میچ اور ٹک ٹیک ٹو، لیڈر بورڈ کے ساتھ۔ سکور سرور پر بنتے ہیں، اس لیے ان کا مطلب ہے۔",ar:"لعبة الذاكرة وإكس أو، مع لوحة صدارة. تُحتسب النقاط على الخادم.",hi:"मेमोरी मैच और टिक-टैक-टो, लीडरबोर्ड के साथ। स्कोर सर्वर पर बनते हैं।",bn:"মেমোরি ম্যাচ ও টিক-ট্যাক-টো, লিডারবোর্ডসহ। স্কোর সার্ভারে হিসাব হয়।",zh:"记忆配对和井字棋，附排行榜。分数在服务器计算。",es:"Memoria y tres en raya, con clasificación. Las puntuaciones se calculan en el servidor.",fr:"Memory et morpion, avec classement. Les scores sont calculés sur le serveur.",pt:"Jogo da memória e jogo da velha, com ranking. As pontuações são calculadas no servidor.",ru:"Игра на память и крестики-нолики, с таблицей лидеров. Очки считаются на сервере.",tr:"Hafıza oyunu ve XOX, sıralamayla. Puanlar sunucuda hesaplanır.",id:"Mencocokkan kartu dan tic-tac-toe, dengan papan peringkat. Skor dihitung di server."},
+    n10:{en:"Games",de:"Spiele",ur:"گیمز",ar:"ألعاب",hi:"गेम्स",bn:"গেমস",zh:"游戏",es:"Juegos",fr:"Jeux",pt:"Jogos",ru:"Игры",tr:"Oyunlar",id:"Permainan"},
+    d9:{en:"Today and the next five days, for any city. Temperature, rain chance, sunrise and sunset.",de:"Heute und die nächsten fünf Tage, für jede Stadt. Temperatur, Regenwahrscheinlichkeit, Sonnenauf- und -untergang.",ur:"کسی بھی شہر کا آج اور اگلے پانچ دن کا موسم۔ درجہ حرارت، بارش کا امکان، طلوع و غروب۔",ar:"طقس اليوم والأيام الخمسة القادمة لأي مدينة. الحرارة واحتمال المطر والشروق والغروب.",hi:"किसी भी शहर का आज और अगले पाँच दिन का मौसम। तापमान, बारिश की संभावना, सूर्योदय-सूर्यास्त।",bn:"যেকোনো শহরের আজ ও পরের পাঁচ দিনের আবহাওয়া। তাপমাত্রা, বৃষ্টির সম্ভাবনা, সূর্যোদয়-অস্ত।",zh:"任意城市今天及未来五天的天气：气温、降雨概率、日出日落。",es:"El tiempo de hoy y los próximos cinco días, en cualquier ciudad.",fr:"La météo du jour et des cinq prochains jours, pour toute ville.",pt:"O tempo de hoje e dos próximos cinco dias, para qualquer cidade.",ru:"Погода на сегодня и пять дней вперёд для любого города.",tr:"Herhangi bir şehir için bugün ve önümüzdeki beş gün.",id:"Cuaca hari ini dan lima hari ke depan, untuk kota mana pun."},
+    n9:{en:"Weather",de:"Wetter",ur:"موسم",ar:"الطقس",hi:"मौसम",bn:"আবহাওয়া",zh:"天气",es:"Clima",fr:"Météo",pt:"Clima",ru:"Погода",tr:"Hava durumu",id:"Cuaca"},
+    d8:{en:"Save the birthdays you keep forgetting. We email you a few days before, and again on the day. Only you are contacted.",de:"Speichere die Geburtstage, die du immer vergisst. Wir schreiben dir ein paar Tage vorher und noch einmal am Tag selbst. Nur du wirst benachrichtigt.",ur:"جو سالگرہیں بھول جاتی ہیں وہ محفوظ کر لیں۔ چند دن پہلے اور اُسی دن ای میل آ جائے گی۔ صرف آپ کو۔",ar:"احفظ أعياد الميلاد التي تنساها. نرسل لك بريدًا قبل أيام، ومرة أخرى في اليوم نفسه.",hi:"जो जन्मदिन भूल जाते हैं वे सहेज लें। कुछ दिन पहले और उसी दिन ईमेल आएगी। केवल आपको।",bn:"যে জন্মদিনগুলো ভুলে যান সেগুলো সংরক্ষণ করুন। কয়েক দিন আগে ও সেদিন ইমেইল পাবেন।",zh:"记下你总忘的生日。提前几天和当天各发一封邮件，只发给你。",es:"Guarda los cumpleaños que siempre olvidas. Te avisamos por correo días antes y el mismo día.",fr:"Enregistrez les anniversaires que vous oubliez. Un e-mail quelques jours avant, puis le jour même.",pt:"Salve os aniversários que você esquece. Enviamos e-mail dias antes e no dia.",ru:"Сохраните дни рождения, которые вечно забываете. Письмо за несколько дней и в сам день.",tr:"Unuttuğunuz doğum günlerini kaydedin. Birkaç gün önce ve o gün e-posta göndeririz.",id:"Simpan ulang tahun yang selalu Anda lupakan. Kami kirim email sebelum dan di hari-H."},
+    n8:{en:"Birthday Reminders",de:"Geburtstagserinnerungen",ur:"سالگرہ کی یاد دہانی",ar:"تذكير بأعياد الميلاد",hi:"जन्मदिन रिमाइंडर",bn:"জন্মদিনের রিমাইন্ডার",zh:"生日提醒",es:"Recordatorios de cumpleaños",fr:"Rappels d'anniversaire",pt:"Lembretes de aniversário",ru:"Напоминания о днях рождения",tr:"Doğum günü hatırlatıcı",id:"Pengingat ulang tahun"},
+    d7:{en:"Learn to type without looking. Fifteen drills, timed speed tests and a letter game, with a weekly leaderboard.",de:"Lerne tippen, ohne hinzusehen. Fünfzehn Übungen, Tempotests mit Zeitnahme und ein Buchstabenspiel, mit wöchentlicher Bestenliste.",ur:"بغیر دیکھے ٹائپ کرنا سیکھیں۔ پندرہ مشقیں، وقت والے ٹیسٹ اور حروف کا کھیل، ہفتہ وار لیڈر بورڈ کے ساتھ۔",ar:"تعلّم الطباعة دون النظر إلى لوحة المفاتيح. خمسة عشر تمرينًا واختبارات موقوتة ولعبة حروف، مع لوحة صدارة أسبوعية.",hi:"बिना देखे टाइप करना सीखें। पंद्रह अभ्यास, समयबद्ध टेस्ट और अक्षरों का खेल, साप्ताहिक लीडरबोर्ड के साथ।",bn:"না দেখে টাইপ করা শিখুন। পনেরোটি অনুশীলন, সময়ভিত্তিক টেস্ট ও অক্ষরের খেলা, সাপ্তাহিক লিডারবোর্ডসহ।",zh:"学会盲打。十五套练习、限时测速和字母游戏，并有每周排行榜。",es:"Aprende a escribir sin mirar. Quince ejercicios, pruebas cronometradas y un juego de letras, con clasificación semanal.",fr:"Apprenez à taper sans regarder. Quinze exercices, tests chronométrés et un jeu de lettres, avec classement hebdomadaire.",pt:"Aprenda a digitar sem olhar. Quinze exercícios, testes cronometrados e um jogo de letras, com ranking semanal.",ru:"Научитесь печатать вслепую. Пятнадцать упражнений, тесты на время и игра с буквами, с еженедельной таблицей лидеров.",tr:"Bakmadan yazmayı öğrenin. On beş alıştırma, süreli testler ve harf oyunu, haftalık sıralamayla.",id:"Belajar mengetik tanpa melihat. Lima belas latihan, tes berwaktu, dan permainan huruf, dengan papan peringkat mingguan."},
+    n7:{en:"Typing Tutor",de:"Schreibtrainer",ur:"ٹائپنگ ٹیوٹر",ar:"مدرّب الطباعة",hi:"टाइपिंग ट्यूटर",bn:"টাইপিং টিউটর",zh:"打字教程",es:"Tutor de mecanografía",fr:"Tuteur de frappe",pt:"Tutor de digitação",ru:"Тренажёр печати",tr:"Klavye eğitmeni",id:"Tutor mengetik"},
+    fVer:{en:"Check a certificate",de:"Zertifikat prüfen",ur:"سرٹیفکیٹ کی تصدیق",ar:"التحقق من شهادة",hi:"सर्टिफिकेट जाँचें",bn:"সার্টিফিকেট যাচাই",zh:"验证证书",es:"Verificar un certificado",fr:"Vérifier un certificat",pt:"Verificar um certificado",ru:"Проверить сертификат",tr:"Sertifika doğrula",id:"Verifikasi sertifikat"},
+    n6:{en:"Quranic Arabic",de:"Koranisches Arabisch",ur:"قرآنی عربی",ar:"العربية القرآنية",hi:"क़ुरआनी अरबी",bn:"কুরআনি আরবি",zh:"古兰经阿拉伯语",es:"Árabe coránico",fr:"Arabe coranique",pt:"Árabe corânico",ru:"Коранический арабский",tr:"Kur'an Arapçası",id:"Bahasa Arab Al-Quran"},
+    d6:{en:"Thirty short daily lessons in Quranic Arabic: vocabulary, basic grammar, and reading short passages word by word. Taught in Urdu.",de:"Dreißig kurze Tageslektionen in koranischem Arabisch: Wortschatz, Grundgrammatik und kurze Textstellen Wort für Wort gelesen. Auf Urdu unterrichtet.",ur:"قرآنی عربی کے تیس مختصر روزانہ اسباق: الفاظ، بنیادی قواعد، اور چھوٹی عبارتیں لفظ بہ لفظ پڑھنا۔ اردو میں۔",ar:"ثلاثون درسًا يوميًا قصيرًا في العربية القرآنية: المفردات والقواعد الأساسية والقراءة كلمة بكلمة. بالأردية.",hi:"क़ुरआनी अरबी के तीस छोटे दैनिक पाठ: शब्दावली, बुनियादी व्याकरण, शब्द दर शब्द पढ़ना। उर्दू में।",bn:"কুরআনি আরবির ত্রিশটি সংক্ষিপ্ত দৈনিক পাঠ: শব্দভাণ্ডার, মৌলিক ব্যাকরণ, শব্দে শব্দে পড়া। উর্দুতে।",zh:"三十节古兰经阿拉伯语短课：词汇、基础语法，逐词阅读。以乌尔都语讲授。",es:"Treinta lecciones diarias breves de árabe coránico: vocabulario, gramática básica y lectura palabra por palabra. En urdu.",fr:"Trente courtes leçons quotidiennes d'arabe coranique : vocabulaire, grammaire de base, lecture mot à mot. En ourdou.",pt:"Trinta lições diárias curtas de árabe corânico: vocabulário, gramática básica e leitura palavra por palavra. Em urdu.",ru:"Тридцать коротких ежедневных уроков коранического арабского: лексика, базовая грамматика, чтение слово за словом. На урду.",tr:"Kur'an Arapçası için otuz kısa günlük ders: kelimeler, temel dilbilgisi, kelime kelime okuma. Urduca.",id:"Tiga puluh pelajaran harian singkat bahasa Arab Al-Quran: kosakata, tata bahasa dasar, membaca kata per kata. Dalam bahasa Urdu."},
+    free:{en:"Free",de:"Kostenlos",ur:"مفت",ar:"مجاني",hi:"मुफ़्त",bn:"ফ্রি",zh:"免费",es:"Gratis",fr:"Gratuit",pt:"Grátis",ru:"Бесплатно",tr:"Ücretsiz",id:"Gratis"},
+    tag:{en:"Free courses. Free tools.",de:"Kostenlose Kurse. Kostenlose Tools.",ur:"مفت کورسز۔ مفت ٹولز۔",ar:"دورات مجانية. أدوات مجانية.",hi:"मुफ़्त कोर्स। मुफ़्त टूल्स।",bn:"বিনামূল্যে কোর্স। বিনামূল্যে টুল।",zh:"免费课程。免费工具。",es:"Cursos gratis. Herramientas gratis.",fr:"Cours gratuits. Outils gratuits.",pt:"Cursos grátis. Ferramentas grátis.",ru:"Бесплатные курсы. Бесплатные инструменты.",tr:"Ücretsiz kurslar. Ücretsiz araçlar.",id:"Kursus gratis. Alat gratis."},
+    h1:{en:"Learn Excel, Word and VBA — free",de:"Excel, Word und VBA lernen — kostenlos",ur:"ایکسل، ورڈ اور VBA سیکھیں — مفت",ar:"تعلّم Excel وWord وVBA — مجانًا",hi:"Excel, Word और VBA सीखें — मुफ़्त",bn:"Excel, Word ও VBA শিখুন — বিনামূল্যে",zh:"免费学习 Excel、Word 和 VBA",es:"Aprende Excel, Word y VBA — gratis",fr:"Apprenez Excel, Word et VBA — gratuitement",pt:"Aprenda Excel, Word e VBA — grátis",ru:"Изучайте Excel, Word и VBA — бесплатно",tr:"Excel, Word ve VBA öğrenin — ücretsiz",id:"Pelajari Excel, Word, dan VBA — gratis"},
+    sub:{en:"Real courses with certificates, plus languages, 30+ everyday tools, a blood bank and games. Built in Lahore, open to everyone.",de:"Echte Kurse mit Zertifikaten, dazu Sprachen, über 30 Alltagswerkzeuge, eine Blutbank und Spiele. In Lahore gebaut, offen für alle.",ur:"سرٹیفکیٹ کے ساتھ اصل کورسز، زبانیں، 30 سے زیادہ روزمرہ ٹولز، بلڈ بینک اور گیمز۔ لاہور میں بنایا گیا، سب کے لیے کھلا۔",ar:"دورات حقيقية بشهادات، ولغات، وأكثر من 30 أداة يومية، وبنك دم وألعاب. صُنع في لاهور، ومتاح للجميع.",hi:"सर्टिफिकेट के साथ असली कोर्स, भाषाएँ, 30+ रोज़मर्रा के टूल्स, ब्लड बैंक और गेम्स। लाहौर में बना, सबके लिए खुला।",bn:"সার্টিফিকেটসহ আসল কোর্স, ভাষা, ৩০+ দৈনন্দিন টুল, ব্লাড ব্যাংক ও গেম। লাহোরে তৈরি, সবার জন্য উন্মুক্ত।",zh:"带证书的真实课程，还有语言、30 多种日常工具、血库和游戏。在拉合尔打造，人人可用。",es:"Cursos reales con certificados, además de idiomas, más de 30 herramientas cotidianas, un banco de sangre y juegos. Hecho en Lahore, abierto a todos.",fr:"De vrais cours avec certificats, plus des langues, plus de 30 outils du quotidien, une banque du sang et des jeux. Conçu à Lahore, ouvert à tous.",pt:"Cursos reais com certificados, além de idiomas, mais de 30 ferramentas do dia a dia, um banco de sangue e jogos. Feito em Lahore, aberto a todos.",ru:"Настоящие курсы с сертификатами, языки, более 30 повседневных инструментов, банк крови и игры. Сделано в Лахоре, открыто для всех.",tr:"Sertifikalı gerçek kurslar, diller, 30'dan fazla günlük araç, kan bankası ve oyunlar. Lahor'da yapıldı, herkese açık.",id:"Kursus nyata dengan sertifikat, ditambah bahasa, 30+ alat sehari-hari, bank darah, dan permainan. Dibuat di Lahore, terbuka untuk semua."},
+    heroCta1:{en:"Start learning",de:"Jetzt lernen",ur:"سیکھنا شروع کریں",ar:"ابدأ التعلّم",hi:"सीखना शुरू करें",bn:"শেখা শুরু করুন",zh:"开始学习",es:"Empezar a aprender",fr:"Commencer à apprendre",pt:"Começar a aprender",ru:"Начать учиться",tr:"Öğrenmeye başla",id:"Mulai belajar"},
+    heroCta2:{en:"Browse the tools",de:"Werkzeuge ansehen",ur:"ٹولز دیکھیں",ar:"تصفّح الأدوات",hi:"टूल्स देखें",bn:"টুল দেখুন",zh:"浏览工具",es:"Ver las herramientas",fr:"Voir les outils",pt:"Ver as ferramentas",ru:"Посмотреть инструменты",tr:"Araçlara göz at",id:"Lihat alat"},
+    cta:{en:"Create account",de:"Konto erstellen",ur:"اکاؤنٹ بنائیں",ar:"إنشاء حساب",hi:"अकाउंट बनाएँ",bn:"অ্যাকাউন্ট তৈরি করুন",zh:"创建账户",es:"Crear cuenta",fr:"Créer un compte",pt:"Criar conta",ru:"Создать аккаунт",tr:"Hesap oluştur",id:"Buat akun"},
+    signin:{en:"Sign in",de:"Anmelden",ur:"سائن اِن",ar:"تسجيل الدخول",hi:"साइन इन",bn:"সাইন ইন",zh:"登录",es:"Iniciar sesión",fr:"Se connecter",pt:"Entrar",ru:"Войти",tr:"Giriş yap",id:"Masuk"},
+    secH:{en:"Our platforms",de:"Unsere Plattformen",ur:"ہمارے پلیٹ فارم",ar:"منصّاتنا",hi:"हमारे प्लेटफ़ॉर्म",bn:"আমাদের প্ল্যাটফর্ম",zh:"我们的平台",es:"Nuestras plataformas",fr:"Nos plateformes",pt:"Nossas plataformas",ru:"Наши платформы",tr:"Platformlarımız",id:"Platform kami"},
+    live:{en:"Live",de:"Live",ur:"فعال",ar:"متاح",hi:"लाइव",bn:"চালু",zh:"已上线",es:"En vivo",fr:"En ligne",pt:"No ar",ru:"Работает",tr:"Yayında",id:"Aktif"},
+    soon:{en:"Coming soon",de:"Bald verfügbar",ur:"جلد آ رہا ہے",ar:"قريبًا",hi:"जल्द आ रहा है",bn:"শীঘ্রই আসছে",zh:"即将推出",es:"Próximamente",fr:"Bientôt",pt:"Em breve",ru:"Скоро",tr:"Çok yakında",id:"Segera hadir"},
+    n1:{en:"XpertLoad",de:"XpertLoad",ur:"ایکسپرٹ لوڈ",ar:"إكسبرت لود",hi:"XpertLoad",bn:"XpertLoad",zh:"XpertLoad",es:"XpertLoad",fr:"XpertLoad",pt:"XpertLoad",ru:"XpertLoad",tr:"XpertLoad",id:"XpertLoad"},
+    d1:{en:"Mobile top-ups and global gift cards. Jazz, Zong, Ufone, Telenor, plus Amazon, PlayStation and more.",de:"Handy-Guthaben und Geschenkkarten weltweit. Jazz, Zong, Ufone, Telenor, dazu Amazon, PlayStation und mehr.",ur:"موبائل لوڈ اور دنیا بھر کے گفٹ کارڈز۔ جاز، زونگ، یوفون، ٹیلی نار، اور ایمازون، پلے اسٹیشن وغیرہ۔",ar:"شحن الهاتف وبطاقات الهدايا العالمية. جاز، زونغ، يوفون، تيلينور، وأمازون وبلايستيشن وغيرها.",hi:"मोबाइल रिचार्ज और ग्लोबल गिफ़्ट कार्ड। जैज़, ज़ोंग, यूफ़ोन, टेलीनॉर, साथ ही अमेज़न, प्लेस्टेशन आदि।",bn:"মোবাইল রিচার্জ ও গ্লোবাল গিফট কার্ড। জ্যাজ, জং, ইউফোন, টেলিনর, এবং অ্যামাজন, প্লেস্টেশন।",zh:"手机充值与全球礼品卡。Jazz、Zong、Ufone、Telenor，以及亚马逊、PlayStation 等。",es:"Recargas móviles y tarjetas de regalo globales. Jazz, Zong, Ufone, Telenor, Amazon, PlayStation y más.",fr:"Recharges mobiles et cartes cadeaux internationales. Jazz, Zong, Ufone, Telenor, Amazon, PlayStation et plus.",pt:"Recargas de celular e cartões-presente globais. Jazz, Zong, Ufone, Telenor, Amazon, PlayStation e mais.",ru:"Пополнение мобильного и подарочные карты. Jazz, Zong, Ufone, Telenor, а также Amazon, PlayStation и другие.",tr:"Mobil yükleme ve global hediye kartları. Jazz, Zong, Ufone, Telenor ile Amazon, PlayStation ve daha fazlası.",id:"Isi pulsa dan kartu hadiah global. Jazz, Zong, Ufone, Telenor, plus Amazon, PlayStation, dan lainnya."},
+    n2:{en:"Blood Bank",de:"Blutbank",ur:"بلڈ بینک",ar:"بنك الدم",hi:"ब्लड बैंक",bn:"ব্লাড ব্যাংক",zh:"血库",es:"Banco de sangre",fr:"Banque du sang",pt:"Banco de sangue",ru:"Банк крови",tr:"Kan bankası",id:"Bank darah"},
+    d2:{en:"Find a donor near you, or register as one. Contact details stay private until the donor agrees to share them.",de:"Finde einen Spender in deiner Nähe oder werde selbst einer. Kontaktdaten bleiben privat, bis der Spender zustimmt, sie zu teilen.",ur:"اپنے قریب ڈونر تلاش کریں، یا خود ڈونر بنیں۔ رابطہ نمبر اُس وقت تک نجی رہتا ہے جب تک ڈونر خود اجازت نہ دے۔",ar:"ابحث عن متبرع قريب منك أو سجّل كمتبرع. تبقى بيانات الاتصال خاصة حتى يوافق المتبرع على مشاركتها.",hi:"अपने पास डोनर खोजें, या खुद डोनर बनें। संपर्क नंबर तब तक निजी रहता है जब तक डोनर सहमति न दे।",bn:"কাছাকাছি ডোনার খুঁজুন, বা নিজে ডোনার হোন। ডোনার সম্মতি না দেওয়া পর্যন্ত যোগাযোগ নম্বর গোপন থাকে।",zh:"寻找附近的献血者，或注册成为献血者。在献血者同意之前，联系方式始终保密。",es:"Encuentra un donante cerca o regístrate como uno. Los datos de contacto son privados hasta que el donante acepte compartirlos.",fr:"Trouvez un donneur près de chez vous ou inscrivez-vous comme donneur. Les coordonnées restent privées jusqu'à l'accord du donneur.",pt:"Encontre um doador perto de você ou registre-se como um. Os contatos ficam privados até o doador concordar em compartilhá-los.",ru:"Найдите донора рядом или станьте им. Контакты остаются скрытыми, пока донор сам не согласится их показать.",tr:"Yakınınızdaki bağışçıyı bulun ya da bağışçı olun. Bağışçı onay verene kadar iletişim bilgileri gizli kalır.",id:"Temukan pendonor di dekat Anda, atau daftar jadi pendonor. Kontak tetap privat sampai pendonor menyetujuinya."},
+    n3:{en:"XpertAcademy",de:"XpertAcademy",ur:"ایکسپرٹ اکیڈمی",ar:"أكاديمية إكسبرت",hi:"XpertAcademy",bn:"XpertAcademy",zh:"XpertAcademy",es:"XpertAcademy",fr:"XpertAcademy",pt:"XpertAcademy",ru:"XpertAcademy",tr:"XpertAcademy",id:"XpertAcademy"},
+    d3:{en:"Free step-by-step courses in Microsoft Word, Excel and PowerPoint, plus Korean, German, French and Japanese. No fee, no ads, learn at your own pace.",de:"Kostenlose Schritt-für-Schritt-Kurse: Microsoft Word, Excel und PowerPoint, dazu Koreanisch, Deutsch, Französisch und Japanisch. Keine Gebühren, keine Werbung, lerne in deinem Tempo.",ur:"مائیکروسافٹ ورڈ، ایکسل اور پاورپوائنٹ کے مفت کورس، قدم بہ قدم۔ کوئی فیس نہیں، کوئی اشتہار نہیں۔",ar:"دورات مجانية خطوة بخطوة في وورد وإكسل وباوربوينت. بدون رسوم أو إعلانات، تعلّم على راحتك.",hi:"माइक्रोसॉफ्ट वर्ड, एक्सेल और पावरपॉइंट के मुफ़्त कोर्स, कदम दर कदम। कोई फ़ीस नहीं, कोई विज्ञापन नहीं।",bn:"মাইক্রোসফট ওয়ার্ড, এক্সেল ও পাওয়ারপয়েন্টের ফ্রি কোর্স, ধাপে ধাপে। কোনো ফি নেই, বিজ্ঞাপন নেই।",zh:"免费的 Word、Excel、PowerPoint 分步课程。无费用、无广告，按自己的节奏学习。",es:"Cursos gratuitos paso a paso de Word, Excel y PowerPoint. Sin costo, sin anuncios, a tu ritmo.",fr:"Cours gratuits pas à pas sur Word, Excel et PowerPoint. Sans frais, sans publicité, à votre rythme.",pt:"Cursos gratuitos passo a passo de Word, Excel e PowerPoint. Sem taxa, sem anúncios, no seu ritmo.",ru:"Бесплатные пошаговые курсы по Word, Excel и PowerPoint. Без оплаты и рекламы, в своём темпе.",tr:"Word, Excel ve PowerPoint için ücretsiz adım adım kurslar. Ücret yok, reklam yok, kendi hızınızda.",id:"Kursus gratis langkah demi langkah untuk Word, Excel, dan PowerPoint. Tanpa biaya, tanpa iklan."},
+    open:{en:"Open",de:"Öffnen",ur:"کھولیں",ar:"افتح",hi:"खोलें",bn:"খুলুন",zh:"打开",es:"Abrir",fr:"Ouvrir",pt:"Abrir",ru:"Открыть",tr:"Aç",id:"Buka"},
+    notify:{en:"Notify me",de:"Benachrichtige mich",ur:"مجھے اطلاع دیں",ar:"أبلغني",hi:"मुझे बताएँ",bn:"আমাকে জানান",zh:"通知我",es:"Avísame",fr:"Prévenez-moi",pt:"Avise-me",ru:"Сообщить мне",tr:"Haber ver",id:"Beri tahu saya"},
+    whyH:{en:"One account, everywhere",de:"Ein Konto, überall",ur:"ایک اکاؤنٹ، ہر جگہ",ar:"حساب واحد في كل مكان",hi:"एक अकाउंट, हर जगह",bn:"একটি অ্যাকাউন্ট, সর্বত্র",zh:"一个账户，处处通用",es:"Una cuenta, en todas partes",fr:"Un compte, partout",pt:"Uma conta, em todo lugar",ru:"Один аккаунт везде",tr:"Tek hesap, her yerde",id:"Satu akun, di mana saja"},
+    w1:{en:"Sign up once",de:"Einmal registrieren",ur:"ایک بار رجسٹر کریں",ar:"سجّل مرة واحدة",hi:"एक बार रजिस्टर करें",bn:"একবার সাইন আপ করুন",zh:"注册一次",es:"Regístrate una vez",fr:"Inscrivez-vous une fois",pt:"Cadastre-se uma vez",ru:"Зарегистрируйтесь один раз",tr:"Bir kez kaydolun",id:"Daftar sekali"},
+    w1p:{en:"Your email and password work across every service listed here.",de:"Deine E-Mail-Adresse und dein Passwort gelten für jeden hier aufgeführten Dienst.",ur:"آپ کا ای میل اور پاس ورڈ یہاں کی ہر خدمت پر چلتا ہے۔",ar:"بريدك وكلمة المرور يعملان في كل خدمة مذكورة هنا.",hi:"आपका ईमेल और पासवर्ड यहाँ की हर सेवा पर चलता है।",bn:"আপনার ইমেইল ও পাসওয়ার্ড এখানের সব সেবায় চলে।",zh:"您的邮箱和密码适用于此处列出的所有服务。",es:"Tu correo y contraseña funcionan en todos los servicios de esta lista.",fr:"Votre e-mail et mot de passe fonctionnent sur tous les services listés ici.",pt:"Seu e-mail e senha funcionam em todos os serviços listados aqui.",ru:"Ваша почта и пароль работают во всех перечисленных сервисах.",tr:"E-postanız ve şifreniz buradaki tüm hizmetlerde geçerli.",id:"Email dan kata sandi Anda berlaku di semua layanan di sini."},
+    w2:{en:"Confirmed email",de:"Bestätigte E-Mail",ur:"تصدیق شدہ ای میل",ar:"بريد مؤكَّد",hi:"वेरिफाइड ईमेल",bn:"যাচাই করা ইমেইল",zh:"已验证邮箱",es:"Correo confirmado",fr:"E-mail confirmé",pt:"E-mail confirmado",ru:"Подтверждённая почта",tr:"Doğrulanmış e-posta",id:"Email terverifikasi"},
+    w2p:{en:"Gift card codes are delivered by email, so we confirm the address before any order.",de:"Geschenkkarten-Codes kommen per E-Mail, deshalb bestätigen wir die Adresse vor jeder Bestellung.",ur:"گفٹ کارڈ کا کوڈ ای میل پر جاتا ہے، اس لیے آرڈر سے پہلے پتہ تصدیق کیا جاتا ہے۔",ar:"أكواد بطاقات الهدايا تُرسل بالبريد، لذا نؤكّد العنوان قبل أي طلب.",hi:"गिफ़्ट कार्ड कोड ईमेल पर आता है, इसलिए ऑर्डर से पहले पता वेरिफाई होता है।",bn:"গিফট কার্ডের কোড ইমেইলে যায়, তাই অর্ডারের আগে ঠিকানা যাচাই করা হয়।",zh:"礼品卡兑换码通过邮件发送，因此下单前需先验证邮箱。",es:"Los códigos de tarjeta llegan por correo, así que confirmamos la dirección antes de cualquier pedido.",fr:"Les codes des cartes cadeaux arrivent par e-mail, nous confirmons donc l'adresse avant toute commande.",pt:"Os códigos dos cartões chegam por e-mail, então confirmamos o endereço antes de qualquer pedido.",ru:"Коды подарочных карт приходят на почту, поэтому мы подтверждаем адрес до заказа.",tr:"Hediye kartı kodları e-postayla gelir, bu yüzden siparişten önce adresi doğrularız.",id:"Kode kartu hadiah dikirim lewat email, jadi kami verifikasi alamatnya sebelum pesanan."},
+    w3:{en:"Your data stays yours",de:"Deine Daten gehören dir",ur:"آپ کا ڈیٹا آپ کا رہتا ہے",ar:"بياناتك تبقى ملكك",hi:"आपका डेटा आपका रहता है",bn:"আপনার তথ্য আপনারই থাকে",zh:"您的数据归您所有",es:"Tus datos siguen siendo tuyos",fr:"Vos données restent les vôtres",pt:"Seus dados continuam seus",ru:"Ваши данные остаются вашими",tr:"Verileriniz size ait kalır",id:"Data Anda tetap milik Anda"},
+    w3p:{en:"We never sell your details, and you can delete your account at any time.",de:"Wir verkaufen deine Daten nie, und du kannst dein Konto jederzeit löschen.",ur:"ہم آپ کی معلومات کبھی نہیں بیچتے، اور آپ جب چاہیں اکاؤنٹ ختم کر سکتے ہیں۔",ar:"لا نبيع بياناتك أبدًا، ويمكنك حذف حسابك في أي وقت.",hi:"हम आपकी जानकारी कभी नहीं बेचते, और आप कभी भी अकाउंट डिलीट कर सकते हैं।",bn:"আমরা কখনও আপনার তথ্য বিক্রি করি না, আর আপনি যেকোনো সময় অ্যাকাউন্ট মুছতে পারেন।",zh:"我们绝不出售您的信息，您可随时删除账户。",es:"Nunca vendemos tus datos y puedes eliminar tu cuenta cuando quieras.",fr:"Nous ne vendons jamais vos données et vous pouvez supprimer votre compte à tout moment.",pt:"Nunca vendemos seus dados e você pode excluir sua conta quando quiser.",ru:"Мы никогда не продаём ваши данные, а аккаунт можно удалить в любой момент.",tr:"Bilgilerinizi asla satmayız, hesabınızı istediğiniz an silebilirsiniz.",id:"Kami tidak pernah menjual data Anda, dan Anda bisa menghapus akun kapan saja."},
+    supH:{en:"Talk to us",de:"Sprich mit uns",ur:"ہم سے رابطہ",ar:"تواصل معنا",hi:"हमसे बात करें",bn:"আমাদের সাথে কথা বলুন",zh:"联系我们",es:"Habla con nosotros",fr:"Contactez-nous",pt:"Fale conosco",ru:"Свяжитесь с нами",tr:"Bize ulaşın",id:"Hubungi kami"},
+    hrs:{en:"9am – 11pm, every day",de:"9 bis 23 Uhr, jeden Tag",ur:"روزانہ صبح ۹ سے رات ۱۱",ar:"يوميًا من ٩ صباحًا إلى ١١ مساءً",hi:"रोज़ सुबह ९ – रात ११",bn:"প্রতিদিন সকাল ৯ – রাত ১১",zh:"每天 9:00–23:00",es:"9:00–23:00, todos los días",fr:"9h–23h, tous les jours",pt:"9h–23h, todos os dias",ru:"Каждый день 9:00–23:00",tr:"Her gün 09:00–23:00",id:"Setiap hari 09.00–23.00"},
+    sCall:{en:"Call",de:"Anrufen",ur:"کال",ar:"اتصال",hi:"कॉल",bn:"কল",zh:"电话",es:"Llamar",fr:"Appeler",pt:"Ligar",ru:"Звонок",tr:"Ara",id:"Telepon"},
+    sMail:{en:"Email",de:"E-Mail",ur:"ای میل",ar:"بريد",hi:"ईमेल",bn:"ইমেইল",zh:"邮箱",es:"Correo",fr:"E-mail",pt:"E-mail",ru:"Почта",tr:"E-posta",id:"Email"},
+    fPriv:{en:"Privacy",de:"Datenschutz",ur:"پرائیویسی",ar:"الخصوصية",hi:"प्राइवेसी",bn:"প্রাইভেসি",zh:"隐私",es:"Privacidad",fr:"Confidentialité",pt:"Privacidade",ru:"Конфиденциальность",tr:"Gizlilik",id:"Privasi"},
+    fTerm:{en:"Terms",de:"Nutzungsbedingungen",ur:"شرائط",ar:"الشروط",hi:"शर्तें",bn:"শর্তাবলী",zh:"条款",es:"Términos",fr:"Conditions",pt:"Termos",ru:"Условия",tr:"Koşullar",id:"Ketentuan"},
+    fDel:{en:"Delete account",de:"Konto löschen",ur:"اکاؤنٹ ختم کریں",ar:"حذف الحساب",hi:"अकाउंट डिलीट करें",bn:"অ্যাকাউন্ট মুছুন",zh:"删除账户",es:"Eliminar cuenta",fr:"Supprimer le compte",pt:"Excluir conta",ru:"Удалить аккаунт",tr:"Hesabı sil",id:"Hapus akun"}
+  };
+  function t(k){ return (T[k] && T[k][lang]) || (T[k] && T[k].en) || k; }
+
+  var RTL = ["ur","ar"];
+  var FONTS = { ur:"Noto+Nastaliq+Urdu:wght@400;600;700", ar:"Noto+Naskh+Arabic:wght@400;600;700",
+                hi:"Noto+Sans+Devanagari:wght@400;600;800", bn:"Noto+Sans+Bengali:wght@400;600;800" };
+  var LONG = ["es","fr","pt","ru","tr","id"];
+  var loaded = {};
+
+  function loadFont(code){
+    if (!FONTS[code] || loaded[code]) return;
+    loaded[code] = true;
+    var l = document.createElement("link");
+    l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=" + FONTS[code] + "&display=swap";
+    document.head.appendChild(l);
+  }
+
+
+
+  function applyLang(){
+    loadFont(lang);
+    var b = document.body;
+    b.className = b.className.replace(/\bf-\w+\b/g, "").replace(/\brtl\b/g, "").trim();
+    b.classList.add("f-" + lang);
+    if (RTL.indexOf(lang) !== -1) b.classList.add("rtl");
+    if (LONG.indexOf(lang) !== -1) b.classList.add("f-long");
+    document.documentElement.lang = lang;
+    document.documentElement.dir = RTL.indexOf(lang) !== -1 ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      el.textContent = t(el.getAttribute("data-i18n"));
+    });
+  }
+
+  document.getElementById("langSel").addEventListener("change", function(e){
+    lang = e.target.value;
+    try { localStorage.setItem("xc_lang", lang); } catch (err) {}
+    applyLang();
+    // Ye lang badalne ke BAAD chalna chahiye, warna apps purani zaban
+    // mein hi paint hote hain.
+    setTimeout(paintApps, 0);
+  });
+
+  window.addEventListener("scroll", function(){
+    document.getElementById("topbar").classList.toggle("stuck", window.scrollY > 8);
+  }, {passive:true});
+
+  // Dropdown hamesha English dikhata tha, chahe zaban kuch aur ho.
+  (function(){
+    var sel = document.getElementById("langSel");
+    if (sel) sel.value = lang;
+  })();
+  applyLang();
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  // Each app owns a colour. The gradient and the glow are derived from it, so
+  // a card reads as one object rather than a box with a tint.
+  var APPS = [
+    { id:"academy",href:"https://learn.xpertcreation.com", icon:"\ud83c\udf93",
+      c1:"#00B37E", c2:"#046B4E", glow:"rgba(0,179,126,.30)", live:1,
+      name:"XpertAcademy", nk:"n3", dk:"d3" },
+    { id:"donateapp", href:"/donate", icon:"\ud83e\udd1d",
+      c1:"#DB2777", c2:"#831843", glow:"rgba(219,39,119,.30)", live:1,
+      name:"Donate", nk:"n16", dk:"d16" },
+    { id:"blood",  href:"/blood", icon:"\ud83e\ude78",
+      c1:"#E11D48", c2:"#8E1129", glow:"rgba(225,29,72,.30)", live:1,
+      name:"Blood Bank", nk:"n2", dk:"d2" },
+    { id:"games",  href:"/games", icon:"\ud83c\udfae",
+      c1:"#7C3AED", c2:"#4C1D95", glow:"rgba(124,58,237,.30)", live:1,
+      name:"Games", nk:"n10", dk:"d10" },
+    { id:"newscard",    href:"/news", icon:"\ud83d\udcf0",
+      c1:"#1B4DFF", c2:"#0B2FB8", glow:"rgba(27,77,255,.30)", live:1,
+      name:"News", nk:"n13", dk:"d13" },
+    { id:"tools",   href:"/tools", icon:"\ud83e\uddee",
+      c1:"#0F766E", c2:"#04413C", glow:"rgba(15,118,110,.30)", live:1,
+      name:"Tools", nk:"n12", dk:"d12" },
+    { id:"money", href:"/money", icon:"\ud83d\udcb0",
+      c1:"#16A34A", c2:"#14532D", glow:"rgba(22,163,74,.30)", live:1,
+      name:"Money", nk:"nMoney", dk:"dMoney" },
+    { id:"people", href:"/people", icon:"\ud83d\udc65",
+      c1:"#4F46E5", c2:"#312E81", glow:"rgba(79,70,229,.30)", live:1,
+      name:"Connect", nk:"nPeople", dk:"dPeople" },
+    { id:"pets", href:"/pets", icon:"\ud83d\udc3e",
+      c1:"#EA580C", c2:"#7C2D12", glow:"rgba(234,88,12,.30)", live:1,
+      name:"Pets", nk:"nPets", dk:"dPets" },
+    { id:"shows", href:"/shows", icon:"\ud83c\udfac",
+      c1:"#DC2626", c2:"#7F1D1D", glow:"rgba(220,38,38,.30)", live:1,
+      name:"Shows", nk:"nShows", dk:"dShows" },
+    { id:"biz", href:"/business", icon:"\ud83d\udcbc",
+      c1:"#0891B2", c2:"#164E63", glow:"rgba(8,145,178,.30)", live:1,
+      name:"Business", nk:"nBiz", dk:"dBiz" },
+    { id:"bday",   href:"/birthdays", icon:"\ud83c\udf82",
+      c1:"#F59E0B", c2:"#92400E", glow:"rgba(245,158,11,.30)", live:1,
+      name:"Birthdays", nk:"n8", dk:"d8" },
+    { id:"chatapp", href:"/chat", icon:"\ud83d\udcac",
+      c1:"#0EA5E9", c2:"#075E86", glow:"rgba(14,165,233,.30)", live:1,
+      name:"Chat", nk:"n18", dk:"d18" },
+    { id:"supportcard", href:"/support", icon:"\ud83c\udfa7",
+      c1:"#B8892D", c2:"#7A5A17", glow:"rgba(184,137,45,.30)", live:1,
+      name:"Support", nk:"n14", dk:"d14" }
+  ];
+
+  function appName(a){ return T[a.nk] ? t(a.nk) : a.name; }
+  function appDesc(a){ return T[a.dk] ? t(a.dk) : ""; }
+
+  // Banner slider. Har tasveer apne page par le jati hai. alt zaroori hai:
+  // tamam matn tasveer ke andar jama hai, to load na hone par kuch bacha nahi.
+  var BANNERS = [
+    { img:"/brand/slides/8.jpg", href:"/people",
+      alt:"People \u2014 connect, follow and endorse each other" },
+    { img:"/brand/slides/9.jpg", href:"/pets",
+      alt:"Pets \u2014 vaccine reminders, health records and a QR tag" },
+    { img:"/brand/slides/2.jpg", href:"/games",
+      alt:"Games \u2014 play, enjoy, repeat" },
+    { img:"/brand/slides/5.jpg", href:"/blood",
+      alt:"Blood Bank \u2014 one donation, endless lives" },
+    { img:"/brand/slides/4.jpg", href:"/tools?t=prayer",
+      alt:"Prayer Times \u2014 stay connected, stay blessed" },
+    { img:"/brand/slides/6.jpg", href:"/tools?t=clock",
+      alt:"World Clock \u2014 one world, many times" },
+    { img:"/brand/slides/7.jpg", href:"/weather",
+      alt:"Weather \u2014 know today, plan better" },
+  ];
+  function renderSlides(){
+    var el = document.getElementById("slides");
+    if (!el) return;
+    el.innerHTML = BANNERS.map(function(b, i){
+      // Pehli tasveer foran, baqi tab jab paas aayen.
+      var lazy = i === 0 ? '' : ' loading="lazy"';
+      return '<a class="slide banner" href="' + b.href + '">'
+        + '<img src="' + b.img + '" alt="' + esc(b.alt) + '"' + lazy + '>'
+        + '</a>';
+    }).join("");
+    var dots = document.getElementById("dots");
+    if (dots){
+      dots.innerHTML = BANNERS.map(function(_, i){
+        return '<i class="' + (i === 0 ? "on" : "") + '"></i>';
+      }).join("");
+    }
+  }
+
+  function renderTiles(){
+    var el = document.getElementById("tiles");
+    if (!el) return;
+    el.innerHTML = APPS.map(function(a){
+      return '<a class="tile2" href="' + a.href + '" style="--c1:' + a.c1
+        + ';--c2:' + a.c2 + ';--glow:' + a.glow + '">'
+        + '<span class="ghost">' + a.icon + '</span>'
+        + '<span class="ic">' + a.icon + '</span>'
+        + '<b>' + esc(appName(a)) + '</b>'
+        + '<small>' + esc(appDesc(a).split(".")[0]) + '</small></a>';
+    }).join("");
+  }
+
+  // Auto-advance, with the dots following along.
+  var autoSlide = null;
+
+  function slideCount(){ return BANNERS.length; }
+
+  function currentSlide(box){
+    return Math.round(box.scrollLeft / box.clientWidth);
+  }
+
+  function paintDots(i){
+    var dots = document.querySelectorAll("#dots i");
+    dots.forEach(function(d, n){ d.classList.toggle("on", n === i); });
+  }
+
+  function startAuto(){
+    stopAuto();
+    autoSlide = setInterval(function(){
+      var box = document.getElementById("slides");
+      if (!box || !box.clientWidth) return;
+      // Pause while the tab is hidden: otherwise it races through every slide
+      // in the background and the user returns to the last one.
+      if (document.hidden) return;
+      var next = (currentSlide(box) + 1) % slideCount();
+      box.scrollTo({ left: next * box.clientWidth, behavior: "smooth" });
+    }, 4500);
+  }
+
+  function stopAuto(){
+    if (autoSlide){ clearInterval(autoSlide); autoSlide = null; }
+  }
+
+  (function(){
+    var box = document.getElementById("slides");
+    if (!box) return;
+    var tick = null;
+
+    box.addEventListener("scroll", function(){
+      clearTimeout(tick);
+      tick = setTimeout(function(){ paintDots(currentSlide(box)); }, 90);
+    }, { passive: true });
+
+    // Touching it means the reader is in charge now. Ten seconds of quiet and
+    // it picks up again.
+    ["pointerdown", "touchstart", "wheel"].forEach(function(ev){
+      box.addEventListener(ev, function(){
+        stopAuto();
+        clearTimeout(box._resume);
+        box._resume = setTimeout(startAuto, 10000);
+      }, { passive: true });
+    });
+
+    document.addEventListener("visibilitychange", function(){
+      if (document.hidden) stopAuto(); else startAuto();
+    });
+
+    var dots = document.getElementById("dots");
+    if (dots){
+      dots.addEventListener("click", function(e){
+        var all = [].slice.call(dots.querySelectorAll("i"));
+        var i = all.indexOf(e.target);
+        if (i < 0) return;
+        stopAuto();
+        box.scrollTo({ left: i * box.clientWidth, behavior: "smooth" });
+        clearTimeout(box._resume);
+        box._resume = setTimeout(startAuto, 10000);
+      });
+    }
+
+    startAuto();
+  })();
+
+  // Rendered last, once esc(), t() and APPS are all defined. Putting these
+  // calls next to applyLang() ran them before the functions existed, which is
+  // why the slider and the grid came out empty.
+
+  // Set as soon as we know who is here, so the hero never flashes up and then
+  // vanishes for a signed-in visitor.
+  function heroSignedIn(on){
+    document.body.classList.toggle("signed-in", !!on);
+  }
+
+  function paintApps(){
+    try { renderSlides(); renderTiles(); }
+    catch (e) { console.error("app grid:", e); }
+  }
+  paintApps();
+})();
+</script>
+
+<script>
+/* Shared session badge. Shows who is signed in, on every page. */
+(function(){
+  var el = document.getElementById("sessBtn");
+  if (!el) return;
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      document.body.classList.toggle("signed-in", !!u);
+      if (!u) return;
+      var name = (u.full_name || u.email.split("@")[0]).trim();
+      var pic = "";
+      if (u.avatar_url){
+        // Backend poora rasta bhejta hai, is liye extension aazmane ki
+        // zarurat nahi. Click par seedha tasveer badalne ke safe par.
+        pic = '<a href="/account?pick=1" title="Change your picture">'
+            + '<img src="' + esc(u.avatar_url) + '" alt="" '
+            + 'onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),'
+            + '{className:\'ini\',textContent:\'' + esc(name.charAt(0).toUpperCase()) + '\'}));">'
+            + '</a>';
+      } else {
+        pic = '<span class="ini">' + esc(name.charAt(0).toUpperCase()) + '</span>';
+      }
+      // Replaces the data-i18n span, so applyLang has nothing left to
+      // overwrite on this button.
+      el.className = "acctbtn";
+      el.href = "/account";
+      el.innerHTML = pic + '<span>' + esc(name.slice(0, 14)) + '</span>';
+    })
+    .catch(function(){});
+})();
+</script>
+
+<script>
+/* Signed-in welcome: name, avatar, zodiac, weather, and a birthday card. */
+(function(){
+  var box = document.getElementById("hello");
+  var bd = document.getElementById("bday");
+  if (!box) return;
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+
+  var SIGN_EMOJI = {Aries:"\u2648",Taurus:"\u2649",Gemini:"\u264A",Cancer:"\u264B",
+    Leo:"\u264C",Virgo:"\u264D",Libra:"\u264E",Scorpio:"\u264F",
+    Sagittarius:"\u2650",Capricorn:"\u2651",Aquarius:"\u2652",Pisces:"\u2653"};
+
+
+  // Ticks every ten seconds. Every second would be a needless repaint for a
+  // display that only shows minutes.
+  function startClock(){
+    var DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    var MONS = ["January","February","March","April","May","June","July",
+                "August","September","October","November","December"];
+
+    function tick(){
+      var d = new Date();
+      var hh = d.getHours(), mm = d.getMinutes();
+      var ampm = hh < 12 ? "AM" : "PM";
+      var h12 = hh % 12 || 12;
+      var t = document.getElementById("todayline");
+      if (t){
+        var n = d.getDate();
+        var suffix = (n % 10 === 1 && n !== 11) ? "st"
+                   : (n % 10 === 2 && n !== 12) ? "nd"
+                   : (n % 10 === 3 && n !== 13) ? "rd" : "th";
+        t.textContent = DAYS[d.getDay()] + ", " + n + suffix + " "
+          + MONS[d.getMonth()] + " " + d.getFullYear() + " \u00b7 "
+          + h12 + ":" + (mm < 10 ? "0" : "") + mm + " " + ampm;
+      }
+    }
+    tick();
+    clearInterval(window.__clock);
+    window.__clock = setInterval(tick, 10000);
+  }
+
+
+  var QUOTES = [
+    "Small things, done daily, beat big things done rarely.",
+    "The work you avoid today is still there tomorrow, just heavier.",
+    "Discipline is choosing what you want most over what you want now.",
+    "A little progress each day adds up to big results.",
+    "You do not have to see the whole staircase, just take the first step.",
+    "What you do today can improve all your tomorrows.",
+    "Start where you are. Use what you have. Do what you can.",
+    "The best time to plant a tree was twenty years ago. The second best time is now.",
+    "Success is the sum of small efforts, repeated day in and day out.",
+    "Focus on being productive instead of busy.",
+    "Well begun is half done.",
+    "It always seems impossible until it is done.",
+    "Do not watch the clock. Do what it does. Keep going.",
+    "Patience and persistence carry more people than talent does.",
+    "Every accomplishment starts with the decision to try."
+  ];
+
+  // A fixed cycle keyed to the date, so the line changes once a day and is
+  // the same for everyone visiting that day - not a fresh random pick per
+  // page load, which would feel arbitrary rather than daily.
+  function todaysQuote(){
+    var day = Math.floor(Date.now() / 86400000);
+    return QUOTES[day % QUOTES.length];
+  }
+
+  /* Do letter ka mulk ka code jhande mein. Har harf ko us ke regional
+     indicator se badalne par browser khud jhanda bana deta hai — koi
+     tasveer rakhne ki zarurat nahi. */
+  function flagOf(cc){
+    if (!cc || cc.length !== 2) return "";
+    var c = cc.toUpperCase();
+    if (!/^[A-Z]{2}$/.test(c)) return "";
+    return String.fromCodePoint(
+      0x1F1E6 + c.charCodeAt(0) - 65,
+      0x1F1E6 + c.charCodeAt(1) - 65);
+  }
+
+  function avatarImg(key, name){
+    // Tasveer ab link ke andar hai — is par click se seedha badalne ke
+    // safe par. Pehle ye link doosri jagah laga diya tha jo istemal hi
+    // nahi hoti thi.
+    var inner = key
+      ? '<img class="av" src="' + esc(key) + '" alt=""'
+        + ' onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),'
+        + '{className:\'av ph\',textContent:\'' + esc(name.charAt(0).toUpperCase()) + '\'}));">'
+      : '<span class="av ph">' + esc(name.charAt(0).toUpperCase()) + '</span>';
+    return '<a class="avlink" href="/account?pick=1" '
+      + 'title="Change your picture">' + inner + '</a>';
+  }
+
+  function confetti(el){
+    var bits = ["\ud83c\udf89","\ud83c\udf88","\u2728","\ud83c\udf8a","\ud83c\udf82"];
+    for (var i = 0; i < 14; i++){
+      var c = document.createElement("span");
+      c.className = "conf";
+      c.textContent = bits[i % bits.length];
+      c.style.left = (4 + Math.random() * 90) + "%";
+      c.style.animationDuration = (2.6 + Math.random() * 2.2) + "s";
+      c.style.animationDelay = (Math.random() * 2.4) + "s";
+      el.appendChild(c);
+    }
+  }
+
+  function weatherChip(city, retry){
+    var line = document.getElementById("wxline");
+    if (!line) return;
+    fetch("/api/weather/?city=" + encodeURIComponent(city), {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(w){
+        if (!w || w.temp === undefined) throw new Error("no data");
+        line.innerHTML = '<a class="v" href="/weather?city=' + encodeURIComponent(w.city)
+          + '">\ud83c\udf24\ufe0f ' + w.temp + '\u00b0C, ' + esc(w.description)
+          + ' in ' + esc(w.city) + '</a>';
+      })
+      .catch(function(){
+        // Phone par pehli koshish aksar us waqt hoti hai jab net abhi
+        // sambhla nahi hota. Ek dafa dobara, phir link — khali dash
+        // chhorne se lagta hai ke feature hi toota hua hai.
+        if (!retry){
+          setTimeout(function(){ weatherChip(city, true); }, 1500);
+          return;
+        }
+        line.innerHTML = '<a class="v dim" href="/weather">check the weather</a>';
+      });
+  }
+
+  fetch("/api/auth/home/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      document.body.classList.toggle("signed-in", !!u);
+      if (!u) return;
+
+      var hour = new Date().getHours();
+      var greet = hour < 5  ? "Still up"
+                : hour < 12 ? "Good morning"
+                : hour < 17 ? "Good afternoon"
+                : hour < 21 ? "Good evening"
+                            : "Good night";
+      var showQuote = hour < 5;
+
+      var h = '<div class="who">' + avatarImg(u.avatar_url || u.avatar, u.name)
+        + '<span class="t"><span class="greet">' + greet + '</span>'
+        + '<b>' + esc(u.name)
+        + (flagOf(u.country) ? ' <span class="flag"><img src="/flags/' + u.country.toLowerCase() + '.png" alt="" width="20" height="15" style="vertical-align:-2px;border-radius:2px" onerror="this.remove()">'
+                               + '</span>' : '') + '</b>'
+        + '<small>' + esc(u.email) + '</small></span></div>'
+
+                + (showQuote ? '<p class="quote">\u201c' + esc(todaysQuote()) + '\u201d</p>' : '')
++ '<div class="hellolines">'
+        + '<div class="ln"><span class="k">Today is</span>'
+        + '<span class="v today2" id="todayline">\u2014</span></div>'
+        + '<div class="ln"><span class="k">Your vibe is</span>'
+        + '<span id="vibeline"></span></div>'
+        + '<div class="ln"><span class="k">Your star is</span>'
+        + '<span id="starline"></span></div>'
+        + '<div class="ln"><span class="k">Weather</span>'
+        + '<span class="v" id="wxline">\u2014</span></div>'
+        + '<div class="ln cardlinerow"><span class="k">Your role</span>'
+        + '<span id="cardline">\u2014</span></div>'
+        + '</div>'
+        + '<div class="chips" id="chips" hidden>';
+
+      var starHtml = u.zodiac
+        ? '<a class="v" href="/zodiac?sign=' + esc(u.zodiac) + '">'
+          + (SIGN_EMOJI[u.zodiac] || "") + " " + esc(u.zodiac) + '</a>'
+        : '<a class="v dim" href="/account">not set \u2014 add your birthday</a>';
+
+      // The vibe result is kept on the device, so it can be shown without
+      // asking the server for anything.
+      // From the account first, so it is the same on every device.
+      var vibe = u.vibe || null;
+      if (!vibe){ try { vibe = localStorage.getItem("xc_vibe"); } catch(e){} }
+      else { try { localStorage.setItem("xc_vibe", vibe); } catch(e){} }
+      var VIBE_FACE = {dragon:"\ud83d\udc09", phoenix:"\ud83d\udd25",
+        siren:"\ud83e\udddc", dracula:"\ud83e\udddb", witch:"\ud83e\uddd9",
+        ghost:"\ud83d\udc7b", werewolf:"\ud83d\udc3a", elf:"\ud83e\udddd",
+        dodo:"\ud83d\udc26"};
+      var vibeHtml = vibe
+        ? '<a class="v" href="/vibe?v=' + esc(vibe) + '">'
+          + (VIBE_FACE[vibe] || "\u2728") + ' '
+          + esc(vibe.charAt(0).toUpperCase() + vibe.slice(1)) + '</a>'
+          + '<button class="sharebtn" id="shareVibe">Share</button>'
+        : '<a class="v dim" href="/vibe">not set \u2014 take the quiz</a>';
+
+      h += '</div>';
+
+      box.innerHTML = h;
+      box.classList.add("on");
+      var sl = document.getElementById("starline");
+      if (sl) sl.innerHTML = starHtml;
+      var vl = document.getElementById("vibeline");
+      if (vl) vl.innerHTML = vibeHtml;
+      var cl = document.getElementById("cardline");
+      if (cl){
+        // The visiting card used to sit here. A role is more worth a
+        // daily glance; the card now has its own tile in the apps.
+        fetch("/api/academy/badges/", {credentials:"same-origin"})
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(d){
+            if (!d || !d.role){
+              cl.innerHTML = '<a class="v dim" href="/academy/?v=badges">see your badges</a>';
+              return;
+            }
+            cl.innerHTML = '<a class="v" href="/academy/?v=badges">'
+              + esc(d.role.icon) + ' ' + esc(d.role.title)
+              + ' \u00b7 ' + d.earned + (d.earned === 1 ? ' medal' : ' medals') + '</a>';
+          })
+          .catch(function(){
+            cl.innerHTML = '<a class="v dim" href="/academy/?v=badges">see your badges</a>';
+          });
+      }
+
+
+      var sb = document.getElementById("shareVibe");
+      if (sb) sb.addEventListener("click", function(){
+        var nice = vibe.charAt(0).toUpperCase() + vibe.slice(1);
+        var text = "I got " + (VIBE_FACE[vibe] || "\u2728") + " " + nice
+          + " on XpertCreation. What's yours?";
+        var url = location.origin + "/vibe";
+        if (navigator.share){
+          navigator.share({title:"What's your vibe?", text:text, url:url}).catch(function(){});
+        } else if (navigator.clipboard){
+          navigator.clipboard.writeText(text + "\n" + url).then(function(){
+            sb.textContent = "Copied";
+            setTimeout(function(){ sb.textContent = "Share"; }, 2000);
+          }).catch(function(){});
+        }
+      });
+
+      startClock();
+
+      weatherChip("Lahore");
+
+      if (u.birthday_today && bd){
+        bd.innerHTML = '<div class="bcard" id="bcard">'
+          + '<h3>\ud83c\udf82 Happy birthday, ' + esc(u.name) + '!</h3>'
+          + '<p>' + (u.turning ? "You turn " + u.turning + " today. " : "")
+          + 'Everyone at XpertCreation wishes you a wonderful year ahead.</p>'
+          + '<a class="go2" href="/birthdays">See your birthday reminders \u2192</a></div>';
+        confetti(document.getElementById("bcard"));
+      }
+    })
+    .catch(function(){});
+
+
+})();
+</script>
+
+
+<script>
+/* Registers the worker that makes the site open without a connection.
+   Failure here is not worth reporting: the site works either way. */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  });
+}
+</script>
+
+<script>
+/* Install prompt. Held back until the browser offers it, and shown once:
+   a banner that reappears on every visit is an advert, not an offer. */
+(function(){
+  var deferred = null;
+
+  window.addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault();
+    deferred = e;
+
+    var seen = null;
+    try { seen = localStorage.getItem("xc_install"); } catch(err){}
+    if (seen) return;
+
+    var bar = document.createElement("div");
+    bar.id = "installbar";
+    bar.innerHTML =
+      '<img src="/brand/icon-64.png" alt="">'
+      + '<span class="t"><b>Install XpertCreation</b>'
+      + '<small>Opens like an app, and works offline</small></span>'
+      + '<button class="yes">Install</button>'
+      + '<button class="no" aria-label="Not now">&times;</button>';
+    document.body.appendChild(bar);
+    setTimeout(function(){ bar.classList.add("up"); }, 700);
+
+    bar.querySelector(".yes").addEventListener("click", function(){
+      bar.classList.remove("up");
+      try { localStorage.setItem("xc_install", "1"); } catch(err){}
+      if (deferred){ deferred.prompt(); deferred = null; }
+      setTimeout(function(){ bar.remove(); }, 400);
+    });
+    bar.querySelector(".no").addEventListener("click", function(){
+      bar.classList.remove("up");
+      try { localStorage.setItem("xc_install", "1"); } catch(err){}
+      setTimeout(function(){ bar.remove(); }, 400);
+    });
+  });
+})();
+</script>
+
+<div id="fbwrap">
+  <div id="fbform">
+    <h3>Write to us</h3>
+    <p class="sub2">This goes to the CEO&rsquo;s inbox, not a ticket queue.
+    You will get a reply from a person.</p>
+
+    <div class="kinds" id="fbkinds">
+      <button data-kind="feature" class="on">A feature I want</button>
+      <button data-kind="bug">Something is broken</button>
+      <button data-kind="suggestion">A suggestion</button>
+      <button data-kind="complaint">A complaint</button>
+    </div>
+
+    <div id="fbemailwrap" style="display:none">
+      <label for="fbemail">Your email</label>
+      <input id="fbemail" type="email" placeholder="so we can reply">
+    </div>
+
+    <label for="fbmsg">Your message</label>
+    <textarea id="fbmsg" maxlength="4000"
+      placeholder="Tell us what you need, or what went wrong."></textarea>
+
+    <p class="said2" id="fbsaid"></p>
+
+    <div class="acts2">
+      <button class="no2" data-close-fb>Cancel</button>
+      <button class="go4" id="fbsend">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Sent through the server rather than a mailto: link. On a phone a mailto
+   often opens nothing at all, and the message is simply lost. */
+(function(){
+  var wrap = document.getElementById("fbwrap");
+  if (!wrap) return;
+  var kind = "feature", busy = false;
+
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+  function say(text, ok){
+    var el = document.getElementById("fbsaid");
+    el.textContent = text;
+    el.className = "said2 on " + (ok ? "ok" : "err");
+  }
+
+  document.addEventListener("click", function(e){
+    if (e.target.closest("[data-open-fb]")){
+      e.preventDefault();
+      wrap.classList.add("on");
+      // Signed out, we need somewhere to reply to.
+      fetch("/api/auth/me/", {credentials:"same-origin"})
+        .then(function(r){
+          document.getElementById("fbemailwrap").style.display = r.ok ? "none" : "block";
+        }).catch(function(){
+          document.getElementById("fbemailwrap").style.display = "block";
+        });
+      return;
+    }
+    if (e.target.closest("[data-close-fb]") || e.target === wrap){
+      wrap.classList.remove("on");
+    }
+  });
+
+  document.getElementById("fbkinds").addEventListener("click", function(e){
+    var b = e.target.closest("[data-kind]");
+    if (!b) return;
+    kind = b.getAttribute("data-kind");
+    this.querySelectorAll("button").forEach(function(x){
+      x.classList.toggle("on", x === b);
+    });
+  });
+
+  document.getElementById("fbsend").addEventListener("click", function(){
+    if (busy) return;
+    var msg = document.getElementById("fbmsg").value.trim();
+    if (msg.length < 10) return say("Tell us a bit more \u2014 at least a sentence.", false);
+
+    var body = {kind: kind, message: msg, page: location.pathname};
+    var em = document.getElementById("fbemail");
+    if (em && em.offsetParent !== null) body.email = em.value.trim();
+
+    busy = true;
+    this.disabled = true;
+    var btn = this;
+
+    fetch("/api/auth/feedback/", {
+      method: "POST", credentials: "same-origin",
+      headers: {"Content-Type":"application/json", "X-CSRFToken": cookie("xc_csrf")},
+      body: JSON.stringify(body)
+    })
+    .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+    .then(function(res){
+      busy = false; btn.disabled = false;
+      if (!res.ok) return say(res.d.detail || "Could not send that.", false);
+      say(res.d.detail, true);
+      document.getElementById("fbmsg").value = "";
+      setTimeout(function(){ wrap.classList.remove("on"); }, 2200);
+    })
+    .catch(function(){
+      busy = false; btn.disabled = false;
+      say("Could not reach the server. Check your connection.", false);
+    });
+  });
+})();
+</script>
+
+<script>
+/* Members by country. Counts only - a list of who is online would tell
+   anyone watching which people are awake and which are away from home. */
+(function(){
+  var box = document.getElementById("geobox");
+  if (!box) return;
+
+  function fimg(code){
+    code = String(code || "").toLowerCase();
+    if (!/^[a-z]{2}$/.test(code)) return "";
+    return "<img src='/flags/" + code + ".png' alt='' width='20' height='15' loading='lazy' "
+      + "style='vertical-align:-2px;border-radius:2px;object-fit:cover' onerror='this.remove()'>";
+  }
+
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  fetch("/api/where/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if (!d || !d.members) return;
+
+      var h = '<div class="gh"><h4>Where our members are</h4>';
+      if (d.online){
+        h += '<span class="live"><i></i>' + d.online + ' online now</span>';
+      }
+      h += '</div><div class="tot">'
+        + '<span><b>' + d.members.toLocaleString() + '</b> members</span>'
+        + '<span><b>' + d.country_count + '</b> countries</span>';
+      if (d.you){
+        h += '<span>You are in ' + fimg(d.you.code) + ' ' + esc(d.you.name) + '</span>';
+      }
+      h += '</div>';
+
+      if (d.countries && d.countries.length){
+        h += '<div class="flags">' + d.countries.map(function(c){
+          var mine = d.you && d.you.code === c.code;
+          return '<span class="fl' + (mine ? " you" : "") + '" title="'
+            + esc(c.name) + '"><span class="em3">' + fimg(c.code) + '</span>'
+            + esc(c.name) + ' <b>' + c.members + '</b></span>';
+        }).join("");
+        if (d.elsewhere){
+          h += '<span class="fl"><span class="em3">\ud83c\udf0d</span>Elsewhere <b>'
+            + d.elsewhere + '</b></span>';
+        }
+        h += '</div>';
+      }
+
+      h += '<p class="priv">Country counts are public, and the newest members show a first name and initial. '
+        + 'You can hide your name from these lists in your privacy settings. Moderators can see which members are online.</p>';
+
+      box.innerHTML = h;
+      box.classList.add("on");
+
+      // Moderators also get the names of who is online. Everyone else gets a 403, silently.
+      fetch("/api/auth/online/", {credentials:"same-origin"})
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(o){
+          if (!o || !o.online || !o.online.length) return;
+          var l = "<div class='onl' style='margin-top:12px'><b style='font-size:13px'>"
+            + "Online now \u2014 visible to moderators only</b><div style='margin-top:6px'>";
+          o.online.forEach(function(p){
+            l += "<span style='display:inline-flex;align-items:center;gap:6px;margin:0 12px 6px 0'>"
+              + fimg(p.code) + esc(p.name) + " <small style='opacity:.6'>"
+              + (p.seen < 60 ? "now" : Math.round(p.seen / 60) + " min") + "</small></span>";
+          });
+          box.insertAdjacentHTML("beforeend", l + "</div></div>");
+        })
+        .catch(function(){});
+    })
+    .catch(function(){});
+})();
+</script>
+
+<script>
+/* The moderation link, for the people who have that job. Everyone else never
+   sees it - and the endpoint refuses them anyway, so hiding it is only tidiness. */
+(function(){
+  var bar = document.getElementById("modlink");
+  if (!bar) return;
+  fetch("/api/auth/role/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if (!d || !d.moderator) return;
+      bar.classList.add("on");
+      if (d.super){
+        document.getElementById("modsub").textContent =
+          "Review comments, and manage moderators";
+      }
+      if (d.pending){
+        var c = document.getElementById("modcnt");
+        c.textContent = d.pending + " waiting";
+        c.hidden = false;
+      }
+      // Videos waiting get their own bar, pointing straight at the
+      // queue - nobody should have to remember that address.
+      if (d.videos){
+        var v = document.createElement("a");
+        v.className = "modbar on";
+        v.href = "/academy/?v=vqueue";
+        v.innerHTML = '<span class="e5">&#127909;</span>'
+          + '<span class="t"><b>Videos</b>'
+          + '<small>Sent to a course, waiting to be checked</small></span>'
+          + '<span class="cnt2">' + Number(d.videos) + ' waiting</span>';
+        bar.parentNode.insertBefore(v, bar.nextSibling);
+      }
+    })
+    .catch(function(){});
+})();
+</script>
+
+<script>
+(function(){
+  var a = document.getElementById("supportlink");
+  if (!a) return;
+  fetch("/api/auth/role/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if (d && d.pending){
+        a.textContent = "Get help \u2192 (" + d.pending + " waiting)";
+      }
+    })
+    .catch(function(){});
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

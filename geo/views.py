@@ -86,7 +86,7 @@ def where(request):
 
     hit = cache.get("geo:summary")
     if hit is None:
-        rows = (User.objects.filter(is_active=True, is_email_verified=True)
+        rows = (User.objects.filter(is_active=True, is_blocked=False, is_email_verified=True)
                 .exclude(signup_country="")
                 .values("signup_country")
                 .annotate(n=Count("id")).order_by("-n"))
@@ -97,13 +97,13 @@ def where(request):
             if not code:
                 continue
             countries += 1
-            if r["n"] < 3:
+            if r["n"] < 1:   # every country shown, PenFlow style (was < 3)
                 folded += r["n"]
                 continue
             listed.append({"code": code, "flag": flag(code),
                            "name": NAMES.get(code, code), "members": r["n"]})
 
-        total = User.objects.filter(is_active=True, is_email_verified=True).count()
+        total = User.objects.filter(is_active=True, is_blocked=False, is_email_verified=True).count()
 
         hit = {"countries": listed[:24], "country_count": countries,
                "elsewhere": folded, "members": total}
@@ -111,10 +111,8 @@ def where(request):
 
     out.update(hit)
 
-    # Rounded down to the nearest five above twenty. "23 people online" on a
-    # small site is close to a headcount of who is about.
-    since = timezone.now() - timezone.timedelta(minutes=ONLINE_WINDOW)
-    live = User.objects.filter(last_login__gte=since).count()
-    out["online"] = live if live < 20 else (live // 5) * 5
+    # Same presence as the footer: signed-in members seen in the last five minutes.
+    from accounts.community import online_count
+    out["online"] = online_count()
 
     return Response(out)

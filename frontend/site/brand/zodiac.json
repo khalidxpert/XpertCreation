@@ -1,0 +1,302 @@
+{
+ "Aries": {
+  "emoji": "🐏",
+  "dates": "Mar 21 - Apr 19",
+  "element": "🔥 Fire",
+  "planet": "♂️ Mars",
+  "stone": "💎 Diamond",
+  "color": "❤️ Red",
+  "desc": "Aries is the first sign of the zodiac. Bold and ambitious, Aries dives headfirst into challenging situations.",
+  "love": "Passionate and direct in love. Best matches: Leo, Sagittarius, Gemini.",
+  "career": "Natural leaders. Great for entrepreneurship, military, sports, and management.",
+  "health": "Prone to headaches and stress. Regular exercise helps channel excess energy.",
+  "today": "Your energy is at peak today. Take initiative and start new projects. Financial opportunities await!",
+  "lucky": [
+   1,
+   8,
+   17
+  ],
+  "traits": [
+   "Courageous",
+   "Energetic",
+   "Confident",
+   "Impulsive",
+   "Adventurous"
+  ]
+ },
+ "Taurus": {
+  "emoji": "🐂",
+  "dates": "Apr 20 - May 20",
+  "element": "🌍 Earth",
+  "planet": "♀️ Venus",
+  "stone": "💚 Emerald",
+  "color": "💚 Green",
+  "desc": "Taurus is an earth sign represented by the bull. Taureans enjoy relaxing in serene environments.",
+  "love": "Loyal and sensual in love. Best matches: Virgo, Capricorn, Cancer.",
+  "career": "Excel in finance, art, cooking, and architecture.",
+  "health": "Watch out for throat issues. Enjoy nature walks and relaxation.",
+  "today": "Focus on financial matters today. A good day for long-term investments and home improvements.",
+  "lucky": [
+   2,
+   6,
+   9
+  ],
+  "traits": [
+   "Reliable",
+   "Patient",
+   "Practical",
+   "Stubborn",
+   "Devoted"
+  ]
+ },
+ "Gemini": {
+  "emoji": "👯",
+  "dates": "May 21 - Jun 20",
+  "element": "💨 Air",
+  "planet": "☿️ Mercury",
+  "stone": "💛 Agate",
+  "color": "💛 Yellow",
+  "desc": "Gemini is a versatile and curious sign. Represented by twins, Geminis have two sides to their personality.",
+  "love": "Playful and intellectual in love. Best matches: Libra, Aquarius, Aries.",
+  "career": "Great communicators. Excel in journalism, teaching, sales, and writing.",
+  "health": "Prone to nervous tension. Meditation and breathing exercises help.",
+  "today": "Communication is your superpower today. Network and socialize — great connections await!",
+  "lucky": [
+   3,
+   12,
+   23
+  ],
+  "traits": [
+   "Curious",
+   "Adaptable",
+   "Witty",
+   "Inconsistent",
+   "Communicative"
+  ]
+ },
+ "Cancer": {
+  "emoji": "🦀",
+  "dates": "Jun 21 - Jul 22",
+  "element": "💧 Water",
+  "planet": "🌙 Moon",
+  "stone": "🤍 Pearl",
+  "color": "⚪ Silver",
+  "desc": "Cancer is the cardinal water sign. Represented by the crab, Cancers are deeply intuitive and sentimental.",
+  "love": "Deeply caring in love. Best matches: Scorpio, Pisces, Taurus.",
+  "career": "Excel in nursing, childcare, real estate, and cooking.",
+  "health": "Watch digestive health. Home comforts and family time are healing.",
+  "today": "Trust your gut today. Family matters need attention. A nurturing gesture will go a long way.",
+  "lucky": [
+   2,
+   7,
+   11
+  ],
+  "traits": [
+   "Intuitive",
+   "Emotional",
+   "Protective",
+   "Moody",
+   "Loyal"
+  ]
+ },
+ "Leo": {
+  "emoji": "🦁",
+  "dates": "Jul 23 - Aug 22",
+  "element": "🔥 Fire",
+  "planet": "☀️ Sun",
+  "stone": "🟡 Ruby",
+  "color": "🟠 Gold",
+  "desc": "Leo is the royal sign of the zodiac. Leos are natural leaders who love being in the spotlight.",
+  "love": "Romantic and generous in love. Best matches: Aries, Sagittarius, Gemini.",
+  "career": "Born performers. Excel in acting, politics, management, and entertainment.",
+  "health": "Heart health is important. Regular cardio and creative outlets help.",
+  "today": "You are shining today! Lead with confidence. Creative projects get a boost. Romance is in the air!",
+  "lucky": [
+   1,
+   3,
+   10
+  ],
+  "traits": [
+   "Creative",
+   "Generous",
+   "Dramatic",
+   "Proud",
+   "Loyal"
+  ]
+ },
+ "Virgo": {
+  "emoji": "🌾",
+  "dates": "Aug 23 - Sep 22",
+  "element": "🌍 Earth",
+  "planet": "☿️ Mercury",
+  "stone": "💚 Peridot",
+  "color": "🟢 Green",
+  "desc": "Virgo is the sign of service and precision. Virgos are known for their analytical minds and attention to detail.",
+  "love": "Devoted and practical in love. Best matches: Taurus, Capricorn, Cancer.",
+  "career": "Excel in medicine, research, accounting, and editing.",
+  "health": "Digestive system needs care. Clean diet and routine are beneficial.",
+  "today": "Your analytical skills are sharp. Tackle complex problems today. Health improvements show results!",
+  "lucky": [
+   5,
+   14,
+   23
+  ],
+  "traits": [
+   "Analytical",
+   "Hardworking",
+   "Practical",
+   "Critical",
+   "Helpful"
+  ]
+ },
+ "Libra": {
+  "emoji": "⚖️",
+  "dates": "Sep 23 - Oct 22",
+  "element": "💨 Air",
+  "planet": "♀️ Venus",
+  "stone": "🔵 Opal",
+  "color": "🩷 Pink",
+  "desc": "Libra is the sign of balance and harmony. Libras are natural peacemakers who value justice.",
+  "love": "Romantic and balanced in love. Best matches: Gemini, Aquarius, Leo.",
+  "career": "Excel in law, diplomacy, design, and counseling.",
+  "health": "Kidney health needs attention. Balance work and rest.",
+  "today": "Harmony surrounds you today. Partnership opportunities arise. Trust your aesthetic sense!",
+  "lucky": [
+   6,
+   15,
+   24
+  ],
+  "traits": [
+   "Diplomatic",
+   "Fair",
+   "Social",
+   "Indecisive",
+   "Charming"
+  ]
+ },
+ "Scorpio": {
+  "emoji": "🦂",
+  "dates": "Oct 23 - Nov 21",
+  "element": "💧 Water",
+  "planet": "♇ Pluto",
+  "stone": "🔴 Topaz",
+  "color": "🟤 Maroon",
+  "desc": "Scorpio is the most intense sign. Scorpios are passionate, determined, and deeply emotional.",
+  "love": "Intense and loyal in love. Best matches: Cancer, Pisces, Virgo.",
+  "career": "Excel in research, psychology, surgery, and investigation.",
+  "health": "Reproductive health needs attention. Deep breathing and yoga help.",
+  "today": "Your intuition is powerful today. Secrets may be revealed. Transformation is in progress!",
+  "lucky": [
+   8,
+   11,
+   18
+  ],
+  "traits": [
+   "Passionate",
+   "Resourceful",
+   "Brave",
+   "Secretive",
+   "Determined"
+  ]
+ },
+ "Sagittarius": {
+  "emoji": "🏹",
+  "dates": "Nov 22 - Dec 21",
+  "element": "🔥 Fire",
+  "planet": "♃ Jupiter",
+  "stone": "🔵 Turquoise",
+  "color": "💙 Blue",
+  "desc": "Sagittarius is the archer of the zodiac. Sagittarians are adventurous, optimistic truth-seekers.",
+  "love": "Free-spirited in love. Best matches: Aries, Leo, Aquarius.",
+  "career": "Excel in travel, education, philosophy, and entrepreneurship.",
+  "health": "Hip and thigh health important. Outdoor activities are beneficial.",
+  "today": "Adventure calls! Expand your horizons today. Travel plans get a green light. Lucky financial news!",
+  "lucky": [
+   3,
+   9,
+   21
+  ],
+  "traits": [
+   "Optimistic",
+   "Adventurous",
+   "Honest",
+   "Restless",
+   "Philosophical"
+  ]
+ },
+ "Capricorn": {
+  "emoji": "🐐",
+  "dates": "Dec 22 - Jan 19",
+  "element": "🌍 Earth",
+  "planet": "♄ Saturn",
+  "stone": "🖤 Garnet",
+  "color": "⬛ Black",
+  "desc": "Capricorn is the most disciplined sign. Capricorns are ambitious, hardworking, and determined.",
+  "love": "Committed and serious in love. Best matches: Taurus, Virgo, Scorpio.",
+  "career": "Excel in finance, management, engineering, and government.",
+  "health": "Bone and joint health important. Yoga and stretching help.",
+  "today": "Hard work pays off today! Career advancement is likely. Stay disciplined and focused on goals.",
+  "lucky": [
+   4,
+   8,
+   13
+  ],
+  "traits": [
+   "Ambitious",
+   "Disciplined",
+   "Patient",
+   "Pessimistic",
+   "Responsible"
+  ]
+ },
+ "Aquarius": {
+  "emoji": "🏺",
+  "dates": "Jan 20 - Feb 18",
+  "element": "💨 Air",
+  "planet": "♅ Uranus",
+  "stone": "💙 Amethyst",
+  "color": "🔵 Blue",
+  "desc": "Aquarius is the visionary of the zodiac. Aquarians are forward-thinking humanitarians.",
+  "love": "Intellectual in love. Best matches: Gemini, Libra, Sagittarius.",
+  "career": "Excel in technology, science, social work, and innovation.",
+  "health": "Circulation needs attention. Group sports and social activities help.",
+  "today": "Innovation is your theme today. Think outside the box. Community involvement brings rewards!",
+  "lucky": [
+   4,
+   7,
+   11
+  ],
+  "traits": [
+   "Progressive",
+   "Original",
+   "Independent",
+   "Aloof",
+   "Humanitarian"
+  ]
+ },
+ "Pisces": {
+  "emoji": "🐟",
+  "dates": "Feb 19 - Mar 20",
+  "element": "💧 Water",
+  "planet": "♆ Neptune",
+  "stone": "🔵 Aquamarine",
+  "color": "🟣 Purple",
+  "desc": "Pisces is the most spiritual sign. Pisceans are compassionate, artistic, and deeply intuitive.",
+  "love": "Romantic and selfless in love. Best matches: Cancer, Scorpio, Taurus.",
+  "career": "Excel in art, music, healing, and spirituality.",
+  "health": "Immune system needs care. Rest, meditation, and water activities help.",
+  "today": "Your creativity flows beautifully today. Spiritual insights are powerful. Trust your dreams!",
+  "lucky": [
+   3,
+   7,
+   12
+  ],
+  "traits": [
+   "Compassionate",
+   "Artistic",
+   "Intuitive",
+   "Escapist",
+   "Gentle"
+  ]
+ }
+}

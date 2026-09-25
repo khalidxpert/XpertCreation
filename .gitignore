@@ -23,3 +23,7 @@ media/
 .vscode/
 .idea/
 .DS_Store
+frontend/site/geo/
+frontend/site/flags/
+frontend/site/tools-pages/
+frontend/site/docs/

@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Find a blood donor, or become one — XpertCreation Blood Bank</title>
+<!-- seo:start -->
+<meta name="description" content="Ek boond, kisi ki zindagi. Search for donors by blood group and city, or register as one. Your number is shared only when you say yes.">
+<link rel="canonical" href="https://xpertcreation.com/blood">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Find a blood donor, or become one — XpertCreation Blood Bank">
+<meta property="og:description" content="Ek boond, kisi ki zindagi. Search for donors by blood group and city, or register as one. Your number is shared only when you say yes.">
+<meta property="og:url" content="https://xpertcreation.com/blood">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Find a blood donor, or become one — XpertCreation Blood Bank">
+<meta name="twitter:description" content="Ek boond, kisi ki zindagi. Search for donors by blood group and city, or register as one. Your number is shared only when you say yes.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Find a blood donor, or become one","url":"https://xpertcreation.com/blood","description":"Ek boond, kisi ki zindagi. Search for donors by blood group and city, or register as one. Your number is shared only when you say yes.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<!-- seo:end -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="apple-touch-icon" href="/brand/icon-180.png">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --brand:#1B4DFF;--blood:#C0392B;--go:#00B37E;--warn:#B45309;--line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--paper);pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px)}
+.bg .a{width:460px;height:460px;background:#C0392B;top:-180px;left:-140px;opacity:.2}
+.bg .b{width:420px;height:420px;background:#1B4DFF;bottom:-170px;right:-140px;opacity:.16}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:rgba(246,247,251,.9);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top .chip{width:40px;height:40px;border-radius:9px;background:#14151A;display:block}
+.top .chip.gone{display:none}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.top .who{padding:7px 13px;border-radius:999px;background:var(--ink);color:#fff;font-size:12.5px;
+  font-weight:700;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top .who.out{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(25px,6vw,34px);letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14.5px;color:var(--ink-soft);margin-top:9px;max-width:52ch}
+.head{display:flex;align-items:baseline;gap:10px;margin:26px 2px 13px}
+.head h3{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.026em}
+.head small{font-size:12px;color:var(--ink-soft)}
+
+.tabs{display:flex;gap:7px;margin:18px 0;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:10px 17px;border-radius:999px;background:var(--card);
+  border:1px solid var(--line);font-size:13.5px;font-weight:600;white-space:nowrap}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tab .dot{display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;
+  border-radius:99px;background:var(--blood);color:#fff;font-size:10.5px;font-weight:700;
+  margin-left:6px;text-align:center}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.st{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px 6px;text-align:center}
+.st b{display:block;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03em;line-height:1}
+.st span{display:block;font-size:10.5px;color:var(--ink-soft);font-weight:600;margin-top:5px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:11px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin-bottom:5px}
+.fld input,.fld select,.fld textarea{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:15px;outline:none;font-family:inherit}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--brand);background:var(--card)}
+.fld .note{font-size:11.5px;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.checks{display:grid;gap:8px;margin-top:4px}
+.chk{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;
+  background:var(--paper);border:1.5px solid var(--line);cursor:pointer;font-size:14px}
+.chk.on{border-color:var(--brand);background:rgba(27,77,255,.05)}
+.chk .box{width:20px;height:20px;border-radius:6px;border:2px solid var(--line);
+  display:grid;place-items:center;color:transparent;font-size:12px;flex:0 0 auto}
+.chk.on .box{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn{width:100%;padding:14px;border-radius:13px;background:var(--brand);color:#fff;
+  font-weight:700;font-size:15px;margin-top:6px}
+.btn.blood{background:var(--blood)}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.4}
+
+.donor{display:flex;align-items:center;gap:12px;padding:14px;border-radius:15px;
+  background:var(--card);border:1px solid var(--line);margin-bottom:9px}
+.donor .bg2{width:46px;height:46px;border-radius:14px;background:var(--blood);color:#fff;
+  display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:15px;flex:0 0 auto}
+.donor .t{flex:1;min-width:0}
+.donor .t b{display:block;font-size:14.5px;font-weight:700}
+.donor .t small{display:block;font-size:12px;color:var(--ink-soft);margin-top:2px}
+.donor .act{padding:9px 15px;border-radius:11px;background:var(--ink);color:#fff;
+  font-size:12.5px;font-weight:700;white-space:nowrap}
+.donor .act.done{background:var(--paper);color:var(--ink-soft);border:1px solid var(--line)}
+.verified{display:inline-block;font-size:10.5px;font-weight:700;color:#00734F;
+  background:rgba(0,179,126,.12);border-radius:99px;padding:2px 7px;margin-left:6px}
+
+.phone{display:flex;align-items:center;gap:8px;margin-top:10px;padding:11px 13px;
+  border-radius:12px;background:rgba(0,179,126,.08);border:1px solid rgba(0,179,126,.32)}
+.phone .n{flex:1;font-family:var(--mono);font-size:15px;font-weight:700;direction:ltr}
+.phone a{padding:8px 13px;border-radius:10px;background:var(--go);color:#fff;
+  font-size:12.5px;font-weight:700}
+
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px}
+.pill.open{background:rgba(0,179,126,.13);color:#00734F}
+.pill.wait{background:rgba(180,83,9,.11);color:#92400E}
+.pill.no{background:var(--paper);color:var(--ink-soft);border:1px solid var(--line)}
+.pill.crit{background:rgba(192,57,43,.13);color:#8E2116}
+
+.msg{padding:12px 14px;border-radius:12px;font-size:13.5px;margin-bottom:14px;line-height:1.55}
+.msg.err{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.msg.ok{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.32);color:#00734F}
+.note{background:var(--card);border:1px dashed var(--line);border-radius:15px;padding:18px;
+  text-align:center;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+.note button{margin-top:12px;padding:11px 22px;border-radius:12px;background:var(--brand);
+  color:#fff;font-weight:700;font-size:13.5px}
+.privacy{background:rgba(27,77,255,.05);border:1px solid rgba(27,77,255,.2);border-radius:14px;
+  padding:14px;font-size:13px;color:var(--ink);line-height:1.6;margin-bottom:16px}
+.privacy b{display:block;margin-bottom:5px}
+
+/* floating support button */
+.wafab{position:fixed;z-index:80;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));
+  width:52px;height:52px;border-radius:17px;background:#25D366;display:grid;place-items:center;
+  box-shadow:0 8px 24px rgba(37,211,102,.4);transition:transform .16s}
+.wafab:active{transform:scale(.93)}
+.wafab svg{width:27px;height:27px;fill:#fff}
+body.rtl .wafab{right:auto;left:16px}
+@media(min-width:1100px){
+  .wafab{right:calc(50% - 520px);}
+  body.rtl .wafab{left:calc(50% - 520px);right:auto}
+}
+
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;
+  color:var(--ink-soft,#5A657C);flex:0 0 auto;transition:color .15s,border-color .15s}
+.gear:hover{color:var(--ink,#0D1424);border-color:var(--ink-soft,#5A657C)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.langwrap{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 11px;
+  border-radius:999px;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2)}
+.langwrap svg{width:16px;height:16px;fill:none;stroke:var(--ink-soft,#5A657C);
+  stroke-width:1.7;flex:0 0 auto}
+.langwrap select,.langwrap #langSel{border:none!important;background:none!important;
+  padding:2px 18px 2px 0!important;max-width:104px}
+
+.dirbox{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:12px}
+.dirhead{display:flex;align-items:center;gap:10px;padding:13px 15px;background:var(--paper);
+  border-bottom:1px solid var(--line)}
+.dirhead b{flex:1;font-size:14.5px;font-weight:700}
+.dirhead small{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.dircity{display:flex;align-items:center;gap:10px;padding:11px 15px;border-top:1px solid var(--line);cursor:pointer}
+.dircity:first-child{border-top:none}
+.dircity .n{flex:1;font-size:13.5px}
+.dircity .c{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.grpgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.grp{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:11px 4px;text-align:center}
+.grp b{display:block;font-family:var(--display);font-weight:800;font-size:16px;color:var(--blood)}
+.grp span{display:block;font-size:11px;color:var(--ink-soft);margin-top:2px}
+.km{font-family:var(--mono);font-size:11px;color:var(--ink-soft);white-space:nowrap}
+.giving{background:linear-gradient(135deg,rgba(0,179,126,.1),rgba(0,179,126,.03));
+  border:1px solid rgba(0,179,126,.35);border-radius:16px;padding:15px;margin-bottom:12px}
+.giving b{display:block;font-size:14.5px;margin-bottom:4px}
+.giving p{font-size:13px;color:var(--ink-soft);line-height:1.55}
+.giving button{margin-top:11px;padding:11px 20px;border-radius:12px;background:var(--go);
+  color:#fff;font-size:13.5px;font-weight:700}
+
+/* ---------- rating ---------- */
+.rate{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:20px;
+  padding:20px;margin-top:28px}
+.rate .top2{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rate .big2{font-family:var(--display),system-ui;font-weight:800;font-size:36px;
+  letter-spacing:-.04em;line-height:1}
+.rate .out{font-size:12.5px;color:var(--ink-soft,#5A657C)}
+.rate .top2 .t2{flex:1;min-width:120px}
+.rate .stars{font-size:17px;letter-spacing:2px;color:#F59E0B}
+.rate h4{font-family:var(--display),system-ui;font-weight:800;font-size:15px;
+  letter-spacing:-.02em;margin-bottom:4px}
+.rate .pick2{display:flex;gap:6px;margin-top:14px}
+.rate .pick2 button{width:44px;height:44px;border-radius:13px;background:var(--paper,#F6F7FB);
+  border:1.5px solid var(--line,#E4E8F2);font-size:21px;cursor:pointer;line-height:1;
+  transition:transform .14s,border-color .14s;padding:0}
+.rate .pick2 button:hover{transform:scale(1.08)}
+.rate .pick2 button.on{background:#FEF3C7;border-color:#F59E0B}
+.rate textarea{width:100%;margin-top:12px;padding:12px 13px;border:1.5px solid var(--line,#E4E8F2);
+  border-radius:13px;background:var(--paper,#F6F7FB);font-size:14.5px;font-family:inherit;
+  outline:none;resize:vertical;min-height:74px}
+.rate textarea:focus{border-color:var(--brand,#1B4DFF);background:#fff}
+.rate .send{margin-top:10px;padding:12px 24px;border-radius:13px;background:var(--ink,#0D1424);
+  color:#fff;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:inherit}
+.rate .send:disabled{opacity:.4;cursor:default}
+.rate .said{font-size:13px;color:#00734F;font-weight:600;margin-top:10px}
+.rate .said.wait{color:var(--warn,#B45309)}
+.rate .list2{margin-top:18px;display:grid;gap:10px}
+.rate .r2{padding:13px;border-radius:14px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2)}
+.rate .r2 .hd{display:flex;align-items:center;gap:9px}
+.rate .r2 .hd b{font-size:13.5px;font-weight:700;flex:1}
+.rate .r2 .hd .s{font-size:12px;color:#F59E0B;letter-spacing:1px}
+.rate .r2 .hd small{font-size:11px;color:var(--ink-soft,#5A657C)}
+.rate .r2 p{font-size:13.5px;line-height:1.6;margin-top:7px}
+.rate .none2{font-size:13px;color:var(--ink-soft,#5A657C);margin-top:14px}
+
+/* ---------- phone layout ---------- */
+@media (max-width: 560px){
+  /* Nothing may be wider than the screen. One stray element makes the whole
+     page scroll sideways, which feels broken even when nothing else is. */
+  html, body{overflow-x:hidden;max-width:100vw}
+
+  .top, .topbar{padding:10px 12px;gap:6px}
+  .top b, .topbar b, .brandbar b{font-size:15px}
+  .top .chip, .topbar .chip, .brandbar img{width:28px;height:28px}
+
+  /* The wordmark goes; the logo alone is enough on a small screen. */
+  .brandbar b{display:none}
+
+  .gear{width:36px;height:36px}
+  .langwrap{padding:4px 7px 4px 8px}
+  .langwrap select, .langwrap #langSel{max-width:60px;font-size:12.5px}
+  .acctbtn, .who{max-width:96px;font-size:11.5px;padding:5px 10px 5px 5px}
+  .acctbtn img, .acctbtn .ini{width:21px;height:21px;font-size:10px}
+
+  /* Cards to the edge, with the padding on the page instead. */
+  .wrap{padding-left:14px;padding-right:14px}
+  .hello{padding:18px 16px;border-radius:20px}
+  .hello .t b{font-size:19px}
+  .hellolines .ln{flex-wrap:wrap;gap:4px}
+  .hellolines .ln .k{min-width:78px;font-size:12.5px}
+  .hellolines .ln .v{font-size:13.5px}
+  .hellolines .today2{font-size:14.5px}
+
+  .grid2{grid-template-columns:1fr 1fr;gap:9px}
+  .tiles{gap:9px}
+  .slide{min-height:200px;padding:20px}
+  .slide h3{font-size:22px}
+  .about{padding:20px 16px}
+  .about .contact{grid-template-columns:1fr;gap:8px}
+  .about .contact a{display:flex;align-items:center;gap:12px;text-align:left;padding:12px}
+  .about .contact .ic2{margin:0}
+  .about .pic{width:66px;height:66px;border-radius:20px}
+
+  .row, .row3b, .two{grid-template-columns:1fr}
+  .row3b .swap{width:100%;height:38px}
+  .keys{gap:5px}
+  .keys button{padding:12px 0;font-size:14px}
+}
+
+@media (max-width: 380px){
+  .grid2{grid-template-columns:1fr}
+  .hello .av{width:48px;height:48px}
+  .hello .t b{font-size:17px}
+}
+
+.fld input.bad2,.fld select.bad2{border-color:#DC2626;background:rgba(220,38,38,.05)}
+.fld .why{display:none;font-size:12px;color:#B91C1C;font-weight:600;margin-top:5px}
+.fld .why.on{display:block}
+.emptyhint{text-align:center;padding:26px 18px;color:var(--ink-soft);font-size:13.5px;
+  line-height:1.6}
+.listhead{display:flex;align-items:baseline;gap:10px;margin:20px 2px 11px}
+.listhead h3{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.026em}
+.listhead small{font-size:12px;color:var(--ink-soft)}
+.listhead .cnt{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.reqcard{display:flex;align-items:center;gap:12px;padding:14px;border-radius:15px;
+  background:var(--card);border:1px solid var(--line);margin-bottom:9px}
+.reqcard.urgent{border-color:rgba(225,29,72,.4);
+  background:linear-gradient(180deg,rgba(225,29,72,.05),transparent)}
+.reqcard .bg3{width:44px;height:44px;border-radius:14px;background:var(--blood);color:#fff;
+  display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:15px;
+  flex:0 0 auto}
+.reqcard .t{flex:1;min-width:0}
+.reqcard .t b{display:block;font-size:14px;font-weight:700}
+.reqcard .t small{display:block;font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<div class="bg"><i class="a"></i><i class="b"></i></div>
+
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img class="chip" src="/brand/icon-64.png" alt="" onerror="this.classList.add('gone')">
+    <b>Blood Bank</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+  <a class="gear" href="https://xpertcreation.com/account" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></a>
+    <button class="who out" id="who">Sign in</button>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap"><div id="app"></div><section class="rate" id="ratebox"></section></div>
+
+<script>
+(function(){
+  "use strict";
+  var API = "/api/blood";
+  var me = null, donor = null, tab = "find", msg = "", msgType = "err";
+  var stats = null, results = null, myReqs = [], inbox = [], detail = null;
+  var lastSearch = '', openReqs = [];
+  var dir = null;
+  var GROUPS = ["A+","A-","B+","B-","AB+","AB-","O+","O-"];
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+  function api(path, opts){
+    opts = opts || {};
+    var h = {"Content-Type":"application/json"};
+    if (opts.method && opts.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch(API + path, {method:opts.method||"GET", headers:h, credentials:"same-origin",
+      body:opts.body ? JSON.stringify(opts.body) : undefined})
+      .then(function(r){ return r.json().catch(function(){return{};})
+        .then(function(d){ return {ok:r.ok, status:r.status, data:d}; }); })
+      .catch(function(){ return {ok:false,status:0,data:{detail:"Network error."}}; });
+  }
+  function val(id){ var e=document.getElementById(id); return e?String(e.value||"").trim():""; }
+  function checked(id){ var e=document.getElementById(id); return e ? e.classList.contains("on") : false; }
+
+  // Everything typed into the form, kept across re-renders. Without this an
+  // error wipes six fields because one was wrong.
+  var kept = {};
+
+  function keepForm(){
+    var ids = ["dn","dg","dc","dp","dl","rg","ru","rc","rh","rr","rp","fg","fc"];
+    ids.forEach(function(id){
+      var el = document.getElementById(id);
+      if (el && el.value !== "") kept[id] = el.value;
+    });
+    ["cCall","cWa","cSms","cAvail"].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) kept[id] = el.classList.contains("on");
+    });
+  }
+
+  function restoreForm(){
+    Object.keys(kept).forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (typeof kept[id] === "boolean") el.classList.toggle("on", kept[id]);
+      else if (el.value === "") el.value = kept[id];
+    });
+    // Put the cursor back on whatever was wrong, so the fix is one tap away.
+    if (badField){
+      var el = document.getElementById(badField);
+      if (el){
+        el.classList.add("bad2");
+        var why = el.parentNode.querySelector(".why");
+        if (why){ why.textContent = badWhy; why.classList.add("on"); }
+        el.focus();
+        el.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+      badField = null;
+    }
+  }
+
+  var badField = null, badWhy = "";
+
+  // Which field a message is about, so the right one can be marked.
+  function blame(detail){
+    var d = (detail || "").toLowerCase();
+    if (d.indexOf("blood group") >= 0) return ["dg", detail];
+    if (d.indexOf("city") >= 0) return ["dc", detail];
+    if (d.indexOf("international format") >= 0 || d.indexOf("phone") >= 0)
+      return ["dp", detail];
+    if (d.indexOf("last donation") >= 0) return ["dl", detail];
+    if (d.indexOf("hospital") >= 0) return ["rh", detail];
+    if (d.indexOf("contact number") >= 0) return ["rp", detail];
+    return [null, detail];
+  }
+
+  function say(m, kind){
+    msg = m;
+    msgType = kind || "err";
+    if (msgType === "err"){
+      var b = blame(m);
+      badField = b[0];
+      badWhy = b[1];
+    }
+    view();
+  }
+
+  function paintWho(){
+    var b=document.getElementById("who");
+    if(me){ b.textContent=(me.full_name||me.email.split("@")[0]).slice(0,16); b.className="who"; }
+    else { b.textContent="Sign in"; b.className="who out"; }
+  }
+  document.getElementById("who").addEventListener("click", function(){
+    location.href = me ? "https://xpertcreation.com/account"
+      : "https://xpertcreation.com/login?next=" + encodeURIComponent(location.href);
+  });
+
+  function groupOpts(sel){
+    return GROUPS.map(function(g){
+      return '<option value="'+g+'"'+(sel===g?' selected':'')+'>'+g+'</option>';
+    }).join("");
+  }
+
+  function tabs(){
+    var pending = inbox.filter(function(a){ return a.status==="pending" && a.request.live; }).length;
+    var items = [["find","Find blood"],["donate","Be a donor"],
+                 ["mine","My requests"],["inbox","Requests to me"],
+                 ["dir","Where donors are"]];
+    return '<div class="tabs">' + items.map(function(x){
+      return '<button class="tab'+(tab===x[0]?" on":"")+'" data-tab="'+x[0]+'">'+x[1]
+        + (x[0]==="inbox" && pending ? '<span class="dot">'+pending+'</span>' : '')
+        + '</button>';
+    }).join("") + '</div>';
+  }
+
+  function privacyBox(){
+    return '<div class="privacy"><b>How contact details work here</b>'
+      + 'Donor numbers are never listed. You send a request, the donor decides, '
+      + 'and only then do you see their number. Every release is recorded.</div>';
+  }
+
+  /* ---------------- views ---------------- */
+
+  function findView(){
+    var h = privacyBox()
+      + '<div class="card">'
+      + '<div class="two">'
+      + '<div class="fld"><label for="fg">Blood group needed</label>'
+      + '<select id="fg">' + groupOpts("O+") + '</select></div>'
+      + '<div class="fld"><label for="fc">City</label>'
+      + '<input id="fc" placeholder="Lahore"></div></div>'
+      + '<button class="btn blood" data-act="search">Search donors</button></div>';
+
+    // Shown on arrival, not only after a search: an empty screen reads as
+    // "there are no donors" when it means "you have not searched yet".
+    if (results){
+      h += '<div class="listhead"><h3>Donors</h3>'
+        + '<small>' + (lastSearch || "everyone available") + '</small>'
+        + '<span class="cnt">' + results.length + '</span></div>';
+      if (!results.length){
+        h += '<div class="note">No available donors matched. Try a nearby city, '
+          + 'or post a request so donors can find you.</div>';
+      }
+      results.forEach(function(d){
+        h += '<div class="donor"><span class="bg2">'+esc(d.blood_group)+'</span>'
+          + '<span class="t"><b>' + esc(d.name)
+          + (d.is_verified ? '<span class="verified">verified</span>' : '') + '</b>'
+          + '<small>' + esc(d.city) + (d.allow_whatsapp ? ' · WhatsApp ok' : '')
+          + (d.allow_call ? ' · calls ok' : ' · no calls') + '</small></span>'
+          + (d.km !== undefined && d.km !== null
+              ? '<span class="km">' + d.km + ' km</span>' : '')
+          + '<button class="act" data-ask="'+d.id+'">Ask</button></div>';
+      });
+    }
+    return h;
+  }
+
+  function donateView(){
+    var d = donor || {};
+    return '<div class="privacy"><b>Your number stays private</b>'
+      + 'It is never shown in searches. It is sent to one person only, after you '
+      + 'accept their request. You can stop being listed at any time.</div>'
+      + '<div class="card">'
+      + '<div class="fld"><label for="dn">Your name</label>'
+      + '<input id="dn" value="' + esc(d.name || (me && me.full_name) || "") + '"></div>'
+      + '<div class="two">'
+      + '<div class="fld"><label for="dg">Blood group</label>'
+      + '<select id="dg">' + groupOpts(d.blood_group) + '</select></div>'
+      + '<div class="fld"><label for="dc">City</label>'
+      + '<input id="dc" value="' + esc(d.city || "") + '" placeholder="Lahore"></div></div>'
+      + '<div class="fld"><label for="dp">Phone</label>'
+      + '<input id="dp" value="' + esc(d.phone || "") + '" placeholder="+923001234567">'
+      + '<p class="note">International format. Shared only when you accept a request.</p></div>'
+      + '<div class="fld"><label for="dl">Last donation (optional)</label>'
+      + '<input id="dl" type="date" value="' + esc(d.last_donation || "") + '">'
+      + '<p class="note">We hide you for 56 days after a donation, so nobody asks too soon.</p></div>'
+      + '<div class="checks">'
+      + chk("cCall", "Calls are fine", d.allow_call !== false)
+      + chk("cWa", "WhatsApp is fine", d.allow_whatsapp !== false)
+      + chk("cSms", "SMS is fine", !!d.allow_sms)
+      + chk("cAvail", "I am available to donate", d.is_available !== false)
+      + '</div>'
+      + '<button class="btn" data-act="savedonor">'
+      + (donor ? "Update my details" : "Register as a donor") + '</button>'
+      + (donor ? '<button class="btn ghost" data-act="deldonor">Remove me from the list</button>' : '')
+      + '</div>'
+      + (donor ? givingBox() + locationBox() : '');
+  }
+
+  function chk(id, label, on){
+    return '<div class="chk' + (on ? " on" : "") + '" id="'+id+'" data-chk="1">'
+      + '<span class="box">&#10003;</span><span>' + esc(label) + '</span></div>';
+  }
+
+  function mineView(){
+    if (detail) return detailView();
+    var h = '<div class="card">'
+      + '<div class="two">'
+      + '<div class="fld"><label for="rg">Blood group</label><select id="rg">'+groupOpts("O+")+'</select></div>'
+      + '<div class="fld"><label for="ru">Units</label><input id="ru" type="number" min="1" max="10" value="1"></div>'
+      + '</div>'
+      + '<div class="two">'
+      + '<div class="fld"><label for="rc">City</label><input id="rc" placeholder="Lahore"></div>'
+      + '<div class="fld"><label for="rr">Urgency</label><select id="rr">'
+      + '<option value="critical">Right now</option><option value="urgent" selected>Today</option>'
+      + '<option value="normal">Within a few days</option></select></div></div>'
+      + '<div class="fld"><label for="rh">Hospital</label><input id="rh" placeholder="Services Hospital"></div>'
+      + '<div class="fld"><label for="rp">Your contact number</label>'
+      + '<input id="rp" placeholder="+923001234567">'
+      + '<p class="note">Shown to a donor only after they accept.</p></div>'
+      + '<button class="btn blood" data-act="newreq">Post request</button></div>';
+
+    if (myReqs.length){
+      h += '<div class="head"><h3>Your requests</h3></div>';
+      myReqs.forEach(function(r){
+        h += '<div class="donor" data-open="'+r.id+'"><span class="bg2">'+esc(r.blood_group)+'</span>'
+          + '<span class="t"><b>' + esc(r.hospital) + '</b>'
+          + '<small>' + esc(r.city) + ' · ' + r.asked + ' asked · ' + r.accepted + ' accepted'
+          + ' · until ' + esc(r.expires) + '</small></span>'
+          + '<span class="pill ' + (r.live ? "open" : "no") + '">'
+          + esc(r.live ? "open" : r.status) + '</span></div>';
+      });
+    }
+    return h;
+  }
+
+  function detailView(){
+    var d = detail;
+    var h = '<button class="btn ghost" data-act="backmine" style="width:auto;padding:9px 16px">&larr; Back</button>'
+      + '<div class="head"><h3>' + esc(d.request.hospital) + '</h3>'
+      + '<small>' + esc(d.request.blood_group) + ' · ' + esc(d.request.city) + '</small></div>';
+    if (!d.asks.length) return h + '<div class="note">You have not asked anyone yet. '
+      + 'Search for donors and ask them.</div>';
+
+    d.asks.forEach(function(a){
+      var dn = a.donor;
+      h += '<div class="card"><div class="donor" style="border:none;padding:0;margin:0">'
+        + '<span class="bg2">'+esc(dn.blood_group)+'</span>'
+        + '<span class="t"><b>'+esc(dn.name)+'</b><small>'+esc(dn.city)+'</small></span>'
+        + '<span class="pill ' + (a.status==="accepted"?"open":a.status==="pending"?"wait":"no") + '">'
+        + esc(a.status==="pending"?"waiting":a.status) + '</span></div>';
+      if (a.donor.phone){
+        h += '<div class="phone"><span class="n">'+esc(dn.phone)+'</span>'
+          + (dn.allow_call ? '<a href="tel:'+esc(dn.phone)+'">Call</a>' : '')
+          + (dn.allow_whatsapp ? '<a href="https://wa.me/'+esc(dn.phone.replace(/\D/g,""))
+             +'" target="_blank" rel="noopener">WhatsApp</a>' : '')
+          + '</div>';
+      }
+      h += '</div>';
+    });
+    return h;
+  }
+
+  function inboxView(){
+    if (!donor) return '<div class="note">Register as a donor to receive requests.'
+      + '<br><button data-act="godonate">Be a donor</button></div>';
+    if (!inbox.length) return '<div class="note">No requests yet. '
+      + 'You will get an email when someone nearby needs your blood group.</div>';
+
+    var h = "";
+    inbox.forEach(function(a){
+      var r = a.request;
+      h += '<div class="card"><div class="donor" style="border:none;padding:0;margin:0 0 10px">'
+        + '<span class="bg2">'+esc(r.blood_group)+'</span>'
+        + '<span class="t"><b>'+esc(r.hospital)+'</b>'
+        + '<small>'+esc(r.city)+' · '+r.units+' unit(s) · '+esc(r.created)+'</small></span>'
+        + '<span class="pill ' + (r.urgency==="critical"?"crit":r.urgency==="urgent"?"wait":"no") + '">'
+        + esc(r.urgency) + '</span></div>'
+        + (r.note ? '<p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:10px">'
+                    + esc(r.note) + '</p>' : '');
+
+      if (a.status === "pending" && r.live){
+        h += '<div class="two"><button class="btn" data-yes="'+a.id+'">Accept &amp; share my number</button>'
+          + '<button class="btn ghost" data-no="'+a.id+'">Decline</button></div>';
+      } else if (a.status === "accepted"){
+        h += '<div class="phone"><span class="n">'+esc(r.contact||"")+'</span>'
+          + (r.contact ? '<a href="tel:'+esc(r.contact)+'">Call them</a>' : '') + '</div>';
+      } else {
+        h += '<span class="pill no">' + esc(!r.live ? "closed" : a.status) + '</span>';
+      }
+      h += '</div>';
+    });
+    return h;
+  }
+
+
+  function givingBox(){
+    var d = donor || {};
+    if (d.eligible_from){
+      return '<div class="giving" style="background:rgba(180,83,9,.06);'
+        + 'border-color:rgba(180,83,9,.3)"><b>Resting until ' + esc(d.eligible_from) + '</b>'
+        + '<p>You are hidden from searches until then. The 56-day gap is there to '
+        + 'protect you, not to slow anyone down.</p></div>';
+    }
+    return '<div class="giving"><b>Did you donate today?</b>'
+      + '<p>Tap once and we will hide you from searches for 56 days, so nobody '
+      + 'asks you too soon.</p>'
+      + '<button data-act="donated">I donated today</button></div>';
+  }
+
+  function locationBox(){
+    var on = donor && donor.share_location;
+    return '<div class="card"><div class="setrow" style="border:none;padding:0;margin:0">'
+      + '<span class="t" style="flex:1"><b style="font-size:14px">Share a rough location</b>'
+      + '<small style="display:block;font-size:12px;color:var(--ink-soft);margin-top:3px;line-height:1.5">'
+      + 'Lets requesters see who is nearest. Stored to about one kilometre &mdash; '
+      + 'never your street.</small></span></div>'
+      + '<button class="btn ghost" data-act="loc" style="margin-top:12px">'
+      + (on ? "Update my location" : "Share my location") + '</button>'
+      + (on ? '<button class="btn ghost" data-act="locoff">Stop sharing</button>' : '')
+      + '</div>';
+  }
+
+  function dirView(){
+    if (!dir) { loadDir(); return '<div class="note">Loading…</div>'; }
+    if (dir.city){
+      var h = '<button class="btn ghost" data-act="backdir" style="width:auto;padding:9px 16px">'
+        + '&larr; All cities</button>'
+        + '<div class="head"><h3>' + esc(dir.city) + '</h3></div><div class="grpgrid">';
+      dir.groups.forEach(function(g){
+        h += '<div class="grp"><b>' + esc(g.blood_group) + '</b>'
+          + '<span>' + g.donors + '</span></div>';
+      });
+      return h + '</div><p class="lead" style="margin-top:14px">Counts only. '
+        + 'Names and numbers are never listed here.</p>';
+    }
+    if (!dir.countries || !dir.countries.length){
+      return '<div class="note">No donors registered yet.</div>';
+    }
+    var h = '<p class="lead">How many donors are registered, and where. '
+      + 'No names, no contact details.</p>';
+    dir.countries.forEach(function(c){
+      h += '<div class="dirbox"><div class="dirhead"><b>' + esc(c.country) + '</b>'
+        + '<small>' + c.donors + ' donors</small></div>';
+      c.cities.forEach(function(x){
+        h += '<div class="dircity" data-city="' + esc(x.city) + '">'
+          + '<span class="n">' + esc(x.city) + '</span>'
+          + '<span class="c">' + x.donors + '</span></div>';
+      });
+      h += '</div>';
+    });
+    return h;
+  }
+
+  function view(){
+    keepForm();
+    var app = document.getElementById("app");
+    if (!me){
+      app.innerHTML = '<h1>Blood Bank</h1><p class="lead">Find a donor near you, or become one. '
+        + 'Contact details stay private until a donor agrees to share them.</p>'
+        + '<div class="note" style="margin-top:20px">Sign in to search or register.'
+        + '<br><button data-act="signin">Sign in</button></div>';
+      return;
+    }
+    var h = '<h1>Blood Bank</h1>';
+    if (stats){
+      h += '<div class="stats">'
+        + '<div class="st"><b>'+stats.donors+'</b><span>donors</span></div>'
+        + '<div class="st"><b>'+stats.open_requests+'</b><span>open requests</span></div>'
+        + '<div class="st"><b>'+stats.cities+'</b><span>cities</span></div></div>';
+    }
+    h += tabs();
+    if (msg) h += '<div class="msg '+msgType+'">'+esc(msg)+'</div>';
+    h += tab === "find" ? findView()
+       : tab === "donate" ? donateView()
+       : tab === "mine" ? mineView()
+       : tab === "dir" ? dirView()
+       : inboxView();
+    app.innerHTML = h;
+    restoreForm();
+  }
+
+  /* ---------------- actions ---------------- */
+
+  document.getElementById("app").addEventListener("click", function(e){
+    var t = e.target.closest("[data-tab]");
+    if (t){ tab = t.getAttribute("data-tab"); msg=""; detail=null;
+            if (tab==="mine") loadReqs(); if (tab==="inbox") loadInbox(); return view(); }
+
+    var c = e.target.closest("[data-chk]");
+    if (c){ c.classList.toggle("on"); return; }
+
+    var city = e.target.closest("[data-city]");
+    if (city) return loadDir(city.getAttribute("data-city"));
+
+    var open = e.target.closest("[data-open]");
+    if (open) return loadDetail(open.getAttribute("data-open"));
+
+    var askBtn = e.target.closest("[data-ask]");
+    if (askBtn) return doAsk(askBtn.getAttribute("data-ask"), askBtn);
+
+    var yes = e.target.closest("[data-yes]");
+    if (yes) return answer(yes.getAttribute("data-yes"), true);
+    var no = e.target.closest("[data-no]");
+    if (no) return answer(no.getAttribute("data-no"), false);
+
+    var a = e.target.closest("[data-act]");
+    if (!a) return;
+    var act = a.getAttribute("data-act");
+
+    if (act === "signin"){
+      location.href = "https://xpertcreation.com/login?next=" + encodeURIComponent(location.href);
+    } else if (act === "godonate"){ tab = "donate"; view(); }
+    else if (act === "backmine"){ detail = null; view(); }
+    else if (act === "search"){ doSearch(); }
+    else if (act === "savedonor"){ saveDonor(); }
+    else if (act === "deldonor"){ delDonor(); }
+    else if (act === "newreq"){ newReq(); }
+    else if (act === "donated"){ markDonated(); }
+    else if (act === "loc"){ shareLocation(); }
+    else if (act === "locoff"){ stopLocation(); }
+    else if (act === "backdir"){ dir = null; loadDir(); }
+  });
+
+  function doSearch(quiet){
+    var g = val("fg"), c = val("fc");
+    lastSearch = [g, c].filter(Boolean).join(" in ") || "everyone available";
+    api("/search/?blood_group=" + encodeURIComponent(g) + "&city=" + encodeURIComponent(c))
+      .then(function(r){
+        if (!r.ok) return say(r.data.detail || "Search failed.");
+        results = r.data.donors; msg = ""; view();
+      });
+  }
+
+  function saveDonor(){
+    var body = {
+      name: val("dn"), blood_group: val("dg"), city: val("dc"), phone: val("dp"),
+      last_donation: val("dl"),
+      allow_call: checked("cCall"), allow_whatsapp: checked("cWa"),
+      allow_sms: checked("cSms"), is_available: checked("cAvail"),
+    };
+    api("/me/", {method:"POST", body:body}).then(function(r){
+      if (!r.ok) return say(r.data.detail || "Could not save.");
+      donor = r.data.donor;
+      kept = {};
+      say("Saved. You are listed as a donor.", "ok");
+    });
+  }
+
+  function delDonor(){
+    if (!confirm("Remove yourself from the donor list?")) return;
+    api("/me/", {method:"DELETE"}).then(function(){
+      donor = null; say("You are no longer listed.", "ok");
+    });
+  }
+
+  function newReq(){
+    var body = { blood_group: val("rg"), units: val("ru"), city: val("rc"),
+                 hospital: val("rh"), urgency: val("rr"), contact_phone: val("rp") };
+    api("/requests/", {method:"POST", body:body}).then(function(r){
+      if (!r.ok) return say(r.data.detail || "Could not post.");
+      kept = {}; msg = ""; loadReqs();
+      say("Posted. Now search donors and ask them.", "ok");
+    });
+  }
+
+  function doAsk(id, btn){
+    var open = myReqs.filter(function(r){ return r.live; });
+    if (!open.length){
+      tab = "mine";
+      return say("Post a request first, then ask donors.");
+    }
+    btn.disabled = true;
+    api("/ask/", {method:"POST", body:{request: open[0].id, donor: parseInt(id,10)}})
+      .then(function(r){
+        if (!r.ok){ btn.disabled = false; return say(r.data.detail || "Could not ask."); }
+        btn.textContent = "Asked";
+        btn.className = "act done";
+        say("Asked. You will see their number if they accept.", "ok");
+      });
+  }
+
+  function answer(id, accept){
+    api("/inbox/" + id + "/answer/", {method:"POST", body:{accept: accept}})
+      .then(function(r){
+        if (!r.ok) return say(r.data.detail || "Could not answer.");
+        loadInbox();
+        say(r.data.detail, accept ? "ok" : "err");
+      });
+  }
+
+
+  function markDonated(){
+    if (!confirm("Record a donation today? You will be hidden from searches for 56 days.")) return;
+    api("/donated/", {method:"POST"}).then(function(r){
+      if (!r.ok) return say(r.data.detail || "Could not save.");
+      if (donor) donor.eligible_from = r.data.eligible_from;
+      say(r.data.detail, "ok");
+    });
+  }
+
+  function shareLocation(){
+    if (!navigator.geolocation) return say("This browser cannot share a location.");
+    say("Getting your location…", "ok");
+    navigator.geolocation.getCurrentPosition(function(pos){
+      // Rounded here as well as on the server: the precise reading should not
+      // even leave the device.
+      var lat = Math.round(pos.coords.latitude * 100) / 100;
+      var lng = Math.round(pos.coords.longitude * 100) / 100;
+      api("/location/", {method:"POST", body:{share:true, lat:lat, lng:lng}})
+        .then(function(r){
+          if (!r.ok) return say(r.data.detail || "Could not save.");
+          if (donor) donor.share_location = true;
+          say("Saved, to about a kilometre.", "ok");
+        });
+    }, function(){
+      say("Could not get your location. Check the browser's permission.");
+    }, {enableHighAccuracy:false, timeout:10000, maximumAge:600000});
+  }
+
+  function stopLocation(){
+    api("/location/", {method:"POST", body:{share:false}}).then(function(){
+      if (donor) donor.share_location = false;
+      say("Location sharing turned off.", "ok");
+    });
+  }
+
+  function loadDir(city){
+    dir = null;
+    return api("/directory/" + (city ? "?city=" + encodeURIComponent(city) : ""))
+      .then(function(r){ dir = r.ok ? r.data : {countries:[]}; view(); });
+  }
+
+  function loadReqs(){ return api("/requests/").then(function(r){
+    if (r.ok) myReqs = r.data.requests || []; view(); }); }
+  function loadInbox(){ return api("/inbox/").then(function(r){
+    if (r.ok) inbox = r.data.asks || []; view(); }); }
+  function loadDetail(id){ return api("/requests/"+id+"/").then(function(r){
+    if (r.ok){ detail = r.data; tab = "mine"; view(); } }); }
+
+  /* ---------------- boot ---------------- */
+
+  fetch("/api/auth/csrf/", {credentials:"same-origin"});
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      me = u; paintWho();
+      if (!me) return view();
+      return Promise.all([
+        api("/stats/").then(function(r){ if (r.ok) stats = r.data; }),
+        api("/me/").then(function(r){ if (r.ok && r.data.registered) donor = r.data.donor; }),
+        api("/inbox/").then(function(r){ if (r.ok) inbox = r.data.asks || []; }),
+        api("/requests/").then(function(r){ if (r.ok) myReqs = r.data.requests || []; }),
+        api("/open/").then(function(r){ if (r.ok) openReqs = r.data.requests || []; }),
+        // An empty search means "everyone available", which is what somebody
+        // arriving actually wants to see.
+        api("/search/").then(function(r){ if (r.ok) results = r.data.donors || []; })
+      ]).then(view);
+    });
+})();
+</script>
+
+<a class="wafab" href="https://wa.me/923009462916" target="_blank" rel="noopener"
+   aria-label="Message support on WhatsApp" title="Message support on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.5 12.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.9-.4-1.7-.9-2.4-1.6-.6-.7-1.1-1.4-1.4-2.2-.1-.2-.1-.4.1-.5.2-.2.4-.5.6-.7.1-.2.2-.3.1-.5-.1-.3-.7-1.8-.9-2.1-.1-.3-.3-.3-.5-.3h-.6c-.2 0-.5.1-.7.4-.6.6-1 1.4-.9 2.3 0 1.1.4 2.1 1 3 1 1.6 2.3 2.9 3.9 3.8.6.3 1.2.6 1.9.7.6.2 1.3.2 2 .1.8-.2 1.5-.7 1.9-1.4.2-.4.2-.8.1-1.2 0-.1-.1-.2-.3-.3z"/></svg>
+</a>
+
+<script>
+/* Registers the worker that makes the site open without a connection.
+   Failure here is not worth reporting: the site works either way. */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  });
+}
+</script>
+
+<script>
+/* Ratings. Stars go live at once; a written comment waits to be read, because
+   a star cannot carry abuse or a spam link and a sentence can. */
+(function(){
+  var MODULE = "blood";
+  var wrap = document.getElementById("ratebox");
+  if (!wrap) return;
+
+  var picked = 0, mine = null, busy = false;
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+  function stars(n){
+    return "\u2605".repeat(Math.round(n)) + "\u2606".repeat(5 - Math.round(n));
+  }
+
+  function draw(d){
+    var h = '<div class="top2">';
+    if (d.count){
+      h += '<span class="big2">' + d.average + '</span>'
+        + '<span class="t2"><span class="stars">' + stars(d.average) + '</span>'
+        + '<span class="out" style="display:block">out of 5, from '
+        + d.count + (d.count === 1 ? ' person' : ' people') + '</span></span>';
+    } else {
+      h += '<span class="t2"><h4>Rate this</h4>'
+        + '<span class="out">Nobody has rated it yet.</span></span>';
+    }
+    h += '</div>';
+
+    h += '<h4 style="margin-top:16px">'
+      + (mine ? "Your rating" : "How was it?") + '</h4>'
+      + '<div class="pick2">';
+    for (var i = 1; i <= 5; i++){
+      h += '<button data-star="' + i + '" class="'
+        + (i <= picked ? "on" : "") + '">'
+        + (i <= picked ? "\u2605" : "\u2606") + '</button>';
+    }
+    h += '</div>'
+      + '<textarea id="rcomment" maxlength="600" placeholder="Say a bit more '
+      + '(optional)">' + esc(mine && mine.comment ? mine.comment : "") + '</textarea>'
+      + '<button class="send" id="rsend"' + (picked ? "" : " disabled") + '>'
+      + (mine ? "Update" : "Send") + '</button>';
+
+    if (mine && mine.state === "pending"){
+      h += '<p class="said wait">Your rating counts already. '
+        + 'The comment appears once we have read it.</p>';
+    }
+
+    if (d.reviews && d.reviews.length){
+      h += '<div class="list2">';
+      d.reviews.forEach(function(r){
+        h += '<div class="r2"><div class="hd">'
+          + '<b>' + esc(r.name) + '</b>'
+          + '<span class="s">' + stars(r.stars) + '</span>'
+          + '<small>' + esc(r.when) + '</small></div>'
+          + '<p>' + esc(r.comment) + '</p></div>';
+      });
+      h += '</div>';
+    }
+
+    wrap.innerHTML = h;
+  }
+
+  function load(){
+    fetch("/api/reviews/" + MODULE + "/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        mine = d.mine || null;
+        picked = mine ? mine.stars : 0;
+        draw(d);
+      })
+      .catch(function(){});
+  }
+
+  wrap.addEventListener("click", function(e){
+    var st = e.target.closest("[data-star]");
+    if (st){
+      picked = parseInt(st.getAttribute("data-star"), 10);
+      var btns = wrap.querySelectorAll("[data-star]");
+      btns.forEach(function(b, i){
+        var on = (i + 1) <= picked;
+        b.classList.toggle("on", on);
+        b.textContent = on ? "\u2605" : "\u2606";
+      });
+      var send = document.getElementById("rsend");
+      if (send) send.disabled = false;
+      return;
+    }
+
+    if (e.target.id === "rsend"){
+      if (busy || !picked) return;
+      busy = true;
+      e.target.disabled = true;
+      var box = document.getElementById("rcomment");
+      fetch("/api/reviews/" + MODULE + "/mine/", {
+        method: "POST", credentials: "same-origin",
+        headers: {"Content-Type":"application/json", "X-CSRFToken": cookie("xc_csrf")},
+        body: JSON.stringify({stars: picked, comment: box ? box.value : ""})
+      })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+      .then(function(res){
+        busy = false;
+        if (!res.ok){
+          alert(res.d.detail || "Could not save that.");
+          return;
+        }
+        load();
+      })
+      .catch(function(){ busy = false; });
+    }
+  });
+
+  load();
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Learn and use</h5>
+      <ul>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/people">Connect</a></li>
+        <li><a href="/pets">Pets</a></li>
+        <li><a href="/shows">Shows</a></li>
+        <li><a href="/docs">Guide</a></li>
+        <li><a href="/games">Games</a></li>
+        <li><a href="/money">Money</a></li>
+        <li><a href="/business">Business</a></li>
+        <li><a href="/blood">Blood bank</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+</body>
+</html>

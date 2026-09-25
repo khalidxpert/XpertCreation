@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import SimpleRateThrottle
 
-from .models import Score, Session, Stats
+from .models import Room, Score, Session, Stats
 
 # Memory: pairs per level, and the emoji they are drawn from.
 # Six pairs was over in twenty seconds. These give a real game.
@@ -334,3 +334,239 @@ def my_stats(request):
         "total_points": st.total_points,
         "streak": st.current_streak, "longest_streak": st.longest_streak,
     })
+
+# ------------------------------------------------------------------ rooms
+#
+# Do khiladi, do alag device. Websockets is API mein nahi hain, is liye
+# frontend har do second halat poochta hai. Chess ki chaalein tez tez
+# nahi hoti, to ye kaafi hai aur server par bojh bhi kam.
+
+ROOM_GAMES = {"chess", "tictac"}
+# H aur X, U aur V, S aur 5, Z aur 2 — ye chhote font mein mil jate
+# hain. Sirf wo harf rakhe hain jo saaf alag nazar aate hain.
+ROOM_CODE_CHARS = "ACDEFGJKLMNPQRTWY3479"   # I, O, 0, 1 nahi — parhne mein galti hoti hai
+
+
+def _room_code():
+    for _ in range(40):
+        code = "".join(secrets.choice(ROOM_CODE_CHARS) for _ in range(5))
+        if not Room.objects.filter(code=code).exists():
+            return code
+    return None
+
+
+def _fresh_state(game):
+    if game == "tictac":
+        return {"cells": [""] * 9}
+    return {"moves": [], "fen": ""}
+
+
+def _room_json(room, me):
+    side = room.side_of(me)
+    return {
+        "code": room.code,
+        "game": room.game,
+        "stage": room.stage,
+        "you": side,
+        "your_turn": bool(side) and room.turn == side and room.stage == Room.PLAYING,
+        "turn": room.turn,
+        "state": room.state,
+        "result": room.result,
+        "host_name": ((room.host.full_name or "").strip() or "Player"),
+        "guest_name": ((room.guest.full_name or "").strip() or "Player")
+                      if room.guest_id else None,
+        "moved_at": room.moved_at.isoformat(),
+        # Who is at the board, and whether this person is only watching
+        "host_here": room.here("host"),
+        "guest_here": room.here("guest") if room.guest_id else False,
+        "watching": side is None,
+    }
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([PlayThrottle])
+def room_create(request):
+    game = str(request.data.get("game") or "").strip()
+    if game not in ROOM_GAMES:
+        return _err("Unknown game.")
+
+    # Pehle se khula room ho to wahi wapas dein. Naya banane se purana
+    # code bekaar ho jata tha aur doosra khiladi "not found" dekhta tha.
+    open_room = Room.objects.filter(host=request.user, game=game,
+                                    stage=Room.OPEN).first()
+    if open_room:
+        if open_room.stale:
+            open_room.delete()
+        else:
+            return Response(_room_json(open_room, request.user))
+
+    code = _room_code()
+    if not code:
+        return _err("Could not make a room. Try again.", status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    room = Room.objects.create(
+        code=code, game=game, host=request.user,
+        state=_fresh_state(game), turn="host")
+    return Response(_room_json(room, request.user))
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([PlayThrottle])
+def room_join(request):
+    code = str(request.data.get("code") or "").strip().upper()[:8]
+    if not code:
+        return _err("Enter the room code.")
+    room = Room.objects.filter(code=code).first()
+    if not room:
+        return _err("No room with that code.", status.HTTP_404_NOT_FOUND)
+
+    # Apne hi room mein wapas aana jaiz hai (page refresh, ya doosra tab)
+    if room.side_of(request.user):
+        return Response(_room_json(room, request.user))
+
+    if room.stage != Room.OPEN or room.guest_id:
+        return _err("That room is already full.")
+
+    room.guest = request.user
+    room.stage = Room.PLAYING
+    room.moved_at = timezone.now()
+    room.save(update_fields=["guest", "stage", "moved_at"])
+    return Response(_room_json(room, request.user))
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def room_state(request, code):
+    room = Room.objects.filter(code=str(code).upper()[:8]).first()
+    if not room:
+        return _err("No room with that code.", status.HTTP_404_NOT_FOUND)
+    side = room.side_of(request.user)
+    if side:
+        # Note that this player is still at the board.
+        now = timezone.now()
+        if side == "host":
+            room.host_seen = now
+            room.save(update_fields=["host_seen"])
+        else:
+            room.guest_seen = now
+            room.save(update_fields=["guest_seen"])
+    # Anyone else with the code may watch. They cannot move: room_move
+    # turns away everybody who is not one of the two players.
+    return Response(_room_json(room, request.user))
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([PlayThrottle])
+def room_move(request, code):
+    room = Room.objects.filter(code=str(code).upper()[:8]).first()
+    if not room:
+        return _err("No room with that code.", status.HTTP_404_NOT_FOUND)
+
+    side = room.side_of(request.user)
+    if not side:
+        return _err("You are not in that room.", status.HTTP_403_FORBIDDEN)
+    if room.stage != Room.PLAYING:
+        return _err("That game is not running.")
+    if room.turn != side:
+        return _err("Not your turn.")
+
+    if room.game == "tictac":
+        # Nau khane — jaanch yahin ho sakti hai, is liye yahin hoti hai.
+        try:
+            cell = int(request.data.get("cell"))
+        except (TypeError, ValueError):
+            return _err("Which square?")
+        cells = room.state.get("cells") or [""] * 9
+        if not (0 <= cell < 9):
+            return _err("That square does not exist.")
+        if cells[cell]:
+            return _err("That square is taken.")
+        mark = "X" if side == "host" else "O"
+        cells[cell] = mark
+        room.state = {"cells": cells}
+
+        won = None
+        for a, b, c in WIN_LINES:
+            if cells[a] and cells[a] == cells[b] == cells[c]:
+                won = cells[a]
+                room.state["line"] = [a, b, c]
+                break
+        if won:
+            room.result = "host" if won == "X" else "guest"
+            room.stage = Room.OVER
+        elif all(cells):
+            room.result = "draw"
+            room.stage = Room.OVER
+
+    else:
+        # Chess: chaal browser mein jaanchi ja chuki hai. Server sirf halat
+        # rakhta hai aur baari sambhalta hai.
+        mv = request.data.get("move")
+        if not isinstance(mv, dict):
+            return _err("Send the move.")
+        moves = room.state.get("moves") or []
+        if len(moves) > 600:
+            return _err("That game has gone on long enough.")
+        moves.append({
+            "from": mv.get("from"), "to": mv.get("to"),
+            "promo": mv.get("promo") or "", "san": str(mv.get("san") or "")[:12],
+        })
+        room.state = {"moves": moves}
+        over = str(request.data.get("over") or "")
+        if over in ("mate", "stalemate", "draw", "resign"):
+            room.stage = Room.OVER
+            room.result = ("host" if side == "host" else "guest") if over == "mate" \
+                          else ("guest" if side == "host" else "host") if over == "resign" \
+                          else "draw"
+
+    if room.stage == Room.PLAYING:
+        room.turn = "guest" if side == "host" else "host"
+    room.moved_at = timezone.now()
+    room.save(update_fields=["state", "turn", "stage", "result", "moved_at"])
+    return Response(_room_json(room, request.user))
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def room_leave(request, code):
+    room = Room.objects.filter(code=str(code).upper()[:8]).first()
+    if not room:
+        return _err("No room with that code.", status.HTTP_404_NOT_FOUND)
+    side = room.side_of(request.user)
+    if not side:
+        return _err("You are not in that room.", status.HTTP_403_FORBIDDEN)
+    if room.stage == Room.PLAYING:
+        room.stage = Room.OVER
+        room.result = "guest" if side == "host" else "host"
+        room.save(update_fields=["stage", "result"])
+    elif room.stage == Room.OPEN and side == "host":
+        room.delete()
+        return Response({"ok": True})
+    return Response(_room_json(room, request.user))
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def rooms_live(request):
+    """Games running right now, so there is something to watch without
+    being handed a code first. Only ones that have actually started, and
+    only ones somebody has touched in the last ten minutes."""
+    from datetime import timedelta
+    since = timezone.now() - timedelta(minutes=10)
+    rows = (Room.objects.filter(stage=Room.PLAYING, moved_at__gte=since)
+            .select_related("host", "guest").order_by("-moved_at")[:20])
+
+    def name(u):
+        if not u:
+            return "\u2014"
+        return (u.full_name or "").strip() or "Player"
+
+    return Response({"rooms": [{
+        "code": r.code, "game": r.game,
+        "host": name(r.host), "guest": name(r.guest),
+        "moves": len((r.state or {}).get("moves") or []),
+        "host_here": r.here("host"), "guest_here": r.here("guest"),
+    } for r in rows]})

@@ -1,0 +1,1147 @@
+{
+ "day-1": {
+  "t": "Day 1 - Your first Python",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print something and see it happen",
+     "Put a value in a variable and use it",
+     "Know what an error looks like and not panic"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. Everything on this page runs in your browser - nothing to install."
+   },
+   {
+    "k": "h",
+    "v": "1) print"
+   },
+   {
+    "k": "p",
+    "v": "print() puts something on the screen. That is the whole of it. Press Run and see."
+   },
+   {
+    "k": "run",
+    "v": "python\nprint(\"Hello\")\nprint(\"My name is Khalid\")"
+   },
+   {
+    "k": "p",
+    "v": "Now change the name to yours and press Run again. The box is yours to edit - break it, fix it, that is what it is for."
+   },
+   {
+    "k": "h",
+    "v": "2) Variables"
+   },
+   {
+    "k": "p",
+    "v": "A variable is a name for a value. You make one by writing the name, an equals sign, and the value. No keyword, no type, no declaration."
+   },
+   {
+    "k": "run",
+    "v": "python\nname = \"Ayesha\"\nage = 30\n\nprint(name)\nprint(age)"
+   },
+   {
+    "k": "tip",
+    "v": "If you did the VBA course: this is Dim name As String followed by name = \"Ayesha\", except Python skips the Dim. It works out the type from what you put in."
+   },
+   {
+    "k": "h",
+    "v": "3) The equals sign is not equality"
+   },
+   {
+    "k": "p",
+    "v": "x = 5 does not claim that x equals five. It puts five into x. You can put something else in a moment later, and the old value is gone."
+   },
+   {
+    "k": "run",
+    "v": "python\nx = 5\nprint(x)\n\nx = 10\nprint(x)\n\nx = x + 1\nprint(x)"
+   },
+   {
+    "k": "p",
+    "v": "That last line looks like nonsense as mathematics - x cannot be x plus one. As an instruction it is fine: take what is in x, add one, put it back."
+   },
+   {
+    "k": "h",
+    "v": "4) Naming things"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Letters, numbers and underscores only",
+     "Cannot start with a number",
+     "Case matters - name and Name are two different variables",
+     "By habit, lower case with underscores: first_name, not FirstName"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Case matters more than beginners expect. print(Name) when you made name will not quietly use the wrong one - it will stop with an error saying Name is not defined. That is Python being helpful."
+   },
+   {
+    "k": "h",
+    "v": "5) Your first error"
+   },
+   {
+    "k": "p",
+    "v": "Run this. It is broken on purpose."
+   },
+   {
+    "k": "run",
+    "v": "python\nprint(\"one\")\nprint(tow)\nprint(\"three\")"
+   },
+   {
+    "k": "p",
+    "v": "Read the last line of the message: NameError, name 'tow' is not defined. Python is saying it has never heard of tow. Notice also that one printed and three did not - Python stops at the error."
+   },
+   {
+    "k": "tip",
+    "v": "Always read the last line of an error first. The rest is the path that led there, and beginners waste a lot of time reading it top to bottom."
+   },
+   {
+    "k": "h",
+    "v": "6) Comments"
+   },
+   {
+    "k": "run",
+    "v": "python\n# Anything after a hash is ignored\nprice = 250   # so is this\nprint(price)"
+   },
+   {
+    "k": "p",
+    "v": "In VBA a comment starts with an apostrophe. In Python it is a hash. Same purpose: notes for humans, invisible to the machine."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print your name, city and age using three variables",
+     "Make a deliberate error and read what Python says",
+     "Change one variable twice and print it after each change"
+    ]
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 - Numbers and text",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Do arithmetic",
+     "Join text together",
+     "Know why \"5\" and 5 are not the same thing"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Arithmetic"
+   },
+   {
+    "k": "run",
+    "v": "python\nprint(10 + 3)\nprint(10 - 3)\nprint(10 * 3)\nprint(10 / 3)\nprint(10 // 3)\nprint(10 % 3)\nprint(10 ** 3)"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "/ = ordinary division, always gives a decimal",
+     "// = division with the remainder thrown away",
+     "% = only the remainder",
+     "** = to the power of"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "% is more useful than it looks. n % 2 is 0 for even numbers and 1 for odd, which is how you test for even without any special function."
+   },
+   {
+    "k": "h",
+    "v": "2) Two kinds of number"
+   },
+   {
+    "k": "run",
+    "v": "python\nprint(type(7))\nprint(type(7.5))\nprint(7 / 1)"
+   },
+   {
+    "k": "p",
+    "v": "int is a whole number, float has a decimal point. Notice 7 / 1 gives 7.0 and not 7 - division always produces a float, even when it comes out even."
+   },
+   {
+    "k": "h",
+    "v": "3) Text"
+   },
+   {
+    "k": "p",
+    "v": "Text is called a string. Single or double quotes, it does not matter, as long as you finish with the one you started with."
+   },
+   {
+    "k": "run",
+    "v": "python\nfirst = \"Ali\"\nlast = \"Khan\"\n\nprint(first + \" \" + last)\nprint(first * 3)\nprint(len(first))"
+   },
+   {
+    "k": "p",
+    "v": "Plus joins strings. Star repeats one. len() counts the characters."
+   },
+   {
+    "k": "h",
+    "v": "4) The mistake everyone makes"
+   },
+   {
+    "k": "p",
+    "v": "Run this. It fails, and the reason matters."
+   },
+   {
+    "k": "run",
+    "v": "python\nage = \"30\"\nprint(age + 5)"
+   },
+   {
+    "k": "p",
+    "v": "\"30\" in quotes is text, not a number. You cannot add 5 to it any more than you could add 5 to the word thirty. Python says so plainly: can only concatenate str to str."
+   },
+   {
+    "k": "run",
+    "v": "python\nage = \"30\"\nprint(int(age) + 5)\n\ncount = 7\nprint(\"I have \" + str(count) + \" books\")"
+   },
+   {
+    "k": "p",
+    "v": "int() turns text into a number, str() turns a number into text. When something refuses to work with numbers and text together, this is nearly always why."
+   },
+   {
+    "k": "h",
+    "v": "5) f-strings, the tidy way"
+   },
+   {
+    "k": "run",
+    "v": "python\nname = \"Sana\"\nage = 25\n\nprint(f\"{name} is {age} years old\")\nprint(f\"Next year she will be {age + 1}\")"
+   },
+   {
+    "k": "p",
+    "v": "Put an f before the quote and anything inside curly brackets gets worked out and dropped in. No str(), no plus signs. Use this everywhere - it is what real Python looks like."
+   },
+   {
+    "k": "tip",
+    "v": "In VBA you would write \"I have \" & count & \" books\". The f-string is the same idea, done more neatly."
+   },
+   {
+    "k": "h",
+    "v": "6) Useful string tricks"
+   },
+   {
+    "k": "run",
+    "v": "python\ns = \"  Hello World  \"\n\nprint(s.strip())\nprint(s.upper())\nprint(s.lower())\nprint(s.strip().replace(\"World\", \"Lahore\"))\nprint(\"one,two,three\".split(\",\"))"
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Work out 17 divided by 5 three ways: /, // and %",
+     "Build a sentence about yourself with an f-string",
+     "Take \"100\" as text, turn it into a number, and add 50"
+    ]
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 - Making decisions",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write an if",
+     "Compare two things",
+     "Understand why Python cares about indentation"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) if"
+   },
+   {
+    "k": "run",
+    "v": "python\nage = 20\n\nif age >= 18:\n    print(\"Adult\")\nelse:\n    print(\"Not yet\")"
+   },
+   {
+    "k": "p",
+    "v": "Change 20 to 15 and run it again. Note the colon at the end of the if line, and the four spaces on the line below."
+   },
+   {
+    "k": "h",
+    "v": "2) The indentation is the grammar"
+   },
+   {
+    "k": "p",
+    "v": "Most languages mark a block with brackets or a word like End If. Python uses the indent itself. Lines pushed in belong to the if; lines back at the margin do not."
+   },
+   {
+    "k": "run",
+    "v": "python\nx = 5\n\nif x > 3:\n    print(\"inside the if\")\n    print(\"also inside\")\nprint(\"outside, always runs\")"
+   },
+   {
+    "k": "warn",
+    "v": "This is the one thing that catches everybody. Four spaces per level, and be consistent - mixing tabs and spaces gives errors that are hard to see because they look identical on screen."
+   },
+   {
+    "k": "tip",
+    "v": "VBA has If ... Then ... End If. Python has no End If - the indent already said where the block stopped. Fewer words, but the spacing now matters."
+   },
+   {
+    "k": "h",
+    "v": "3) Comparing"
+   },
+   {
+    "k": "run",
+    "v": "python\nprint(5 == 5)\nprint(5 != 5)\nprint(5 > 3)\nprint(5 <= 4)\nprint(\"abc\" == \"abc\")"
+   },
+   {
+    "k": "warn",
+    "v": "One equals sets a value. Two equals asks a question. x = 5 puts five in x; x == 5 asks whether it is already five. Getting these the wrong way round is the most common bug in any language."
+   },
+   {
+    "k": "h",
+    "v": "4) More than two paths"
+   },
+   {
+    "k": "run",
+    "v": "python\nmarks = 72\n\nif marks >= 80:\n    print(\"A\")\nelif marks >= 70:\n    print(\"B\")\nelif marks >= 60:\n    print(\"C\")\nelse:\n    print(\"Below C\")"
+   },
+   {
+    "k": "p",
+    "v": "elif is else-if. Python checks each in turn and stops at the first true one. Order matters - put 60 first and every mark above 60 would get a C."
+   },
+   {
+    "k": "h",
+    "v": "5) and, or, not"
+   },
+   {
+    "k": "run",
+    "v": "python\nage = 25\nhas_id = True\n\nif age >= 18 and has_id:\n    print(\"Allowed in\")\n\nif age < 13 or age > 65:\n    print(\"Discount\")\n\nif not has_id:\n    print(\"Bring your card\")"
+   },
+   {
+    "k": "p",
+    "v": "Python uses the plain English words, not && and ||. and needs both sides true; or needs one."
+   },
+   {
+    "k": "h",
+    "v": "6) What counts as false"
+   },
+   {
+    "k": "run",
+    "v": "python\nname = \"\"\n\nif name:\n    print(f\"Hello {name}\")\nelse:\n    print(\"No name given\")"
+   },
+   {
+    "k": "p",
+    "v": "Empty text, zero, and an empty list all count as false. So if name: reads as if there is a name, which is shorter than comparing to an empty string and is what Python programmers actually write."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a grade checker with five bands",
+     "Test whether a number is even using %",
+     "Write one if that needs two conditions to be true"
+    ]
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 - Repeating things",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Loop a set number of times",
+     "Loop until something changes",
+     "Get out of a loop early"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) for and range"
+   },
+   {
+    "k": "run",
+    "v": "python\nfor i in range(5):\n    print(i)"
+   },
+   {
+    "k": "warn",
+    "v": "It printed 0 1 2 3 4 - five numbers, starting at zero, stopping before five. range(5) means five of them, not up to five. This trips up everyone once."
+   },
+   {
+    "k": "run",
+    "v": "python\nfor i in range(1, 6):\n    print(i)\n\nprint(\"---\")\n\nfor i in range(0, 20, 5):\n    print(i)"
+   },
+   {
+    "k": "p",
+    "v": "range(start, stop) begins where you say. range(start, stop, step) counts in jumps. The stop is never included."
+   },
+   {
+    "k": "h",
+    "v": "2) Looping over text"
+   },
+   {
+    "k": "run",
+    "v": "python\nfor letter in \"Python\":\n    print(letter)"
+   },
+   {
+    "k": "p",
+    "v": "A for loop walks through anything with parts - text, lists, and more you will meet tomorrow. You are not limited to counting."
+   },
+   {
+    "k": "h",
+    "v": "3) while"
+   },
+   {
+    "k": "run",
+    "v": "python\ncount = 3\n\nwhile count > 0:\n    print(count)\n    count = count - 1\n\nprint(\"Go\")"
+   },
+   {
+    "k": "p",
+    "v": "while keeps going as long as its condition holds. Use for when you know how many times; use while when you do not."
+   },
+   {
+    "k": "warn",
+    "v": "Forget the count = count - 1 line and the condition never becomes false. That is an endless loop. The box on this page stops after three seconds, but on your own computer it would sit there forever."
+   },
+   {
+    "k": "h",
+    "v": "4) Try breaking it"
+   },
+   {
+    "k": "p",
+    "v": "Run this and watch it get stopped."
+   },
+   {
+    "k": "run",
+    "v": "python\ncount = 3\n\nwhile count > 0:\n    print(count)\n\nprint(\"never reached\")"
+   },
+   {
+    "k": "p",
+    "v": "Now add count = count - 1 inside the loop and run it again."
+   },
+   {
+    "k": "h",
+    "v": "5) break and continue"
+   },
+   {
+    "k": "run",
+    "v": "python\nfor i in range(1, 11):\n    if i == 5:\n        break\n    print(i)\n\nprint(\"---\")\n\nfor i in range(1, 11):\n    if i % 2 == 0:\n        continue\n    print(i)"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "break = leave the loop now",
+     "continue = skip the rest of this turn, go round again"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "If you did VBA: for is For ... Next, while is Do While ... Loop, and break is Exit For. Same ideas, shorter words."
+   },
+   {
+    "k": "h",
+    "v": "6) A loop worth keeping"
+   },
+   {
+    "k": "run",
+    "v": "python\ntotal = 0\n\nfor n in range(1, 101):\n    total = total + n\n\nprint(f\"1 to 100 adds up to {total}\")"
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print the 7 times table using a for loop",
+     "Add up the even numbers from 1 to 50",
+     "Count down from 10 with a while loop"
+    ]
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 - Lists",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Keep many values under one name",
+     "Reach any one of them",
+     "Add, remove, sort and count"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) A list"
+   },
+   {
+    "k": "run",
+    "v": "python\nfruits = [\"apple\", \"banana\", \"mango\"]\n\nprint(fruits)\nprint(len(fruits))\nprint(fruits[0])\nprint(fruits[2])"
+   },
+   {
+    "k": "warn",
+    "v": "Counting starts at zero. The first item is [0] and the third is [2]. Asking for fruits[3] in a list of three gives an IndexError - there is no fourth."
+   },
+   {
+    "k": "h",
+    "v": "2) Counting from the back"
+   },
+   {
+    "k": "run",
+    "v": "python\nfruits = [\"apple\", \"banana\", \"mango\"]\n\nprint(fruits[-1])\nprint(fruits[-2])"
+   },
+   {
+    "k": "p",
+    "v": "Minus one is the last item, always, whatever the length. Much better than working out len(fruits) - 1 every time."
+   },
+   {
+    "k": "h",
+    "v": "3) Changing a list"
+   },
+   {
+    "k": "run",
+    "v": "python\nnums = [3, 1, 4]\n\nnums.append(9)\nprint(nums)\n\nnums.insert(0, 7)\nprint(nums)\n\nnums.remove(1)\nprint(nums)\n\nlast = nums.pop()\nprint(last, nums)"
+   },
+   {
+    "k": "h",
+    "v": "4) Sorting and searching"
+   },
+   {
+    "k": "run",
+    "v": "python\nnums = [5, 2, 9, 1, 7]\n\nprint(sorted(nums))\nprint(sorted(nums, reverse=True))\nprint(max(nums), min(nums), sum(nums))\nprint(9 in nums)\nprint(3 in nums)"
+   },
+   {
+    "k": "p",
+    "v": "sorted() gives you a new sorted list and leaves the original alone. nums.sort() changes the original instead. Both are useful; know which one you called."
+   },
+   {
+    "k": "h",
+    "v": "5) Looping over a list"
+   },
+   {
+    "k": "run",
+    "v": "python\nprices = [120, 340, 90, 560]\ntotal = 0\n\nfor p in prices:\n    total = total + p\n\nprint(f\"Total: {total}\")\nprint(f\"Average: {total / len(prices)}\")"
+   },
+   {
+    "k": "run",
+    "v": "python\nnames = [\"Ali\", \"Sana\", \"Bilal\"]\n\nfor i, name in enumerate(names, start=1):\n    print(f\"{i}. {name}\")"
+   },
+   {
+    "k": "p",
+    "v": "enumerate gives you the position and the item together, which saves keeping a counter by hand."
+   },
+   {
+    "k": "h",
+    "v": "6) Slicing"
+   },
+   {
+    "k": "run",
+    "v": "python\nletters = [\"a\", \"b\", \"c\", \"d\", \"e\"]\n\nprint(letters[1:3])\nprint(letters[:2])\nprint(letters[2:])\nprint(letters[-2:])"
+   },
+   {
+    "k": "p",
+    "v": "Two numbers with a colon take a slice: from the first, up to but not including the second. Leave one out and Python assumes the start or the end."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make a list of five prices and find the total and average",
+     "Print the highest and lowest",
+     "Print the list sorted, without changing the original"
+    ]
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 - Dictionaries",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Store things by name instead of by position",
+     "Look a value up",
+     "Loop over pairs"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) When a list is the wrong shape"
+   },
+   {
+    "k": "p",
+    "v": "A list holds things in order and you fetch them by number. But if you want the price of sugar, counting to the right position is silly. You want to ask by name."
+   },
+   {
+    "k": "run",
+    "v": "python\nprices = {\"sugar\": 180, \"rice\": 340, \"oil\": 560}\n\nprint(prices[\"rice\"])\nprint(len(prices))"
+   },
+   {
+    "k": "p",
+    "v": "Curly brackets, and each entry is a key, a colon, then a value. The key is what you look up by."
+   },
+   {
+    "k": "h",
+    "v": "2) Adding and changing"
+   },
+   {
+    "k": "run",
+    "v": "python\nprices = {\"sugar\": 180}\n\nprices[\"tea\"] = 750\nprices[\"sugar\"] = 195\n\nprint(prices)\ndel prices[\"tea\"]\nprint(prices)"
+   },
+   {
+    "k": "p",
+    "v": "Assigning to a key that exists changes it. Assigning to one that does not adds it. There is no separate add."
+   },
+   {
+    "k": "h",
+    "v": "3) Asking for something that is not there"
+   },
+   {
+    "k": "run",
+    "v": "python\nprices = {\"sugar\": 180}\nprint(prices[\"salt\"])"
+   },
+   {
+    "k": "p",
+    "v": "KeyError. Python will not invent a value. When you are not sure, use get instead."
+   },
+   {
+    "k": "run",
+    "v": "python\nprices = {\"sugar\": 180}\n\nprint(prices.get(\"salt\"))\nprint(prices.get(\"salt\", 0))\nprint(\"salt\" in prices)"
+   },
+   {
+    "k": "tip",
+    "v": "get with a second argument is the tidy way to say use this if it is missing. It comes up constantly once you work with real data."
+   },
+   {
+    "k": "h",
+    "v": "4) Looping over a dictionary"
+   },
+   {
+    "k": "run",
+    "v": "python\nprices = {\"sugar\": 180, \"rice\": 340, \"oil\": 560}\n\nfor item in prices:\n    print(item)\n\nprint(\"---\")\n\nfor item, price in prices.items():\n    print(f\"{item} costs {price}\")"
+   },
+   {
+    "k": "p",
+    "v": "Looping plainly gives you the keys. .items() gives you both halves, which is nearly always what you want."
+   },
+   {
+    "k": "h",
+    "v": "5) Something real"
+   },
+   {
+    "k": "run",
+    "v": "python\nstock = {\"sugar\": 12, \"rice\": 0, \"oil\": 5, \"tea\": 0}\n\nout = []\nfor item, qty in stock.items():\n    if qty == 0:\n        out.append(item)\n\nprint(f\"Out of stock: {out}\")\nprint(f\"Total items held: {sum(stock.values())}\")"
+   },
+   {
+    "k": "h",
+    "v": "6) A dictionary inside a dictionary"
+   },
+   {
+    "k": "run",
+    "v": "python\nstaff = {\n    \"ali\":  {\"role\": \"manager\", \"salary\": 90000},\n    \"sana\": {\"role\": \"designer\", \"salary\": 75000}\n}\n\nprint(staff[\"ali\"][\"role\"])\n\nfor name, info in staff.items():\n    print(f\"{name}: {info['role']}, {info['salary']}\")"
+   },
+   {
+    "k": "warn",
+    "v": "Inside an f-string, use the other kind of quote for the key - info['role'] with single quotes inside double. Same quote twice ends the string early."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make a dictionary of five products and prices",
+     "Print each on its own line with .items()",
+     "Use get to look up something that is not there without crashing"
+    ]
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 - Functions",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write your own function",
+     "Pass values in and get one back",
+     "Stop repeating yourself"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Why"
+   },
+   {
+    "k": "p",
+    "v": "When the same few lines appear three times, any change means finding all three. A function gives those lines a name, and then there is one place to change."
+   },
+   {
+    "k": "run",
+    "v": "python\ndef greet():\n    print(\"Hello there\")\n\ngreet()\ngreet()"
+   },
+   {
+    "k": "p",
+    "v": "def makes it, the brackets and colon end the line, and the indented lines are the body. Nothing happens until you call it by name."
+   },
+   {
+    "k": "h",
+    "v": "2) Giving it something to work with"
+   },
+   {
+    "k": "run",
+    "v": "python\ndef greet(name):\n    print(f\"Hello {name}\")\n\ngreet(\"Ali\")\ngreet(\"Sana\")"
+   },
+   {
+    "k": "h",
+    "v": "3) Getting something back"
+   },
+   {
+    "k": "run",
+    "v": "python\ndef add(a, b):\n    return a + b\n\nresult = add(3, 4)\nprint(result)\nprint(add(10, 20))"
+   },
+   {
+    "k": "warn",
+    "v": "print shows a value on the screen. return hands it back to whoever called. A function that prints but does not return gives you None, and you cannot do sums with it. This distinction confuses people for weeks."
+   },
+   {
+    "k": "run",
+    "v": "python\ndef shows(n):\n    print(n * 2)\n\ndef gives(n):\n    return n * 2\n\na = shows(5)\nb = gives(5)\n\nprint(f\"a is {a}\")\nprint(f\"b is {b}\")\nprint(gives(5) + 1)"
+   },
+   {
+    "k": "h",
+    "v": "4) Defaults"
+   },
+   {
+    "k": "run",
+    "v": "python\ndef greet(name, greeting=\"Hello\"):\n    return f\"{greeting} {name}\"\n\nprint(greet(\"Ali\"))\nprint(greet(\"Ali\", \"Salam\"))"
+   },
+   {
+    "k": "p",
+    "v": "A default is used when the caller leaves that one out. Defaults must come after the arguments that have none."
+   },
+   {
+    "k": "h",
+    "v": "5) Something worth keeping"
+   },
+   {
+    "k": "run",
+    "v": "python\ndef gst(amount, rate=18):\n    tax = amount * rate / 100\n    return amount + tax\n\nprint(gst(1000))\nprint(gst(1000, 5))\n\nfor price in [500, 1200, 8000]:\n    print(f\"{price} -> {gst(price)}\")"
+   },
+   {
+    "k": "tip",
+    "v": "If you did VBA: def is Function, and return is the same idea as setting the function name equal to a value. VBA also has Sub for the ones that give nothing back - Python does not bother with the distinction."
+   },
+   {
+    "k": "h",
+    "v": "6) Where names live"
+   },
+   {
+    "k": "run",
+    "v": "python\ntotal = 100\n\ndef change():\n    total = 5\n    print(f\"inside: {total}\")\n\nchange()\nprint(f\"outside: {total}\")"
+   },
+   {
+    "k": "p",
+    "v": "The total inside the function is its own. Setting it does not touch the one outside. That is deliberate - a function should not quietly change things around it."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a function that takes a price and returns it with 18% added",
+     "Write one that takes a list and returns the average",
+     "Write one with a default and call it both ways"
+    ]
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 - When things go wrong",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Read an error properly",
+     "Catch one instead of crashing",
+     "Know the four you will meet most"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The four common ones"
+   },
+   {
+    "k": "run",
+    "v": "python\nprint(undefined_thing)"
+   },
+   {
+    "k": "run",
+    "v": "python\nprint(\"5\" + 5)"
+   },
+   {
+    "k": "run",
+    "v": "python\nitems = [1, 2, 3]\nprint(items[5])"
+   },
+   {
+    "k": "run",
+    "v": "python\nd = {\"a\": 1}\nprint(d[\"b\"])"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "NameError = you used a name Python has never seen",
+     "TypeError = you mixed two kinds of thing that do not mix",
+     "IndexError = you asked for a position past the end",
+     "KeyError = you asked for a key the dictionary has not got"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "The last line names the problem and the line number. Read that first. Everything above it is the route Python took to get there, and beginners lose a lot of time reading it from the top."
+   },
+   {
+    "k": "h",
+    "v": "2) Catching one"
+   },
+   {
+    "k": "run",
+    "v": "python\ntry:\n    n = int(\"hello\")\n    print(n)\nexcept ValueError:\n    print(\"That was not a number\")\n\nprint(\"still running\")"
+   },
+   {
+    "k": "p",
+    "v": "Without the try, the program stops there. With it, the except runs instead and the rest carries on."
+   },
+   {
+    "k": "h",
+    "v": "3) Where it belongs"
+   },
+   {
+    "k": "run",
+    "v": "python\ndef to_number(text):\n    try:\n        return int(text)\n    except ValueError:\n        return 0\n\nfor v in [\"10\", \"abc\", \"25\", \"\"]:\n    print(f\"{v!r} -> {to_number(v)}\")"
+   },
+   {
+    "k": "p",
+    "v": "Wrap the one line that might fail, not the whole program. A try around everything hides real bugs and makes them much harder to find later."
+   },
+   {
+    "k": "warn",
+    "v": "Never write a bare except: with nothing after it. It swallows every error including your own typing mistakes, and you will spend an evening hunting a problem the computer was ready to tell you about."
+   },
+   {
+    "k": "h",
+    "v": "4) Dividing by zero"
+   },
+   {
+    "k": "run",
+    "v": "python\ndef average(nums):\n    try:\n        return sum(nums) / len(nums)\n    except ZeroDivisionError:\n        return 0\n\nprint(average([10, 20, 30]))\nprint(average([]))"
+   },
+   {
+    "k": "h",
+    "v": "5) Checking first"
+   },
+   {
+    "k": "run",
+    "v": "python\nprices = {\"sugar\": 180}\nitem = \"salt\"\n\nif item in prices:\n    print(prices[item])\nelse:\n    print(f\"No price for {item}\")"
+   },
+   {
+    "k": "p",
+    "v": "Often a simple check is clearer than catching an error. Use try for things you cannot check in advance - a file that might not open, text that might not be a number."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Cause each of the four errors on purpose and read them",
+     "Write a function that turns text into a number and returns 0 on failure",
+     "Handle an empty list in an average function"
+    ]
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 - Working with data",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hold records as a list of dictionaries",
+     "Filter, sort and total them",
+     "Write the kind of code a real job needs"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. This is where the last eight days start paying."
+   },
+   {
+    "k": "h",
+    "v": "1) The shape real data takes"
+   },
+   {
+    "k": "run",
+    "v": "python\nsales = [\n    {\"item\": \"sugar\", \"qty\": 3, \"price\": 180},\n    {\"item\": \"rice\",  \"qty\": 2, \"price\": 340},\n    {\"item\": \"oil\",   \"qty\": 1, \"price\": 560},\n    {\"item\": \"tea\",   \"qty\": 5, \"price\": 750}\n]\n\nfor s in sales:\n    print(f\"{s['item']}: {s['qty']} x {s['price']}\")"
+   },
+   {
+    "k": "p",
+    "v": "A list of dictionaries is how almost every real dataset arrives - rows of records, each with named fields. A spreadsheet in Python's shape."
+   },
+   {
+    "k": "h",
+    "v": "2) Totals"
+   },
+   {
+    "k": "run",
+    "v": "python\nsales = [\n    {\"item\": \"sugar\", \"qty\": 3, \"price\": 180},\n    {\"item\": \"rice\",  \"qty\": 2, \"price\": 340},\n    {\"item\": \"oil\",   \"qty\": 1, \"price\": 560}\n]\n\ntotal = 0\nfor s in sales:\n    total = total + s[\"qty\"] * s[\"price\"]\n\nprint(f\"Total sales: {total}\")"
+   },
+   {
+    "k": "h",
+    "v": "3) Filtering"
+   },
+   {
+    "k": "run",
+    "v": "python\nsales = [\n    {\"item\": \"sugar\", \"qty\": 3, \"price\": 180},\n    {\"item\": \"rice\",  \"qty\": 2, \"price\": 340},\n    {\"item\": \"oil\",   \"qty\": 1, \"price\": 560},\n    {\"item\": \"tea\",   \"qty\": 5, \"price\": 750}\n]\n\nbig = []\nfor s in sales:\n    if s[\"price\"] > 300:\n        big.append(s[\"item\"])\n\nprint(big)\n\nbig2 = [s[\"item\"] for s in sales if s[\"price\"] > 300]\nprint(big2)"
+   },
+   {
+    "k": "p",
+    "v": "The second version is a list comprehension - the same loop written on one line. Read it as: this item, for each sale, where the price is over 300."
+   },
+   {
+    "k": "h",
+    "v": "4) Sorting records"
+   },
+   {
+    "k": "run",
+    "v": "python\nsales = [\n    {\"item\": \"sugar\", \"price\": 180},\n    {\"item\": \"tea\",   \"price\": 750},\n    {\"item\": \"rice\",  \"price\": 340}\n]\n\nby_price = sorted(sales, key=lambda s: s[\"price\"])\nfor s in by_price:\n    print(f\"{s['item']}: {s['price']}\")\n\nprint(\"---\")\n\ndearest = max(sales, key=lambda s: s[\"price\"])\nprint(f\"Dearest: {dearest['item']}\")"
+   },
+   {
+    "k": "p",
+    "v": "key tells sorted what to sort on. lambda s: s[\"price\"] is a one-line function meaning take a sale and give me its price. Do not worry about lambda beyond this use - it is how sorting records is done."
+   },
+   {
+    "k": "h",
+    "v": "5) Grouping"
+   },
+   {
+    "k": "run",
+    "v": "python\norders = [\n    {\"city\": \"Lahore\",  \"amount\": 1200},\n    {\"city\": \"Karachi\", \"amount\": 800},\n    {\"city\": \"Lahore\",  \"amount\": 450},\n    {\"city\": \"Karachi\", \"amount\": 300},\n    {\"city\": \"Multan\",  \"amount\": 950}\n]\n\ntotals = {}\nfor o in orders:\n    city = o[\"city\"]\n    totals[city] = totals.get(city, 0) + o[\"amount\"]\n\nfor city, amount in totals.items():\n    print(f\"{city}: {amount}\")"
+   },
+   {
+    "k": "tip",
+    "v": "totals.get(city, 0) + amount is the whole trick: start at zero if this city is new, otherwise add to what is there. This one line replaces a lot of clumsy if-statements."
+   },
+   {
+    "k": "h",
+    "v": "Today's homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Build a list of six sales records",
+     "Find the total, the dearest item, and everything over 500",
+     "Group them by something and total each group"
+    ]
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 - Building something",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Put the ten days together in one program",
+     "See what to learn next"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) What you can now do"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Store values and print them",
+     "Work with numbers and text and convert between them",
+     "Make decisions with if, elif and else",
+     "Repeat work with for and while",
+     "Hold many values in lists and dictionaries",
+     "Write your own functions",
+     "Handle errors instead of crashing",
+     "Filter, sort and total real records"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) A small shop report"
+   },
+   {
+    "k": "p",
+    "v": "Everything here is something you met in the last nine days. Read it, run it, then change the numbers."
+   },
+   {
+    "k": "run",
+    "v": "python\nsales = [\n    {\"item\": \"sugar\", \"qty\": 3, \"price\": 180},\n    {\"item\": \"rice\",  \"qty\": 2, \"price\": 340},\n    {\"item\": \"oil\",   \"qty\": 1, \"price\": 560},\n    {\"item\": \"tea\",   \"qty\": 5, \"price\": 750},\n    {\"item\": \"salt\",  \"qty\": 4, \"price\": 60}\n]\n\ndef line_total(sale):\n    return sale[\"qty\"] * sale[\"price\"]\n\ndef with_gst(amount, rate=18):\n    return amount + amount * rate / 100\n\nprint(\"ITEM        QTY   PRICE    TOTAL\")\nprint(\"-\" * 36)\n\ngrand = 0\nfor s in sales:\n    t = line_total(s)\n    grand = grand + t\n    print(f\"{s['item']:<10} {s['qty']:>3} {s['price']:>7} {t:>8}\")\n\nprint(\"-\" * 36)\nprint(f\"{'Subtotal':<22} {grand:>13}\")\nprint(f\"{'With GST':<22} {with_gst(grand):>13.0f}\")\n\nbiggest = max(sales, key=lambda s: line_total(s))\nprint(f\"\\nBiggest line: {biggest['item']}\")"
+   },
+   {
+    "k": "p",
+    "v": "The {s['item']:<10} bits line the columns up - left-aligned in ten spaces, right-aligned in seven. That is all that makes it look like a table."
+   },
+   {
+    "k": "h",
+    "v": "3) Now change it"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Add two more items",
+     "Change the GST rate to 5",
+     "Print only the lines over 500",
+     "Sort by total before printing"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) What is missing"
+   },
+   {
+    "k": "p",
+    "v": "This runs in your browser, which is fine for learning and no good for work. On your own computer you would install Python from python.org, write this in a file called report.py, and run it with python report.py. Everything you have learnt works there unchanged."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Files - reading a CSV and writing your results back out",
+     "Modules - import to use code other people wrote",
+     "pandas - the library that does all of day 9 in three lines",
+     "Django - websites in Python, which is what this site runs on"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) Ten things worth remembering"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Indentation is grammar, not decoration",
+     "= puts a value in, == asks a question",
+     "range(5) gives 0 to 4",
+     "Lists count from zero, and [-1] is the last",
+     "print shows, return hands back",
+     "Read the last line of an error first",
+     "f-strings beat joining text with plus",
+     "get(key, default) saves you from KeyError",
+     "Wrap the risky line in try, not the whole program",
+     "If you wrote it three times, make it a function"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Nobody learns to program by reading. Take the report above, break it, and fix it. The hour you spend fixing something you broke teaches more than three hours of reading."
+   },
+   {
+    "k": "h",
+    "v": "Final homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Change the report to sort by line total, biggest first",
+     "Add a discount function and use it",
+     "Take the quiz and claim your certificate"
+    ]
+   }
+  ]
+ }
+}

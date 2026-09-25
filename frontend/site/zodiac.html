@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Star signs and what they mean — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Find your star sign from your birthday and read what it is said to mean. For fun, not for decisions.">
+<link rel="canonical" href="https://xpertcreation.com/zodiac">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Star signs and what they mean — XpertCreation">
+<meta property="og:description" content="Find your star sign from your birthday and read what it is said to mean. For fun, not for decisions.">
+<meta property="og:url" content="https://xpertcreation.com/zodiac">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Star signs and what they mean — XpertCreation">
+<meta name="twitter:description" content="Find your star sign from your birthday and read what it is said to mean. For fun, not for decisions.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Star signs and what they mean","url":"https://xpertcreation.com/zodiac","description":"Find your star sign from your birthday and read what it is said to mean. For fun, not for decisions.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="apple-touch-icon" href="/brand/icon-180.png">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --brand:#1B4DFF;--star:#7C3AED;--gold:#B8892D;--line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--paper);pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px)}
+.bg .a{width:470px;height:470px;background:#7C3AED;top:-180px;left:-130px;opacity:.2}
+.bg .b{width:420px;height:420px;background:#B8892D;bottom:-160px;right:-130px;opacity:.16}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.9);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top .chip{width:40px;height:40px;border-radius:9px;background:#14151A;display:block}
+.top .chip.gone{display:none}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft);flex:0 0 auto}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:720px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(25px,6vw,34px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14.5px;color:var(--ink-soft);margin-top:9px;max-width:52ch}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(4,1fr)}}
+.sign{padding:16px 8px;border-radius:18px;background:var(--card);border:1.5px solid var(--line);
+  text-align:center;cursor:pointer;transition:transform .16s,border-color .16s}
+.sign:hover{transform:translateY(-2px);border-color:var(--star)}
+.sign:active{transform:scale(.97)}
+.sign.on{background:linear-gradient(150deg,#7C3AED,#4C1D95);border-color:#7C3AED;color:#fff}
+.sign .e{font-size:26px;display:block}
+.sign b{display:block;font-size:12.5px;font-weight:700;margin-top:6px;letter-spacing:-.01em}
+.sign small{display:block;font-size:9.5px;opacity:.7;font-family:var(--mono);margin-top:2px}
+
+.detail{margin-top:22px}
+.dhead{position:relative;overflow:hidden;border-radius:24px;padding:24px;color:#fff;
+  background:linear-gradient(145deg,#7C3AED,#3B1178);
+  box-shadow:0 12px 34px rgba(124,58,237,.28)}
+.dhead::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 15% -10%,rgba(255,255,255,.35),transparent 55%)}
+.dhead .ghost{position:absolute;right:-16px;top:-24px;font-size:140px;line-height:1;
+  opacity:.16;transform:rotate(-8deg);pointer-events:none}
+.dhead h2{position:relative;z-index:2;font-family:var(--display);font-weight:800;
+  font-size:30px;letter-spacing:-.035em}
+.dhead .dates{position:relative;z-index:2;font-family:var(--mono);font-size:12.5px;
+  opacity:.9;margin-top:4px}
+.dhead .facts{position:relative;z-index:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.dhead .facts span{font-size:12px;padding:6px 12px;border-radius:999px;
+  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.28)}
+
+.today{background:linear-gradient(135deg,rgba(184,137,45,.1),rgba(184,137,45,.03));
+  border:1px solid rgba(184,137,45,.35);border-radius:18px;padding:18px;margin-top:14px}
+.today .lbl{font-size:10.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:7px}
+.today p{font-size:15px;line-height:1.65}
+
+.sec{background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:17px;margin-top:11px}
+.sec h4{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:-.02em;
+  margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.sec p{font-size:14px;line-height:1.65;color:var(--ink)}
+.traits{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.traits span{font-size:12px;padding:6px 12px;border-radius:999px;background:var(--paper);
+  border:1px solid var(--line);font-weight:600}
+.lucky{display:flex;gap:8px;margin-top:11px}
+.lucky span{width:38px;height:38px;border-radius:12px;background:var(--paper);
+  border:1px solid var(--line);display:grid;place-items:center;
+  font-family:var(--mono);font-weight:700;font-size:14px}
+
+.disc{margin-top:18px;padding:14px 16px;border-radius:14px;background:var(--card);
+  border:1px dashed var(--line);font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+.note{background:var(--card);border:1px dashed var(--line);border-radius:16px;padding:22px;
+  text-align:center;color:var(--ink-soft);font-size:13.5px;line-height:1.6;margin-top:20px}
+
+/* ---------- rating ---------- */
+.rate{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:20px;
+  padding:20px;margin-top:28px}
+.rate .top2{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rate .big2{font-family:var(--display),system-ui;font-weight:800;font-size:36px;
+  letter-spacing:-.04em;line-height:1}
+.rate .out{font-size:12.5px;color:var(--ink-soft,#5A657C)}
+.rate .top2 .t2{flex:1;min-width:120px}
+.rate .stars{font-size:17px;letter-spacing:2px;color:#F59E0B}
+.rate h4{font-family:var(--display),system-ui;font-weight:800;font-size:15px;
+  letter-spacing:-.02em;margin-bottom:4px}
+.rate .pick2{display:flex;gap:6px;margin-top:14px}
+.rate .pick2 button{width:44px;height:44px;border-radius:13px;background:var(--paper,#F6F7FB);
+  border:1.5px solid var(--line,#E4E8F2);font-size:21px;cursor:pointer;line-height:1;
+  transition:transform .14s,border-color .14s;padding:0}
+.rate .pick2 button:hover{transform:scale(1.08)}
+.rate .pick2 button.on{background:#FEF3C7;border-color:#F59E0B}
+.rate textarea{width:100%;margin-top:12px;padding:12px 13px;border:1.5px solid var(--line,#E4E8F2);
+  border-radius:13px;background:var(--paper,#F6F7FB);font-size:14.5px;font-family:inherit;
+  outline:none;resize:vertical;min-height:74px}
+.rate textarea:focus{border-color:var(--brand,#1B4DFF);background:#fff}
+.rate .send{margin-top:10px;padding:12px 24px;border-radius:13px;background:var(--ink,#0D1424);
+  color:#fff;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:inherit}
+.rate .send:disabled{opacity:.4;cursor:default}
+.rate .said{font-size:13px;color:#00734F;font-weight:600;margin-top:10px}
+.rate .said.wait{color:var(--warn,#B45309)}
+.rate .list2{margin-top:18px;display:grid;gap:10px}
+.rate .r2{padding:13px;border-radius:14px;background:var(--paper,#F6F7FB);
+  border:1px solid var(--line,#E4E8F2)}
+.rate .r2 .hd{display:flex;align-items:center;gap:9px}
+.rate .r2 .hd b{font-size:13.5px;font-weight:700;flex:1}
+.rate .r2 .hd .s{font-size:12px;color:#F59E0B;letter-spacing:1px}
+.rate .r2 .hd small{font-size:11px;color:var(--ink-soft,#5A657C)}
+.rate .r2 p{font-size:13.5px;line-height:1.6;margin-top:7px}
+.rate .none2{font-size:13px;color:var(--ink-soft,#5A657C);margin-top:14px}
+
+/* ---------- phone layout ---------- */
+@media (max-width: 560px){
+  /* Nothing may be wider than the screen. One stray element makes the whole
+     page scroll sideways, which feels broken even when nothing else is. */
+  html, body{overflow-x:hidden;max-width:100vw}
+
+  .top, .topbar{padding:10px 12px;gap:6px}
+  .top b, .topbar b, .brandbar b{font-size:15px}
+  .top .chip, .topbar .chip, .brandbar img{width:28px;height:28px}
+
+  /* The wordmark goes; the logo alone is enough on a small screen. */
+  .brandbar b{display:none}
+
+  .gear{width:36px;height:36px}
+  .langwrap{padding:4px 7px 4px 8px}
+  .langwrap select, .langwrap #langSel{max-width:60px;font-size:12.5px}
+  .acctbtn, .who{max-width:96px;font-size:11.5px;padding:5px 10px 5px 5px}
+  .acctbtn img, .acctbtn .ini{width:21px;height:21px;font-size:10px}
+
+  /* Cards to the edge, with the padding on the page instead. */
+  .wrap{padding-left:14px;padding-right:14px}
+  .hello{padding:18px 16px;border-radius:20px}
+  .hello .t b{font-size:19px}
+  .hellolines .ln{flex-wrap:wrap;gap:4px}
+  .hellolines .ln .k{min-width:78px;font-size:12.5px}
+  .hellolines .ln .v{font-size:13.5px}
+  .hellolines .today2{font-size:14.5px}
+
+  .grid2{grid-template-columns:1fr 1fr;gap:9px}
+  .tiles{gap:9px}
+  .slide{min-height:200px;padding:20px}
+  .slide h3{font-size:22px}
+  .about{padding:20px 16px}
+  .about .contact{grid-template-columns:1fr;gap:8px}
+  .about .contact a{display:flex;align-items:center;gap:12px;text-align:left;padding:12px}
+  .about .contact .ic2{margin:0}
+  .about .pic{width:66px;height:66px;border-radius:20px}
+
+  .row, .row3b, .two{grid-template-columns:1fr}
+  .row3b .swap{width:100%;height:38px}
+  .keys{gap:5px}
+  .keys button{padding:12px 0;font-size:14px}
+}
+
+@media (max-width: 380px){
+  .grid2{grid-template-columns:1fr}
+  .hello .av{width:48px;height:48px}
+  .hello .t b{font-size:17px}
+}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+</style>
+</head>
+<body>
+<div class="bg"><i class="a"></i><i class="b"></i></div>
+
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img class="chip" src="/brand/icon-64.png" alt="" onerror="this.classList.add('gone')">
+    <b>Star signs</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap">
+  <h1>Star signs</h1>
+  <p class="lead">Pick a sign, or set your birthday on your account and yours
+    will open by itself.</p>
+<section class="sky" id="sky">
+  <h2>The real sky</h2>
+  <p class="skynote">Positions below are real astronomy, worked out on your device. What each sign
+    is said to mean is tradition, not science.</p>
+  <div class="skycard" id="skytoday"><span class="skymuted">Working out today&rsquo;s sky&hellip;</span></div>
+
+  <h3>Your Sun, Moon and Rising sign</h3>
+  <div class="skycard">
+    <div class="skyrow">
+      <label>Date of birth<input id="skyd" type="date"></label>
+      <label>Time of birth<input id="skyt" type="time"></label>
+    </div>
+    <div class="skyrow">
+      <label>Born in<select id="skyc"></select></label>
+      <label>UTC offset at birth<select id="skyo"></select></label>
+    </div>
+    <div class="skyrow" id="skyll" style="display:none">
+      <label>Latitude<input id="skylat" type="number" step="0.0001"></label>
+      <label>Longitude<input id="skylng" type="number" step="0.0001"></label>
+    </div>
+    <p class="skymuted">No birth time? Leave it empty: you still get your Sun sign, and the Moon
+      where the day allows. The Rising sign needs the time. Summer time in the place you were
+      born changes the offset by an hour.</p>
+    <button type="button" class="skybtn" id="skygo">Work out my signs</button>
+    <div id="skyout"></div>
+  </div>
+</section>
+<style>
+.sky{margin:26px 0}
+.sky h2{font-size:20px;margin:0 0 4px}
+.sky h3{font-size:16px;margin:20px 0 8px}
+.sky .skynote,.sky .skymuted{color:var(--ink-soft,#5A657C);font-size:13.5px;margin:4px 0 10px;line-height:1.55}
+.sky .skycard{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:16px}
+.sky .skyrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.sky label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft,#5A657C)}
+.sky input,.sky select{display:block;width:100%;margin-top:5px;padding:10px 12px;border:1px solid var(--line,#E4E8F2);
+  border-radius:11px;font:inherit;background:var(--card,#fff);color:var(--ink,#0D1424);box-sizing:border-box}
+.sky .skybtn{margin-top:6px;padding:11px 18px;border:0;border-radius:12px;background:var(--brand,#1B4DFF);color:#fff;
+  font:inherit;font-weight:700;cursor:pointer}
+.sky .pl{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;
+  border-top:1px solid var(--line,#E4E8F2);font-size:14.5px}
+.sky .pl:first-child{border-top:0;padding-top:0}
+.sky .pl a{color:inherit;text-decoration:none;font-weight:700}
+.sky .moon{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.sky .moon .big{font-size:44px;line-height:1}
+.sky .three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.sky .three div{background:var(--paper,#F6F7FB);border-radius:14px;padding:12px;text-align:center}
+.sky .three b{display:block;font-size:17px;margin:4px 0}
+.sky .three a{color:inherit;text-decoration:none}
+@media (max-width:520px){.sky .skyrow{grid-template-columns:1fr}.sky .three{grid-template-columns:1fr}}
+</style>
+<script src="/js/astronomy-2.1.19.min.js" defer></script>
+<script>
+/* The real sky - see the note above. Everything here runs on the visitor's device. */
+document.addEventListener("DOMContentLoaded", function(){
+  "use strict";
+  var A = window.Astronomy;
+  var today = document.getElementById("skytoday");
+  if (!A){ if (today) today.innerHTML = "<span class='skymuted'>The sky calculator did not load. Try again later.</span>"; return; }
+
+  var SIGNS = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+  var GLYPH = ["\u2648","\u2649","\u264A","\u264B","\u264C","\u264D","\u264E","\u264F","\u2650","\u2651","\u2652","\u2653"];
+  var CITIES = [
+    ["Lahore",31.5204,74.3587,5],["Karachi",24.8607,67.0011,5],["Islamabad",33.6844,73.0479,5],
+    ["Rawalpindi",33.5651,73.0169,5],["Faisalabad",31.4504,73.135,5],["Multan",30.1575,71.5249,5],
+    ["Peshawar",34.0151,71.5249,5],["Quetta",30.1798,66.975,5],["Sialkot",32.4945,74.5229,5],
+    ["Gujranwala",32.1877,74.1945,5],["Hyderabad",25.396,68.3578,5],["Bahawalpur",29.3544,71.6911,5],
+    ["Sargodha",32.0836,72.6711,5],["Sukkur",27.7052,68.8574,5],["Abbottabad",34.1688,73.2215,5],
+    ["Mardan",34.1986,72.0404,5],["Muzaffarabad",34.37,73.4711,5],["Gilgit",35.9208,74.3144,5],
+    ["Dubai",25.2048,55.2708,4],["Abu Dhabi",24.4539,54.3773,4],["Riyadh",24.7136,46.6753,3],
+    ["Jeddah",21.4858,39.1925,3],["Doha",25.2854,51.531,3],["Kuwait City",29.3759,47.9774,3],
+    ["London",51.5074,-0.1278,0],["Manchester",53.4808,-2.2426,0],["Toronto",43.6532,-79.3832,-5],
+    ["New York",40.7128,-74.006,-5],["Delhi",28.6139,77.209,5.5],["Kabul",34.5553,69.2075,4.5]
+  ];
+  function $(id){ return document.getElementById(id); }
+  function norm(x){ return ((x % 360) + 360) % 360; }
+  function sign(lon){ lon = norm(lon); var i = Math.floor(lon / 30); return {i: i, name: SIGNS[i], deg: Math.floor(lon % 30)}; }
+  function signLink(s){ return "<a href='?sign=" + s.name + "'>" + GLYPH[s.i] + " " + s.name + "</a>"; }
+  function sunLon(t){ return A.SunPosition(t).elon; }
+  function moonLon(t){ return A.EclipticGeoMoon(t).lon; }
+  function bodyLon(b, t){ return A.Ecliptic(A.GeoVector(b, t, true)).elon; }
+  function ascendant(t, lat, lng){
+    var R = Math.PI / 180;
+    var ramc = norm((A.SiderealTime(t) + lng / 15) * 15);
+    var T = (t.getTime() / 86400000 + 2440587.5 - 2451545) / 36525;
+    var eps = 23.4392911 - 0.0130042 * T;
+    return norm(Math.atan2(Math.cos(ramc * R),
+      -(Math.sin(ramc * R) * Math.cos(eps * R) + Math.tan(lat * R) * Math.sin(eps * R))) / R);
+  }
+  function phaseName(a){
+    var n = ["New moon","Waxing crescent","First quarter","Waxing gibbous","Full moon","Waning gibbous","Last quarter","Waning crescent"];
+    var e = ["\uD83C\uDF11","\uD83C\uDF12","\uD83C\uDF13","\uD83C\uDF14","\uD83C\uDF15","\uD83C\uDF16","\uD83C\uDF17","\uD83C\uDF18"];
+    var i = Math.floor(norm(a + 22.5) / 45) % 8;
+    return {name: n[i], emoji: e[i]};
+  }
+  function day(t){ return t.toLocaleDateString(undefined, {weekday: "short", day: "numeric", month: "short"}); }
+
+  // ---------------- today
+  try {
+    var now = new Date();
+    var ph = A.MoonPhase(now), p = phaseName(ph);
+    var lit = Math.round(100 * A.Illumination("Moon", now).phase_fraction);
+    var nextNew = A.SearchMoonPhase(0, now, 40), nextFull = A.SearchMoonPhase(180, now, 40);
+    var h = "<div class='moon'><span class='big'>" + p.emoji + "</span><div><b>" + p.name + "</b>"
+      + "<div class='skymuted' style='margin:2px 0 0'>" + lit + "% lit"
+      + (nextFull ? " \u00b7 full moon " + day(nextFull.date) : "")
+      + (nextNew ? " \u00b7 new moon " + day(nextNew.date) : "") + "</div></div></div>";
+    var rows = [["Sun", sunLon(now)], ["Moon", moonLon(now)]];
+    ["Mercury", "Venus", "Mars", "Jupiter", "Saturn"].forEach(function(b){ rows.push([b, bodyLon(b, now)]); });
+    h += rows.map(function(r){
+      var s = sign(r[1]);
+      return "<div class='pl'><span>" + r[0] + "</span><span>" + signLink(s) + " <span class='skymuted'>" + s.deg + "\u00b0</span></span></div>";
+    }).join("");
+    today.innerHTML = h;
+  } catch (e) {
+    today.innerHTML = "<span class='skymuted'>Could not work out today&rsquo;s sky.</span>";
+  }
+
+  // ---------------- birth chart form
+  var cSel = $("skyc"), oSel = $("skyo");
+  cSel.innerHTML = CITIES.map(function(c, i){ return "<option value='" + i + "'>" + c[0] + "</option>"; }).join("")
+    + "<option value='x'>Somewhere else (type the map position)</option>";
+  var offs = [];
+  for (var o = -12; o <= 14; o += 0.5) offs.push(o);
+  oSel.innerHTML = offs.map(function(o){
+    var hh = Math.floor(Math.abs(o)), mm = Math.abs(o) % 1 ? "30" : "00";
+    return "<option value='" + o + "'>UTC" + (o < 0 ? "\u2212" : "+") + hh + ":" + mm + "</option>";
+  }).join("");
+  oSel.value = "5";
+  cSel.onchange = function(){
+    var v = cSel.value;
+    $("skyll").style.display = v === "x" ? "" : "none";
+    if (v !== "x") oSel.value = String(CITIES[+v][3]);
+  };
+
+  function at(dateStr, timeStr, off){
+    var p = dateStr.split("-"), t = (timeStr || "12:00").split(":");
+    return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2], +t[0], +t[1]) - off * 3600000);
+  }
+
+  $("skygo").onclick = function(){
+    var out = $("skyout"), ds = $("skyd").value, ts = $("skyt").value, off = parseFloat(oSel.value);
+    if (!ds){ out.innerHTML = "<p class='skymuted' style='color:var(--bad,#DC2626)'>Pick your date of birth.</p>"; return; }
+    var lat, lng;
+    if (cSel.value === "x"){
+      lat = parseFloat($("skylat").value); lng = parseFloat($("skylng").value);
+      if (!(lat >= -66 && lat <= 66) || !(lng >= -180 && lng <= 180)){
+        out.innerHTML = "<p class='skymuted' style='color:var(--bad,#DC2626)'>Type a latitude between -66 and 66 and a longitude between -180 and 180.</p>";
+        return;
+      }
+    } else { lat = CITIES[+cSel.value][1]; lng = CITIES[+cSel.value][2]; }
+
+    var t = at(ds, ts, off);
+    var sun = sign(sunLon(t));
+    var moonTxt, ascTxt;
+    if (ts){
+      moonTxt = signLink(sign(moonLon(t)));
+      ascTxt = signLink(sign(ascendant(t, lat, lng)));
+    } else {
+      var m1 = sign(moonLon(at(ds, "00:00", off))), m2 = sign(moonLon(at(ds, "23:59", off)));
+      moonTxt = m1.i === m2.i ? signLink(m1) : signLink(m1) + " or " + signLink(m2);
+      ascTxt = "<span class='skymuted'>needs your birth time</span>";
+    }
+    var sun0 = sign(sunLon(at(ds, "00:00", off))), sun1 = sign(sunLon(at(ds, "23:59", off)));
+    var cusp = !ts && sun0.i !== sun1.i;
+    out.innerHTML = "<div class='three'>"
+      + "<div><span class='skymuted'>Sun sign</span><b>" + (cusp ? signLink(sun0) + " / " + signLink(sun1) : signLink(sun)) + "</b></div>"
+      + "<div><span class='skymuted'>Moon sign</span><b>" + moonTxt + "</b></div>"
+      + "<div><span class='skymuted'>Rising sign</span><b>" + ascTxt + "</b></div></div>"
+      + (cusp ? "<p class='skymuted'>The Sun changed sign on your birthday. Your birth time decides which one.</p>" : "");
+  };
+
+  // Fill from the account when we can: birthday from /me/, city from the network profile.
+  fetch("/api/auth/me/", {credentials: "same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(m){
+      m = m && (m.user || m);
+      if (!m || !m.birth_day || !m.birth_month || !m.birth_year || $("skyd").value) return;
+      $("skyd").value = m.birth_year + "-" + String(m.birth_month).padStart(2, "0") + "-" + String(m.birth_day).padStart(2, "0");
+      return fetch("/api/network/me/", {credentials: "same-origin"})
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(p){
+          var city = String((p && p.city) || "").trim().toLowerCase();
+          for (var i = 0; i < CITIES.length; i++){
+            if (CITIES[i][0].toLowerCase() === city){ cSel.value = String(i); oSel.value = String(CITIES[i][3]); break; }
+          }
+        })
+        .catch(function(){})
+        .then(function(){
+          var n = document.createElement("p");
+          n.className = "skymuted";
+          n.textContent = "Filled in from your profile. Change it to check someone else. Add a birth time for the Moon and Rising sign.";
+          $("skygo").parentNode.insertBefore(n, $("skygo"));
+          $("skygo").click();
+        });
+    })
+    .catch(function(){});
+});
+</script>
+  <div class="grid" id="grid"></div>
+  <div class="detail" id="detail"></div>
+<section class="rate" id="ratebox"></section></div>
+
+<script>
+(function(){
+  "use strict";
+  var DATA = null, current = null;
+
+  var EMOJI = {Aries:"\u2648",Taurus:"\u2649",Gemini:"\u264A",Cancer:"\u264B",
+    Leo:"\u264C",Virgo:"\u264D",Libra:"\u264E",Scorpio:"\u264F",
+    Sagittarius:"\u2650",Capricorn:"\u2651",Aquarius:"\u2652",Pisces:"\u2653"};
+
+  var ORDER = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo",
+               "Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  function grid(){
+    document.getElementById("grid").innerHTML = ORDER.map(function(k){
+      var d = DATA[k];
+      if (!d) return "";
+      return '<div class="sign' + (current===k?" on":"") + '" data-sign="' + k + '">'
+        + '<span class="e">' + (EMOJI[k]||d.emoji||"") + '</span>'
+        + '<b>' + esc(k) + '</b>'
+        + '<small>' + esc((d.dates||"").split(" - ")[0]) + '</small></div>';
+    }).join("");
+  }
+
+  function detail(){
+    var el = document.getElementById("detail");
+    if (!current || !DATA[current]){ el.innerHTML = ""; return; }
+    var d = DATA[current];
+
+    var h = '<div class="dhead"><span class="ghost">' + (EMOJI[current]||"") + '</span>'
+      + '<h2>' + esc(current) + '</h2>'
+      + '<p class="dates">' + esc(d.dates||"") + '</p>'
+      + '<div class="facts">'
+      + (d.element ? '<span>' + esc(d.element) + '</span>' : '')
+      + (d.planet ? '<span>' + esc(d.planet) + '</span>' : '')
+      + (d.stone ? '<span>' + esc(d.stone) + '</span>' : '')
+      + (d.color ? '<span>' + esc(d.color) + '</span>' : '')
+      + '</div></div>';
+
+    if (d.today){
+      h += '<div class="today"><div class="lbl">Today</div><p>'
+        + esc(d.today) + '</p></div>';
+    }
+
+    if (d.desc){
+      h += '<div class="sec"><h4>About ' + esc(current) + '</h4><p>' + esc(d.desc) + '</p>';
+      if (d.traits && d.traits.length){
+        h += '<div class="traits">' + d.traits.map(function(t){
+          return '<span>' + esc(t) + '</span>'; }).join("") + '</div>';
+      }
+      h += '</div>';
+    }
+
+    [["love","\ud83d\udc9b Love"],["career","\ud83d\udcbc Work"],
+     ["health","\ud83c\udf3f Health"]].forEach(function(pair){
+      if (d[pair[0]]){
+        h += '<div class="sec"><h4>' + pair[1] + '</h4><p>'
+          + esc(d[pair[0]]) + '</p></div>';
+      }
+    });
+
+    if (d.lucky && d.lucky.length){
+      h += '<div class="sec"><h4>\ud83c\udf40 Lucky numbers</h4><div class="lucky">'
+        + d.lucky.map(function(n){ return '<span>' + n + '</span>'; }).join("")
+        + '</div></div>';
+    }
+
+    // Said plainly rather than buried. Star signs are entertainment, and the
+    // page should not pretend otherwise.
+    h += '<div class="disc">Star signs are for entertainment. There is no '
+      + 'evidence that the position of the stars affects anyone\u2019s life or '
+      + 'character, so please do not use any of this to make a real decision.</div>';
+
+    el.innerHTML = h;
+  }
+
+  document.getElementById("grid").addEventListener("click", function(e){
+    var s = e.target.closest("[data-sign]");
+    if (!s) return;
+    current = s.getAttribute("data-sign");
+    grid(); detail();
+    history.replaceState(null, "", "/zodiac?sign=" + current);
+    document.getElementById("detail").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  fetch("/brand/zodiac.json", {credentials:"same-origin"})
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){
+      DATA = d;
+      var q = new URLSearchParams(location.search).get("sign");
+      if (q && DATA[q]) current = q;
+      grid(); detail();
+
+      // No sign in the URL: use the one on the account, if there is one.
+      if (!current){
+        fetch("/api/auth/home/", {credentials:"same-origin"})
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(u){
+            if (u && u.zodiac && DATA[u.zodiac]){
+              current = u.zodiac; grid(); detail();
+            }
+          }).catch(function(){});
+      }
+    })
+    .catch(function(){
+      document.getElementById("grid").innerHTML =
+        '<div class="note" style="grid-column:1/-1">Could not load the signs. '
+        + 'Try again in a moment.</div>';
+    });
+})();
+</script>
+
+<script>
+/* Registers the worker that makes the site open without a connection.
+   Failure here is not worth reporting: the site works either way. */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  });
+}
+</script>
+
+<script>
+/* Ratings. Stars go live at once; a written comment waits to be read, because
+   a star cannot carry abuse or a spam link and a sentence can. */
+(function(){
+  var MODULE = "zodiac";
+  var wrap = document.getElementById("ratebox");
+  if (!wrap) return;
+
+  var picked = 0, mine = null, busy = false;
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+  function stars(n){
+    return "\u2605".repeat(Math.round(n)) + "\u2606".repeat(5 - Math.round(n));
+  }
+
+  function draw(d){
+    var h = '<div class="top2">';
+    if (d.count){
+      h += '<span class="big2">' + d.average + '</span>'
+        + '<span class="t2"><span class="stars">' + stars(d.average) + '</span>'
+        + '<span class="out" style="display:block">out of 5, from '
+        + d.count + (d.count === 1 ? ' person' : ' people') + '</span></span>';
+    } else {
+      h += '<span class="t2"><h4>Rate this</h4>'
+        + '<span class="out">Nobody has rated it yet.</span></span>';
+    }
+    h += '</div>';
+
+    h += '<h4 style="margin-top:16px">'
+      + (mine ? "Your rating" : "How was it?") + '</h4>'
+      + '<div class="pick2">';
+    for (var i = 1; i <= 5; i++){
+      h += '<button data-star="' + i + '" class="'
+        + (i <= picked ? "on" : "") + '">'
+        + (i <= picked ? "\u2605" : "\u2606") + '</button>';
+    }
+    h += '</div>'
+      + '<textarea id="rcomment" maxlength="600" placeholder="Say a bit more '
+      + '(optional)">' + esc(mine && mine.comment ? mine.comment : "") + '</textarea>'
+      + '<button class="send" id="rsend"' + (picked ? "" : " disabled") + '>'
+      + (mine ? "Update" : "Send") + '</button>';
+
+    if (mine && mine.state === "pending"){
+      h += '<p class="said wait">Your rating counts already. '
+        + 'The comment appears once we have read it.</p>';
+    }
+
+    if (d.reviews && d.reviews.length){
+      h += '<div class="list2">';
+      d.reviews.forEach(function(r){
+        h += '<div class="r2"><div class="hd">'
+          + '<b>' + esc(r.name) + '</b>'
+          + '<span class="s">' + stars(r.stars) + '</span>'
+          + '<small>' + esc(r.when) + '</small></div>'
+          + '<p>' + esc(r.comment) + '</p></div>';
+      });
+      h += '</div>';
+    }
+
+    wrap.innerHTML = h;
+  }
+
+  function load(){
+    fetch("/api/reviews/" + MODULE + "/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        mine = d.mine || null;
+        picked = mine ? mine.stars : 0;
+        draw(d);
+      })
+      .catch(function(){});
+  }
+
+  wrap.addEventListener("click", function(e){
+    var st = e.target.closest("[data-star]");
+    if (st){
+      picked = parseInt(st.getAttribute("data-star"), 10);
+      var btns = wrap.querySelectorAll("[data-star]");
+      btns.forEach(function(b, i){
+        var on = (i + 1) <= picked;
+        b.classList.toggle("on", on);
+        b.textContent = on ? "\u2605" : "\u2606";
+      });
+      var send = document.getElementById("rsend");
+      if (send) send.disabled = false;
+      return;
+    }
+
+    if (e.target.id === "rsend"){
+      if (busy || !picked) return;
+      busy = true;
+      e.target.disabled = true;
+      var box = document.getElementById("rcomment");
+      fetch("/api/reviews/" + MODULE + "/mine/", {
+        method: "POST", credentials: "same-origin",
+        headers: {"Content-Type":"application/json", "X-CSRFToken": cookie("xc_csrf")},
+        body: JSON.stringify({stars: picked, comment: box ? box.value : ""})
+      })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok, d:d}; }); })
+      .then(function(res){
+        busy = false;
+        if (!res.ok){
+          alert(res.d.detail || "Could not save that.");
+          return;
+        }
+        load();
+      })
+      .catch(function(){ busy = false; });
+    }
+  });
+
+  load();
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

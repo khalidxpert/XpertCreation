@@ -10,6 +10,7 @@ djangorestframework==3.18.0
 gunicorn==26.0.0
 packaging==26.3
 pillow==12.3.0
+pillow_heif==1.5.0
 psycopg2-binary==2.9.12
 pycparser==3.0
 qrcode==8.2

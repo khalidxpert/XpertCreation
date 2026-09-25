@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sign in — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Sign in to your XpertCreation account.">
+<link rel="canonical" href="https://xpertcreation.com/login">
+<meta name="robots" content="noindex,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Sign in — XpertCreation">
+<meta property="og:description" content="Sign in to your XpertCreation account.">
+<meta property="og:url" content="https://xpertcreation.com/login">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sign in — XpertCreation">
+<meta name="twitter:description" content="Sign in to your XpertCreation account.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Sign in","url":"https://xpertcreation.com/login","description":"Sign in to your XpertCreation account.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="apple-touch-icon" href="/brand/icon-180.png">
+<meta name="theme-color" content="#14151A">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0D1424; --ink-soft:#5A657C; --paper:#F6F7FB; --card:#FFF;
+  --brand:#1B4DFF; --go:#00B37E; --hot:#B45309; --danger:#B91C1C; --line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;
+  --mono:"Space Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.55;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{display:flex;align-items:center;gap:9px;padding:14px 18px;border-bottom:1px solid var(--line);
+  background:var(--card)}
+.top .chip{width:40px;height:40px;border-radius:9px;background:#14151A;display:block}
+.top .chip.gone{display:none}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+
+main{flex:1;display:grid;place-items:center;padding:28px 18px 40px}
+.card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);
+  border-radius:22px;padding:26px 22px;box-shadow:0 2px 4px rgba(13,20,36,.04),0 14px 34px rgba(13,20,36,.07)}
+h1{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.035em;line-height:1.1}
+.sub{font-size:13.5px;color:var(--ink-soft);margin-top:7px;line-height:1.55}
+
+.fld{margin-top:15px}
+.fld label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+.fld input{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:13px;
+  background:var(--paper);font-size:15px;outline:none;transition:border-color .18s;font-family:inherit}
+.fld input:focus{border-color:var(--brand);background:var(--card)}
+.fld .pw{position:relative}
+.fld .pw input{padding-right:48px}
+.fld .pw .eye{position:absolute;top:50%;right:6px;transform:translateY(-50%);
+  width:38px;height:38px;border-radius:10px;display:grid;place-items:center;
+  color:var(--ink-soft);transition:color .15s,background .15s}
+.fld .pw .eye:hover{background:var(--paper);color:var(--ink)}
+.fld .pw .eye svg{width:20px;height:20px;fill:none;stroke:currentColor;
+  stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.fld .note{font-size:11.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+.fld.code input{font-family:var(--mono);font-size:25px;letter-spacing:.34em;text-align:center}
+
+.btn{width:100%;margin-top:20px;padding:15px;border-radius:14px;background:var(--brand);
+  color:#fff;font-weight:700;font-size:15px;transition:opacity .2s}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.danger{background:var(--danger)}
+.btn.ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line);margin-top:10px}
+
+.rows{display:flex;justify-content:space-between;gap:10px;margin-top:17px;font-size:13px;flex-wrap:wrap}
+.rows span{color:var(--ink-soft)}
+.rows button{color:var(--brand);font-weight:700}
+
+.msg{margin-top:16px;padding:12px 14px;border-radius:12px;font-size:13.5px;line-height:1.55;display:none}
+.msg.on{display:block}
+.msg.err{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.msg.ok{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.32);color:#00734F}
+
+.who{display:flex;align-items:center;gap:12px;padding:14px;border-radius:15px;
+  background:var(--paper);border:1px solid var(--line);margin-top:16px}
+.who .av{width:42px;height:42px;border-radius:13px;background:var(--ink);color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:17px;flex:0 0 auto}
+.who .t{min-width:0}
+.who .t b{display:block;font-size:14.5px}
+.who .t small{display:block;font-size:12px;color:var(--ink-soft);font-family:var(--mono);
+  overflow:hidden;text-overflow:ellipsis}
+
+.links{display:grid;gap:8px;margin-top:18px}
+.links a{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;
+  border-radius:13px;background:var(--paper);border:1px solid var(--line);
+  color:var(--ink);font-size:14px;font-weight:600}
+.links a small{color:var(--ink-soft);font-weight:400}
+
+.warnbox{margin-top:18px;padding:15px;border-radius:14px;background:rgba(185,28,28,.06);
+  border:1px solid rgba(185,28,28,.28)}
+.warnbox b{display:block;font-size:14px;color:var(--danger);margin-bottom:7px}
+.warnbox ul{margin:0;padding-left:19px}
+.warnbox li{font-size:13px;line-height:1.6;color:var(--ink)}
+
+footer{padding:20px 18px 28px;text-align:center;font-size:12.5px;color:var(--ink-soft)}
+footer a{color:var(--ink-soft);margin:0 8px}
+
+/* floating support button */
+.wafab{position:fixed;z-index:80;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));
+  width:52px;height:52px;border-radius:17px;background:#25D366;display:grid;place-items:center;
+  box-shadow:0 8px 24px rgba(37,211,102,.4);transition:transform .16s}
+.wafab:active{transform:scale(.93)}
+.wafab svg{width:27px;height:27px;fill:#fff}
+body.rtl .wafab{right:auto;left:16px}
+@media(min-width:1100px){
+  .wafab{right:calc(50% - 520px);}
+  body.rtl .wafab{left:calc(50% - 520px);right:auto}
+}
+
+.avwrap{display:flex;align-items:center;gap:14px;margin-top:16px}
+/* Upload ke buttons. .avwrap .pick ka CSS in par nahi lagta tha, is liye
+   ye bilkul saade aur ek doosre se chipke hue dikh rahe the. */
+.avpick{margin-top:16px}
+.avpick .row{display:flex;gap:10px;flex-wrap:wrap}
+.avpick button{padding:12px 18px;border-radius:13px;font-size:14px;
+  font-weight:700;border:1.5px solid transparent;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:all .16s}
+.avpick .go{background:var(--brand,#1B4DFF);color:#fff;
+  box-shadow:0 4px 14px rgba(27,77,255,.26)}
+.avpick .go:hover{transform:translateY(-1px);
+  box-shadow:0 7px 18px rgba(27,77,255,.32)}
+.avpick .alt{background:var(--paper,#F6F7FB);color:var(--ink,#0D1424);
+  border-color:var(--line,#E4E8F2)}
+.avpick .alt:hover{border-color:var(--brand,#1B4DFF);color:var(--brand,#1B4DFF)}
+.avpick .kill{background:transparent;color:#B91C1C;border-color:#F3C6C6;
+  margin-top:10px;padding:9px 15px;font-size:13px}
+.avpick .kill:hover{background:#FEF2F2;border-color:#DC2626}
+.avpick .msg{margin-top:10px;font-size:13px;color:var(--ink-soft,#5A657C)}
+.avpick .msg.bad{color:#B91C1C}
+@media(max-width:420px){
+  .avpick .row{flex-direction:column}
+  .avpick .row button{width:100%;justify-content:center}
+}
+.avbig{width:72px;height:72px;border-radius:22px;object-fit:cover;flex:0 0 auto;
+  border:2px solid var(--line);background:var(--paper)}
+.avbig.ph{display:grid;place-items:center;font-family:var(--display);font-weight:800;
+  font-size:28px;color:#fff;background:var(--ink);border-color:var(--ink)}
+.avwrap .t{flex:1;min-width:0}
+.avwrap .t b{display:block;font-size:16px;font-weight:700}
+.avwrap .t small{display:block;font-size:12.5px;color:var(--ink-soft);
+  font-family:var(--mono);overflow:hidden;text-overflow:ellipsis}
+.avwrap .pick{padding:9px 14px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);font-size:12.5px;font-weight:700;white-space:nowrap}
+
+.avgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:9px;
+  margin-top:14px;max-height:44vh;overflow-y:auto;padding:2px}
+.avgrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:16px;
+  border:2px solid var(--line);cursor:pointer;background:var(--paper);
+  transition:transform .14s,border-color .14s}
+.avgrid img:hover{transform:scale(1.04)}
+.avgrid img.on{border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,77,255,.18)}
+
+.setrow{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;
+  background:var(--paper);border:1px solid var(--line);margin-top:10px}
+.setrow .t{flex:1;min-width:0}
+.setrow .t b{display:block;font-size:14px;font-weight:700}
+.setrow .t small{display:block;font-size:12px;color:var(--ink-soft);margin-top:3px;line-height:1.5}
+.sw{width:46px;height:27px;border-radius:99px;background:var(--line);position:relative;
+  flex:0 0 auto;transition:background .2s;cursor:pointer}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;
+  border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:var(--go)}
+.sw.on::after{transform:translateX(19px)}
+
+.wish{position:relative;overflow:hidden;border-radius:20px;padding:24px 20px;margin-bottom:18px;
+  background:linear-gradient(135deg,#DB2777,#7C3AED 55%,#1B4DFF);color:#fff;text-align:center;
+  box-shadow:0 12px 34px rgba(219,39,119,.3)}
+.wish h2{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.03em;
+  line-height:1.2;position:relative;z-index:2}
+.wish p{font-size:14px;line-height:1.6;margin-top:8px;opacity:.94;position:relative;z-index:2}
+.wish a{display:inline-block;margin-top:15px;padding:11px 22px;border-radius:12px;
+  background:#fff;color:#0D1424;font-weight:700;font-size:13.5px;position:relative;z-index:2}
+.wish .cf{position:absolute;top:-14px;font-size:17px;opacity:.85;pointer-events:none;
+  animation:wfall linear infinite}
+@keyframes wfall{
+  0%{transform:translateY(-16px) rotate(0);opacity:0}
+  12%{opacity:.9}
+  100%{transform:translateY(260px) rotate(400deg);opacity:0}
+}
+@media(prefers-reduced-motion:reduce){ .wish .cf{display:none} }
+
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;
+  color:var(--ink-soft,#5A657C);flex:0 0 auto;text-decoration:none}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- phone layout ---------- */
+@media (max-width: 560px){
+  /* Nothing may be wider than the screen. One stray element makes the whole
+     page scroll sideways, which feels broken even when nothing else is. */
+  html, body{overflow-x:hidden;max-width:100vw}
+
+  .top, .topbar{padding:10px 12px;gap:6px}
+  .top b, .topbar b, .brandbar b{font-size:15px}
+  .top .chip, .topbar .chip, .brandbar img{width:28px;height:28px}
+
+  /* The wordmark goes; the logo alone is enough on a small screen. */
+  .brandbar b{display:none}
+
+  .gear{width:36px;height:36px}
+  .langwrap{padding:4px 7px 4px 8px}
+  .langwrap select, .langwrap #langSel{max-width:60px;font-size:12.5px}
+  .acctbtn, .who{max-width:96px;font-size:11.5px;padding:5px 10px 5px 5px}
+  .acctbtn img, .acctbtn .ini{width:21px;height:21px;font-size:10px}
+
+  /* Cards to the edge, with the padding on the page instead. */
+  .wrap{padding-left:14px;padding-right:14px}
+  .hello{padding:18px 16px;border-radius:20px}
+  .hello .t b{font-size:19px}
+  .hellolines .ln{flex-wrap:wrap;gap:4px}
+  .hellolines .ln .k{min-width:78px;font-size:12.5px}
+  .hellolines .ln .v{font-size:13.5px}
+  .hellolines .today2{font-size:14.5px}
+
+  .grid2{grid-template-columns:1fr 1fr;gap:9px}
+  .tiles{gap:9px}
+  .slide{min-height:200px;padding:20px}
+  .slide h3{font-size:22px}
+  .about{padding:20px 16px}
+  .about .contact{grid-template-columns:1fr;gap:8px}
+  .about .contact a{display:flex;align-items:center;gap:12px;text-align:left;padding:12px}
+  .about .contact .ic2{margin:0}
+  .about .pic{width:66px;height:66px;border-radius:20px}
+
+  .row, .row3b, .two{grid-template-columns:1fr}
+  .row3b .swap{width:100%;height:38px}
+  .keys{gap:5px}
+  .keys button{padding:12px 0;font-size:14px}
+}
+
+@media (max-width: 380px){
+  .grid2{grid-template-columns:1fr}
+  .hello .av{width:48px;height:48px}
+  .hello .t b{font-size:17px}
+}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+.botlinkbox{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:16px;margin-top:14px}
+.botlinkbox h4{font-family:var(--display);font-weight:800;font-size:14.5px;margin-bottom:11px}
+.botrow{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.botrow:first-of-type{border-top:none;padding-top:0}
+.botrow .bicon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  color:#fff;font-size:17px;flex:0 0 auto}
+.botrow .bicon.discord{background:#5865F2}
+.botrow .bicon.telegram{background:#26A5E4}
+.botrow .bt{flex:1;min-width:0}
+.botrow .bt b{display:block;font-size:13.5px;font-weight:700}
+.botrow .bt small{display:block;font-size:11.5px;color:var(--ink-soft)}
+.botrow button{padding:9px 15px;border-radius:11px;font-size:12.5px;font-weight:700}
+.botrow .connectbtn{background:var(--ink);color:#fff}
+.botrow .disconnectbtn{background:var(--paper);border:1px solid var(--line);color:var(--bad,#DC2626)}
+.codebox2{margin-top:10px;padding:14px;border-radius:13px;background:var(--paper);
+  border:1px dashed var(--line);text-align:center}
+.codebox2 .code3{font-family:var(--mono);font-weight:800;font-size:24px;letter-spacing:.12em;
+  color:var(--ink)}
+.codebox2 p{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a href="/" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img class="chip" src="/brand/icon-64.png" alt="" onerror="this.classList.add('gone')">
+    <b>XpertCreation</b>
+  </a>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<style>.acctabs{display:flex;gap:6px;margin:0 0 14px;padding:4px;background:var(--paper,#F6F7FB);border:1px solid var(--line,#E4E8F2);border-radius:14px}.acctabs a{flex:1;text-align:center;padding:9px 10px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink-soft,#5A657C)}.acctabs a.on{background:var(--card,#fff);color:var(--ink,#0D1424);box-shadow:0 1px 3px rgba(13,20,36,.1)}</style><main><div class="acctabs"><a class="on" href="/account">Account</a><a href="/me/profile">Professional profile</a></div><div class="card" id="card"></div></main>
+
+<footer>
+  <a href="/privacy">Privacy</a>·<a href="/terms">Terms</a>·<a href="/">Home</a>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var API = "/api";
+  var me = null, busy = false, email = "", msg = "", msgType = "err";
+  var avatars = [], picking = false, birthdayToday = false;
+  // Homepage ki tasveer par click ?pick=1 ke sath yahan bhejta hai, taake
+  // upload ka khana pehle se khula mile aur ek qadam kam ho jaye.
+  try {
+    if (new URLSearchParams(location.search).get("pick") === "1") picking = true;
+  } catch (e) {}
+  var editingName = false, editingBday = false;
+  var MONTHS_LIST = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  function avatarFor(key){
+    if (!key) return null;
+    // Uploaded tasveer .jpg par khatam hoti hai; baqi purani keys hain.
+    if (/\.jpg$/.test(key)){
+      return "/media/avatars/" + key
+        + (me && me.avatar_bust ? "?v=" + me.avatar_bust : "");
+    }
+    var a = avatars.filter(function(x){ return x.key === key; })[0];
+    return a ? "/brand/avatars/" + a.file : null;
+  }
+
+  // The screen comes from the URL, so /login and /register are real,
+  // shareable, bookmarkable addresses rather than states inside one page.
+  function screenFromPath(){
+    var p = location.pathname.replace(/\/+$/, "") || "/";
+    if (p === "/register") return "register";
+    if (p === "/account/delete") return "delete";
+    if (p === "/account") return "account";
+    return "login";
+  }
+  var screen = screenFromPath();
+
+  function esc(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
+  }
+
+  function cookie(name){
+    var m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+
+  function api(path, opts){
+    opts = opts || {};
+    var h = {"Content-Type":"application/json"};
+    if (opts.method && opts.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch(API + path, {
+      method: opts.method || "GET", headers: h, credentials: "same-origin",
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    }).then(function(r){
+      return r.json().catch(function(){ return {}; }).then(function(d){
+        return { ok: r.ok, status: r.status, data: d };
+      });
+    }).catch(function(){
+      return { ok:false, status:0, data:{ detail:"Network error. Check your connection." } };
+    });
+  }
+
+  function fail(r){
+    var d = r.data;
+    msg = d.detail || (d.email && d.email[0]) || (d.password && d.password[0])
+       || (d.code && d.code[0]) || (d.new_password && d.new_password[0])
+       || "Something went wrong.";
+    msgType = "err"; busy = false; draw();
+  }
+
+  function val(id){
+    var e = document.getElementById(id);
+    return e ? String(e.value || "").trim() : "";
+  }
+  function go(s){ screen = s; msg = ""; draw(); }
+
+  var EYE_OPEN = '<svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7'
+    + '-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var EYE_SHUT = '<svg viewBox="0 0 24 24"><path d="M3 3l18 18"/>'
+    + '<path d="M10.6 5.2A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a17.9 17.9 0 0 1-3.4 4.3"/>'
+    + '<path d="M6.5 6.9C3.8 8.6 2 12 2 12s3.6 7 10 7a10.6 10.6 0 0 0 4.1-.8"/>'
+    + '<path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+
+  function fld(id, label, type, value, note, cls){
+    var isPw = type === "password";
+    var input = '<input id="' + id + '" type="' + type + '" value="' + esc(value||"") + '"'
+      + (cls === "code" ? ' inputmode="numeric" maxlength="6"' : '')
+      + (type === "email" ? ' autocomplete="email"' : '')
+      + (isPw ? ' autocomplete="' + (screen === "register" || screen === "reset"
+                                     ? "new-password" : "current-password") + '"' : '')
+      + '>';
+    if (isPw){
+      input = '<span class="pw">' + input
+        + '<button type="button" class="eye" data-eye="' + id + '"'
+        + ' aria-label="Show password" title="Show password">' + EYE_OPEN + '</button></span>';
+    }
+    return '<div class="fld ' + (cls||"") + '">'
+      + '<label for="' + id + '">' + esc(label) + '</label>'
+      + input + (note ? '<p class="note">' + esc(note) + '</p>' : '') + '</div>';
+  }
+
+  function wishCard(name){
+    return '<div class="wish" id="wishBox">'
+      + '<h2>\ud83c\udf82 Happy birthday, ' + esc(name) + '!</h2>'
+      + '<p>What a day to join us. Everyone at XpertCreation wishes you a '
+      + 'wonderful year ahead.</p>'
+      + '<a href="/birthdays">Save the birthdays you forget \u2192</a></div>';
+  }
+
+  function confetti(){
+    var el = document.getElementById("wishBox");
+    if (!el) return;
+    var bits = ["\ud83c\udf89","\ud83c\udf88","\u2728","\ud83c\udf8a","\ud83c\udf82"];
+    for (var i = 0; i < 12; i++){
+      var c = document.createElement("span");
+      c.className = "cf";
+      c.textContent = bits[i % bits.length];
+      c.style.left = (5 + Math.random() * 88) + "%";
+      c.style.animationDuration = (2.4 + Math.random() * 2) + "s";
+      c.style.animationDelay = (Math.random() * 2) + "s";
+      el.appendChild(c);
+    }
+  }
+
+  function draw(){
+    var m = msg ? '<div class="msg ' + msgType + ' on">' + esc(msg) + '</div>' : '';
+    var h = "";
+
+    if (screen === "login"){
+      h = '<h1>Sign in</h1><p class="sub">One account for every XpertCreation service.</p>' + m
+        + fld("email","Email","email",email)
+        + fld("pass","Password","password","")
+        + '<button class="btn" data-a="login"' + (busy?" disabled":"") + '>'
+        + (busy ? "Working…" : "Sign in") + '</button>'
+        + '<div class="rows"><button data-a="go-forgot">Forgot password</button>'
+        + '<span>New here? <button data-a="go-register">Create account</button></span></div>';
+
+    } else if (screen === "register"){
+      h = '<h1>Create account</h1><p class="sub">Free. One account works across every service.</p>' + m
+        + fld("name","Full name","text","","This is the name printed on your certificates.")
+        + '<div class="fld"><label>Birthday (optional)</label>'
+        + '<div style="display:grid;grid-template-columns:1fr 1.5fr;gap:9px">'
+        + '<input id="regBdDay" type="number" min="1" max="31" placeholder="Day">'
+        + '<select id="regBdMonth"><option value="">Month</option>'
+        + ["January","February","March","April","May","June","July","August",
+           "September","October","November","December"].map(function(mn, i){
+             return '<option value="' + (i+1) + '">' + mn + '</option>';
+           }).join("")
+        + '</select></div>'
+        + '<p class="note">We will not ask for the year. Leave this blank if you '
+        + 'would rather not say.</p></div>'
+        + fld("email","Email","email",email)
+        + fld("pass","Password","password","","At least 8 characters.")
+        + '<button class="btn" data-a="register"' + (busy?" disabled":"") + '>'
+        + (busy ? "Working…" : "Create account") + '</button>'
+        + '<p class="sub" style="margin-top:14px;font-size:12px">By creating an account you agree to our '
+        + '<a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.</p>'
+        + '<div class="rows"><span>Already have an account? '
+        + '<button data-a="go-login">Sign in</button></span></div>';
+
+    } else if (screen === "verify"){
+      h = '<h1>Check your email</h1><p class="sub">We sent a 6-digit code to <b>' + esc(email)
+        + '</b>. It expires in 10 minutes.</p>' + m
+        + fld("code","Code","text","","","code")
+        + '<button class="btn" data-a="verify"' + (busy?" disabled":"") + '>'
+        + (busy ? "Working…" : "Confirm") + '</button>'
+        + '<div class="rows"><button data-a="resend">Send again</button>'
+        + '<button data-a="go-login">Cancel</button></div>';
+
+    } else if (screen === "forgot"){
+      h = '<h1>Reset password</h1><p class="sub">We will email you a 6-digit code.</p>' + m
+        + fld("email","Email","email",email)
+        + '<button class="btn" data-a="forgot"' + (busy?" disabled":"") + '>'
+        + (busy ? "Working…" : "Send code") + '</button>'
+        + '<div class="rows"><button data-a="go-login">Back to sign in</button></div>';
+
+    } else if (screen === "reset"){
+      h = '<h1>New password</h1><p class="sub">Enter the code we sent to <b>' + esc(email) + '</b>.</p>' + m
+        + fld("code","Code","text","","","code")
+        + fld("pass","New password","password","","At least 8 characters.")
+        + '<button class="btn" data-a="reset"' + (busy?" disabled":"") + '>'
+        + (busy ? "Working…" : "Change password") + '</button>'
+        + '<div class="rows"><button data-a="go-login">Cancel</button></div>';
+
+    } else if (screen === "account"){
+      if (!me) return;
+      var initial = (me.full_name || me.email).trim().charAt(0).toUpperCase();
+      var av = avatarFor(me.avatar);
+
+      var wish = "";
+      try {
+        if (sessionStorage.getItem("xc_wish") === "1"){
+          wish = wishCard(me.full_name || me.email.split("@")[0]);
+          sessionStorage.removeItem("xc_wish");
+          setTimeout(confetti, 60);
+        }
+      } catch(e){}
+
+      h = wish + '<h1>Your account</h1>' + m
+        + '<div class="avwrap">'
+        + (av ? '<img class="avbig" src="' + esc(av) + '" alt="" data-a="pickav" '
+              + 'title="Change picture" style="cursor:pointer">'
+              : '<span class="avbig ph" data-a="pickav" title="Change picture" '
+              + 'style="cursor:pointer">' + esc(initial) + '</span>')
+        + '<span class="t"><b>' + esc(me.full_name || "—") + '</b>'
+        + '<small>' + esc(me.email) + '</small></span>'
+        + '<button class="pick" data-a="pickav">Change</button></div>';
+
+      if (picking){
+        // Do alag input: ek hi input camera aur gallery dono nahi de sakta.
+        // capture wala seedha camera kholta hai, doosra gallery.
+        h += '<div class="avpick">'
+          + '<input type="file" id="avatarCam" accept="image/*" '
+          + 'capture="user" style="display:none">'
+          + '<input type="file" id="avatarUpload" accept="image/*" '
+          + 'style="display:none">'
+          + '<div class="row">'
+          + '<button class="go" data-a="choosepic">'
+          + '<span>&#128247;</span> Choose a picture</button>'
+          + '<button class="alt" data-a="buildav">'
+          + '<span>&#127912;</span> Build an avatar</button>'
+          + '</div>'
+          + '<p class="msg">A square photo works best. Up to 2 MB.</p>'
+          + (me.avatar ? '<button class="kill" data-a="removepic">'
+                       + 'Remove my picture</button>' : '')
+          + '<p class="msg" id="avatarMsg"></p>'
+          + '</div>';
+      }
+
+      // Shown, not opened for editing: arriving with a cursor in a filled
+      // field reads as "we lost your name, type it again".
+      if (editingName){
+        h += '<div class="fld" style="margin-top:18px">'
+          + '<label for="nm">Display name</label>'
+          + '<input id="nm" value="' + esc(me.full_name || "") + '">'
+          + '<p class="note">This is the name printed on your certificates and '
+          + 'shown on leaderboards.</p></div>'
+          + '<button class="btn" data-a="savename">Save name</button>'
+          + '<button class="btn ghost" data-a="cancelname">Cancel</button>';
+      } else {
+        h += '<div class="setrow" style="margin-top:18px">'
+          + '<span class="t"><b>' + esc(me.full_name || "Not set") + '</b>'
+          + '<small>Shown on certificates and leaderboards.</small></span>'
+          + '<button class="pick" data-a="editname">Edit</button></div>';
+      }
+
+      // A saved date is shown, not opened for editing. A filled field with a
+      // cursor in it reads as though the value had been lost.
+      if (!me.birth_day || editingBday){
+        h += '<div class="fld" style="margin-top:20px">'
+          + '<label>Your birthday</label>'
+          + '<div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:9px">'
+          + '<input id="bdDay" type="number" min="1" max="31" placeholder="Day" value="'
+          + (me.birth_day || "") + '">'
+          + '<select id="bdMonth"><option value="">Month</option>'
+          + MONTHS_LIST.map(function(mn, i){
+              return '<option value="' + (i+1) + '"'
+                + (me.birth_month === i+1 ? " selected" : "") + '>' + mn + '</option>';
+            }).join("")
+          + '</select>'
+          + '<input id="bdYear" type="number" min="1900" placeholder="Year" value="'
+          + (me.birth_year || "") + '"></div>'
+          + '<p class="note">Year is optional. Without it we still know your birthday '
+          + 'and your star sign, but not your age.</p>'
+          + '<button class="btn" data-a="savebday" style="margin-top:10px">Save birthday</button>'
+          + (me.birth_day ? '<button class="btn ghost" data-a="cancelbday">Cancel</button>'
+                          : '')
+          + (me.birth_day ? '<button class="btn ghost" data-a="clearbday">Remove it</button>'
+                          : '')
+          + '</div>';
+      } else {
+        h += '<div class="setrow" style="margin-top:20px">'
+          + '<span class="t"><b>' + me.birth_day + ' '
+          + (MONTHS_LIST[me.birth_month - 1] || '')
+          + (me.birth_year ? ' ' + me.birth_year : '') + '</b>'
+          + '<small>Your birthday'
+          + (me.birth_year ? '' : ' (year not set)') + '.</small></span>'
+          + '<button class="pick" data-a="editbday">Edit</button></div>';
+      }
+
+      var myVibe = me.vibe || null;
+      if (!myVibe){ try { myVibe = localStorage.getItem("xc_vibe"); } catch(e){} }
+      var VF = {dragon:"\ud83d\udc09",phoenix:"\ud83d\udd25",siren:"\ud83e\udddc",
+        dracula:"\ud83e\udddb",witch:"\ud83e\uddd9",ghost:"\ud83d\udc7b",
+        werewolf:"\ud83d\udc3a",elf:"\ud83e\udddd",dodo:"\ud83d\udc26"};
+      h += '<div class="setrow" style="margin-top:12px">'
+        + '<span class="t"><b>' + (myVibe
+            ? (VF[myVibe] || "\u2728") + " "
+              + esc(myVibe.charAt(0).toUpperCase() + myVibe.slice(1))
+            : "No vibe yet") + '</b>'
+        + '<small>' + (myVibe ? "Your vibe. Tap share to send it to a friend."
+                              : "Take the quiz to find out which creature you are.")
+        + '</small></span>'
+        + (myVibe ? '<button class="pick" data-a="sharevibe">Share</button>'
+                  : '<a class="pick" href="/vibe">Take it</a>') + '</div>';
+
+
+      h += '<a class="setrow" href="/me/profile#socials" style="text-decoration:none;color:inherit">'
+        + '<span class="t"><b>Social links</b><small>Facebook, Instagram, X, LinkedIn, YouTube, TikTok and more, shown on your profile.</small></span>'
+        + '<span>\u2192</span></a><div id="botlinkbox" style="display:none"></div>';
+      h += '<div class="setrow"><span class="t"><b>Hide me from leaderboards</b>'
+        + '<small>You are still ranked, but shown as a private learner instead of '
+        + 'by name.</small></span>'
+        + '<span class="sw' + (me.hide_from_leaderboard ? " on" : "") + '" id="swPriv" '
+        + 'data-a="privacy" role="switch"></span></div>';
+
+      h += '<div class="links" style="margin-top:18px">'
+        + '<a href="https://learn.xpertcreation.com/">XpertAcademy <small>Courses &amp; certificates &rarr;</small></a>'
+        + '<a href="https://xpertcreation.com/typing">Typing Tutor <small>Lessons &amp; leaderboard &rarr;</small></a>'
+        + '<a href="https://xpertcreation.com/blood">Blood Bank <small>Donors &amp; requests &rarr;</small></a>'
+        + '<a href="https://xpertcreation.com/birthdays">Birthdays <small>Reminders &rarr;</small></a>'
+        + '</div>'
+        + '<button class="btn ghost" data-a="signout">Sign out</button>'
+        + '<div class="rows" style="justify-content:center">'
+        + '<a href="/account/delete" style="color:var(--danger);font-weight:700">Delete my account</a></div>';
+
+    } else if (screen === "delete"){
+      if (!me){
+        h = '<h1>Delete your account</h1>'
+          + '<p class="sub">Sign in first, so we know whose account to delete.</p>'
+          + '<button class="btn" data-a="go-login">Sign in</button>';
+      } else {
+        h = '<h1>Delete your account</h1>'
+          + '<p class="sub">This cannot be undone.</p>'
+          + '<div class="warnbox"><b>What gets deleted</b><ul>'
+          + '<li>Your account and sign-in details</li>'
+          + '<li>All course progress and quiz results</li>'
+          + '<li>Every certificate you have earned — verification links stop working</li>'
+          + '</ul></div>' + m
+          + fld("pass","Your password","password","")
+          + fld("confirm","Type DELETE to confirm","text","")
+          + '<button class="btn danger" data-a="delete"' + (busy?" disabled":"") + '>'
+          + (busy ? "Deleting…" : "Delete permanently") + '</button>'
+          + '<button class="btn ghost" data-a="go-account">Keep my account</button>';
+      }
+    }
+
+    var keep = {};
+    document.querySelectorAll(".fld input").forEach(function(i){ keep[i.id] = i.value; });
+
+    document.getElementById("card").innerHTML = h;
+
+    Object.keys(keep).forEach(function(id){
+      var i = document.getElementById(id);
+      if (i && !i.value) i.value = keep[id];
+    });
+
+    var first = document.querySelector(".fld input");
+    if (first && !busy) first.focus();
+  }
+
+  function celebrate(){
+    // Shown once, right after the account is confirmed on the day itself.
+    try { sessionStorage.setItem("xc_wish", "1"); } catch(e){}
+  }
+
+  function next(){
+    var q = new URLSearchParams(location.search).get("next");
+    // Home, not settings. Landing on an edit form after signing in makes it
+    // look as though something is being asked for, when nothing is.
+    location.href = q && /^https:\/\/[a-z0-9-]+\.xpertcreation\.com\//.test(q)
+      ? q : "/";
+  }
+
+  document.getElementById("card").addEventListener("click", function(e){
+    var eye = e.target.closest("[data-eye]");
+    if (eye){
+      var inp = document.getElementById(eye.getAttribute("data-eye"));
+      if (!inp) return;
+      var showing = inp.type === "text";
+      inp.type = showing ? "password" : "text";
+      eye.innerHTML = showing ? EYE_OPEN : EYE_SHUT;
+      eye.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      eye.setAttribute("title", showing ? "Show password" : "Hide password");
+      inp.focus();
+      return;
+    }
+
+    var act = e.target.closest("[data-a]");
+    if (act && act.getAttribute("data-a") === "choosepic"){
+      var inp = document.getElementById("avatarUpload");
+      if (inp) inp.click();
+      return;
+    }
+    if (act && act.getAttribute("data-a") === "takepic"){
+      var cam = document.getElementById("avatarCam");
+      if (cam) cam.click();
+      return;
+    }
+    if (act && act.getAttribute("data-a") === "buildav"){
+      location.href = "/avatar-builder";
+      return;
+    }
+    if (act && act.getAttribute("data-a") === "removepic"){
+      me.avatar = ""; picking = false; draw();
+      return api("/auth/avatar/", {method:"POST", body:{avatar: ""}});
+    }
+
+    var b = e.target.closest("[data-a]");
+    if (!b || busy) return;
+    var a = b.getAttribute("data-a");
+
+    if (a.indexOf("go-") === 0) return go(a.slice(3));
+
+    if (a === "login"){
+      email = val("email"); busy = true; draw();
+      return api("/auth/login/", {method:"POST", body:{email:email, password:val("pass")}})
+        .then(function(r){
+          if (r.ok){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} return next(); }
+          if (r.data.needs_verification){ screen = "verify"; msg = r.data.detail; }
+          fail(r);
+        });
+    }
+
+    if (a === "register"){
+      email = val("email"); busy = true; draw();
+      return api("/auth/register/", {method:"POST",
+        body:{email:email, password:val("pass"), full_name:val("name")}})
+        .then(function(r){
+          if (r.ok){ screen = "verify"; msg = ""; busy = false; return draw(); }
+          fail(r);
+        });
+    }
+
+    if (a === "verify"){
+      busy = true; draw();
+      return api("/auth/verify-email/", {method:"POST", body:{email:email, code:val("code")}})
+        .then(function(r){
+          if (r.ok && r.data.user){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} return next(); }
+          if (r.ok){ screen = "login"; msg = r.data.detail; msgType = "ok"; busy = false; return draw(); }
+          fail(r);
+        });
+    }
+
+    if (a === "resend"){
+      busy = true; draw();
+      return api("/auth/resend-verify/", {method:"POST", body:{email:email}})
+        .then(function(r){ msg = r.data.detail || ""; msgType = r.ok ? "ok" : "err";
+                           busy = false; draw(); });
+    }
+
+    if (a === "forgot"){
+      email = val("email"); busy = true; draw();
+      return api("/auth/forgot-password/", {method:"POST", body:{email:email}})
+        .then(function(r){
+          if (r.ok){ screen = "reset"; msg = ""; busy = false; return draw(); }
+          fail(r);
+        });
+    }
+
+    if (a === "reset"){
+      busy = true; draw();
+      return api("/auth/reset-password/", {method:"POST",
+        body:{email:email, code:val("code"), new_password:val("pass")}})
+        .then(function(r){
+          if (r.ok){ screen = "login"; msg = r.data.detail; msgType = "ok"; busy = false; return draw(); }
+          fail(r);
+        });
+    }
+
+    if (a === "pickav"){ picking = !picking; return draw(); }
+
+    if (a === "privacy"){
+      var on = !me.hide_from_leaderboard;
+      me.hide_from_leaderboard = on;
+      draw();
+      return api("/auth/privacy/", {method:"POST", body:{hide_from_leaderboard: on}})
+        .then(function(r){
+          if (!r.ok){ me.hide_from_leaderboard = !on; return fail(r); }
+        });
+    }
+
+    if (a === "editbday"){ editingBday = true; return draw(); }
+    if (a === "cancelbday"){ editingBday = false; msg = ""; return draw(); }
+
+    if (a === "savebday"){
+      // Read all three before anything re-renders.
+      var b = {day: val("bdDay"), month: val("bdMonth"), year: val("bdYear"), show: true};
+      if (!b.day || !b.month){ msg = "Pick a day and a month."; msgType = "err"; return draw(); }
+      busy = true; draw();
+      return api("/auth/birthday/", {method:"POST", body:b}).then(function(r){
+        busy = false;
+        if (!r.ok) return fail(r);
+        me.birth_day = r.data.day; me.birth_month = r.data.month; me.birth_year = r.data.year;
+        var now = new Date();
+        if (r.data.day === now.getDate() && r.data.month === now.getMonth() + 1){
+          try { sessionStorage.setItem("xc_wish", "1"); } catch(e){}
+        }
+        editingBday = false;
+        msg = "Saved. Your star sign is " + (r.data.zodiac || "set") + ".";
+        msgType = "ok"; draw();
+      });
+    }
+
+    if (a === "clearbday"){
+      busy = true; draw();
+      return api("/auth/birthday/", {method:"POST", body:{clear:true}}).then(function(r){
+        busy = false;
+        me.birth_day = me.birth_month = me.birth_year = null;
+        editingBday = false;
+        msg = "Removed."; msgType = "ok"; draw();
+      });
+    }
+
+    if (a === "sharevibe"){
+      var v = null;
+      try { v = localStorage.getItem("xc_vibe"); } catch(e){}
+      if (!v) return;
+      var text = "I got " + v.charAt(0).toUpperCase() + v.slice(1)
+        + " on XpertCreation. What's yours?";
+      var url = location.origin + "/vibe";
+      if (navigator.share){
+        navigator.share({title:"What's your vibe?", text:text, url:url}).catch(function(){});
+      } else if (navigator.clipboard){
+        navigator.clipboard.writeText(text + "\n" + url);
+        msg = "Link copied."; msgType = "ok"; draw();
+      }
+      return;
+    }
+
+    if (a === "editname"){ editingName = true; return draw(); }
+    if (a === "cancelname"){ editingName = false; msg = ""; return draw(); }
+
+    if (a === "savename"){
+      var nm = val("nm");
+      busy = true; draw();
+      return api("/auth/me/", {method:"PATCH", body:{full_name: nm}}).then(function(r){
+        busy = false;
+        if (!r.ok) return fail(r);
+        me = r.data; editingName = false;
+        msg = "Saved."; msgType = "ok"; draw();
+      });
+    }
+
+    if (a === "signout"){
+      busy = true; draw();
+      return api("/auth/logout/", {method:"POST"}).then(function(){ location.href = "/"; });
+    }
+
+    if (a === "delete"){
+      busy = true; draw();
+      return api("/auth/delete-account/", {method:"POST",
+        body:{password:val("pass"), confirm:val("confirm")}})
+        .then(function(r){
+          if (r.ok){ location.href = "/?deleted=1"; return; }
+          fail(r);
+        });
+    }
+  });
+
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && !busy){
+      var btn = document.querySelector(".btn:not(.ghost)");
+      if (btn) btn.click();
+    }
+  });
+
+  api("/auth/csrf/");
+  // Tasveer chunte hi bhej dete hain: alag "save" ka button ek aur
+  // qadam hai jise log bhool jate hain.
+  document.addEventListener("change", function(e){
+    if (!e.target) return;
+    if (e.target.id !== "avatarUpload" && e.target.id !== "avatarCam") return;
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    var msg = document.getElementById("avatarMsg");
+    if (f.size > 2 * 1024 * 1024){
+      if (msg){ msg.textContent = "That picture is larger than 2 MB.";
+                msg.className = "msg bad"; }
+      return;
+    }
+    if (msg){ msg.textContent = "Uploading\u2026"; msg.className = "msg"; }
+    var fd = new FormData();
+    fd.append("file", f);
+    fetch("/api/auth/avatar/upload/", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {"X-CSRFToken": cookie("xc_csrf")},
+      body: fd
+    }).then(function(r){
+      return r.json().catch(function(){ return {}; })
+        .then(function(d){ return {ok: r.ok, data: d}; });
+    }).then(function(r){
+      if (!r.ok){
+        if (msg){ msg.textContent = r.data.detail || "That did not work.";
+                  msg.className = "msg bad"; }
+        return;
+      }
+      me.avatar = r.data.avatar;
+      // Browser purani tasveer cache se de sakta hai. Waqt jorne se wo
+      // majboor ho jata hai ke nayi mange.
+      me.avatar_bust = Date.now();
+      picking = false;
+      if (msg){ msg.textContent = "Saved."; msg.className = "msg"; }
+      draw();
+    }).catch(function(){
+      if (msg){ msg.textContent = "Network error."; msg.className = "msg bad"; }
+    });
+  });
+
+  api("/auth/avatars/").then(function(r){
+    if (r.ok) avatars = r.data.avatars || [];
+    if (me && screen === "account") draw();
+  });
+  api("/auth/me/").then(function(r){
+    me = r.ok ? r.data : null;
+    // Already signed in and landing on /login or /register: no point showing
+    // a form they do not need.
+    if (me && (screen === "login" || screen === "register")) screen = "account";
+    if (!me && screen === "account") screen = "login";
+    draw();
+  });
+})();
+</script>
+
+<a class="wafab" href="https://wa.me/923009462916" target="_blank" rel="noopener"
+   aria-label="Message support on WhatsApp" title="Message support on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.5 12.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.9-.4-1.7-.9-2.4-1.6-.6-.7-1.1-1.4-1.4-2.2-.1-.2-.1-.4.1-.5.2-.2.4-.5.6-.7.1-.2.2-.3.1-.5-.1-.3-.7-1.8-.9-2.1-.1-.3-.3-.3-.5-.3h-.6c-.2 0-.5.1-.7.4-.6.6-1 1.4-.9 2.3 0 1.1.4 2.1 1 3 1 1.6 2.3 2.9 3.9 3.8.6.3 1.2.6 1.9.7.6.2 1.3.2 2 .1.8-.2 1.5-.7 1.9-1.4.2-.4.2-.8.1-1.2 0-.1-.1-.2-.3-.3z"/></svg>
+</a>
+
+<script>
+/* Registers the worker that makes the site open without a connection.
+   Failure here is not worth reporting: the site works either way. */
+if ("serviceWorker" in navigator){
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("/sw.js").catch(function(){});
+  });
+}
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+
+<script>
+/* Discord and Telegram linking, on the account page. A code is generated
+   here and typed into the bot - never the other way around, so nobody can
+   link an account by guessing a Discord or Telegram id. */
+(function(){
+  var box = document.getElementById("botlinkbox");
+  if (!box) return;
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+  function api(p,o){
+    o=o||{};
+    var h={"Content-Type":"application/json"};
+    if(o.method&&o.method!=="GET") h["X-CSRFToken"]=cookie("xc_csrf");
+    return fetch("/api/botlink"+p,{method:o.method||"GET",headers:h,credentials:"same-origin",
+      body:o.body?JSON.stringify(o.body):undefined})
+      .then(function(r){return r.json().catch(function(){return{};})
+        .then(function(d){return{ok:r.ok,data:d};});})
+      .catch(function(){return{ok:false,data:{detail:"Network error."}};});
+  }
+
+  var links = [], activeCode = null;
+
+  function draw(){
+    var byPlatform = {};
+    links.forEach(function(l){ byPlatform[l.platform] = l; });
+
+    var h = '<h4>Connect an account</h4>';
+    [["discord","Discord","\ud83c\udfae"],["telegram","Telegram","\u2708\ufe0f"]].forEach(function(p){
+      var key = p[0], name = p[1], emoji = p[2];
+      var linked = byPlatform[key];
+      h += '<div class="botrow">'
+        + '<span class="bicon ' + key + '">' + emoji + '</span>'
+        + '<span class="bt"><b>' + name + '</b>'
+        + '<small>' + (linked ? "Connected as " + esc(linked.name || "your account")
+                              : "Not connected") + '</small></span>'
+        + (linked
+            ? '<button class="disconnectbtn" data-unlink="' + key + '">Disconnect</button>'
+            : '<button class="connectbtn" data-connect="' + key + '">Connect</button>')
+        + '</div>';
+    });
+
+    if (activeCode){
+      var botName = activeCode.platform === "discord" ? "our Discord bot" : "our Telegram bot";
+      var cmd = activeCode.platform === "discord"
+        ? "/xc-verify " + activeCode.code
+        : "/verify " + activeCode.code;
+      h += '<div class="codebox2"><div class="code3">' + esc(activeCode.code) + '</div>'
+        + '<p>Send <b>' + esc(cmd) + '</b> to ' + botName + ' within 10 minutes.</p></div>';
+    }
+
+    box.innerHTML = h;
+  }
+
+  function load(){
+    api("/mine/").then(function(r){
+      if (r.ok) links = r.data.links || [];
+      draw();
+    });
+  }
+
+  box.addEventListener("click", function(e){
+    var c = e.target.closest("[data-connect]");
+    if (c){
+      var platform = c.getAttribute("data-connect");
+      api("/code/", {method:"POST", body:{platform: platform}}).then(function(r){
+        if (!r.ok) return alert(r.data.detail || "Could not generate a code.");
+        activeCode = {platform: platform, code: r.data.code};
+        draw();
+      });
+      return;
+    }
+    var u = e.target.closest("[data-unlink]");
+    if (u){
+      var platform2 = u.getAttribute("data-unlink");
+      if (!confirm("Disconnect " + platform2 + "?")) return;
+      api("/unlink/", {method:"POST", body:{platform: platform2}}).then(function(){
+        activeCode = null;
+        load();
+      });
+    }
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>

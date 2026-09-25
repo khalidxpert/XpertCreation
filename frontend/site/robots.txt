@@ -1,0 +1,40 @@
+User-agent: *
+Allow: /
+
+# Nothing useful to a search engine, and some of it is private.
+Disallow: /account
+Disallow: /login
+Disallow: /register
+Disallow: /chat
+Disallow: /chat/
+Disallow: /moderate
+Disallow: /offline
+Disallow: /api/
+Disallow: /auth/
+Disallow: /me/
+Disallow: /mine/
+Disallow: /memory/
+Disallow: /tictac/
+Disallow: /leaderboard/
+Disallow: /cities/
+Disallow: /requests/
+Disallow: /given/
+Disallow: /queue/
+Disallow: /decide/
+Disallow: /apply/
+Disallow: /applications/
+Disallow: /moderators/
+Disallow: /role/
+Disallow: /ask/
+Disallow: /post/
+Disallow: /submit/
+Disallow: /start/
+Disallow: /threads/
+Disallow: /categories/
+Disallow: /withdraw/
+Disallow: /tickets/
+Disallow: /search/
+Disallow: /dl/
+
+Sitemap: https://xpertcreation.com/sitemap.xml
+Disallow: /account/delete

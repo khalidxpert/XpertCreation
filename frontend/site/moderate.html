@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Moderation — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Moderator tools.">
+<link rel="canonical" href="https://xpertcreation.com/moderate">
+<meta name="robots" content="noindex,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Moderation — XpertCreation">
+<meta property="og:description" content="Moderator tools.">
+<meta property="og:url" content="https://xpertcreation.com/moderate">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Moderation — XpertCreation">
+<meta name="twitter:description" content="Moderator tools.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Moderation","url":"https://xpertcreation.com/moderate","description":"Moderator tools.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --brand:#1B4DFF;--go:#00B37E;--bad:#DC2626;--warn:#B45309;--line:#E4E8F2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif;--mono:"Space Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:720px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(24px,6vw,32px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:8px}
+
+.tabs{display:flex;gap:7px;margin:20px 0 16px}
+.tab{padding:10px 17px;border-radius:999px;background:var(--card);border:1px solid var(--line);
+  font-size:13.5px;font-weight:600}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tab .n{display:inline-block;min-width:19px;height:19px;line-height:19px;padding:0 5px;
+  border-radius:99px;background:var(--warn);color:#fff;font-size:10.5px;font-weight:800;
+  margin-left:6px}
+
+.item{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;
+  margin-bottom:11px}
+.item .hd2{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.item .hd2 b{font-size:14px;font-weight:700}
+.item .hd2 .mod{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;
+  background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)}
+.item .hd2 .st{color:#F59E0B;font-size:13px;letter-spacing:1px}
+.item .hd2 small{margin-left:auto;font-size:11.5px;color:var(--ink-soft);font-family:var(--mono)}
+.item p{font-size:14.5px;line-height:1.6;padding:12px;background:var(--paper);
+  border-radius:12px;border:1px solid var(--line)}
+.item .acts3{display:flex;gap:8px;margin-top:12px}
+.item .acts3 button{flex:1;padding:11px;border-radius:12px;font-weight:700;font-size:13.5px}
+.item .acts3 .yes2{background:var(--go);color:#fff}
+.item .acts3 .no3{background:var(--paper);border:1px solid var(--line);color:var(--bad)}
+
+.mrow{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);
+  border:1px solid var(--line);border-radius:16px;margin-bottom:9px}
+.mrow img{width:40px;height:40px;border-radius:13px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.mrow .ph2{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;flex:0 0 auto}
+.mrow .t{flex:1;min-width:0}
+.mrow .t b{display:block;font-size:14px;font-weight:700}
+.mrow .t small{display:block;font-size:12px;color:var(--ink-soft);
+  overflow:hidden;text-overflow:ellipsis}
+.mrow .fire{padding:9px 14px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);font-size:12.5px;font-weight:700;color:var(--bad)}
+
+.add{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;
+  margin-bottom:16px}
+.add label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin-bottom:5px}
+.add input{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:12px;
+  background:var(--paper);font-size:15px;font-family:inherit;outline:none}
+.add input:focus{border-color:var(--brand);background:#fff}
+.add button{width:100%;padding:13px;border-radius:13px;background:var(--ink);color:#fff;
+  font-weight:700;font-size:14.5px;margin-top:11px}
+.add .hint2{font-size:12px;color:var(--ink-soft);margin-top:9px;line-height:1.55}
+
+.msg2{padding:12px 14px;border-radius:12px;font-size:13.5px;margin-bottom:14px;line-height:1.55}
+.msg2.ok{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.3);color:#00734F}
+.msg2.err{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.3);color:#991B1B}
+.empty4{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:14px;line-height:1.6}
+.locked{max-width:420px;margin:60px auto;text-align:center;padding:30px 22px;
+  background:var(--card);border:1px solid var(--line);border-radius:22px}
+.locked .e4{font-size:44px}
+.locked h2{font-family:var(--display);font-weight:800;font-size:22px;margin-top:14px;
+  letter-spacing:-.03em}
+.locked p{font-size:14px;color:var(--ink-soft);margin-top:9px;line-height:1.6}
+.locked a{display:inline-block;margin-top:18px;padding:12px 24px;border-radius:13px;
+  background:var(--ink);color:#fff;font-weight:700;font-size:14px}
+@media(max-width:560px){ html,body{overflow-x:hidden} .wrap{padding:16px 14px 50px} }
+
+.appitem{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:15px;margin-bottom:10px}
+.appitem .hd3{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.appitem .av4{width:38px;height:38px;border-radius:13px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.appitem .ph4{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;flex:0 0 auto}
+.appitem .hd3 b{font-size:14px;font-weight:700}
+.appitem .hd3 small{display:block;font-size:11.5px;color:var(--ink-soft)}
+.appitem p{font-size:13.5px;line-height:1.6;padding:11px;background:var(--paper);
+  border-radius:11px;border:1px solid var(--line)}
+.appitem .soc2{display:flex;gap:6px;margin-top:8px}
+.appitem .soc2 a{padding:5px 11px;border-radius:9px;background:var(--paper);
+  border:1px solid var(--line);font-size:11.5px;font-weight:600}
+.togrow{display:flex;align-items:center;gap:11px;padding:13px;background:var(--card);
+  border:1px solid var(--line);border-radius:14px;margin-bottom:8px}
+.togrow .t{flex:1;min-width:0}
+.togrow .t b{display:block;font-size:13.5px;font-weight:700}
+.togrow .t small{display:block;font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+.togsw{width:42px;height:24px;border-radius:99px;background:var(--go);position:relative;
+  flex:0 0 auto;cursor:pointer}
+.togsw::after{content:"";position:absolute;top:2.5px;left:21px;width:19px;height:19px;
+  border-radius:50%;background:#fff;transition:left .18s}
+.togsw.off{background:var(--line)}
+.togsw.off::after{left:2.5px}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Moderation</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap"><div id="app"><div class="empty4">Checking&hellip;</div></div></div>
+
+<script>
+(function(){
+  "use strict";
+  var role = null, tab = "queue", queue = [], mods = [], apps2 = [];
+  var msg = "", msgKind = "ok";
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+  function api2(p, o){
+    o = o || {};
+    var h = {"Content-Type":"application/json"};
+    if (o.method && o.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch("/api/mod" + p, {method:o.method||"GET", headers:h,
+      credentials:"same-origin", body:o.body ? JSON.stringify(o.body) : undefined})
+      .then(function(r){ return r.json().catch(function(){return{};})
+        .then(function(d){ return {ok:r.ok, data:d}; }); })
+      .catch(function(){ return {ok:false, data:{detail:"Network error."}}; });
+  }
+
+  function api(p, o){
+    o = o || {};
+    var h = {"Content-Type":"application/json"};
+    if (o.method && o.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch("/api/auth" + p, {method:o.method||"GET", headers:h,
+      credentials:"same-origin", body:o.body ? JSON.stringify(o.body) : undefined})
+      .then(function(r){ return r.json().catch(function(){return{};})
+        .then(function(d){ return {ok:r.ok, data:d}; }); })
+      .catch(function(){ return {ok:false, data:{detail:"Network error."}}; });
+  }
+  function stars(n){ return "\u2605".repeat(n) + "\u2606".repeat(5 - n); }
+
+  function locked(why){
+    document.getElementById("app").innerHTML =
+      '<div class="locked"><div class="e4">\ud83d\udd12</div>'
+      + '<h2>Not your page</h2><p>' + esc(why) + '</p>'
+      + '<a href="https://xpertcreation.com">Back to the site</a></div>';
+  }
+
+  function render(){
+    var app = document.getElementById("app");
+    var h = '<h1>Moderation</h1><p class="lead">'
+      + (role.super ? "You are the super admin." : "You can publish or reject comments.")
+      + '</p><div class="tabs">'
+      + '<button class="tab' + (tab === "queue" ? " on" : "") + '" data-tab="queue">'
+      + 'Waiting' + (queue.length ? '<span class="n">' + queue.length + '</span>' : '')
+      + '</button>';
+    if (role.super){
+      h += '<button class="tab' + (tab === "mods" ? " on" : "") + '" data-tab="mods">'
+        + 'Moderators</button>'
+        + '<button class="tab' + (tab === "apps" ? " on" : "") + '" data-tab="apps">'
+        + 'Applications' + (apps2.length ? '<span class="n">' + apps2.length + '</span>' : '')
+        + '</button>';
+    }
+    h += '</div>';
+
+    if (msg) h += '<div class="msg2 ' + msgKind + '">' + esc(msg) + '</div>';
+
+    if (tab === "queue"){
+      if (!queue.length){
+        h += '<div class="empty4">Nothing waiting. Star ratings go live on their '
+          + 'own \u2014 only written comments come here.</div>';
+      } else {
+        queue.forEach(function(q){
+          h += '<div class="item"><div class="hd2">'
+            + '<b>' + esc(q.name) + '</b>'
+            + '<span class="mod">' + esc(q.module) + '</span>'
+            + '<span class="st">' + stars(q.stars) + '</span>'
+            + '<small>' + esc(q.when) + '</small></div>'
+            + '<p>' + esc(q.comment) + '</p>'
+            + '<div class="acts3">'
+            + '<button class="yes2" data-yes="' + q.id + '">Publish</button>'
+            + '<button class="no3" data-no="' + q.id + '">Reject</button>'
+            + '</div></div>';
+        });
+      }
+    } else if (tab === "apps"){
+      if (!apps2.length){
+        h += '<div class="empty4">No applications waiting.</div>';
+      } else {
+        apps2.forEach(function(a){
+          var soc = "";
+          if (a.linkedin) soc += '<a href="' + esc(a.linkedin) + '" target="_blank" rel="nofollow noopener">LinkedIn</a>';
+          if (a.instagram) soc += '<a href="' + esc(a.instagram) + '" target="_blank" rel="nofollow noopener">Instagram</a>';
+          if (a.twitter) soc += '<a href="' + esc(a.twitter) + '" target="_blank" rel="nofollow noopener">X</a>';
+          h += '<div class="appitem"><div class="hd3">'
+            + (a.avatar
+                ? '<img class="av4" src="/brand/avatars/' + esc(a.avatar) + '.jpeg" alt="">'
+                : '<span class="ph4">' + esc(a.name.charAt(0).toUpperCase()) + '</span>')
+            + '<span><b>' + esc(a.name) + '</b><small>' + esc(a.email) + ' \u00b7 '
+            + esc(a.when) + '</small></span></div>'
+            + '<p>' + esc(a.why) + '</p>'
+            + (soc ? '<div class="soc2">' + soc + '</div>' : '')
+            + '<div class="acts3">'
+            + '<button class="yes2" data-appyes="' + a.id + '">Accept</button>'
+            + '<button class="no3" data-appno="' + a.id + '">Decline</button>'
+            + '</div></div>';
+        });
+      }
+    } else {
+      h += '<div class="add"><label for="me">Add a moderator</label>'
+        + '<input id="me" type="email" placeholder="their@email.com">'
+        + '<button data-add>Make them a moderator</button>'
+        + '<p class="hint2">They must already have an account here. A moderator '
+        + 'can publish and reject comments \u2014 nothing else. They cannot see '
+        + 'member details, donor records or appoint anyone.</p></div>';
+
+      if (!mods.length){
+        h += '<div class="empty4">No moderators yet.</div>';
+      } else {
+        mods.forEach(function(m){
+          h += '<div class="mrow">'
+            + (m.avatar
+                ? '<img src="/brand/avatars/' + esc(m.avatar) + '.jpeg" alt="" '
+                  + 'onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),'
+                  + '{className:\'ph2\',textContent:\'' + esc(m.name.charAt(0).toUpperCase())
+                  + '\'}))">'
+                : '<span class="ph2">' + esc(m.name.charAt(0).toUpperCase()) + '</span>')
+            + '<span class="t"><b>' + esc(m.name) + '</b>'
+            + '<small>' + esc(m.email) + ' \u00b7 since ' + esc(m.since) + '</small></span>'
+            + '<button class="fire" data-fire="' + esc(m.email) + '">Remove</button></div>';
+        });
+      }
+    }
+    app.innerHTML = h;
+  }
+
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("[data-tab]");
+    if (t){ tab = t.getAttribute("data-tab"); msg = ""; return render(); }
+
+    var y = e.target.closest("[data-yes]");
+    var n = e.target.closest("[data-no]");
+    if (y || n){
+      var id = (y || n).getAttribute(y ? "data-yes" : "data-no");
+      return api("/queue/" + id + "/", {method:"POST", body:{publish: !!y}})
+        .then(function(r){
+          msg = r.data.detail || ""; msgKind = r.ok ? "ok" : "err";
+          return load();
+        });
+    }
+
+    var ay = e.target.closest("[data-appyes]");
+    var an = e.target.closest("[data-appno]");
+    if (ay || an){
+      var id = (ay || an).getAttribute(ay ? "data-appyes" : "data-appno");
+      return api2("/applications/" + id + "/", {method:"POST", body:{accept: !!ay}})
+        .then(function(r){
+          msg = r.data.detail || ""; msgKind = r.ok ? "ok" : "err";
+          return load();
+        });
+    }
+
+    if (e.target.closest("[data-add]")){
+      var em = document.getElementById("me");
+      if (!em || !em.value.trim()) return;
+      return api("/moderators/", {method:"POST", body:{email: em.value.trim(), make:true}})
+        .then(function(r){
+          msg = r.data.detail || ""; msgKind = r.ok ? "ok" : "err";
+          return load();
+        });
+    }
+
+    var f = e.target.closest("[data-fire]");
+    if (f){
+      var mail = f.getAttribute("data-fire");
+      if (!confirm("Remove " + mail + " as a moderator?")) return;
+      return api("/moderators/", {method:"POST", body:{email: mail, make:false}})
+        .then(function(r){
+          msg = r.data.detail || ""; msgKind = r.ok ? "ok" : "err";
+          return load();
+        });
+    }
+  });
+
+  function load(){
+    var jobs = [api("/queue/").then(function(r){ if (r.ok) queue = r.data.queue || []; })];
+    if (role && role.super){
+      jobs.push(api("/moderators/").then(function(r){
+        if (r.ok) mods = r.data.moderators || []; }));
+      jobs.push(api2("/applications/").then(function(r){
+        if (r.ok) apps2 = r.data.applications || []; }));
+    }
+    return Promise.all(jobs).then(render);
+  }
+
+  api("/role/").then(function(r){
+    if (!r.ok){
+      return locked("Sign in with an account that has moderation rights.");
+    }
+    role = r.data;
+    if (!role.moderator){
+      return locked("This page is for moderators. If you think that is wrong, "
+        + "ask the administrator to add you.");
+    }
+    return load();
+  });
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

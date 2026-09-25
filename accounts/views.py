@@ -317,7 +317,9 @@ def delete_account(request):
 
 # Filled in by the install script from whatever is on disk, so adding a
 # picture is a matter of dropping a file in and re-running it.
-AVATAR_KEYS = [{"key": "free1", "file": "free1.jpeg"}, {"key": "free2", "file": "free2.jpeg"}, {"key": "free3", "file": "free3.jpeg"}, {"key": "free4", "file": "free4.jpeg"}, {"key": "free5", "file": "free5.jpeg"}, {"key": "free6", "file": "free6.jpeg"}, {"key": "free7", "file": "free7.jpeg"}, {"key": "free8", "file": "free8.jpeg"}, {"key": "free9", "file": "free9.jpeg"}, {"key": "paid1", "file": "paid1.jpeg"}, {"key": "paid10", "file": "paid10.jpeg"}, {"key": "paid11", "file": "paid11.jpeg"}, {"key": "paid12", "file": "paid12.jpeg"}, {"key": "paid13", "file": "paid13.jpeg"}, {"key": "paid14", "file": "paid14.jpeg"}, {"key": "paid15", "file": "paid15.jpeg"}, {"key": "paid16", "file": "paid16.jpeg"}, {"key": "paid17", "file": "paid17.jpeg"}, {"key": "paid18", "file": "paid18.jpeg"}, {"key": "paid19", "file": "paid19.jpeg"}, {"key": "paid2", "file": "paid2.jpeg"}, {"key": "paid20", "file": "paid20.jpeg"}, {"key": "paid21", "file": "paid21.jpeg"}, {"key": "paid22", "file": "paid22.jpeg"}, {"key": "paid23", "file": "paid23.jpeg"}, {"key": "paid3", "file": "paid3.jpeg"}, {"key": "paid4", "file": "paid4.jpeg"}, {"key": "paid5", "file": "paid5.jpeg"}, {"key": "paid6", "file": "paid6.jpeg"}, {"key": "paid7", "file": "paid7.jpeg"}, {"key": "paid8", "file": "paid8.jpeg"}, {"key": "paid9", "file": "paid9.jpeg"}]
+# Purani tayyar-shuda tasveerein hata di gayin: unka copyright
+# hamara nahi tha. Ab user apni tasveer upload karta hai.
+AVATAR_KEYS = []
 
 
 @api_view(["GET"])
@@ -334,9 +336,96 @@ def set_avatar(request):
     # store an arbitrary string that later gets pasted into an img src.
     if key and key not in [a["key"] for a in AVATAR_KEYS]:
         return _err("Unknown avatar.")
+    _drop_avatar_file(request.user.avatar)
     request.user.avatar = key
     request.user.save(update_fields=["avatar"])
-    return Response({"avatar": key})
+    return Response({"avatar": key, "avatar_url": avatar_url(key)})
+
+
+AVATAR_DIR = "avatars"
+AVATAR_MAX = 2 * 1024 * 1024          # 2 MB
+AVATAR_SIDE = 400                      # square, 400x400
+
+
+def avatar_url(value):
+    """Field mein ya to uploaded file ka naam hai, ya purani key.
+    Dono ka rasta alag hai, is liye faisla yahan ek hi jagah hota hai."""
+    if not value:
+        return ""
+    if value.endswith(".jpg"):
+        return "/media/%s/%s" % (AVATAR_DIR, value)
+    return "/brand/avatars/%s.jpeg" % value
+
+
+def _drop_avatar_file(value):
+    """Purani uploaded tasveer mita dein, warna har tabdeeli par ek aur
+    file jama hoti rahegi."""
+    if not value or not value.endswith(".jpg"):
+        return
+    import os as _os
+    from django.conf import settings as _settings
+    path = _os.path.join(str(_settings.MEDIA_ROOT), AVATAR_DIR, value)
+    try:
+        if _os.path.isfile(path):
+            _os.remove(path)
+    except OSError:
+        log.exception("Could not remove old avatar %r", value)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def avatar_upload(request):
+    """Apni tasveer. Naam par bharosa nahi kiya jata - Pillow se khol kar
+    dekha jata hai ke ye waqai tasveer hai, phir naye sire se likhi jati
+    hai. Isse .jpg naam wali script bhi bekaar ho jati hai."""
+    import io as _io
+    import os as _os
+    import secrets as _secrets
+    from django.conf import settings as _settings
+
+    f = request.FILES.get("file") or request.FILES.get("avatar")
+    if not f:
+        return _err("No file was sent.")
+    if f.size > AVATAR_MAX:
+        return _err("That picture is larger than 2 MB.")
+
+    try:
+        from PIL import Image, ImageOps
+    except ImportError:
+        log.exception("Pillow missing")
+        return _err("Pictures cannot be processed right now.", 503)
+
+    try:
+        raw = f.read(AVATAR_MAX + 1)
+        img = Image.open(_io.BytesIO(raw))
+        img.verify()                       # sirf tasdeeq, padhne ke liye nahi
+        img = Image.open(_io.BytesIO(raw)) # verify ke baad dobara kholna parta hai
+        img = ImageOps.exif_transpose(img) # phone ki tasveerein tirchi aati hain
+        img = img.convert("RGB")
+    except Exception:
+        return _err("That file is not a picture we can read.")
+
+    img = ImageOps.fit(img, (AVATAR_SIDE, AVATAR_SIDE), Image.LANCZOS,
+                       centering=(0.5, 0.35))   # chehra thora upar hota hai
+
+    folder = _os.path.join(str(_settings.MEDIA_ROOT), AVATAR_DIR)
+    try:
+        _os.makedirs(folder, exist_ok=True)
+    except OSError:
+        log.exception("Could not create %r", folder)
+        return _err("Pictures cannot be saved right now.", 503)
+
+    name = "u%s_%s.jpg" % (request.user.id, _secrets.token_hex(4))
+    try:
+        img.save(_os.path.join(folder, name), "JPEG", quality=85, optimize=True)
+    except OSError:
+        log.exception("Could not write avatar %r", name)
+        return _err("Pictures cannot be saved right now.", 503)
+
+    _drop_avatar_file(request.user.avatar)
+    request.user.avatar = name
+    request.user.save(update_fields=["avatar"])
+    return Response({"avatar": name, "avatar_url": avatar_url(name)})
 
 
 @api_view(["POST"])
@@ -388,6 +477,10 @@ def home_card(request):
         "name": (u.full_name or "").strip() or u.email.split("@")[0],
         "email": u.email,
         "avatar": u.avatar,
+        "avatar_url": avatar_url(u.avatar),
+        # Signup par mehfooz hota tha magar wapas kabhi nahi aata tha,
+        # is liye jhanda dikhaya hi nahi ja sakta tha.
+        "country": u.signup_country or "",
         "zodiac": zodiac_sign(u.birth_day, u.birth_month),
         "vibe": u.vibe,
         "birthday_today": is_birthday,
@@ -549,13 +642,22 @@ def my_role(request):
     """What this account may do. Drives which links the site shows."""
     u = request.user
     pending = 0
+    videos = 0
     if u.is_moderator or u.is_superuser:
         from reviews.models import Review
         pending = Review.objects.filter(state=Review.PENDING).exclude(comment="").count()
+        # Videos sent to a course, waiting to be looked at. Counted
+        # here so the homepage can say so without a second request.
+        try:
+            from academy.models import VideoPost
+            videos = VideoPost.objects.filter(state=VideoPost.PENDING).count()
+        except Exception:
+            videos = 0
     return Response({
         "moderator": bool(u.is_moderator or u.is_superuser),
         "super": bool(u.is_superuser),
         "pending": pending,
+        "videos": videos,
     })
 
 
@@ -611,7 +713,10 @@ def review_queue(request):
             .select_related("user").order_by("created_at")[:50])
 
     return Response({"queue": [{
-        "id": r.id, "module": r.module, "stars": r.stars, "comment": r.comment,
+        # A course review shows which course, not just the word "course"
+        "id": r.id,
+        "module": (r.module + " - " + r.course) if getattr(r, "course", "") else r.module,
+        "stars": r.stars, "comment": r.comment,
         "name": (r.user.full_name or "").strip() or r.user.email.split("@")[0],
         "when": r.created_at.strftime("%d %b %H:%M"),
     } for r in rows]})
@@ -641,3 +746,14 @@ def review_decide(request, pk):
              "published" if publish else "rejected", u.email)
     return Response({"detail": "Published." if publish else "Rejected. "
                      "Their star rating still counts."})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def set_whatsapp(request):
+    number = str(request.data.get("whatsapp") or "").strip()[:20]
+    show = bool(request.data.get("show_whatsapp_on_accept"))
+    request.user.whatsapp = number
+    request.user.show_whatsapp_on_accept = show and bool(number)
+    request.user.save(update_fields=["whatsapp", "show_whatsapp_on_accept"])
+    return Response({"detail": "Saved."})

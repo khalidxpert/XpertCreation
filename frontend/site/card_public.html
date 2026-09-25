@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Visiting Card — XpertCreation</title>
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:grid;place-items:center;padding:24px}
+a{color:var(--brand);text-decoration:none}
+.wrap2{max-width:420px;width:100%}
+#cardface2{aspect-ratio:1.6/1;border-radius:22px;padding:26px;position:relative;
+  overflow:hidden;color:#fff;box-shadow:0 14px 34px rgba(13,20,36,.25)}
+.theme-ink{background:linear-gradient(140deg,#0D1424,#1B2B4D 60%,#2D1B4D)}
+.theme-emerald{background:linear-gradient(140deg,#022C22,#065F46 60%,#0F766E)}
+.theme-rose{background:linear-gradient(140deg,#4C0519,#9F1239 60%,#BE123C)}
+.theme-amber{background:linear-gradient(140deg,#451A03,#92400E 60%,#B45309)}
+#cardface2::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(90% 70% at 100% 0%,rgba(255,255,255,.14),transparent 60%)}
+#cardface2 .top9{display:flex;align-items:center;gap:12px;position:relative;z-index:2}
+#cardface2 .av5{width:52px;height:52px;border-radius:16px;object-fit:cover;
+  border:2px solid rgba(255,255,255,.35)}
+#cardface2 .ph5{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;
+  background:rgba(255,255,255,.18);font-weight:800;font-size:20px}
+#cardface2 .name5{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.03em}
+#cardface2 .role5{font-size:12px;opacity:.8;margin-top:2px}
+#cardface2 .org5{font-size:11px;opacity:.65;margin-top:1px}
+#cardface2 .contacts{position:relative;z-index:2;margin-top:16px;display:grid;gap:5px}
+#cardface2 .contacts div{font-size:11.5px;opacity:.88}
+#cardface2 .qrbox{position:absolute;right:22px;bottom:22px;background:#fff;padding:7px;border-radius:11px}
+.actions3{display:flex;gap:9px;margin-top:16px}
+.actions3 a{flex:1;text-align:center;padding:13px;border-radius:13px;font-weight:700;
+  font-size:13.5px;background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.footer3{text-align:center;margin-top:20px;font-size:12px;color:var(--ink-soft)}
+.gone2{text-align:center;color:var(--ink-soft);padding:40px}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+</style>
+</head>
+<body>
+<div class="wrap2">
+  <div id="cardface2" class="theme-ink"><div class="gone2" style="color:#fff">Loading\u2026</div></div>
+  <div id="actbox"></div>
+  <p class="footer3">Made with <a href="https://xpertcreation.com">XpertCreation</a></p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var token = location.pathname.split("/").pop();
+
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  fetch("/api/vcard/c/" + token + "/")
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      var face = document.getElementById("cardface2");
+      if (!d || !d.card){
+        face.className = "theme-ink";
+        face.innerHTML = '<div class="gone2" style="color:#fff">This card is not '
+          + 'available, or has been made private.</div>';
+        return;
+      }
+      var c = d.card;
+      face.className = "theme-" + (c.theme || "ink");
+      var ini = esc((c.display_name || "?").charAt(0).toUpperCase());
+      var contacts = "";
+      if (c.email) contacts += '<div>\u2709 ' + esc(c.email) + '</div>';
+      if (c.phone) contacts += '<div>\u260e ' + esc(c.phone) + '</div>';
+      if (c.whatsapp) contacts += '<div>\ud83d\udcac ' + esc(c.whatsapp) + '</div>';
+      if (c.city) contacts += '<div>\ud83d\udccd ' + esc(c.city) + '</div>';
+
+      face.innerHTML =
+        '<div class="top9">'
+        + (c.avatar
+            ? '<img class="av5" src="/brand/avatars/' + esc(c.avatar) + '.jpeg" alt="">'
+            : '<span class="ph5">' + ini + '</span>')
+        + '<div><div class="name5">' + esc(c.display_name) + '</div>'
+        + (c.role ? '<div class="role5">' + esc(c.role) + '</div>' : '')
+        + (c.org ? '<div class="org5">' + esc(c.org) + '</div>' : '')
+        + '</div></div>'
+        + '<div class="contacts">' + contacts + '</div>'
+        + '<div class="qrbox" id="qrslot2"></div>';
+
+      new QRCode(document.getElementById("qrslot2"), {
+        text: location.href, width: 56, height: 56, colorDark: "#000", colorLight: "#fff"
+      });
+
+      var acts = "";
+      if (c.linkedin) acts += '<a href="' + esc(c.linkedin) + '" target="_blank" rel="nofollow noopener">LinkedIn</a>';
+      if (c.website) acts += '<a href="' + esc(c.website) + '" target="_blank" rel="nofollow noopener">Website</a>';
+      if (acts) document.getElementById("actbox").innerHTML = '<div class="actions3">' + acts + '</div>';
+    })
+    .catch(function(){
+      document.getElementById("cardface2").innerHTML =
+        '<div class="gone2" style="color:#fff">Could not load this card.</div>';
+    });
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+</body>
+</html>

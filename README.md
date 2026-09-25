@@ -46,6 +46,14 @@ can check at `/verify` without an account.
 
 ---
 
+Chat is never open to strangers. A conversation starts only after both people have agreed to something: an accepted connection, blood request or donation. Nobody can message a member out of the blue.
+
+The TMDB key never reaches the browser. Every film and drama request goes through the server and is cached, so the key stays private and the site stays fast.
+
+A pet's tag page shows only what the owner chose. Anyone who finds a pet can leave a note without an account; the owner gets it at once, and their own details stay private unless they added a phone number themselves.
+
+Business tools keep their data on the device. Employee lists, stock and attendance are stored in the browser, not on our server, because a shop's staff records are not ours to hold.
+
 ## Running it
 
 Python 3.10+, PostgreSQL, Redis.
@@ -74,6 +82,7 @@ separate repository because they are deployed as static files.
 
 ```
 0 8 * * *  manage.py send_birthday_reminders
+0 9 * * *  manage.py pets_remind
 ```
 
 Safe to run more than once: each reminder is sent once per year and logged.
@@ -90,6 +99,14 @@ bloodbank/     donors, requests, consent-gated contact
 reminders/     birthdays and the daily send
 weather/       open-meteo, cached
 games/         memory match, tic-tac-toe
+network/       professional profiles, skills, endorsements, connections, follows, blue tick
+notifications/ the bell, and chat that opens only after both people agree
+pets/          pet profiles, health records, vaccine reminders, QR tags, lost and found
+screen/        Pakistani and Indian dramas and films (TMDB), reviews, watchlists
+donations/     giving and asking for things; chat once a request is accepted
+vcard/         digital visiting cards
+botlink/       linking an account to a messaging bot
+frontend/      the site and XpertAcademy: plain HTML, CSS and JavaScript
 ```
 
 The typing app is `typingtutor`, not `typing`. A folder called `typing` in the

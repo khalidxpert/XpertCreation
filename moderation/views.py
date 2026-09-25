@@ -207,7 +207,7 @@ def tickets(request):
         rows = qs.order_by("-updated_at")[:60]
         return Response({"tickets": [{
             "id": t.id, "subject": t.subject, "priority": t.priority,
-            "state": t.state,
+            "category": t.get_category_display(), "state": t.state,
             "from": (t.user.full_name or "").strip() or t.user.email.split("@")[0]
                     if is_staff_user(request.user) else None,
             "updated": t.updated_at.strftime("%d %b, %H:%M"),
@@ -242,7 +242,7 @@ def ticket_detail(request, pk):
         msgs = t.messages.select_related("author")
         return Response({
             "id": t.id, "subject": t.subject, "state": t.state,
-            "priority": t.priority,
+            "priority": t.priority, "category": t.get_category_display(),
             "from": (t.user.full_name or "").strip() or t.user.email.split("@")[0],
             "messages": [{
                 "body": m.body, "staff": m.is_staff,
@@ -264,6 +264,10 @@ def ticket_detail(request, pk):
 
     if close is not None and (staff or t.user_id == request.user.id):
         t.state = Ticket.CLOSED if close else Ticket.OPEN
+        t.save(update_fields=["state", "updated_at"])
+
+    if staff and request.data.get("in_progress") and t.state == Ticket.OPEN:
+        t.state = Ticket.IN_PROGRESS
         t.save(update_fields=["state", "updated_at"])
 
     return Response({"detail": "Sent."})

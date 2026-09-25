@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chess — XpertCreation</title>
+<meta name="description" content="Play chess: two players on one board, full rules. Free, no sign-up.">
+<link rel="canonical" href="https://xpertcreation.com/chess">
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#F6F7FB">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;
+  --line:#E4E8F2;--brand:#1B4DFF;
+  --light:#EDE0C8;--dark:#B58863;--pick:#F6D96B;--dot:rgba(27,77,255,.5);
+  --last:rgba(246,217,107,.55);--danger:#DC2626;
+  --display:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--display);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent}
+.top{position:sticky;top:0;z-index:20;background:rgba(246,247,251,.93);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .in{max-width:560px;margin:0 auto;padding:11px 15px;display:flex;
+  align-items:center;gap:10px}
+.top img{width:28px;height:28px;border-radius:9px}
+.top b{font-weight:800;font-size:15px;letter-spacing:-.02em}
+.top .sp{flex:1}
+.top a{font-size:13px;color:var(--ink-soft);text-decoration:none;padding:7px 12px;
+  border-radius:10px;border:1px solid var(--line);background:var(--card)}
+.wrap{max-width:620px;margin:0 auto;padding:14px 15px 40px}
+
+.who{display:flex;align-items:center;gap:9px;padding:10px 13px;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  margin-bottom:10px;font-size:13.5px}
+.who .dot{width:11px;height:11px;border-radius:50%;background:#0D1424;
+  border:1.5px solid var(--ink-soft);flex:0 0 auto}
+.who .dot.w{background:#fff}
+.who b{font-weight:800}
+.who .st{margin-left:auto;font-size:12.5px;color:var(--ink-soft);font-weight:700}
+.who .st.chk{color:var(--danger)}
+
+.boardwrap{position:relative;border-radius:16px;overflow:hidden;
+  width:100%;box-shadow:0 6px 22px rgba(13,20,36,.14)}
+/* Khiladi ka naam aur rang. Online mein pata hona chahiye kaun kaun hai. */
+.seats{display:flex;gap:8px;margin-bottom:9px}
+.seat{flex:1;display:flex;align-items:center;gap:8px;padding:9px 12px;
+  background:var(--card);border:1px solid var(--line);border-radius:13px;
+  font-size:13px;min-width:0}
+.seat .pip{width:14px;height:14px;border-radius:50%;flex:0 0 auto;
+  border:1.5px solid var(--ink-soft)}
+.seat .pip.w{background:#fff}
+.seat .pip.b{background:#0D1424}
+.seat b{font-weight:700;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.seat .me{margin-left:auto;font-size:10.5px;font-weight:800;
+  letter-spacing:.06em;color:var(--brand);flex:0 0 auto}
+.seat.turn{border-color:var(--brand);box-shadow:0 0 0 2px rgba(27,77,255,.14)}
+.board{display:grid;grid-template-columns:repeat(8,1fr);
+  /* Rows too, or each row takes the height of whatever is in it -
+     rows with pieces grow, empty rows squash. */
+  grid-template-rows:repeat(8,1fr);aspect-ratio:1;
+  user-select:none;touch-action:manipulation}
+.sq{position:relative;display:grid;place-items:center;cursor:pointer;
+  min-width:0;min-height:0;overflow:hidden}
+.sq.l{background:var(--light)}
+.sq.d{background:var(--dark)}
+.sq.sel{box-shadow:inset 0 0 0 4px var(--pick)}
+.sq.lm{background-image:linear-gradient(var(--last),var(--last))}
+.sq.chk{box-shadow:inset 0 0 0 4px var(--danger)}
+.sq .pc{font-size:min(8.4vw,44px);line-height:1;pointer-events:none;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
+.sq .go{position:absolute;width:26%;height:26%;border-radius:50%;
+  background:var(--dot);pointer-events:none}
+.sq.cap .go{width:78%;height:78%;border-radius:50%;background:transparent;
+  border:4px solid var(--dot)}
+.sq .co{position:absolute;bottom:1px;right:3px;font-size:9px;font-weight:800;
+  opacity:.45;pointer-events:none}
+
+.over{position:absolute;inset:0;display:grid;place-items:center;z-index:6;
+  background:rgba(246,247,251,.93);text-align:center;padding:22px}
+.over .e{font-size:38px}
+.over h2{font-weight:800;font-size:22px;letter-spacing:-.03em;margin-top:6px}
+.over p{color:var(--ink-soft);font-size:14px;margin-top:4px}
+.over button{margin-top:14px;padding:12px 24px;border-radius:13px;border:none;
+  background:var(--brand);color:#fff;font-size:15px;font-weight:800;cursor:pointer}
+
+.promo{position:absolute;inset:0;display:grid;place-items:center;z-index:7;
+  background:rgba(13,20,36,.55)}
+.promo .in2{background:var(--card);border-radius:18px;padding:16px;
+  display:flex;gap:8px}
+.promo button{width:58px;height:58px;border-radius:13px;border:1.5px solid var(--line);
+  background:var(--paper);font-size:34px;cursor:pointer;line-height:1}
+.promo button:hover{border-color:var(--brand)}
+
+.room{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:12px 13px;margin-bottom:11px;font-size:13.5px}
+.room .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.room button{padding:10px 14px;border-radius:11px;font-size:13px;font-weight:700;
+  border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
+  cursor:pointer}
+.room button.go{background:var(--brand);color:#fff;border-color:var(--brand)}
+.room button:disabled{opacity:.5;cursor:default}
+.room input{flex:1;min-width:110px;padding:10px 12px;border-radius:11px;
+  border:1.5px solid var(--line);font-size:14px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;font-family:inherit;
+  color:var(--ink);background:var(--paper)}
+.room .code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:22px;font-weight:800;letter-spacing:.22em;color:var(--brand)}
+.room .msg{margin-top:8px;color:var(--ink-soft);font-size:12.5px}
+.room .msg.bad{color:var(--danger)}
+.themes{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.themes button{width:44px;height:30px;border-radius:9px;cursor:pointer;
+  border:2px solid transparent;padding:0;overflow:hidden;display:flex}
+.themes button span{flex:1}
+.themes button.on{border-color:var(--ink)}
+.acts{display:flex;gap:9px;margin-top:13px}
+.acts button{flex:1;padding:12px 14px;border-radius:13px;font-size:14px;
+  font-weight:700;border:1.5px solid var(--line);background:var(--card);
+  color:var(--ink);cursor:pointer}
+.acts button:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+.acts button:disabled{opacity:.45;cursor:default}
+
+.moves{margin-top:13px;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:12px 14px;max-height:150px;overflow-y:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+  line-height:1.9;color:var(--ink-soft)}
+.moves b{color:var(--ink)}
+.moves .n{opacity:.5;margin-right:3px}
+.note{background:var(--card);border:1px dashed var(--line);border-radius:16px;
+  padding:15px;margin-top:14px;font-size:13.5px;color:var(--ink-soft)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Chess</b>
+    <span class="sp"></span>
+    <a href="/games">All games</a>
+  </div>
+</header>
+<script src="/js/topnav-1.js" defer></script>
+
+<div class="wrap">
+  <div class="room" id="room">
+    <div class="row" id="roomRow">
+      <button type="button" class="go" id="mkRoom">Play a friend</button>
+      <input id="joinCode" placeholder="Room code" maxlength="5" autocomplete="off">
+      <button type="button" id="joinRoom">Join</button>
+    </div>
+    <div class="msg" id="roomMsg"></div>
+    <div class="live" id="liveList"></div>
+  </div>
+  <style>#liveList .lvh{margin:14px 0 6px;font-size:14px}#liveList .lvr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid rgba(127,127,127,.2);font-size:14px}#liveList small{opacity:.6;margin-left:6px}</style>
+
+  <div class="who">
+    <span class="dot" id="dot"></span>
+    <b id="turn">White to move</b>
+    <span class="st" id="st"></span>
+  </div>
+
+  <div class="seats" id="seats" style="display:none"></div>
+
+  <div class="boardwrap" id="bw">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="themes" id="themes"></div>
+
+  <div class="acts">
+    <button type="button" id="undo" disabled>Undo</button>
+    <button type="button" id="flip">Flip board</button>
+    <button type="button" id="again">New game</button>
+  </div>
+
+  <div class="moves" id="log">No moves yet.</div>
+
+  <div class="note">
+    Two players on one board. Tap a piece, then tap where it goes. All the
+    rules are here: castling, en passant, promotion, check, checkmate and
+    stalemate.
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* Chess engine — poore qawaid.
+   *
+   * Board 64 khanon ka ek array hai, 0 = a8, 63 = h1. Har khana ya khali
+   * hai ("") ya do harf ka: pehla rang (w/b), doosra mohra (p n b r q k).
+   *
+   * Halat mein sirf board kaafi nahi — castling ke haq, en passant ka khana,
+   * aur bina-pitay chaalon ki ginti bhi rakhni parti hai, warna qawaid poore
+   * nahi hote.
+   */
+
+  var IDX = {};
+  (function(){
+    var files = "abcdefgh";
+    for (var r = 0; r < 8; r++)
+      for (var f = 0; f < 8; f++)
+        IDX[files[f] + (8 - r)] = r * 8 + f;
+  })();
+
+  function startPos(){
+    return {
+      b: [
+        "br","bn","bb","bq","bk","bb","bn","br",
+        "bp","bp","bp","bp","bp","bp","bp","bp",
+        "","","","","","","","",
+        "","","","","","","","",
+        "","","","","","","","",
+        "","","","","","","","",
+        "wp","wp","wp","wp","wp","wp","wp","wp",
+        "wr","wn","wb","wq","wk","wb","wn","wr"
+      ],
+      turn: "w",
+      castle: {wk:true, wq:true, bk:true, bq:true},
+      ep: -1,          // en passant ka khana, ya -1
+      half: 0,         // bina pite/bina piyade ki chaalein (50-move)
+      full: 1
+    };
+  }
+
+  function clone(s){
+    return {b: s.b.slice(), turn: s.turn,
+            castle: {wk:s.castle.wk, wq:s.castle.wq, bk:s.castle.bk, bq:s.castle.bq},
+            ep: s.ep, half: s.half, full: s.full};
+  }
+
+  function rc(i){ return [i >> 3, i & 7]; }
+  function ix(r, c){ return r * 8 + c; }
+  function onBoard(r, c){ return r >= 0 && r < 8 && c >= 0 && c < 8; }
+  function colorOf(p){ return p ? p[0] : ""; }
+  function typeOf(p){ return p ? p[1] : ""; }
+  function other(c){ return c === "w" ? "b" : "w"; }
+
+  var SLIDE = {
+    b: [[-1,-1],[-1,1],[1,-1],[1,1]],
+    r: [[-1,0],[1,0],[0,-1],[0,1]],
+    q: [[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]]
+  };
+  var JUMP = {
+    n: [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]],
+    k: [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
+  };
+
+  /* Kya rang `by` ka koi mohra khana `sq` par hamla kar raha hai?
+   * Ye castling aur check dono ke liye chahiye. */
+  function attacked(b, sq, by){
+    var t = rc(sq), tr = t[0], tc = t[1];
+
+    // piyade — hamla tirchha hota hai, chaal ke ulat
+    var dir = by === "w" ? 1 : -1;      // by ka piyada kis taraf se aata hai
+    for (var dc = -1; dc <= 1; dc += 2){
+      var pr = tr + dir, pc = tc + dc;
+      if (onBoard(pr, pc) && b[ix(pr, pc)] === by + "p") return true;
+    }
+
+    // ghoda aur badshah
+    var kinds = [["n", JUMP.n], ["k", JUMP.k]];
+    for (var k = 0; k < kinds.length; k++){
+      var moves = kinds[k][1];
+      for (var m = 0; m < moves.length; m++){
+        var r = tr + moves[m][0], c = tc + moves[m][1];
+        if (onBoard(r, c) && b[ix(r, c)] === by + kinds[k][0]) return true;
+      }
+    }
+
+    // sarakne wale
+    var lines = [["b", SLIDE.b], ["r", SLIDE.r]];
+    for (var l = 0; l < lines.length; l++){
+      var dirs = lines[l][1];
+      for (var d = 0; d < dirs.length; d++){
+        var rr = tr + dirs[d][0], cc = tc + dirs[d][1];
+        while (onBoard(rr, cc)){
+          var p = b[ix(rr, cc)];
+          if (p){
+            if (colorOf(p) === by && (typeOf(p) === lines[l][0] || typeOf(p) === "q"))
+              return true;
+            break;
+          }
+          rr += dirs[d][0]; cc += dirs[d][1];
+        }
+      }
+    }
+    return false;
+  }
+
+  function kingSquare(b, color){
+    for (var i = 0; i < 64; i++) if (b[i] === color + "k") return i;
+    return -1;
+  }
+
+  function inCheck(s, color){
+    var k = kingSquare(s.b, color);
+    return k >= 0 && attacked(s.b, k, other(color));
+  }
+
+  /* Ek khane se hone wali chaalein — abhi check ki parwah kiye baghair */
+  function rawMoves(s, from){
+    var p = s.b[from];
+    if (!p) return [];
+    var me = colorOf(p), t = typeOf(p), out = [];
+    var a = rc(from), r = a[0], c = a[1];
+
+    if (t === "p"){
+      var dir = me === "w" ? -1 : 1;
+      var startRow = me === "w" ? 6 : 1;
+      var one = ix(r + dir, c);
+      if (onBoard(r + dir, c) && !s.b[one]){
+        out.push({from: from, to: one});
+        var two = ix(r + dir * 2, c);
+        if (r === startRow && !s.b[two]) out.push({from: from, to: two, dbl: true});
+      }
+      for (var dc = -1; dc <= 1; dc += 2){
+        var nr = r + dir, nc = c + dc;
+        if (!onBoard(nr, nc)) continue;
+        var to = ix(nr, nc), q = s.b[to];
+        if (q && colorOf(q) !== me) out.push({from: from, to: to});
+        else if (to === s.ep) out.push({from: from, to: to, ep: true});
+      }
+    } else if (t === "n" || t === "k"){
+      var jm = JUMP[t];
+      for (var j = 0; j < jm.length; j++){
+        var jr = r + jm[j][0], jc = c + jm[j][1];
+        if (!onBoard(jr, jc)) continue;
+        var ti = ix(jr, jc);
+        if (colorOf(s.b[ti]) !== me) out.push({from: from, to: ti});
+      }
+      if (t === "k"){
+        // Castling: haq baqi ho, beech khali ho, aur badshah check se
+        // guzarta na ho. Teenon shartein alag hain.
+        var row = me === "w" ? 7 : 0;
+        if (from === ix(row, 4) && !inCheck(s, me)){
+          if (s.castle[me + "k"] && !s.b[ix(row,5)] && !s.b[ix(row,6)]
+              && !attacked(s.b, ix(row,5), other(me))
+              && !attacked(s.b, ix(row,6), other(me)))
+            out.push({from: from, to: ix(row,6), castle: "k"});
+          if (s.castle[me + "q"] && !s.b[ix(row,3)] && !s.b[ix(row,2)]
+              && !s.b[ix(row,1)]
+              && !attacked(s.b, ix(row,3), other(me))
+              && !attacked(s.b, ix(row,2), other(me)))
+            out.push({from: from, to: ix(row,2), castle: "q"});
+        }
+      }
+    } else {
+      var dirs = SLIDE[t];
+      for (var d = 0; d < dirs.length; d++){
+        var rr = r + dirs[d][0], cc = c + dirs[d][1];
+        while (onBoard(rr, cc)){
+          var si = ix(rr, cc), sp = s.b[si];
+          if (!sp) out.push({from: from, to: si});
+          else {
+            if (colorOf(sp) !== me) out.push({from: from, to: si});
+            break;
+          }
+          rr += dirs[d][0]; cc += dirs[d][1];
+        }
+      }
+    }
+    return out;
+  }
+
+  /* Chaal chalao. Halat wapas milti hai; asal halat nahi badalti. */
+  function apply(s, mv){
+    var n = clone(s);
+    var p = n.b[mv.from], me = colorOf(p), t = typeOf(p);
+    var captured = n.b[mv.to];
+
+    n.b[mv.to] = p;
+    n.b[mv.from] = "";
+
+    if (mv.ep){
+      // Pita hua piyada us khane par nahi hota jahan hum gaye
+      var epr = me === "w" ? rc(mv.to)[0] + 1 : rc(mv.to)[0] - 1;
+      n.b[ix(epr, rc(mv.to)[1])] = "";
+      captured = other(me) + "p";
+    }
+
+    if (mv.castle){
+      var row = me === "w" ? 7 : 0;
+      if (mv.castle === "k"){
+        n.b[ix(row,5)] = n.b[ix(row,7)];
+        n.b[ix(row,7)] = "";
+      } else {
+        n.b[ix(row,3)] = n.b[ix(row,0)];
+        n.b[ix(row,0)] = "";
+      }
+    }
+
+    if (mv.promo) n.b[mv.to] = me + mv.promo;
+
+    // castling ke haq — badshah ya rukh hile to khatam
+    if (t === "k"){ n.castle[me + "k"] = false; n.castle[me + "q"] = false; }
+    if (t === "r"){
+      var rw = me === "w" ? 7 : 0;
+      if (mv.from === ix(rw, 0)) n.castle[me + "q"] = false;
+      if (mv.from === ix(rw, 7)) n.castle[me + "k"] = false;
+    }
+    // dushman ka rukh pita jaye to uska haq bhi khatam
+    var orw = me === "w" ? 0 : 7;
+    if (mv.to === ix(orw, 0)) n.castle[other(me) + "q"] = false;
+    if (mv.to === ix(orw, 7)) n.castle[other(me) + "k"] = false;
+
+    n.ep = mv.dbl ? ix(rc(mv.from)[0] + (me === "w" ? -1 : 1), rc(mv.from)[1]) : -1;
+    n.half = (t === "p" || captured) ? 0 : n.half + 1;
+    if (me === "b") n.full++;
+    n.turn = other(me);
+    return n;
+  }
+
+  /* Jaiz chaalein: wo raw chaalein jinke baad apna badshah check mein na ho */
+  function legalMoves(s, from){
+    var out = [];
+    var list = from === undefined || from === null
+      ? allRaw(s) : rawMoves(s, from);
+    for (var i = 0; i < list.length; i++){
+      var mv = list[i];
+      if (colorOf(s.b[mv.from]) !== s.turn) continue;
+      var after = apply(s, mv);
+      if (inCheck(after, s.turn)) continue;
+      // piyada aakhri qatar par — promotion
+      var t = typeOf(s.b[mv.from]);
+      var toRow = rc(mv.to)[0];
+      if (t === "p" && (toRow === 0 || toRow === 7)){
+        ["q","r","b","n"].forEach(function(pr){
+          out.push({from: mv.from, to: mv.to, promo: pr, ep: mv.ep,
+                    dbl: mv.dbl, castle: mv.castle});
+        });
+      } else {
+        out.push(mv);
+      }
+    }
+    return out;
+  }
+
+  function allRaw(s){
+    var out = [];
+    for (var i = 0; i < 64; i++)
+      if (colorOf(s.b[i]) === s.turn) out = out.concat(rawMoves(s, i));
+    return out;
+  }
+
+  function status(s){
+    var moves = legalMoves(s);
+    if (!moves.length) return inCheck(s, s.turn) ? "mate" : "stalemate";
+    if (s.half >= 100) return "fifty";
+    // sirf badshah bache to koi nahi jeet sakta
+    var pieces = s.b.filter(function(p){ return p; });
+    if (pieces.length === 2) return "material";
+    return inCheck(s, s.turn) ? "check" : "ok";
+  }
+
+  /* ---------------- khelne wala hissa ---------------- */
+
+  var GLYPH = {
+    wk:"\u2654", wq:"\u2655", wr:"\u2656", wb:"\u2657", wn:"\u2658", wp:"\u2659",
+    bk:"\u265A", bq:"\u265B", br:"\u265C", bb:"\u265D", bn:"\u265E", bp:"\u265F"
+  };
+  var FILES = "abcdefgh";
+
+  var state, history, sel, moves, flipped = false, lastMove = null, done = false;
+
+  /* Board ke andaz. Har ek mein halka aur gehra khana, aur chuni hui
+     chaal ka rang — teenon sath badalte hain warna meil nahi khate. */
+  var THEMES = [
+    {id:"wood",  light:"#EDE0C8", dark:"#B58863", last:"rgba(246,217,107,.55)"},
+    {id:"green", light:"#EEEED2", dark:"#769656", last:"rgba(246,246,105,.5)"},
+    {id:"blue",  light:"#DEE3E6", dark:"#788A9F", last:"rgba(120,180,255,.5)"},
+    {id:"ink",   light:"#D9DEE8", dark:"#3D4A63", last:"rgba(120,150,255,.45)"}
+  ];
+  var theme = THEMES[0].id;
+  try {
+    var t = localStorage.getItem("xc_chess_theme");
+    if (t && THEMES.some(function(x){ return x.id === t; })) theme = t;
+  } catch(e){}
+
+  function paintTheme(){
+    var t = THEMES.filter(function(x){ return x.id === theme; })[0] || THEMES[0];
+    var r = document.documentElement.style;
+    r.setProperty("--light", t.light);
+    r.setProperty("--dark", t.dark);
+    r.setProperty("--last", t.last);
+    document.querySelectorAll("[data-th]").forEach(function(b){
+      b.classList.toggle("on", b.getAttribute("data-th") === theme);
+    });
+  }
+
+  (function(){
+    var el = document.getElementById("themes");
+    if (!el) return;
+    el.innerHTML = THEMES.map(function(t){
+      return '<button type="button" data-th="' + t.id + '" aria-label="' + t.id
+        + '"><span style="background:' + t.light + '"></span>'
+        + '<span style="background:' + t.dark + '"></span></button>';
+    }).join("");
+    el.addEventListener("click", function(e){
+      var b = e.target.closest("[data-th]");
+      if (!b) return;
+      theme = b.getAttribute("data-th");
+      try { localStorage.setItem("xc_chess_theme", theme); } catch(err){}
+      paintTheme();
+    });
+    paintTheme();
+  })();
+
+  /* ---------------- online khel ----------------
+     Websockets nahi hain, is liye har do second halat poochte hain.
+     Chess ki chaalein tez tez nahi hoti, to ye kaafi hai. */
+
+  var room = null;          // {code, you, your_turn, stage}
+  var poll = null;
+  var seen = 0;             // kitni chaalein hum laga chuke hain
+
+  function cookie(n){
+    var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+
+  function api(path, opts){
+    opts = opts || {};
+    var h = {"Content-Type": "application/json"};
+    if (opts.method && opts.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch("/api/games" + path, {
+      method: opts.method || "GET", headers: h, credentials: "same-origin",
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    }).then(function(r){
+      return r.json().catch(function(){ return {}; })
+        .then(function(d){ return {ok: r.ok, data: d}; });
+    }).catch(function(){
+      return {ok: false, data: {detail: "Network error."}};
+    });
+  }
+
+  function say(text, bad){
+    var m = document.getElementById("roomMsg");
+    m.textContent = text || "";
+    m.className = "msg" + (bad ? " bad" : "");
+  }
+
+  function roomRow(){
+    var el = document.getElementById("roomRow");
+    if (!room){
+      el.innerHTML = '<button type="button" class="go" id="mkRoom">Play a friend</button>'
+        + '<input id="joinCode" placeholder="Room code" maxlength="5" autocomplete="off">'
+        + '<button type="button" id="joinRoom">Join</button>';
+      return;
+    }
+    el.innerHTML = '<span class="code">' + room.code + '</span>'
+      + '<button type="button" id="copyCode">Copy code</button>'
+      + '<button type="button" id="leaveRoom">Leave</button>';
+  }
+
+  /* Dono khiladi kaun hain, aur kis ki baari. Room banane wala safed. */
+  function seats(d){
+    var el = document.getElementById("seats");
+    if (!el) return;
+    if (!d || d.stage === "open" || !d.guest_name){
+      el.style.display = "none";
+      return;
+    }
+    el.style.display = "flex";
+    var rows = [
+      {name: d.host_name, pip: "w", side: "host"},
+      {name: d.guest_name, pip: "b", side: "guest"}
+    ];
+    el.innerHTML = rows.map(function(r){
+      var isTurn = d.stage === "playing" && d.turn === r.side;
+      return '<span class="seat' + (isTurn ? " turn" : "") + '">'
+        + '<span class="pip ' + r.pip + '"></span>'
+        + '<b>' + esc(r.name || "\u2014") + '</b>'
+        + (d.you === r.side ? '<span class="me">YOU</span>' : '')
+        + '</span>';
+    }).join("");
+  }
+
+  function esc(x){
+    return String(x == null ? "" : x).replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  /* Games being played right now - tap one to watch. */
+  function loadLive(){
+    var el = document.getElementById("liveList");
+    if (!el) return;
+    if (room){ el.innerHTML = ""; return; }
+    api("/rooms/live/").then(function(r){
+      if (!r.ok || room) return;
+      var rows = (r.data.rooms || []).filter(function(x){ return x.game === "chess"; });
+      if (!rows.length){ el.innerHTML = ""; return; }
+      el.innerHTML = '<h4 class="lvh">Live games</h4>' + rows.map(function(x){
+        return '<div class="lvr"><span><b>' + esc(x.host) + '</b> vs <b>' + esc(x.guest) + '</b>'
+          + '<small>' + x.moves + ' moves</small></span>'
+          + '<button type="button" data-watch="' + esc(x.code) + '">Watch</button></div>';
+      }).join("");
+    });
+  }
+  setTimeout(loadLive, 300);
+  setInterval(function(){ if (!document.hidden) loadLive(); }, 15000);
+
+  // True from the moment a move leaves until the server answers. A poll
+  // landing in that gap would bring back a list without the move in it.
+  var sending = false;
+
+  function startPoll(){
+    stopPoll();
+    poll = setInterval(function(){
+      if (!room) return stopPoll();
+      if (sending) return;              // apni chaal raaste mein hai
+      if (document.hidden) return;      // chhupe tab par server ko na thakayen
+      api("/rooms/" + room.code + "/").then(function(r){
+        if (!r.ok) return;
+        soakUp(r.data);
+      });
+    }, 2000);
+  }
+  function stopPoll(){ if (poll){ clearInterval(poll); poll = null; } }
+
+  /* Server se aayi halat ko board par lagana. Sirf wo chaalein lagate hain
+     jo hum ne abhi tak nahi lagayin — poora board dobara banane se undo
+     aur notation dono toot jate hain. */
+  function soakUp(d){
+    room = d;
+    roomRow();
+
+    if (d.stage === "open"){
+      say("Waiting for someone to join. Send them the code.");
+      return;
+    }
+
+    // Guest kaala khelta hai, is liye uska board palta hua hona chahiye.
+    // Ye chhoot gaya tha, aur isi wajah se baari ka hisaab bhi ulta lagta tha.
+    if (d.you === "guest" && !flipped) flipped = true;
+    if (d.you === "host" && flipped) flipped = false;
+    seats(d);
+
+    var moves = (d.state && d.state.moves) || [];
+    if (moves.length < seen){
+      // Doosra khiladi naya khel shuru kar chuka hai
+      seen = 0;
+      state = startPos(); history = []; lastMove = null; done = false;
+    }
+    for (var i = seen; i < moves.length; i++){
+      var m = moves[i];
+      // Our own move is already on the board - it went on the moment it
+      // was played, before it was sent. Playing it again is never legal,
+      // and that is what put the game out of step.
+      var mine2 = history[i] && history[i].mv
+        && history[i].mv.from === m.from && history[i].mv.to === m.to;
+      if (mine2) continue;
+      var legal = legalMoves(state).filter(function(x){
+        return x.from === m.from && x.to === m.to
+            && (m.promo ? x.promo === m.promo : !x.promo);
+      })[0];
+      if (!legal){
+        // Rather than telling them to start again, rebuild the board
+        // from the server's list. The server is the one that is right.
+        return resync();
+      }
+      var san = notate(state, legal);
+      history.push({state: clone(state), san: san, mv: legal});
+      state = apply(state, legal);
+      lastMove = legal;
+    }
+    seen = moves.length;
+    sel = null; moves = [];
+    render(); log();
+
+    var mine = (d.you === "host") ? "w" : "b";
+    if (d.stage === "over"){
+      say(d.result === "draw" ? "Game drawn."
+          : d.result === d.you ? "You won." : "You lost.");
+    } else {
+      var them = (d.you === "host" ? d.guest_name : d.host_name) || "them";
+      // Somebody who closed their tab is not thinking about their move.
+      var themHere = d.you === "host" ? d.guest_here : d.host_here;
+      if (d.watching){
+        say("Watching " + (d.host_name || "host") + " against "
+            + (d.guest_name || "guest") + " \u2014 you cannot move.");
+        return;
+      }
+      if (themHere === false){
+        say(them + " has left the board.", true);
+        return;
+      }
+      say(state.turn === mine
+          ? "Your move \u2014 you are " + (mine === "w" ? "White" : "Black")
+          : them + " is thinking \u2014 you are "
+            + (mine === "w" ? "White" : "Black"));
+    }
+  }
+
+  /* Throw away what is on the board and play the server's list from the
+     start. Slower than patching it up, but it always ends in the right
+     position, which patching up does not. */
+  function resync(){
+    if (!room) return;
+    sending = true;
+    api("/rooms/" + room.code + "/").then(function(r){
+      sending = false;
+      if (!r.ok) return;
+      seen = 0;
+      state = startPos(); history = []; lastMove = null; done = false; sel = null;
+      soakUp(r.data);
+    });
+  }
+
+  function sendMove(mv, san){
+    if (!room) return;
+    var over = "";
+    var after = apply(state, mv);
+    var st = status(after);
+    if (st === "mate") over = "mate";
+    else if (st === "stalemate" || st === "fifty" || st === "material") over = "draw";
+
+    sending = true;
+    api("/rooms/" + room.code + "/move/", {method: "POST", body: {
+      move: {from: mv.from, to: mv.to, promo: mv.promo || "", san: san},
+      over: over
+    }}).then(function(r){
+      sending = false;
+      if (!r.ok){
+        // The board now holds a move the server never took. Left alone,
+        // every move after it would be out of step.
+        say(r.data.detail || "That move did not send.", true);
+        return resync();
+      }
+      seen = (r.data.state.moves || []).length;
+      soakUp(r.data);
+    });
+  }
+
+  document.getElementById("room").addEventListener("click", function(e){
+    var b = e.target.closest("button");
+    if (!b) return;
+
+    if (b.id === "mkRoom"){
+      b.disabled = true;
+      say("Making a room\u2026");
+      api("/rooms/create/", {method: "POST", body: {game: "chess"}})
+        .then(function(r){
+          if (!r.ok){
+            say(r.data.detail || "Sign in first to play a friend.", true);
+            b.disabled = false;
+            return;
+          }
+          reset();
+          seen = 0;
+          soakUp(r.data);
+          startPoll();
+        });
+      return;
+    }
+
+    if (b.getAttribute("data-watch")){
+      var wc = b.getAttribute("data-watch");
+      say("Opening the game\u2026");
+      api("/rooms/" + wc + "/").then(function(r){
+        if (!r.ok){ say((r.data && r.data.detail) || "That game has ended.", true); loadLive(); return; }
+        reset();
+        seen = 0;
+        soakUp(r.data);
+        startPoll();
+        loadLive();
+        window.scrollTo({top: 0, behavior: "smooth"});
+      });
+      return;
+    }
+
+    if (b.id === "joinRoom"){
+      var code = (document.getElementById("joinCode").value || "").trim().toUpperCase();
+      if (!code){ say("Enter the code your friend sent you.", true); return; }
+      b.disabled = true;
+      say("Joining\u2026");
+      api("/rooms/join/", {method: "POST", body: {code: code}}).then(function(r){
+        b.disabled = false;
+        if (!r.ok){ say(r.data.detail || "Could not join.", true); return; }
+        reset();
+        seen = 0;
+        soakUp(r.data);
+        startPoll();
+      });
+      return;
+    }
+
+    if (b.id === "copyCode"){
+      var t = room ? room.code : "";
+      if (navigator.clipboard) navigator.clipboard.writeText(t);
+      say("Code copied. Send it to your friend.");
+      return;
+    }
+
+    if (b.id === "leaveRoom"){
+      var code2 = room ? room.code : "";
+      stopPoll();
+      room = null; seen = 0;
+      flipped = false;
+      roomRow();
+      seats(null);
+      say("");
+      api("/rooms/" + code2 + "/leave/", {method: "POST"});
+      reset();
+      return;
+    }
+  });
+
+  function reset(){
+    state = startPos();
+    history = [];
+    sel = null;
+    moves = [];
+    lastMove = null;
+    done = false;
+    var o = document.querySelector(".over");
+    if (o) o.remove();
+    var p = document.querySelector(".promo");
+    if (p) p.remove();
+    render();
+    log();
+  }
+
+  function sqName(i){
+    var a = rc(i);
+    return FILES[a[1]] + (8 - a[0]);
+  }
+
+  function render(){
+    var el = document.getElementById("board");
+    var order = [];
+    for (var i = 0; i < 64; i++) order.push(i);
+    if (flipped) order.reverse();
+
+    var kSq = -1;
+    if (!done && inCheck(state, state.turn)){
+      for (var q = 0; q < 64; q++) if (state.b[q] === state.turn + "k") kSq = q;
+    }
+
+    var h = "";
+    order.forEach(function(i){
+      var a = rc(i), light = (a[0] + a[1]) % 2 === 0;
+      var cls = "sq " + (light ? "l" : "d");
+      if (sel === i) cls += " sel";
+      if (lastMove && (lastMove.from === i || lastMove.to === i)) cls += " lm";
+      if (i === kSq) cls += " chk";
+      var target = moves.filter(function(m){ return m.to === i; })[0];
+      if (target && state.b[i]) cls += " cap";
+      h += '<div class="' + cls + '" data-i="' + i + '">'
+        + (state.b[i] ? '<span class="pc">' + GLYPH[state.b[i]] + '</span>' : '')
+        + (target ? '<span class="go"></span>' : '')
+        + '</div>';
+    });
+    el.innerHTML = h;
+
+    var turnName = state.turn === "w" ? "White" : "Black";
+    document.getElementById("turn").textContent = turnName + " to move";
+    document.getElementById("dot").className = "dot" + (state.turn === "w" ? " w" : "");
+    document.getElementById("undo").disabled = !history.length;
+
+    var s = status(state);
+    var st = document.getElementById("st");
+    st.className = "st";
+    st.textContent = "";
+    if (s === "check"){ st.textContent = "Check"; st.className = "st chk"; }
+
+    if (!done && (s === "mate" || s === "stalemate" || s === "fifty" || s === "material")){
+      done = true;
+      finish(s, turnName);
+    }
+  }
+
+  function finish(s, turnName){
+    var won = s === "mate" ? (state.turn === "w" ? "Black" : "White") : null;
+    var title = s === "mate" ? "Checkmate"
+              : s === "stalemate" ? "Stalemate"
+              : s === "fifty" ? "Draw" : "Draw";
+    var line = s === "mate" ? won + " wins."
+             : s === "stalemate" ? turnName + " has no legal move, and is not in check."
+             : s === "fifty" ? "Fifty moves without a capture or a pawn move."
+             : "Not enough material to win.";
+    var bw = document.getElementById("bw");
+    if (bw.querySelector(".over")) return;
+    var d = document.createElement("div");
+    d.className = "over";
+    d.innerHTML = '<div><div class="e">' + (s === "mate" ? "\u265B" : "\u00BD")
+      + '</div><h2>' + title + '</h2><p>' + line + '</p>'
+      + '<button type="button" id="ng">New game</button></div>';
+    bw.appendChild(d);
+    d.querySelector("#ng").addEventListener("click", reset);
+  }
+
+  /* Chaal ka naam: Nf3, exd5, O-O, e8=Q+ */
+  function notate(before, mv){
+    var p = before.b[mv.from], t = typeOf(p);
+    if (mv.castle) return mv.castle === "k" ? "O-O" : "O-O-O";
+    var cap = before.b[mv.to] || mv.ep;
+    var s = "";
+    if (t === "p"){
+      if (cap) s += FILES[rc(mv.from)[1]] + "x";
+      s += sqName(mv.to);
+      if (mv.promo) s += "=" + mv.promo.toUpperCase();
+    } else {
+      s += t.toUpperCase();
+      // Do ek jaise mohre ek hi khane par ja sakte hain? Tab farq batana parta hai.
+      var same = legalMoves(before).filter(function(m){
+        return m.to === mv.to && m.from !== mv.from
+            && typeOf(before.b[m.from]) === t;
+      });
+      if (same.length){
+        var sameFile = same.some(function(m){ return rc(m.from)[1] === rc(mv.from)[1]; });
+        s += sameFile ? (8 - rc(mv.from)[0]) : FILES[rc(mv.from)[1]];
+      }
+      if (cap) s += "x";
+      s += sqName(mv.to);
+    }
+    var after = apply(before, mv);
+    var st = status(after);
+    if (st === "mate") s += "#";
+    else if (inCheck(after, after.turn)) s += "+";
+    return s;
+  }
+
+  function log(){
+    var el = document.getElementById("log");
+    if (!history.length){ el.textContent = "No moves yet."; return; }
+    var h = "";
+    for (var i = 0; i < history.length; i++){
+      if (i % 2 === 0) h += '<span class="n">' + (i / 2 + 1) + '.</span>';
+      h += "<b>" + history[i].san + "</b> ";
+    }
+    el.innerHTML = h;
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function play(mv){
+    // Online mein apni baari ke ilawa chaal nahi chalti
+    if (room && room.stage === "playing"){
+      var mine = (room.you === "host") ? "w" : "b";
+      if (state.turn !== mine) return;
+    }
+    var san = notate(state, mv);
+    history.push({state: clone(state), san: san, mv: mv});
+    state = apply(state, mv);
+    lastMove = mv;
+    sel = null;
+    moves = [];
+    render();
+    log();
+    if (room && room.stage === "playing"){
+      seen = history.length;
+      sendMove(mv, san);
+    }
+  }
+
+  document.getElementById("board").addEventListener("click", function(e){
+    if (done) return;
+    var sq = e.target.closest("[data-i]");
+    if (!sq) return;
+    var i = parseInt(sq.getAttribute("data-i"), 10);
+
+    var target = moves.filter(function(m){ return m.to === i; });
+    if (target.length){
+      if (target.length > 1 && target[0].promo){
+        askPromo(target);
+        return;
+      }
+      play(target[0]);
+      return;
+    }
+
+    if (colorOf(state.b[i]) === state.turn){
+      if (room && room.stage === "playing"){
+        var mine = (room.you === "host") ? "w" : "b";
+        if (state.turn !== mine){ sel = null; moves = []; render(); return; }
+      }
+      sel = i;
+      moves = legalMoves(state, i);
+    } else {
+      sel = null;
+      moves = [];
+    }
+    render();
+  });
+
+  function askPromo(list){
+    var bw = document.getElementById("bw");
+    var d = document.createElement("div");
+    d.className = "promo";
+    var me = state.turn;
+    d.innerHTML = '<div class="in2">'
+      + ["q","r","b","n"].map(function(k){
+          return '<button type="button" data-p="' + k + '">'
+            + GLYPH[me + k] + '</button>';
+        }).join("")
+      + '</div>';
+    bw.appendChild(d);
+    d.addEventListener("click", function(e){
+      var b = e.target.closest("[data-p]");
+      if (!b) return;
+      var want = b.getAttribute("data-p");
+      var mv = list.filter(function(m){ return m.promo === want; })[0];
+      d.remove();
+      if (mv) play(mv);
+    });
+  }
+
+  document.getElementById("undo").addEventListener("click", function(){
+    // Online mein undo doosre khiladi ka board bhi badal dega, is liye nahi
+    if (room && room.stage === "playing") return;
+    if (!history.length) return;
+    var last = history.pop();
+    state = last.state;
+    lastMove = history.length ? history[history.length - 1].mv : null;
+    sel = null; moves = []; done = false;
+    var o = document.querySelector(".over");
+    if (o) o.remove();
+    render();
+    log();
+  });
+
+  document.getElementById("flip").addEventListener("click", function(){
+    flipped = !flipped;
+    render();
+  });
+
+  document.getElementById("again").addEventListener("click", reset);
+
+  reset();
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Learn and use</h5>
+      <ul>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/people">Connect</a></li>
+        <li><a href="/pets">Pets</a></li>
+        <li><a href="/shows">Shows</a></li>
+        <li><a href="/docs">Guide</a></li>
+        <li><a href="/games">Games</a></li>
+        <li><a href="/money">Money</a></li>
+        <li><a href="/business">Business</a></li>
+        <li><a href="/blood">Blood bank</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+</body>
+</html>

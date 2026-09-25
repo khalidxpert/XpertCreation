@@ -66,6 +66,13 @@ INSTALLED_APPS = [
     "reviews",
     "geo",
     "moderation",
+    "vcard",
+    "network",
+    "pets",
+    "screen",
+    "donations",
+    "notifications",
+    "botlink",
 ]
 
 MIDDLEWARE = [
@@ -75,6 +82,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'accounts.presence.PresenceMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -184,6 +192,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_THROTTLE_CLASSES": [],
     "DEFAULT_THROTTLE_RATES": {
+        "chat": "60/min",
         "login": "8/hour",
         "register": "5/hour",
         "code_send": "6/hour",
@@ -199,6 +208,27 @@ REST_FRAMEWORK = {
         # somebody hammering the endpoint.
         "reviews": "30/hour",
         "geo": "120/hour",
+        # Professional network
+        "net_edit": "300/hour",
+        "net_endorse": "60/hour",
+        "net_report": "10/hour",
+        "net_browse": "600/hour",
+        "net_connect": "60/hour",
+        "net_follow": "120/hour",
+        # Pets
+        "pets_edit": "300/hour",
+        "pets_found": "20/hour",
+        "pets_lost": "30/day",
+        "pets_browse": "600/hour",
+        # Shows
+        "screen_browse": "600/hour",
+        "screen_write": "120/hour",
+        "botcode": "10/hour",
+        # Posting a donation listing.
+        "donate_post": "10/hour",
+        "donate_request": "30/hour",
+        "ticket": "60/hour",
+        "modapply": "5/day",
         "feedback": "5/day",
         # Starting a game is cheap; this only bounds a script that
         # tries to farm the leaderboard by opening games in a loop.
@@ -277,3 +307,15 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = "XpertAcademy <%s>" % EMAIL_HOST_USER
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+# Donation photos live here, served by nginx directly (not through gunicorn).
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+
+# The same shared-secret pattern PenFlow already uses for its own
+# Discord integration: the bot authenticates with this, not a user
+# login, when it calls back to confirm a link.
+DISCORD_BOT_SECRET = env("XC_DISCORD_BOT_SECRET", "")
+TELEGRAM_BOT_SECRET = env("XC_TELEGRAM_BOT_SECRET", "")

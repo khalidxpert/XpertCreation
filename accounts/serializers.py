@@ -92,14 +92,21 @@ class ChangePasswordSerializer(serializers.Serializer):
 class MeSerializer(serializers.ModelSerializer):
     can_order = serializers.BooleanField(read_only=True)
 
+    avatar_url = serializers.SerializerMethodField()
+
+    def get_avatar_url(self, obj):
+        from .views import avatar_url
+        return avatar_url(obj.avatar)
+
     class Meta:
         model = User
         fields = [
             "id", "email", "full_name", "phone", "is_email_verified",
             "can_order", "daily_limit_pkr", "preferred_lang", "date_joined",
-            "hide_from_leaderboard", "avatar",
+            "hide_from_leaderboard", "avatar", "avatar_url",
             "birth_day", "birth_month", "birth_year", "show_birthday",
             "vibe", "is_moderator",
+            "whatsapp", "show_whatsapp_on_accept",
         ]
         read_only_fields = [
             "id", "email", "is_email_verified", "can_order",
