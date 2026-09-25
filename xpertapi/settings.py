@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "network",
     "pets",
     "screen",
+    "feed",
     "donations",
     "notifications",
     "botlink",
@@ -220,6 +221,9 @@ REST_FRAMEWORK = {
         "pets_found": "20/hour",
         "pets_lost": "30/day",
         "pets_browse": "600/hour",
+        "feed_post": "20/hour",
+        "feed_react": "300/hour",
+        "feed_comment": "60/hour",
         # Shows
         "screen_browse": "600/hour",
         "screen_write": "120/hour",

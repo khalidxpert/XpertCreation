@@ -27,6 +27,7 @@ urlpatterns = [
     path("api/pets/", include("pets.urls")),
     path("api/screen/", include("screen.urls")),
 
+    path("api/feed/", include("feed.urls")),
     # Mounted at the root so the link people share stays short and readable.
     path("certificate/<str:serial>/", academy_views.certificate_page, name="certificate"),
 ]
