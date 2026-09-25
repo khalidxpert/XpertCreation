@@ -1,10 +1,15 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.xpertcreation.app",
-    "sha256_cert_fingerprints": [
-      "47:28:60:61:53:98:16:8B:2E:29:78:04:A8:5E:FB:59:9B:CF:E4:58:8F:07:AF:21:96:DE:1D:20:9C:A5:D3:49"
-    ]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.xpertcreation.app",
+      "sha256_cert_fingerprints": [
+        "58:D8:E6:66:5F:33:D3:D6:9B:0F:4B:01:3E:28:F1:76:BF:9A:C4:E8:5B:3B:62:85:AB:D0:0B:9C:31:FF:C0:A6",
+        "47:28:60:61:53:98:16:8B:2E:29:78:04:A8:5E:FB:59:9B:CF:E4:58:8F:07:AF:21:96:DE:1D:20:9C:A5:D3:49"
+      ]
+    }
   }
-}]
+]
