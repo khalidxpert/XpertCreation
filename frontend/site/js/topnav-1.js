@@ -54,6 +54,21 @@
   else if (sp){ head.insertBefore(nav, sp); head.insertBefore(btn, sp); } else { head.appendChild(nav); head.appendChild(btn); }
   head.appendChild(drop);
   btn.onclick = function(e){ e.stopPropagation(); drop.classList.toggle("open"); };
+  // "System log" - only for the super admin. The server decides; the answer is remembered for this visit.
+  function addAdmin(){
+    var link = '<a href="/system-log"' + (path === "/system-log" ? ' class="on"' : '') + '>\uD83D\uDEE1 System log</a>';
+    [head.querySelector(".tnav"), head.querySelector(".xnav"), drop].forEach(function(el){
+      if (el && !el.querySelector('a[href="/system-log"]')) el.insertAdjacentHTML("beforeend", link);
+    });
+  }
+  var sup = null;
+  try { sup = sessionStorage.getItem("xc_super"); } catch (e) {}
+  if (sup === "1") addAdmin();
+  else fetch("/api/auditlog/events/?from=2000-01-01&to=2000-01-01", {credentials: "same-origin"}).then(function(r){
+    if (!r.ok) return;
+    try { sessionStorage.setItem("xc_super", "1"); } catch (e) {}
+    addAdmin();
+  }).catch(function(){});
   document.addEventListener("click", function(e){ if (!drop.contains(e.target)) drop.classList.remove("open"); });  // Unread chat messages as a badge on "Chat", for signed-in members. Checked every minute.
   function chatBadge(){
     if (document.hidden) return;
