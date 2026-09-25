@@ -31,7 +31,7 @@
           + "<button data-push='test' style='" + BTN + "background:var(--card,#fff)'>Send a test</button>"
           + "<button data-push='off' style='" + BTN + "background:var(--card,#fff)'>Turn off</button>");
       } else {
-        box("\uD83D\uDD14 Get a notification on this device when someone messages you. <span style='flex:1'></span>"
+        box("\uD83D\uDD14 Notifications on this device: new messages, connection requests and reminders, even when the site is closed. <span style='flex:1'></span>"
           + "<button data-push='on' style='" + BTN + "background:var(--brand,#1B4DFF);color:#fff;border-color:var(--brand,#1B4DFF)'>Turn on</button>");
       }
     }).catch(function(){ box(""); });

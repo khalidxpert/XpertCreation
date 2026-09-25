@@ -113,6 +113,7 @@ body.inchat .thread2.on{flex:1;min-height:0}
 .stk3{width:150px;max-width:100%;height:auto;display:block}
 .msg8.stkmsg{background:transparent !important;border:0 !important;padding:0 2px}
 .msg8.stkmsg small{color:var(--ink-soft)}
+.newc3{margin-top:12px}.newc3 button{padding:10px 16px;border-radius:12px;background:var(--brand);color:#fff;font-weight:800;border:0;cursor:pointer}#newlist3{margin-top:10px}body.inchat .newc3,body.inchat #newlist3{display:none}
 .empty8{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px}
 
 /* ---------- bell ---------- */
@@ -156,8 +157,8 @@ body.inchat .thread2.on{flex:1;min-height:0}
 
 <div class="wrap">
   <h1>Chat</h1>
-  <script src="/js/push-1.js" defer></script>
-<div id="pushbar"></div>
+    <div class="newc3"><button id="newchat3" type="button">+ New chat</button></div>
+  <div id="newlist3"></div>
   <div id="list5" style="margin-top:14px"></div>
   <div class="thread2" id="threadbox">
     <div class="thd3"><button class="back3" data-back3>&larr; All chats</button><span style="flex:1"></span>
@@ -367,6 +368,42 @@ body.inchat .thread2.on{flex:1;min-height:0}
     var et = e.target.closest("[data-etab]"); if (et){ emoTab = et.getAttribute("data-etab"); drawEmo(); return; }
     var em = e.target.closest("[data-emoji]"); if (em){ insertEmoji(em.getAttribute("data-emoji")); return; }
     var sk = e.target.closest("[data-stk]"); if (sk){ sendSticker(sk.getAttribute("data-stk")); return; }
+    if (e.target.closest("#newchat3")){
+      var nl = $("newlist3");
+      if (nl.innerHTML){ nl.innerHTML = ""; return; }
+      nl.innerHTML = '<div class="empty8">Loading your connections\u2026</div>';
+      fetch("/api/network/me/people/connections/", {credentials: "same-origin"}).then(function(r){ return r.json(); }).then(function(d){
+        var list = (d && d.people) || [];
+        if (!list.length){
+          nl.innerHTML = '<div class="empty8">You can chat with people you are connected to. Find people in '
+            + '<a href="/people">Connect</a> and send a request; once they accept, they appear here.</div>';
+          return;
+        }
+        nl.innerHTML = '<input id="ncq3" placeholder="Search your connections" style="width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px;font:inherit">'
+          + '<div id="ncl3">' + list.map(function(p){
+              return '<div class="trow2" data-newc="' + esc(p.slug || "") + '" data-name="' + esc(p.name.toLowerCase()) + '">'
+                + '<span class="av6">' + esc(p.name.charAt(0).toUpperCase()) + '</span>'
+                + '<span class="t3"><b>' + esc(p.name) + '</b><small>' + esc(p.headline || "") + '</small></span></div>';
+            }).join("") + '</div>';
+      }).catch(function(){ nl.innerHTML = '<div class="empty8">Could not load your connections.</div>'; });
+      return;
+    }
+    var nc = e.target.closest("[data-newc]");
+    if (nc){
+      var slug = nc.getAttribute("data-newc");
+      if (!slug) return;
+      nc.style.opacity = ".5";
+      fetch("/api/network/in/" + encodeURIComponent(slug) + "/message/", {method: "POST", credentials: "same-origin",
+            headers: {"Content-Type": "application/json", "X-CSRFToken": cookie("xc_csrf")}, body: "{}"})
+        .then(function(r){ return r.json().then(function(d){ return {ok: r.ok, d: d}; }); })
+        .then(function(x){
+          nc.style.opacity = "";
+          if (!x.ok){ alert(x.d.detail || "Could not open the chat."); return; }
+          $("newlist3").innerHTML = "";
+          loadList().then(function(){ openThread(x.d.id); });
+        });
+      return;
+    }
     if (e.target.id === "csend") send();
   });
 
