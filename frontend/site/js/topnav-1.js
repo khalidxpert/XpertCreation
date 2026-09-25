@@ -1,8 +1,9 @@
 /* One menu for every page with the small header. Change the links here, and every page follows. */
 (function(){
   "use strict";
-  var head = document.querySelector("header.top");
-  if (!head || head.querySelector(".tnav")) return;
+  var head = document.querySelector("header.top") || document.querySelector("header.topbar");
+  if (!head || head.querySelector(".tmenu")) return;
+  var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
   var LINKS = [["Home", "/"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Connect", "/people"], ["Pets", "/pets"],
                ["Shows", "/shows"], ["Games", "/games"], ["Chat", "/chat"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
@@ -28,7 +29,7 @@
     ".tdrop.open{display:grid;grid-template-columns:1fr 1fr;gap:4px}" +
     ".tdrop a{padding:11px 12px;border-radius:10px;text-decoration:none;font-weight:600;color:var(--ink,#0D1424)}" +
     ".tdrop a.on{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}" +
-    "@media(max-width:820px){.tnav{display:none}.tmenu{display:inline-grid;place-items:center}}";
+    "@media(max-width:820px){.tnav,header.topbar .xnav{display:none}.tmenu{display:inline-grid;place-items:center}}";
   document.head.appendChild(css);
   if (getComputedStyle(head).position === "static") head.style.position = "relative";
   var links = LINKS.map(function(l){
@@ -47,7 +48,8 @@
   drop.className = "tdrop";
   drop.innerHTML = links;
   var sp = head.querySelector(".sp");
-  if (sp){ head.insertBefore(nav, sp); head.insertBefore(btn, sp); } else { head.appendChild(nav); head.appendChild(btn); }
+  if (isHome){ var g = head.querySelector(".gear"); if (g) head.insertBefore(btn, g); else head.appendChild(btn); }
+  else if (sp){ head.insertBefore(nav, sp); head.insertBefore(btn, sp); } else { head.appendChild(nav); head.appendChild(btn); }
   head.appendChild(drop);
   btn.onclick = function(e){ e.stopPropagation(); drop.classList.toggle("open"); };
   document.addEventListener("click", function(e){ if (!drop.contains(e.target)) drop.classList.remove("open"); });  // Unread chat messages as a badge on "Chat", for signed-in members. Checked every minute.
