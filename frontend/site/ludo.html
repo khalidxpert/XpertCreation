@@ -37,6 +37,7 @@ body{background:radial-gradient(circle at 50% 0%,#3B2755,var(--felt2));
 .seg button{flex:1;padding:9px 6px;border-radius:11px;font-size:12.5px;
   font-weight:700;border:1px solid rgba(255,255,255,.16);
   background:rgba(255,255,255,.07);color:#D6CCEA;cursor:pointer;font-family:inherit}
+.seg button.locked{opacity:.45}
 .seg button.on{background:#fff;color:var(--felt);border-color:#fff}
 
 /* A player's corner: who they are, and their own die. */
@@ -173,6 +174,7 @@ body{background:radial-gradient(circle at 50% 0%,#3B2755,var(--felt2));
     <button type="button" data-n="2">2 players</button>
     <button type="button" data-n="3">3 players</button>
     <button type="button" data-n="4" class="on">4 players</button>
+    <button type="button" id="newg">&#8635; New game</button>
   </div>
 
   <div class="pset" id="topSet"></div>
@@ -257,7 +259,7 @@ body{background:radial-gradient(circle at 50% 0%,#3B2755,var(--felt2));
       players.push({i: i, color: COLORS[i], tokens: [-1, -1, -1, -1], done: false});
     }
     return {players: players, turn: 0, dice: 0, rolled: false,
-            sixes: 0, finished: [], count: count};
+            sixes: 0, finished: [], count: count, started: false};
   }
 
   /* Every move this roll allows. Empty means the turn is over. */
@@ -536,7 +538,46 @@ body{background:radial-gradient(circle at 50% 0%,#3B2755,var(--felt2));
   }
 
   function say(msg){ document.getElementById("say").textContent = msg || ""; }
-  function refresh(){ drawPlayers(); drawTokens(); }
+  /* A game in progress keeps its players: changing the count or starting again first asks who is
+     quitting, and whoever quits loses. */
+  function inPlay(){ return !!(g && g.started && !over(g) && !document.querySelector(".over")); }
+  function lockSeg(){
+    var on = inPlay();
+    document.querySelectorAll("[data-n]").forEach(function(x){ x.classList.toggle("locked", on); });
+  }
+  function showQuit(i, after){
+    var bw = document.getElementById("bw");
+    var others = g.players.filter(function(p){ return p.i !== i; }).map(function(p){
+      var home = g.finished.indexOf(p.i);
+      return {i: p.i, s: (home >= 0 ? 1000 - home : 0) + p.tokens.reduce(function(a, t){ return a + Math.max(t, 0); }, 0)};
+    }).sort(function(a, b){ return b.s - a.s; });
+    g.started = false;
+    var d = document.createElement("div");
+    d.className = "over";
+    d.innerHTML = '<div><div class="e">\ud83c\udff3\ufe0f</div><h2>' + NAMES[i] + ' quit</h2>'
+      + '<p style="margin-top:4px">' + NAMES[i] + ' loses. ' + NAMES[others[0].i] + ' wins.</p><ol>'
+      + others.map(function(o){ return '<li style="color:var(--' + COLORS[o.i] + ')">' + NAMES[o.i] + '</li>'; }).join("")
+      + '<li style="color:var(--' + COLORS[i] + ');opacity:.6">' + NAMES[i] + ' (quit)</li></ol>'
+      + '<button type="button" id="ng">New game</button></div>';
+    bw.appendChild(d);
+    lockSeg();
+    d.querySelector("#ng").addEventListener("click", after);
+  }
+  function quitDialog(after){
+    dialog("Quit this game?", '<p style="margin:0 0 10px">The game is not finished. Whoever quits loses. Who is quitting?</p>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap">' + g.players.filter(function(p){ return !p.done; }).map(function(p){
+          return '<button type="button" data-quit="' + p.i + '" style="flex:1;padding:11px;border-radius:11px;border:0;font-weight:800;color:#fff;background:var(--' + COLORS[p.i] + ')">' + NAMES[p.i] + '</button>';
+        }).join("") + '</div>'
+      + '<button type="button" class="ok" data-dclose style="margin-top:12px">Keep playing</button>', function(d){
+        d.addEventListener("click", function(e){
+          var q = e.target.closest("[data-quit]");
+          if (!q) return;
+          d.remove();
+          showQuit(parseInt(q.getAttribute("data-quit"), 10), after);
+        });
+      });
+  }
+  function refresh(){ drawPlayers(); drawTokens(); lockSeg(); }
   function pace(ms){ return [ms * 1.5, ms, ms * 0.55][opt.speed] || ms; }
 
   /* ---- a turn ---- */
@@ -545,6 +586,7 @@ body{background:radial-gradient(circle at 50% 0%,#3B2755,var(--felt2));
     if (busy || rolling || !g || g.rolled) return;
     if (who !== g.turn) return;
     rolling = true;
+    g.started = true;
     var btn = document.querySelector('[data-roll="' + g.turn + '"]');
     btn.classList.remove("ready");
     SND.roll();
@@ -677,14 +719,20 @@ body{background:radial-gradient(circle at 50% 0%,#3B2755,var(--felt2));
 
     var n = e.target.closest("[data-n]");
     if (n){
-      count = parseInt(n.getAttribute("data-n"), 10);
-      try { localStorage.setItem("xc_ludo_n", String(count)); } catch (err) {}
-      document.querySelectorAll("[data-n]").forEach(function(x){
-        x.classList.toggle("on", x === n);
-      });
-      reset();
+      var want = parseInt(n.getAttribute("data-n"), 10);
+      if (want === count && inPlay()) return;
+      var go = function(){
+        count = want;
+        try { localStorage.setItem("xc_ludo_n", String(count)); } catch (err) {}
+        document.querySelectorAll("[data-n]").forEach(function(x){
+          x.classList.toggle("on", x === n);
+        });
+        reset();
+      };
+      if (inPlay()) quitDialog(go); else go();
       return;
     }
+    if (e.target.closest("#newg")){ if (inPlay()) quitDialog(reset); else reset(); return; }
 
     if (e.target.closest("#setBtn")){ settings(); return; }
 

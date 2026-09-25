@@ -87,6 +87,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   background:rgba(243,235,221,.94);border-radius:22px;text-align:center;
   padding:24px;z-index:5}
 .win .e{font-size:44px}
+.apx{opacity:0;animation:apop .35s ease-out forwards;transform-box:fill-box;transform-origin:center}
+@keyframes apop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
 .win h2{font-family:var(--display);font-weight:800;font-size:24px;
   letter-spacing:-.03em;margin-top:8px}
 .win p{color:var(--ink-soft);font-size:14px;margin-top:5px}
@@ -158,13 +160,13 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   <div class="acts">
     <button type="button" id="again">Restart level</button>
-    <button type="button" class="go2" id="skip">Skip level</button>
   </div>
 
   <div class="note">
     Tap an arrow whose way out is clear and it slides off the board. If
     something is in the way it will not move. Every level here can be solved
-    — no level is ever a dead end.
+    — no level is ever a dead end. Every fifth level, and some others,
+    hide an animal: clear the board to reveal it.
   </div>
 </div>
 
@@ -199,7 +201,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     return true;
   }
 
-  function grow(start, headDir, size, occ, minLen, maxLen, rng){
+  function grow(start, headDir, size, occ, minLen, maxLen, rng, mask){
     var cells = [start], own = {};
     own[key(start[0],start[1])] = 1;
     var hd = DIRS[headDir];
@@ -215,7 +217,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         var nr = cur[0]+d[0], nc = cur[1]+d[1];
         if (nr < 0 || nr >= size || nc < 0 || nc >= size) continue;
         var k = key(nr,nc);
-        if (occ[k] || own[k]) continue;
+        if (occ[k] || own[k] || (mask && !mask[k])) continue;
         // Seedha jaari rehne ka mauqa zyada, warna rasta bahut zigzag lagta hai
         var w = (d[0] === last[0] && d[1] === last[1]) ? 3 : 1;
         for (var j = 0; j < w; j++) opts.push(d);
@@ -230,23 +232,39 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     return cells.length < minLen ? null : {cells:cells, own:own};
   }
 
-  function generate(size, want, rng, minLen, maxLen){
+  function generate(size, want, rng, minLen, maxLen, mask){
     var occ = {}, paths = [], tries = 0, max = want * 60;
-    while (paths.length < want && tries < max){
-      tries++;
-      var r = Math.floor(rng()*size), c = Math.floor(rng()*size);
-      if (occ[key(r,c)]) continue;
-      var dir = NAMES[Math.floor(rng()*4)];
+    function place(r, c, dir, lo){
+      if (occ[key(r,c)] || (mask && !mask[key(r,c)])) return false;
       var one = {}; one[key(r,c)] = 1;
-      if (!canExit([r,c], dir, size, occ, one)) continue;
-      var p = grow([r,c], dir, size, occ, minLen, maxLen, rng);
-      if (!p) continue;
-      if (!canExit([r,c], dir, size, occ, p.own)) continue;
+      if (!canExit([r,c], dir, size, occ, one)) return false;
+      var p = grow([r,c], dir, size, occ, lo, maxLen, rng, mask);
+      if (!p || !canExit([r,c], dir, size, occ, p.own)) return false;
       for (var k in p.own) occ[k] = 1;
       paths.push({id: paths.length, dir: dir, cells: p.cells, own: p.own});
+      return true;
+    }
+    while (paths.length < want && tries < max){
+      tries++;
+      place(Math.floor(rng()*size), Math.floor(rng()*size), NAMES[Math.floor(rng()*4)], minLen);
+    }
+    // Fill the gaps: every empty square gets a chance, in shuffled order, with shorter arrows allowed.
+    // Each arrow is still placed only where it can leave, so every level stays solvable.
+    for (var pass = 0; pass < 3 && paths.length < want; pass++){
+      var cells = [];
+      for (var r = 0; r < size; r++) for (var c = 0; c < size; c++) if (!occ[key(r,c)]) cells.push([r, c]);
+      for (var i = cells.length - 1; i > 0; i--){ var j = Math.floor(rng() * (i + 1)); var t = cells[i]; cells[i] = cells[j]; cells[j] = t; }
+      var added = 0;
+      cells.forEach(function(cc){
+        if (paths.length >= want) return;
+        var ds = NAMES.slice().sort(function(){ return rng() - 0.5; });
+        for (var d = 0; d < 4; d++) if (place(cc[0], cc[1], ds[d], 2)){ added++; break; }
+      });
+      if (!added) break;
     }
     return {size: size, paths: paths};
   }
+
 
   function mulberry(a){
     return function(){
@@ -257,10 +275,44 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     };
   }
 
+  /* ---- animal levels: every 5th level, and now and then by chance, the arrows fill an animal's
+     shape; clearing the board shows the animal. ---- */
+  var ANIMALS = [
+    {id:"fish", name:"Fish", e:"\ud83d\udc1f", c1:"#38BDF8", c2:"#1D4ED8", rows:[
+      "............","............",".....##.....","...######..#","..########.#",".##.#######.",
+      ".##########.","..########.#","...######..#",".....##.....","............","............"]},
+    {id:"cat", name:"Cat", e:"\ud83d\udc31", c1:"#FDBA74", c2:"#C2410C", rows:[
+      ".##......##.",".###....###.",".##########.","############","##..####..##","############",
+      "#####..#####","############",".##########.","..########..","...######...","............"]},
+    {id:"turtle", name:"Turtle", e:"\ud83d\udc22", c1:"#86EFAC", c2:"#15803D", rows:[
+      "............",".....##.....",".....##.....",".##.####.##.","..########..",".##########.",
+      ".##########.",".##########.","..########..",".##.####.##.",".....##.....","............"]},
+    {id:"butterfly", name:"Butterfly", e:"\ud83e\udd8b", c1:"#F0ABFC", c2:"#7E22CE", rows:[
+      "............","###......###","####....####","#####..#####","############",".##########.",
+      "..########..",".##########.","#####..#####","####....####","###......###","............"]},
+    {id:"rabbit", name:"Rabbit", e:"\ud83d\udc30", c1:"#E5E7EB", c2:"#6B7280", rows:[
+      "..##....##..","..##....##..","..##....##..","..###..###..","..########..",".##########.",
+      ".#..####..#.",".##########.",".####..####.","..########..","...######...","............"]},
+    {id:"elephant", name:"Elephant", e:"\ud83d\udc18", c1:"#CBD5E1", c2:"#475569", rows:[
+      "............","....######..","..#########.",".###.######.","############","###.########",
+      "##..########","#...########","#...##.##.##","#...##.##.##","....##.##.##","............"]}
+  ];
+  function animalFor(n){
+    if (n % 5 === 0) return ANIMALS[(n / 5 - 1) % ANIMALS.length];
+    var x = Math.sin(n * 12.9898) * 43758.5453; x -= Math.floor(x);
+    return x < 0.12 ? ANIMALS[Math.floor(x * 1000) % ANIMALS.length] : null;
+  }
+  function maskOf(a){
+    var m = {};
+    a.rows.forEach(function(row, r){ for (var c = 0; c < row.length; c++) if (row[c] === "#") m[key(r, c)] = 1; });
+    return m;
+  }
+  function collected(){ try { return JSON.parse(localStorage.getItem("xc_arrow_animals") || "[]"); } catch(e){ return []; } }
+
   /* ---- level ka naap ---- */
   function params(n){
-    var size = Math.min(14, 8 + Math.floor((n - 1) / 3));
-    var want = Math.min(140, 24 + (n - 1) * 6);
+    var size = Math.min(16, 10 + Math.floor((n - 1) / 2));   // more, smaller squares: arrows sit closer together
+    var want = Math.min(260, 40 + (n - 1) * 8);
     var maxLen = Math.min(9, 5 + Math.floor(n / 4));
     return {size: size, want: want, minLen: 3, maxLen: maxLen};
   }
@@ -278,7 +330,10 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   function newLevel(seed){
     var p = params(level);
     var s = seed || (level * 7919 + Math.floor(Math.random() * 100000));
-    board = generate(p.size, p.want, mulberry(s), p.minLen, p.maxLen);
+    var an = animalFor(level);
+    board = an ? generate(12, 400, mulberry(s), 3, p.maxLen, maskOf(an))
+               : generate(p.size, p.want, mulberry(s), p.minLen, p.maxLen);
+    board.animal = an;
     board.seed = s;
     occ = {};
     board.paths.forEach(function(pa){
@@ -309,6 +364,13 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     svg.setAttribute("viewBox", "0 0 " + W + " " + W);
 
     var out = "";
+    if (board.animal){            // a faint outline, so the shape can be guessed while playing
+      board.animal.rows.forEach(function(row, r){
+        for (var c = 0; c < row.length; c++) if (row[c] === "#")
+          out += '<rect x="' + (PAD + c * CELL + 1) + '" y="' + (PAD + r * CELL + 1) + '" width="' + (CELL - 2) + '" height="' + (CELL - 2)
+            + '" rx="' + (CELL * 0.22) + '" fill="var(--stroke)" opacity=".07"/>';
+      });
+    }
     board.paths.forEach(function(p){
       if (p.gone) return;
       // Dum se sar tak, taake teer ka nishan sar par baithe
@@ -488,9 +550,26 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     if (bw.querySelector(".win")) return;
     var d = document.createElement("div");
     d.className = "win";
-    d.innerHTML = '<div><div class="e">\u2728</div><h2>Cleared</h2>'
-      + '<p>Level ' + level + ' in ' + moves + ' moves.</p>'
-      + '<button type="button" id="next">Next level \u2192</button></div>';
+    var an = board.animal;
+    if (an){
+      var got = collected();
+      if (got.indexOf(an.id) === -1){ got.push(an.id); try { localStorage.setItem("xc_arrow_animals", JSON.stringify(got)); } catch(e){} }
+      var cs = 12, pic = '<svg viewBox="0 0 144 144" width="150" height="150"><defs><linearGradient id="ag" x1="0" y1="0" x2="1" y2="1">'
+        + '<stop offset="0" stop-color="' + an.c1 + '"/><stop offset="1" stop-color="' + an.c2 + '"/></linearGradient></defs>';
+      an.rows.forEach(function(row, r){ for (var c = 0; c < row.length; c++) if (row[c] === "#")
+        pic += '<rect class="apx" style="animation-delay:' + ((r + c) * 25) + 'ms" x="' + c * cs + '" y="' + r * cs + '" width="' + (cs - 1) + '" height="' + (cs - 1) + '" rx="3" fill="url(#ag)"/>'; });
+      pic += '</svg>';
+      d.innerHTML = '<div>' + pic + '<h2>' + an.e + ' ' + an.name + '!</h2>'
+        + '<p>You uncovered the ' + an.name.toLowerCase() + ' in ' + moves + ' moves.</p>'
+        + '<p style="margin-top:6px">Collection: ' + ANIMALS.map(function(a){ return got.indexOf(a.id) >= 0 ? a.e : '\u2754'; }).join(" ")
+        + ' (' + got.length + ' of ' + ANIMALS.length + ')</p>'
+        + '<button type="button" id="next">Next level \u2192</button></div>';
+    } else {
+      d.innerHTML = '<div><div class="e">\u2728</div><h2>Cleared</h2>'
+        + '<p>Level ' + level + ' in ' + moves + ' moves.</p>'
+        + '<button type="button" id="next">Next level \u2192</button></div>';
+    }
+
     bw.appendChild(d);
     d.querySelector("#next").addEventListener("click", function(){
       d.remove();
@@ -505,13 +584,6 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     newLevel(board.seed);
   });
 
-  document.getElementById("skip").addEventListener("click", function(){
-    var w = document.querySelector(".win, .gameover");
-    if (w) w.remove();
-    level++;
-    try { localStorage.setItem("xc_arrow2_level", String(level)); } catch(e){}
-    newLevel();
-  });
 
   document.getElementById("hint").addEventListener("click", function(){
     for (var i = 0; i < board.paths.length; i++){
@@ -532,7 +604,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   function fit(){
     var w = document.getElementById("bw").clientWidth - 20;
     var size = board ? board.size : 8;
-    CELL = Math.max(20, Math.floor((w - PAD * 2) / size));
+    CELL = Math.max(15, Math.floor((w - PAD * 2) / size));
     if (board) draw();
   }
   window.addEventListener("resize", fit);
