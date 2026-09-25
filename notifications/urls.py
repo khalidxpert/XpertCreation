@@ -15,8 +15,11 @@ urlpatterns = [
     path("threads/", views.my_threads, name="threads"),
     path("threads/start/", views.start_thread, name="start"),
     path("threads/unread/", views.unread_count, name="unread"),
+    path("threads/delete/", views.threads_delete, name="delete-threads"),
     path("threads/<int:pk>/", views.thread_detail, name="thread"),
     path("threads/<int:pk>/typing/", views.thread_typing, name="typing"),
     path("threads/<int:pk>/block/", views.thread_block, name="block"),
     path("threads/<int:pk>/report/", views.thread_report, name="report"),
+    path("threads/<int:pk>/clear/", views.thread_clear, name="clear-thread"),
+    path("threads/<int:pk>/disappear/", views.thread_disappear, name="disappear"),
 ]

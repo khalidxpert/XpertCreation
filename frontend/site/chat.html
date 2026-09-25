@@ -114,6 +114,18 @@ body.inchat .thread2.on{flex:1;min-height:0}
 .msg8.stkmsg{background:transparent !important;border:0 !important;padding:0 2px}
 .msg8.stkmsg small{color:var(--ink-soft)}
 .newc3{margin-top:12px}.newc3 button{padding:10px 16px;border-radius:12px;background:var(--brand);color:#fff;font-weight:800;border:0;cursor:pointer}#newlist3{margin-top:10px}body.inchat .newc3,body.inchat #newlist3{display:none}
+.att3{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;align-self:flex-end;border-radius:50%;background:transparent;border:0;color:var(--ink-soft);cursor:pointer}
+.att3:hover{background:var(--paper);color:var(--ink)}
+#csend{display:grid;place-items:center;width:46px;height:46px;flex:0 0 46px;align-self:flex-end;border-radius:50%;padding:0}
+.reply4{align-items:flex-end;gap:4px}
+.ghost3{background:transparent !important;color:var(--ink) !important;border:1.5px solid var(--line) !important;margin-left:8px}
+.selbar3{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 14px;border-radius:14px;background:var(--paper);font-size:14px;font-weight:600}
+.selbar3 button{padding:8px 14px;border-radius:10px;background:#B91C1C;color:#fff;border:0;font-weight:800}
+.ck3{width:22px;height:22px;flex:0 0 22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.ck3.on{background:var(--brand);border-color:var(--brand)}
+.ck3.on:after{content:"\2713";color:#fff;font-size:13px;font-weight:900}
+.trow2.picked{background:var(--paper)}
+.sys3{align-self:center;max-width:90%;margin:6px auto;padding:6px 12px;border-radius:10px;background:var(--paper);color:var(--ink-soft);font-size:12.5px;text-align:center}
 .empty8{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px}
 
 /* ---------- bell ---------- */
@@ -157,7 +169,8 @@ body.inchat .thread2.on{flex:1;min-height:0}
 
 <div class="wrap">
   <h1>Chat</h1>
-    <div class="newc3"><button id="newchat3" type="button">+ New chat</button></div>
+    <div class="newc3"><button id="newchat3" type="button">+ New chat</button><button id="sel3" type="button" class="ghost3">Select</button></div>
+  <div id="selbar3"></div>
   <div id="newlist3"></div>
   <div id="list5" style="margin-top:14px"></div>
   <div class="thread2" id="threadbox">
@@ -169,10 +182,10 @@ body.inchat .thread2.on{flex:1;min-height:0}
     <div class="blockedbar" id="blockedbar"></div>
     <div class="emo3" id="emo3"></div>
     <div class="reply4" id="reply4">
-      <button class="att3" type="button" data-emo3 title="Emoji and stickers">&#128578;</button>
-      <label class="att3" title="Send a photo">&#128206;<input type="file" id="cphoto" accept="image/*" style="display:none"></label>
+      <button class="att3" type="button" data-emo3 title="Emoji and stickers" aria-label="Emoji and stickers"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.2 2.1 1.8 3.5 1.8s2.5-.6 3.5-1.8"/><circle cx="9" cy="10" r=".6" fill="currentColor"/><circle cx="15" cy="10" r=".6" fill="currentColor"/></svg></button>
+      <label class="att3" title="Send a photo" aria-label="Send a photo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.4 3.4 0 0 1 4.8 4.8l-8.4 8.4a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg><input type="file" id="cphoto" accept="image/*" style="display:none"></label>
       <textarea id="cinput" placeholder="Type a message"></textarea>
-      <button id="csend">Send</button>
+      <button id="csend" aria-label="Send"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3.4 20.4l17.4-7.5a1 1 0 0 0 0-1.8L3.4 3.6a.9.9 0 0 0-1.3 1l1.8 6.4 9.1 1-9.1 1-1.8 6.4a.9.9 0 0 0 1.3 1z"/></svg></button>
     </div>
   </div>
 </div>
@@ -180,6 +193,7 @@ body.inchat .thread2.on{flex:1;min-height:0}
 <script>
 (function(){
   "use strict";
+  var selecting = false, sel = {};
   var threads = [], current = null, lastId = 0, seenUpto = 0, poll = null, listPoll = null, typedAt = 0, sending = false;
 
   function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
@@ -207,9 +221,10 @@ body.inchat .thread2.on{flex:1;min-height:0}
     }
     box.innerHTML = threads.map(function(t){
       var sub = t.last || (t.about ? "About: " + t.about : "No messages yet");
-      return '<div class="trow2" data-open3="' + t.id + '">'
+      return '<div class="trow2' + (selecting && sel[t.id] ? ' picked' : '') + '" data-open3="' + t.id + '">'
+        + (selecting ? '<span class="ck3' + (sel[t.id] ? ' on' : '') + '"></span>' : '')
         + '<span class="av6">' + esc(t.with.charAt(0).toUpperCase()) + '</span>'
-        + '<span class="t3"><b>' + esc(t.with) + '</b>'
+        + '<span class="t3"><b>' + esc(t.with) + (t.disappear ? ' <span title="Disappearing messages">\u23F1</span>' : '') + '</b>'
         + (t.about ? '<em class="about2">' + esc(t.about) + '</em>' : '')
         + '<small>' + esc(sub) + '</small></span>'
         + (t.unread ? '<span class="badge2">' + t.unread + '</span>' : '')
@@ -217,7 +232,13 @@ body.inchat .thread2.on{flex:1;min-height:0}
     }).join("");
   }
 
+  function drawSel(){
+    var n = Object.keys(sel).filter(function(k){ return sel[k]; }).length;
+    $("selbar3").innerHTML = selecting ? '<div class="selbar3"><span>' + (n ? n + " selected" : "Tap chats to select them") + '</span>'
+      + (n ? '<button data-seldel3>Delete</button>' : '') + '</div>' : "";
+  }
   function bubble(m){
+    if (m.system) return '<div class="sys3">\u23F1 ' + esc(m.body) + '</div>';
     var tick = m.mine ? ' <span class="tick3' + (m.id <= seenUpto ? ' seen' : '') + '" data-tick="' + m.id + '">'
       + (m.id <= seenUpto ? "\u2713\u2713" : "\u2713") + '</span>' : "";
     return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + (stk(m.body) ? " stkmsg" : "") + '">'
@@ -296,7 +317,7 @@ body.inchat .thread2.on{flex:1;min-height:0}
       document.body.classList.add("inchat");
       $("list5").style.display = "none";
       $("menu3").innerHTML = "";
-      document.querySelector(".wrap > h1").textContent = current.with;
+      document.querySelector(".wrap > h1").textContent = current.with + (current.disappear ? " \u23F1" : "");
       $("msgs3").innerHTML = "";
       addMessages(current.messages);
       $("msgs3").scrollTop = $("msgs3").scrollHeight;
@@ -324,6 +345,47 @@ body.inchat .thread2.on{flex:1;min-height:0}
   }
 
   document.addEventListener("click", function(e){
+    if (e.target.closest("#sel3")){ selecting = !selecting; sel = {}; e.target.closest("#sel3").textContent = selecting ? "Cancel" : "Select"; drawSel(); renderList(); return; }
+    if (e.target.closest("[data-seldel3]")){
+      var ids = Object.keys(sel).filter(function(k){ return sel[k]; });
+      if (!ids.length || !confirm("Delete " + ids.length + " chat" + (ids.length > 1 ? "s" : "") + " from your list? The other person keeps theirs.")) return;
+      api("/threads/delete/", {method:"POST", body:{ids: ids.map(Number)}}).then(function(){
+        selecting = false; sel = {}; $("sel3").textContent = "Select"; drawSel(); loadList();
+      });
+      return;
+    }
+    if (selecting){
+      var so = e.target.closest("[data-open3]");
+      if (so){ var sid = so.getAttribute("data-open3"); sel[sid] = !sel[sid]; drawSel(); renderList(); return; }
+    }
+    if (e.target.closest("[data-clear3]") && current){
+      if (!confirm("Clear all messages in this chat? Only for you: " + current.with + " keeps theirs.")) return;
+      api("/threads/" + current.id + "/clear/", {method:"POST", body:{}}).then(function(){ $("msgs3").innerHTML = ""; $("menu3").innerHTML = ""; });
+      return;
+    }
+    if (e.target.closest("[data-del3]") && current){
+      if (!confirm("Delete this chat from your list? It comes back if " + current.with + " writes again.")) return;
+      api("/threads/" + current.id + "/clear/", {method:"POST", body:{delete: true}}).then(function(){
+        var back = document.querySelector("[data-back3]"); if (back) back.click();
+      });
+      return;
+    }
+    if (e.target.closest("[data-dis3]") && current){
+      $("menu3").innerHTML = '<span style="font-size:13px;font-weight:700;align-self:center">Messages disappear after:</span>'
+        + [[0, "Off"], [24, "24 hours"], [168, "7 days"], [2160, "90 days"]].map(function(o){
+            return '<button data-dish="' + o[0] + '"' + ((current.disappear || 0) === o[0] ? ' style="background:var(--ink);color:#fff"' : '') + '>' + o[1] + '</button>'; }).join("");
+      return;
+    }
+    var dh = e.target.closest("[data-dish]");
+    if (dh && current){
+      api("/threads/" + current.id + "/disappear/", {method:"POST", body:{hours: +dh.getAttribute("data-dish")}}).then(function(r){
+        if (!r.ok) return;
+        current.disappear = r.data.disappear;
+        document.querySelector(".wrap > h1").textContent = current.with + (current.disappear ? " \u23F1" : "");
+        $("menu3").innerHTML = "";
+      });
+      return;
+    }
     var o = e.target.closest("[data-open3]");
     if (o) return openThread(o.getAttribute("data-open3"));
 
@@ -341,7 +403,8 @@ body.inchat .thread2.on{flex:1;min-height:0}
     if (e.target.closest("[data-more3]") && current){
       var m = $("menu3");
       m.innerHTML = m.innerHTML ? "" : '<button data-block3>' + (current.i_blocked ? "Unblock" : "Block") + " " + esc(current.with) + '</button>'
-        + '<button data-report3>Report this chat</button>';
+        + '<button data-report3>Report this chat</button><button data-dis3>Disappearing messages</button>'
+        + '<button data-clear3>Clear chat</button><button data-del3 style="color:#B91C1C">Delete chat</button>';
       return;
     }
     if (e.target.closest("[data-block3]") && current){

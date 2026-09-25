@@ -124,7 +124,29 @@ def _url(path):
 
 def _msg(m, me):
     return {"id": m.id, "body": m.body, "image": _url(m.image), "mine": m.author_id == me.id,
-            "read": m.read, "when": m.created_at.strftime("%d %b, %H:%M")}
+            "read": m.read, "system": m.system, "when": m.created_at.strftime("%d %b, %H:%M")}
+
+
+DISAPPEAR = {0: "Off", 24: "24 hours", 168: "7 days", 2160: "90 days"}
+
+
+def _side(t, user):
+    return "a" if user.id == t.a_id else "b"
+
+
+def _cleared(t, user):
+    return getattr(t, _side(t, user) + "_cleared_at")
+
+
+def _visible(t, user):
+    """The messages this person can still see: after they cleared the chat, and not expired."""
+    qs = t.messages.all()
+    c = _cleared(t, user)
+    if c:
+        qs = qs.filter(created_at__gt=c)
+    if t.disappear_hours:
+        qs = qs.filter(created_at__gt=timezone.now() - timezone.timedelta(hours=t.disappear_hours))
+    return qs
 
 
 def _save_photo(f, thread_id):
@@ -175,15 +197,18 @@ def my_threads(request):
             titles = {}
 
     for t in rows:
+        if getattr(t, _side(t, request.user) + "_hidden"):
+            continue
         other = t.other(request.user)
-        unread = t.messages.filter(read=False).exclude(author=request.user).count()
-        last = t.messages.last()
+        vis = _visible(t, request.user)
+        unread = vis.filter(read=False).exclude(author=request.user).count()
+        last = vis.last()
         out.append({
             "id": t.id, "context": t.context, "ref_id": t.ref_id,
             "with": _name(other),
             "about": titles.get(t.ref_id, "") if t.context == "donate" else CONTEXT_LABEL.get(t.context, ""),
             "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "")) if last else "",
-            "unread": unread,
+            "unread": unread, "disappear": t.disappear_hours,
             "updated": t.updated_at.strftime("%d %b, %H:%M"),
         })
     return Response({"threads": out})
@@ -219,7 +244,7 @@ def thread_detail(request, pk):
             after = int(request.GET.get("after") or 0)
         except ValueError:
             after = 0
-        qs = t.messages.all()
+        qs = _visible(t, request.user)
         if after:
             qs = qs.filter(id__gt=after)
         # the newest of my messages the other person has read - so ticks can turn blue
@@ -231,6 +256,7 @@ def thread_detail(request, pk):
             "typing": bool(cache.get("chat_typing:%d:%d" % (t.id, other.id))),
             "blocked": _blocked(request.user, other),
             "i_blocked": ChatBlock.objects.filter(blocker=request.user, blocked=other).exists(),
+            "disappear": t.disappear_hours,
         })
 
     if _blocked(request.user, other):
@@ -250,7 +276,8 @@ def thread_detail(request, pk):
     if not body and not rel:
         return _err("Write something first.")
     m = ChatMessage.objects.create(thread=t, author=request.user, body=body, image=rel)
-    t.save(update_fields=[])   # bumps updated_at via auto_now
+    t.a_hidden = t.b_hidden = False
+    t.save(update_fields=["a_hidden", "b_hidden", "updated_at"])
     cache.delete("chat_typing:%d:%d" % (t.id, request.user.id))
     cache.delete("chat_unread:%d" % other.pk)
     notify(other, "chat_message", _name(request.user) + " sent you a message.", "/chat/" + str(t.id))
@@ -297,6 +324,71 @@ def thread_report(request, pk):
                               note=str(request.data.get("note") or "").strip()[:500])
     notify_admins("chat_report", "Chat reported (%s) by %s" % (reason, _name(request.user)), "/admin/notifications/chatreport/")
     return Response({"ok": True})
+
+
+def _clear_for(t, user, hide):
+    side = _side(t, user)
+    setattr(t, side + "_cleared_at", timezone.now())
+    fields = [side + "_cleared_at"]
+    if hide:
+        setattr(t, side + "_hidden", True)
+        fields.append(side + "_hidden")
+    t.save(update_fields=fields)
+    t.messages.exclude(author=user).filter(read=False).update(read=True)
+    cache.delete("chat_unread:%d" % user.pk)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([ChatThrottle])
+def thread_clear(request, pk):
+    """Clear the messages for me only (the other person keeps theirs). With {"delete": true} the chat
+    also leaves my list until someone writes again - like deleting a chat on WhatsApp."""
+    t = ChatThread.objects.filter(id=pk).first()
+    if not t or not t.has(request.user):
+        return _err("Not found.", status.HTTP_404_NOT_FOUND)
+    _clear_for(t, request.user, bool(request.data.get("delete")))
+    return Response({"ok": True})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([ChatThrottle])
+def threads_delete(request):
+    """body: { ids: [3, 7] } - delete several chats from my list at once."""
+    ids = request.data.get("ids") or []
+    if not isinstance(ids, list):
+        return _err("Pick some chats.")
+    done = 0
+    for t in ChatThread.objects.filter(id__in=[int(i) for i in ids[:100] if str(i).isdigit()]):
+        if t.has(request.user):
+            _clear_for(t, request.user, True)
+            done += 1
+    return Response({"deleted": done})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([ChatThrottle])
+def thread_disappear(request, pk):
+    """body: { hours: 0 | 24 | 168 | 2160 }. Applies to the whole chat, for both people, as on WhatsApp.
+    A line in the chat tells both of them who changed it."""
+    t = ChatThread.objects.filter(id=pk).first()
+    if not t or not t.has(request.user):
+        return _err("Not found.", status.HTTP_404_NOT_FOUND)
+    try:
+        hours = int(request.data.get("hours"))
+    except (TypeError, ValueError):
+        hours = -1
+    if hours not in DISAPPEAR:
+        return _err("Pick 24 hours, 7 days, 90 days or off.")
+    if hours != t.disappear_hours:
+        t.disappear_hours = hours
+        t.save(update_fields=["disappear_hours"])
+        text = (_name(request.user) + " turned on disappearing messages: new and old messages leave this chat after " + DISAPPEAR[hours] + "."
+                if hours else _name(request.user) + " turned off disappearing messages.")
+        ChatMessage.objects.create(thread=t, author=request.user, body=text, system=True)
+    return Response({"disappear": t.disappear_hours})
 
 
 @api_view(["POST"])

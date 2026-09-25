@@ -56,6 +56,11 @@ class ChatThread(models.Model):
 
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    a_cleared_at = models.DateTimeField(null=True, blank=True)
+    b_cleared_at = models.DateTimeField(null=True, blank=True)
+    a_hidden = models.BooleanField(default=False)
+    b_hidden = models.BooleanField(default=False)
+    disappear_hours = models.PositiveIntegerField(default=0)
 
     class Meta:
         unique_together = [("context", "ref_id", "a", "b")]
@@ -75,6 +80,7 @@ class ChatMessage(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     read = models.BooleanField(default=False)
     image = models.CharField(max_length=160, blank=True, default="")
+    system = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["created_at"]
