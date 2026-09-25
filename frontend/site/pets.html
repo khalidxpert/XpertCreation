@@ -164,7 +164,42 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 <script src="/js/topnav-1.js?v=5" defer></script>
 
 <div class="wrap net">
-  <h1>My pets</h1>
+  <style>
+.psub{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 14px}
+.psub a{padding:8px 14px;border-radius:99px;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);font-weight:700;font-size:13.5px;text-decoration:none;color:var(--ink,#0D1424)}
+.psub a.on{background:var(--ink,#0D1424);color:#fff;border-color:var(--ink,#0D1424)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.pcard{display:block;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;overflow:hidden;text-decoration:none;color:inherit}
+.pcard img,.pcard .noimg{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--paper,#F6F7FB)}
+.pcard .noimg{display:grid;place-items:center;font-size:48px}
+.pcard .in{padding:10px 12px}
+.pcard b{font-size:16px}
+.pcard small{display:block;color:var(--ink-soft,#5A657C);font-size:13px;margin-top:2px}
+.pbad{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.pbad span{font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--paper,#F6F7FB);color:var(--ink-soft,#5A657C)}
+.pbad .ok{background:#DCFCE7;color:#166534}.pbad .res{background:#FEF3C7;color:#92400E}.pbad .done{background:#DBEAFE;color:#1E40AF}
+.pbox{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:16px;margin-bottom:12px}
+.pform label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}
+.pform input,.pform select,.pform textarea,.pfilt select{width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--line,#E4E8F2);border-radius:12px;font:inherit;font-size:14.5px;background:var(--card,#fff);color:var(--ink,#0D1424)}
+.pform .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pbtn{padding:11px 18px;border-radius:12px;border:0;background:var(--brand,#1B4DFF);color:#fff;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+.pbtn.ghost{background:var(--card,#fff);color:var(--ink,#0D1424);border:1.5px solid var(--line,#E4E8F2)}
+.pbtn.red{background:#B91C1C}
+.pacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pwarn{background:#FEF3C7;color:#92400E;border-radius:14px;padding:11px 14px;font-size:13.5px;font-weight:600;margin:12px 0}
+.pnote{color:var(--ink-soft,#5A657C);text-align:center;padding:24px 10px}
+.pmsg{font-size:13.5px;margin-top:8px}.pmsg.bad{color:#B91C1C}.pmsg.ok{color:#166534}
+.pphotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-top:10px}
+.pphotos img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px}
+.preq{border-top:1px solid var(--line,#E4E8F2);padding:12px 0}
+.preq p{margin:6px 0;white-space:pre-wrap;font-size:14px}
+.pfilt{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:12px}
+@media(max-width:620px){.pfilt{grid-template-columns:1fr}}
+.vet{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.vet b{font-size:16px}.vet small{display:block;color:var(--ink-soft,#5A657C);margin-top:3px}
+</style>
+<div class="psub"><a href="/pets" class="on">My pets</a><a href="/lost">Lost &amp; found</a><a href="/adopt">Adopt</a><a href="/vets">Vets</a></div>
+<h1>My pets</h1>
   <p class="lead" id="lead">Health records, vaccine reminders and a QR tag for every pet. All free.</p>
   <div id="up"></div>
   <div id="list" class="pgrid"></div>

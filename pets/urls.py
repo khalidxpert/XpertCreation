@@ -1,8 +1,19 @@
 from django.urls import path
 
-from . import views
+from . import adopt, views
 
 urlpatterns = [
+    path("adopt/", adopt.adopt_list, name="adopt-list"),
+    path("adopt/requests/mine/", adopt.adopt_my_requests, name="adopt-my-requests"),
+    path("adopt/requests/<int:rid>/<str:action>/", adopt.adopt_answer, name="adopt-answer"),
+    path("adopt/<int:pk>/", adopt.adopt_detail, name="adopt-detail"),
+    path("adopt/<int:pk>/photos/", adopt.adopt_photos, name="adopt-photos"),
+    path("adopt/<int:pk>/request/", adopt.adopt_request, name="adopt-request"),
+    path("adopt/<int:pk>/requests/", adopt.adopt_requests, name="adopt-requests"),
+    path("adopt/<int:pk>/withdraw/", adopt.adopt_withdraw, name="adopt-withdraw"),
+    path("adopt/<int:pk>/report/", adopt.adopt_report, name="adopt-report"),
+    path("vets/", adopt.vets, name="vets"),
+    path("vets/<int:pk>/", adopt.vet_moderate, name="vet-moderate"),
     path("mine/", views.mine, name="pets-mine"),
     path("upcoming/", views.upcoming, name="pets-upcoming"),
     path("templates/<str:species>/", views.templates, name="pets-templates"),

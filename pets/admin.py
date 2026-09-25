@@ -25,3 +25,25 @@ class VaccineTemplateAdmin(admin.ModelAdmin):
 
 admin.site.register(HealthRecord)
 admin.site.register(FoundNote)
+
+
+from .models import AdoptionPost, AdoptionRequest, VetClinic
+
+
+@admin.register(AdoptionPost)
+class AdoptionPostAdmin(admin.ModelAdmin):
+    list_display = ("name", "species", "city", "status", "owner", "hidden", "created_at")
+    list_filter = ("status", "species", "hidden")
+    list_editable = ("hidden",)
+    search_fields = ("name", "city", "description")
+
+
+@admin.register(VetClinic)
+class VetClinicAdmin(admin.ModelAdmin):
+    list_display = ("name", "city", "phone", "emergency", "approved", "created_at")
+    list_filter = ("approved", "emergency")
+    list_editable = ("approved",)
+    search_fields = ("name", "city", "address")
+
+
+admin.site.register(AdoptionRequest)

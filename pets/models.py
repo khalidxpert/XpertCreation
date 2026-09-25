@@ -111,3 +111,69 @@ class FoundNote(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class AdoptionPost(models.Model):
+    """A pet looking for a new home. Adoption here is always free - selling is not allowed."""
+    STATES = [("available", "Available"), ("reserved", "Reserved"), ("adopted", "Adopted"), ("closed", "Closed")]
+    GENDERS = [("male", "Male"), ("female", "Female"), ("unknown", "Not sure")]
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="adoption_posts")
+    pet = models.ForeignKey(Pet, on_delete=models.SET_NULL, null=True, blank=True, related_name="adoption_posts")
+    name = models.CharField(max_length=60)
+    species = models.CharField(max_length=10, choices=SPECIES, default="cat")
+    breed = models.CharField(max_length=80, blank=True, default="")
+    gender = models.CharField(max_length=8, choices=GENDERS, default="unknown")
+    age_text = models.CharField(max_length=40, blank=True, default="")
+    vaccinated = models.BooleanField(default=False)
+    neutered = models.BooleanField(default=False)
+    photos = models.JSONField(default=list, blank=True)
+    country = models.CharField(max_length=2, blank=True, default="")
+    state = models.CharField(max_length=100, blank=True, default="")
+    city = models.CharField(max_length=100, blank=True, default="", db_index=True)
+    description = models.TextField(max_length=2000)
+    status = models.CharField(max_length=10, choices=STATES, default="available", db_index=True)
+    hidden = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(default=timezone.now, db_index=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+    def __str__(self):
+        return "%s (%s, %s)" % (self.name, self.species, self.city)
+
+
+class AdoptionRequest(models.Model):
+    STATES = [("pending", "Waiting"), ("accepted", "Accepted"), ("declined", "Declined"), ("withdrawn", "Withdrawn")]
+    post = models.ForeignKey(AdoptionPost, on_delete=models.CASCADE, related_name="requests")
+    requester = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="adoption_requests")
+    message = models.TextField(max_length=1000)
+    status = models.CharField(max_length=10, choices=STATES, default="pending")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = [("post", "requester")]
+        ordering = ["-id"]
+
+
+class VetClinic(models.Model):
+    """Member-added vets. They go public once a moderator approves them."""
+    added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="+")
+    name = models.CharField(max_length=120)
+    country = models.CharField(max_length=2, blank=True, default="")
+    state = models.CharField(max_length=100, blank=True, default="")
+    city = models.CharField(max_length=100, db_index=True)
+    address = models.CharField(max_length=250, blank=True, default="")
+    phone = models.CharField(max_length=30, blank=True, default="")
+    hours = models.CharField(max_length=120, blank=True, default="")
+    services = models.CharField(max_length=300, blank=True, default="")
+    emergency = models.BooleanField(default=False, help_text="Open for emergencies around the clock")
+    map_url = models.URLField(max_length=300, blank=True, default="")
+    approved = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["city", "name"]
+
+    def __str__(self):
+        return "%s, %s" % (self.name, self.city)
