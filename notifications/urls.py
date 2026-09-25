@@ -1,11 +1,12 @@
 from django.urls import path
 
-from . import push, views
+from . import broadcast, push, views
 
 app_name = "notifications"
 
 urlpatterns = [
     path("mine/", views.my_notifications, name="mine"),
+    path("broadcast/", broadcast.broadcast, name="broadcast"),
     path("read/", views.mark_read, name="read"),
     path("clear/", views.clear_all, name="clear"),
     path("push/key/", push.public_key, name="push-key"),

@@ -119,3 +119,19 @@ class PushSubscription(models.Model):
     fails = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     last_ok = models.DateTimeField(null=True, blank=True)
+
+
+class Broadcast(models.Model):
+    """A message from the admins to every member: it lands in each bell and, if asked, on their phones."""
+    AUDIENCE = [("all", "All members"), ("verified", "Members with a verified email")]
+    sent_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+")
+    text = models.CharField(max_length=200)
+    link = models.CharField(max_length=200, blank=True, default="")
+    audience = models.CharField(max_length=10, choices=AUDIENCE, default="all")
+    push = models.BooleanField(default=True)
+    recipients = models.PositiveIntegerField(default=0)
+    devices = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-id"]

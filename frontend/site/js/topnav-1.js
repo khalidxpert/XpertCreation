@@ -57,6 +57,7 @@
   // "System log" - only for the super admin. The server decides; the answer is remembered for this visit.
   function addAdmin(){
     var link = '<a href="/system-log"' + (path === "/system-log" ? ' class="on"' : '') + '>\uD83D\uDEE1 System log</a>';
+    link += '<a href="/broadcast"' + (path === "/broadcast" ? ' class="on"' : '') + '>\uD83D\uDCE2 Broadcast</a>';
     [head.querySelector(".tnav"), head.querySelector(".xnav"), drop].forEach(function(el){
       if (el && !el.querySelector('a[href="/system-log"]')) el.insertAdjacentHTML("beforeend", link);
     });
