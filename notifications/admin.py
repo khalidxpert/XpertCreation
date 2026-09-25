@@ -19,3 +19,12 @@ class ChatReportAdmin(_admin.ModelAdmin):
 
 
 _admin.site.register(_ChatBlock)
+
+from django.contrib import admin as _padmin
+from .models import PushSubscription as _Push
+
+
+@_padmin.register(_Push)
+class PushSubscriptionAdmin(_padmin.ModelAdmin):
+    list_display = ("user", "created_at", "last_ok", "fails")
+    readonly_fields = ("endpoint", "p256dh", "auth")

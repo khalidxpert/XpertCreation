@@ -6,7 +6,7 @@
  * honest "you are offline", and blood requests in particular must never be
  * answered from a cache.
  */
-const VERSION = "xc-v61";
+const VERSION = "xc-v62";
 const SHELL = VERSION + "-shell";
 
 // Pages worth having offline. Each is small and self-contained.
@@ -102,4 +102,24 @@ self.addEventListener("fetch", function (event) {
       });
     }).catch(function () { return caches.match("/offline"); })
   );
+});
+
+/* ---- push notifications: show them, and open the right page when tapped ---- */
+self.addEventListener("push", function(event){
+  var d = {};
+  try { d = event.data ? event.data.json() : {}; } catch (e) { d = {body: event.data ? event.data.text() : ""}; }
+  event.waitUntil(self.registration.showNotification(d.title || "XpertCreation", {
+    body: d.body || "", icon: "/brand/icon-512.png", badge: "/brand/logo-64.png",
+    tag: d.tag || "xc", renotify: true, data: {url: d.url || "/"}
+  }));
+});
+self.addEventListener("notificationclick", function(event){
+  event.notification.close();
+  var url = new URL((event.notification.data && event.notification.data.url) || "/", self.location.origin).href;
+  event.waitUntil(self.clients.matchAll({type: "window", includeUncontrolled: true}).then(function(list){
+    for (var i = 0; i < list.length; i++){
+      if (list[i].url === url && "focus" in list[i]) return list[i].focus();
+    }
+    return self.clients.openWindow ? self.clients.openWindow(url) : null;
+  }));
 });

@@ -102,3 +102,14 @@ class ChatReport(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class PushSubscription(models.Model):
+    """One phone or browser that agreed to get notifications."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="push_subscriptions")
+    endpoint = models.CharField(max_length=600, unique=True)
+    p256dh = models.CharField(max_length=200)
+    auth = models.CharField(max_length=100)
+    fails = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(default=timezone.now)
+    last_ok = models.DateTimeField(null=True, blank=True)

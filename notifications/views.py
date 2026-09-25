@@ -40,6 +40,11 @@ def notify(user, kind, text, link=""):
     if not user or not user.is_authenticated:
         return
     Notification.objects.create(user=user, kind=kind, text=text[:200], link=link[:200])
+    try:
+        from .push import send as _push
+        _push(user, kind, text, link)
+    except Exception:
+        pass
 
 
 def notify_admins(kind, text, link=""):
@@ -177,7 +182,7 @@ def my_threads(request):
             "id": t.id, "context": t.context, "ref_id": t.ref_id,
             "with": _name(other),
             "about": titles.get(t.ref_id, "") if t.context == "donate" else CONTEXT_LABEL.get(t.context, ""),
-            "last": (last.body[:80] or ("\U0001F4F7 Photo" if last.image else "")) if last else "",
+            "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "")) if last else "",
             "unread": unread,
             "updated": t.updated_at.strftime("%d %b, %H:%M"),
         })
