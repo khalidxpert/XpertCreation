@@ -1,12 +1,20 @@
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes, throttle_classes
+from rest_framework.decorators import api_view, parser_classes, permission_classes, throttle_classes
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import SimpleRateThrottle
 
-from .models import ChatMessage, ChatThread, Notification
+import os
+import secrets
+
+from django.conf import settings
+from django.core.cache import cache
+from django.db.models import Q
+
+from .models import ChatBlock, ChatMessage, ChatReport, ChatThread, Notification
 
 User = get_user_model()
 
@@ -90,6 +98,58 @@ def clear_all(request):
 
 # ---------------------------------------------------------------- chat
 
+CONTEXT_LABEL = {"donate": "", "blood": "Blood request", "connect": "Connection"}
+MAX_PHOTO = 2 * 1024 * 1024
+PHOTOS_PER_DAY = 20
+TYPING_SECONDS = 6
+
+
+def _name(u):
+    return (getattr(u, "full_name", "") or "").strip() or "Member"
+
+
+def _blocked(a, b):
+    """True if either person has blocked the other."""
+    return ChatBlock.objects.filter(Q(blocker=a, blocked=b) | Q(blocker=b, blocked=a)).exists()
+
+
+def _url(path):
+    return (settings.MEDIA_URL.rstrip("/") + "/" + path) if path else ""
+
+
+def _msg(m, me):
+    return {"id": m.id, "body": m.body, "image": _url(m.image), "mine": m.author_id == me.id,
+            "read": m.read, "when": m.created_at.strftime("%d %b, %H:%M")}
+
+
+def _save_photo(f, thread_id):
+    from PIL import Image, ImageOps
+    if not f:
+        raise ValueError("Pick a photo.")
+    if f.size > MAX_PHOTO:
+        raise ValueError("That photo is over 2 MB.")
+    try:
+        im = Image.open(f)
+        fmt = im.format
+        im.load()
+    except Exception:
+        raise ValueError("That file is not a photo we can read.")
+    if fmt not in ("JPEG", "PNG", "WEBP", "GIF"):
+        raise ValueError("Use a JPG, PNG or WebP photo.")
+    im = ImageOps.exif_transpose(im).convert("RGB")
+    im.thumbnail((1280, 1280))
+    rel = "chat/%d/%s.webp" % (thread_id, secrets.token_hex(12))
+    full = os.path.join(settings.MEDIA_ROOT, rel)
+    os.makedirs(os.path.dirname(full), exist_ok=True)
+    try:
+        im.save(full, "WEBP", quality=78, method=4)
+    except Exception:                                   # Pillow without WebP: fall back to JPEG
+        rel = rel[:-5] + ".jpg"
+        full = os.path.join(settings.MEDIA_ROOT, rel)
+        im.save(full, "JPEG", quality=80, optimize=True)
+    return rel
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def my_threads(request):
@@ -115,47 +175,123 @@ def my_threads(request):
         last = t.messages.last()
         out.append({
             "id": t.id, "context": t.context, "ref_id": t.ref_id,
-            "with": (other.full_name or "").strip() or other.email.split("@")[0],
-            "about": titles.get(t.ref_id, "") if t.context == "donate" else "Blood request",
-            "last": last.body[:80] if last else "",
+            "with": _name(other),
+            "about": titles.get(t.ref_id, "") if t.context == "donate" else CONTEXT_LABEL.get(t.context, ""),
+            "last": (last.body[:80] or ("\U0001F4F7 Photo" if last.image else "")) if last else "",
             "unread": unread,
             "updated": t.updated_at.strftime("%d %b, %H:%M"),
         })
     return Response({"threads": out})
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def unread_count(request):
+    """Unread messages across all chats - for the badge in the menu. Cached for ten seconds."""
+    key = "chat_unread:%d" % request.user.pk
+    n = cache.get(key)
+    if n is None:
+        n = ChatMessage.objects.filter(Q(thread__a=request.user) | Q(thread__b=request.user), read=False) \
+                               .exclude(author=request.user).count()
+        cache.set(key, n, 10)
+    return Response({"unread": n})
+
+
 @api_view(["GET", "POST"])
 @permission_classes([IsAuthenticated])
+@parser_classes([JSONParser, MultiPartParser, FormParser])
 @throttle_classes([ChatThrottle])
 def thread_detail(request, pk):
     t = ChatThread.objects.filter(id=pk).first()
     if not t or not t.has(request.user):
         return _err("Not found.", status.HTTP_404_NOT_FOUND)
+    other = t.other(request.user)
 
     if request.method == "GET":
-        t.messages.exclude(author=request.user).update(read=True)
-        other = t.other(request.user)
+        if t.messages.exclude(author=request.user).filter(read=False).update(read=True):
+            cache.delete("chat_unread:%d" % request.user.pk)
+        try:
+            after = int(request.GET.get("after") or 0)
+        except ValueError:
+            after = 0
+        qs = t.messages.all()
+        if after:
+            qs = qs.filter(id__gt=after)
+        # the newest of my messages the other person has read - so ticks can turn blue
+        seen = t.messages.filter(author=request.user, read=True).order_by("-id").values_list("id", flat=True).first() or 0
         return Response({
-            "id": t.id, "context": t.context, "ref_id": t.ref_id,
-            "with": (other.full_name or "").strip() or other.email.split("@")[0],
-            "messages": [{
-                "body": m.body, "mine": m.author_id == request.user.id,
-                "when": m.created_at.strftime("%d %b, %H:%M"),
-            } for m in t.messages.all()],
+            "id": t.id, "context": t.context, "ref_id": t.ref_id, "with": _name(other),
+            "messages": [_msg(m, request.user) for m in qs],
+            "seen_upto": seen,
+            "typing": bool(cache.get("chat_typing:%d:%d" % (t.id, other.id))),
+            "blocked": _blocked(request.user, other),
+            "i_blocked": ChatBlock.objects.filter(blocker=request.user, blocked=other).exists(),
         })
 
-    body = str(request.data.get("message") or "").strip()
-    if len(body) < 1:
+    if _blocked(request.user, other):
+        return _err("You cannot send messages in this chat.", status.HTTP_403_FORBIDDEN)
+    body = str(request.data.get("message") or "").strip()[:2000]
+    photo = request.FILES.get("photo")
+    rel = ""
+    if photo:
+        today = timezone.localdate()
+        sent = ChatMessage.objects.filter(author=request.user, created_at__date=today).exclude(image="").count()
+        if sent >= PHOTOS_PER_DAY:
+            return _err("You have sent %d photos today. Try again tomorrow." % PHOTOS_PER_DAY)
+        try:
+            rel = _save_photo(photo, t.id)
+        except ValueError as e:
+            return _err(str(e))
+    if not body and not rel:
         return _err("Write something first.")
-    ChatMessage.objects.create(thread=t, author=request.user, body=body[:2000])
+    m = ChatMessage.objects.create(thread=t, author=request.user, body=body, image=rel)
     t.save(update_fields=[])   # bumps updated_at via auto_now
+    cache.delete("chat_typing:%d:%d" % (t.id, request.user.id))
+    cache.delete("chat_unread:%d" % other.pk)
+    notify(other, "chat_message", _name(request.user) + " sent you a message.", "/chat/" + str(t.id))
+    return Response({"detail": "Sent.", "message": _msg(m, request.user)})
 
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def thread_typing(request, pk):
+    t = ChatThread.objects.filter(id=pk).first()
+    if t and t.has(request.user):
+        cache.set("chat_typing:%d:%d" % (t.id, request.user.id), 1, TYPING_SECONDS)
+    return Response({"ok": True})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([ChatThrottle])
+def thread_block(request, pk):
+    """Block or unblock the other person in this chat. Blocking stops both sides from sending."""
+    t = ChatThread.objects.filter(id=pk).first()
+    if not t or not t.has(request.user):
+        return _err("Not found.", status.HTTP_404_NOT_FOUND)
     other = t.other(request.user)
-    who = (request.user.full_name or "").strip() or request.user.email.split("@")[0]
-    notify(other, "chat_message", who + " sent you a message.",
-          "/chat/" + str(t.id))
+    old = ChatBlock.objects.filter(blocker=request.user, blocked=other).first()
+    if old:
+        old.delete()
+        return Response({"i_blocked": False, "blocked": _blocked(request.user, other)})
+    ChatBlock.objects.get_or_create(blocker=request.user, blocked=other)
+    return Response({"i_blocked": True, "blocked": True})
 
-    return Response({"detail": "Sent."})
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@throttle_classes([ChatThrottle])
+def thread_report(request, pk):
+    t = ChatThread.objects.filter(id=pk).first()
+    if not t or not t.has(request.user):
+        return _err("Not found.", status.HTTP_404_NOT_FOUND)
+    reason = request.data.get("reason")
+    if reason not in dict(ChatReport.REASONS):
+        return _err("Pick a reason.")
+    ChatReport.objects.create(thread=t, reporter=request.user, reason=reason,
+                              note=str(request.data.get("note") or "").strip()[:500])
+    notify_admins("chat_report", "Chat reported (%s) by %s" % (reason, _name(request.user)), "/admin/notifications/chatreport/")
+    return Response({"ok": True})
 
 
 @api_view(["POST"])

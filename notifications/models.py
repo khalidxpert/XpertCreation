@@ -74,6 +74,31 @@ class ChatMessage(models.Model):
     body = models.TextField(max_length=2000)
     created_at = models.DateTimeField(default=timezone.now)
     read = models.BooleanField(default=False)
+    image = models.CharField(max_length=160, blank=True, default="")
 
     class Meta:
         ordering = ["created_at"]
+
+
+class ChatBlock(models.Model):
+    """One person blocking another. Either side's block stops both from sending."""
+    blocker = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="chat_blocks")
+    blocked = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = [("blocker", "blocked")]
+
+
+class ChatReport(models.Model):
+    REASONS = [("spam", "Spam"), ("abuse", "Abusive or threatening"), ("scam", "Scam or fraud"), ("other", "Something else")]
+
+    thread = models.ForeignKey(ChatThread, on_delete=models.CASCADE, related_name="reports")
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    reason = models.CharField(max_length=10, choices=REASONS)
+    note = models.CharField(max_length=500, blank=True, default="")
+    handled = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-created_at"]

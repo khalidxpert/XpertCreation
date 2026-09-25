@@ -77,6 +77,22 @@ h1{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03
 .reply4 textarea{flex:1;padding:12px 13px;border:1.5px solid var(--line);border-radius:14px;
   background:var(--card);font-size:14.5px;font-family:inherit;min-height:46px;max-height:120px;resize:none}
 .reply4 button{padding:0 20px;border-radius:14px;background:var(--ink);color:#fff;font-weight:700}
+.thd3{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.thd3 .back3{margin-bottom:0}
+.more3{width:36px;height:36px;border-radius:11px;background:var(--card);border:1px solid var(--line);font-size:18px;font-weight:800}
+.menu3{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.menu3:empty{display:none}
+.menu3 button{padding:9px 13px;border-radius:11px;background:var(--card);border:1px solid var(--line);font-size:13px;font-weight:700}
+.menu3 select,.menu3 input{padding:9px 11px;border:1px solid var(--line);border-radius:11px;font:inherit;font-size:13px;background:var(--card)}
+.menu3 .ok3{font-size:13px;color:#166534}
+.cb{white-space:pre-wrap;word-wrap:break-word}
+.cimg{display:block;max-width:100%;max-height:320px;border-radius:12px;margin-bottom:6px}
+.tick3{margin-left:4px;letter-spacing:-2px;opacity:.8}
+.tick3.seen{color:#7DD3FC;opacity:1}
+.typing3{min-height:18px;font-size:12px;color:var(--ink-soft);padding:2px 4px}
+.blockedbar{font-size:13px;color:#991B1B;padding:4px}
+.blockedbar:empty{display:none}
+.att3{display:grid;place-items:center;width:46px;border-radius:14px;background:var(--card);border:1.5px solid var(--line);font-size:18px;cursor:pointer}
 .empty8{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px}
 
 /* ---------- bell ---------- */
@@ -116,15 +132,20 @@ h1{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js" defer></script>
+<script src="/js/topnav-1.js?v=2" defer></script>
 
 <div class="wrap">
   <h1>Chat</h1>
   <div id="list5" style="margin-top:14px"></div>
   <div class="thread2" id="threadbox">
-    <button class="back3" data-back3>&larr; All chats</button>
+    <div class="thd3"><button class="back3" data-back3>&larr; All chats</button><span style="flex:1"></span>
+      <button class="more3" data-more3 aria-label="Block or report">&#8942;</button></div>
+    <div class="menu3" id="menu3"></div>
     <div class="msgs2" id="msgs3"></div>
-    <div class="reply4">
+    <div class="typing3" id="typing3"></div>
+    <div class="blockedbar" id="blockedbar"></div>
+    <div class="reply4" id="reply4">
+      <label class="att3" title="Send a photo">&#128206;<input type="file" id="cphoto" accept="image/*" style="display:none"></label>
       <textarea id="cinput" placeholder="Type a message"></textarea>
       <button id="csend">Send</button>
     </div>
@@ -134,26 +155,28 @@ h1{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03
 <script>
 (function(){
   "use strict";
-  var threads = [], current = null;
+  var threads = [], current = null, lastId = 0, seenUpto = 0, poll = null, listPoll = null, typedAt = 0, sending = false;
 
   function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
     .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
   function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
   function api(p,o){
     o=o||{};
-    var h={"Content-Type":"application/json"};
+    var h={};
+    if (!(o.body instanceof FormData)) h["Content-Type"]="application/json";
     if(o.method&&o.method!=="GET") h["X-CSRFToken"]=cookie("xc_csrf");
     return fetch("/api/notify"+p,{method:o.method||"GET",headers:h,credentials:"same-origin",
-      body:o.body?JSON.stringify(o.body):undefined})
+      body:o.body?(o.body instanceof FormData?o.body:JSON.stringify(o.body)):undefined})
       .then(function(r){return r.json().catch(function(){return{};})
-        .then(function(d){return{ok:r.ok,data:d};});})
+        .then(function(d){return{ok:r.ok,status:r.status,data:d};});})
       .catch(function(){return{ok:false,data:{}};});
   }
+  function $(id){ return document.getElementById(id); }
 
   function renderList(){
-    var box = document.getElementById("list5");
+    var box = $("list5");
     if (!threads.length){
-      box.innerHTML = '<div class="empty8">No conversations yet. A chat opens once a '
+      box.innerHTML = '<div class="empty8">No conversations yet. A chat opens once a connection, '
         + 'donation or blood request is accepted.</div>';
       return;
     }
@@ -169,23 +192,70 @@ h1{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03
     }).join("");
   }
 
-  function renderThread(t){
-    document.getElementById("threadbox").classList.add("on");
-    document.getElementById("list5").style.display = "none";
-    document.querySelector(".wrap > h1").textContent = t.with;
-    var box = document.getElementById("msgs3");
-    box.innerHTML = t.messages.map(function(m){
-      return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + '">' + esc(m.body)
-        + '<small>' + esc(m.when) + '</small></div>';
-    }).join("");
-    box.scrollTop = box.scrollHeight;
+  function bubble(m){
+    var tick = m.mine ? ' <span class="tick3' + (m.id <= seenUpto ? ' seen' : '') + '" data-tick="' + m.id + '">'
+      + (m.id <= seenUpto ? "\u2713\u2713" : "\u2713") + '</span>' : "";
+    return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + '">'
+      + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="cimg" src="' + esc(m.image) + '" alt="Photo" loading="lazy"></a>' : '')
+      + (m.body ? '<div class="cb">' + esc(m.body) + '</div>' : '')
+      + '<small>' + esc(m.when) + tick + '</small></div>';
+  }
+  function nearBottom(box){ return box.scrollHeight - box.scrollTop - box.clientHeight < 120; }
+  function addMessages(list){
+    if (!list || !list.length) return;
+    var box = $("msgs3"), stick = nearBottom(box);
+    box.insertAdjacentHTML("beforeend", list.map(bubble).join(""));
+    lastId = Math.max(lastId, list[list.length - 1].id);
+    if (stick) box.scrollTop = box.scrollHeight;
+  }
+  function refreshTicks(){
+    [].forEach.call(document.querySelectorAll("[data-tick]"), function(t){
+      if (+t.getAttribute("data-tick") <= seenUpto && !t.classList.contains("seen")){ t.classList.add("seen"); t.textContent = "\u2713\u2713"; }
+    });
+  }
+  function setState(d){
+    $("typing3").textContent = d.typing ? esc(current ? current.with : "") + " is typing\u2026" : "";
+    if (d.seen_upto != null){ seenUpto = d.seen_upto; refreshTicks(); }
+    var blocked = !!d.blocked;
+    current.i_blocked = !!d.i_blocked;
+    $("blockedbar").innerHTML = blocked ? (d.i_blocked ? "You blocked this person. Unblock them from the \u22EE menu to chat again."
+                                                        : "You cannot send messages in this chat.") : "";
+    $("reply4").style.display = blocked ? "none" : "";
   }
 
+  function stopPoll(){ if (poll){ clearInterval(poll); poll = null; } }
   function openThread(id){
+    stopPoll();
     return api("/threads/" + id + "/").then(function(r){
       if (!r.ok) return;
-      current = r.data;
-      renderThread(current);
+      current = r.data; lastId = 0; seenUpto = r.data.seen_upto || 0;
+      $("threadbox").classList.add("on");
+      $("list5").style.display = "none";
+      $("menu3").innerHTML = "";
+      document.querySelector(".wrap > h1").textContent = current.with;
+      $("msgs3").innerHTML = "";
+      addMessages(current.messages);
+      $("msgs3").scrollTop = $("msgs3").scrollHeight;
+      setState(current);
+      poll = setInterval(function(){
+        if (document.hidden || !current || sending) return;
+        api("/threads/" + current.id + "/?after=" + lastId).then(function(r){
+          if (!r.ok || !current || r.data.id !== current.id) return;
+          addMessages(r.data.messages); setState(r.data);
+        });
+      }, 3000);
+    });
+  }
+
+  function send(){
+    var box = $("cinput"), body = box.value.trim();
+    if (!body || !current || sending) return;
+    sending = true; box.value = "";
+    api("/threads/" + current.id + "/", {method:"POST", body:{message: body}}).then(function(r){
+      sending = false;
+      if (r.ok && r.data.message) addMessages([r.data.message]);
+      else { box.value = body; alert((r.data && r.data.detail) || "Could not send. Try again."); }
+      $("msgs3").scrollTop = $("msgs3").scrollHeight;
     });
   }
 
@@ -194,35 +264,71 @@ h1{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03
     if (o) return openThread(o.getAttribute("data-open3"));
 
     if (e.target.closest("[data-back3]")){
-      document.getElementById("threadbox").classList.remove("on");
-      document.getElementById("list5").style.display = "";
+      stopPoll();
+      $("threadbox").classList.remove("on");
+      $("list5").style.display = "";
       document.querySelector(".wrap > h1").textContent = "Chat";
       current = null;
       loadList();
       return;
     }
-
-    if (e.target.id === "csend"){
-      var box = document.getElementById("cinput");
-      var body = box.value.trim();
-      if (!body || !current) return;
-      box.value = "";
-      api("/threads/" + current.id + "/", {method:"POST", body:{message: body}})
-        .then(function(){ return openThread(current.id); });
+    if (e.target.closest("[data-more3]") && current){
+      var m = $("menu3");
+      m.innerHTML = m.innerHTML ? "" : '<button data-block3>' + (current.i_blocked ? "Unblock" : "Block") + " " + esc(current.with) + '</button>'
+        + '<button data-report3>Report this chat</button>';
+      return;
     }
+    if (e.target.closest("[data-block3]") && current){
+      if (!current.i_blocked && !confirm("Block " + current.with + "? Neither of you will be able to send messages here.")) return;
+      api("/threads/" + current.id + "/block/", {method:"POST", body:{}}).then(function(r){
+        $("menu3").innerHTML = "";
+        if (r.ok) setState({blocked: r.data.blocked, i_blocked: r.data.i_blocked});
+      });
+      return;
+    }
+    if (e.target.closest("[data-report3]") && current){
+      $("menu3").innerHTML = '<select id="rr3"><option value="spam">Spam</option><option value="abuse">Abusive or threatening</option>'
+        + '<option value="scam">Scam or fraud</option><option value="other">Something else</option></select>'
+        + '<input id="rn3" maxlength="500" placeholder="What happened? (optional)"><button data-sendreport3>Send report</button>';
+      return;
+    }
+    if (e.target.closest("[data-sendreport3]") && current){
+      api("/threads/" + current.id + "/report/", {method:"POST", body:{reason: $("rr3").value, note: $("rn3").value}}).then(function(r){
+        $("menu3").innerHTML = '<p class="ok3">' + (r.ok ? "Thank you. A moderator will look at it." : "Could not send the report.") + '</p>';
+      });
+      return;
+    }
+    if (e.target.id === "csend") send();
   });
 
-  document.getElementById("cinput").addEventListener("keydown", function(e){
-    if (e.key === "Enter" && !e.shiftKey){
-      e.preventDefault();
-      document.getElementById("csend").click();
-    }
+  $("cinput").addEventListener("keydown", function(e){
+    if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); send(); }
+  });
+  $("cinput").addEventListener("input", function(){
+    if (!current || Date.now() - typedAt < 3000) return;
+    typedAt = Date.now();
+    api("/threads/" + current.id + "/typing/", {method:"POST", body:{}});
+  });
+  $("cphoto").addEventListener("change", function(){
+    var f = this.files[0]; this.value = "";
+    if (!f || !current) return;
+    if (f.size > 2 * 1024 * 1024){ alert("That photo is over 2 MB. Pick a smaller one."); return; }
+    var fd = new FormData(); fd.append("photo", f);
+    var cap = $("cinput").value.trim(); if (cap){ fd.append("message", cap); $("cinput").value = ""; }
+    $("typing3").textContent = "Sending photo\u2026";
+    sending = true;
+    api("/threads/" + current.id + "/", {method:"POST", body: fd}).then(function(r){
+      sending = false; $("typing3").textContent = "";
+      if (r.ok && r.data.message) addMessages([r.data.message]);
+      else alert((r.data && r.data.detail) || "Could not send the photo.");
+      $("msgs3").scrollTop = $("msgs3").scrollHeight;
+    });
   });
 
   function loadList(){
     return api("/threads/").then(function(r){
       if (r.ok) threads = r.data.threads || [];
-      renderList();
+      if (!current) renderList();
     });
   }
 
@@ -230,13 +336,13 @@ h1{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(u){
       if (!u){
-        document.getElementById("list5").innerHTML =
-          '<div class="empty8">Sign in to see your chats.</div>';
+        $("list5").innerHTML = '<div class="empty8">Sign in to see your chats.</div>';
         return;
       }
       var openId = new URLSearchParams(location.search).get("t")
                   || location.pathname.split("/chat/")[1];
       loadList().then(function(){ if (openId) openThread(openId); });
+      listPoll = setInterval(function(){ if (!current && !document.hidden) loadList(); }, 15000);
     });
 })();
 </script>

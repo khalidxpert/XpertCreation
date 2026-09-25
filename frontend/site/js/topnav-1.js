@@ -50,5 +50,23 @@
   if (sp){ head.insertBefore(nav, sp); head.insertBefore(btn, sp); } else { head.appendChild(nav); head.appendChild(btn); }
   head.appendChild(drop);
   btn.onclick = function(e){ e.stopPropagation(); drop.classList.toggle("open"); };
-  document.addEventListener("click", function(e){ if (!drop.contains(e.target)) drop.classList.remove("open"); });
+  document.addEventListener("click", function(e){ if (!drop.contains(e.target)) drop.classList.remove("open"); });  // Unread chat messages as a badge on "Chat", for signed-in members. Checked every minute.
+  function chatBadge(){
+    if (document.hidden) return;
+    fetch("/api/notify/threads/unread/", {credentials: "same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        var n = d && d.unread ? d.unread : 0;
+        [].forEach.call(document.querySelectorAll(".tnav a[href='/chat'], .tdrop a[href='/chat']"), function(a){
+          var b = a.querySelector(".tbadge");
+          if (!n){ if (b) b.remove(); return; }
+          if (!b){ b = document.createElement("span"); b.className = "tbadge"; a.appendChild(b); }
+          b.textContent = n > 99 ? "99+" : String(n);
+        });
+      }).catch(function(){});
+  }
+  css.textContent += ".tbadge{display:inline-block;min-width:18px;height:18px;padding:0 5px;margin-left:5px;border-radius:99px;" +
+    "background:#DC2626;color:#fff;font-size:11px;font-weight:800;line-height:18px;text-align:center;vertical-align:1px}";
+  setTimeout(chatBadge, 800);
+  setInterval(chatBadge, 60000);
 })();
