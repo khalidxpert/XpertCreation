@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>73 free calculators and everyday tools — XpertCreation</title>
+<title>78 free calculators and everyday tools — XpertCreation</title>
 <!-- seo:start -->
 <meta name="description" content="Prayer times for your city, a world clock, a passport photo maker, WhatsApp link generator, age, BMI, loan, zakat, marla to square feet, currency and a scientific calculator. No sign-up, works offline.">
 <link rel="canonical" href="https://xpertcreation.com/tools">
@@ -1134,6 +1134,37 @@ var Tools = (function(){
     if (clockTimer){ clearInterval(clockTimer); clockTimer = null; }
     paintClocks();
   }
+  /* ---------------- domain & web helpers (DNS over HTTPS, RDAP, Cloudflare trace) ---------------- */
+  var DNSTYPE = {A: 1, AAAA: 28, CNAME: 5, MX: 15, NS: 2, TXT: 16, CAA: 257};
+  function cleanDomain(s){
+    s = String(s || "").trim().toLowerCase().replace(/^[a-z]+:\/\//, "").split(/[\/?#:@\s]/)[0].replace(/\.$/, "");
+    return /^(?=.{3,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9-]{2,63}$/.test(s) ? s : "";
+  }
+  function doh(name, type){
+    return fetch("https://cloudflare-dns.com/dns-query?name=" + encodeURIComponent(name) + "&type=" + type,
+                 {headers: {accept: "application/dns-json"}})
+      .then(function(r){ if (!r.ok) throw new Error("The DNS service did not answer. Try again."); return r.json(); });
+  }
+  function txtOf(a){ return String(a.data || "").replace(/^"|"$/g, "").replace(/"\s*"/g, ""); }
+  function waiting(){ show('<p class="note3">Checking\u2026</p>'); }
+  (function(){
+    var st = document.createElement("style");
+    st.textContent = ".gwrap{display:flex;align-items:center;gap:6px}" +
+      ".gwrap .groups{flex:1;min-width:0;display:flex;flex-wrap:nowrap !important;overflow-x:auto;scroll-behavior:smooth;" +
+      "scrollbar-width:none;-webkit-overflow-scrolling:touch}.gwrap .groups::-webkit-scrollbar{display:none}" +
+      ".gwrap .gbtn{flex:0 0 auto;white-space:nowrap}" +
+      ".garr{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line,#E4E8F2);" +
+      "background:var(--card,#fff);font-size:20px;line-height:1;cursor:pointer;color:var(--ink,#0D1424)}";
+    document.head.appendChild(st);
+    function centre(){ var on = document.querySelector("#groupsbar .gbtn.on"); if (on && on.scrollIntoView) on.scrollIntoView({inline: "center", block: "nearest"}); }
+    document.addEventListener("click", function(e){
+      var a = e.target.closest && e.target.closest("[data-gs]");
+      if (a){ var bar = document.getElementById("groupsbar"); if (bar) bar.scrollBy({left: 220 * +a.getAttribute("data-gs"), behavior: "smooth"}); return; }
+      if (e.target.closest && e.target.closest("[data-g]")) setTimeout(centre, 30);
+    });
+    setTimeout(centre, 300);
+  })();
+
   var TOOLS = [
   { id:"calc", g:"maths", e:"\uD83D\uDD22", c:"#7C3AED",
     name:"Scientific calculator", blurb:"Powers, roots, trig, log, factorial",
@@ -2059,6 +2090,125 @@ var Tools = (function(){
         ? [["Target", target], ["Rounds done", Math.floor(n / target)], ["This round", (n % target) + " of " + target]]
         : [["Target", "None"]]);
     }},
+
+  { id:"dns", g:"web", e:"\uD83C\uDF10", c:"#0EA5E9",
+    name:"DNS lookup", blurb:"A, AAAA, MX, TXT, NS, CNAME and CAA records",
+    keys:"dns lookup records a aaaa mx txt ns cname caa domain nameserver",
+    form: function(){
+      return '<div class="f"><label for="dd">Domain</label><input id="dd" placeholder="example.com" autocomplete="off"></div>'
+        + '<div class="f"><label for="dt">Record</label><select id="dt">'
+        + ["A","AAAA","MX","TXT","NS","CNAME","CAA"].map(function(t){ return '<option>' + t + '</option>'; }).join("")
+        + '</select></div><button class="go5" data-run>Look it up</button>';
+    },
+    run: function(){
+      var d = cleanDomain(val("dd")), t = val("dt") || "A";
+      if (!d) throw new Error("Type a domain, like example.com.");
+      waiting();
+      doh(d, t).then(function(res){
+        if (res.Status === 3) return fail(d + " does not exist.");
+        var ans = (res.Answer || []).filter(function(a){ return a.type === DNSTYPE[t]; });
+        if (!ans.length) return big("None", "No " + t + " records for " + d, [], "The domain exists but has no " + t + " records.");
+        big(String(ans.length), t + " record" + (ans.length > 1 ? "s" : "") + " for " + d,
+            ans.map(function(a){ return ["TTL " + a.TTL + "s", esc(t === "TXT" ? txtOf(a) : a.data)]; }),
+            "Answered by Cloudflare's public DNS (1.1.1.1). Changes can take up to the TTL to show everywhere.");
+      }).catch(function(e){ fail(e.message || "Could not look that up."); });
+    }},
+
+  { id:"rdap", g:"web", e:"\uD83D\uDCC7", c:"#6366F1",
+    name:"Domain info", blurb:"Registrar, dates, expiry and nameservers (WHOIS)",
+    keys:"whois rdap domain info registrar expiry expire age created nameservers owner",
+    form: function(){
+      return '<div class="f"><label for="rd">Domain</label><input id="rd" placeholder="example.com" autocomplete="off"></div>'
+        + '<button class="go5" data-run>Look it up</button>';
+    },
+    run: function(){
+      var d = cleanDomain(val("rd")).replace(/^www\./, "");
+      if (!d) throw new Error("Type a domain, like example.com.");
+      if (/\.pk$/.test(d)) return big("\u2014", "No public record for .pk", [],
+        "Pakistan's registry (PKNIC) does not publish domain records in this format. Check the domain on <a href='https://pknic.net.pk' target='_blank' rel='noopener'>pknic.net.pk</a>.");
+      waiting();
+      fetch("https://rdap.org/domain/" + encodeURIComponent(d)).then(function(r){
+        if (r.status === 404) throw new Error("No registration found for " + d + ". It may be free to register.");
+        if (!r.ok) throw new Error("This domain's registry did not answer. Try again later.");
+        return r.json();
+      }).then(function(j){
+        var ev = {};
+        (j.events || []).forEach(function(e){ ev[e.eventAction] = (e.eventDate || "").slice(0, 10); });
+        var reg = "";
+        (j.entities || []).forEach(function(en){
+          if ((en.roles || []).indexOf("registrar") >= 0 && en.vcardArray){
+            (en.vcardArray[1] || []).forEach(function(v){ if (v[0] === "fn") reg = v[3]; });
+          }
+        });
+        var ns = (j.nameservers || []).map(function(n){ return String(n.ldhName || "").toLowerCase(); }).filter(Boolean);
+        var age = "";
+        if (ev.registration){
+          var days = Math.floor((Date.now() - Date.parse(ev.registration)) / 864e5);
+          age = days >= 365 ? Math.floor(days / 365) + " years, " + Math.floor(days % 365 / 30) + " months" : days + " days";
+        }
+        var left = ev.expiration ? Math.floor((Date.parse(ev.expiration) - Date.now()) / 864e5) : null;
+        big(esc(age || d), age ? "Age of " + d : "Domain", [
+          ["Registered", esc(ev.registration || "\u2014")],
+          ["Expires", esc(ev.expiration || "\u2014") + (left != null ? " (" + (left < 0 ? "expired" : left + " days left") + ")" : "")],
+          ["Last changed", esc(ev["last changed"] || "\u2014")],
+          ["Registrar", esc(reg || "\u2014")],
+          ["Nameservers", esc(ns.join(", ") || "\u2014")],
+          ["Status", esc((j.status || []).join(", ") || "\u2014")]
+        ], "From the registry's public RDAP record, the modern form of WHOIS. Owner details are usually hidden for privacy.");
+      }).catch(function(e){ fail(e.message || "Could not look that up."); });
+    }},
+
+  { id:"myip", g:"web", e:"\uD83D\uDCCD", c:"#10B981",
+    name:"What is my IP", blurb:"The address websites see, and your country",
+    keys:"what is my ip address public ip ipv4 ipv6 location country",
+    form: function(){
+      return '<p class="hint">Shows the public address your phone or computer is using right now.</p>'
+        + '<button class="go5" data-run>Show my IP</button>';
+    },
+    run: function(){
+      waiting();
+      fetch("/cdn-cgi/trace").then(function(r){ if (!r.ok) throw new Error("Could not check right now."); return r.text(); })
+        .then(function(t){
+          var o = {};
+          t.split("\n").forEach(function(l){ var i = l.indexOf("="); if (i > 0) o[l.slice(0, i)] = l.slice(i + 1); });
+          if (!o.ip) throw new Error("Could not read your address.");
+          var c = /^[A-Z]{2}$/.test(o.loc || "") ? "<img src='/flags/" + o.loc.toLowerCase() + ".png' alt='' width='20' height='15' style='vertical-align:-2px;border-radius:2px'> " + o.loc : "\u2014";
+          big(esc(o.ip), "Your IP address", [["Country", c], ["Type", o.ip.indexOf(":") >= 0 ? "IPv6" : "IPv4"],
+            ["Connection", esc((o.http || "") + (o.tls ? " \u00b7 " + o.tls : ""))], ["Nearest data centre", esc(o.colo || "\u2014")]],
+            "This can change when you restart your router or phone. Other sites see the same address.");
+        }).catch(function(e){ fail(e.message || "Could not check right now."); });
+    }},
+
+  { id:"mailcheck", g:"web", e:"\u2709\uFE0F", c:"#F59E0B",
+    name:"Email setup check", blurb:"MX, SPF and DMARC for any domain",
+    keys:"email mx spf dmarc dkim spam deliverability domain check setup",
+    form: function(){
+      return '<div class="f"><label for="md">Domain</label><input id="md" placeholder="example.com" autocomplete="off"></div>'
+        + '<button class="go5" data-run>Check</button>';
+    },
+    run: function(){
+      var d = cleanDomain(val("md")).replace(/^www\./, "");
+      if (!d) throw new Error("Type a domain, like example.com.");
+      waiting();
+      Promise.all([doh(d, "MX"), doh(d, "TXT"), doh("_dmarc." + d, "TXT")]).then(function(r){
+        if (r[0].Status === 3) return fail(d + " does not exist.");
+        var mx = (r[0].Answer || []).filter(function(a){ return a.type === 15; }).map(function(a){ return a.data; });
+        var spf = (r[1].Answer || []).filter(function(a){ return a.type === 16; }).map(txtOf).filter(function(x){ return /^v=spf1/i.test(x); });
+        var dm = (r[2].Answer || []).filter(function(a){ return a.type === 16; }).map(txtOf).filter(function(x){ return /^v=DMARC1/i.test(x); });
+        var ok = "\u2705 ", no = "\u274C ", warn = "\u26A0\uFE0F ";
+        var pol = dm.length ? ((dm[0].match(/;\s*p=(\w+)/i) || [])[1] || "none").toLowerCase() : "";
+        var score = (mx.length ? 1 : 0) + (spf.length === 1 ? 1 : 0) + (dm.length ? 1 : 0);
+        big(score + " of 3", "Email setup for " + d, [
+          ["MX (receiving)", mx.length ? ok + esc(mx.join(", ")) : no + "No mail servers: this domain cannot receive email"],
+          ["SPF (who may send)", spf.length === 1 ? ok + esc(spf[0]) : spf.length > 1 ? warn + "More than one SPF record: keep only one" : no + "Missing: others can send email pretending to be this domain"],
+          ["DMARC (what to do with fakes)", dm.length ? (pol === "none" ? warn + "Monitoring only (p=none): " : ok) + esc(dm[0]) : no + "Missing: add a DMARC record"]
+        ], "DKIM is checked per sending service, so it is not shown here. Ask your email provider for its DKIM record.");
+      }).catch(function(e){ fail(e.message || "Could not check right now."); });
+    }},
+
+  { id:"bizapp", g:"daily", e:"\uD83D\uDCBC", c:"#0891B2", href:"/business",
+    name:"Business", blurb:"Employees, stock and attendance, on your device",
+    keys:"business employee staff inventory stock attendance salary shop office" },
 
   { id:"walink", g:"daily", e:"\uD83D\uDCAC", c:"#25D366",
     name:"WhatsApp link", blurb:"Message a number without saving it first",
@@ -4590,7 +4740,7 @@ var Tools = (function(){
 
   var GROUPS = [["all","Everything"],["money","Money"],["convert","Convert"],
                 ["time","Dates"],["maths","Maths"],["health","Health"],["text","Text"],
-                ["daily","Daily"],["dev","Developer"]];
+                ["daily","Daily"],["dev","Developer"],["web","Domain & web"]];
 
   function list(){
     var rows = TOOLS.filter(function(t){
@@ -4606,9 +4756,9 @@ var Tools = (function(){
       + 'their own page.</p>'
       + '<div class="search2"><input id="q" placeholder="Search: marla, loan, BMI, tola\u2026" '
       + 'value="' + esc(query) + '"></div>'
-      + '<div class="groups">' + GROUPS.map(function(g){
+      + '<div class="gwrap"><button class="garr" data-gs="-1" aria-label="Back">\u2039</button><div class="groups" id="groupsbar">' + GROUPS.map(function(g){
           return '<button class="gbtn' + (group === g[0] ? " on" : "") + '" data-g="'
-            + g[0] + '">' + g[1] + '</button>'; }).join("") + '</div>';
+            + g[0] + '">' + g[1] + '</button>'; }).join("") + '</div><button class="garr" data-gs="1" aria-label="More">\u203A</button></div>';
 
     if (!rows.length){
       h += '<div class="none3">Nothing matches \u201c' + esc(query) + '\u201d.</div>';

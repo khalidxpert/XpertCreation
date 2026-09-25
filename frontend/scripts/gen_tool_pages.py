@@ -16,11 +16,11 @@ OUT     = LIVE if APPLY else DRY
 STAMP   = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 # These already have their own pages elsewhere on the site.
-SKIP = {"card", "vcard", "typingtutor", "wx", "vibecheck"}
+SKIP = {"card", "vcard", "typingtutor", "wx", "vibecheck", "bizapp"}
 
 GROUPS = {"maths": "maths", "time": "date and time", "health": "health",
           "money": "money", "convert": "converter", "text": "text",
-          "daily": "everyday", "dev": "developer"}
+          "daily": "everyday", "dev": "developer", "web": "domain and web"}
 
 # id: (slug, title, description) - the ones people search for most.
 SEO = {
@@ -72,6 +72,14 @@ SEO = {
               "Convert an English date to the Hijri (Islamic) date and back, using the Umm al-Qura calendar."),
  "tasbeeh":  ("tasbeeh-counter", "Online Tasbeeh Counter - Digital Tasbih for Dhikr",
               "A digital tasbeeh counter with a target of 33, 99 or 100. The count stays on your phone."),
+ "dns":      ("dns-lookup", "DNS Lookup - A, MX, TXT, NS, CNAME and CAA Records",
+              "Look up the DNS records of any domain: A, AAAA, MX, TXT, NS, CNAME and CAA. Free and instant."),
+ "rdap":     ("domain-whois-lookup", "Domain WHOIS Lookup - Registrar, Expiry Date and Age",
+              "See when a domain was registered, when it expires, its registrar, age and nameservers."),
+ "myip":     ("what-is-my-ip", "What Is My IP Address",
+              "See your public IP address, IPv4 or IPv6, and the country websites see you in."),
+ "mailcheck":("email-spf-dmarc-check", "Email Setup Check - MX, SPF and DMARC",
+              "Check whether a domain's email is set up properly: mail servers, SPF and DMARC, with plain advice."),
  "clock":    ("world-clock", "World Clock - Time in Other Countries",
               "See the time in other countries side by side."),
 }
