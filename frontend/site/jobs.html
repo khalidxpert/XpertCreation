@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Jobs — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Free job board: find jobs in Pakistan and remote, apply with your profile, or post a job for free.">
+<link rel="canonical" href="https://xpertcreation.com/jobs">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="The team — XpertCreation">
+<meta property="og:description" content="Who builds and looks after XpertCreation.">
+<meta property="og:url" content="https://xpertcreation.com/team">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The team — XpertCreation">
+<meta name="twitter:description" content="Who builds and looks after XpertCreation.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"The team","url":"https://xpertcreation.com/team","description":"Who builds and looks after XpertCreation.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --go:#00B37E;--bad:#DC2626;--line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:9px}
+
+.member{display:flex;align-items:center;gap:14px;padding:15px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;margin-bottom:10px}
+.member .av3{width:54px;height:54px;border-radius:17px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.member .ph3{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;font-size:21px;flex:0 0 auto}
+.member .t{flex:1;min-width:0}
+.member .t b{display:block;font-size:15px;font-weight:700}
+.member .t small{display:block;font-size:12.5px;color:var(--brand);font-weight:600;margin-top:2px}
+.member .soc{display:flex;gap:7px}
+.member .soc a{width:34px;height:34px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:15px}
+
+.apply2{background:var(--card);border:1px dashed var(--line);border-radius:18px;
+  padding:18px;text-align:center;margin-top:22px}
+.apply2 b{display:block;font-size:14.5px;font-weight:700}
+.apply2 p{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+.apply2 button{margin-top:13px;padding:12px 24px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:13.5px}
+
+#appform{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:18px;margin-top:14px}
+#appform.on{display:block}
+#appform label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:12px 0 5px}
+#appform label:first-of-type{margin-top:0}
+#appform textarea,#appform input{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:14.5px;font-family:inherit;outline:none}
+#appform textarea{min-height:90px;resize:vertical}
+#appform textarea:focus,#appform input:focus{border-color:var(--brand);background:#fff}
+#appform .hint3{font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+#appform .go6{width:100%;margin-top:14px;padding:13px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:14px}
+.appstate{padding:13px 15px;border-radius:14px;font-size:13.5px;margin-top:14px;line-height:1.55}
+.appstate.pending{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.appstate.accepted{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.3);color:#00734F}
+.appstate.declined{background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Jobs</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js?v=5" defer></script>
+
+<div class="wrap jobsw">
+  <div id="jview"></div>
+</div>
+<style>
+.jobsw{max-width:760px}
+.jtabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
+.jtabs button,.jtabs a{padding:8px 14px;border-radius:99px;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;color:var(--ink,#0D1424);text-decoration:none}
+.jtabs .on{background:var(--ink,#0D1424);color:#fff;border-color:var(--ink,#0D1424)}
+.jtabs .post{background:var(--brand,#1B4DFF);color:#fff;border-color:var(--brand,#1B4DFF);margin-left:auto}
+.jfilt{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:12px}
+@media(max-width:620px){.jfilt{grid-template-columns:1fr 1fr}.jfilt input{grid-column:1/-1}}
+.jfilt input,.jfilt select,.jform input,.jform select,.jform textarea{width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--line,#E4E8F2);border-radius:12px;font:inherit;font-size:14.5px;background:var(--card,#fff);color:var(--ink,#0D1424)}
+.jcard{display:block;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:14px 16px;margin-bottom:10px;text-decoration:none;color:inherit}
+.jcard:hover{border-color:var(--brand,#1B4DFF)}
+.jcard h3{margin:0;font-size:17px}
+.jcard .co{color:var(--ink-soft,#5A657C);font-size:14px;margin-top:2px}
+.jbad{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.jbad span{font-size:12px;font-weight:700;padding:4px 9px;border-radius:99px;background:var(--paper,#F6F7FB);color:var(--ink-soft,#5A657C)}
+.jbad .pay{background:#DCFCE7;color:#166534}.jbad .st{background:#DBEAFE;color:#1E40AF}.jbad .shut{background:#FEE2E2;color:#991B1B}
+.jbox{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:16px;margin-bottom:12px}
+.jdesc{white-space:pre-wrap;line-height:1.7;font-size:15px;margin-top:10px}
+.jwarn{background:#FEF3C7;color:#92400E;border-radius:14px;padding:11px 14px;font-size:13.5px;font-weight:600;margin:12px 0}
+.jbtn{padding:11px 18px;border-radius:12px;border:0;background:var(--brand,#1B4DFF);color:#fff;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+.jbtn.ghost{background:var(--card,#fff);color:var(--ink,#0D1424);border:1.5px solid var(--line,#E4E8F2)}
+.jbtn.red{background:#B91C1C}
+.jacts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.japp{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line,#E4E8F2);padding:12px 0}
+.japp .av{width:44px;height:44px;border-radius:14px;background:var(--paper,#F6F7FB);display:grid;place-items:center;font-weight:800;flex:0 0 44px;object-fit:cover}
+.japp .inf{flex:1;min-width:0}
+.japp small{display:block;color:var(--ink-soft,#5A657C)}
+.jform label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}
+.jform .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.jform .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:620px){.jform .three{grid-template-columns:1fr 1fr}}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chips span{background:var(--paper,#F6F7FB);border-radius:99px;padding:5px 10px;font-size:13px;font-weight:600}
+.chips button{border:0;background:transparent;cursor:pointer;font-weight:900;margin-left:4px}
+.jmsg{font-size:13.5px;margin-top:8px}.jmsg.bad{color:#B91C1C}.jmsg.ok{color:#166534}
+.jnote{color:var(--ink-soft,#5A657C);text-align:center;padding:24px 10px}
+</style>
+<script src="/js/geo-1.js"></script>
+<script>
+(function(){
+  "use strict";
+  var SKILLS = ["API Development", "AWS", "Accounting", "Administration", "Adobe After Effects", "Adobe Illustrator", "Adobe InDesign", "Adobe Photoshop", "Adobe Premiere Pro", "Agile", "Android Development", "Angular", "Animation", "Arabic", "Architecture", "Artificial Intelligence", "AutoCAD", "Automation", "Azure", "Banking", "Bash", "Blockchain", "Bookkeeping", "Brand Management", "Business Analysis", "Business Development", "C", "C#", "C++", "Call Center", "Canva", "Carpentry", "Cash Handling", "Chemistry", "Civil Engineering", "Cloud Computing", "Coaching", "Communication", "Computer Hardware", "Computer Networking", "Construction", "Content Writing", "Copywriting", "CorelDRAW", "Counselling", "Customer Service", "Cyber Security", "Data Analysis", "Data Entry", "Data Science", "Database Design", "Digital Marketing", "Django", "Django REST Framework", "Docker", "Driving", "E-commerce", "Education", "Electrical Engineering", "Electrician", "Email Marketing", "English", "Event Management", "Excel Formulas", "Facebook Ads", "Fashion Design", "Figma", "Finance", "Financial Analysis", "Firebase", "Flutter", "French", "Front-end Development", "Full Stack Development", "Game Development", "German", "Git", "GitHub", "Google Ads", "Google Sheets", "Graphic Design", "HTML and CSS", "Hardware Repair", "Healthcare", "Human Resources", "IT Support", "Illustration", "Import and Export", "Inventory Management", "Java", "JavaScript", "Journalism", "Kotlin", "Laravel", "Leadership", "Legal Research", "Linux", "Linux Server Administration", "Logistics", "Machine Learning", "Management", "Marketing", "Mathematics", "Mechanical Engineering", "Medical Coding", "Microsoft Access", "Microsoft Excel", "Microsoft Office", "Microsoft Outlook", "Microsoft PowerPoint", "Microsoft Word", "Mobile App Development", "MongoDB", "Motion Graphics", "MySQL", "Negotiation", "Networking", "Next.js", "Nginx", "Node.js", "Nursing", "Office Management", "Online Teaching", "Operations", "PHP", "Payroll", "Pharmacy", "Photography", "Physics", "Pi Network", "Plumbing", "PostgreSQL", "Power BI", "Presentation Skills", "Printing", "Problem Solving", "Procurement", "Product Management", "Project Management", "Proofreading", "Public Speaking", "Punjabi", "Python", "QuickBooks", "Quran Teaching", "REST APIs", "React", "React Native", "Real Estate", "Recruitment", "Redis", "Research", "Retail", "Ruby", "SAP", "SQL", "Sales", "Search Engine Optimization", "Shopify", "Social Media Management", "Software Testing", "Solar Installation", "Spanish", "Statistics", "Stock Management", "Supply Chain", "Swift", "Tailoring", "Tally", "Teaching", "Team Management", "Technical Support", "Telemarketing", "Translation", "Travel and Tourism", "Turkish", "TypeScript", "Typing", "UI Design", "UX Design", "Unity", "Urdu", "Urdu Typing", "VBA", "Video Editing", "Virtual Assistant", "Vue.js", "Web Design", "Web Development", "WooCommerce", "WordPress", "Writing", "YouTube", "iOS Development", "jQuery"];
+  var KIND = {full_time: "Full-time", part_time: "Part-time", internship: "Internship", freelance: "Freelance", contract: "Contract"};
+  var PLACE = {onsite: "On-site", remote: "Remote", hybrid: "Hybrid"};
+  var me = null, box = document.getElementById("jview");
+  var list = [], more = false, tab = new URLSearchParams(location.search).get("tab") || "find", filt = {q: "", kind: "", workplace: "", country: "", city: ""};
+
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
+  function cookie(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function api(p, o){
+    o = o || {};
+    var h = {"Content-Type": "application/json"};
+    if (o.method && o.method !== "GET") h["X-CSRFToken"] = cookie("xc_csrf");
+    return fetch("/api/jobs" + p, {method: o.method || "GET", headers: h, credentials: "same-origin", body: o.body ? JSON.stringify(o.body) : undefined})
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, status: r.status, data: d}; }); })
+      .catch(function(){ return {ok: false, data: {detail: "No connection. Try again."}}; });
+  }
+  function flag(c){ return /^[A-Z]{2}$/.test(c || "") ? "<img src='/flags/" + c.toLowerCase() + ".png' alt='' width='18' height='13' style='vertical-align:-1px;border-radius:2px'> " : ""; }
+  function place(j){ return j.workplace === "remote" && !j.city ? "Remote" : flag(j.country) + esc([j.city, j.state].filter(Boolean).join(", ")); }
+  function money(s){
+    if (!s) return "";
+    var f = function(n){ return Number(n).toLocaleString(); };
+    return esc(s.currency) + " " + (s.min && s.max ? f(s.min) + "\u2013" + f(s.max) : f(s.min || s.max)) + " " + esc(s.period_label);
+  }
+  var STATUS = {applied: "Applied", shortlisted: "Shortlisted \u2714", rejected: "Not selected", withdrawn: "Withdrawn"};
+  function card(j, extra){
+    return '<a class="jcard" href="/job/' + j.id + '"><h3>' + esc(j.title) + '</h3><div class="co">' + esc(j.company) + ' \u00b7 ' + place(j) + '</div>'
+      + '<div class="jbad"><span>' + esc(j.kind_label) + '</span><span>' + esc(j.workplace_label) + '</span>'
+      + (j.salary ? '<span class="pay">' + money(j.salary) + '</span>' : '')
+      + (j.my_application ? '<span class="st">' + STATUS[j.my_application] + '</span>' : '')
+      + (!j.open ? '<span class="shut">Closed</span>' : '') + (extra || '') + '</div></a>';
+  }
+
+  // ---------------- the list ----------------
+  function listView(){
+    document.title = "Jobs \u2014 XpertCreation";
+    var h = '<h1>Jobs</h1><p class="jnote" style="text-align:left;padding:0">Free for everyone: posting, applying and hiring. Apply with your Connect profile.</p>'
+      + '<div class="jtabs">' + [["find", "Find jobs"], ["forme", "For you"], ["applied", "My applications"], ["posted", "Posted by me"]].map(function(t){
+          return '<button data-tab="' + t[0] + '" class="' + (tab === t[0] ? "on" : "") + '">' + t[1] + '</button>'; }).join("")
+      + '<a class="post" href="/jobs/new">+ Post a job</a></div>';
+    if (tab === "find"){
+      h += '<div class="jfilt"><input id="fq" placeholder="Job title, company or city" value="' + esc(filt.q) + '">'
+        + '<select id="fkind"><option value="">Any type</option>' + Object.keys(KIND).map(function(k){ return '<option value="' + k + '"' + (filt.kind === k ? " selected" : "") + '>' + KIND[k] + '</option>'; }).join("") + '</select>'
+        + '<select id="fplace"><option value="">On-site or remote</option>' + Object.keys(PLACE).map(function(k){ return '<option value="' + k + '"' + (filt.workplace === k ? " selected" : "") + '>' + PLACE[k] + '</option>'; }).join("") + '</select></div>'
+        + '<div id="fgeo" style="margin-bottom:12px"></div>';
+    }
+    box.innerHTML = h + '<div id="jlist"><div class="jnote">Loading\u2026</div></div><div id="jmore"></div>';
+    if (tab === "find" && window.GeoPicker){
+      GeoPicker(document.getElementById("fgeo"), {country: filt.country, city: filt.city, onChange: function(g){ filt.country = g.country; filt.city = g.city; loadList(true); }});
+    }
+    loadList(true);
+  }
+  function loadList(reset){
+    if (reset){ list = []; }
+    var el = document.getElementById("jlist");
+    if ((tab !== "find") && !me){ el.innerHTML = '<div class="jnote"><a href="/login">Sign in</a> to see this.</div>'; return; }
+    var url = tab === "forme" ? "/for-me/" : tab === "applied" ? "/applied/" : tab === "posted" ? "/mine/"
+      : "/?q=" + encodeURIComponent(filt.q) + "&kind=" + filt.kind + "&workplace=" + filt.workplace + "&country=" + filt.country + "&city=" + encodeURIComponent(filt.city)
+        + (list.length ? "&before=" + list[list.length - 1].id : "");
+    api(url).then(function(r){
+      var d = r.data || {};
+      if (tab === "applied"){
+        var apps = d.applications || [];
+        el.innerHTML = apps.length ? apps.map(function(a){ return card(a.job); }).join("") : '<div class="jnote">You have not applied for any job yet.</div>';
+        return;
+      }
+      var rows = d.jobs || [];
+      list = list.concat(rows); more = !!d.more;
+      if (tab === "posted"){
+        el.innerHTML = list.length ? list.map(function(j){ return card(j, '<span>' + j.applicants + ' applicant' + (j.applicants === 1 ? "" : "s") + '</span>'); }).join("")
+          : '<div class="jnote">You have not posted a job. <a href="/jobs/new">Post one</a> \u2014 it is free.</div>';
+      } else if (tab === "forme"){
+        el.innerHTML = list.length ? list.map(function(j){ return card(j); }).join("")
+          : '<div class="jnote">' + ((d.skills || []).length ? "No open jobs ask for your skills right now." : 'Add skills to <a href="/me/profile">your profile</a> to see jobs that match them.') + '</div>';
+      } else {
+        el.innerHTML = list.length ? list.map(function(j){ return card(j); }).join("") : '<div class="jnote">No jobs match. Try fewer filters.</div>';
+      }
+      document.getElementById("jmore").innerHTML = more ? '<div style="text-align:center"><button class="jbtn ghost" id="jmorebtn">Show more</button></div>' : "";
+    });
+  }
+
+  // ---------------- one job ----------------
+  function jobView(id){
+    box.innerHTML = '<div class="jnote">Loading\u2026</div>';
+    api("/" + id + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = '<div class="jnote">This job is not available. <a href="/jobs">See other jobs</a></div>'; return; }
+      var j = r.data.job;
+      document.title = j.title + " at " + j.company + " \u2014 XpertCreation Jobs";
+      ld(j);
+      var h = '<p style="margin:10px 0 0"><a href="/jobs">\u2190 All jobs</a></p><div class="jbox"><h1 style="margin:4px 0 2px;font-size:24px">' + esc(j.title) + '</h1>'
+        + '<div style="color:var(--ink-soft);font-size:15px">' + esc(j.company) + ' \u00b7 ' + place(j) + '</div>'
+        + '<div class="jbad"><span>' + esc(j.kind_label) + '</span><span>' + esc(j.workplace_label) + '</span>' + (j.salary ? '<span class="pay">' + money(j.salary) + '</span>' : '')
+        + (j.open ? '<span>Apply by ' + esc(j.deadline) + '</span>' : '<span class="shut">Closed</span>') + (j.hidden ? '<span class="shut">Hidden by a moderator</span>' : '') + '</div>'
+        + (j.skills.length ? '<div class="chips" style="margin-top:10px">' + j.skills.map(function(s){ return '<span>' + esc(s) + '</span>'; }).join("") + '</div>' : '')
+        + '<div class="jdesc">' + esc(j.description) + '</div>'
+        + '<p style="color:var(--ink-soft);font-size:13px;margin-top:12px">Posted ' + esc(j.posted) + ' by ' + esc(j.poster.name) + ' \u00b7 ' + j.applicants + ' applicant' + (j.applicants === 1 ? "" : "s") + '</p></div>'
+        + '<div class="jwarn">\u26A0\uFE0F Jobs on XpertCreation are free. Never pay a fee, deposit or "registration charge" to get a job. If someone asks, tap Report.</div>';
+      if (j.is_mine){
+        h += '<div class="jbox"><b>Your job</b><div class="jacts"><a class="jbtn ghost" href="/jobs/new?edit=' + j.id + '">Edit</a>'
+          + '<button class="jbtn ghost" data-close="' + (j.closed ? 0 : 1) + '">' + (j.closed ? "Reopen" : "Close applications") + '</button>'
+          + '<button class="jbtn red" data-jdel>Delete</button></div></div><div class="jbox"><b>Applicants</b><div id="apps"><div class="jnote">Loading\u2026</div></div></div>';
+      } else if (!me){
+        h += '<div class="jbox"><a class="jbtn" href="/login">Sign in to apply</a></div>';
+      } else if (j.my_application && j.my_application !== "withdrawn"){
+        h += '<div class="jbox"><b>You applied.</b> Status: <b>' + STATUS[j.my_application] + '</b>'
+          + (j.my_application === "applied" ? '<div class="jacts"><button class="jbtn ghost" data-withdraw>Withdraw my application</button></div>' : '')
+          + (j.my_application === "shortlisted" ? '<p>The employer opened a chat with you. <a href="/chat">Go to chat</a></p>' : '') + '</div>';
+      } else if (j.open){
+        h += '<div class="jbox"><b>Apply with your profile</b><p style="color:var(--ink-soft);font-size:14px;margin:4px 0 8px">The employer sees your Connect profile: headline, skills and experience. '
+          + '<a href="/me/profile">Check it first</a>.</p><textarea id="anote" maxlength="1000" placeholder="A short note (optional): why you fit this job" style="width:100%;box-sizing:border-box;min-height:80px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit"></textarea>'
+          + '<div class="jacts"><button class="jbtn" data-apply>Apply</button></div><div id="amsg" class="jmsg"></div></div>';
+      }
+      if (me && !j.is_mine) h += '<p style="text-align:right"><button class="jbtn ghost" style="padding:7px 12px;font-size:13px" data-jreport>\u26A0\uFE0F Report this job</button></p><div id="jrep"></div>';
+      if (j.can_moderate) h += '<p style="text-align:right"><button class="jbtn ghost" style="padding:7px 12px;font-size:13px" data-jhide="' + (j.hidden ? 0 : 1) + '">' + (j.hidden ? "Unhide" : "Hide (moderator)") + '</button></p>';
+      box.innerHTML = h;
+      box.setAttribute("data-job", j.id);
+      if (j.is_mine) loadApplicants(j.id);
+    });
+  }
+  function ld(j){
+    var el = document.getElementById("jobld") || document.createElement("script");
+    el.type = "application/ld+json"; el.id = "jobld";
+    var o = {"@context": "https://schema.org", "@type": "JobPosting", title: j.title, description: j.description.replace(/\n/g, "<br>"),
+      datePosted: j.posted_iso.slice(0, 10), validThrough: j.deadline + "T23:59", employmentType: j.kind.toUpperCase(),
+      hiringOrganization: {"@type": "Organization", name: j.company}, directApply: true};
+    if (j.workplace === "remote") { o.jobLocationType = "TELECOMMUTE"; if (j.country) o.applicantLocationRequirements = {"@type": "Country", name: j.country}; }
+    if (j.city) o.jobLocation = {"@type": "Place", address: {"@type": "PostalAddress", addressLocality: j.city, addressRegion: j.state, addressCountry: j.country}};
+    if (j.salary) o.baseSalary = {"@type": "MonetaryAmount", currency: j.salary.currency, value: {"@type": "QuantitativeValue", minValue: j.salary.min || j.salary.max, maxValue: j.salary.max || j.salary.min, unitText: {month: "MONTH", year: "YEAR", hour: "HOUR", project: "YEAR"}[j.salary.period]}};
+    el.textContent = JSON.stringify(o);
+    document.head.appendChild(el);
+  }
+  function loadApplicants(id){
+    api("/" + id + "/applicants/").then(function(r){
+      var a = (r.data && r.data.applicants) || [], el = document.getElementById("apps");
+      if (!a.length){ el.innerHTML = '<div class="jnote">No one has applied yet.</div>'; return; }
+      el.innerHTML = a.map(function(x){
+        var p = x.person;
+        return '<div class="japp">' + (p.avatar_url ? '<img class="av" src="' + esc(p.avatar_url) + '" alt="">' : '<span class="av">' + esc(p.name.charAt(0)) + '</span>')
+          + '<div class="inf"><b>' + (p.slug ? '<a href="/in/' + encodeURIComponent(p.slug) + '" target="_blank">' + esc(p.name) + '</a>' : esc(p.name)) + (p.verified ? ' <span style="color:#1D9BF0">\u2714</span>' : '') + '</b>'
+          + '<small>' + esc(p.headline) + '</small><small>' + flag(p.country) + esc(p.city) + ' \u00b7 applied ' + esc(x.when) + '</small>'
+          + (p.skills.length ? '<div class="chips">' + p.skills.map(function(s){ return '<span>' + esc(s) + '</span>'; }).join("") + '</div>' : '')
+          + (x.note ? '<p style="margin:8px 0 0;white-space:pre-wrap;font-size:14px">\u201C' + esc(x.note) + '\u201D</p>' : '')
+          + '<div class="jacts">' + (x.status === "shortlisted" ? '<span class="jbad"><span class="pay">Shortlisted</span></span><a class="jbtn ghost" href="/chat">Chat</a>'
+              : x.status === "rejected" ? '<span class="jbad"><span class="shut">Not selected</span></span><button class="jbtn ghost" data-st="applied" data-aid="' + x.id + '">Undo</button>'
+              : '<button class="jbtn" data-st="shortlisted" data-aid="' + x.id + '">Shortlist and chat</button><button class="jbtn ghost" data-st="rejected" data-aid="' + x.id + '">Not selected</button>')
+          + '</div></div></div>';
+      }).join("");
+    });
+  }
+
+  // ---------------- post or edit ----------------
+  function formView(){
+    if (!me){ box.innerHTML = '<div class="jnote"><a href="/login">Sign in</a> to post a job.</div>'; return; }
+    var editId = new URLSearchParams(location.search).get("edit");
+    var go = function(j){
+      j = j || {skills: [], workplace: "onsite", kind: "full_time", currency: "PKR", salary_period: "month", country: "PK"};
+      var sk = (j.skills || []).slice(), today = new Date(); today.setDate(today.getDate() + 30);
+      var dl = j.deadline || today.toISOString().slice(0, 10), s = j.salary || {};
+      box.innerHTML = '<p style="margin:10px 0 0"><a href="/jobs">\u2190 Jobs</a></p><h1>' + (editId ? "Edit job" : "Post a job") + '</h1>'
+        + '<div class="jwarn">Posting is free. Jobs that ask applicants for money are removed, and the account may be blocked.</div>'
+        + '<div class="jbox jform"><label>Job title</label><input id="jt" maxlength="120" value="' + esc(j.title) + '" placeholder="e.g. Sales assistant">'
+        + '<label>Company or shop</label><input id="jc" maxlength="120" value="' + esc(j.company) + '">'
+        + '<div class="two"><div><label>Type</label><select id="jk">' + Object.keys(KIND).map(function(k){ return '<option value="' + k + '"' + (j.kind === k ? " selected" : "") + '>' + KIND[k] + '</option>'; }).join("") + '</select></div>'
+        + '<div><label>Where</label><select id="jw">' + Object.keys(PLACE).map(function(k){ return '<option value="' + k + '"' + (j.workplace === k ? " selected" : "") + '>' + PLACE[k] + '</option>'; }).join("") + '</select></div></div>'
+        + '<label>Location</label><div id="jgeo"></div>'
+        + '<label>Salary (optional)</label><div class="three"><input id="jsmin" type="number" min="0" placeholder="From" value="' + (s.min || "") + '"><input id="jsmax" type="number" min="0" placeholder="To" value="' + (s.max || "") + '">'
+        + '<select id="jsp"><option value="month">a month</option><option value="year">a year</option><option value="hour">an hour</option><option value="project">for the project</option></select></div>'
+        + '<div class="two"><div><label>Currency</label><input id="jcur" maxlength="6" value="' + esc((s.currency || j.currency || "PKR")) + '"></div><div><label>Apply by</label><input id="jdl" type="date" value="' + esc(dl) + '"></div></div>'
+        + '<label>Skills needed</label><input id="jsk" list="jsklist" autocomplete="off" placeholder="Start typing, then pick"><datalist id="jsklist">' + SKILLS.map(function(x){ return '<option value="' + esc(x) + '">'; }).join("") + '</datalist>'
+        + '<div class="chips" id="jskc"></div>'
+        + '<label>Description</label><textarea id="jd" maxlength="6000" style="min-height:160px" placeholder="What the job is, working hours, what you offer, and how you will contact people.">' + esc(j.description) + '</textarea>'
+        + '<div class="jacts"><button class="jbtn" id="jsave">' + (editId ? "Save changes" : "Post job") + '</button></div><div id="jfmsg" class="jmsg"></div></div>';
+      if (s.period) document.getElementById("jsp").value = s.period;
+      var geo = {country: j.country || "", state: j.state || "", city: j.city || ""};
+      if (window.GeoPicker) GeoPicker(document.getElementById("jgeo"), {country: geo.country, state: geo.state, city: geo.city, onChange: function(g){ geo = g; }});
+      function chips(){ document.getElementById("jskc").innerHTML = sk.map(function(x, i){ return '<span>' + esc(x) + '<button data-unsk="' + i + '">\u00d7</button></span>'; }).join(""); }
+      chips();
+      document.getElementById("jsk").addEventListener("change", function(){
+        var v = this.value.trim(), hit = SKILLS.filter(function(x){ return x.toLowerCase() === v.toLowerCase(); })[0];
+        if (hit && sk.indexOf(hit) < 0 && sk.length < 15){ sk.push(hit); chips(); }
+        this.value = "";
+      });
+      document.getElementById("jskc").addEventListener("click", function(e){ var b = e.target.closest("[data-unsk]"); if (b){ sk.splice(+b.getAttribute("data-unsk"), 1); chips(); } });
+      document.getElementById("jsave").addEventListener("click", function(){
+        var btn = this, msg = document.getElementById("jfmsg");
+        var body = {title: val("jt"), company: val("jc"), kind: val("jk"), workplace: val("jw"), country: geo.country, state: geo.state, city: geo.city,
+          salary_min: val("jsmin"), salary_max: val("jsmax"), salary_period: val("jsp"), currency: val("jcur"), deadline: val("jdl"), skills: sk, description: val("jd")};
+        btn.disabled = true; msg.className = "jmsg"; msg.textContent = "Saving\u2026";
+        api(editId ? "/" + editId + "/" : "/", {method: editId ? "PATCH" : "POST", body: body}).then(function(r){
+          btn.disabled = false;
+          if (!r.ok){ msg.className = "jmsg bad"; msg.textContent = r.data.detail || "Could not save."; return; }
+          location.href = "/job/" + r.data.job.id;
+        });
+      });
+    };
+    if (editId) api("/" + editId + "/").then(function(r){ if (r.ok && r.data.job.is_mine) go(r.data.job); else box.innerHTML = '<div class="jnote">You can only edit your own jobs.</div>'; });
+    else go(null);
+  }
+  function val(id){ var e = document.getElementById(id); return e ? e.value.trim() : ""; }
+
+  // ---------------- taps ----------------
+  document.addEventListener("click", function(e){
+    if (!e.target.closest) return;
+    var t;
+    if ((t = e.target.closest("[data-tab]"))){ tab = t.getAttribute("data-tab"); history.replaceState(null, "", "/jobs" + (tab === "find" ? "" : "?tab=" + tab)); listView(); return; }
+    if (e.target.id === "jmorebtn"){ loadList(false); return; }
+    var id = box.getAttribute("data-job");
+    if (e.target.closest("[data-apply]")){
+      var b = e.target.closest("[data-apply]"); b.disabled = true;
+      api("/" + id + "/apply/", {method: "POST", body: {note: val("anote")}}).then(function(r){
+        if (!r.ok){ b.disabled = false; var m = document.getElementById("amsg"); m.className = "jmsg bad"; m.innerHTML = esc(r.data.detail || "Could not apply.") + (/profile/.test(r.data.detail || "") ? ' <a href="/me/profile">Open your profile</a>' : ''); return; }
+        jobView(id);
+      });
+      return;
+    }
+    if (e.target.closest("[data-withdraw]")){ if (confirm("Withdraw your application?")) api("/" + id + "/withdraw/", {method: "POST", body: {}}).then(function(){ jobView(id); }); return; }
+    if ((t = e.target.closest("[data-st]"))){
+      t.disabled = true;
+      api("/applications/" + t.getAttribute("data-aid") + "/status/", {method: "POST", body: {status: t.getAttribute("data-st")}}).then(function(){ loadApplicants(id); });
+      return;
+    }
+    if ((t = e.target.closest("[data-close]"))){ api("/" + id + "/", {method: "PATCH", body: {closed: t.getAttribute("data-close") === "1"}}).then(function(){ jobView(id); }); return; }
+    if (e.target.closest("[data-jdel]")){ if (confirm("Delete this job and its applications?")) api("/" + id + "/", {method: "DELETE"}).then(function(){ location.href = "/jobs?tab=posted"; }); return; }
+    if ((t = e.target.closest("[data-jhide]"))){ api("/" + id + "/", {method: "PATCH", body: {hidden: t.getAttribute("data-jhide") === "1"}}).then(function(){ jobView(id); }); return; }
+    if (e.target.closest("[data-jreport]")){
+      document.getElementById("jrep").innerHTML = '<div class="jbox"><b>Report this job</b><select id="jrr" style="display:block;margin:8px 0;padding:9px;border-radius:10px;border:1px solid var(--line)">'
+        + '<option value="fee">Asks for money or a fee</option><option value="scam">Scam or fake job</option><option value="wrong">Wrong or misleading</option><option value="abuse">Offensive</option><option value="other">Something else</option></select>'
+        + '<input id="jrn" maxlength="500" placeholder="What happened? (optional)" style="width:100%;box-sizing:border-box;padding:9px;border-radius:10px;border:1px solid var(--line)">'
+        + '<div class="jacts"><button class="jbtn" data-jrsend>Send report</button></div></div>';
+      return;
+    }
+    if (e.target.closest("[data-jrsend]")){
+      api("/" + id + "/report/", {method: "POST", body: {reason: val("jrr"), note: val("jrn")}}).then(function(r){
+        document.getElementById("jrep").innerHTML = '<p class="jmsg ok">' + (r.ok ? "Thank you. A moderator will look at it." : "Could not send the report.") + '</p>';
+      });
+    }
+  });
+  var timer = null;
+  document.addEventListener("input", function(e){
+    if (e.target.id !== "fq") return;
+    filt.q = e.target.value; clearTimeout(timer); timer = setTimeout(function(){ loadList(true); }, 350);
+  });
+  document.addEventListener("change", function(e){
+    if (e.target.id === "fkind"){ filt.kind = e.target.value; loadList(true); }
+    if (e.target.id === "fplace"){ filt.workplace = e.target.value; loadList(true); }
+  });
+
+  function route(){
+    var m = location.pathname.match(/^\/job\/(\d+)/);
+    if (m) return jobView(m[1]);
+    if (/^\/jobs\/new/.test(location.pathname)) return formView();
+    listView();
+  }
+  fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){ me = u; route(); }).catch(function(){ route(); });
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Learn and use</h5>
+      <ul>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/people">Connect</a></li>
+        <li><a href="/feed">Feed</a></li>
+        <li><a href="/jobs">Jobs</a></li>
+        <li><a href="/pets">Pets</a></li>
+        <li><a href="/shows">Shows</a></li>
+        <li><a href="/docs">Guide</a></li>
+        <li><a href="/games">Games</a></li>
+        <li><a href="/money">Money</a></li>
+        <li><a href="/business">Business</a></li>
+        <li><a href="/blood">Blood bank</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert/XpertCreation" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+<script src="/js/share-1.js" defer></script>
+</body>
+</html>

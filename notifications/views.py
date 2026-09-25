@@ -103,7 +103,7 @@ def clear_all(request):
 
 # ---------------------------------------------------------------- chat
 
-CONTEXT_LABEL = {"donate": "", "blood": "Blood request", "connect": "Connection"}
+CONTEXT_LABEL = {"donate": "", "blood": "Blood request", "connect": "Connection", "job": "Job application"}
 MAX_PHOTO = 2 * 1024 * 1024
 PHOTOS_PER_DAY = 20
 TYPING_SECONDS = 6

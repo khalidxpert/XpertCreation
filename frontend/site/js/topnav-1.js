@@ -4,7 +4,7 @@
   var head = document.querySelector("header.top") || document.querySelector("header.topbar");
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
-  var LINKS = [["Home", "/"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Connect", "/people"], ["Feed", "/feed"], ["Pets", "/pets"],
+  var LINKS = [["Home", "/"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Connect", "/people"], ["Feed", "/feed"], ["Jobs", "/jobs"], ["Pets", "/pets"],
                ["Shows", "/shows"], ["Games", "/games"], ["Chat", "/chat"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   function here(u){
@@ -13,6 +13,7 @@
     if (b === "/people") return path === "/people" || path.indexOf("/in/") === 0 || path === "/me/profile";
     if (b === "/pets") return path === "/pets" || path === "/lost" || path.indexOf("/pet/") === 0;
     if (b === "/feed") return path === "/feed" || path.indexOf("/post/") === 0;
+    if (b === "/jobs") return path === "/jobs" || path.indexOf("/jobs/") === 0 || path.indexOf("/job/") === 0;
     if (b === "/shows") return path === "/shows" || path.indexOf("/show/") === 0;
     return path === b || path.indexOf(b + "/") === 0;
   }
