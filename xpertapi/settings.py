@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "network",
     "pets",
     "screen",
+    "seo",
     "assistant",
     "auditlog",
     "jobs",

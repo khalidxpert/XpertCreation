@@ -38,3 +38,5 @@ Disallow: /dl/
 
 Sitemap: https://xpertcreation.com/sitemap.xml
 Disallow: /account/delete
+Sitemap: https://xpertcreation.com/sitemap.xml
+Sitemap: https://xpertcreation.com/sitemap-dynamic.xml
