@@ -129,6 +129,47 @@ body.inchat .thread2.on{flex:1;min-height:0}
 .trow2.picked{background:var(--paper)}
 .sys3{align-self:center;max-width:90%;margin:6px auto;padding:6px 12px;border-radius:10px;background:var(--paper);color:var(--ink-soft);font-size:12.5px;text-align:center}
 img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:10px}
+#threadbox{position:relative}
+.menu3{position:absolute;right:0;top:44px;z-index:30;display:flex;flex-direction:column;gap:0;min-width:220px;padding:6px 0;margin:0;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 34px rgba(13,20,36,.18)}
+.menu3:empty{display:none}
+.menu3 > button{border:0;border-radius:0;background:transparent;text-align:left;padding:11px 16px;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
+.menu3 > button:hover{background:var(--paper)}
+.menu3 hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+.menu3 select,.menu3 input{margin:6px 12px}
+.cfile{display:flex;align-items:center;gap:8px;padding:9px 11px;margin-bottom:6px;border-radius:12px;background:rgba(255,255,255,.18);border:1px solid rgba(13,20,36,.1);text-decoration:none;color:inherit;font-weight:600;font-size:14px;word-break:break-word}
+.msg8.theirs .cfile{background:var(--card)}
+.cfile small{opacity:.75;font-weight:500;white-space:nowrap}
+.darkwall .msg8.theirs{background:#202C33;color:#E9EDEF}
+.darkwall .typing3,.darkwall .sys3{color:#8696A0}
+#panel3{position:fixed;inset:0;z-index:200;background:rgba(13,20,36,.45);display:flex;align-items:flex-end;justify-content:center}
+@media(min-width:700px){#panel3{align-items:center}}
+.pn3{background:var(--card);width:100%;max-width:560px;max-height:86vh;overflow:auto;border-radius:20px 20px 0 0;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+@media(min-width:700px){.pn3{border-radius:20px}}
+.pnh3{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card)}
+.pnh3 button{border:0;background:transparent;font-size:24px;line-height:1;cursor:pointer;color:var(--ink)}
+.pnb3{padding:14px 16px}
+.tabs3{display:flex;gap:6px;margin-bottom:12px}
+.tabs3 button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--card);font:inherit;font-weight:700;cursor:pointer}
+.tabs3 button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mgrid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:4px}
+.mgrid3 img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block}
+.row3{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;word-break:break-all}
+.row3 small{grid-column:1;color:var(--ink-soft)}
+.row3 button,.row3 .dl3{grid-column:2;grid-row:1/3;padding:7px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:13px;font-weight:700;text-decoration:none;color:var(--ink);cursor:pointer}
+.mut3{color:var(--ink-soft);font-size:13.5px}
+.ct3{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:8px 0}
+.ct3 img,.ctl3{width:96px;height:96px;border-radius:50%;object-fit:cover}
+.ctl3{display:grid;place-items:center;background:var(--paper);font-size:38px;font-weight:800}
+.ct3 h3{margin:4px 0 0}.ct3 p{margin:0}
+.pbt3{display:block;width:100%;max-width:320px;padding:12px;border-radius:12px;border:0;background:var(--brand);color:#fff;font:inherit;font-weight:800;text-decoration:none;cursor:pointer;text-align:center}
+.pbt3.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.wgrid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.wgrid3 button,.wbtn3{height:72px;border-radius:12px;border:2px solid var(--line);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:6px;color:#0D1424}
+.wgrid3 button.on{border-color:var(--brand)}
+.wgrid3 button[data-wall="night"]{color:#fff}
+.wbtn3{background:var(--paper);align-items:center}
+.wall3{display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:600}
 .empty8{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px}
 
 /* ---------- bell ---------- */
@@ -186,7 +227,7 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
     <div class="emo3" id="emo3"></div>
     <div class="reply4" id="reply4">
       <button class="att3" type="button" data-emo3 title="Emoji and stickers" aria-label="Emoji and stickers"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.2 2.1 1.8 3.5 1.8s2.5-.6 3.5-1.8"/><circle cx="9" cy="10" r=".6" fill="currentColor"/><circle cx="15" cy="10" r=".6" fill="currentColor"/></svg></button>
-      <label class="att3" title="Send a photo" aria-label="Send a photo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.4 3.4 0 0 1 4.8 4.8l-8.4 8.4a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg><input type="file" id="cphoto" accept="image/*" style="display:none"></label>
+      <label class="att3" title="Send a photo" aria-label="Send a photo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.4 3.4 0 0 1 4.8 4.8l-8.4 8.4a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg><input type="file" id="cphoto" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv" style="display:none"></label>
       <textarea id="cinput" placeholder="Type a message"></textarea>
       <button id="csend" aria-label="Send"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3.4 20.4l17.4-7.5a1 1 0 0 0 0-1.8L3.4 3.6a.9.9 0 0 0-1.3 1l1.8 6.4 9.1 1-9.1 1-1.8 6.4a.9.9 0 0 0 1.3 1z"/></svg></button>
     </div>
@@ -245,6 +286,7 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
     var tick = m.mine ? ' <span class="tick3' + (m.id <= seenUpto ? ' seen' : '') + '" data-tick="' + m.id + '">'
       + (m.id <= seenUpto ? "\u2713\u2713" : "\u2713") + '</span>' : "";
     return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + (stk(m.body) ? " stkmsg" : "") + '">'
+      + (m.file ? '<a class="cfile" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' <small>' + kb(m.file.size) + '</small></a>' : '')
       + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="cimg" src="' + esc(m.image) + '" alt="Photo" loading="lazy"></a>' : '')
       + (stk(m.body) ? '<img class="stk3" src="/stickers/' + stk(m.body) + '.svg" alt="Sticker">'
                      : (m.body ? '<div class="cb">' + esc(m.body) + '</div>' : ''))
@@ -298,6 +340,86 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
     var h = document.querySelector(".wrap > h1");
     h.innerHTML = (current.avatar ? '<img class="chead-av" src="' + esc(current.avatar) + '" alt="">' : '') + esc(current.with) + (current.disappear ? " \u23F1" : "");
   }
+  // ---- WhatsApp-style extras: panels, contact, media/links/docs, wallpaper, export ----
+  var WALLS = {none: "", beige: "#EFE7DD", mint: "#DCF3E6", sky: "#DCEBF7", lilac: "#EDE3F5", sand: "#F6EBD9",
+    dots: "radial-gradient(rgba(13,20,36,.10) 1px, transparent 1.2px) 0 0/16px 16px, #F4F1EC",
+    lines: "repeating-linear-gradient(45deg, rgba(13,20,36,.05) 0 2px, transparent 2px 14px), #EEF3F7",
+    night: "#0B141A"};
+  function wallKey(){ return current ? "xc_wall_t" + current.id : "xc_wall_all"; }
+  function getWall(){ try { return localStorage.getItem(wallKey()) || localStorage.getItem("xc_wall_all") || ""; } catch (e) { return ""; } }
+  function applyWall(){
+    var w = getWall(), box = $("msgs3");
+    if (!box) return;
+    box.style.background = ""; box.style.backgroundSize = "";
+    if (w.indexOf("img:") === 0){ box.style.background = "url(" + w.slice(4) + ") center/cover"; }
+    else if (WALLS[w]) box.style.background = WALLS[w];
+    box.classList.toggle("darkwall", w === "night");
+  }
+  function panel(title, inner){
+    var old = $("panel3"); if (old) old.remove();
+    var p = document.createElement("div");
+    p.id = "panel3";
+    p.innerHTML = '<div class="pn3"><div class="pnh3"><b>' + esc(title) + '</b><button data-pclose aria-label="Close">\u00d7</button></div><div class="pnb3">' + inner + '</div></div>';
+    document.body.appendChild(p);
+    return p;
+  }
+  function kb(n){ return n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
+  function mediaPanel(tab){
+    var p = panel("Media, links and docs", '<div class="tabs3"><button data-mt="media">Media</button><button data-mt="links">Links</button><button data-mt="docs">Docs</button></div><div id="mt3"><p class="mut3">Loading\u2026</p></div>');
+    api("/threads/" + current.id + "/media/").then(function(r){
+      var d = r.data || {media: [], links: [], docs: []};
+      function show(k){
+        [].forEach.call(p.querySelectorAll("[data-mt]"), function(b){ b.classList.toggle("on", b.getAttribute("data-mt") === k); });
+        var h = "";
+        if (k === "media") h = d.media.length ? '<div class="mgrid3">' + d.media.map(function(x){ return '<a href="' + esc(x.url) + '" target="_blank" rel="noopener" download><img src="' + esc(x.url) + '" alt="" loading="lazy"></a>'; }).join("") + '</div>' : '<p class="mut3">No photos in this chat.</p>';
+        if (k === "links") h = d.links.length ? d.links.map(function(x){ return '<div class="row3"><a href="' + esc(x.url) + '" target="_blank" rel="noopener nofollow">' + esc(x.url) + '</a><small>' + esc(x.when) + '</small><button data-copy="' + esc(x.url) + '">Copy</button></div>'; }).join("") : '<p class="mut3">No links in this chat.</p>';
+        if (k === "docs") h = d.docs.length ? d.docs.map(function(x){ return '<div class="row3"><span>\uD83D\uDCC4 ' + esc(x.name) + '</span><small>' + kb(x.size) + ' \u00b7 ' + esc(x.when) + '</small><a class="dl3" href="' + esc(x.url) + '">Download</a></div>'; }).join("") : '<p class="mut3">No documents in this chat.</p>';
+        $("mt3").innerHTML = h;
+      }
+      p.addEventListener("click", function(e){ var b = e.target.closest("[data-mt]"); if (b) show(b.getAttribute("data-mt")); });
+      show(tab || "media");
+    });
+  }
+  function contactPanel(){
+    var c = current.contact || {};
+    panel("Contact", '<div class="ct3">' + (current.avatar ? '<img src="' + esc(current.avatar) + '" alt="">' : '<span class="ctl3">' + esc(current.with.charAt(0)) + '</span>')
+      + '<h3>' + esc(current.with) + '</h3>' + (c.headline ? '<p>' + esc(c.headline) + '</p>' : '') + (c.city ? '<p class="mut3">' + esc(c.city) + '</p>' : '')
+      + (c.slug ? '<a class="pbt3" href="/in/' + encodeURIComponent(c.slug) + '">View profile</a>' : '')
+      + '<button class="pbt3 ghost" data-openmedia>Media, links and docs</button></div>');
+  }
+  function wallPanel(){
+    var cur = getWall();
+    panel("Wallpaper", '<div class="wgrid3">' + Object.keys(WALLS).map(function(k){
+        return '<button data-wall="' + k + '" class="' + (cur === k || (!cur && k === "none") ? "on" : "") + '" style="background:' + (WALLS[k] || "#fff") + '">' + (k === "none" ? "Default" : k.charAt(0).toUpperCase() + k.slice(1)) + '</button>'; }).join("")
+      + '<label class="wbtn3">\uD83D\uDDBC\uFE0F My photo<input type="file" id="wfile" accept="image/*" style="display:none"></label></div>'
+      + '<label class="wall3"><input type="checkbox" id="wall_all"> Use for all chats</label><p class="mut3">Your photo is kept on this device only.</p>');
+  }
+  function setWall(v){
+    var all = $("wall_all") && $("wall_all").checked;
+    try {
+      if (all){ localStorage.setItem("xc_wall_all", v); localStorage.removeItem("xc_wall_t" + current.id); }
+      else localStorage.setItem("xc_wall_t" + current.id, v);
+    } catch (e) { alert("This device is out of space for a photo wallpaper. Pick a plain one."); return; }
+    applyWall();
+    var p = $("panel3"); if (p) p.remove();
+  }
+  function exportPanel(){
+    panel("Export chat", '<p>We will email this chat to <b>your own email address</b>. It includes both sides of the conversation, so keep it private.</p>'
+      + '<div class="ct3" style="padding:0"><button class="pbt3 ghost" data-export="0">Without media</button><button class="pbt3" data-export="1">Include media</button></div>'
+      + '<p class="mut3">With media, photos and documents are attached up to 15 MB; anything more is listed by name. You can export 3 times a day.</p><div id="exmsg3"></div>');
+  }
+  document.addEventListener("change", function(e){
+    if (e.target.id !== "wfile" || !e.target.files || !e.target.files[0]) return;
+    var img = new Image();
+    img.onload = function(){
+      var sc = Math.min(1, 1080 / Math.max(img.width, img.height)), c = document.createElement("canvas");
+      c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      setWall("img:" + c.toDataURL("image/jpeg", 0.7));
+    };
+    img.src = URL.createObjectURL(e.target.files[0]);
+  });
   function nearBottom(box){ return box.scrollHeight - box.scrollTop - box.clientHeight < 120; }
   function addMessages(list){
     if (!list || !list.length) return;
@@ -328,6 +450,7 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
       if (!r.ok) return;
       current = r.data; lastId = 0; seenUpto = r.data.seen_upto || 0;
       $("threadbox").classList.add("on");
+      applyWall();
       document.body.classList.add("inchat");
       setHH();
       $("list5").style.display = "none";
@@ -417,9 +540,10 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
     }
     if (e.target.closest("[data-more3]") && current){
       var m = $("menu3");
-      m.innerHTML = m.innerHTML ? "" : '<button data-block3>' + (current.i_blocked ? "Unblock" : "Block") + " " + esc(current.with) + '</button>'
-        + '<button data-report3>Report this chat</button><button data-dis3>Disappearing messages</button>'
-        + '<button data-clear3>Clear chat</button><button data-del3 style="color:#B91C1C">Delete chat</button>';
+      m.innerHTML = m.innerHTML ? "" : '<button data-contact3>View contact</button><button data-media3>Media, links and docs</button>'
+        + '<button data-wall3>Wallpaper</button><button data-export3>Export chat</button><button data-dis3>Disappearing messages</button><hr>'
+        + '<button data-clear3>Clear chat</button><button data-report3>Report</button>'
+        + '<button data-block3>' + (current.i_blocked ? "Unblock" : "Block") + '</button><button data-del3 style="color:#B91C1C">Delete chat</button>';
       return;
     }
     if (e.target.closest("[data-block3]") && current){
@@ -482,6 +606,23 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
         });
       return;
     }
+    if (e.target.closest("[data-pclose]") || e.target.id === "panel3"){ var pc = $("panel3"); if (pc) pc.remove(); return; }
+    if (e.target.closest("[data-contact3]") && current){ $("menu3").innerHTML = ""; contactPanel(); return; }
+    if ((e.target.closest("[data-media3]") || e.target.closest("[data-openmedia]")) && current){ $("menu3").innerHTML = ""; mediaPanel("media"); return; }
+    if (e.target.closest("[data-wall3]") && current){ $("menu3").innerHTML = ""; wallPanel(); return; }
+    var wb = e.target.closest("[data-wall]"); if (wb && current){ setWall(wb.getAttribute("data-wall") === "none" ? "" : wb.getAttribute("data-wall")); return; }
+    if (e.target.closest("[data-export3]") && current){ $("menu3").innerHTML = ""; exportPanel(); return; }
+    var ex = e.target.closest("[data-export]");
+    if (ex && current){
+      [].forEach.call(document.querySelectorAll("[data-export]"), function(b){ b.disabled = true; });
+      api("/threads/" + current.id + "/export/", {method: "POST", body: {media: ex.getAttribute("data-export") === "1"}}).then(function(r){
+        $("exmsg3").innerHTML = r.ok ? '<p class="ok3">Sent to ' + esc(r.data.to) + ': ' + r.data.messages + ' messages' + (r.data.attached ? ', ' + r.data.attached + ' files attached' : '') + '. Check your inbox (and spam) in a few minutes.</p>'
+                                     : '<p style="color:#B91C1C">' + esc(r.data.detail || "Could not send.") + '</p>';
+      });
+      return;
+    }
+    var cp = e.target.closest("[data-copy]");
+    if (cp){ if (navigator.clipboard) navigator.clipboard.writeText(cp.getAttribute("data-copy")).then(function(){ cp.textContent = "Copied"; }); return; }
     if (e.target.id === "csend") send();
   });
 
@@ -496,8 +637,9 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
   $("cphoto").addEventListener("change", function(){
     var f = this.files[0]; this.value = "";
     if (!f || !current) return;
-    if (f.size > 2 * 1024 * 1024){ alert("That photo is over 2 MB. Pick a smaller one."); return; }
-    var fd = new FormData(); fd.append("photo", f);
+    var isImg = /^image\//.test(f.type);
+    if (f.size > (isImg ? 2 : 5) * 1024 * 1024){ alert(isImg ? "That photo is over 2 MB. Pick a smaller one." : "That file is over 5 MB."); return; }
+    var fd = new FormData(); fd.append(isImg ? "photo" : "file", f);
     var cap = $("cinput").value.trim(); if (cap){ fd.append("message", cap); $("cinput").value = ""; }
     $("typing3").textContent = "Sending photo\u2026";
     sending = true;

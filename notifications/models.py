@@ -81,6 +81,9 @@ class ChatMessage(models.Model):
     read = models.BooleanField(default=False)
     image = models.CharField(max_length=160, blank=True, default="")
     system = models.BooleanField(default=False)
+    attachment = models.CharField(max_length=200, blank=True, default="")
+    attachment_name = models.CharField(max_length=120, blank=True, default="")
+    attachment_size = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ["created_at"]

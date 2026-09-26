@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import broadcast, push, views
+from . import broadcast, chatx, push, views
 
 app_name = "notifications"
 
@@ -19,6 +19,9 @@ urlpatterns = [
     path("threads/delete/", views.threads_delete, name="delete-threads"),
     path("threads/<int:pk>/", views.thread_detail, name="thread"),
     path("threads/<int:pk>/typing/", views.thread_typing, name="typing"),
+    path("threads/<int:pk>/media/", chatx.thread_media, name="media"),
+    path("threads/<int:pk>/export/", chatx.thread_export, name="export"),
+    path("files/<int:pk>/", chatx.file_download, name="file"),
     path("threads/<int:pk>/block/", views.thread_block, name="block"),
     path("threads/<int:pk>/report/", views.thread_report, name="report"),
     path("threads/<int:pk>/clear/", views.thread_clear, name="clear-thread"),

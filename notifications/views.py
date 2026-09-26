@@ -132,7 +132,7 @@ def _url(path):
 
 def _msg(m, me):
     return {"id": m.id, "body": m.body, "image": _url(m.image), "mine": m.author_id == me.id,
-            "read": m.read, "system": m.system, "when": m.created_at.strftime("%d %b, %H:%M")}
+            "read": m.read, "system": m.system, "file": ({"name": m.attachment_name, "size": m.attachment_size, "url": "/api/notify/files/%d/" % m.id} if m.attachment else None), "when": m.created_at.strftime("%d %b, %H:%M")}
 
 
 DISAPPEAR = {0: "Off", 24: "24 hours", 168: "7 days", 2160: "90 days"}
@@ -215,7 +215,7 @@ def my_threads(request):
             "id": t.id, "context": t.context, "ref_id": t.ref_id,
             "with": _name(other), "avatar": _avatar(other),
             "about": titles.get(t.ref_id, "") if t.context == "donate" else CONTEXT_LABEL.get(t.context, ""),
-            "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "")) if last else "",
+            "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "") or (("\U0001F4C4 " + last.attachment_name) if last.attachment else "")) if last else "",
             "unread": unread, "disappear": t.disappear_hours,
             "updated": t.updated_at.strftime("%d %b, %H:%M"),
         })
@@ -265,6 +265,7 @@ def thread_detail(request, pk):
             "blocked": _blocked(request.user, other),
             "i_blocked": ChatBlock.objects.filter(blocker=request.user, blocked=other).exists(),
             "disappear": t.disappear_hours,
+            "contact": __import__("notifications.chatx", fromlist=["contact"]).contact(other),
         })
 
     if _blocked(request.user, other):
@@ -281,9 +282,19 @@ def thread_detail(request, pk):
             rel = _save_photo(photo, t.id)
         except ValueError as e:
             return _err(str(e))
-    if not body and not rel:
+    att = None
+    if request.FILES.get("file"):
+        from .chatx import FILES_PER_DAY, save_file
+        if ChatMessage.objects.filter(author=request.user, created_at__date=timezone.localdate()).exclude(attachment="").count() >= FILES_PER_DAY:
+            return _err("You have sent %d files today. Try again tomorrow." % FILES_PER_DAY)
+        try:
+            att = save_file(request.FILES["file"], t.id)
+        except ValueError as e:
+            return _err(str(e))
+    if not body and not rel and not att:
         return _err("Write something first.")
-    m = ChatMessage.objects.create(thread=t, author=request.user, body=body, image=rel)
+    m = ChatMessage.objects.create(thread=t, author=request.user, body=body, image=rel,
+                                   attachment=att[0] if att else "", attachment_name=att[1] if att else "", attachment_size=att[2] if att else 0)
     t.a_hidden = t.b_hidden = False
     t.save(update_fields=["a_hidden", "b_hidden", "updated_at"])
     cache.delete("chat_typing:%d:%d" % (t.id, request.user.id))
