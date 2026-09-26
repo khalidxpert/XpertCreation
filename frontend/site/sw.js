@@ -6,7 +6,7 @@
  * honest "you are offline", and blood requests in particular must never be
  * answered from a cache.
  */
-const VERSION = "xc-v93";
+const VERSION = "xc-v94";
 const SHELL = VERSION + "-shell";
 
 // Pages worth having offline. Each is small and self-contained.
