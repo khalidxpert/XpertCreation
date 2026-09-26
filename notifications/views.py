@@ -113,6 +113,14 @@ def _name(u):
     return (getattr(u, "full_name", "") or "").strip() or "Member"
 
 
+def _avatar(u):
+    try:
+        from network.views import _av
+        return _av(u) or ""
+    except Exception:
+        return ""
+
+
 def _blocked(a, b):
     """True if either person has blocked the other."""
     return ChatBlock.objects.filter(Q(blocker=a, blocked=b) | Q(blocker=b, blocked=a)).exists()
@@ -205,7 +213,7 @@ def my_threads(request):
         last = vis.last()
         out.append({
             "id": t.id, "context": t.context, "ref_id": t.ref_id,
-            "with": _name(other),
+            "with": _name(other), "avatar": _avatar(other),
             "about": titles.get(t.ref_id, "") if t.context == "donate" else CONTEXT_LABEL.get(t.context, ""),
             "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "")) if last else "",
             "unread": unread, "disappear": t.disappear_hours,
@@ -250,7 +258,7 @@ def thread_detail(request, pk):
         # the newest of my messages the other person has read - so ticks can turn blue
         seen = t.messages.filter(author=request.user, read=True).order_by("-id").values_list("id", flat=True).first() or 0
         return Response({
-            "id": t.id, "context": t.context, "ref_id": t.ref_id, "with": _name(other),
+            "id": t.id, "context": t.context, "ref_id": t.ref_id, "with": _name(other), "avatar": _avatar(other),
             "messages": [_msg(m, request.user) for m in qs],
             "seen_upto": seen,
             "typing": bool(cache.get("chat_typing:%d:%d" % (t.id, other.id))),

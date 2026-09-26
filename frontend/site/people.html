@@ -161,10 +161,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=10" defer></script>
+<script src="/js/topnav-1.js?v=12" defer></script>
 
 <div class="wrap net">
   <h1>Connect</h1>
+  <style>.hubbar{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 14px}.hubbar a{padding:8px 14px;border-radius:99px;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);font-weight:700;font-size:13.5px;text-decoration:none;color:var(--ink,#0D1424)}.hubbar a.on{background:var(--ink,#0D1424);color:#fff;border-color:var(--ink,#0D1424)}</style><div class="hubbar"><a href="/feed">Posts</a><a href="/people" class="on">People</a><a href="/me/profile#connections">My network</a><a href="/me/profile">My profile</a></div>
   <p class="lead">Find members by skill, city or name. Connect, follow and endorse each other.</p>
   <div class="card" style="display:grid;gap:10px">
     <input id="q" placeholder="Search a name, skill or city" maxlength="60">
@@ -252,7 +253,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (p.avatar_url) return "<img class='" + cls + "' src='" + esc(p.avatar_url) + "' alt=''>";
     return "<span class='" + cls + " ph'>" + esc((p.name || "?").charAt(0).toUpperCase()) + "</span>";
   }
-  function tick(v){ return v ? "<span class='tick' title='Verified'>\u2714</span>" : ""; }
+  function tick(v){ return v ? "<svg class='vbadge' viewBox='0 0 24 24' width='16' height='16' role='img' aria-label='Verified' style='vertical-align:-3px;margin-left:3px'><title>Verified</title><path fill='#1D9BF0' stroke='#1D9BF0' stroke-width='1.2' stroke-linejoin='round' d='M12.00 1.00 L14.43 2.92 L17.50 2.47 L18.65 5.35 L21.53 6.50 L21.08 9.57 L23.00 12.00 L21.08 14.43 L21.53 17.50 L18.65 18.65 L17.50 21.53 L14.43 21.08 L12.00 23.00 L9.57 21.08 L6.50 21.53 L5.35 18.65 L2.47 17.50 L2.92 14.43 L1.00 12.00 L2.92 9.57 L2.47 6.50 L5.35 5.35 L6.50 2.47 L9.57 2.92Z'/><path d='M7.6 12.4l3 3 5.8-6.2' fill='none' stroke='#fff' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round'/></svg>" : ""; }
   function say(el, text, kind){
     if (!el) return;
     el.className = "msg" + (kind ? " " + kind : "");
