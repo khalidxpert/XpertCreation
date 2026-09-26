@@ -5,7 +5,7 @@
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
   var LINKS = [["Home", "/"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Connect", "/people"], ["Feed", "/feed"], ["Jobs", "/jobs"], ["Pets", "/pets"],
-               ["Shows", "/shows"], ["Games", "/games"], ["Chat", "/chat"], ["Guide", "/docs"]];
+               ["Shows", "/shows"], ["Games", "/games"], ["Chat", "/chat"], ["Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   function here(u){
     var b = u.replace(/\/+$/, "") || "/";
