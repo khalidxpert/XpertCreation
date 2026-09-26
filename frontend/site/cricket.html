@@ -304,7 +304,7 @@ function level(n){
   function bat(){ noise(0.08, 0.6); } function cheer(){ noise(1.6, 0.25, 900); } function stumpsSound(){ noise(0.25, 0.5, 2600); }
   // ---- layout and projection
   function layout(){
-    var w = Math.min(wrapEl.clientWidth, 560); scale = w / VW;
+    var w = Math.min(wrapEl.clientWidth || (window.innerWidth - 24), 560, Math.max(260, (window.innerHeight - 330) * 0.75)); scale = w / VW;
     cv.width = Math.round(VW * scale * devicePixelRatio); cv.height = Math.round(VH * scale * devicePixelRatio);
     cv.style.width = Math.round(VW * scale) + "px"; cv.style.height = Math.round(VH * scale) + "px";
   }
@@ -533,7 +533,7 @@ function level(n){
   }
   function start(n){
     G = {L: level(n), runs: 0, wk: 0, balls: 0, log: []}; $("ckmenu").hidden = true; $("ckend").hidden = true; $("ckplay").hidden = false;
-    hud(); nextBall();
+    layout(); hud(); nextBall();
   }
   function nextBall(){
     fieldAnim = null; swing = null;
