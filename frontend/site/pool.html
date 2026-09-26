@@ -414,7 +414,9 @@ function freeSpot(balls, x, y){
     var w = wrapEl.clientWidth, portrait = window.innerHeight > window.innerWidth && w < 700;
     vertical = portrait;
     var tw = W + RAIL * 2, th = H + RAIL * 2;
-    var avail = Math.max(240, (window.innerHeight || 700) - 260);
+    var top = wrapEl.getBoundingClientRect().top + (window.scrollY || 0);
+    var ctl = document.querySelector(".pctl"), below = (ctl ? ctl.offsetHeight : 80) + ($("pmsg").offsetHeight || 30) + 28;
+    var avail = Math.max(200, (window.innerHeight || 700) - top - below);
     if (vertical){ scale = Math.min(w / th, avail / tw); cv.width = Math.round(th * scale * devicePixelRatio); cv.height = Math.round(tw * scale * devicePixelRatio); cv.style.width = Math.round(th * scale) + "px"; cv.style.height = Math.round(tw * scale) + "px"; }
     else { scale = Math.min(w / tw, avail / th); cv.width = Math.round(tw * scale * devicePixelRatio); cv.height = Math.round(th * scale * devicePixelRatio); cv.style.width = Math.round(tw * scale) + "px"; cv.style.height = Math.round(th * scale) + "px"; }
     draw();
