@@ -215,13 +215,17 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function av(src, name, cls){ return src ? '<img ' + (cls ? 'class="' + cls + '" ' : '') + 'src="' + esc(src) + '" alt="">' : '<span class="gl">' + esc((name || "?").charAt(0)) + '</span>'; }
   function kb(n){ return n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
   function stk(b){ var m = /^\[sticker:([a-z0-9-]+)\]$/.exec(b || ""); return m ? m[1] : ""; }
+  function linkify(t){
+    return esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g, '<a href="$1" target="_blank" rel="noopener nofollow ugc">$1</a>')
+      .replace(/(^|[\s(])((?:www\.)?xpertcreation\.com[^\s<]*)/gi, '$1<a href="https://$2" target="_blank" rel="noopener">$2</a>');
+  }
   function bubble(m){
     if (m.system) return '<div class="gsys">' + esc(m.body) + '</div>';
     var s = stk(m.body);
     return '<div class="gm' + (m.mine ? ' me' : '') + '">' + (m.mine ? '' : '<span class="who">' + esc(m.author) + '</span>')
       + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="gi" src="' + esc(m.image) + '" alt="" loading="lazy"></a>' : '')
       + (m.file ? '<a class="gf" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' \u00b7 ' + kb(m.file.size) + '</a>' : '')
-      + (s ? '<img class="gs" src="/stickers/' + s + '.svg" alt="Sticker">' : (m.body ? esc(m.body) : ''))
+      + (s ? '<img class="gs" src="/stickers/' + s + '.svg" alt="Sticker">' : (m.body ? linkify(m.body) : ''))
       + '<small>' + esc(m.when) + '</small></div>';
   }
   function add(list){
@@ -269,7 +273,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     sending = true;
     api("/groups/" + gid + "/", {method: "POST", body: fd || {message: body}}).then(function(r){
       sending = false;
-      if (r.ok) add([r.data.message]); else alert(r.data.detail || "Could not send.");
+      if (r.ok) add([r.data.message]); else alert(r.data.detail || (r.status === 413 ? "That file is too big for the server (8 MB at most)." : "Could not send it (error " + (r.status || "no connection") + ")."));
     });
   }
   function panel(html){ var p = document.getElementById("gp"); if (p) p.remove(); p = document.createElement("div"); p.id = "gp"; p.innerHTML = '<div class="gpn">' + html + '</div>'; document.body.appendChild(p); return p; }

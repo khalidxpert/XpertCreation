@@ -285,6 +285,10 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     $("selbar3").innerHTML = selecting ? '<div class="selbar3"><span>' + (n ? n + " selected" : "Tap chats to select them") + '</span>'
       + (n ? '<button data-seldel3>Delete</button>' : '') + '</div>' : "";
   }
+  function linkify(t){
+    return esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g, '<a href="$1" target="_blank" rel="noopener nofollow ugc">$1</a>')
+      .replace(/(^|[\s(])((?:www\.)?xpertcreation\.com[^\s<]*)/gi, '$1<a href="https://$2" target="_blank" rel="noopener">$2</a>');
+  }
   function bubble(m){
     if (m.system) return '<div class="sys3">\u23F1 ' + esc(m.body) + '</div>';
     var tick = m.mine ? ' <span class="tick3' + (m.id <= seenUpto ? ' seen' : '') + '" data-tick="' + m.id + '">'
@@ -293,7 +297,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
       + (m.file ? '<a class="cfile" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' <small>' + kb(m.file.size) + '</small></a>' : '')
       + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="cimg" src="' + esc(m.image) + '" alt="Photo" loading="lazy"></a>' : '')
       + (stk(m.body) ? '<img class="stk3" src="/stickers/' + stk(m.body) + '.svg" alt="Sticker">'
-                     : (m.body ? '<div class="cb">' + esc(m.body) + '</div>' : ''))
+                     : (m.body ? '<div class="cb">' + linkify(m.body) + '</div>' : ''))
       + '<small>' + esc(m.when) + tick + '</small></div>';
   }
   // ---- stickers and emoji ----
@@ -670,7 +674,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     api("/threads/" + current.id + "/", {method:"POST", body: fd}).then(function(r){
       sending = false; $("typing3").textContent = "";
       if (r.ok && r.data.message) addMessages([r.data.message]);
-      else alert((r.data && r.data.detail) || "Could not send the photo.");
+      else alert((r.data && r.data.detail) || (r.status === 413 ? "That file is too big for the server (8 MB at most)." : "Could not send it (error " + (r.status || "no connection") + ")."));
       $("msgs3").scrollTop = $("msgs3").scrollHeight;
     });
   });
