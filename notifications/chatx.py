@@ -166,6 +166,15 @@ def thread_export(request, pk):
             else:
                 skipped += with_media
                 txt = (txt + " " if txt else "") + "[photo]"
+        if m.voice:
+            path = os.path.join(FILES_DIR, m.voice)
+            nm = "voice-%d.%s" % (m.id, m.voice.rsplit(".", 1)[-1])
+            if with_media and os.path.exists(path) and total + os.path.getsize(path) <= ATTACH_LIMIT:
+                atts.append((nm, path)); total += os.path.getsize(path)
+                txt = (txt + " " if txt else "") + "[voice message %d:%02d attached: %s]" % (m.voice_secs // 60, m.voice_secs % 60, nm)
+            else:
+                skipped += with_media
+                txt = (txt + " " if txt else "") + "[voice message %d:%02d]" % (m.voice_secs // 60, m.voice_secs % 60)
         if m.attachment:
             path = os.path.join(FILES_DIR, m.attachment)
             if with_media and os.path.exists(path) and total + os.path.getsize(path) <= ATTACH_LIMIT:
@@ -181,3 +190,73 @@ def thread_export(request, pk):
     email = request.user.email
     shown = email[:2] + "***" + email[email.find("@"):] if "@" in email else "your email"
     return Response({"ok": True, "to": shown, "messages": len(rows), "attached": len(atts), "too_big": skipped})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def dm_pin(request, pk, mid):
+    """Pin or unpin a message in a one-to-one chat. Either person can; up to 3 pins."""
+    t = _thread(pk, request.user)
+    m = ChatMessage.objects.filter(id=mid, thread=t).first() if t else None
+    if not m:
+        return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+    m.pinned = not m.pinned
+    m.pinned_at = timezone.now() if m.pinned else None
+    m.save(update_fields=["pinned", "pinned_at"])
+    for old in ChatMessage.objects.filter(thread=t, pinned=True).order_by("-pinned_at")[3:]:
+        ChatMessage.objects.filter(pk=old.pk).update(pinned=False)
+    return Response({"pinned": m.pinned})
+
+
+# ---------------------------------------------------------------- voice messages
+
+VOICE_PER_DAY = 100
+VOICE_MAX = 3 * 1024 * 1024
+VOICE_TYPES = {"webm": "audio/webm", "ogg": "audio/ogg", "m4a": "audio/mp4"}
+
+
+def save_voice(f, prefix, secs):
+    """Check and store a voice note (WebM/Opus from Android and computers, MP4/AAC from iPhones)."""
+    if f.size > VOICE_MAX:
+        raise ValueError("That voice message is too long.")
+    head = f.read(16)
+    f.seek(0)
+    if head.startswith(b"\x1a\x45\xdf\xa3"):
+        ext = "webm"
+    elif head.startswith(b"OggS"):
+        ext = "ogg"
+    elif head[4:8] == b"ftyp":
+        ext = "m4a"
+    else:
+        raise ValueError("That does not look like a voice recording.")
+    try:
+        secs = max(1, min(int(float(secs or 1)), 180))
+    except (TypeError, ValueError):
+        secs = 1
+    rel = "voice/%s/%s.%s" % (prefix, secrets.token_hex(12), ext)
+    full = os.path.join(FILES_DIR, rel)
+    os.makedirs(os.path.dirname(full), exist_ok=True)
+    with open(full, "wb") as out:
+        for chunk in f.chunks():
+            out.write(chunk)
+    return rel, secs
+
+
+def serve_voice(rel):
+    """Let nginx send the file (it handles seeking, which phones need for audio), after our checks."""
+    from django.http import HttpResponse
+    ext = rel.rsplit(".", 1)[-1]
+    r = HttpResponse(content_type=VOICE_TYPES.get(ext, "application/octet-stream"))
+    r["X-Accel-Redirect"] = "/_xcvoice/" + rel[len("voice/"):]
+    r["Cache-Control"] = "private, max-age=86400"
+    r["X-Content-Type-Options"] = "nosniff"
+    return r
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def voice_dm(request, pk):
+    m = ChatMessage.objects.select_related("thread").filter(id=pk).exclude(voice="").first()
+    if not m or not m.thread.has(request.user):
+        return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+    return serve_voice(m.voice)

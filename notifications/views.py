@@ -132,7 +132,7 @@ def _url(path):
 
 def _msg(m, me):
     return {"id": m.id, "body": m.body, "image": _url(m.image), "mine": m.author_id == me.id,
-            "read": m.read, "system": m.system, "file": ({"name": m.attachment_name, "size": m.attachment_size, "url": "/api/notify/files/%d/" % m.id} if m.attachment else None), "when": m.created_at.strftime("%d %b, %H:%M")}
+            "voice": ({"url": "/api/notify/voice/%d/" % m.id, "secs": m.voice_secs} if m.voice else None), "pinned": m.pinned, "read": m.read, "system": m.system, "file": ({"name": m.attachment_name, "size": m.attachment_size, "url": "/api/notify/files/%d/" % m.id} if m.attachment else None), "when": m.created_at.strftime("%d %b, %H:%M")}
 
 
 DISAPPEAR = {0: "Off", 24: "24 hours", 168: "7 days", 2160: "90 days"}
@@ -215,7 +215,7 @@ def my_threads(request):
             "id": t.id, "context": t.context, "ref_id": t.ref_id,
             "with": _name(other), "avatar": _avatar(other),
             "about": titles.get(t.ref_id, "") if t.context == "donate" else CONTEXT_LABEL.get(t.context, ""),
-            "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "") or (("\U0001F4C4 " + last.attachment_name) if last.attachment else "")) if last else "",
+            "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "") or (("\U0001F4C4 " + last.attachment_name) if last.attachment else "") or ("\U0001F3A4 Voice message" if last.voice else "")) if last else "",
             "unread": unread, "disappear": t.disappear_hours,
             "updated": t.updated_at.strftime("%d %b, %H:%M"),
         })
@@ -270,6 +270,7 @@ def thread_detail(request, pk):
             "blocked": _blocked(request.user, other),
             "i_blocked": ChatBlock.objects.filter(blocker=request.user, blocked=other).exists(),
             "disappear": t.disappear_hours,
+            "pinned": [_msg(x, request.user) for x in _visible(t, request.user).filter(pinned=True).order_by("-pinned_at")[:3]],
             "contact": __import__("notifications.chatx", fromlist=["contact"]).contact(other),
         })
 
@@ -296,9 +297,18 @@ def thread_detail(request, pk):
             att = save_file(request.FILES["file"], t.id)
         except ValueError as e:
             return _err(str(e))
-    if not body and not rel and not att:
+    voice, vsecs = "", 0
+    if request.FILES.get("voice"):
+        from .chatx import VOICE_PER_DAY, save_voice
+        if ChatMessage.objects.filter(author=request.user, created_at__date=timezone.localdate()).exclude(voice="").count() >= VOICE_PER_DAY:
+            return _err("You have sent a lot of voice messages today. Try again tomorrow.")
+        try:
+            voice, vsecs = save_voice(request.FILES["voice"], "t%d" % t.id, request.data.get("secs"))
+        except ValueError as e:
+            return _err(str(e))
+    if not body and not rel and not att and not voice:
         return _err("Write something first.")
-    m = ChatMessage.objects.create(thread=t, author=request.user, body=body, image=rel,
+    m = ChatMessage.objects.create(thread=t, author=request.user, body=body, image=rel, voice=voice, voice_secs=vsecs,
                                    attachment=att[0] if att else "", attachment_name=att[1] if att else "", attachment_size=att[2] if att else 0)
     t.a_hidden = t.b_hidden = False
     t.save(update_fields=["a_hidden", "b_hidden", "updated_at"])

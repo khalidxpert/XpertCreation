@@ -152,6 +152,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
+<script src="/js/voice-1.js?v=1"></script>
 </head>
 <body>
 <header class="top">
@@ -178,12 +179,19 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .gm img.gi{max-width:100%;max-height:300px;border-radius:10px;display:block}
 .gm img.gs{width:140px}
 .gm .gf{display:block;padding:8px 10px;border-radius:10px;background:rgba(13,20,36,.06);color:inherit;font-weight:700;text-decoration:none}
+.gm.bot{background:#EEF2FF;border:1px solid #C7D2FE}.gm.bot .who{color:#4338CA}
+.gm.flash{outline:3px solid #FACC15}
+#gpins{display:none;align-items:center;gap:8px;margin:0 0 6px;padding:8px 12px;border-radius:12px;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);cursor:pointer;font-size:13.5px}
+#gpins b{white-space:nowrap}#gpins span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gmem em.mod{color:#4338CA;background:#E0E7FF}.gset textarea{min-height:70px}.gset .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.glogl{font-size:12.5px;border-bottom:1px solid var(--line,#E4E8F2);padding:5px 0}
 .gsys{align-self:center;font-size:12.5px;color:var(--ink-soft,#5A657C);background:var(--card,#fff);padding:4px 10px;border-radius:9px}
 .gty{min-height:18px;font-size:12px;color:var(--ink-soft,#5A657C);padding:2px 4px}
 .gform{display:flex;gap:6px;align-items:flex-end;margin-top:6px}
 .gform textarea{flex:1;border:1.5px solid var(--line,#E4E8F2);border-radius:14px;padding:10px 12px;font:inherit;font-size:15px;resize:none;min-height:46px;max-height:140px;background:var(--card,#fff);color:var(--ink,#0D1424)}
 .gform label,.gform button{width:46px;height:46px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;flex:0 0 46px}
 .gform label{background:transparent;color:var(--ink-soft,#5A657C)}.gform button{background:var(--brand,#1B4DFF);color:#fff;font-size:18px}
+.gform .gmic{background:var(--paper,#F6F7FB);color:var(--ink,#0D1424)}
 .gnote{text-align:center;color:var(--ink-soft,#5A657C);padding:10px;font-size:13.5px}
 #gp{position:fixed;inset:0;z-index:200;background:rgba(13,20,36,.45);display:flex;align-items:flex-end;justify-content:center}
 @media(min-width:700px){#gp{align-items:center}}
@@ -219,16 +227,26 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     return esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g, '<a href="$1" target="_blank" rel="noopener nofollow ugc">$1</a>')
       .replace(/(^|[\s(])((?:www\.)?xpertcreation\.com[^\s<]*)/gi, '$1<a href="https://$2" target="_blank" rel="noopener">$2</a>');
   }
+  var PINS = [], pinAt = 0, MSGS = {};
+  function showPins(list){
+    PINS = list || []; var el = document.getElementById("gpins"); if (!el) return;
+    if (!PINS.length){ el.style.display = "none"; return; }
+    pinAt = pinAt % PINS.length; var p = PINS[pinAt];
+    el.style.display = "flex";
+    el.innerHTML = '<b>\uD83D\uDCCC ' + (PINS.length > 1 ? (pinAt + 1) + '/' + PINS.length : 'Pinned') + '</b><span>' + esc(p.author ? p.author + ": " : "") + esc(p.body || (p.image ? "Photo" : p.file ? p.file.name : "")) + '</span>';
+  }
   function bubble(m){
     if (m.system) return '<div class="gsys">' + esc(m.body) + '</div>';
     var s = stk(m.body);
-    return '<div class="gm' + (m.mine ? ' me' : '') + '">' + (m.mine ? '' : '<span class="who">' + esc(m.author) + '</span>')
+    return '<div class="gm' + (m.mine ? ' me' : '') + (m.bot ? ' bot' : '') + '" data-mid="' + m.id + '">' + (m.mine ? '' : '<span class="who">' + (m.bot ? '\uD83E\uDD16 ' : '') + esc(m.author) + '</span>')
       + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="gi" src="' + esc(m.image) + '" alt="" loading="lazy"></a>' : '')
+      + (m.voice && window.XCVoice ? XCVoice.html(m.voice) : '')
       + (m.file ? '<a class="gf" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' \u00b7 ' + kb(m.file.size) + '</a>' : '')
       + (s ? '<img class="gs" src="/stickers/' + s + '.svg" alt="Sticker">' : (m.body ? linkify(m.body) : ''))
       + '<small>' + esc(m.when) + '</small></div>';
   }
   function add(list){
+    list.forEach(function(m){ MSGS[m.id] = m; });
     var log = document.getElementById("glog"); if (!log || !list.length) return;
     var stick = log.scrollHeight - log.scrollTop - log.clientHeight < 120;
     log.insertAdjacentHTML("beforeend", list.map(bubble).join(""));
@@ -243,27 +261,30 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function view(){
     var can = !G.only_admins_send || G.my_role === "admin";
-    box.innerHTML = header() + '<div class="glog" id="glog"></div><div class="gty" id="gty"></div>'
-      + (can ? '<div class="gform"><label title="Photo or document">\uD83D\uDCCE<input type="file" id="gfile" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv" style="display:none"></label>'
-             + '<textarea id="gq" rows="1" maxlength="2000" placeholder="Message"></textarea><button id="gsend" aria-label="Send">\u27A4</button></div>'
+    box.innerHTML = header() + '<div id="gpins"></div><div class="glog" id="glog"></div><div class="gty" id="gty"></div>'
+      + (can ? '<div class="gform" id="gform"><label title="Photo or document">\uD83D\uDCCE<input type="file" id="gfile" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv" style="display:none"></label>'
+             + '<textarea id="gq" rows="1" maxlength="2000" placeholder="Message"></textarea><button id="gmic" class="gmic" type="button" aria-label="Voice message">\uD83C\uDFA4</button><button id="gsend" aria-label="Send">\u27A4</button></div>'
              : '<p class="gnote">Only admins can send messages in this group.</p>');
   }
   function load(){
     api("/groups/" + gid + "/").then(function(r){
       if (!r.ok){ box.innerHTML = '<p class="gnote">' + esc(r.data.detail || "This group is not available.") + ' <a href="/chat">Back to chats</a></p>'; return; }
       G = r.data.group; last = 0; document.title = G.name + " \u2014 XpertCreation";
-      view(); add(r.data.messages);
+      view(); add(r.data.messages); showPins(r.data.pinned);
       var log = document.getElementById("glog"); log.scrollTop = log.scrollHeight;
       clearInterval(poll);
       poll = setInterval(function(){
         if (document.hidden || sending) return;
         api("/groups/" + gid + "/?after=" + last).then(function(x){
           if (!x.ok) return;
-          add(x.data.messages);
+          add(x.data.messages); showPins(x.data.pinned);
           var t = x.data.typing || []; document.getElementById("gty").textContent = t.length ? t.join(", ") + (t.length > 1 ? " are" : " is") + " typing\u2026" : "";
         });
       }, 3000);
     });
+  }
+  function pollNow(){
+    api("/groups/" + gid + "/?after=" + last).then(function(x){ if (x.ok){ add(x.data.messages); showPins(x.data.pinned); } });
   }
   function send(body, file){
     if (sending) return;
@@ -273,7 +294,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     sending = true;
     api("/groups/" + gid + "/", {method: "POST", body: fd || {message: body}}).then(function(r){
       sending = false;
-      if (r.ok) add([r.data.message]); else alert(r.data.detail || (r.status === 413 ? "That file is too big for the server (8 MB at most)." : "Could not send it (error " + (r.status || "no connection") + ")."));
+      if (r.ok){ add([r.data.message]); if (/^!/.test(body || "")) setTimeout(pollNow, 700); }
+      else alert(r.data.detail || (r.status === 413 ? "That file is too big for the server (8 MB at most)." : "Could not send it (error " + (r.status || "no connection") + ")."));
     });
   }
   function panel(html){ var p = document.getElementById("gp"); if (p) p.remove(); p = document.createElement("div"); p.id = "gp"; p.innerHTML = '<div class="gpn">' + html + '</div>'; document.body.appendChild(p); return p; }
@@ -284,10 +306,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
               + '<div class="gacts"><button class="gbtn" data-save>Save</button><label class="gbtn" style="margin:0">Change photo<input type="file" id="gphoto" accept="image/*" style="display:none"></label></div>' : '')
       + (admin ? '<label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="gonly"' + (G.only_admins_send ? " checked" : "") + '> Only admins can send messages</label>'
                + '<label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="gedit"' + (G.only_admins_edit ? " checked" : "") + '> Only admins can edit group info</label>'
-               + '<div class="gacts"><button class="gbtn" data-addp>+ Add people</button><button class="gbtn" data-link>Invite link</button></div><div id="glinkbox"></div>' : '')
+               + '<div class="gacts"><button class="gbtn" data-addp>+ Add people</button><button class="gbtn" data-link>Invite link</button><button class="gbtn" data-botset>\uD83E\uDD16 Bot</button></div><div id="glinkbox"></div>' : '')
       + '<h3 style="margin-top:16px">' + G.members.length + ' members</h3>' + G.members.map(function(m){
-          return '<div class="gmem">' + av(m.avatar, m.name) + '<span>' + esc(m.me ? "You" : m.name) + '</span>' + (m.role === "admin" ? '<em>Admin</em>' : '')
+          return '<div class="gmem">' + av(m.avatar, m.name) + '<span>' + esc(m.me ? "You" : m.name) + (m.muted ? ' \uD83D\uDD07' : '') + '</span>' + (m.role === "admin" ? '<em>Admin</em>' : (m.bot_mod ? '<em class="mod">Moderator</em>' : ''))
             + (admin && !m.me ? (m.role === "admin" ? '<button class="gbtn" data-mem="dismiss_admin" data-uid="' + m.id + '">Dismiss admin</button>' : '<button class="gbtn" data-mem="make_admin" data-uid="' + m.id + '">Make admin</button>')
+               + (m.role !== "admin" ? (m.bot_mod ? '<button class="gbtn" data-mem="bot_unmod" data-uid="' + m.id + '">Remove moderator</button>' : '<button class="gbtn" data-mem="bot_mod" data-uid="' + m.id + '">Make moderator</button>') : '')
                + '<button class="gbtn gred" data-mem="remove" data-uid="' + m.id + '">Remove</button>' : '') + '</div>'; }).join("")
       + '<div class="gacts"><button class="gbtn" data-mute>' + (G.muted ? "Unmute" : "Mute") + '</button><button class="gbtn gred" data-report>Report group</button><button class="gbtn gred" data-leave>Leave group</button></div>');
   }
@@ -302,6 +325,28 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   document.addEventListener("click", function(e){
     var t = e.target.closest && e.target.closest("[data-info],[data-close],[data-save],[data-addp],[data-doadd],[data-link],[data-mem],[data-mute],[data-report],[data-leave],[data-join],[data-linkact]");
     if (e.target.id === "gp"){ e.target.remove(); return; }
+    if (e.target.closest && e.target.closest("#gpins") && PINS.length){
+      var pm = PINS[pinAt], el = document.querySelector('.gm[data-mid="' + pm.id + '"]');
+      if (el){ el.scrollIntoView({block: "center"}); el.classList.add("flash"); setTimeout(function(){ el.classList.remove("flash"); }, 1500); }
+      pinAt++; showPins(PINS); return;
+    }
+    var bub = e.target.closest && e.target.closest(".gm[data-mid]");
+    if (bub && !e.target.closest("a") && !document.getElementById("gp")){
+      var mid = +bub.getAttribute("data-mid"), isPinned = PINS.some(function(p){ return p.id === mid; });
+      var canPin = !(G.bot && G.bot.pin_admins_only) || G.my_role === "admin";
+      var txt = (MSGS[mid] && MSGS[mid].body) || "";
+      panel('<div class="gacts" style="flex-direction:column">' + (canPin ? '<button class="gbtn" data-pinmsg="' + mid + '">' + (isPinned ? "Unpin" : "\uD83D\uDCCC Pin") + '</button>' : '')
+        + '<button class="gbtn" data-copytxt>Copy text</button><button class="gbtn" data-close>Cancel</button></div>');
+      document.querySelector("[data-copytxt]").onclick = function(){ if (navigator.clipboard) navigator.clipboard.writeText(txt); document.getElementById("gp").remove(); };
+      return;
+    }
+    var pb = e.target.closest && e.target.closest("[data-pinmsg]");
+    if (pb){ api("/groups/" + gid + "/messages/" + pb.getAttribute("data-pinmsg") + "/pin/", {method: "POST", body: {}}).then(function(r){ document.getElementById("gp").remove(); if (!r.ok) alert(r.data.detail || "Could not pin."); pollNow(); }); return; }
+    if (e.target.closest && e.target.closest("[data-botset]")){ botPanel(); return; }
+    if (e.target.closest && e.target.closest("[data-botsave]")){ botSave(); return; }
+    if (e.target.closest && e.target.closest("[data-timeradd]")){ timerAdd(); return; }
+    var td = e.target.closest && e.target.closest("[data-timerdel]");
+    if (td){ api("/groups/" + gid + "/bot/timers/", {method: "POST", body: {"delete": +td.getAttribute("data-timerdel")}}).then(function(r){ if (r.ok) botPanel(r.data); }); return; }
     if (e.target.id === "gsend"){ var q = document.getElementById("gq"); send(q.value.trim()); q.value = ""; return; }
     if (!t) return;
     if (t.hasAttribute("data-info")) return info();
@@ -344,6 +389,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   document.addEventListener("keydown", function(e){ if (e.target.id === "gq" && e.key === "Enter" && !e.shiftKey){ e.preventDefault(); send(e.target.value.trim()); e.target.value = ""; } });
   document.addEventListener("input", function(e){
     if (e.target.id !== "gq") return;
+    if (e.target.value === "!") document.getElementById("gty").textContent = "\uD83E\uDD16 Bot command \u2014 type !help to see them all";
     e.target.style.height = "auto"; e.target.style.height = Math.min(140, e.target.scrollHeight) + "px";
     if (Date.now() - typedAt > 3000){ typedAt = Date.now(); api("/groups/" + gid + "/typing/", {method: "POST", body: {}}); }
   });
@@ -351,6 +397,42 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (e.target.id === "gfile" && e.target.files[0]){ var f = e.target.files[0]; e.target.value = ""; if (f.size > (/^image\//.test(f.type) ? 2 : 5) * 1048576){ alert("That file is too big."); return; } send(document.getElementById("gq").value.trim(), f); document.getElementById("gq").value = ""; }
     if (e.target.id === "gphoto" && e.target.files[0]){ var fd = new FormData(); fd.append("photo", e.target.files[0]); api("/groups/" + gid + "/settings/", {method: "POST", body: fd}).then(function(r){ if (r.ok){ G = r.data; info(); } else alert(r.data.detail || "Could not change the photo."); }); }
   });
+  var HELP = "Everyone: !help !rules !admins !ping !date !hijri !time [city] !weather <city> !prayer [city] !dns <domain> [MX|TXT|NS] !calc <sum> !roll [2d6] !coin !8ball <question> !joke !quote !seen @name !whois @name !stats\nModerators and admins: !warn !mute @name [30m|2h|1d] !unmute !kick !ban !unban !bans !pin !unpin !clear [10] !topic <text> !lock !unlock";
+  function botPanel(data){
+    if (!data){ api("/groups/" + gid + "/bot/").then(function(r){ if (r.ok) botPanel(r.data); else alert(r.data.detail || "Only admins can set up the bot."); }); return; }
+    var b = data.bot;
+    function chk(k, label){ return '<label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" data-bk="' + k + '"' + (b[k] ? " checked" : "") + '> ' + label + '</label>'; }
+    function num(k, label){ return '<div><label>' + label + '</label><input type="text" inputmode="numeric" data-bk="' + k + '" value="' + b[k] + '"></div>'; }
+    panel('<div style="text-align:right"><button class="gbtn" data-close>\u00d7</button></div><h3>\uD83E\uDD16 Group bot</h3><div class="gset">'
+      + chk("enabled", "Bot is on") + '<label>Bot name</label><input type="text" data-bk="name" maxlength="30" value="' + esc(b.name) + '">'
+      + '<label>Greeting ({name} and {group} are filled in)</label><textarea data-bk="greeting" maxlength="300">' + esc(b.greeting) + '</textarea>'
+      + '<label>Rules (shown with !rules)</label><textarea data-bk="rules" maxlength="1500">' + esc(b.rules) + '</textarea>'
+      + '<label>Words not allowed (comma or one per line)</label><textarea data-bk="bad_words" maxlength="3000" placeholder="word1, word2">' + esc(b.bad_words) + '</textarea>'
+      + '<div class="two">' + num("warn_limit", "Warnings before mute") + num("mute_minutes", "Mute length (minutes)") + num("flood_count", "Flood: messages") + num("flood_seconds", "...within seconds") + '</div>'
+      + chk("links_admins_only", "Only admins and moderators can post links") + chk("pin_admins_only", "Only admins can pin messages")
+      + '<div class="gacts"><button class="gbtn" data-botsave style="background:var(--brand);color:#fff;border-color:var(--brand)">Save bot settings</button></div><div id="botmsg"></div>'
+      + '<h3 style="margin-top:18px">\u23F0 Timed messages (up to 5)</h3>' + (data.timers.length ? data.timers.map(function(t){ return '<div class="glogl">' + esc(t.text) + '<br><small>' + (t.daily_at ? "Every day at " + t.daily_at : "Every " + t.every_hours + " hours") + ' \u00b7 next ' + esc(t.next) + '</small> <button class="gbtn" data-timerdel="' + t.id + '">Delete</button></div>'; }).join("") : '<p class="gnote" style="text-align:left">None yet.</p>')
+      + '<label>New message</label><textarea id="tmtext" maxlength="500" placeholder="Good morning everyone! \u2600\uFE0F"></textarea><div class="two"><div><label>Every day at</label><input type="text" id="tmat" placeholder="09:00"></div><div><label>or every N hours</label><input type="text" id="tmev" inputmode="numeric" placeholder="6"></div></div>'
+      + '<div class="gacts"><button class="gbtn" data-timeradd>Add timed message</button></div>'
+      + '<h3 style="margin-top:18px">\u26D4 Banned</h3><p class="gnote" style="text-align:left">' + (data.bans.length ? data.bans.map(function(x){ return esc(x.name) + (x.reason ? " (" + esc(x.reason) + ")" : ""); }).join(", ") + " \u2014 use !unban name in the group" : "Nobody") + '</p>'
+      + '<h3 style="margin-top:18px">\uD83D\uDCDC Bot log</h3>' + (data.log.length ? data.log.map(function(l){ return '<div class="glogl"><b>' + esc(l.action) + '</b> ' + esc(l.target) + (l.reason ? " \u2014 " + esc(l.reason) : "") + '<br><small>' + esc(l.when) + ' by ' + esc(l.by) + '</small></div>'; }).join("") : '<p class="gnote" style="text-align:left">Nothing yet.</p>')
+      + '<h3 style="margin-top:18px">Commands</h3><p class="gnote" style="text-align:left;white-space:pre-wrap">' + esc(HELP) + '</p>'
+      + '<p class="gnote" style="text-align:left">Moderators: in group info, tap <b>Make moderator</b> on a member. Moderators can use the moderator commands but can\u2019t change these settings.</p></div>');
+  }
+  function botSave(){
+    var body = {};
+    [].forEach.call(document.querySelectorAll("[data-bk]"), function(el){ body[el.getAttribute("data-bk")] = el.type === "checkbox" ? el.checked : el.value; });
+    api("/groups/" + gid + "/bot/", {method: "POST", body: body}).then(function(r){ document.getElementById("botmsg").innerHTML = '<p class="gnote" style="text-align:left">' + (r.ok ? "Saved \u2714" : esc(r.data.detail || "Could not save.")) + '</p>'; });
+  }
+  function timerAdd(){
+    var t = document.getElementById("tmtext").value.trim(), at = document.getElementById("tmat").value.trim(), ev = document.getElementById("tmev").value.trim();
+    api("/groups/" + gid + "/bot/timers/", {method: "POST", body: at ? {text: t, daily_at: at} : {text: t, every_hours: ev || 24}}).then(function(r){ if (r.ok) botPanel(r.data); else alert(r.data.detail || "Could not add."); });
+  }
+  if (window.XCVoice) XCVoice.recorder({mic: "gmic", box: "gform", upload: function(fd){
+    return api("/groups/" + gid + "/", {method: "POST", body: fd}).then(function(r){
+      if (r.ok) add([r.data.message]); else alert(r.data.detail || "Could not send the voice message (error " + (r.status || "no connection") + ").");
+    });
+  }});
   function joinView(code){
     api("/groups/join/" + code + "/").then(function(r){
       if (!r.ok){ box.innerHTML = '<p class="gnote">' + esc(r.data.detail || "This invite link is not valid.") + '</p>'; return; }

@@ -81,6 +81,10 @@ class ChatMessage(models.Model):
     read = models.BooleanField(default=False)
     image = models.CharField(max_length=160, blank=True, default="")
     system = models.BooleanField(default=False)
+    pinned = models.BooleanField(default=False)
+    pinned_at = models.DateTimeField(null=True, blank=True)
+    voice = models.CharField(max_length=200, blank=True, default="")
+    voice_secs = models.PositiveSmallIntegerField(default=0)
     attachment = models.CharField(max_length=200, blank=True, default="")
     attachment_name = models.CharField(max_length=120, blank=True, default="")
     attachment_size = models.PositiveIntegerField(default=0)
@@ -162,6 +166,11 @@ class GroupMember(models.Model):
     role = models.CharField(max_length=8, choices=ROLES, default="member")
     last_read_id = models.PositiveIntegerField(default=0)
     muted = models.BooleanField(default=False)
+    bot_mod = models.BooleanField(default=False)
+    warnings = models.PositiveSmallIntegerField(default=0)
+    muted_until = models.DateTimeField(null=True, blank=True)
+    last_seen = models.DateTimeField(null=True, blank=True)
+    msg_count = models.PositiveIntegerField(default=0)
     joined_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -189,6 +198,12 @@ class GroupMessage(models.Model):
     attachment_name = models.CharField(max_length=120, blank=True, default="")
     attachment_size = models.PositiveIntegerField(default=0)
     system = models.BooleanField(default=False)
+    bot = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False)
+    pinned = models.BooleanField(default=False)
+    pinned_at = models.DateTimeField(null=True, blank=True)
+    voice = models.CharField(max_length=200, blank=True, default="")
+    voice_secs = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -200,3 +215,51 @@ class GroupPrivacy(models.Model):
     CHOICES = [("everyone", "Everyone"), ("connections", "My connections"), ("nobody", "Nobody")]
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="group_privacy")
     who = models.CharField(max_length=12, choices=CHOICES, default="connections")
+
+
+class GroupBot(models.Model):
+    """The group's bot: greets people, keeps order, answers !commands. Set up by the group's admins."""
+    group = models.OneToOneField(ChatGroup, on_delete=models.CASCADE, related_name="bot")
+    enabled = models.BooleanField(default=True)
+    name = models.CharField(max_length=30, default="XpertBot")
+    greeting = models.CharField(max_length=300, default="Welcome to {group}, {name}! \U0001F44B Type !help to see what I can do, and !rules for the group rules.")
+    rules = models.TextField(max_length=1500, blank=True, default="1. Be kind and respectful.\n2. No spam or advertising.\n3. No abuse or bad language.")
+    bad_words = models.TextField(max_length=3000, blank=True, default="")
+    warn_limit = models.PositiveSmallIntegerField(default=3)
+    mute_minutes = models.PositiveSmallIntegerField(default=30)
+    flood_count = models.PositiveSmallIntegerField(default=6)
+    flood_seconds = models.PositiveSmallIntegerField(default=10)
+    links_admins_only = models.BooleanField(default=False)
+    pin_admins_only = models.BooleanField(default=False)
+
+
+class GroupBan(models.Model):
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, related_name="bans")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+")
+    reason = models.CharField(max_length=200, blank=True, default="")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = [("group", "user")]
+
+
+class GroupBotTimer(models.Model):
+    """A message the bot posts by itself: every N hours, or every day at a set time."""
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, related_name="bot_timers")
+    text = models.CharField(max_length=500)
+    every_hours = models.PositiveSmallIntegerField(default=0)
+    daily_at = models.TimeField(null=True, blank=True)
+    next_run = models.DateTimeField(db_index=True)
+
+
+class GroupBotLog(models.Model):
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, related_name="bot_log")
+    action = models.CharField(max_length=20)
+    target = models.CharField(max_length=120, blank=True, default="")
+    by = models.CharField(max_length=120, blank=True, default="")
+    reason = models.CharField(max_length=200, blank=True, default="")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-id"]

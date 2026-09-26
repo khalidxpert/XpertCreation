@@ -172,6 +172,9 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
 .wall3{display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:600}
 .ginv3{margin:10px 0;padding:11px 14px;border-radius:14px;background:#DBEAFE;color:#1E40AF;font-weight:700;cursor:pointer}
 body.inchat #grp3,body.inchat #gprivacy3{display:none}
+#pins3{display:none;align-items:center;gap:8px;margin:0 0 6px;padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);cursor:pointer;font-size:13.5px}
+#pins3 b{white-space:nowrap}#pins3 span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msg8.flash3{outline:3px solid #FACC15}
 .empty8{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px}
 
 /* ---------- bell ---------- */
@@ -201,6 +204,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 .nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
 .nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
 </style>
+<script src="/js/voice-1.js?v=1"></script>
 </head>
 <body>
 <header class="top">
@@ -225,6 +229,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     <div class="thd3"><button class="back3" data-back3>&larr; All chats</button><span style="flex:1"></span>
       <button class="more3" data-more3 aria-label="Block or report">&#8942;</button></div>
     <div class="menu3" id="menu3"></div>
+    <div id="pins3"></div>
     <div class="msgs2" id="msgs3"></div>
     <div class="typing3" id="typing3"></div>
     <div class="blockedbar" id="blockedbar"></div>
@@ -233,6 +238,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
       <button class="att3" type="button" data-emo3 title="Emoji and stickers" aria-label="Emoji and stickers"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.2 2.1 1.8 3.5 1.8s2.5-.6 3.5-1.8"/><circle cx="9" cy="10" r=".6" fill="currentColor"/><circle cx="15" cy="10" r=".6" fill="currentColor"/></svg></button>
       <label class="att3" title="Send a photo" aria-label="Send a photo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.4 3.4 0 0 1 4.8 4.8l-8.4 8.4a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg><input type="file" id="cphoto" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv" style="display:none"></label>
       <textarea id="cinput" placeholder="Type a message"></textarea>
+      <button class="att3" type="button" id="cmic" title="Voice message" aria-label="Record a voice message"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v4"/></svg></button>
       <button id="csend" aria-label="Send"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3.4 20.4l17.4-7.5a1 1 0 0 0 0-1.8L3.4 3.6a.9.9 0 0 0-1.3 1l1.8 6.4 9.1 1-9.1 1-1.8 6.4a.9.9 0 0 0 1.3 1z"/></svg></button>
     </div>
   </div>
@@ -289,11 +295,21 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     return esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g, '<a href="$1" target="_blank" rel="noopener nofollow ugc">$1</a>')
       .replace(/(^|[\s(])((?:www\.)?xpertcreation\.com[^\s<]*)/gi, '$1<a href="https://$2" target="_blank" rel="noopener">$2</a>');
   }
+  var MSG3 = {}, PINS3 = [], pin3At = 0;
+  function renderPins3(list){
+    PINS3 = list || []; var el = $("pins3"); if (!el) return;
+    if (!PINS3.length){ el.style.display = "none"; return; }
+    pin3At = pin3At % PINS3.length; var p = PINS3[pin3At];
+    el.style.display = "flex";
+    el.innerHTML = '<b>\uD83D\uDCCC ' + (PINS3.length > 1 ? (pin3At + 1) + '/' + PINS3.length : 'Pinned') + '</b><span>' + esc(p.body && p.body.indexOf("[sticker:") !== 0 ? p.body : (p.image ? "Photo" : p.file ? p.file.name : "Sticker")) + '</span>';
+  }
   function bubble(m){
+    MSG3[m.id] = m;
     if (m.system) return '<div class="sys3">\u23F1 ' + esc(m.body) + '</div>';
     var tick = m.mine ? ' <span class="tick3' + (m.id <= seenUpto ? ' seen' : '') + '" data-tick="' + m.id + '">'
       + (m.id <= seenUpto ? "\u2713\u2713" : "\u2713") + '</span>' : "";
-    return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + (stk(m.body) ? " stkmsg" : "") + '">'
+    return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + (stk(m.body) ? " stkmsg" : "") + '" data-mid="' + m.id + '">'
+      + (m.voice && window.XCVoice ? XCVoice.html(m.voice) : '')
       + (m.file ? '<a class="cfile" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' <small>' + kb(m.file.size) + '</small></a>' : '')
       + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="cimg" src="' + esc(m.image) + '" alt="Photo" loading="lazy"></a>' : '')
       + (stk(m.body) ? '<img class="stk3" src="/stickers/' + stk(m.body) + '.svg" alt="Sticker">'
@@ -456,7 +472,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     stopPoll();
     return api("/threads/" + id + "/").then(function(r){
       if (!r.ok) return;
-      current = r.data; lastId = 0; seenUpto = r.data.seen_upto || 0;
+      current = r.data; lastId = 0; seenUpto = r.data.seen_upto || 0; pin3At = 0; renderPins3(r.data.pinned || []);
       $("threadbox").classList.add("on");
       applyWall();
       document.body.classList.add("inchat");
@@ -490,6 +506,13 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     });
   }
 
+  if (window.XCVoice) XCVoice.recorder({mic: "cmic", box: "reply4", upload: function(fd){
+    if (!current) return;
+    return api("/threads/" + current.id + "/", {method: "POST", body: fd}).then(function(r){
+      if (r.ok && r.data.message){ addMessages([r.data.message]); $("msgs3").scrollTop = $("msgs3").scrollHeight; }
+      else alert((r.data && r.data.detail) || "Could not send the voice message (error " + (r.status || "no connection") + ").");
+    });
+  }});
   document.addEventListener("click", function(e){
     if (e.target.closest("#sel3")){ selecting = !selecting; sel = {}; e.target.closest("#sel3").textContent = selecting ? "Cancel" : "Select"; drawSel(); renderList(); return; }
     if (e.target.closest("[data-seldel3]")){
@@ -648,6 +671,30 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     if (gi){
       api("/groups/invites/" + gi.getAttribute("data-id") + "/" + gi.getAttribute("data-ginv") + "/", {method: "POST", body: {}}).then(function(r){
         if (r.ok && r.data.status === "accepted") location.href = "/group/" + r.data.group_id; else { invitesPanel(); loadGroups(); }
+      });
+      return;
+    }
+    if (e.target.closest("#pins3") && PINS3.length){
+      var pm3 = PINS3[pin3At], el3 = document.querySelector('.msg8[data-mid="' + pm3.id + '"]');
+      if (el3){ el3.scrollIntoView({block: "center"}); el3.classList.add("flash3"); setTimeout(function(){ el3.classList.remove("flash3"); }, 1500); }
+      pin3At++; renderPins3(PINS3); return;
+    }
+    var bb3 = e.target.closest(".msg8[data-mid]");
+    if (bb3 && current && !e.target.closest("a") && !document.body.classList.contains("selmode") && !$("panel3")){
+      var id3 = +bb3.getAttribute("data-mid"), isP = PINS3.some(function(p){ return p.id === id3; }), m3 = MSG3[id3] || {};
+      panel("Message", '<div class="ct3" style="padding:0"><button class="pbt3" data-pin3="' + id3 + '">' + (isP ? "Unpin" : "\uD83D\uDCCC Pin") + '</button>'
+        + (m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-copy="' + esc(m3.body) + '">Copy text</button>' : '') + '<button class="pbt3 ghost" data-pclose>Cancel</button></div>');
+      return;
+    }
+    var pn3 = e.target.closest("[data-pin3]");
+    if (pn3 && current){
+      var pid = +pn3.getAttribute("data-pin3");
+      api("/threads/" + current.id + "/messages/" + pid + "/pin/", {method: "POST", body: {}}).then(function(r){
+        var pc = $("panel3"); if (pc) pc.remove();
+        if (!r.ok){ alert((r.data && r.data.detail) || "Could not pin."); return; }
+        PINS3 = PINS3.filter(function(p){ return p.id !== pid; });
+        if (r.data.pinned && MSG3[pid]) PINS3.unshift(MSG3[pid]);
+        pin3At = 0; renderPins3(PINS3.slice(0, 3));
       });
       return;
     }
