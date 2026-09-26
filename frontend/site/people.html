@@ -166,6 +166,79 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 <div class="wrap net">
   <h1>Connect</h1>
   <style>.hubbar{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 14px}.hubbar a{padding:8px 14px;border-radius:99px;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);font-weight:700;font-size:13.5px;text-decoration:none;color:var(--ink,#0D1424)}.hubbar a.on{background:var(--ink,#0D1424);color:#fff;border-color:var(--ink,#0D1424)}</style><div class="hubbar"><a href="/feed">Posts</a><a href="/people" class="on">People</a><a href="/me/profile#connections">My network</a><a href="/me/profile">My profile</a></div>
+<style>
+.ffc{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:14px 16px;margin:0 0 14px}
+.ffc h3{margin:0 0 4px;font-size:17px}.ffc p{margin:4px 0;font-size:13.5px;color:var(--ink-soft,#5A657C)}
+.ffc .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ffc button{padding:10px 14px;border-radius:12px;border:1.5px solid var(--line,#E4E8F2);background:var(--card,#fff);font:inherit;font-weight:700;cursor:pointer;color:var(--ink,#0D1424)}
+.ffc button.pri{background:var(--brand,#1B4DFF);border-color:var(--brand,#1B4DFF);color:#fff}
+.ffc textarea{width:100%;box-sizing:border-box;min-height:70px;margin-top:8px;padding:10px 12px;border:1.5px solid var(--line,#E4E8F2);border-radius:12px;font:inherit;background:var(--card,#fff);color:var(--ink,#0D1424)}
+.ffr{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line,#E4E8F2)}
+.ffr img,.ffr .l{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--paper,#F6F7FB);display:grid;place-items:center;font-weight:800}
+.ffr span{flex:1;min-width:0}.ffr small{display:block;color:var(--ink-soft,#5A657C);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ffr a{padding:8px 12px;border-radius:10px;background:var(--brand,#1B4DFF);color:#fff;text-decoration:none;font-weight:700;font-size:13px}
+.ffc label{display:flex;gap:8px;align-items:center;font-size:13.5px;margin:4px 0}
+</style>
+<div class="ffc" id="ffc">
+  <h3>&#128199; Find people you know</h3>
+  <p>See which of your contacts are already on XpertCreation. Your contacts are checked once and then forgotten: we never save them and never message them.</p>
+  <div class="acts"><button class="pri" id="ffpick" hidden>Pick from my phone contacts</button><button id="fftype">Type emails or numbers</button><button id="ffpriv">My privacy</button></div>
+  <div id="ffin" hidden><textarea id="fftext" placeholder="ali@gmail.com, 0300 1234567 &#10;one per line or separated by commas"></textarea><div class="acts"><button class="pri" id="ffgo">Check</button></div></div>
+  <div id="ffpv" hidden>
+    <label><input type="checkbox" id="ffe"> Let people who have my email address find me</label>
+    <label><input type="checkbox" id="ffp"> Let people who have my phone or WhatsApp number (from my profile) find me</label>
+  </div>
+  <div id="ffout"></div>
+</div>
+<script>
+(function(){
+  "use strict";
+  function $(i){ return document.getElementById(i); }
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function cookie(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function call(p, body){
+    return fetch("/api/find/" + p, {method: body ? "POST" : "GET", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": cookie("xc_csrf")}, body: body ? JSON.stringify(body) : undefined})
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, status: r.status, data: d}; }); });
+  }
+  function show(r){
+    var o = $("ffout");
+    if (r.status === 403 || r.status === 401){ o.innerHTML = '<p><a href="/login">Sign in</a> to find people you know.</p>'; return; }
+    if (!r.ok){ o.innerHTML = '<p style="color:#B91C1C">' + esc(r.data.detail || "Could not check.") + '</p>'; return; }
+    var f = r.data.found || [];
+    o.innerHTML = '<p><b>' + f.length + '</b> of ' + r.data.checked + ' checked ' + (f.length === 1 ? 'is' : 'are') + ' on XpertCreation.' + (r.data.checks_left != null ? ' (' + r.data.checks_left + ' checks left today)' : '') + '</p>'
+      + f.map(function(x){ return '<div class="ffr">' + (x.avatar ? '<img src="' + esc(x.avatar) + '" alt="">' : '<span class="l">' + esc(x.name.charAt(0)) + '</span>')
+        + '<span><b>' + esc(x.name) + '</b><small>' + esc(x.headline || "") + '</small></span>' + (x.slug ? '<a href="/in/' + encodeURIComponent(x.slug) + '">View</a>' : '') + '</div>'; }).join("")
+      + (f.length ? '' : '<p>None of them yet. Invite them: share <b>xpertcreation.com</b> with them.</p>');
+  }
+  function check(emails, phones){ $("ffout").innerHTML = "<p>Checking\u2026</p>"; call("contacts/", {emails: emails, phones: phones}).then(show); }
+  if ("contacts" in navigator && "ContactsManager" in window) $("ffpick").hidden = false;
+  $("ffpick").onclick = function(){
+    navigator.contacts.select(["email", "tel"], {multiple: true}).then(function(list){
+      var e = [], p = [];
+      (list || []).forEach(function(c){ (c.email || []).forEach(function(x){ e.push(x); }); (c.tel || []).forEach(function(x){ p.push(x); }); });
+      if (e.length || p.length) check(e.slice(0, 300), p.slice(0, 300));
+    }).catch(function(){});
+  };
+  $("fftype").onclick = function(){ $("ffin").hidden = !$("ffin").hidden; };
+  $("ffgo").onclick = function(){
+    var e = [], p = [];
+    $("fftext").value.split(/[\n,;]+/).forEach(function(line){
+      var rest = [];
+      line.trim().split(/\s+/).forEach(function(t){ if (t.indexOf("@") > 0) e.push(t); else rest.push(t); });
+      var num = rest.join(" ").trim();
+      if (num.replace(/\D/g, "").length >= 10) p.push(num);
+    });
+    if (!e.length && !p.length){ $("ffout").innerHTML = "<p>Type at least one email address or phone number.</p>"; return; }
+    check(e, p);
+  };
+  $("ffpriv").onclick = function(){
+    $("ffpv").hidden = !$("ffpv").hidden;
+    if (!$("ffpv").hidden) call("settings/").then(function(r){ if (!r.ok){ $("ffout").innerHTML = '<p><a href="/login">Sign in</a> to change this.</p>'; return; } $("ffe").checked = r.data.by_email; $("ffp").checked = r.data.by_phone; });
+  };
+  ["ffe", "ffp"].forEach(function(id){ $(id).onchange = function(){ call("settings/", {by_email: $("ffe").checked, by_phone: $("ffp").checked}); }; });
+})();
+</script>
+
   <p class="lead">Find members by skill, city or name. Connect, follow and endorse each other.</p>
   <div class="card" style="display:grid;gap:10px">
     <input id="q" placeholder="Search a name, skill or city" maxlength="60">
