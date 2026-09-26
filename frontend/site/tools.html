@@ -10,7 +10,7 @@
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="XpertCreation">
-<meta property="og:title" content="29 free calculators and everyday tools — XpertCreation">
+<meta property="og:title" content="78 free calculators and everyday tools — XpertCreation">
 <meta property="og:description" content="Prayer times for your city, a world clock, a passport photo maker, WhatsApp link generator, age, BMI, loan, zakat, marla to square feet, currency and a scientific calculator. No sign-up, works offline.">
 <meta property="og:url" content="https://xpertcreation.com/tools">
 <meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
@@ -18,10 +18,10 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="29 free calculators and everyday tools — XpertCreation">
+<meta name="twitter:title" content="78 free calculators and everyday tools — XpertCreation">
 <meta name="twitter:description" content="Prayer times for your city, a world clock, a passport photo maker, WhatsApp link generator, age, BMI, loan, zakat, marla to square feet, currency and a scientific calculator. No sign-up, works offline.">
 <meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"29 free calculators and everyday tools","url":"https://xpertcreation.com/tools","description":"Prayer times for your city, a world clock, a passport photo maker, WhatsApp link generator, age, BMI, loan, zakat, marla to square feet, currency and a scientific calculator. No sign-up, works offline.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"78 free calculators and everyday tools","url":"https://xpertcreation.com/tools","description":"Prayer times for your city, a world clock, a passport photo maker, WhatsApp link generator, age, BMI, loan, zakat, marla to square feet, currency and a scientific calculator. No sign-up, works offline.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 <!-- seo:end -->
 <link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
 <link rel="manifest" href="/manifest.json">
@@ -1149,14 +1149,14 @@ var Tools = (function(){
   function waiting(){ show('<p class="note3">Checking\u2026</p>'); }
   (function(){
     var st = document.createElement("style");
-    st.textContent = ".gwrap{display:flex;align-items:center;gap:6px}" +
+    st.textContent = "html,body{overflow-x:hidden}.gwrap{display:flex;align-items:center;gap:6px;max-width:100%;overflow:hidden}" + ".rows2 .r3{min-width:0;gap:10px}.rows2 .r3 span{flex:0 0 auto}.rows2 .r3 b{min-width:0;overflow-wrap:anywhere;word-break:break-word;text-align:right}" +
       ".gwrap .groups{flex:1;min-width:0;display:flex;flex-wrap:nowrap !important;overflow-x:auto;scroll-behavior:smooth;" +
       "scrollbar-width:none;-webkit-overflow-scrolling:touch}.gwrap .groups::-webkit-scrollbar{display:none}" +
       ".gwrap .gbtn{flex:0 0 auto;white-space:nowrap}" +
       ".garr{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line,#E4E8F2);" +
       "background:var(--card,#fff);font-size:20px;line-height:1;cursor:pointer;color:var(--ink,#0D1424)}";
     document.head.appendChild(st);
-    function centre(){ var on = document.querySelector("#groupsbar .gbtn.on"); if (on && on.scrollIntoView) on.scrollIntoView({inline: "center", block: "nearest"}); }
+    function centre(){ var bar = document.getElementById("groupsbar"), on = bar && bar.querySelector(".gbtn.on"); if (on) bar.scrollLeft = on.offsetLeft - (bar.clientWidth - on.offsetWidth) / 2; }
     document.addEventListener("click", function(e){
       var a = e.target.closest && e.target.closest("[data-gs]");
       if (a){ var bar = document.getElementById("groupsbar"); if (bar) bar.scrollBy({left: 220 * +a.getAttribute("data-gs"), behavior: "smooth"}); return; }
