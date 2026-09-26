@@ -1719,26 +1719,147 @@ var Tools = (function(){
     }},
 
   { id:"qr", g:"text", e:"\u25A6", c:"#0D1424",
-    name:"QR code", blurb:"For a link, a number, any text",
-    keys:"qr code barcode scan link share",
+    name:"QR code", blurb:"Link, text or a visiting card (vCard)",
+    keys:"qr code barcode scan link share visiting card business card vcard contact whatsapp",
     form: function(){
-      return '<div class="f"><label for="qt">Text or link</label>'
-        + '<input id="qt" placeholder="https://xpertcreation.com"></div>'
+      // Made on this device (the qrgen library): nothing typed here is sent anywhere.
+      if (!window.__xcqr) window.__xcqr = (function(){
+        var FIELDS = [["qn", "Full name", "Khalid Shah", "text"], ["qd", "Designation", "Director", "text"], ["qc", "Company", "XpertCreation", "text"],
+                      ["qp", "Phone", "+92 300 1234567", "tel"], ["qw", "WhatsApp", "+92 300 1234567", "tel"], ["qe", "Email", "name@example.com", "email"],
+                      ["qu", "Website", "https://xpertcreation.com", "url"], ["qa", "Address", "Lahore, Pakistan", "text"]];
+        var KEY = "xc_qr_card", last = null;
+        function g(id){ var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+        function vesc(s){ return String(s).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;"); }
+        function lib(cb){
+          if (window.qrcode) return cb();
+          var s = document.createElement("script"); s.src = "/js/qrgen-1.js?v=1"; s.onload = cb;
+          s.onerror = function(){ cb(new Error("Could not load the QR maker. Check the connection and try again.")); };
+          document.head.appendChild(s);
+        }
+        function custom(){ return [].map.call(document.querySelectorAll(".qcf"), function(r){ return [r.querySelector(".qcl").value.trim(), r.querySelector(".qcv").value.trim()]; }).filter(function(x){ return x[0] || x[1]; }); }
+        function vcard(){
+          var name = g("qn");
+          if (!name && !g("qc")) throw new Error("Type at least a name or a company.");
+          var parts = name.split(/\s+/), last = parts.length > 1 ? parts.pop() : "", first = parts.join(" ");
+          var L = ["BEGIN:VCARD", "VERSION:3.0", "N:" + vesc(last) + ";" + vesc(first) + ";;;", "FN:" + vesc(name || g("qc"))];
+          if (g("qc")) L.push("ORG:" + vesc(g("qc")));
+          if (g("qd")) L.push("TITLE:" + vesc(g("qd")));
+          if (g("qp")) L.push("TEL;TYPE=CELL:" + g("qp").replace(/[^\d+]/g, ""));
+          if (g("qw")){ var w = g("qw").replace(/\D/g, ""); if (w.indexOf("0") === 0 && w.length === 11) w = "92" + w.slice(1);
+            L.push("item1.URL:https://wa.me/" + w, "item1.X-ABLabel:WhatsApp"); if (g("qw").replace(/\D/g, "") !== g("qp").replace(/\D/g, "")) L.push("TEL;TYPE=CELL,VOICE:" + g("qw").replace(/[^\d+]/g, "")); }
+          if (g("qe")) L.push("EMAIL;TYPE=INTERNET:" + g("qe"));
+          if (g("qu")) L.push("URL:" + (/^https?:\/\//i.test(g("qu")) ? g("qu") : "https://" + g("qu")));
+          if (g("qa")) L.push("ADR;TYPE=WORK:;;" + vesc(g("qa")) + ";;;;");
+          var c = custom();
+          if (c.length) L.push("NOTE:" + vesc(c.map(function(x){ return (x[0] ? x[0] + ": " : "") + x[1]; }).join("\n")));
+          L.push("END:VCARD");
+          return L.join("\r\n");
+        }
+        function svg(q, px){
+          var n = q.getModuleCount(), m = 4, cell = px / (n + m * 2), d = "";
+          for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + (c + m) + " " + (r + m) + "h1v1h-1z";
+          return '<svg xmlns="http://www.w3.org/2000/svg" width="' + px + '" height="' + px + '" viewBox="0 0 ' + (n + m * 2) + ' ' + (n + m * 2) + '" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path fill="#000" d="' + d + '"/></svg>';
+        }
+        function canvas(q, px){
+          var n = q.getModuleCount(), m = 4, cv = document.createElement("canvas"), cell = Math.max(1, Math.floor(px / (n + m * 2)));
+          cv.width = cv.height = cell * (n + m * 2);
+          var x = cv.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, cv.width, cv.height); x.fillStyle = "#000";
+          for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) x.fillRect((c + m) * cell, (r + m) * cell, cell, cell);
+          return cv;
+        }
+        function save(blob, name){ var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500); }
+        function note(t){ var n = document.getElementById("qmsg"); if (n){ n.textContent = t; setTimeout(function(){ if (n.textContent === t) n.textContent = ""; }, 3000); } }
+        function mode(m){
+          [].forEach.call(document.querySelectorAll("[data-qm]"), function(b){ b.classList.toggle("on", b.getAttribute("data-qm") === m); });
+          document.getElementById("qtext").hidden = m !== "text"; document.getElementById("qcard").hidden = m !== "card";
+          try { localStorage.setItem("xc_qr_mode", m); } catch (e) {}
+        }
+        function addRow(l, v){
+          var row = document.createElement("div"); row.className = "row qcf";
+          row.innerHTML = '<div class="f"><input class="qcl" placeholder="Label, e.g. Skype" maxlength="40"></div><div class="f" style="display:flex;gap:6px"><input class="qcv" placeholder="Value" maxlength="200" style="flex:1"><button type="button" class="qdel" aria-label="Remove">\u00d7</button></div>';
+          row.querySelector(".qcl").value = l || ""; row.querySelector(".qcv").value = v || "";
+          document.getElementById("qcustom").appendChild(row);
+        }
+        function init(){
+          if (!document.getElementById("qcard") || document.getElementById("qcard").getAttribute("data-ready")) return;
+          document.getElementById("qcard").setAttribute("data-ready", "1");
+          var saved = null; try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
+          if (saved){ FIELDS.forEach(function(f){ var el = document.getElementById(f[0]); if (el && saved[f[0]]) el.value = saved[f[0]]; }); (saved.custom || []).forEach(function(c){ addRow(c[0], c[1]); }); document.getElementById("qremember").checked = true; }
+          var m = "text"; try { m = localStorage.getItem("xc_qr_mode") || "text"; } catch (e) {}
+          mode(m);
+        }
+        document.addEventListener("click", function(e){
+          var t = e.target.closest && e.target.closest("[data-qm],#qaddf,.qdel,[data-qdl],#qcopyimg,#qcopytxt,#qshare");
+          if (!t) return;
+          if (t.hasAttribute("data-qm")){ e.preventDefault(); mode(t.getAttribute("data-qm")); return; }
+          if (t.id === "qaddf"){ e.preventDefault(); if (document.querySelectorAll(".qcf").length < 8) addRow(); return; }
+          if (t.classList.contains("qdel")){ e.preventDefault(); t.closest(".qcf").remove(); return; }
+          if (!last) return;
+          var px = +(document.getElementById("qsize") || {value: 1024}).value || 1024, base = last.file;
+          if (t.getAttribute("data-qdl") === "png") canvas(last.q, px).toBlob(function(b){ save(b, base + ".png"); note("PNG saved."); });
+          if (t.getAttribute("data-qdl") === "svg") { save(new Blob([svg(last.q, px)], {type: "image/svg+xml"}), base + ".svg"); note("SVG saved."); }
+          if (t.id === "qcopyimg") canvas(last.q, px).toBlob(function(b){
+            if (navigator.clipboard && window.ClipboardItem) navigator.clipboard.write([new ClipboardItem({"image/png": b})]).then(function(){ note("QR image copied."); }, function(){ note("Your browser can't copy images here \u2014 use Download."); });
+            else note("Your browser can't copy images here \u2014 use Download.");
+          });
+          if (t.id === "qcopytxt"){ if (navigator.clipboard) navigator.clipboard.writeText(last.text).then(function(){ note("Text copied."); }); }
+          if (t.id === "qshare") canvas(last.q, 1024).toBlob(function(b){
+            var f = new File([b], base + ".png", {type: "image/png"});
+            if (navigator.canShare && navigator.canShare({files: [f]})) navigator.share({files: [f], title: "QR code"}).catch(function(){});
+            else note("Sharing files isn't supported here \u2014 use Download.");
+          });
+        });
+        return {
+          FIELDS: FIELDS, init: init, lib: lib,
+          build: function(){
+            var isCard = document.getElementById("qcard") && !document.getElementById("qcard").hidden, text, file;
+            if (isCard){
+              text = vcard(); file = "qr-" + (g("qn") || g("qc")).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30);
+              try {
+                if (document.getElementById("qremember").checked){ var o = {custom: custom()}; FIELDS.forEach(function(f){ o[f[0]] = g(f[0]); }); localStorage.setItem(KEY, JSON.stringify(o)); }
+                else localStorage.removeItem(KEY);
+              } catch (e) {}
+            } else {
+              text = g("qt"); if (!text) throw new Error("Type something first."); file = "qr-code";
+            }
+            if (text.length > 1400) throw new Error("That is too much for one QR code. Make it shorter.");
+            return {text: text, file: file || "qr-code", card: isCard};
+          },
+          render: function(job){
+            var q = qrcode(0, job.text.length > 600 ? "L" : "M"); q.addData(job.text, "Byte"); q.make();
+            last = {q: q, text: job.text, file: job.file};
+            var box = document.getElementById("qout");
+            box.innerHTML = svg(q, 260).replace("<svg ", '<svg style="width:100%;max-width:260px;height:auto;display:block;margin:12px auto 0;border-radius:12px" ');
+          }
+        };
+      })();
+      setTimeout(function(){ window.__xcqr.init(); }, 0);
+      var F = window.__xcqr.FIELDS;
+      return '<div class="qtabs" style="display:flex;gap:6px;margin-bottom:10px">'
+        + '<button type="button" class="go5" data-qm="text" style="flex:1">Text / link</button>'
+        + '<button type="button" class="go5" data-qm="card" style="flex:1">Visiting card</button></div>'
+        + '<style>.qtabs .go5{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}.qtabs .go5.on{background:var(--ink);color:#fff;border-color:var(--ink)}'
+        + '.qdel{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px;font-size:18px;cursor:pointer}'
+        + '.qacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.qacts button{flex:1 1 44%;padding:11px 8px;border-radius:11px;border:1.5px solid var(--line);background:var(--card);font:inherit;font-weight:700;cursor:pointer;color:var(--ink)}</style>'
+        + '<div id="qtext"><div class="f"><label for="qt">Text or link</label><input id="qt" placeholder="https://xpertcreation.com"></div></div>'
+        + '<div id="qcard" hidden>'
+        + F.map(function(f, i){ return (i % 2 ? '' : '<div class="row">') + '<div class="f"><label for="' + f[0] + '">' + f[1] + '</label><input id="' + f[0] + '" type="' + f[3] + '" placeholder="' + f[2] + '" maxlength="120"></div>' + (i % 2 ? '</div>' : ''); }).join("")
+        + '<div id="qcustom"></div><button type="button" id="qaddf" class="go5" style="background:var(--paper);color:var(--ink);border:1.5px dashed var(--line);margin:4px 0 8px">+ Add field</button>'
+        + '<label style="display:flex;gap:8px;align-items:center;font-size:13.5px;margin:6px 0"><input type="checkbox" id="qremember" style="width:auto"> Remember my details on this device</label></div>'
         + '<button class="go5" data-run>Make it</button>';
     },
     run: function(){
-      var t = val("qt").trim();
-      if (!t) throw new Error("Type something first.");
-      // Generated by a third-party image service, so this one needs a
-      // connection. Everything else on this page does not.
-      var src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="
-        + encodeURIComponent(t);
-      show('<div class="cap">Your QR code</div>'
-        + '<img src="' + esc(src) + '" alt="QR code" '
-        + 'style="width:100%;max-width:240px;margin:12px auto 0;display:block;'
-        + 'border-radius:14px;background:#fff;padding:10px">'
-        + '<p class="note3">Right-click or long-press to save it. '
-        + 'This one needs a connection \u2014 the image is generated elsewhere.</p>');
+      var job = window.__xcqr.build();
+      show('<div class="cap">Your QR code' + (job.card ? ' \u2014 scan it to save the contact' : '') + '</div><div id="qout"><p class="note3">Making it\u2026</p></div>'
+        + '<div class="qacts"><button data-qdl="png">\u2B07 Download PNG</button><button data-qdl="svg">\u2B07 Download SVG</button>'
+        + '<button id="qcopyimg">\u29C9 Copy image</button><button id="qcopytxt">\u29C9 Copy text</button><button id="qshare">\u21AA Share</button>'
+        + '<select id="qsize" aria-label="Size" style="flex:1 1 44%;padding:10px;border-radius:11px;border:1.5px solid var(--line)"><option value="512">Small (512 px)</option><option value="1024" selected>Medium (1024 px)</option><option value="2048">Large for print (2048 px)</option></select></div>'
+        + '<p class="note3" id="qmsg"></p><p class="note3">Made on your device \u2014 nothing you type is sent anywhere.</p>');
+      window.__xcqr.lib(function(err){
+        var box = document.getElementById("qout");
+        if (err){ box.innerHTML = '<p class="note3" style="color:#B91C1C">' + esc(err.message) + '</p>'; return; }
+        window.__xcqr.render(job);
+      });
     }},
 
   /* ---------------- prayer times ---------------- */
