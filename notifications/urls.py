@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import broadcast, chatx, push, views
+from . import broadcast, chatx, groups, push, views
 
 app_name = "notifications"
 
@@ -13,6 +13,21 @@ urlpatterns = [
     path("push/subscribe/", push.subscribe, name="push-subscribe"),
     path("push/unsubscribe/", push.unsubscribe, name="push-unsubscribe"),
     path("push/test/", push.test, name="push-test"),
+    path("groups/", groups.groups, name="groups"),
+    path("groups/invites/", groups.invites, name="group-invites"),
+    path("groups/invites/<int:pk>/<str:action>/", groups.invite_answer, name="group-invite-answer"),
+    path("groups/privacy/", groups.privacy, name="group-privacy"),
+    path("groups/join/<str:code>/", groups.group_join, name="group-join"),
+    path("groups/files/<int:pk>/", groups.group_file, name="group-file"),
+    path("groups/<int:pk>/", groups.group_detail, name="group"),
+    path("groups/<int:pk>/typing/", groups.group_typing, name="group-typing"),
+    path("groups/<int:pk>/settings/", groups.group_settings, name="group-settings"),
+    path("groups/<int:pk>/members/", groups.group_members, name="group-members"),
+    path("groups/<int:pk>/members/<int:uid>/", groups.group_member, name="group-member"),
+    path("groups/<int:pk>/leave/", groups.group_leave, name="group-leave"),
+    path("groups/<int:pk>/mute/", groups.group_mute, name="group-mute"),
+    path("groups/<int:pk>/report/", groups.group_report, name="group-report"),
+    path("groups/<int:pk>/link/", groups.group_link, name="group-link"),
     path("threads/", views.my_threads, name="threads"),
     path("threads/start/", views.start_thread, name="start"),
     path("threads/unread/", views.unread_count, name="unread"),

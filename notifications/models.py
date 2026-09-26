@@ -138,3 +138,65 @@ class Broadcast(models.Model):
 
     class Meta:
         ordering = ["-id"]
+
+
+class ChatGroup(models.Model):
+    name = models.CharField(max_length=80)
+    description = models.CharField(max_length=300, blank=True, default="")
+    photo = models.CharField(max_length=160, blank=True, default="")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+")
+    only_admins_send = models.BooleanField(default=False)
+    only_admins_edit = models.BooleanField(default=True)
+    invite_code = models.CharField(max_length=16, blank=True, default="", db_index=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class GroupMember(models.Model):
+    ROLES = [("admin", "Admin"), ("member", "Member")]
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, related_name="members")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="group_memberships")
+    role = models.CharField(max_length=8, choices=ROLES, default="member")
+    last_read_id = models.PositiveIntegerField(default=0)
+    muted = models.BooleanField(default=False)
+    joined_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = [("group", "user")]
+
+
+class GroupInvite(models.Model):
+    STATES = [("pending", "Waiting"), ("accepted", "Accepted"), ("declined", "Declined")]
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, related_name="invites")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="group_invites")
+    invited_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+")
+    status = models.CharField(max_length=10, choices=STATES, default="pending")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = [("group", "user")]
+
+
+class GroupMessage(models.Model):
+    group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, related_name="messages")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="+")
+    body = models.TextField(max_length=2000, blank=True, default="")
+    image = models.CharField(max_length=160, blank=True, default="")
+    attachment = models.CharField(max_length=200, blank=True, default="")
+    attachment_name = models.CharField(max_length=120, blank=True, default="")
+    attachment_size = models.PositiveIntegerField(default=0)
+    system = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["id"]
+
+
+class GroupPrivacy(models.Model):
+    """Who may put this member straight into a group. Anyone else sends an invitation instead."""
+    CHOICES = [("everyone", "Everyone"), ("connections", "My connections"), ("nobody", "Nobody")]
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="group_privacy")
+    who = models.CharField(max_length=12, choices=CHOICES, default="connections")

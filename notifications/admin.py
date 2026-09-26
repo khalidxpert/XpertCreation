@@ -28,3 +28,18 @@ from .models import PushSubscription as _Push
 class PushSubscriptionAdmin(_padmin.ModelAdmin):
     list_display = ("user", "created_at", "last_ok", "fails")
     readonly_fields = ("endpoint", "p256dh", "auth")
+
+from django.contrib import admin as _gadmin
+from .models import ChatGroup as _ChatGroup, GroupMember as _GroupMember
+
+
+class _MemberInline(_gadmin.TabularInline):
+    model = _GroupMember
+    extra = 0
+
+
+@_gadmin.register(_ChatGroup)
+class ChatGroupAdmin(_gadmin.ModelAdmin):
+    list_display = ("name", "created_by", "created_at")
+    search_fields = ("name",)
+    inlines = [_MemberInline]

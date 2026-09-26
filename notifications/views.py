@@ -231,6 +231,11 @@ def unread_count(request):
     if n is None:
         n = ChatMessage.objects.filter(Q(thread__a=request.user) | Q(thread__b=request.user), read=False) \
                                .exclude(author=request.user).count()
+        try:
+            from .groups import unread_for
+            n += unread_for(request.user)
+        except Exception:
+            pass
         cache.set(key, n, 10)
     return Response({"unread": n})
 

@@ -170,6 +170,8 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
 .wgrid3 button[data-wall="night"]{color:#fff}
 .wbtn3{background:var(--paper);align-items:center}
 .wall3{display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:600}
+.ginv3{margin:10px 0;padding:11px 14px;border-radius:14px;background:#DBEAFE;color:#1E40AF;font-weight:700;cursor:pointer}
+body.inchat #grp3,body.inchat #gprivacy3{display:none}
 .empty8{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:13.5px}
 
 /* ---------- bell ---------- */
@@ -213,8 +215,10 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
 
 <div class="wrap">
   <h1>Chat</h1>
-    <div class="newc3"><button id="newchat3" type="button">+ New chat</button><button id="sel3" type="button" class="ghost3">Select</button></div>
+    <div class="newc3"><button id="newchat3" type="button">+ New chat</button><button id="newgroup3" type="button" class="ghost3">+ New group</button><button id="sel3" type="button" class="ghost3">Select</button></div>
   <div id="selbar3"></div>
+  <div id="grp3"></div>
+  <p style="margin:6px 0 0;text-align:right"><a href="#" id="gprivacy3" style="font-size:13px">Groups privacy</a></p>
   <div id="newlist3"></div>
   <div id="list5" style="margin-top:14px"></div>
   <div class="thread2" id="threadbox">
@@ -623,6 +627,26 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
     }
     var cp = e.target.closest("[data-copy]");
     if (cp){ if (navigator.clipboard) navigator.clipboard.writeText(cp.getAttribute("data-copy")).then(function(){ cp.textContent = "Copied"; }); return; }
+    if (e.target.closest("#newgroup3")){ newGroupPanel(); return; }
+    if (e.target.closest("[data-invites3]")){ invitesPanel(); return; }
+    if (e.target.closest("#gprivacy3")){ e.preventDefault(); privacyPanel(); return; }
+    if (e.target.closest("[data-ngcreate]")){
+      var nm = ($("ngname").value || "").trim();
+      if (nm.length < 2){ $("ngmsg").innerHTML = '<p style="color:#B91C1C">Give the group a name.</p>'; return; }
+      var ids = [].map.call(document.querySelectorAll("#ngcand input:checked"), function(i){ return +i.value; });
+      api("/groups/", {method: "POST", body: {name: nm, members: ids}}).then(function(r){
+        if (r.ok) location.href = "/group/" + r.data.id;
+        else $("ngmsg").innerHTML = '<p style="color:#B91C1C">' + esc(r.data.detail || "Could not create the group.") + '</p>';
+      });
+      return;
+    }
+    var gi = e.target.closest("[data-ginv]");
+    if (gi){
+      api("/groups/invites/" + gi.getAttribute("data-id") + "/" + gi.getAttribute("data-ginv") + "/", {method: "POST", body: {}}).then(function(r){
+        if (r.ok && r.data.status === "accepted") location.href = "/group/" + r.data.group_id; else { invitesPanel(); loadGroups(); }
+      });
+      return;
+    }
     if (e.target.id === "csend") send();
   });
 
@@ -651,7 +675,53 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
     });
   });
 
+  // ---- groups in the chat list ----
+  function loadGroups(){
+    var box = $("grp3"); if (!box) return;
+    api("/groups/").then(function(r){
+      if (!r.ok){ box.innerHTML = ""; return; }
+      var gs = r.data.groups || [], inv = r.data.invites || 0;
+      box.innerHTML = (inv ? '<div class="ginv3" data-invites3>\uD83D\uDCE8 You have ' + inv + ' group invitation' + (inv > 1 ? 's' : '') + ' \u2192</div>' : '')
+        + gs.map(function(g){
+          return '<a class="trow2" href="/group/' + g.id + '" style="text-decoration:none;color:inherit">'
+            + (g.photo ? '<img class="av6" src="' + esc(g.photo) + '" alt="">' : '<span class="av6">\uD83D\uDC65</span>')
+            + '<span class="t3"><b>' + esc(g.name) + (g.muted ? ' \uD83D\uDD15' : '') + '</b><small>' + esc(g.last || "") + '</small></span>'
+            + (g.unread ? '<span class="badge2">' + g.unread + '</span>' : '') + '</a>';
+        }).join("");
+    });
+  }
+  function newGroupPanel(){
+    var p = panel("New group", '<label style="font-weight:700;font-size:13px">Group name</label><input id="ngname" maxlength="80" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;margin:4px 0 10px">'
+      + '<p class="mut3">Add people from your connections. Anyone who only lets their connections add them, or nobody, will get an invitation instead.</p><div id="ngcand"><p class="mut3">Loading\u2026</p></div>'
+      + '<button class="pbt3" data-ngcreate style="margin-top:12px;max-width:none">Create group</button><div id="ngmsg"></div>');
+    fetch("/api/network/me/people/connections/", {credentials: "same-origin"}).then(function(r){ return r.json(); }).then(function(d){
+      var list = d.people || [];
+      $("ngcand").innerHTML = list.length ? list.map(function(x){ return '<label class="trow2" style="margin:0;cursor:pointer"><input type="checkbox" value="' + x.user_id + '" style="width:20px;height:20px"> '
+        + (x.avatar_url ? '<img class="av6" src="' + esc(x.avatar_url) + '" alt="">' : '<span class="av6">' + esc(x.name.charAt(0)) + '</span>') + '<span class="t3"><b>' + esc(x.name) + '</b></span></label>'; }).join("")
+        : '<p class="mut3">You have no connections yet. You can still create the group and share its invite link.</p>';
+    });
+  }
+  function invitesPanel(){
+    panel("Group invitations", '<div id="ginvl"><p class="mut3">Loading\u2026</p></div>');
+    api("/groups/invites/").then(function(r){
+      var l = (r.data && r.data.invites) || [];
+      $("ginvl").innerHTML = l.length ? l.map(function(i){ return '<div class="row3"><span><b>' + esc(i.group) + '</b> \u00b7 ' + i.members + ' members</span><small>Invited by ' + esc(i.by) + '</small>'
+        + '<span style="grid-column:2;grid-row:1/3;display:flex;gap:6px"><button data-ginv="accept" data-id="' + i.id + '">Join</button><button data-ginv="decline" data-id="' + i.id + '">Decline</button></span></div>'; }).join("") : '<p class="mut3">No invitations.</p>';
+    });
+  }
+  function privacyPanel(){
+    panel("Groups privacy", '<p>Who can add me to groups:</p><div id="gpriv"><p class="mut3">Loading\u2026</p></div><p class="mut3">Anyone else can only send you an invitation, which you can accept or decline.</p>');
+    api("/groups/privacy/").then(function(r){
+      var w = (r.data && r.data.who) || "connections";
+      $("gpriv").innerHTML = [["everyone", "Everyone"], ["connections", "My connections"], ["nobody", "Nobody"]].map(function(o){
+        return '<label class="wall3" style="margin:6px 0"><input type="radio" name="gpv" value="' + o[0] + '"' + (w === o[0] ? " checked" : "") + '> ' + o[1] + '</label>'; }).join("");
+    });
+  }
+  document.addEventListener("change", function(e){
+    if (e.target.name === "gpv") api("/groups/privacy/", {method: "POST", body: {who: e.target.value}});
+  });
   function loadList(){
+    loadGroups();
     return api("/threads/").then(function(r){
       if (r.ok) threads = r.data.threads || [];
       if (!current) renderList();
