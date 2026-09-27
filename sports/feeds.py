@@ -171,9 +171,17 @@ def refresh_football(force=False):
     due = [c for c in codes if force or age("football:m:" + c) > (120 if live_in(c) else 1800)]
     due.sort(key=lambda c: (not live_in(c), -age("football:m:" + c)))
     for code in due[:3 if not force else 6]:          # at most 3 a run: well under the free 10-a-minute limit
-        d = fdata("competitions/%s/matches" % code, dateFrom=str(today - timedelta(days=4)), dateTo=str(today + timedelta(days=6)))
+        d = fdata("competitions/%s/matches" % code)          # the whole season: works through international breaks
         if d is not None and "matches" in d:
-            put("football:m:" + code, {"matches": [football_match(m) for m in d.get("matches") or []]}); n += 1
+            ms = [football_match(m) for m in d.get("matches") or []]
+            now = timezone.now().strftime("%Y-%m-%dT%H:%M")
+            live = [m for m in ms if m["status"] in ("IN_PLAY", "PAUSED")]
+            done = sorted([m for m in ms if m["status"] == "FINISHED"], key=lambda m: m["date"], reverse=True)[:20]
+            soon = sorted([m for m in ms if m["status"] in ("SCHEDULED", "TIMED") and m["date"][:16] >= now], key=lambda m: m["date"])
+            if soon:
+                horizon = max(soon[0]["date"][:10], str(today + timedelta(days=21)))
+                soon = [m for m in soon if m["date"][:10] <= horizon][:30]
+            put("football:m:" + code, {"matches": live + soon + done}); n += 1
     if force or age("football:comps") > 24 * 3600:
         d = fdata("competitions")
         if d and d.get("competitions"):
