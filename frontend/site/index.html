@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>XpertCreation — Free tools, learning and help, all in one place</title>
+<title>XpertCreation — Free tools, courses, jobs and games</title>
 <!-- seo:start -->
 <meta name="description" content="Free courses, 78 tools, jobs, Connect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
 <link rel="canonical" href="https://xpertcreation.com/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="XpertCreation">
-<meta property="og:title" content="XpertCreation — Free tools, learning and help, all in one place">
+<meta property="og:title" content="XpertCreation — Free tools, courses, jobs and games">
 <meta property="og:description" content="Free courses, 78 tools, jobs, Connect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
 <meta property="og:url" content="https://xpertcreation.com/">
 <meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
@@ -18,7 +18,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="XpertCreation — Free tools, learning and help, all in one place">
+<meta name="twitter:title" content="XpertCreation — Free tools, courses, jobs and games">
 <meta name="twitter:description" content="Free courses, 78 tools, jobs, Connect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
 <meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"XpertCreation","url":"https://xpertcreation.com/","description":"Prayer times, world clock, weather, 78 calculators, a blood donor network, a donation board, Word and Excel courses and games. Free to use, and most of it needs no account.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"potentialAction":{"@type":"SearchAction","target":"https://xpertcreation.com/tools?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
@@ -279,7 +279,7 @@ body.f-long h1{font-size:clamp(26px,7vw,42px)}
    par daayen baayen se kaat deta tha aur matn adha reh jata tha. */
 .slide.banner img{width:100%;height:100%;object-fit:contain;display:block;
   border-radius:28px}
-@media(max-width:520px){ .slide.banner{aspect-ratio:3/2} }
+.slide.banner{aspect-ratio:3/2}   /* every screen: the space is kept before the picture arrives */
 
 .dots{display:flex;gap:7px;justify-content:center;margin:2px 0 6px}
 .dots i{width:7px;height:7px;border-radius:99px;background:var(--line);transition:all .25s;cursor:pointer}
@@ -779,6 +779,7 @@ body.signed-in .hello{margin-top:4px}
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
+<link rel="preload" as="image" href="/brand/slides/drama.webp" imagesrcset="/brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" imagesizes="(max-width: 860px) 100vw, 860px" fetchpriority="high">
 </head>
 <body>
 <div class="wrap">
@@ -864,7 +865,7 @@ body.signed-in .hello{margin-top:4px}
     <h2 data-i18n="secH">Our platforms</h2>
 
     <div class="slidewrap">
-      <div class="slides" id="slides"></div>
+      <div class="slides" id="slides"><a class="slide banner" href="/shows"><img src="/brand/slides/drama.webp" srcset="/brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="Dramas and films — story, cast, trailers and where to watch" fetchpriority="high"></a></div>
     </div>
     <div class="dots" id="dots"></div>
     <p class="swipehint" data-i18n="swipe">Swipe to see more</p>
@@ -1223,22 +1224,16 @@ body.signed-in .hello{margin-top:4px}
   // Banner slider. Har tasveer apne page par le jati hai. alt zaroori hai:
   // tamam matn tasveer ke andar jama hai, to load na hone par kuch bacha nahi.
   var BANNERS = [
-    { img:"/brand/slides/8.jpg", href:"/feed",
-      alt:"People \u2014 connect, follow and endorse each other" },
-    { img:"/brand/slides/9.jpg", href:"/pets",
+    { img:"/brand/slides/drama.webp", href:"/shows",
+      alt:"Dramas and films \u2014 story, cast, trailers and where to watch" },
+    { img:"/brand/slides/sports.webp", href:"/sports",
+      alt:"Sports \u2014 live cricket, football and more" },
+    { img:"/brand/slides/pets.webp", href:"/pets",
       alt:"Pets \u2014 vaccine reminders, health records and a QR tag" },
-    { img:"/brand/slides/2.jpg", href:"/games",
-      alt:"Games \u2014 play, enjoy, repeat" },
-    { img:"/brand/slides/5.jpg", href:"/blood",
-      alt:"Blood Bank \u2014 one donation, endless lives" },
-    { img:"/brand/slides/4.jpg", href:"/tools?t=prayer",
-      alt:"Prayer Times \u2014 stay connected, stay blessed" },
-    { img:"/brand/slides/6.jpg", href:"/tools?t=clock",
-      alt:"World Clock \u2014 one world, many times" },
-    { img:"/brand/slides/7.jpg", href:"/weather",
-      alt:"Weather \u2014 know today, plan better" },
-    { img:"/brand/slides/10.jpg", href:"/tools/qr-code-generator",
+    { img:"/brand/slides/qrcode.webp", href:"/tools/qr-code-generator",
       alt:"QR Code Generator \u2014 free, print-ready codes" },
+    { img:"/brand/slides/weather.webp", href:"/weather",
+      alt:"Weather \u2014 know today, plan better" },
   ];
   function renderSlides(){
     var el = document.getElementById("slides");
@@ -1247,7 +1242,7 @@ body.signed-in .hello{margin-top:4px}
       // Pehli tasveer foran, baqi tab jab paas aayen.
       var lazy = i === 0 ? '' : ' loading="lazy"';
       return '<a class="slide banner" href="' + b.href + '">'
-        + '<img src="' + b.img + '" alt="' + esc(b.alt) + '"' + lazy + '>'
+        + '<img src="' + b.img + '" srcset="' + b.img.replace(".webp", "-768.webp") + ' 768w, ' + b.img + ' 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="' + esc(b.alt) + '"' + (i === 0 ? ' fetchpriority="high"' : lazy) + '>'
         + '</a>';
     }).join("");
     var dots = document.getElementById("dots");
