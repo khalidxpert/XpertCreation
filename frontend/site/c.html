@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digital business card — XpertCreation</title>
+<meta name="description" content="A digital business card made free with XpertCreation.">
+<link rel="canonical" href="https://xpertcreation.com/cards">
+<link rel="icon" href="/favicon.ico">
+<meta name="theme-color" content="#0D1424">
+<style>
+html,body{margin:0;background:#E9ECF3}#xcpub{max-width:480px;margin:0 auto;min-height:100vh;box-shadow:0 0 40px rgba(13,20,36,.12)}
+#xcmodal{position:fixed;inset:0;background:rgba(13,20,36,.6);display:grid;place-items:center;z-index:50;padding:16px}#xcmodal[hidden]{display:none}
+#xcmodal div{background:#fff;border-radius:20px;padding:18px;text-align:center;max-width:340px;width:100%;font-family:system-ui,sans-serif}
+#xcmodal img{width:100%;border-radius:12px}#xcmodal button,#xcmodal a{display:inline-block;margin:10px 4px 0;padding:11px 16px;border-radius:12px;border:0;background:#0D1424;color:#fff;font:inherit;font-weight:700;text-decoration:none;cursor:pointer}
+#xcmodal .g{background:#E9ECF3;color:#0D1424}.xcmiss{font-family:system-ui,sans-serif;text-align:center;padding:80px 20px;color:#475569}
+</style>
+<script src="/js/bizcard-1.js?v=1"></script>
+</head><body>
+<div id="xcpub"><p class="xcmiss">Loading the card…</p></div>
+<div id="xcmodal" hidden><div><img id="xcqimg" alt="QR code"><p style="margin:10px 0 0;font-size:14px;color:#475569">Scan to open this card</p><a id="xcqdl" download="card-qr.png">Download</a><button class="g" data-close>Close</button></div></div>
+<script>
+(function(){
+  "use strict";
+  var slug = (location.pathname.match(/^\/c\/([a-z0-9-]+)/) || [])[1], el = document.getElementById("xcpub"), D = null;
+  var src = /[?&]src=qr/.test(location.search) ? "qr" : "web";
+  if (!slug){ el.innerHTML = '<p class="xcmiss">Card not found.</p>'; return; }
+  fetch("/api/cards/public/" + slug + "/?count=1&src=" + src).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (!d){ el.innerHTML = '<p class="xcmiss">This card is not available. <a href="/cards">Make your own free card</a></p>'; return; }
+    D = d; XCCard.render(el, d, {vcf: "/c/" + slug + ".vcf", report: true});
+  }).catch(function(){ el.innerHTML = '<p class="xcmiss">No connection. Please try again.</p>'; });
+  function track(label){
+    var body = JSON.stringify({label: label});
+    if (navigator.sendBeacon) navigator.sendBeacon("/api/cards/public/" + slug + "/click/", new Blob([body], {type: "application/json"}));
+  }
+  document.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest("[data-lbl],[data-xshare],[data-xqr],[data-close],[data-xreport]");
+    if (!a) return;
+    if (a.hasAttribute("data-lbl") && a.getAttribute("data-lbl") !== "save") track(a.getAttribute("data-lbl"));
+    if (a.hasAttribute("data-xshare")){
+      e.preventDefault(); track("share");
+      var url = location.origin + "/c/" + slug, t = (D && D.profile && D.profile.name) || "Business card";
+      if (navigator.share) navigator.share({title: t, url: url}).catch(function(){});
+      else if (navigator.clipboard) navigator.clipboard.writeText(url).then(function(){ alert("Link copied."); });
+    }
+    if (a.hasAttribute("data-xqr") && D){
+      e.preventDefault();
+      XCCard.qr(location.origin + "/c/" + slug + "?src=qr", D.qr || {}, 600, D.qr && D.qr.logo ? XCCard.media(D.profile.logo) : "", function(cv){
+        var u = cv.toDataURL("image/png"); document.getElementById("xcqimg").src = u; document.getElementById("xcqdl").href = u; document.getElementById("xcmodal").hidden = false;
+      });
+    }
+    if (a.hasAttribute("data-close")) document.getElementById("xcmodal").hidden = true;
+    if (a.hasAttribute("data-xreport")){
+      e.preventDefault();
+      var why = prompt("What is wrong with this card? (fake, spam, abuse, other)", "fake");
+      if (why) fetch("/api/cards/public/" + slug + "/report/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": (document.cookie.match(/xc_csrf=([^;]+)/) || [])[1] || ""}, body: JSON.stringify({reason: why})})
+        .then(function(r){ alert(r.ok ? "Thank you. A moderator will look at it." : "Sign in to report a card."); });
+    }
+  });
+})();
+</script>
+</body></html>
