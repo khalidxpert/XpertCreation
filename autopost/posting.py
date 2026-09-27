@@ -88,7 +88,13 @@ def tools():
 
 
 def _tag(s):
-    return "#" + re.sub(r"[^A-Za-z0-9]", "", s.title())[:30]
+    """Whole words only, up to about 22 letters: #NumberToWordsConverter, never #NumberToWordsConverterForChequ."""
+    out = ""
+    for w in re.findall(r"[A-Za-z0-9]+", s):
+        if out and len(out) + len(w) > 22:
+            break
+        out += w[:1].upper() + w[1:]
+    return "#" + (out[:30] or "XpertCreation")
 
 
 def _save_poster(url, owner_id):
