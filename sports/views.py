@@ -72,11 +72,21 @@ def cricket_match(request, mid):
     return Response(card)
 
 
+def _football_all():
+    from .models import SportsData
+    ms, at, seen = [], None, set()
+    for r in SportsData.objects.filter(key__startswith="football:m:"):
+        for m in (r.data or {}).get("matches", []):
+            if m["id"] not in seen:
+                seen.add(m["id"]); ms.append(m)
+        at = max(at, r.fetched_at) if at else r.fetched_at
+    return ms, at
+
+
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def football(request):
-    d, at = feeds.get("football:matches")
-    ms = (d or {}).get("matches", [])
+    ms, at = _football_all()
     code = str(request.GET.get("comp") or "").upper()[:6]
     if code:
         ms = [m for m in ms if m["comp"]["code"] == code]
@@ -100,8 +110,7 @@ def football_table(request, code):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def football_match(request, mid):
-    d, _ = feeds.get("football:matches")
-    m = next((x for x in (d or {}).get("matches", []) if x["id"] == mid), None)
+    m = next((x for x in _football_all()[0] if x["id"] == mid), None)
     if not m:
         return Response({"detail": "This match is not in the current fixtures."}, status=404)
     return Response(dict(m, predictions=_votes("football", [mid], request.user)))
@@ -120,9 +129,9 @@ def other(request, kind):
 @permission_classes([AllowAny])
 def home(request):
     allm, _ = _cricket_all()
-    fm, _ = feeds.get("football:matches")
+    fm, _ = _football_all()
     return Response({"cricket_live": [m for m in allm if m["started"] and not m["ended"]][:6],
-                     "football_live": [m for m in (fm or {}).get("matches", []) if m["status"] in ("IN_PLAY", "PAUSED")][:6]})
+                     "football_live": [m for m in fm if m["status"] in ("IN_PLAY", "PAUSED")][:6]})
 
 
 @api_view(["POST"])
@@ -137,8 +146,7 @@ def predict(request):
         m = next((x for x in allm if x["id"] == mid), None)
         ok = m and not m["ended"] and pick in [t["name"] for t in m["teams"]] + ["Draw"]
     else:
-        d, _ = feeds.get("football:matches")
-        m = next((x for x in (d or {}).get("matches", []) if str(x["id"]) == mid), None)
+        m = next((x for x in _football_all()[0] if str(x["id"]) == mid), None)
         ok = m and m["status"] in ("SCHEDULED", "TIMED") and pick in (m["home"]["name"], m["away"]["name"], "Draw")
     if not ok:
         return Response({"detail": "Predictions are closed for this match."}, status=400)

@@ -94,14 +94,21 @@ def refresh_cricket(force=False):
     cur, _ = get("cricket:current")
     live = any(m["started"] and not m["ended"] for m in (cur or {}).get("matches", []))
     n = 0
-    if force or age("cricket:current") > (1200 if live else 3600):
+    if force or age("cricket:current") > (1800 if live else 3600):
         d = cricapi("currentMatches", offset=0)
         if d:
             put("cricket:current", {"matches": [cricket_match(m) for m in d.get("data") or []]}); n += 1
     if force or age("cricket:list") > 6 * 3600:
-        d = cricapi("matches", offset=0)
-        if d:
-            put("cricket:list", {"matches": [cricket_match(m) for m in d.get("data") or []]}); n += 1
+        allm = []
+        for off in (0, 25, 50):                      # the list comes 25 at a time; upcoming games are on later pages
+            d = cricapi("matches", offset=off)
+            if not d:
+                break
+            allm += [cricket_match(m) for m in d.get("data") or []]; n += 1
+            if len(d.get("data") or []) < 25:
+                break
+        if allm:
+            put("cricket:list", {"matches": allm})
     return n
 
 
@@ -156,13 +163,17 @@ def refresh_football(force=False):
     """Matches from 3 days back to 7 days ahead: every 2 minutes while a game is on, every 30 otherwise.
     League tables every 3 hours (one competition per run, so we stay under 10 requests a minute)."""
     n = 0
-    cur, _ = get("football:matches")
-    live = any(m["status"] in ("IN_PLAY", "PAUSED") for m in (cur or {}).get("matches", []))
-    if force or age("football:matches") > (120 if live else 1800):
-        today = timezone.localdate()
-        d = fdata("matches", dateFrom=str(today - timedelta(days=3)), dateTo=str(today + timedelta(days=7)))
+    today = timezone.localdate()
+    codes = [c["code"] for c in (get("football:comps")[0] or {}).get("comps", [])] or FOOTBALL_CODES
+    def live_in(code):
+        d, _ = get("football:m:" + code)
+        return any(m["status"] in ("IN_PLAY", "PAUSED") for m in (d or {}).get("matches", []))
+    due = [c for c in codes if force or age("football:m:" + c) > (120 if live_in(c) else 1800)]
+    due.sort(key=lambda c: (not live_in(c), -age("football:m:" + c)))
+    for code in due[:3 if not force else 6]:          # at most 3 a run: well under the free 10-a-minute limit
+        d = fdata("competitions/%s/matches" % code, dateFrom=str(today - timedelta(days=4)), dateTo=str(today + timedelta(days=6)))
         if d is not None and "matches" in d:
-            put("football:matches", {"matches": [football_match(m) for m in d.get("matches") or []]}); n += 1
+            put("football:m:" + code, {"matches": [football_match(m) for m in d.get("matches") or []]}); n += 1
     if force or age("football:comps") > 24 * 3600:
         d = fdata("competitions")
         if d and d.get("competitions"):
@@ -186,12 +197,14 @@ def refresh_football(force=False):
 
 # ---------------------------------------------------------------- other sports (TheSportsDB, free key)
 
-OTHER = [("hockey", "Hockey", ["FIH Pro League", "Hockey India League", "NHL", "FIH Hockey World Cup", "Men's FIH Hockey World Cup"]),
-         ("f1", "Formula 1", ["Formula 1"]),
-         ("tennis", "Tennis", ["ATP World Tour", "WTA Tour", "ATP Tour"]),
-         ("kabaddi", "Kabaddi", ["Pro Kabaddi League", "Kabaddi World Cup"]),
-         ("basketball", "Basketball", ["NBA"]),
-         ("mma", "UFC", ["UFC"])]
+# The free TheSportsDB key only returns a few events per request, but "events on a day" works per sport,
+# so we ask day by day: 3 days back and 6 ahead. One sport per run keeps us under its rate limit.
+OTHER = [("hockey", "Hockey", ["Field_Hockey", "Ice_Hockey"]),
+         ("f1", "Motorsport", ["Motorsport"]),
+         ("tennis", "Tennis", ["Tennis"]),
+         ("kabaddi", "Kabaddi", ["Kabaddi"]),
+         ("basketball", "Basketball", ["Basketball"]),
+         ("mma", "Fighting", ["Fighting"])]
 
 
 def sdb(path, **params):
@@ -205,21 +218,22 @@ def sdb_event(e):
 
 
 def refresh_other(force=False):
-    """Leagues are looked up by name once a week; their next and last events every 6 hours."""
     n = 0
-    if force or age("other:leagues") > 7 * 24 * 3600:
-        d = sdb("all_leagues.php")
-        if d and d.get("leagues"):
-            names = {l.get("strLeague"): l.get("idLeague") for l in d["leagues"]}
-            put("other:leagues", {k: [[nm, names[nm]] for nm in wanted if nm in names] for k, _, wanted in OTHER}); n += 1
-    leagues, _ = get("other:leagues")
-    for k, label, _ in OTHER:
-        if not force and age("other:" + k) < 6 * 3600:
-            continue
-        out = {"label": label, "next": [], "past": []}
-        for nm, lid in (leagues or {}).get(k, [])[:3]:
-            nx = sdb("eventsnextleague.php", id=lid); ps = sdb("eventspastleague.php", id=lid); n += 2
-            out["next"] += [sdb_event(e) for e in ((nx or {}).get("events") or [])[:10]]
-            out["past"] += [sdb_event(e) for e in ((ps or {}).get("events") or [])[:10]]
-        put("other:" + k, out)
+    today = timezone.localdate()
+    due = sorted([k for k, _, _ in OTHER if force or age("other:" + k) > 6 * 3600], key=lambda k: -age("other:" + k))
+    for k in due[:len(OTHER) if force else 1]:
+        label, sports = next((l, sp) for kk, l, sp in OTHER if kk == k)
+        evs = []
+        for sp in sports:
+            for off in range(-3, 7):
+                d = sdb("eventsday.php", d=str(today + timedelta(days=off)), s=sp); n += 1
+                evs += [sdb_event(e) for e in ((d or {}).get("events") or [])]
+        seen, uniq = set(), []
+        for e in evs:
+            if e["id"] not in seen:
+                seen.add(e["id"]); uniq.append(e)
+        t = str(today)
+        put("other:" + k, {"label": label,
+                           "next": sorted([e for e in uniq if e["date"] >= t and e["hs"] in (None, "")], key=lambda e: (e["date"], e["time"]))[:40],
+                           "past": sorted([e for e in uniq if e["date"] < t or e["hs"] not in (None, "")], key=lambda e: (e["date"], e["time"]), reverse=True)[:40]})
     return n
