@@ -64,7 +64,7 @@ def add_to_official_group(user, welcome=True):
 
 def _api(path):
     try:
-        m = resolve(path)
+        m = resolve(path.split("?")[0])          # the view lookup takes no ?query; the request below keeps it
         req = _rf.get(path, HTTP_HOST="xpertcreation.com", secure=True)
         req.user = AnonymousUser()
         r = m.func(req, *m.args, **m.kwargs)
