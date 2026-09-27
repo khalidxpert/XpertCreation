@@ -149,7 +149,7 @@ def _add_people(g, adder, ids, greet_them=True):
 
 def _info(g, u):
     me = _me(g, u)
-    members = [{"id": m.user_id, "name": _name(m.user), "avatar": _avatar(m.user), "role": m.role, "me": m.user_id == u.id, "bot_mod": m.bot_mod,
+    members = [{"id": m.user_id, "name": _name(m.user), "avatar": _avatar(m.user), "role": m.role, "owner": m.user_id == g.created_by_id, "me": m.user_id == u.id, "bot_mod": m.bot_mod,
                 "muted": bool(m.muted_until and m.muted_until > timezone.now())}
                for m in GroupMember.objects.filter(group=g).select_related("user").order_by("role", "joined_at")]
     return {"id": g.id, "name": g.name, "description": g.description, "photo": _url(g.photo),

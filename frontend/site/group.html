@@ -153,6 +153,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
 <script src="/js/voice-1.js?v=1"></script>
+<style>/* group roles */.who.rk-owner,b.rk-owner{color:#B7791F;font-weight:800}.who.rk-admin,b.rk-admin{color:#2563EB;font-weight:800}.who.rk-mod,b.rk-mod{color:#16A34A;font-weight:800}b.rk-mem{font-weight:600}</style>
 </head>
 <body>
 <header class="top">
@@ -235,10 +236,15 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     el.style.display = "flex";
     el.innerHTML = '<b>\uD83D\uDCCC ' + (PINS.length > 1 ? (pinAt + 1) + '/' + PINS.length : 'Pinned') + '</b><span>' + esc(p.author ? p.author + ": " : "") + esc(p.body || (p.image ? "Photo" : p.file ? p.file.name : "")) + '</span>';
   }
+  // Roles, like Discord: owner (crown), admin (shield), moderator (star). Taken from the members list.
+  var RICON = {owner: "\uD83D\uDC51 ", admin: "\uD83D\uDEE1\uFE0F ", mod: "\u2B50 "};
+  function roleKind(x){ return !x ? "" : x.owner ? "owner" : x.role === "admin" ? "admin" : x.bot_mod ? "mod" : ""; }
+  function roleOf(id){ var x = ((typeof G !== "undefined" && G && G.members) || []).filter(function(mm){ return mm.id === id; })[0]; return roleKind(x); }
+  function roleName(mm, label){ var r = roleKind(mm); return '<b class="rk-' + (r || "mem") + '">' + (RICON[r] || "") + esc(label) + '</b>'; }
   function bubble(m){
     if (m.system) return '<div class="gsys">' + esc(m.body) + '</div>';
     var s = stk(m.body);
-    return '<div class="gm' + (m.mine ? ' me' : '') + (m.bot ? ' bot' : '') + '" data-mid="' + m.id + '">' + (m.mine ? '' : '<span class="who">' + (m.bot ? '\uD83E\uDD16 ' : '') + esc(m.author) + '</span>')
+    return '<div class="gm' + (m.mine ? ' me' : '') + (m.bot ? ' bot' : '') + '" data-mid="' + m.id + '">' + (m.mine ? '' : '<span class="who' + (m.bot ? '' : ' rk-' + (roleOf(m.author_id) || 'mem')) + '">' + (m.bot ? '\uD83E\uDD16 ' : (RICON[roleOf(m.author_id)] || '')) + esc(m.author) + '</span>')
       + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="gi" src="' + esc(m.image) + '" alt="" loading="lazy"></a>' : '')
       + (m.voice && window.XCVoice ? XCVoice.html(m.voice) : '')
       + (m.file ? '<a class="gf" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' \u00b7 ' + kb(m.file.size) + '</a>' : '')
@@ -308,7 +314,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
                + '<label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="gedit"' + (G.only_admins_edit ? " checked" : "") + '> Only admins can edit group info</label>'
                + '<div class="gacts"><button class="gbtn" data-addp>+ Add people</button><button class="gbtn" data-link>Invite link</button><button class="gbtn" data-botset>\uD83E\uDD16 Bot</button></div><div id="glinkbox"></div>' : '')
       + '<h3 style="margin-top:16px">' + G.members.length + ' members</h3>' + G.members.map(function(m){
-          return '<div class="gmem">' + av(m.avatar, m.name) + '<span>' + esc(m.me ? "You" : m.name) + (m.muted ? ' \uD83D\uDD07' : '') + '</span>' + (m.role === "admin" ? '<em>Admin</em>' : (m.bot_mod ? '<em class="mod">Moderator</em>' : ''))
+          return '<div class="gmem">' + av(m.avatar, m.name) + '<span>' + roleName(m, m.me ? "You" : m.name) + (m.muted ? ' \uD83D\uDD07' : '') + '</span>' + (m.role === "admin" ? '<em>Admin</em>' : (m.bot_mod ? '<em class="mod">Moderator</em>' : ''))
             + (admin && !m.me ? (m.role === "admin" ? '<button class="gbtn" data-mem="dismiss_admin" data-uid="' + m.id + '">Dismiss admin</button>' : '<button class="gbtn" data-mem="make_admin" data-uid="' + m.id + '">Make admin</button>')
                + (m.role !== "admin" ? (m.bot_mod ? '<button class="gbtn" data-mem="bot_unmod" data-uid="' + m.id + '">Remove moderator</button>' : '<button class="gbtn" data-mem="bot_mod" data-uid="' + m.id + '">Make moderator</button>') : '')
                + '<button class="gbtn gred" data-mem="remove" data-uid="' + m.id + '">Remove</button>' : '') + '</div>'; }).join("")
