@@ -1828,8 +1828,12 @@ var Tools = (function(){
           render: function(job){
             var q = qrcode(0, job.text.length > 600 ? "L" : "M"); q.addData(job.text, "Byte"); q.make();
             last = {q: q, text: job.text, file: job.file};
-            var box = document.getElementById("qout");
-            box.innerHTML = svg(q, 260).replace("<svg ", '<svg style="width:100%;max-width:260px;height:auto;display:block;margin:12px auto 0;border-radius:12px" ');
+            var html = svg(q, 260).replace("<svg ", '<svg style="width:100%;max-width:260px;height:auto;display:block;margin:12px auto 0;border-radius:12px" '), tries = 0;
+            (function put(){
+              var box = document.getElementById("qout");
+              if (box){ box.innerHTML = html; return; }
+              if (++tries < 60) setTimeout(put, 50);
+            })();
           }
         };
       })();
@@ -1856,9 +1860,8 @@ var Tools = (function(){
         + '<select id="qsize" aria-label="Size" style="flex:1 1 44%;padding:10px;border-radius:11px;border:1.5px solid var(--line)"><option value="512">Small (512 px)</option><option value="1024" selected>Medium (1024 px)</option><option value="2048">Large for print (2048 px)</option></select></div>'
         + '<p class="note3" id="qmsg"></p><p class="note3">Made on your device \u2014 nothing you type is sent anywhere.</p>');
       window.__xcqr.lib(function(err){
-        var box = document.getElementById("qout");
-        if (err){ box.innerHTML = '<p class="note3" style="color:#B91C1C">' + esc(err.message) + '</p>'; return; }
-        window.__xcqr.render(job);
+        if (err){ var box = document.getElementById("qout"); if (box) box.innerHTML = '<p class="note3" style="color:#B91C1C">' + esc(err.message) + '</p>'; else alert(err.message); return; }
+        setTimeout(function(){ window.__xcqr.render(job); }, 0);
       });
     }},
 
