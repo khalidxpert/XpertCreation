@@ -5,7 +5,7 @@
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
   var LINKS = [["Home", "/"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Connect", "/feed"], ["Jobs", "/jobs"], ["Pets", "/pets"],
-               ["Shows", "/shows"], ["Games", "/games"], ["Chat", "/chat"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
+               ["Shows", "/shows"], ["Sports", "/sports"], ["Games", "/games"], ["Chat", "/chat"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   function here(u){
     var b = u.replace(/\/+$/, "") || "/";
@@ -38,6 +38,7 @@
   if (getComputedStyle(head).position === "static") head.style.position = "relative";
   // One set of drawn icons, so the menu looks the same on Android, iPhone and Windows.
   var IC = {
+    "/sports": '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3a3 3 0 0 1-3 4M7 5H4a3 3 0 0 0 3 4"/>',
     "/": '<path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
     "/academy/": '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
     "/tools": '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>',

@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "network",
     "pets",
     "screen",
+    "sports",
     "findfriends",
     "seo",
     "assistant",
