@@ -102,6 +102,8 @@ def _stat(card, kind, label=""):
 
 def _owner_out(c):
     return {"id": c.id, "slug": c.slug, "url": SITE + "/c/" + c.slug, "active": c.active, "hidden": c.hidden, "data": c.data,
+            "verify": {"domain": c.domain, "token": c.domain_token, "verified": bool(c.domain_verified_at),
+                       "when": timezone.localtime(c.domain_verified_at).strftime("%d %b %Y") if c.domain_verified_at else ""},
             "views": c.views, "scans": c.scans, "saves": c.saves, "updated": timezone.localtime(c.updated_at).strftime("%d %b %Y")}
 
 
@@ -202,6 +204,7 @@ def _public(c):
             s["images"] = [_url(i) for i in s.get("images", [])]
     d["sections"] = [s for s in d.get("sections", []) if s.get("on", True)]
     d["slug"] = c.slug
+    d["verified_domain"] = c.domain if c.domain_verified_at else ""
     d["url"] = SITE + "/c/" + c.slug
     return d
 
@@ -321,3 +324,88 @@ def legacy(request, token):
     if c:
         return HttpResponsePermanentRedirect("/c/" + c.slug)
     return HttpResponsePermanentRedirect("/cards")
+
+
+# ---------------------------------------------------------------- company website verification
+DOMAIN = re.compile(r"^(?=.{4,120}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24}$")
+VERIFY_FILE = "xpertcreation-verify.txt"
+
+
+def _host(v):
+    v = str(v or "").strip().lower()
+    v = re.sub(r"^[a-z]+://", "", v).split("/")[0].split("?")[0].split(":")[0]
+    return v[4:] if v.startswith("www.") else v
+
+
+def _public_ips(host):
+    """Every address the name points to must be on the public internet (never our server or a private network)."""
+    import ipaddress
+    import socket
+    try:
+        infos = socket.getaddrinfo(host, 443, proto=socket.IPPROTO_TCP)
+    except OSError:
+        return False
+    ips = {i[4][0] for i in infos}
+    return bool(ips) and all(ipaddress.ip_address(ip).is_global for ip in ips)
+
+
+def _fetch_verify(domain):
+    """https://<domain>/xpertcreation-verify.txt (or www.), following at most 2 redirects that stay on that
+    domain over https. Reads 2 KB at most. Returns (text, error)."""
+    import requests
+    from urllib.parse import urljoin, urlparse
+    url = "https://%s/%s" % (domain, VERIFY_FILE)
+    for _ in range(3):
+        host = urlparse(url).hostname or ""
+        if host not in (domain, "www." + domain) or urlparse(url).scheme != "https":
+            return "", "The file must stay on https://%s." % domain
+        if not _public_ips(host):
+            return "", "We couldn't reach %s on the public internet." % host
+        try:
+            r = requests.get(url, timeout=8, allow_redirects=False, stream=True, headers={"User-Agent": "XpertCreation-Verify/1.0"})
+        except requests.RequestException:
+            if host == domain:
+                url = "https://www.%s/%s" % (domain, VERIFY_FILE); continue
+            return "", "We couldn't connect to %s over https." % host
+        if r.status_code in (301, 302, 303, 307, 308):
+            url = urljoin(url, r.headers.get("Location", "")); r.close(); continue
+        if r.status_code != 200:
+            r.close()
+            return "", "The file wasn't found at %s (answer %d)." % (url, r.status_code)
+        text = r.raw.read(2048, decode_content=True).decode("utf-8", "ignore"); r.close()
+        return text, ""
+    return "", "Too many redirects."
+
+
+@api_view(["POST", "DELETE"])
+@permission_classes([IsAuthenticated])
+def verify(request, pk):
+    """POST {domain}: get the file to upload. POST {check: true}: check it. DELETE: remove the verification."""
+    c = Card.objects.filter(pk=pk, owner=request.user).first()
+    if not c:
+        return _err("Card not found.", 404)
+    if request.method == "DELETE":
+        c.domain = c.domain_token = ""; c.domain_verified_at = None
+        c.save(update_fields=["domain", "domain_token", "domain_verified_at"]); return Response(_owner_out(c))
+    if request.data.get("check"):
+        if not c.domain or not c.domain_token:
+            return _err("Enter your website first.")
+        key = "cardverify:%d:%s" % (c.id, timezone.localdate())
+        n = cache.get(key, 0)
+        if n >= 15:
+            return _err("That's a lot of checks today. Try again tomorrow.")
+        cache.set(key, n + 1, 90000)
+        text, e = _fetch_verify(c.domain)
+        if e:
+            return _err(e)
+        if ("xpertcreation-verification=" + c.domain_token) not in text:
+            return _err("The file is there, but the code inside doesn't match. Upload the file exactly as downloaded.")
+        c.domain_verified_at = timezone.now(); c.save(update_fields=["domain_verified_at"])
+        return Response(_owner_out(c))
+    d = _host(request.data.get("domain"))
+    if not DOMAIN.match(d) or d.endswith("xpertcreation.com"):
+        return _err("Enter your company's website, like mycompany.com.")
+    if d != c.domain or not c.domain_token:
+        c.domain, c.domain_token, c.domain_verified_at = d, secrets.token_hex(16), None
+        c.save(update_fields=["domain", "domain_token", "domain_verified_at"])
+    return Response(_owner_out(c))

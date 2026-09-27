@@ -151,7 +151,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
-<script src="/js/bizcard-1.js?v=1"></script>
+<script src="/js/bizcard-1.js?v=3"></script>
 </head>
 <body>
 <header class="top">
@@ -237,12 +237,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function shell(){
     box.innerHTML = '<div class="xceh"><button class="xcbtn" data-back>\u2190 My cards</button><h1 style="font-size:20px">' + esc(C.slug) + '</h1><button class="xcbtn pri" data-save>Save</button></div>'
-      + '<div class="xcgrid"><div><div class="xcsteps">' + [["content", "1 \u00b7 Content"], ["design", "2 \u00b7 Design"], ["qr", "3 \u00b7 QR code"], ["stats", "Stats"]].map(function(s){ return '<button data-step="' + s[0] + '"' + (step === s[0] ? ' class="on"' : '') + '>' + s[1] + '</button>'; }).join("") + '</div>'
+      + '<div class="xcgrid"><div><div class="xcsteps">' + [["content", "1 \u00b7 Content"], ["design", "2 \u00b7 Design"], ["qr", "3 \u00b7 QR code"], ["verify", "\u2714 Verify"], ["stats", "Stats"]].map(function(s){ return '<button data-step="' + s[0] + '"' + (step === s[0] ? ' class="on"' : '') + '>' + s[1] + '</button>'; }).join("") + '</div>'
       + '<div id="xcform"></div><div class="xcmsg" id="xcmsg"></div></div>'
       + '<div class="xcprev"><div class="xcurl">\uD83D\uDD17 <a href="/c/' + esc(C.slug) + '" target="_blank" rel="noopener">xpertcreation.com/c/' + esc(C.slug) + '</a><button class="xcmini" data-copyurl>Copy</button></div><div class="xcphone"><div id="xcpv"></div></div></div></div>';
     form(); preview();
   }
-  function preview(){ var el = document.getElementById("xcpv"); if (el) XCCard.render(el, C.data, {vcf: "#", preview: true}); }
+  function preview(){ var el = document.getElementById("xcpv"); if (el) XCCard.render(el, Object.assign({}, C.data, {verified_domain: C.verify && C.verify.verified ? C.verify.domain : ""}), {vcf: "#", preview: true}); }
   function fld(path, label, val, type, ph){ return '<div><label>' + label + '</label>' + (type === "area" ? '<textarea data-f="' + path + '" placeholder="' + esc(ph || "") + '">' + esc(val) + '</textarea>' : '<input data-f="' + path + '" type="' + (type || "text") + '" value="' + esc(val) + '" placeholder="' + esc(ph || "") + '">') + '</div>'; }
   function imgPick(kind, label, cur){ return '<div><label>' + label + '</label><div class="xcimgs">' + (cur ? '<img src="' + esc(XCCard.media(cur)) + '" alt=""><button class="xcmini" data-rmimg="' + kind + '">Remove</button>' : '') + '<label class="xcmini" style="margin:0">Upload<input type="file" accept="image/*" data-up="' + kind + '" style="display:none"></label></div></div>'; }
   function form(){
@@ -276,6 +276,19 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<div class="xcqr" id="xcqr" style="text-align:center;margin-top:12px"></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"><button class="xcbtn pri" data-qdl="1024">Download PNG</button><button class="xcbtn" data-qdl="2400">Large PNG for print</button></div>'
         + '<p style="font-size:12.5px;color:var(--ink-soft)">The QR opens xpertcreation.com/c/' + esc(C.slug) + '. Save the card first so the QR shows your latest details.</p></div>';
       setTimeout(drawQr, 0);
+    }
+    if (step === "verify"){
+      var v = C.verify || {};
+      h += '<div class="xcbox"><h3>\u2714 Verify your company website</h3>'
+        + (v.verified ? '<p style="background:#DCFCE7;color:#166534;padding:10px 12px;border-radius:10px;font-weight:700">\u2714 Verified: ' + esc(v.domain) + ' (since ' + esc(v.when) + '). Your card shows a green \u201cVerified\u201d badge.</p><button class="xcbtn red" data-vrm>Remove verification</button>'
+          : '<p style="font-size:14px;color:var(--ink-soft)">Prove you run your company\u2019s website, and your card gets a green <b>\u201cVerified: yourcompany.com\u201d</b> badge.</p>'
+            + '<label>Your website</label><div style="display:flex;gap:6px"><input id="xcvdom" placeholder="mycompany.com" value="' + esc(v.domain || "") + '"><button class="xcbtn" data-vstart>Get my file</button></div>'
+            + (v.token ? '<ol style="font-size:14px;line-height:1.7;padding-left:20px;margin:12px 0">'
+              + '<li><button class="xcmini" data-vdl>\u2B07 Download xpertcreation-verify.txt</button></li>'
+              + '<li>Upload it to the <b>main folder</b> of your website, so it opens at:<br><a href="https://' + esc(v.domain) + '/xpertcreation-verify.txt" target="_blank" rel="noopener">https://' + esc(v.domain) + '/xpertcreation-verify.txt</a></li>'
+              + '<li>Then tap <b>Check now</b>.</li></ol><button class="xcbtn pri" data-vcheck>Check now</button>'
+              + '<p style="font-size:12.5px;color:var(--ink-soft)">The file contains one line: <code>xpertcreation-verification=' + esc(v.token) + '</code>. You can remove it after you\u2019re verified.</p>' : ''))
+        + '</div>';
     }
     if (step === "stats"){
       var l = C.last30 || {};
@@ -373,6 +386,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (a("data-rmimg")){ var k = a("data-rmimg"); if (k === "background") C.data.design.background = ""; else C.data.profile[k] = ""; dirty = true; form(); preview(); return; }
     if (a("data-tpl")){ C.data.design.template = a("data-tpl"); dirty = true; form(); preview(); return; }
     if (a("data-bgc") != null){ if (a("data-bgc")) C.data.design.bg = a("data-bgc"); C.data.design.background = ""; dirty = true; form(); preview(); return; }
+    if (a("data-vstart") != null){ api(C.id + "/verify/", {method: "POST", body: {domain: document.getElementById("xcvdom").value}}).then(function(r){ if (!r.ok){ msg(r.data.detail || "Could not start.", "bad"); return; } C.verify = r.data.verify; msg("Now download the file and upload it to your website.", "ok"); form(); }); return; }
+    if (a("data-vdl") != null){ var vb = new Blob(["xpertcreation-verification=" + C.verify.token + "\n"], {type: "text/plain"}), vl = document.createElement("a"); vl.href = URL.createObjectURL(vb); vl.download = "xpertcreation-verify.txt"; document.body.appendChild(vl); vl.click(); setTimeout(function(){ URL.revokeObjectURL(vl.href); vl.remove(); }, 1500); return; }
+    if (a("data-vcheck") != null){ msg("Checking your website\u2026"); api(C.id + "/verify/", {method: "POST", body: {check: true}}).then(function(r){ if (!r.ok){ msg(r.data.detail || "Not verified yet.", "bad"); return; } C.verify = r.data.verify; C.data = r.data.data; msg("Verified \u2714 Your card now shows the badge.", "ok"); form(); preview(); }); return; }
+    if (a("data-vrm") != null){ if (confirm("Remove the verified badge from your card?")) api(C.id + "/verify/", {method: "DELETE"}).then(function(r){ if (r.ok){ C.verify = r.data.verify; msg("Verification removed.", "ok"); form(); } }); return; }
     if (a("data-qdl")){ XCCard.qr(location.origin + "/c/" + C.slug + "?src=qr", C.data.qr, +a("data-qdl"), C.data.qr.logo ? XCCard.media(C.data.profile.logo) : "", function(cv){ cv.toBlob(function(b){ var l = document.createElement("a"); l.href = URL.createObjectURL(b); l.download = "card-qr-" + C.slug + ".png"; document.body.appendChild(l); l.click(); setTimeout(function(){ URL.revokeObjectURL(l.href); l.remove(); }, 1500); }); }); return; }
   });
   window.addEventListener("beforeunload", function(e){ if (dirty){ e.preventDefault(); e.returnValue = ""; } });

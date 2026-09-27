@@ -21,7 +21,8 @@
     nav: '<path d="M3 11l18-8-8 18-2-8z"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     chev: '<path d="M9 6l6 6-6 6"/>',
-    plus: '<path d="M12 5v14M5 12h14"/>'
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    ok: '<path d="M20 6L9 17l-5-5"/>'
   };
   function ic(n, s){ return '<svg viewBox="0 0 24 24" width="' + (s || 20) + '" height="' + (s || 20) + '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (I[n] || I.link) + '</svg>'; }
   function href(c){
@@ -62,6 +63,7 @@
     + ".xcb .mnl{position:absolute;top:64px;right:14px;background:#fff;color:#0D1424;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.25);padding:6px 0;z-index:7;min-width:190px}.xcb .mnl a{display:block;padding:10px 16px;font-weight:600}.xcb .mnl[hidden]{display:none}"
     + ".xcb .promo{display:flex;justify-content:center;margin:20px 0 0}.xcb .promo a{padding:12px 18px;border-radius:99px;background:rgba(100,116,139,.35);color:inherit;font-size:13.5px;text-decoration:underline}"
     + ".xcb[data-t=hero],.xcb[data-t=dark]{--bg:#050507}.xcb[data-t=hero] .hd{min-height:78vh}.xcb[data-t=hero] h1{font-size:34px}"
+    + ".xcb .vd{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:5px 11px;border-radius:99px;background:#DCFCE7;color:#166534!important;font-size:12.5px;font-weight:700}.xcb .vd svg{stroke-width:3}"
     + ".xcb .bar{position:sticky;bottom:12px;margin:18px 14px 0;display:flex;gap:8px;z-index:3}"
     + ".xcb .bar a,.xcb .bar button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:14px;border:0;font:inherit;font-weight:800;cursor:pointer;background:#fff;color:#0D1424;box-shadow:0 8px 22px rgba(13,20,36,.18)}"
     + ".xcb .bar .pri{background:var(--p);color:#fff;flex:2}"
@@ -105,7 +107,7 @@
     el.style.backgroundImage = dz.background ? "url('" + media(dz.background).replace(/'/g, "") + "')" : "";
     if (p.photo) el.style.setProperty("--hero", "url('" + media(p.photo).replace(/'/g, "") + "')");
     var head = (p.photo ? '<img class="ph" src="' + esc(media(p.photo)) + '" alt="">' : '') + (p.logo ? '<img class="lg" src="' + esc(media(p.logo)) + '" alt="">' : '')
-      + '<h1>' + esc(p.name || "Your name") + '</h1>' + (p.heading ? '<div class="h2">' + esc(p.heading) + '</div>' : '') + (p.sub ? '<div class="h3">' + esc(p.sub) + '</div>' : '')
+      + '<h1>' + esc(p.name || "Your name") + '</h1>' + (d.verified_domain ? '<a class="vd" href="https://' + esc(d.verified_domain) + '" target="_blank" rel="noopener" title="This card\'s owner proved they run this website">' + ic("ok", 13) + 'Verified: ' + esc(d.verified_domain) + '</a><br>' : '') + (p.heading ? '<div class="h2">' + esc(p.heading) + '</div>' : '') + (p.sub ? '<div class="h3">' + esc(p.sub) + '</div>' : '')
       + ((d.connect || []).length ? '<div class="cn">' + d.connect.map(function(c){ return '<a href="' + esc(href(c)) + '" target="_blank" rel="noopener" data-lbl="' + esc(c.type) + '" aria-label="' + esc(c.type) + '">' + ic(c.type, 22) + '</a>'; }).join("") + '</div>' : '')
       + (p.bio ? '<p class="bio">' + esc(p.bio) + '</p>' : '');
     var secs = (d.sections || []).filter(function(s){ return s.on !== false; }).map(function(s, i){ var c = JSON.parse(JSON.stringify(s)); c._i = i; return c; });

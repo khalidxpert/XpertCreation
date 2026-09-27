@@ -13,6 +13,9 @@ class Card(models.Model):
     active = models.BooleanField(default=True)
     hidden = models.BooleanField(default=False)          # moderators
     legacy_token = models.CharField(max_length=24, blank=True, default="", db_index=True)   # old /card/<token> links
+    domain = models.CharField(max_length=120, blank=True, default="")          # company website to verify
+    domain_token = models.CharField(max_length=40, blank=True, default="")
+    domain_verified_at = models.DateTimeField(null=True, blank=True)
     views = models.PositiveIntegerField(default=0)
     scans = models.PositiveIntegerField(default=0)
     saves = models.PositiveIntegerField(default=0)
