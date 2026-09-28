@@ -207,7 +207,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 (function(){
   "use strict";
   /* ENGINE START */
-var W = 1000, H = 500, R = 11.4, POCKET_R = 24, MOUTH = 30;
+var W = 1000, H = 500, R = 14.5, POCKET_R = 30, MOUTH = 37;
 var POCKETS = [[0, 0], [W / 2, -4], [W, 0], [0, H], [W / 2, H + 4], [W, H]];
 var FRICTION = 190, MIN_V = 4, E_BALL = 0.96, E_RAIL = 0.78;
 var HEAD_X = W * 0.25, FOOT = [W * 0.72, H / 2];
@@ -461,7 +461,7 @@ function freeSpot(balls, x, y){
     if (dx > 0) wall = Math.min(wall, (W - R - c.x) / dx); if (dx < 0) wall = Math.min(wall, (R - c.x) / dx);
     if (dy > 0) wall = Math.min(wall, (H - R - c.y) / dy); if (dy < 0) wall = Math.min(wall, (R - c.y) / dy);
     var len = best !== null ? Math.min(best, wall) : wall, gx = c.x + dx * len, gy = c.y + dy * len;
-    ctx.save(); ctx.setLineDash([6, 6]); ctx.strokeStyle = "rgba(255,255,255,.7)"; ctx.lineWidth = 1.6;
+    ctx.save(); ctx.setLineDash([6, 6]); ctx.strokeStyle = "rgba(255,255,255,.75)"; ctx.lineWidth = 2.2;
     ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(gx, gy); ctx.stroke(); ctx.setLineDash([]);
     ctx.beginPath(); ctx.arc(gx, gy, R, 0, Math.PI * 2); ctx.strokeStyle = "rgba(255,255,255,.8)"; ctx.stroke();
     if (hit && best !== null && best <= wall){
@@ -476,11 +476,11 @@ function freeSpot(balls, x, y){
   }
   function cueStick(){
     var c = balls[0], back = 18 + power * 70, dx = Math.cos(aim), dy = Math.sin(aim);
-    var x1 = c.x - dx * (R + back), y1 = c.y - dy * (R + back), x2 = x1 - dx * 360, y2 = y1 - dy * 360;
+    var x1 = c.x - dx * (R + back), y1 = c.y - dy * (R + back), x2 = x1 - dx * 440, y2 = y1 - dy * 440;
     ctx.save(); ctx.lineCap = "round";
-    ctx.strokeStyle = "rgba(0,0,0,.3)"; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(x1 + 3, y1 + 4); ctx.lineTo(x2 + 3, y2 + 4); ctx.stroke();
+    ctx.strokeStyle = "rgba(0,0,0,.3)"; ctx.lineWidth = 13; ctx.beginPath(); ctx.moveTo(x1 + 3, y1 + 4); ctx.lineTo(x2 + 3, y2 + 4); ctx.stroke();
     var g = ctx.createLinearGradient(x1, y1, x2, y2); g.addColorStop(0, "#F1E3C6"); g.addColorStop(0.03, "#2B6CB0"); g.addColorStop(0.05, "#E8D2A6"); g.addColorStop(0.7, "#B7793F"); g.addColorStop(1, "#4A2A14");
-    ctx.strokeStyle = g; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.strokeStyle = g; ctx.lineWidth = 11; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
     ctx.restore();
   }
   function draw(){
