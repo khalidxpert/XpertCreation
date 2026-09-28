@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "network",
     "pets",
     "screen",
+    "tags",
     "autopost",
     "bizcards",
     "sports",

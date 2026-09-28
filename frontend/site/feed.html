@@ -165,6 +165,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
 <div class="wrap feedw">
   <h1 id="fh1">Connect</h1>
+  <div id="fhtag" style="display:flex;gap:6px;margin:0 0 10px"><input id="fhtq" placeholder="Search a hashtag, e.g. #cricket" style="flex:1;padding:9px 12px;border:1.5px solid var(--line,#E4E8F2);border-radius:12px;font:inherit;background:var(--card,#fff);color:var(--ink,#0D1424)"><button id="fhtb" type="button" style="padding:9px 14px;border-radius:12px;border:0;background:var(--brand,#1B4DFF);color:#fff;font:inherit;font-weight:800;cursor:pointer"># Search</button></div>
+  <script>(function(){ function go(){ var q = (document.getElementById("fhtq").value || "").trim().replace(/^#/, ""); if (/^[A-Za-z][A-Za-z0-9_]{1,49}$/.test(q)) location.href = "/tag/" + q.toLowerCase(); } document.getElementById("fhtb").onclick = go; document.getElementById("fhtq").onkeydown = function(e){ if (e.key === "Enter") go(); }; })();</script>
   <style>.hubbar{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 14px}.hubbar a{padding:8px 14px;border-radius:99px;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);font-weight:700;font-size:13.5px;text-decoration:none;color:var(--ink,#0D1424)}.hubbar a.on{background:var(--ink,#0D1424);color:#fff;border-color:var(--ink,#0D1424)}</style><div class="hubbar"><a href="/feed" class="on">Posts</a><a href="/people">People</a><a href="/me/profile#connections">My network</a><a href="/me/profile">My profile</a></div>
   <div id="composer"></div>
   <div class="ftabs" id="ftabs">
@@ -242,7 +244,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
   function $(id){ return document.getElementById(id); }
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
-  function linkify(t){ return esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g, '<a href="$1" target="_blank" rel="noopener nofollow ugc">$1</a>'); }
+  function linkify(t){ return esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g, '<a href="$1" target="_blank" rel="noopener nofollow ugc">$1</a>')
+    .replace(/(^|[\s(])#([A-Za-z][A-Za-z0-9_]{1,49})/g, function(_, pre, tg){ return pre + '<a href="/tag/' + tg.toLowerCase() + '">#' + tg + '</a>'; }); }
   function cookie(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
   function api(p, o){
     o = o || {};
