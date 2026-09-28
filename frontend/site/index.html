@@ -35,7 +35,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"></noscript>
 <style>
 :root{
   --ink:#0D1424; --ink-soft:#5A657C; --paper:#F6F7FB; --card:#FFFFFF;
@@ -779,14 +779,14 @@ body.signed-in .hello{margin-top:4px}
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
-<link rel="preload" as="image" href="/brand/slides/drama.webp" imagesrcset="/brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" imagesizes="(max-width: 860px) 100vw, 860px" fetchpriority="high">
+<link rel="preload" as="image" href="/brand/slides/drama.webp" imagesrcset="/brand/slides/drama-640.webp 640w, /brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" imagesizes="(max-width: 860px) 100vw, 860px" fetchpriority="high">
 </head>
 <body>
 <div class="wrap">
 
   <header class="topbar" id="topbar">
     <div class="logo">
-      <img src="/brand/logo-64.png" alt="" class="brandlogo" style="height:30px;border-radius:9px" onerror="this.style.display='none'">XpertCreation
+      <img src="/brand/logo-64.webp" width="30" height="30" alt="" class="brandlogo" style="height:30px;border-radius:9px" onerror="this.style.display='none'">XpertCreation
     </div>
     <nav class="xnav"><a href="/academy/">Academy</a><a href="/tools">Tools</a><a href="/games">Games</a><a class="hide-s" href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Group</a></nav>
     <div class="spacer"></div>
@@ -865,7 +865,7 @@ body.signed-in .hello{margin-top:4px}
     <h2 data-i18n="secH">Our platforms</h2>
 
     <div class="slidewrap">
-      <div class="slides" id="slides"><a class="slide banner" href="/shows"><img src="/brand/slides/drama.webp" srcset="/brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="Dramas and films — story, cast, trailers and where to watch" fetchpriority="high"></a></div>
+      <div class="slides" id="slides"><a class="slide banner" href="/shows"><img src="/brand/slides/drama.webp" srcset="/brand/slides/drama-640.webp 640w, /brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="Dramas and films — story, cast, trailers and where to watch" fetchpriority="high"></a></div>
     </div>
     <div class="dots" id="dots"></div>
     <p class="swipehint" data-i18n="swipe">Swipe to see more</p>
@@ -905,7 +905,7 @@ body.signed-in .hello{margin-top:4px}
 
     <section class="about" id="about">
       <div class="who2">
-        <img class="pic" src="/brand/ceo.jpg" alt="Syed Khalid Hussain Shah"
+        <img class="pic" src="/brand/ceo-240.webp" srcset="/brand/ceo-240.webp 1x, /brand/ceo-480.webp 2x" alt="Syed Khalid Hussain Shah"
              onerror="this.replaceWith(Object.assign(document.createElement('span'),
                       {className:'pic ph',textContent:'K'}))">
         <div class="t">
@@ -915,7 +915,7 @@ body.signed-in .hello{margin-top:4px}
       </div>
 
       <figure class="mcp" oncontextmenu="return false">
-        <img src="/brand/mcp-display.jpg?v=2" alt="Microsoft Certified Professional certificate of Syed Khalid Hussain Shah"
+        <img src="/brand/mcp-display-600.webp" srcset="/brand/mcp-display-600.webp 600w, /brand/mcp-display.webp 1200w" sizes="(max-width: 640px) 92vw, 600px" alt="Microsoft Certified Professional certificate of Syed Khalid Hussain Shah"
              width="1200" height="922" loading="lazy" draggable="false">
         <figcaption><b>Microsoft Certified Professional</b>
         This curriculum was prepared by Syed Khalid Hussain Shah, a Microsoft Certified Professional.</figcaption>
@@ -1242,7 +1242,7 @@ body.signed-in .hello{margin-top:4px}
       // Pehli tasveer foran, baqi tab jab paas aayen.
       var lazy = i === 0 ? '' : ' loading="lazy"';
       return '<a class="slide banner" href="' + b.href + '">'
-        + '<img src="' + b.img + '" srcset="' + b.img.replace(".webp", "-768.webp") + ' 768w, ' + b.img + ' 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="' + esc(b.alt) + '"' + (i === 0 ? ' fetchpriority="high"' : lazy) + '>'
+        + '<img src="' + b.img + '" srcset="' + b.img.replace(".webp", "-640.webp") + ' 640w, ' + b.img.replace(".webp", "-768.webp") + ' 768w, ' + b.img + ' 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="' + esc(b.alt) + '"' + (i === 0 ? ' fetchpriority="high"' : lazy) + '>'
         + '</a>';
     }).join("");
     var dots = document.getElementById("dots");
