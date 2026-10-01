@@ -110,7 +110,7 @@
       meP.then(function(u){
         var first = ((u && u.full_name) || "").split(" ")[0] || "friend";
         var bar = document.createElement("div"); bar.className = "xcbar";
-        bar.innerHTML = av(u, "xcav") + '<button type="button" class="xcopen">What\u2019s on your mind, ' + esc(first) + '?</button><button type="button" class="xcph" aria-label="Photo">\uD83D\uDDBC\uFE0F</button>';
+        bar.innerHTML = '<a href="/feed?user=' + ((u && u.id) || "") + '" title="My wall">' + av(u, "xcav") + '</a>' + '<button type="button" class="xcopen">What\u2019s on your mind, ' + esc(first) + '?</button><button type="button" class="xcph" aria-label="Photo">\uD83D\uDDBC\uFE0F</button>';
         host.insertBefore(bar, comp);
         var head = document.createElement("div"); head.className = "xcsh";
         head.innerHTML = '<button type="button" class="xcx" aria-label="Close">\u2715</button><b>Create post</b><button type="button" class="xcpost" data-xcpost>Post</button>';

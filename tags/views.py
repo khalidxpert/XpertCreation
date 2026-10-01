@@ -88,9 +88,9 @@ def page(request, name):
         return HttpResponse("Not found", status=404)
     n = _posts(name).count()
     e = lambda v: html.escape(v, quote=True)
-    title = "#%s \u2014 posts on XpertCreation Connect" % name
-    desc = ("%d post%s tagged #%s on XpertCreation Connect. Free tools, courses, jobs, sports and more." % (n, "" if n == 1 else "s", name)) if n else \
-           "Posts tagged #%s on XpertCreation Connect." % name
+    title = "#%s \u2014 posts on XpertConnect" % name
+    desc = ("%d post%s tagged #%s on XpertConnect. Free tools, courses, jobs, sports and more." % (n, "" if n == 1 else "s", name)) if n else \
+           "Posts tagged #%s on XpertConnect." % name
     s = re.sub(r"<title>.*?</title>", "<title>%s</title>" % e(title), src, 1, re.S)
     s = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % e(desc), s, 1)
     s = re.sub(r'<link rel="canonical" href="[^"]*">', '<link rel="canonical" href="%s/tag/%s">' % (SITE, name), s, 1)

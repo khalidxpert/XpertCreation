@@ -161,7 +161,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=17" defer></script>
+<script src="/js/topnav-1.js?v=18" defer></script>
 
 <div class="wrap aiw"><div id="aiv"></div></div>
 <style>
@@ -193,7 +193,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 (function(){
   "use strict";
   var KEY = "xc_ai_chat_v1", box = document.getElementById("aiv"), msgs = [], left = null, busy = false;
-  var IDEAS = ["Excel mein VLOOKUP kaise use karein?", "Write a short cover letter for a sales job", "Mujhe Python seekhne ka plan bana dein", "What should I put in my Connect headline?"];
+  var IDEAS = ["Excel mein VLOOKUP kaise use karein?", "Write a short cover letter for a sales job", "Mujhe Python seekhne ka plan bana dein", "What should I put in my XpertConnect headline?"];
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function cookie(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
   function inl(s){ return s.replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")

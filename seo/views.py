@@ -105,7 +105,7 @@ def post(request, pk):
     d = _api("/api/feed/posts/%s/" % pk)
     url = "%s/post/%s" % (SITE, pk)
     if not d or "post" not in d:
-        return _page("feed.html", "Post \u2014 XpertCreation Connect", "A post on XpertCreation Connect. Sign in to see posts shared with members.", url, noindex=True)
+        return _page("feed.html", "Post \u2014 XpertConnect", "A post on XpertConnect. Sign in to see posts shared with members.", url, noindex=True)
     p = d["post"]
     name = p.get("author", {}).get("name", "A member")
     body = _clip(p.get("body", ""), 150) or "A photo"
@@ -145,11 +145,11 @@ def profile(request, slug):
     d = _api("/api/network/in/%s/" % slug)
     url = "%s/in/%s" % (SITE, slug)
     if not d:
-        return _page("in.html", "Member profile \u2014 XpertCreation Connect", "A member profile on XpertCreation Connect.", url, noindex=True)
+        return _page("in.html", "Member profile \u2014 XpertConnect", "A member profile on XpertConnect.", url, noindex=True)
     name, head = str(_pick(d, "name", "full_name")), str(_pick(d, "headline"))
     city = str(_pick(d, "city"))
     title = _clip(name + (" \u2014 " + head if head else ""), 68)
-    desc = _clip("%s%s%s on XpertCreation Connect. %s" % (name, (", " + head) if head else "", (" in " + city) if city else "", _pick(d, "about")), 158)
+    desc = _clip("%s%s%s on XpertConnect. %s" % (name, (", " + head) if head else "", (" in " + city) if city else "", _pick(d, "about")), 158)
     ld = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {"@type": "Person", "name": name, "jobTitle": head, "url": url}}
     return _page("in.html", title, desc, url, image=_abs(_pick(d, "avatar_url", "avatar")), ld=ld)
 

@@ -161,7 +161,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=17" defer></script>
+<script src="/js/topnav-1.js?v=18" defer></script>
 
 <div class="wrap jobsw">
   <div id="jview"></div>
@@ -314,7 +314,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
           + (j.my_application === "applied" ? '<div class="jacts"><button class="jbtn ghost" data-withdraw>Withdraw my application</button></div>' : '')
           + (j.my_application === "shortlisted" ? '<p>The employer opened a chat with you. <a href="/chat">Go to chat</a></p>' : '') + '</div>';
       } else if (j.open){
-        h += '<div class="jbox"><b>Apply with your profile</b><p style="color:var(--ink-soft);font-size:14px;margin:4px 0 8px">The employer sees your Connect profile: headline, skills and experience. '
+        h += '<div class="jbox"><b>Apply with your profile</b><p style="color:var(--ink-soft);font-size:14px;margin:4px 0 8px">The employer sees your XpertConnect profile: headline, skills and experience. '
           + '<a href="/me/profile">Check it first</a>.</p><textarea id="anote" maxlength="1000" placeholder="A short note (optional): why you fit this job" style="width:100%;box-sizing:border-box;min-height:80px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit"></textarea>'
           + '<div class="jacts"><button class="jbtn" data-apply>Apply</button></div><div id="amsg" class="jmsg"></div></div>';
       }

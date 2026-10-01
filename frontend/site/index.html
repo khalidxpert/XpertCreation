@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>XpertCreation — Free tools, courses, jobs and games</title>
 <!-- seo:start -->
-<meta name="description" content="Free courses, 78 tools, jobs, Connect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
+<meta name="description" content="Free courses, 78 tools, jobs, XpertConnect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
 <link rel="canonical" href="https://xpertcreation.com/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="XpertCreation">
 <meta property="og:title" content="XpertCreation — Free tools, courses, jobs and games">
-<meta property="og:description" content="Free courses, 78 tools, jobs, Connect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
+<meta property="og:description" content="Free courses, 78 tools, jobs, XpertConnect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
 <meta property="og:url" content="https://xpertcreation.com/">
 <meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="XpertCreation — Free tools, courses, jobs and games">
-<meta name="twitter:description" content="Free courses, 78 tools, jobs, Connect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
+<meta name="twitter:description" content="Free courses, 78 tools, jobs, XpertConnect, chat, pets and games - one free account for everything. Made in Lahore, Pakistan.">
 <meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"XpertCreation","url":"https://xpertcreation.com/","description":"Prayer times, world clock, weather, 78 calculators, a blood donor network, a donation board, Word and Excel courses and games. Free to use, and most of it needs no account.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"},"potentialAction":{"@type":"SearchAction","target":"https://xpertcreation.com/tools?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 <!-- seo:end -->
@@ -820,7 +820,7 @@ body.signed-in .hello{margin-top:4px}
       + '<span style="background:#fff;color:#1B4DFF;font-weight:800;padding:10px 14px;border-radius:12px;white-space:nowrap">' + btn + '</span></a>';
   }
   fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
-    if (!u || !u.email){ card("Join XpertCreation Connect", "Free. Build your professional profile, find jobs and connect with people.", "/register", "Join free"); return; }
+    if (!u || !u.email){ card("Join XpertConnect", "Free. Build your professional profile, find jobs and connect with people.", "/register", "Join free"); return; }
     fetch("/api/network/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(p){
       var has = p && (p.slug || (p.profile && p.profile.slug));
       if (!has) card("Create your professional profile", "Get found for jobs, show your skills and connect with people on Connect.", "/me/profile", "Start now");
@@ -861,7 +861,7 @@ body.signed-in .hello{margin-top:4px}
         + "<div style='display:flex;flex-wrap:wrap;gap:6px'>" + steps.filter(function(s){ return !s[1]; }).map(function(s){
             return "<a href='" + s[2] + "' style='padding:4px 10px;border-radius:999px;border:1px solid var(--line,#E4E8F2);font-size:13px;text-decoration:none;color:var(--ink,#0D1424)'>+ " + s[0] + "</a>";
           }).join("") + "</div>"
-        + "<p style='margin:10px 0 0;font-size:13px;color:var(--ink-soft,#5A657C)'>A complete profile shows up in Connect, where members can find, follow and endorse you.</p></div>";
+        + "<p style='margin:10px 0 0;font-size:13px;color:var(--ink-soft,#5A657C)'>A complete profile shows up in XpertConnect, where members can find, follow and endorse you.</p></div>";
       var later = document.getElementById("pdlater");
       if (later) later.onclick = function(){
         try { localStorage.setItem("xc_profdone_later", String(Date.now() + 3 * 86400000)); } catch (e) {}
@@ -886,7 +886,7 @@ body.signed-in .hello{margin-top:4px}
     <h2 data-i18n="secH">Our platforms</h2>
 
     <div class="slidewrap">
-      <div class="slides" id="slides"><a class="slide banner" href="/feed"><img src="/brand/slides/people.webp" srcset="/brand/slides/people-640.webp 640w, /brand/slides/people-768.webp 768w, /brand/slides/people.webp 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="Connect — connect, follow and endorse each other" fetchpriority="high"></a></div>
+      <div class="slides" id="slides"><a class="slide banner" href="/feed"><img src="/brand/slides/people.webp" srcset="/brand/slides/people-640.webp 640w, /brand/slides/people-768.webp 768w, /brand/slides/people.webp 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="XpertConnect — connect, follow and endorse each other" fetchpriority="high"></a></div>
     </div>
     <div class="dots" id="dots"></div>
     <p class="swipehint" data-i18n="swipe">Swipe to see more</p>
@@ -1062,7 +1062,7 @@ body.signed-in .hello{margin-top:4px}
     d18:{en:"Conversations after a donation or blood request is accepted.",de:"Gespräche, nachdem eine Spende oder Blutanfrage angenommen wurde.",ur:"عطیہ یا خون کی درخواست قبول ہونے کے بعد گفتگو۔",ar:"محادثات بعد قبول طلب التبرع أو الدم.",hi:"दान या रक्त अनुरोध स्वीकार होने के बाद बातचीत।",bn:"দান বা রক্তের অনুরোধ গৃহীত হওয়ার পর কথোপকথন।",zh:"捐赠或献血请求被接受后的对话。",es:"Conversaciones tras aceptar una donación o solicitud de sangre.",fr:"Conversations après l'acceptation d'un don ou d'une demande de sang.",pt:"Conversas após aceitar uma doação ou pedido de sangue.",ru:"Переписка после принятия пожертвования или запроса крови.",tr:"Bağış veya kan talebi kabul edildikten sonraki sohbetler.",id:"Percakapan setelah donasi atau permintaan darah diterima."},
     nMoney:{en:"Money",de:"Geld",ur:"حساب کتاب",ar:"المال",hi:"हिसाब-किताब",bn:"টাকা",zh:"记账",es:"Dinero",fr:"Argent",pt:"Dinheiro",ru:"Деньги",tr:"Para",id:"Uang"},
     dMoney:{en:"Cash, wallets and bank balances in one place. Kept on your phone only.",de:"Bargeld, Wallets und Bankguthaben an einem Ort. Nur auf Ihrem Handy gespeichert.",ur:"نقد، والٹ اور بینک بیلنس ایک جگہ۔ صرف آپ کے فون پر محفوظ۔",ar:"النقد والمحافظ وأرصدة البنوك في مكان واحد. محفوظة على هاتفك فقط.",hi:"नकद, वॉलेट और बैंक बैलेंस एक जगह। केवल आपके फ़ोन पर सुरक्षित।",bn:"নগদ, ওয়ালেট আর ব্যাংক ব্যালেন্স এক জায়গায়। শুধু আপনার ফোনে রাখা।",zh:"现金、钱包和银行余额一目了然。只保存在您的手机上。",es:"Efectivo, billeteras y saldos bancarios en un solo lugar. Solo en tu teléfono.",fr:"Espèces, portefeuilles et soldes bancaires au même endroit. Uniquement sur votre téléphone.",pt:"Dinheiro, carteiras e saldos bancários num só lugar. Só no seu telefone.",ru:"Наличные, кошельки и банковские счета в одном месте. Хранится только на вашем телефоне.",tr:"Nakit, cüzdan ve banka bakiyeleri tek yerde. Yalnızca telefonunuzda saklanır.",id:"Uang tunai, dompet digital, dan saldo bank di satu tempat. Hanya tersimpan di ponsel Anda."},
-    nPeople:{en:"Connect",de:"Netzwerk",ur:"رابطہ",ar:"تواصل",hi:"कनेक्ट",bn:"সংযোগ",zh:"人脉",es:"Conectar",fr:"Réseau",pt:"Conectar",ru:"Связи",tr:"Bağlantı",id:"Koneksi"},
+    nPeople:{en:"XpertConnect",de:"Netzwerk",ur:"رابطہ",ar:"تواصل",hi:"कनेक्ट",bn:"সংযোগ",zh:"人脉",es:"Conectar",fr:"Réseau",pt:"Conectar",ru:"Связи",tr:"Bağlantı",id:"Koneksi"},
     dPeople:{en:"Find members, connect, follow and endorse each other.",de:"Mitglieder finden, vernetzen, folgen und empfehlen.",ur:"ممبرز تلاش کریں، جڑیں، فالو کریں اور ایک دوسرے کی توثیق کریں۔",ar:"ابحث عن الأعضاء وتواصل معهم وتابعهم وأيّد مهاراتهم.",hi:"सदस्यों को खोजें, जुड़ें, फ़ॉलो करें और एक-दूसरे को एंडोर्स करें।",bn:"সদস্য খুঁজুন, যুক্ত হন, ফলো করুন এবং একে অপরকে সমর্থন করুন।",zh:"查找成员，建立联系，关注并互相认可技能。",es:"Encuentra miembros, conecta, sigue y recomienda sus habilidades.",fr:"Trouvez des membres, connectez-vous, suivez-les et recommandez leurs compétences.",pt:"Encontre membros, conecte-se, siga e recomende as habilidades uns dos outros.",ru:"Находите участников, общайтесь, подписывайтесь и подтверждайте навыки.",tr:"Üyeleri bul, bağlantı kur, takip et ve becerilerini onayla.",id:"Temukan anggota, terhubung, ikuti, dan dukung keahlian satu sama lain."},
     nShows:{en:"Shows",de:"Serien & Filme",ur:"ڈرامے اور فلمیں",ar:"مسلسلات وأفلام",hi:"ड्रामे और फ़िल्में",bn:"নাটক ও সিনেমা",zh:"剧集与电影",es:"Series y cine",fr:"Séries et films",pt:"Séries e filmes",ru:"Сериалы и фильмы",tr:"Diziler ve filmler",id:"Drama & film"},
     dShows:{en:"Pakistani and Indian dramas and films: stories, cast, trailers and reviews.",de:"Pakistanische und indische Serien und Filme: Handlung, Besetzung, Trailer, Bewertungen.",ur:"پاکستانی اور بھارتی ڈرامے اور فلمیں: کہانی، کاسٹ، ٹریلر اور ریویوز۔",ar:"مسلسلات وأفلام باكستانية وهندية: القصة والممثلون والإعلانات والمراجعات.",hi:"पाकिस्तानी और भारतीय ड्रामे और फ़िल्में: कहानी, कलाकार, ट्रेलर और रिव्यू।",bn:"পাকিস্তানি ও ভারতীয় নাটক ও সিনেমা: গল্প, অভিনেতা, ট্রেলার ও রিভিউ।",zh:"巴基斯坦和印度的剧集与电影：剧情、演员、预告片和评论。",es:"Series y películas de Pakistán e India: trama, reparto, tráileres y reseñas.",fr:"Séries et films pakistanais et indiens : histoire, distribution, bandes-annonces, avis.",pt:"Séries e filmes do Paquistão e da Índia: enredo, elenco, trailers e avaliações.",ru:"Пакистанские и индийские сериалы и фильмы: сюжет, актёры, трейлеры, отзывы.",tr:"Pakistan ve Hindistan dizi ve filmleri: konu, oyuncular, fragmanlar ve yorumlar.",id:"Drama dan film Pakistan dan India: cerita, pemeran, trailer, dan ulasan."},
@@ -1218,7 +1218,7 @@ body.signed-in .hello{margin-top:4px}
       name:"Money", nk:"nMoney", dk:"dMoney" },
     { id:"people", href:"/feed", icon:"\ud83d\udc65",
       c1:"#4F46E5", c2:"#312E81", glow:"rgba(79,70,229,.30)", live:1,
-      name:"Connect", nk:"nPeople", dk:"dPeople" },
+      name:"XpertConnect", nk:"nPeople", dk:"dPeople" },
     { id:"pets", href:"/pets", icon:"\ud83d\udc3e",
       c1:"#EA580C", c2:"#7C2D12", glow:"rgba(234,88,12,.30)", live:1,
       name:"Pets", nk:"nPets", dk:"dPets" },
@@ -1246,7 +1246,7 @@ body.signed-in .hello{margin-top:4px}
   // tamam matn tasveer ke andar jama hai, to load na hone par kuch bacha nahi.
   var BANNERS = [
     { img:"/brand/slides/people.webp", href:"/feed",
-      alt:"Connect \u2014 connect, follow and endorse each other" },
+      alt:"XpertConnect \u2014 connect, follow and endorse each other" },
     { img:"/brand/slides/drama.webp", href:"/shows",
       alt:"Dramas and films \u2014 story, cast, trailers and where to watch" },
     { img:"/brand/slides/sports.webp", href:"/sports",
@@ -2084,6 +2084,6 @@ if ("serviceWorker" in navigator){
   setInterval(go, 60000);
 })();
 </script>
-<script src="/js/topnav-1.js?v=17" defer></script>
+<script src="/js/topnav-1.js?v=18" defer></script>
 </body>
 </html>

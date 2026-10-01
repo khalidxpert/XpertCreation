@@ -4,7 +4,7 @@
   var head = document.querySelector("header.top") || document.querySelector("header.topbar");
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
-  var LINKS = [["Home", "/"], ["Connect", "/feed"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Jobs", "/jobs"], ["Pets", "/pets"],
+  var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Jobs", "/jobs"], ["Pets", "/pets"],
                ["Shows", "/shows"], ["Sports", "/sports"], ["Games", "/games"], ["Chat", "/chat"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   try { if (/[?&]guest=1/.test(location.search)) sessionStorage.setItem("xc_guest", "1"); } catch (e) {}
@@ -116,7 +116,7 @@
       acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
       acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';
       menu.innerHTML = '<b>' + nm.replace(/</g, "&lt;") + (u.username ? ' <small>@' + String(u.username).replace(/</g, "") + '</small>' : '') + '</b>'
-        + '<button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
+        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
       acct.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove("open"); menu.classList.toggle("open"); });
       menu.querySelector(".tout").onclick = function(){
         fetch("/api/auth/logout/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}})
