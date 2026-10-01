@@ -52,7 +52,15 @@ def people(request):
 def _meta_out(m):
     people = {u.pk: u for u in U.objects.filter(pk__in=m.tagged or [])}
     return {"feeling": FEELINGS.get(m.feeling, ""), "feeling_key": m.feeling, "place": m.place,
-            "tagged": [_person(people[i]) for i in (m.tagged or []) if i in people], "bg": m.bg, "fg": m.fg}
+            "tagged": [_person(people[i]) for i in (m.tagged or []) if i in people], "bg": m.bg, "fg": m.fg, "place_url": _place_url(m.place)}
+
+
+def _place_url(place):
+    try:
+        from companies.views import place_url
+        return place_url(place)
+    except Exception:
+        return ""
 
 
 @api_view(["GET"])

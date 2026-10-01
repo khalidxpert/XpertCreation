@@ -122,7 +122,7 @@
       acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
       acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';
       menu.innerHTML = '<b>' + nm.replace(/</g, "&lt;") + (u.username ? ' <small>@' + String(u.username).replace(/</g, "") + '</small>' : '') + '</b>'
-        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
+        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><a href="/company/manage">\uD83C\uDFE2 My company</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
       acct.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove("open"); menu.classList.toggle("open"); });
       menu.querySelector(".tout").onclick = function(){
         fetch("/api/auth/logout/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}})
@@ -152,7 +152,8 @@
   }
   // "Moderation" in the menu - only for moderators (the same role check the home page used).
   function addMod(){
-    var link = '<a href="/moderate"' + (path === "/moderate" ? ' class="on"' : '') + '>\uD83D\uDEE1\uFE0F Moderation</a>';
+    var link = '<a href="/moderate"' + (path === "/moderate" ? ' class="on"' : '') + '>\uD83D\uDEE1\uFE0F Moderation</a>'
+      + '<a href="/company-review"' + (path === "/company-review" ? ' class="on"' : '') + '>\uD83C\uDFE2 Company KYC</a>';
     [head.querySelector(".tnav"), drop].forEach(function(el){ if (el && !el.querySelector('a[href="/moderate"]')) el.insertAdjacentHTML("beforeend", link); });
   }
   var modK = null;

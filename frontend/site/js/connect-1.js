@@ -79,7 +79,7 @@
         box.innerHTML = '<b>How are you feeling?</b><div class="xcgrid">' + list.map(function(f){ return '<button type="button" data-feel="' + f.key + '"' + (pend.feeling === f.key ? ' class="on"' : '') + '>' + esc(f.label) + '</button>'; }).join("") + '</div>';
       });
     } else if (kind === "place"){
-      box.innerHTML = '<b>Where are you?</b><div style="display:flex;gap:6px;margin-top:8px"><input id="xcplace" maxlength="120" placeholder="e.g. Gaddafi Stadium, Lahore" value="' + esc(pend.place) + '">'
+      box.innerHTML = '<b>Where are you?</b><div style="display:flex;gap:6px;margin-top:8px"><input id="xcplace" list="xcplist" autocomplete="off" maxlength="120" placeholder="A company on XpertConnect, or any place" value="' + esc(pend.place) + '"><datalist id="xcplist"></datalist>'
         + '<button type="button" class="xcpost" data-setplace>Add</button></div>' + (pend.place ? '<button type="button" class="xcx" style="font-size:14px" data-clearplace>Remove check-in</button>' : '');
     } else if (kind === "bg"){
       box.innerHTML = '<b>Background</b> <small style="color:var(--ink-soft)">for short text posts without a photo</small>'
@@ -150,7 +150,7 @@
     var old = b.parentNode.querySelector(".xcmeta"); if (old) old.remove();
     var parts = [];
     if (m.feeling) parts.push("is <b>" + esc(m.feeling) + "</b>");
-    if (m.place) parts.push('at <a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(m.place) + '" target="_blank" rel="noopener"><b>\uD83D\uDCCD ' + esc(m.place) + '</b></a>');
+    if (m.place) parts.push('at <a href="' + (m.place_url ? esc(m.place_url) : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(m.place)) + '"' + (m.place_url ? '' : ' target="_blank" rel="noopener"') + '><b>' + (m.place_url ? '\uD83C\uDFE2 ' : '\uD83D\uDCCD ') + esc(m.place) + '</b></a>');
     if (m.tagged && m.tagged.length) parts.push("with " + m.tagged.map(function(p){ return '<a href="/u/' + esc(p.username) + '">' + esc(p.name) + '</a>'; }).join(m.tagged.length === 2 ? " and " : ", "));
     if (!parts.length) return;
     var s = document.createElement("span"); s.className = "xcmeta"; s.innerHTML = " " + parts.join(" ");
@@ -193,6 +193,8 @@
   document.addEventListener("input", function(e){
     var ta = e.target;
     if (ta.id === "ptext") bgPreview();
+    if (ta.id === "xcplace"){ var pq = ta.value.trim(); clearTimeout(menT); if (pq.length < 2) return; menT = setTimeout(function(){ get("/api/companies/search/?q=" + encodeURIComponent(pq)).then(function(d){
+      var dl = document.getElementById("xcplist"); if (dl) dl.innerHTML = ((d && d.companies) || []).map(function(c){ return '<option value="' + esc(c.name) + '">' + (c.verified ? "\u2714 " : "") + esc(c.city || "") + '</option>'; }).join(""); }); }, 250); return; }
     if (ta.id === "xctagq"){ clearTimeout(menT); menT = setTimeout(function(){ tagSearch(ta.value.trim()); }, 250); return; }
     if (!ta || ta.tagName !== "TEXTAREA" || !(ta.id === "ptext" || /^ctext-/.test(ta.id) || /^etext-/.test(ta.id))) return;
     var m = ta.value.slice(0, ta.selectionStart).match(/(?:^|[\s(])@([A-Za-z0-9_]{1,20})$/);

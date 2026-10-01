@@ -316,7 +316,7 @@ body.rtl .wafab{right:auto;left:16px}
   </a>
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=20" defer></script>
+<script src="/js/topnav-1.js?v=21" defer></script>
 
 <style>.acctabs{display:flex;gap:6px;margin:0 0 14px;padding:4px;background:var(--paper,#F6F7FB);border:1px solid var(--line,#E4E8F2);border-radius:14px}.acctabs a{flex:1;text-align:center;padding:9px 10px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink-soft,#5A657C)}.acctabs a.on{background:var(--card,#fff);color:var(--ink,#0D1424);box-shadow:0 1px 3px rgba(13,20,36,.1)}</style><main><div class="acctabs"><a class="on" href="/account">Account</a><a href="/me/profile">Professional profile</a></div><div class="card" id="card"></div><div id="pushbar"></div></main>
 
@@ -482,6 +482,10 @@ body.rtl .wafab{right:auto;left:16px}
 
     } else if (screen === "register"){
       h = '<h1>Create account</h1><p class="sub">Free. One account works across every service.</p>' + m
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px">'
+        + '<button type="button" data-a="acct-ind" style="padding:12px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;border:2px solid ' + (XCK.type === "company" ? 'var(--line,#E4E8F2);background:var(--card,#fff)' : '#1B4DFF;background:rgba(27,77,255,.07)') + '">\uD83D\uDC64 Individual</button>'
+        + '<button type="button" data-a="acct-co" style="padding:12px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;border:2px solid ' + (XCK.type === "company" ? '#1B4DFF;background:rgba(27,77,255,.07)' : 'var(--line,#E4E8F2);background:var(--card,#fff)') + '">\uD83C\uDFE2 Company</button></div>'
+        + (XCK.type === "company" ? '<p class="note" style="margin-top:-4px">Create your personal login first. Right after confirming your email you will set up the company page.</p>' : '')
         + fld("name","Full name","text",XCK.name || "","This is the name printed on your certificates.")
         + fld("uname","Username","text",XCK.uname || "","Letters, numbers or _ (3 to 20). You can sign in with it.")
         + '<p class="note" id="unameMsg" style="margin-top:-6px"></p>'
@@ -771,6 +775,12 @@ body.rtl .wafab{right:auto;left:16px}
         });
     }
 
+    if (a === "acct-ind" || a === "acct-co"){
+      XCK.name = val("name") || XCK.name; XCK.uname = val("uname") || XCK.uname; email = val("email") || email;
+      XCK.type = a === "acct-co" ? "company" : "individual"; try { sessionStorage.setItem("xc_acct_type", XCK.type); } catch (e) {}
+      return draw();
+    }
+
     if (a === "register"){
       XCK.name = val("name"); XCK.uname = val("uname"); email = val("email");
       if (!XCK.uname){ msg = "Choose a username."; msgType = "err"; return draw(); }
@@ -788,7 +798,7 @@ body.rtl .wafab{right:auto;left:16px}
       busy = true; draw();
       return api("/auth/verify-email/", {method:"POST", body:{email:email, code:val("code")}})
         .then(function(r){
-          if (r.ok && r.data.user){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} location.href = "/me/profile?welcome=1"; return; }
+          if (r.ok && r.data.user){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} var acctType = ""; try { acctType = sessionStorage.getItem("xc_acct_type") || ""; } catch (e) {} location.href = acctType === "company" ? "/company/manage" : "/me/profile?welcome=1"; return; }
           if (r.ok){ screen = "login"; msg = r.data.detail; msgType = "ok"; busy = false; return draw(); }
           fail(r);
         });
