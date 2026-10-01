@@ -150,6 +150,19 @@
       if (el && !el.querySelector('a[href="/system-log"]')) el.insertAdjacentHTML("beforeend", link);
     });
   }
+  // "Moderation" in the menu - only for moderators (the same role check the home page used).
+  function addMod(){
+    var link = '<a href="/moderate"' + (path === "/moderate" ? ' class="on"' : '') + '>\uD83D\uDEE1\uFE0F Moderation</a>';
+    [head.querySelector(".tnav"), drop].forEach(function(el){ if (el && !el.querySelector('a[href="/moderate"]')) el.insertAdjacentHTML("beforeend", link); });
+  }
+  var modK = null;
+  try { modK = sessionStorage.getItem("xc_mod"); } catch (e) {}
+  if (modK === "1") addMod();
+  else if (modK !== "0") fetch("/api/auth/role/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    var yes = !!(d && d.moderator);
+    try { sessionStorage.setItem("xc_mod", yes ? "1" : "0"); } catch (e) {}
+    if (yes) addMod();
+  }).catch(function(){});
   var sup = null;
   try { sup = sessionStorage.getItem("xc_super"); } catch (e) {}
   if (sup === "1") addAdmin();
