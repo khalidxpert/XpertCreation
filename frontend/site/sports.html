@@ -281,7 +281,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     }
     var list = (d[state.sub] || []).slice().sort(function(a, b){ return isFav([b.home.name, b.away.name]) - isFav([a.home.name, a.away.name]); });
     return h + '<p class="spupd">Updated ' + esc(d.updated || "soon") + ' \u00b7 live scores refresh every 2 minutes</p>'
-      + (list.length ? list.map(function(m){ return fCard(m, d.predictions, state.sub === "upcoming"); }).join("") : '<p class="spempty">No matches here right now.</p>');
+      + (list.length ? list.map(function(m){ return fCard(m, d.predictions, state.sub === "upcoming"); }).join("")
+         : (state.sub === "live" && (d.upcoming || []).length
+            ? '<p class="spempty">No live matches right now. Coming up next:</p>' + d.upcoming.slice(0, 12).map(function(m){ return fCard(m, d.predictions, true); }).join("")
+            : '<p class="spempty">No matches here right now.</p>'));
   }
   // ---------- other sports
   var OTHER = [["hockey", "\uD83C\uDFD1 Hockey"], ["f1", "\uD83C\uDFCE F1"], ["tennis", "\uD83C\uDFBE Tennis"], ["kabaddi", "\uD83E\uDD3C Kabaddi"], ["basketball", "\uD83C\uDFC0 Basketball"], ["mma", "\uD83E\uDD4A UFC"]];
