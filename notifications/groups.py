@@ -196,7 +196,13 @@ def groups(request):
         return _err("Give the group a name.")
     if ChatGroup.objects.filter(created_by=u, created_at__date=timezone.localdate()).count() >= GROUPS_PER_DAY:
         return _err("You can create %d groups a day." % GROUPS_PER_DAY, 429)
-    g = ChatGroup.objects.create(name=name, description=str(d.get("description") or "").strip()[:300], created_by=u)
+    g = ChatGroup.objects.create(name=name, description=str(d.get("description") or "").strip()[:300], created_by=u,
+                                 only_admins_send=(d.get("kind") == "channel"))      # a channel: only admins post
+    try:
+        from groupdir.views import on_create          # "show in the groups directory"
+        on_create(g, d)
+    except Exception:
+        pass
     GroupMember.objects.create(group=g, user=u, role="admin")
     _say(g, "%s created the group" % _name(u))
     from .groupbot import intro

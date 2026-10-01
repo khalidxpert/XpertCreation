@@ -215,11 +215,11 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=22" defer></script>
+<script src="/js/topnav-1.js?v=23" defer></script>
 
 <div class="wrap">
   <h1>Chat</h1>
-    <div class="newc3"><button id="newchat3" type="button">+ New chat</button><button id="newgroup3" type="button" class="ghost3">+ New group</button><button id="sel3" type="button" class="ghost3">Select</button></div>
+    <div class="newc3"><button id="newchat3" type="button">+ New chat</button><button id="newgroup3" type="button" class="ghost3">+ New group</button><a href="/groups" class="ghost3" style="text-decoration:none;display:inline-flex;align-items:center">\uD83D\uDD0E Find groups</a><button id="sel3" type="button" class="ghost3">Select</button></div>
   <div id="selbar3"></div>
   <div id="grp3"></div>
   <p style="margin:6px 0 0;text-align:right"><a href="#" id="gprivacy3" style="font-size:13px">Groups privacy</a></p>
@@ -662,7 +662,8 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
       var nm = ($("ngname").value || "").trim();
       if (nm.length < 2){ $("ngmsg").innerHTML = '<p style="color:#B91C1C">Give the group a name.</p>'; return; }
       var ids = [].map.call(document.querySelectorAll("#ngcand input:checked"), function(i){ return +i.value; });
-      api("/groups/", {method: "POST", body: {name: nm, members: ids}}).then(function(r){
+      api("/groups/", {method: "POST", body: {name: nm, members: ids, kind: (document.querySelector('input[name="ngkind"]:checked') || {}).value || "group",
+        description: ($("ngdesc") || {}).value || "", listed: !!($("nglisted") && $("nglisted").checked)}}).then(function(r){
         if (r.ok){
           var pf = $("ngphoto") && $("ngphoto").files[0];
           if (!pf){ location.href = "/group/" + r.data.id; return; }
@@ -749,8 +750,13 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     });
   }
   function newGroupPanel(){
-    var p = panel("New group", '<label style="font-weight:700;font-size:13px">Group name</label><input id="ngname" maxlength="80" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;margin:4px 0 10px">'
+    var p = panel("New group", '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px">'
+      + '<label style="border:1.5px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;font-weight:700"><input type="radio" name="ngkind" value="group" checked> \uD83D\uDC65 Group<br><small style="font-weight:400;color:var(--ink-soft,#5A657C)">Everyone can talk</small></label>'
+      + '<label style="border:1.5px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;font-weight:700"><input type="radio" name="ngkind" value="channel"> \uD83D\uDCE2 Channel<br><small style="font-weight:400;color:var(--ink-soft,#5A657C)">Only admins post, members watch</small></label></div>'
+      + '<label style="font-weight:700;font-size:13px">Group name</label><input id="ngname" maxlength="80" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;margin:4px 0 10px">'
       + '<label style="font-weight:700;font-size:13px;display:block;margin-top:12px">Group photo (optional)</label><div style="display:flex;gap:10px;align-items:center;margin:6px 0 8px"><img id="ngprev" alt="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:none"><label style="margin:0;cursor:pointer;padding:8px 14px;border:1.5px solid var(--line);border-radius:10px;font-weight:700;font-size:13.5px">Choose photo<input type="file" id="ngphoto" accept="image/jpeg,image/png,image/webp" style="display:none"></label><small class="mut3" id="ngpnote">JPG, PNG or WebP, up to 2 MB</small></div>'
+      + '<label style="font-weight:700;font-size:13px;display:block;margin-top:10px">Purpose (optional)</label><textarea id="ngdesc" maxlength="300" placeholder="What is this group for?" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;min-height:60px;margin:4px 0 8px"></textarea>'
+      + '<label style="display:flex;gap:8px;align-items:center;font-weight:600;margin:0 0 10px"><input type="checkbox" id="nglisted"> Show in the groups directory (anyone can find and join)</label>'
       + '<p class="mut3">Add people from your connections. Anyone who only lets their connections add them, or nobody, will get an invitation instead.</p><div id="ngcand"><p class="mut3">Loading\u2026</p></div>'
       + '<button class="pbt3" data-ngcreate style="margin-top:12px;max-width:none">Create group</button><div id="ngmsg"></div>');
     var ngp = $("ngphoto");
