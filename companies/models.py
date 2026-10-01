@@ -49,3 +49,27 @@ class CompanyDoc(models.Model):
     name = models.CharField(max_length=120)
     size = models.PositiveIntegerField(default=0)
     uploaded_at = models.DateTimeField(default=timezone.now)
+
+
+class PersonKyc(models.Model):
+    """A member's request for the blue tick: WhatsApp + ID proof + address proof, reviewed by moderators.
+    Approval switches on the profile's 'verified' (the same field the admin uses)."""
+    DRAFT, PENDING, APPROVED, REJECTED = "draft", "pending", "approved", "rejected"
+    STATES = [(DRAFT, "Draft"), (PENDING, "Waiting for review"), (APPROVED, "Blue tick given"), (REJECTED, "Not approved")]
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="person_kyc")
+    whatsapp = models.CharField(max_length=24, blank=True, default="")
+    status = models.CharField(max_length=10, choices=STATES, default=DRAFT, db_index=True)
+    review_note = models.CharField(max_length=500, blank=True, default="")
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class PersonDoc(models.Model):
+    KINDS = [("cnic_front", "CNIC front"), ("cnic_back", "CNIC back"), ("passport", "Passport"), ("address", "Address proof"), ("other", "Other proof")]
+    kyc = models.ForeignKey(PersonKyc, on_delete=models.CASCADE, related_name="docs")
+    kind = models.CharField(max_length=12, choices=KINDS)
+    path = models.CharField(max_length=200)
+    name = models.CharField(max_length=120)
+    size = models.PositiveIntegerField(default=0)
+    uploaded_at = models.DateTimeField(default=timezone.now)

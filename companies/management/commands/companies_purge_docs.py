@@ -13,4 +13,9 @@ class Command(BaseCommand):
         n = 0
         for c in Company.objects.filter(status__in=[Company.APPROVED, Company.REJECTED], reviewed_at__lt=old).exclude(docs=None):
             _wipe_docs(c); n += 1
-        self.stdout.write("companies with documents removed: %d" % n)
+        from companies.models import PersonKyc
+        from companies.person import wipe
+        m = 0
+        for k in PersonKyc.objects.filter(status__in=[PersonKyc.APPROVED, PersonKyc.REJECTED], reviewed_at__lt=old).exclude(docs=None):
+            wipe(k); m += 1
+        self.stdout.write("companies with documents removed: %d, members: %d" % (n, m))
