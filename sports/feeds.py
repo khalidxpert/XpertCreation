@@ -193,6 +193,9 @@ def refresh_football(force=False):
         if age("football:table:" + code) < 3 * 3600 and not force:
             break
         d = fdata("competitions/%s/standings" % code)
+        if not (d and d.get("standings")):          # no table (cup not running, or not in the free plan): note it, so it stops blocking the others
+            put("football:table:" + code, {"comp": code, "table": [], "none": True})
+            continue
         if d and d.get("standings") is not None:
             tot = next((s for s in d["standings"] if s.get("type") == "TOTAL"), (d["standings"] or [{}])[0] if d["standings"] else {})
             put("football:table:" + code, {"comp": (d.get("competition") or {}).get("name", code), "season": (d.get("season") or {}).get("startDate", "")[:4],
