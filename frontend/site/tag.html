@@ -209,7 +209,15 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     fetch("/api/tags/" + name + "/?page=" + page).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
       var l = document.getElementById("tgl"), m = document.getElementById("tgmore"); if (m) m.remove();
       if (!d){ document.getElementById("tgsub").textContent = "Could not load the posts."; return; }
-      document.getElementById("tgsub").textContent = d.total ? d.total + " public post" + (d.total === 1 ? "" : "s") + " on Connect" : "No posts with #" + name + " yet.";
+      document.getElementById("tgsub").textContent = d.total ? d.total + " public post" + (d.total === 1 ? "" : "s") + " on XpertConnect" : "No posts with #" + name + " yet.";
+      if (d.company && !document.getElementById("tgco")){
+        var co = d.company;
+        l.insertAdjacentHTML("beforebegin", '<a id="tgco" href="/company/' + esc(co.slug) + '" style="display:flex;gap:12px;align-items:center;margin:4px 0 14px;padding:12px 14px;border-radius:16px;text-decoration:none;color:inherit;background:var(--card,#fff);border:1.5px solid #E9BB2C;box-shadow:0 6px 18px rgba(201,151,28,.15)">'
+          + (co.logo ? '<img src="' + esc(co.logo) + '" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;background:#fff">' : '<span style="width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:#EEF2FF;font-weight:800;color:#1B4DFF">' + esc(co.name.charAt(0)) + '</span>')
+          + '<span style="flex:1;min-width:0"><b>\uD83C\uDFE2 ' + esc(co.name) + (co.verified ? ' <span style="color:#166534;font-size:13px">\u2714 Verified</span>' : '') + '</b>'
+          + (co.tagline ? '<small style="display:block;color:var(--ink-soft,#5A657C)">' + esc(co.tagline) + '</small>' : '') + '</span>'
+          + '<span style="font-weight:800;color:#1B4DFF;white-space:nowrap">View company page \u2192</span></a>');
+      }
       l.insertAdjacentHTML("beforeend", d.posts.map(card).join(""));
       if (d.more) l.insertAdjacentHTML("afterend", '<button class="tgmore" id="tgmore">More posts</button>'), document.getElementById("tgmore").onclick = function(){ page++; load(); };
     });

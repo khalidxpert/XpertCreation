@@ -49,7 +49,7 @@ def tag_posts(request, name):
     qs = _posts(name)
     total = qs.count()
     rows = qs[(page - 1) * PER_PAGE: page * PER_PAGE]
-    return Response({"tag": name.lower(), "total": total, "page": page, "more": page * PER_PAGE < total,
+    return Response({"tag": name.lower(), "company": _company(name), "total": total, "page": page, "more": page * PER_PAGE < total,
                      "posts": [{"id": p.id, "body": p.body, "image": _media((p.images or [None])[0]) if p.images else "",
                                 "author": getattr(p.author, "full_name", "") or "Member", "avatar": _avatar(p.author),
                                 "author_url": ("/u/" + p.author.username) if getattr(p.author, "username", None) else "",
@@ -111,3 +111,18 @@ def sitemap(request):
     r = HttpResponse(xml, content_type="application/xml")
     r["Cache-Control"] = "public, max-age=1800"
     return r
+
+
+
+def _company(tag):
+    """The company page this tag stands for, if any (#xpertcreation -> XpertCreation)."""
+    try:
+        from companies.models import Company
+        from companies.views import _media, public_ok
+    except Exception:
+        return None
+    t = str(tag or "").lower()
+    for c in Company.objects.filter(hidden=False).order_by("-status", "id")[:500]:
+        if t in (c.slug.replace("-", ""), re.sub(r"[^a-z0-9]", "", c.name.lower())) and public_ok(c):
+            return {"name": c.name, "slug": c.slug, "tagline": c.tagline, "logo": _media(c.logo), "verified": c.status == Company.APPROVED}
+    return None
