@@ -209,5 +209,71 @@
     }, 200);
   });
 })();
+/* Search like Facebook: a "Search XpertConnect" pill next to the heading opens a search screen for people and hashtags. */
+(function(){
+  "use strict";
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function get(u){ return fetch(u, {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); }
+  var h1 = document.getElementById("fh1"); if (!h1 || document.getElementById("xcsrch")) return;
+  var css = document.createElement("style");
+  css.textContent = ".xcsrow{display:flex;align-items:center;gap:10px;justify-content:space-between;margin:6px 0 8px}.xcsrow h1{margin:0}"
+    + ".xcspill{flex:0 1 280px;min-width:0;text-align:left;border:0;background:var(--paper,#EEF1F6);border-radius:99px;padding:10px 16px;font:inherit;font-size:14.5px;color:var(--ink-soft,#5A657C);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"
+    + ".xcsearch{position:fixed;inset:0;z-index:350;background:var(--card,#fff);overflow:auto;padding:12px 16px 30px}"
+    + ".xcsbar{display:flex;gap:8px;align-items:center;position:sticky;top:0;background:var(--card,#fff);padding:4px 0 10px}"
+    + ".xcsbar input{flex:1;padding:12px 16px;border-radius:99px;border:0;background:var(--paper,#EEF1F6);font:inherit;font-size:16px;outline:none}"
+    + ".xcsbar button{border:0;background:transparent;font-size:22px;cursor:pointer;padding:4px 8px}"
+    + ".xcsh2{font-size:13px;font-weight:800;color:var(--ink-soft,#5A657C);margin:14px 4px 6px;text-transform:uppercase;letter-spacing:.04em}"
+    + ".xcsr{display:flex;gap:12px;align-items:center;padding:10px 8px;border-radius:12px;text-decoration:none;color:var(--ink,#0D1424)}.xcsr:hover,.xcsr.first{background:var(--paper,#F6F7FB)}"
+    + ".xcsr .ic{width:40px;height:40px;border-radius:50%;flex:0 0 40px;display:grid;place-items:center;background:#EEF2FF;color:var(--brand,#1B4DFF);font-weight:800;object-fit:cover}"
+    + ".xcsr small{display:block;color:var(--ink-soft,#5A657C)}@media(max-width:520px){.xcspill span{display:none}.xcspill{flex:0 0 auto}}";
+  document.head.appendChild(css);
+  var old = document.getElementById("fhtag"); if (old) old.style.display = "none";
+  var row = document.createElement("div"); row.className = "xcsrow";
+  h1.parentNode.insertBefore(row, h1); row.appendChild(h1);
+  var pill = document.createElement("button"); pill.type = "button"; pill.id = "xcsrch"; pill.className = "xcspill";
+  pill.innerHTML = "\uD83D\uDD0D <span>Search XpertConnect</span>";
+  row.appendChild(pill);
+  var signedIn = null; get("/api/auth/me/").then(function(u){ signedIn = !!(u && u.email); });
+  var TAGS = null, sheet = null, timer = null, firstHref = "";
+  function open(){
+    if (!sheet){
+      sheet = document.createElement("div"); sheet.className = "xcsearch";
+      sheet.innerHTML = '<div class="xcsbar"><button type="button" data-xcsclose aria-label="Back">\u2190</button><input id="xcsq" placeholder="Search people or #hashtags" autocomplete="off"></div><div id="xcsres"></div>';
+      document.body.appendChild(sheet);
+      sheet.querySelector("[data-xcsclose]").onclick = close;
+      var inp = sheet.querySelector("#xcsq");
+      inp.addEventListener("input", function(){ clearTimeout(timer); timer = setTimeout(function(){ run(inp.value.trim()); }, 220); });
+      inp.addEventListener("keydown", function(e){ if (e.key === "Enter" && firstHref){ location.href = firstHref; } if (e.key === "Escape") close(); });
+    }
+    sheet.style.display = "block"; document.body.style.overflow = "hidden";
+    var i = sheet.querySelector("#xcsq"); i.focus(); run(i.value.trim());
+  }
+  function close(){ if (sheet){ sheet.style.display = "none"; document.body.style.overflow = ""; } }
+  pill.onclick = open;
+  function run(q){
+    var res = sheet.querySelector("#xcsres"), word = q.replace(/^[#@]/, ""), isTag = q.charAt(0) === "#";
+    var tagsP = TAGS ? Promise.resolve(TAGS) : get("/api/tags/popular/").then(function(d){ TAGS = (d && d.tags) || []; return TAGS; });
+    var peopleP = (!isTag && word && signedIn) ? get("/api/feedx/people/?q=" + encodeURIComponent(word)).then(function(d){ return (d && d.people) || []; }) : Promise.resolve([]);
+    Promise.all([tagsP, peopleP]).then(function(r){
+      var tags = r[0].filter(function(t){ return !word || t.tag.indexOf(word.toLowerCase()) === 0; }).slice(0, word ? 6 : 10), people = r[1], h = "", hrefs = [];
+      if (people.length){
+        h += '<div class="xcsh2">People</div>' + people.map(function(p){ var href = p.username ? "/u/" + encodeURIComponent(p.username) : "/feed?user=" + p.id; hrefs.push(href);
+          return '<a class="xcsr" href="' + href + '">' + (p.avatar_url ? '<img class="ic" src="' + esc(p.avatar_url) + '" alt="">' : '<span class="ic">' + esc((p.name || "?").charAt(0)) + '</span>')
+            + '<span><b>' + esc(p.name) + '</b><small>@' + esc(p.username) + (p.connected ? ' \u00b7 connection' : '') + '</small></span></a>'; }).join("");
+      } else if (word && !isTag && signedIn === false){
+        h += '<p class="fnote"><a href="/login">Sign in</a> to search people.</p>';
+      }
+      var exact = /^[A-Za-z][A-Za-z0-9_]{1,49}$/.test(word) ? word.toLowerCase() : "";
+      if (exact || tags.length){
+        h += '<div class="xcsh2">' + (word ? "Hashtags" : "Popular hashtags") + '</div>';
+        if (exact && !tags.some(function(t){ return t.tag === exact; })){ hrefs.push("/tag/" + exact); h += '<a class="xcsr" href="/tag/' + exact + '"><span class="ic">#</span><span><b>Search #' + esc(exact) + '</b><small>Posts with this hashtag</small></span></a>'; }
+        h += tags.map(function(t){ hrefs.push("/tag/" + t.tag); return '<a class="xcsr" href="/tag/' + esc(t.tag) + '"><span class="ic">#</span><span><b>#' + esc(t.tag) + '</b><small>' + t.count + ' post' + (t.count === 1 ? '' : 's') + '</small></span></a>'; }).join("");
+      }
+      if (!h) h = '<p class="fnote">Nothing found for \u201c' + esc(q) + '\u201d.</p>';
+      res.innerHTML = h; firstHref = hrefs[0] || "";
+      var f = res.querySelector(".xcsr"); if (f) f.classList.add("first");
+    });
+  }
+})();
 /* in case the feed drew its post box and posts before this script arrived */
 (function(){ if (!window.XCC) return; XCC.wrap(); XCC.decorate([].map.call(document.querySelectorAll(".fcard[id^='post-']"), function(el){ return +el.id.slice(5); })); })();

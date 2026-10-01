@@ -162,7 +162,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
 <script src="/js/topnav-1.js?v=19" defer></script>
-<script src="/js/connect-1.js?v=4" defer></script>
+<script src="/js/connect-1.js?v=5" defer></script>
 
 <div class="wrap feedw">
   <h1 id="fh1">XpertConnect</h1>
@@ -270,7 +270,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
   // ---------------- composer ----------------
   function drawComposer(){
-    if (!me || single || onlyUser){ $("composer").innerHTML = ""; return; }
+    if (!me || single || (onlyUser && String(onlyUser) !== String(me.id))){ $("composer").innerHTML = ""; return; }   // your own wall gets the post box
     $("composer").innerHTML = '<div class="comp"><textarea id="ptext" maxlength="3000" placeholder="What would you like to share, ' + esc((me.full_name || "").split(" ")[0] || "friend") + '?"></textarea>'
       + '<div class="prev" id="prev"></div>'
       + '<div class="row"><label class="ph">\uD83D\uDDBC\uFE0F Photo<input type="file" id="pfiles" accept="image/*" multiple style="display:none"></label>'
