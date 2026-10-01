@@ -112,6 +112,12 @@
         } catch (e) {}
         return;
       }
+      // In the installed app, the first screen of a visit is XpertConnect; after that Home works normally.
+      try {
+        var inApp2 = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || /[?&]src=app/.test(location.search);
+        var first = sessionStorage.getItem("xc_opened") !== "1"; sessionStorage.setItem("xc_opened", "1");
+        if (inApp2 && first && path === "/"){ location.replace("/feed"); return; }
+      } catch (e) {}
       var nm = u.full_name || u.email, pic = u.avatar_url || "";
       acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
       acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';
