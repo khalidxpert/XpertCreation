@@ -779,7 +779,7 @@ body.signed-in .hello{margin-top:4px}
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
-<link rel="preload" as="image" href="/brand/slides/drama.webp" imagesrcset="/brand/slides/drama-640.webp 640w, /brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" imagesizes="(max-width: 860px) 100vw, 860px" fetchpriority="high">
+<link rel="preload" as="image" href="/brand/slides/people.webp" imagesrcset="/brand/slides/people-640.webp 640w, /brand/slides/people-768.webp 768w, /brand/slides/people.webp 1536w" imagesizes="(max-width: 860px) 100vw, 860px" fetchpriority="high">
 </head>
 <body>
 <div class="wrap">
@@ -865,7 +865,7 @@ body.signed-in .hello{margin-top:4px}
     <h2 data-i18n="secH">Our platforms</h2>
 
     <div class="slidewrap">
-      <div class="slides" id="slides"><a class="slide banner" href="/shows"><img src="/brand/slides/drama.webp" srcset="/brand/slides/drama-640.webp 640w, /brand/slides/drama-768.webp 768w, /brand/slides/drama.webp 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="Dramas and films — story, cast, trailers and where to watch" fetchpriority="high"></a></div>
+      <div class="slides" id="slides"><a class="slide banner" href="/feed"><img src="/brand/slides/people.webp" srcset="/brand/slides/people-640.webp 640w, /brand/slides/people-768.webp 768w, /brand/slides/people.webp 1536w" sizes="(max-width: 860px) 100vw, 860px" width="1536" height="1024" alt="Connect — connect, follow and endorse each other" fetchpriority="high"></a></div>
     </div>
     <div class="dots" id="dots"></div>
     <p class="swipehint" data-i18n="swipe">Swipe to see more</p>
@@ -1224,6 +1224,8 @@ body.signed-in .hello{margin-top:4px}
   // Banner slider. Har tasveer apne page par le jati hai. alt zaroori hai:
   // tamam matn tasveer ke andar jama hai, to load na hone par kuch bacha nahi.
   var BANNERS = [
+    { img:"/brand/slides/people.webp", href:"/feed",
+      alt:"Connect \u2014 connect, follow and endorse each other" },
     { img:"/brand/slides/drama.webp", href:"/shows",
       alt:"Dramas and films \u2014 story, cast, trailers and where to watch" },
     { img:"/brand/slides/sports.webp", href:"/sports",
@@ -1234,6 +1236,20 @@ body.signed-in .hello{margin-top:4px}
       alt:"QR Code Generator \u2014 free, print-ready codes" },
     { img:"/brand/slides/weather.webp", href:"/weather",
       alt:"Weather \u2014 know today, plan better" },
+    { img:"/brand/slides/games.webp", href:"/games",
+      alt:"Games \u2014 play, enjoy, repeat" },
+    { img:"/brand/slides/blood.webp", href:"/blood",
+      alt:"Blood Bank \u2014 one donation, endless lives" },
+    { img:"/brand/slides/prayer.webp", href:"/tools?t=prayer",
+      alt:"Prayer Times \u2014 stay connected, stay blessed" },
+    { img:"/brand/slides/clock.webp", href:"/tools?t=clock",
+      alt:"World Clock \u2014 one world, many times" },
+    { img:"/brand/slides/pets2.webp", href:"/pets",
+      alt:"Pets \u2014 vaccine reminders, health records and a QR tag" },
+    { img:"/brand/slides/weather2.webp", href:"/weather",
+      alt:"Weather \u2014 know today, plan better" },
+    { img:"/brand/slides/qrcode2.webp", href:"/tools/qr-code-generator",
+      alt:"QR Code Generator \u2014 free, print-ready codes" },
   ];
   function renderSlides(){
     var el = document.getElementById("slides");
