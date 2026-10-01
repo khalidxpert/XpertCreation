@@ -46,7 +46,25 @@ def people(request):
         conn = set()
     rows = list(qs.order_by("full_name")[:60])
     rows.sort(key=lambda u: (u.pk not in conn, (u.full_name or "").lower()))
-    return Response({"people": [dict(_person(u), connected=u.pk in conn) for u in rows[:8]]})
+    people = [dict(_person(u), connected=u.pk in conn) for u in rows[:8]]
+    if request.GET.get("with") == "companies":
+        people = _companies(q) + people
+    return Response({"people": people[:8]})
+
+
+def _companies(q):
+    """Company pages for @ suggestions: @-name is the page name with _ instead of -."""
+    try:
+        from companies.models import Company
+        from companies.views import _media
+    except Exception:
+        return []
+    qs = Company.objects.filter(hidden=False).filter(Q(domain_verified_at__isnull=False) | Q(status=Company.APPROVED))
+    if q:
+        qs = qs.filter(Q(name__icontains=q) | Q(slug__istartswith=q.replace("_", "-")))
+    return [{"id": 0, "type": "company", "name": c.name, "username": c.slug.replace("-", "_"), "slug": c.slug,
+             "avatar_url": _media(c.logo), "verified": c.status == Company.APPROVED, "connected": False}
+            for c in qs.order_by("-status", "name")[:3]]
 
 
 def _meta_out(m):
@@ -125,6 +143,13 @@ def by_username(request, username):
     """/u/<username>: that member's Connect profile if they have one, otherwise their posts."""
     u = U.objects.filter(username__iexact=username, is_active=True).first()
     if not u:
+        try:                                            # @bilal_traders -> /company/bilal-traders
+            from companies.models import Company
+            c = Company.objects.filter(slug=username.lower().replace("_", "-"), hidden=False).first()
+            if c:
+                return HttpResponseRedirect("/company/" + c.slug)
+        except Exception:
+            pass
         return HttpResponseRedirect("/feed")
     try:
         from network.models import ProProfile

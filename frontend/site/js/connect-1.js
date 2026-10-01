@@ -201,11 +201,11 @@
     clearTimeout(menT);
     if (!m){ closeMen(); return; }
     menT = setTimeout(function(){
-      get("/api/feedx/people/?q=" + encodeURIComponent(m[1])).then(function(d){
+      get("/api/feedx/people/?with=companies&q=" + encodeURIComponent(m[1])).then(function(d){
         var list = (d && d.people) || []; closeMen(); if (!list.length) return;
         var r = ta.getBoundingClientRect(), box = document.createElement("div"); box.className = "xcmen";
         box.style.left = (r.left + window.scrollX) + "px"; box.style.top = (r.bottom + window.scrollY + 4) + "px";
-        box.innerHTML = list.slice(0, 6).map(function(p){ return '<div class="xcpl" data-men="' + esc(p.username) + '" data-for="' + ta.id + '">' + av(p, "xcav") + '<span><b>' + esc(p.name) + '</b><small>@' + esc(p.username) + '</small></span></div>'; }).join("");
+        box.innerHTML = list.slice(0, 6).map(function(p){ return '<div class="xcpl" data-men="' + esc(p.username) + '" data-for="' + ta.id + '">' + av(p, "xcav") + '<span><b>' + esc(p.name) + (p.type === "company" ? ' \uD83C\uDFE2' + (p.verified ? ' \u2714' : '') : '') + '</b><small>@' + esc(p.username) + (p.type === "company" ? ' \u00b7 company' : '') + '</small></span></div>'; }).join("");
         document.body.appendChild(box);
       });
     }, 200);
@@ -255,11 +255,11 @@
   function run(q){
     var res = sheet.querySelector("#xcsres"), word = q.replace(/^[#@]/, ""), isTag = q.charAt(0) === "#";
     var tagsP = TAGS ? Promise.resolve(TAGS) : get("/api/tags/popular/").then(function(d){ TAGS = (d && d.tags) || []; return TAGS; });
-    var peopleP = (!isTag && word && signedIn) ? get("/api/feedx/people/?q=" + encodeURIComponent(word)).then(function(d){ return (d && d.people) || []; }) : Promise.resolve([]);
+    var peopleP = (!isTag && word && signedIn) ? get("/api/feedx/people/?with=companies&q=" + encodeURIComponent(word)).then(function(d){ return (d && d.people) || []; }) : Promise.resolve([]);
     Promise.all([tagsP, peopleP]).then(function(r){
       var tags = r[0].filter(function(t){ return !word || t.tag.indexOf(word.toLowerCase()) === 0; }).slice(0, word ? 6 : 10), people = r[1], h = "", hrefs = [];
       if (people.length){
-        h += '<div class="xcsh2">People</div>' + people.map(function(p){ var href = p.username ? "/u/" + encodeURIComponent(p.username) : "/feed?user=" + p.id; hrefs.push(href);
+        h += '<div class="xcsh2">People</div>' + people.map(function(p){ var href = p.type === "company" ? "/company/" + encodeURIComponent(p.slug) : (p.username ? "/u/" + encodeURIComponent(p.username) : "/feed?user=" + p.id); hrefs.push(href);
           return '<a class="xcsr" href="' + href + '">' + (p.avatar_url ? '<img class="ic" src="' + esc(p.avatar_url) + '" alt="">' : '<span class="ic">' + esc((p.name || "?").charAt(0)) + '</span>')
             + '<span><b>' + esc(p.name) + '</b><small>@' + esc(p.username) + (p.connected ? ' \u00b7 connection' : '') + '</small></span></a>'; }).join("");
       } else if (word && !isTag && signedIn === false){

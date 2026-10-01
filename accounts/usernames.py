@@ -30,6 +30,12 @@ def problem(name, user=None):
         return "Use 3 to 20 letters, numbers or _ (no spaces)."
     if name in RESERVED or name.isdigit():
         return "That username isn't available."
+    try:
+        from companies.models import Company
+        if Company.objects.filter(slug=name.replace("_", "-")).exists():
+            return "That name belongs to a company page."
+    except Exception:
+        pass
     qs = User.objects.filter(username__iexact=name)
     if user is not None:
         qs = qs.exclude(pk=user.pk)
