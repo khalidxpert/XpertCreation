@@ -18,6 +18,8 @@ FEELINGS = {"happy": "\U0001F60A happy", "loved": "\U0001F970 loved", "blessed":
             "celebrating": "\U0001F389 celebrating", "travelling": "\u2708\uFE0F travelling", "working": "\U0001F4BC working", "studying": "\U0001F4DA studying",
             "eating": "\U0001F37D\uFE0F eating", "watching": "\U0001F3AC watching", "sad": "\U0001F622 sad", "tired": "\U0001F634 tired"}
 MAX_TAGS = 10
+BACKGROUNDS = {"blue", "sunset", "green", "night", "pink", "gold", "sky", "red", "purple", "black", "cream", "white"}
+TEXT_COLOURS = {"white", "black", "yellow", "blue"}
 
 
 def _person(u):
@@ -50,7 +52,7 @@ def people(request):
 def _meta_out(m):
     people = {u.pk: u for u in U.objects.filter(pk__in=m.tagged or [])}
     return {"feeling": FEELINGS.get(m.feeling, ""), "feeling_key": m.feeling, "place": m.place,
-            "tagged": [_person(people[i]) for i in (m.tagged or []) if i in people]}
+            "tagged": [_person(people[i]) for i in (m.tagged or []) if i in people], "bg": m.bg, "fg": m.fg}
 
 
 @api_view(["GET"])
@@ -88,9 +90,13 @@ def set_meta(request, pk):
         except (TypeError, ValueError):
             pass
     tagged = list(U.objects.filter(pk__in=want, is_active=True).exclude(pk=request.user.pk).values_list("pk", flat=True))
+    bg = str(request.data.get("bg") or "")
+    bg = bg if bg in BACKGROUNDS and not p.images and len(p.body or "") <= 300 else ""
+    fg = str(request.data.get("fg") or "")
+    fg = (fg if fg in TEXT_COLOURS else ("black" if bg in ("cream", "white", "gold") else "white")) if bg else ""
     m, _ = PostMeta.objects.get_or_create(post=p)
     before = set(m.tagged or [])
-    m.feeling, m.place, m.tagged = feeling, place, tagged
+    m.feeling, m.place, m.tagged, m.bg, m.fg = feeling, place, tagged, bg, fg
     m.save()
     for u in U.objects.filter(pk__in=[i for i in tagged if i not in before]):
         try:

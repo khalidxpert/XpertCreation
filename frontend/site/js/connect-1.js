@@ -3,7 +3,12 @@
    "is feeling ... at ... with ..." line on posts. The feed page's own posting code is left as it is. */
 (function(){
   "use strict";
-  var ME = null, FEEL = null, CACHE = {}, pend = {feeling: "", feelLabel: "", place: "", tagged: []};
+  var ME = null, FEEL = null, CACHE = {}, pend = {feeling: "", feelLabel: "", place: "", tagged: [], bg: "", fg: ""};
+  var BG = {blue: "linear-gradient(135deg,#1B4DFF,#7C3AED)", sunset: "linear-gradient(135deg,#F97316,#DB2777)", green: "linear-gradient(135deg,#059669,#34D399)",
+            night: "linear-gradient(135deg,#0F172A,#334155)", pink: "linear-gradient(135deg,#EC4899,#F9A8D4)", gold: "linear-gradient(135deg,#F59E0B,#FDE68A)",
+            sky: "linear-gradient(135deg,#0284C7,#7DD3FC)", red: "#DC2626", purple: "#7C3AED", black: "#111827", cream: "#FEF3C7", white: "#FFFFFF"};
+  var FG = {white: "#FFFFFF", black: "#111827", yellow: "#FDE047", blue: "#1B4DFF"};
+  function autoFg(bg){ return /^(cream|white|gold)$/.test(bg) ? "black" : "white"; }
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
   function get(u){ return fetch(u, {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); }
@@ -40,6 +45,11 @@
     ".xcgrid button.on{border-color:var(--brand,#1B4DFF);background:rgba(27,77,255,.07)}",
     ".xcpl{display:flex;gap:10px;align-items:center;padding:8px;border-radius:12px;cursor:pointer}.xcpl:hover{background:var(--paper,#F6F7FB)}.xcpl .xcav{width:36px;height:36px;flex-basis:36px}.xcpl small{display:block;color:var(--ink-soft,#5A657C)}.xcpl.on{background:rgba(27,77,255,.07)}",
     /* @mention suggestions */
+    ".xcbgpost{display:flex;align-items:center;justify-content:center;text-align:center;min-height:220px;padding:28px 22px!important;margin:10px -14px 0!important;font-size:24px!important;font-weight:800;line-height:1.35!important;border-radius:0}",
+    ".xcbgpost a{color:inherit!important;text-decoration:underline}",
+    ".xcsw{width:40px;height:40px;border-radius:12px;border:2px solid #fff;box-shadow:0 0 0 1px var(--line,#E4E8F2);cursor:pointer;padding:0}.xcsw.on{box-shadow:0 0 0 3px var(--brand,#1B4DFF)}",
+    ".xcfgb{width:34px;height:34px;border-radius:50%;border:2px solid var(--line,#E4E8F2);cursor:pointer;font-weight:800}.xcfgb.on{border-color:var(--brand,#1B4DFF);box-shadow:0 0 0 2px var(--brand,#1B4DFF)}",
+    ".xcsheet textarea.xcon{text-align:center;font-weight:800!important;font-size:24px!important;min-height:240px!important;border-radius:14px;padding:30px 18px!important}",
     ".xcmen{position:absolute;z-index:400;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:12px;box-shadow:0 12px 30px rgba(13,20,36,.18);padding:4px;min-width:220px;max-width:320px}"
   ].join("");
   document.head.appendChild(css);
@@ -53,6 +63,13 @@
     el.innerHTML = parts.join(" ");
     ["feel", "place", "tag"].forEach(function(k){ var b = document.querySelector('.xcchips [data-xc="' + k + '"]'); if (b) b.classList.toggle("on", k === "feel" ? !!pend.feeling : k === "place" ? !!pend.place : pend.tagged.length > 0); });
   }
+  function bgPreview(){
+    var ta = document.getElementById("ptext"); if (!ta) return;
+    var on = !!pend.bg && ta.value.length <= 300;
+    ta.classList.toggle("xcon", on);
+    ta.style.background = on ? BG[pend.bg] : ""; ta.style.color = on ? FG[pend.fg || autoFg(pend.bg)] : "";
+    var b = document.querySelector('.xcchips [data-xc="bg"]'); if (b) b.classList.toggle("on", !!pend.bg);
+  }
   function pick(kind){
     var box = document.getElementById("xcpick"); if (!box) return;
     if (box.getAttribute("data-k") === kind){ box.innerHTML = ""; box.removeAttribute("data-k"); return; }
@@ -64,6 +81,12 @@
     } else if (kind === "place"){
       box.innerHTML = '<b>Where are you?</b><div style="display:flex;gap:6px;margin-top:8px"><input id="xcplace" maxlength="120" placeholder="e.g. Gaddafi Stadium, Lahore" value="' + esc(pend.place) + '">'
         + '<button type="button" class="xcpost" data-setplace>Add</button></div>' + (pend.place ? '<button type="button" class="xcx" style="font-size:14px" data-clearplace>Remove check-in</button>' : '');
+    } else if (kind === "bg"){
+      box.innerHTML = '<b>Background</b> <small style="color:var(--ink-soft)">for short text posts without a photo</small>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" class="xcsw' + (pend.bg ? '' : ' on') + '" data-bg="" style="background:#fff" title="None">\u2715</button>'
+        + Object.keys(BG).map(function(k){ return '<button type="button" class="xcsw' + (pend.bg === k ? ' on' : '') + '" data-bg="' + k + '" style="background:' + BG[k] + '" title="' + k + '"></button>'; }).join("") + '</div>'
+        + '<b style="display:block;margin-top:12px">Text colour</b><div style="display:flex;gap:8px;margin-top:8px">'
+        + Object.keys(FG).map(function(k){ return '<button type="button" class="xcfgb' + ((pend.fg || autoFg(pend.bg)) === k ? ' on' : '') + '" data-fg="' + k + '" style="background:' + FG[k] + ';color:' + (k === "white" ? "#111" : "#fff") + '">A</button>'; }).join("") + '</div>';
     } else if (kind === "tag"){
       box.innerHTML = '<b>Tag people</b><input id="xctagq" placeholder="Search by name or @username" style="margin-top:8px"><div id="xctagl"></div>';
       tagSearch("");
@@ -98,7 +121,8 @@
         if (ta) ta.placeholder = "What\u2019s on your mind?";
         var chips = document.createElement("div"); chips.className = "xcchips";
         chips.innerHTML = '<button type="button" data-xc="photo">\uD83D\uDDBC\uFE0F Photo</button><button type="button" data-xc="tag">\uD83D\uDC65 Tag people</button>'
-          + '<button type="button" data-xc="feel">\uD83D\uDE0A Feeling</button><button type="button" data-xc="place">\uD83D\uDCCD Check-in</button>';
+          + '<button type="button" data-xc="feel">\uD83D\uDE0A Feeling</button><button type="button" data-xc="place">\uD83D\uDCCD Check-in</button>'
+          + '<button type="button" data-xc="bg" style="grid-column:1/-1">\uD83C\uDFA8 Background</button>';
         var prev = comp.querySelector("#prev");
         comp.insertBefore(chips, prev ? prev.nextSibling : null);
         var pk = document.createElement("div"); pk.id = "xcpick"; comp.insertBefore(pk, chips.nextSibling);
@@ -106,10 +130,10 @@
       });
     },
     afterPost: function(id){
-      var m = pend; pend = {feeling: "", feelLabel: "", place: "", tagged: []};
+      var m = pend; pend = {feeling: "", feelLabel: "", place: "", tagged: [], bg: "", fg: ""};
       document.body.style.overflow = "";
-      if (!m.feeling && !m.place && !m.tagged.length) return;
-      post("/api/feedx/posts/" + id + "/meta/", {feeling: m.feeling, place: m.place, tagged: m.tagged.map(function(p){ return p.id; })}).then(function(d){
+      if (!m.feeling && !m.place && !m.tagged.length && !m.bg) return;
+      post("/api/feedx/posts/" + id + "/meta/", {feeling: m.feeling, place: m.place, tagged: m.tagged.map(function(p){ return p.id; }), bg: m.bg, fg: m.fg}).then(function(d){
         if (d && d.meta){ CACHE[id] = d.meta; paint(id); }
       });
     },
@@ -121,6 +145,8 @@
   };
   function paint(id){
     var m = CACHE[id], b = document.querySelector("#post-" + id + " .fwho b"); if (!b || !m) return;
+    var body = document.querySelector("#post-" + id + " .fbody");
+    if (body && m.bg && BG[m.bg]){ body.classList.add("xcbgpost"); body.style.background = BG[m.bg]; body.style.color = FG[m.fg] || FG[autoFg(m.bg)]; }
     var old = b.parentNode.querySelector(".xcmeta"); if (old) old.remove();
     var parts = [];
     if (m.feeling) parts.push("is <b>" + esc(m.feeling) + "</b>");
@@ -145,6 +171,11 @@
     var fb = t.closest("[data-feel]");
     if (fb){ var key = fb.getAttribute("data-feel"); if (pend.feeling === key){ pend.feeling = ""; pend.feelLabel = ""; } else { pend.feeling = key; pend.feelLabel = fb.textContent; }
       [].forEach.call(document.querySelectorAll("[data-feel]"), function(x){ x.classList.toggle("on", x.getAttribute("data-feel") === pend.feeling); }); summary(); return; }
+    var sw = t.closest("[data-bg]");
+    if (sw){ pend.bg = sw.getAttribute("data-bg"); if (!pend.bg) pend.fg = ""; [].forEach.call(document.querySelectorAll("[data-bg]"), function(x){ x.classList.toggle("on", x.getAttribute("data-bg") === pend.bg); });
+      [].forEach.call(document.querySelectorAll("[data-fg]"), function(x){ x.classList.toggle("on", x.getAttribute("data-fg") === (pend.fg || autoFg(pend.bg))); }); bgPreview(); return; }
+    var fgb = t.closest("[data-fg]");
+    if (fgb){ pend.fg = fgb.getAttribute("data-fg"); [].forEach.call(document.querySelectorAll("[data-fg]"), function(x){ x.classList.toggle("on", x === fgb); }); bgPreview(); return; }
     if (t.closest("[data-setplace]")){ pend.place = (document.getElementById("xcplace").value || "").trim().slice(0, 120); summary(); pick("place"); return; }
     if (t.closest("[data-clearplace]")){ pend.place = ""; summary(); pick("place"); return; }
     var tp = t.closest("[data-tagp]");
@@ -161,6 +192,7 @@
   function closeMen(){ var m = document.querySelector(".xcmen"); if (m) m.remove(); }
   document.addEventListener("input", function(e){
     var ta = e.target;
+    if (ta.id === "ptext") bgPreview();
     if (ta.id === "xctagq"){ clearTimeout(menT); menT = setTimeout(function(){ tagSearch(ta.value.trim()); }, 250); return; }
     if (!ta || ta.tagName !== "TEXTAREA" || !(ta.id === "ptext" || /^ctext-/.test(ta.id) || /^etext-/.test(ta.id))) return;
     var m = ta.value.slice(0, ta.selectionStart).match(/(?:^|[\s(])@([A-Za-z0-9_]{1,20})$/);
