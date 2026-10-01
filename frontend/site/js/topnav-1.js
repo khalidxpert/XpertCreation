@@ -7,6 +7,7 @@
   var LINKS = [["Home", "/"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Connect", "/feed"], ["Jobs", "/jobs"], ["Pets", "/pets"],
                ["Shows", "/shows"], ["Sports", "/sports"], ["Games", "/games"], ["Chat", "/chat"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
+  try { if (/[?&]guest=1/.test(location.search)) sessionStorage.setItem("xc_guest", "1"); } catch (e) {}
   function here(u){
     var b = u.replace(/\/+$/, "") || "/";
     if (b === "/") return path === "/";
@@ -101,7 +102,14 @@
     var menu = document.createElement("div"); menu.className = "tamenu"; head.appendChild(menu);
     function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
     fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
-      if (!u || !u.email) return;                                  // signed out: the sign-in icon stays
+      if (!u || !u.email){                                          // signed out: the sign-in icon stays
+        // In the installed app, the home page opens on Sign in (once per visit; "Continue as guest" skips it).
+        try {
+          var inApp = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || /[?&]src=app/.test(location.search);
+          if (inApp && path === "/" && sessionStorage.getItem("xc_guest") !== "1") location.replace("/login");
+        } catch (e) {}
+        return;
+      }
       var nm = u.full_name || u.email, pic = u.avatar_url || "";
       acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
       acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';

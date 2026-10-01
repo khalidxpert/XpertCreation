@@ -316,7 +316,7 @@ body.rtl .wafab{right:auto;left:16px}
   </a>
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=15" defer></script>
+<script src="/js/topnav-1.js?v=16" defer></script>
 
 <style>.acctabs{display:flex;gap:6px;margin:0 0 14px;padding:4px;background:var(--paper,#F6F7FB);border:1px solid var(--line,#E4E8F2);border-radius:14px}.acctabs a{flex:1;text-align:center;padding:9px 10px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink-soft,#5A657C)}.acctabs a.on{background:var(--card,#fff);color:var(--ink,#0D1424);box-shadow:0 1px 3px rgba(13,20,36,.1)}</style><main><div class="acctabs"><a class="on" href="/account">Account</a><a href="/me/profile">Professional profile</a></div><div class="card" id="card"></div><div id="pushbar"></div></main>
 
@@ -360,6 +360,21 @@ body.rtl .wafab{right:auto;left:16px}
     return "login";
   }
   var screen = screenFromPath();
+  var XCK = {};   // what was typed on the sign-up form, kept if the form is drawn again
+  document.addEventListener("input", function(e){
+    if (!e.target || e.target.id !== "uname") return;
+    clearTimeout(window.__xcUnT);
+    var v = e.target.value.trim();
+    window.__xcUnT = setTimeout(function(){
+      var n = document.getElementById("unameMsg"); if (!n) return;
+      if (!v){ n.textContent = ""; return; }
+      api("/auth/username/check/?u=" + encodeURIComponent(v)).then(function(r){
+        var d = r.data || {};
+        n.textContent = d.ok ? "\u2714 @" + d.username + " is available" : (d.detail || "") + (d.suggestion ? " Try: " + d.suggestion : "");
+        n.style.color = d.ok ? "#15803D" : "#B91C1C";
+      });
+    }, 350);
+  });
 
   function esc(s){
     return String(s == null ? "" : s)
@@ -456,16 +471,19 @@ body.rtl .wafab{right:auto;left:16px}
 
     if (screen === "login"){
       h = '<h1>Sign in</h1><p class="sub">One account for every XpertCreation service.</p>' + m
-        + fld("email","Email","email",email)
+        + fld("email","Email or username","text",email)
         + fld("pass","Password","password","")
         + '<button class="btn" data-a="login"' + (busy?" disabled":"") + '>'
         + (busy ? "Working…" : "Sign in") + '</button>'
-        + '<div class="rows"><button data-a="go-forgot">Forgot password</button>'
-        + '<span>New here? <button data-a="go-register">Create account</button></span></div>';
+        + '<div class="rows"><button data-a="go-forgot">Forgot password</button><button data-a="go-forgotuser">Forgot username</button></div>'
+        + '<div class="rows"><span>New here? <button data-a="go-register">Create account</button></span></div>'
+        + '<p class="sub" style="text-align:center;margin-top:16px"><a href="/?guest=1">Continue as guest \u2192</a></p>';
 
     } else if (screen === "register"){
       h = '<h1>Create account</h1><p class="sub">Free. One account works across every service.</p>' + m
-        + fld("name","Full name","text","","This is the name printed on your certificates.")
+        + fld("name","Full name","text",XCK.name || "","This is the name printed on your certificates.")
+        + fld("uname","Username","text",XCK.uname || "","Letters, numbers or _ (3 to 20). You can sign in with it.")
+        + '<p class="note" id="unameMsg" style="margin-top:-6px"></p>'
         + '<div class="fld"><label>Birthday (optional)</label>'
         + '<div style="display:grid;grid-template-columns:1fr 1.5fr;gap:9px">'
         + '<input id="regBdDay" type="number" min="1" max="31" placeholder="Day">'
@@ -479,6 +497,7 @@ body.rtl .wafab{right:auto;left:16px}
         + 'would rather not say.</p></div>'
         + fld("email","Email","email",email)
         + fld("pass","Password","password","","At least 8 characters.")
+        + fld("pass2","Retype password","password","")
         + '<button class="btn" data-a="register"' + (busy?" disabled":"") + '>'
         + (busy ? "Working…" : "Create account") + '</button>'
         + '<p class="sub" style="margin-top:14px;font-size:12px">By creating an account you agree to our '
@@ -497,13 +516,20 @@ body.rtl .wafab{right:auto;left:16px}
 
     } else if (screen === "forgot"){
       h = '<h1>Reset password</h1><p class="sub">We will email you a 6-digit code.</p>' + m
-        + fld("email","Email","email",email)
+        + fld("email","Email or username","text",email)
         + '<button class="btn" data-a="forgot"' + (busy?" disabled":"") + '>'
         + (busy ? "Working…" : "Send code") + '</button>'
         + '<div class="rows"><button data-a="go-login">Back to sign in</button></div>';
 
+    } else if (screen === "forgotuser"){
+      h = '<h1>Forgot username</h1><p class="sub">We will email your username to you.</p>' + m
+        + fld("email","Email","email",email)
+        + '<button class="btn" data-a="forgotuser"' + (busy?" disabled":"") + '>'
+        + (busy ? "Working\u2026" : "Send my username") + '</button>'
+        + '<div class="rows"><button data-a="go-login">Back to sign in</button></div>';
+
     } else if (screen === "reset"){
-      h = '<h1>New password</h1><p class="sub">Enter the code we sent to <b>' + esc(email) + '</b>.</p>' + m
+      h = '<h1>New password</h1><p class="sub">Enter the code we sent to ' + (email.indexOf("@") > 0 ? '<b>' + esc(email) + '</b>' : 'the email of <b>@' + esc(email.replace(/^@/, "")) + '</b>') + '.</p>' + m
         + fld("code","Code","text","","","code")
         + fld("pass","New password","password","","At least 8 characters.")
         + '<button class="btn" data-a="reset"' + (busy?" disabled":"") + '>'
@@ -561,6 +587,10 @@ body.rtl .wafab{right:auto;left:16px}
         h += '<div class="fld" style="margin-top:18px">'
           + '<label for="nm">Display name</label>'
           + '<input id="nm" value="' + esc(me.full_name || "") + '">'
+          + '<label style="display:block;margin-top:12px;font-weight:700">Username</label>'
+          + '<div style="display:flex;gap:6px;align-items:center"><input id="unameEdit" value="' + esc(me.username || "") + '" placeholder="your_username" style="flex:1">'
+          + '<button type="button" data-a="saveuname" style="padding:10px 14px;border-radius:10px;border:0;background:var(--brand,#1B4DFF);color:#fff;font-weight:700;cursor:pointer">Save</button></div>'
+          + '<p class="note" id="unameMsg2">You can sign in with it. You can change it once a day.</p>'
           + '<p class="note">This is the name printed on your certificates and '
           + 'shown on leaderboards.</p></div>'
           + '<button class="btn" data-a="savename">Save name</button>'
@@ -735,15 +765,18 @@ body.rtl .wafab{right:auto;left:16px}
       return api("/auth/login/", {method:"POST", body:{email:email, password:val("pass")}})
         .then(function(r){
           if (r.ok){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} return next(); }
-          if (r.data.needs_verification){ screen = "verify"; msg = r.data.detail; }
+          if (r.data.needs_verification){ screen = "verify"; msg = r.data.detail; if (r.data.email) email = r.data.email; }
           fail(r);
         });
     }
 
     if (a === "register"){
-      email = val("email"); busy = true; draw();
+      XCK.name = val("name"); XCK.uname = val("uname"); email = val("email");
+      if (!XCK.uname){ msg = "Choose a username."; msgType = "err"; return draw(); }
+      if (val("pass") !== val("pass2")){ msg = "The two passwords don't match."; msgType = "err"; return draw(); }
+      var regPass = val("pass"), regPass2 = val("pass2"); busy = true; draw();
       return api("/auth/register/", {method:"POST",
-        body:{email:email, password:val("pass"), full_name:val("name")}})
+        body:{email:email, password:regPass, password2:regPass2, username:XCK.uname, full_name:XCK.name}})
         .then(function(r){
           if (r.ok){ screen = "verify"; msg = ""; busy = false; return draw(); }
           fail(r);
@@ -784,6 +817,21 @@ body.rtl .wafab{right:auto;left:16px}
           if (r.ok){ screen = "login"; msg = r.data.detail; msgType = "ok"; busy = false; return draw(); }
           fail(r);
         });
+    }
+
+    if (a === "forgotuser"){
+      email = val("email"); busy = true; draw();
+      return api("/auth/forgot-username/", {method:"POST", body:{email:email}})
+        .then(function(r){ screen = "login"; msg = (r.data && r.data.detail) || "Check your email."; msgType = "ok"; busy = false; draw(); });
+    }
+
+    if (a === "saveuname"){
+      var nv = (document.getElementById("unameEdit") || {}).value || "";
+      return api("/auth/username/", {method:"POST", body:{username:nv}}).then(function(r){
+        var n = document.getElementById("unameMsg2");
+        if (r.ok){ me.username = r.data.username; if (n){ n.textContent = "\u2714 Saved: @" + r.data.username; n.style.color = "#15803D"; } }
+        else if (n){ n.textContent = (r.data && r.data.detail) || "Could not save."; n.style.color = "#B91C1C"; }
+      });
     }
 
     if (a === "pickav"){ picking = !picking; return draw(); }
