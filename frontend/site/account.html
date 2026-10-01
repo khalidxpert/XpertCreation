@@ -316,7 +316,7 @@ body.rtl .wafab{right:auto;left:16px}
   </a>
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=16" defer></script>
+<script src="/js/topnav-1.js?v=17" defer></script>
 
 <style>.acctabs{display:flex;gap:6px;margin:0 0 14px;padding:4px;background:var(--paper,#F6F7FB);border:1px solid var(--line,#E4E8F2);border-radius:14px}.acctabs a{flex:1;text-align:center;padding:9px 10px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink-soft,#5A657C)}.acctabs a.on{background:var(--card,#fff);color:var(--ink,#0D1424);box-shadow:0 1px 3px rgba(13,20,36,.1)}</style><main><div class="acctabs"><a class="on" href="/account">Account</a><a href="/me/profile">Professional profile</a></div><div class="card" id="card"></div><div id="pushbar"></div></main>
 
@@ -466,6 +466,7 @@ body.rtl .wafab{right:auto;left:16px}
   }
 
   function draw(){
+    var accTabs = document.querySelector(".acctabs"); if (accTabs) accTabs.style.display = (screen === "account" && me) ? "" : "none";
     var m = msg ? '<div class="msg ' + msgType + ' on">' + esc(msg) + '</div>' : '';
     var h = "";
 
@@ -717,7 +718,7 @@ body.rtl .wafab{right:auto;left:16px}
     // Home, not settings. Landing on an edit form after signing in makes it
     // look as though something is being asked for, when nothing is.
     location.href = q && /^https:\/\/[a-z0-9-]+\.xpertcreation\.com\//.test(q)
-      ? q : "/";
+      ? q : "/feed";
   }
 
   document.getElementById("card").addEventListener("click", function(e){
@@ -787,7 +788,7 @@ body.rtl .wafab{right:auto;left:16px}
       busy = true; draw();
       return api("/auth/verify-email/", {method:"POST", body:{email:email, code:val("code")}})
         .then(function(r){
-          if (r.ok && r.data.user){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} return next(); }
+          if (r.ok && r.data.user){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} location.href = "/me/profile?welcome=1"; return; }
           if (r.ok){ screen = "login"; msg = r.data.detail; msgType = "ok"; busy = false; return draw(); }
           fail(r);
         });

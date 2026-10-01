@@ -807,6 +807,27 @@ body.signed-in .hello{margin-top:4px}
   <div id="bday"></div>
 <a class="modbar" id="modlink" href="/moderate"><span class="e5">&#128737;&#65039;</span><span class="t"><b>Moderation</b><small id="modsub">Review comments waiting to be read</small></span><span class="cnt2" id="modcnt" hidden></span></a>
 <div class="hello" id="hello"></div>
+<div id="xcConnectCard"></div>
+<script>
+/* Connect card: signed out -> join; signed in without a Connect profile -> create it; with a profile -> nothing. */
+(function(){
+  var box = document.getElementById("xcConnectCard"); if (!box) return;
+  function card(t, s, href, btn){
+    box.innerHTML = '<a href="' + href + '" style="display:flex;gap:14px;align-items:center;margin:12px 0;padding:16px 18px;border-radius:20px;text-decoration:none;'
+      + 'background:linear-gradient(135deg,#1B4DFF,#7C3AED);color:#fff;box-shadow:0 10px 26px rgba(27,77,255,.25)">'
+      + '<span style="font-size:34px;line-height:1">\uD83E\uDD1D</span><span style="flex:1"><b style="display:block;font-size:17px">' + t + '</b>'
+      + '<small style="opacity:.92;font-size:13.5px">' + s + '</small></span>'
+      + '<span style="background:#fff;color:#1B4DFF;font-weight:800;padding:10px 14px;border-radius:12px;white-space:nowrap">' + btn + '</span></a>';
+  }
+  fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
+    if (!u || !u.email){ card("Join XpertCreation Connect", "Free. Build your professional profile, find jobs and connect with people.", "/register", "Join free"); return; }
+    fetch("/api/network/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(p){
+      var has = p && (p.slug || (p.profile && p.profile.slug));
+      if (!has) card("Create your professional profile", "Get found for jobs, show your skills and connect with people on Connect.", "/me/profile", "Start now");
+    }).catch(function(){});
+  }).catch(function(){});
+})();
+</script>
 <div id="profdone"></div>
 <script>
 /* Profile completion nudge - only for signed-in members, hidden at 100% or for 3 days after "Later". */
@@ -2063,6 +2084,6 @@ if ("serviceWorker" in navigator){
   setInterval(go, 60000);
 })();
 </script>
-<script src="/js/topnav-1.js?v=16" defer></script>
+<script src="/js/topnav-1.js?v=17" defer></script>
 </body>
 </html>

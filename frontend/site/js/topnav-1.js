@@ -4,7 +4,7 @@
   var head = document.querySelector("header.top") || document.querySelector("header.topbar");
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
-  var LINKS = [["Home", "/"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Connect", "/feed"], ["Jobs", "/jobs"], ["Pets", "/pets"],
+  var LINKS = [["Home", "/"], ["Connect", "/feed"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Jobs", "/jobs"], ["Pets", "/pets"],
                ["Shows", "/shows"], ["Sports", "/sports"], ["Games", "/games"], ["Chat", "/chat"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   try { if (/[?&]guest=1/.test(location.search)) sessionStorage.setItem("xc_guest", "1"); } catch (e) {}
@@ -46,6 +46,7 @@
       "header.topbar{gap:6px}.tdrop.open .tmore{display:block;grid-column:1/-1;border-top:1px solid var(--line,#E4E8F2);margin-top:4px;padding-top:6px}" +
       ".tmore a{display:block;padding:11px 12px;border-radius:10px;text-decoration:none;font-weight:600;color:var(--ink,#0D1424)}.tmore select{width:100%;margin-top:4px;padding:9px;border-radius:10px}}";
   document.head.appendChild(css);
+  css.textContent += ".tnav a.thi,.tdrop a.thi{background:var(--brand,#1B4DFF);color:#fff!important}.tnav a.thi:hover{background:#1640D6}.tnav a.thi .tic,.tdrop a.thi .tic{stroke:#fff}";
   css.textContent += ".tic{width:16px;height:16px;flex:0 0 16px;vertical-align:-3px;margin-right:6px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}" +
     ".tnav a,.tdrop a{display:inline-flex;align-items:center}";
   if (getComputedStyle(head).position === "static") head.style.position = "relative";
@@ -67,7 +68,8 @@
   };
   function icon(href){ return '<svg class="tic" viewBox="0 0 24 24" aria-hidden="true">' + (IC[href] || '<circle cx="12" cy="12" r="3"/>') + '</svg>'; }
   var links = LINKS.map(function(l){
-    return "<a href='" + l[1] + "'" + (here(l[1]) ? " class='on' aria-current='page'" : "") + ">" + icon(l[1]) + l[0].replace(/^[^A-Za-z]+/, "") + "</a>";
+    var cl = ((l[1] === "/feed" ? "thi " : "") + (here(l[1]) ? "on" : "")).trim();
+    return "<a href='" + l[1] + "'" + (cl ? " class='" + cl + "'" : "") + (here(l[1]) ? " aria-current='page'" : "") + ">" + icon(l[1]) + l[0].replace(/^[^A-Za-z]+/, "") + "</a>";
   }).join("");
   var nav = document.createElement("nav");
   nav.className = "tnav";
