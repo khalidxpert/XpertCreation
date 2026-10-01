@@ -4,7 +4,7 @@
   var head = document.querySelector("header.top") || document.querySelector("header.topbar");
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
-  var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Jobs", "/jobs"], ["Pets", "/pets"],
+  var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Academy", "/academy/"], ["Vocabulary", "/vocabulary"], ["Tools", "/tools"], ["Jobs", "/jobs"], ["Pets", "/pets"],
                ["Shows", "/shows"], ["Sports", "/sports"], ["Games", "/games"], ["Chat", "/chat"], ["Groups", "/groups"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   try { if (/[?&]guest=1/.test(location.search)) sessionStorage.setItem("xc_guest", "1"); } catch (e) {}
