@@ -118,7 +118,7 @@ def _save_poster(url, owner_id):
 
 
 def _publish(kind, key, text, group_text=None, images=None):
-    """One post to the feed and one bot message in the group; skipped if this item was posted before."""
+    """One post to the feed and one message from Khalid in the group; skipped if this item was posted before."""
     if AutoPost.objects.filter(kind=kind, key=key).exists():
         return None
     from feed.models import Post
@@ -127,8 +127,16 @@ def _publish(kind, key, text, group_text=None, images=None):
     g = group()
     if g:
         try:
-            from notifications.groupbot import say
-            say(g, (group_text or text)[:2000])
+            from django.db.models import F
+            from django.utils import timezone
+            from notifications.models import ChatGroup, GroupMember, GroupMessage
+            if GroupMember.objects.filter(group=g, user=u).exists():      # posted by Khalid, not the bot
+                GroupMessage.objects.create(group=g, author=u, body=(group_text or text)[:2000])
+                ChatGroup.objects.filter(pk=g.pk).update(updated_at=timezone.now())
+                GroupMember.objects.filter(group=g, user=u).update(msg_count=F("msg_count") + 1)
+            else:
+                from notifications.groupbot import say
+                say(g, (group_text or text)[:2000])
         except Exception:
             pass
     AutoPost.objects.create(kind=kind, key=key[:200], text=text[:3000], feed_post_id=p.id)
