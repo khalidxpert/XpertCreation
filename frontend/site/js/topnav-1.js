@@ -31,7 +31,14 @@
     ".tdrop.open{display:grid;grid-template-columns:1fr 1fr;gap:4px}" +
     ".tdrop a{padding:11px 12px;border-radius:10px;text-decoration:none;font-weight:600;color:var(--ink,#0D1424)}" +
     ".tdrop a.on{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}" +
-    "@media(max-width:820px){.tnav,header.topbar .xnav{display:none}.tmenu{display:inline-grid;place-items:center}}";
+    "@media(max-width:820px){.tnav,header.topbar .xnav{display:none}.tmenu{display:inline-grid;place-items:center}}" +
+    ".tacct{margin-left:6px;padding:7px 12px;border-radius:10px;background:var(--brand,#1B4DFF);color:#fff;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap;flex:0 0 auto}" +
+    ".tacct.me{padding:0;width:36px;height:36px;border-radius:50%;overflow:hidden;display:inline-grid;place-items:center;background:var(--paper,#EEF2FF);color:var(--brand,#1B4DFF);border:2px solid var(--line,#E4E8F2)}" +
+    ".tacct.me img{width:100%;height:100%;object-fit:cover}" +
+    ".tamenu{display:none;position:absolute;right:10px;top:calc(100% + 6px);min-width:190px;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:14px;box-shadow:0 14px 34px rgba(13,20,36,.16);padding:6px;z-index:81}" +
+    ".tamenu.open{display:block}.tamenu b{display:block;padding:8px 12px 6px;font-size:13px;color:var(--ink-soft,#5A657C)}" +
+    ".tamenu a,.tamenu button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:10px;border:0;background:none;font:inherit;font-weight:600;color:var(--ink,#0D1424);text-decoration:none;cursor:pointer}" +
+    ".tamenu a:hover,.tamenu button:hover{background:var(--paper,#F6F7FB)}.tamenu .tout{color:#B91C1C}";
   document.head.appendChild(css);
   css.textContent += ".tic{width:16px;height:16px;flex:0 0 16px;vertical-align:-3px;margin-right:6px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}" +
     ".tnav a,.tdrop a{display:inline-flex;align-items:center}";
@@ -69,10 +76,37 @@
   drop.className = "tdrop";
   drop.innerHTML = links;
   var sp = head.querySelector(".sp");
-  if (isHome){ var g = head.querySelector(".gear"); if (g) head.insertBefore(btn, g); else head.appendChild(btn); }
+  if (isHome){
+    // The home page now shows the same menu as every other page: its own short link row is replaced.
+    var xn = head.querySelector(".xnav"), g = head.querySelector(".gear");
+    if (xn){ head.insertBefore(nav, xn); xn.remove(); } else if (g) head.insertBefore(nav, g); else head.appendChild(nav);
+    if (g) head.insertBefore(btn, g); else head.appendChild(btn);
+  }
   else if (sp){ head.insertBefore(nav, sp); head.insertBefore(btn, sp); } else { head.appendChild(nav); head.appendChild(btn); }
   head.appendChild(drop);
   btn.onclick = function(e){ e.stopPropagation(); drop.classList.toggle("open"); };
+  // Sign in / your photo - the same on every page. Signed in: tap the photo for My profile, Settings, Sign out.
+  (function(){
+    var acct = head.querySelector("#sessBtn"), own = false;
+    if (!acct){ acct = document.createElement("a"); acct.className = "tacct"; acct.href = "/login"; acct.textContent = "Sign in"; head.insertBefore(acct, drop); own = true; }
+    var menu = document.createElement("div"); menu.className = "tamenu"; head.appendChild(menu);
+    function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+    fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
+      if (!u || !u.email) return;                                  // signed out: the button stays "Sign in"
+      var nm = u.full_name || u.email, pic = u.avatar_url || u.avatar || "";
+      if (own){
+        acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
+        acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';
+      }
+      menu.innerHTML = '<b>' + nm.replace(/</g, "&lt;") + '</b><a href="/me/profile">My profile</a><a href="/account">Settings</a><button type="button" class="tout">Sign out</button>';
+      acct.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove("open"); menu.classList.toggle("open"); });
+      menu.querySelector(".tout").onclick = function(){
+        fetch("/api/auth/logout/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}})
+          .then(function(){ try { sessionStorage.clear(); } catch (e) {} location.href = "/"; });
+      };
+    }).catch(function(){});
+    document.addEventListener("click", function(e){ if (!menu.contains(e.target)) menu.classList.remove("open"); });
+  })();
   // "System log" - only for the super admin. The server decides; the answer is remembered for this visit.
   function addAdmin(){
     var link = '<a href="/system-log"' + (path === "/system-log" ? ' class="on"' : '') + '>\uD83D\uDEE1 System log</a>';
