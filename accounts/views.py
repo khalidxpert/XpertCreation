@@ -81,7 +81,9 @@ def register(request):
         existing.set_password(data["password"])
         existing.full_name = data.get("full_name") or existing.full_name
         existing.phone = data.get("phone") or existing.phone
-        existing.save(update_fields=["password", "full_name", "phone"])
+        if data.get("username"):
+            existing.username = data["username"]
+        existing.save(update_fields=["password", "full_name", "phone", "username"])
         user = existing
     else:
         with transaction.atomic():
@@ -89,6 +91,7 @@ def register(request):
                 email=email,
                 password=data["password"],
                 full_name=data.get("full_name", ""),
+                username=data.get("username") or None,
                 phone=data.get("phone", ""),
                 preferred_lang=data.get("preferred_lang", "en"),
                 signup_ip=ip,
@@ -211,7 +214,8 @@ def logout_view(request):
 @permission_classes([AllowAny])
 @throttle_classes([CodeSendThrottle])
 def forgot_password(request):
-    ser = EmailOnlySerializer(data=request.data)
+    from .usernames import email_for
+    ser = EmailOnlySerializer(data={"email": email_for(request.data.get("email"))})
     ser.is_valid(raise_exception=True)
 
     user = User.objects.filter(email=ser.validated_data["email"]).first()

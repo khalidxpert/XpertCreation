@@ -36,6 +36,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, db_index=True)
     full_name = models.CharField(max_length=120, blank=True)
+    # Sign in with this or the email. Lowercase, 3-20 letters, numbers or _; empty until chosen.
+    username = models.CharField(max_length=20, unique=True, null=True, blank=True)
 
     phone = models.CharField(max_length=20, blank=True)
 

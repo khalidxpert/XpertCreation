@@ -27,6 +27,8 @@ class RegisterSerializer(serializers.Serializer):
     full_name = serializers.CharField(max_length=120, required=False, allow_blank=True)
     phone = serializers.CharField(max_length=20, required=False, allow_blank=True)
     preferred_lang = serializers.CharField(max_length=5, required=False, default="en")
+    username = serializers.CharField(max_length=21, required=False, allow_blank=True)
+    password2 = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     def validate_email(self, value):
         return value.lower().strip()
@@ -43,6 +45,15 @@ class RegisterSerializer(serializers.Serializer):
         return _validate_password(value)
 
     def validate(self, data):
+        if data.get("password2") not in (None, "") and data.get("password2") != data.get("password"):
+            raise serializers.ValidationError({"password2": "The two passwords don't match."})
+        from .usernames import clean, problem
+        name = clean(data.get("username"))
+        if name:
+            p = problem(name, User.objects.filter(email=data["email"]).first())
+            if p:
+                raise serializers.ValidationError({"username": p})
+        data["username"] = name
         local = data["email"].split("@")[0]
         if len(local) > 3 and local.lower() in data["password"].lower():
             raise serializers.ValidationError(
@@ -52,11 +63,12 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    email = serializers.CharField(max_length=254)          # email or username
     password = serializers.CharField(write_only=True)
 
     def validate_email(self, value):
-        return value.lower().strip()
+        from .usernames import email_for
+        return email_for(value)
 
 
 class EmailOnlySerializer(serializers.Serializer):
@@ -75,6 +87,12 @@ class CodeSerializer(serializers.Serializer):
 
 
 class ResetConfirmSerializer(CodeSerializer):
+    email = serializers.CharField(max_length=254)          # email or username
+
+    def validate_email(self, value):
+        from .usernames import email_for
+        return email_for(value)
+
     new_password = serializers.CharField(write_only=True, min_length=8, max_length=128)
 
     def validate_new_password(self, value):
@@ -101,7 +119,7 @@ class MeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "id", "email", "full_name", "phone", "is_email_verified",
+            "id", "email", "username", "full_name", "phone", "is_email_verified",
             "can_order", "daily_limit_pkr", "preferred_lang", "date_joined",
             "hide_from_leaderboard", "avatar", "avatar_url",
             "birth_day", "birth_month", "birth_year", "show_birthday",

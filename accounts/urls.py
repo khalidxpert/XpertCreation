@@ -5,6 +5,8 @@ from . import community
 
 app_name = "accounts"
 
+from . import usernames  # noqa: E402
+
 urlpatterns = [
     path("csrf/", views.csrf, name="csrf"),
 
@@ -13,6 +15,9 @@ urlpatterns = [
     path("resend-verify/", views.resend_verify, name="resend-verify"),
 
     path("login/", views.login_view, name="login"),
+    path("username/check/", usernames.check, name="username-check"),
+    path("username/", usernames.mine, name="username"),
+    path("forgot-username/", usernames.forgot, name="forgot-username"),
     path("logout/", views.logout_view, name="logout"),
 
     path("forgot-password/", views.forgot_password, name="forgot-password"),
