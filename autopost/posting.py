@@ -17,7 +17,7 @@ from django.utils import timezone
 from .models import AutoPost, OfficialAdded
 
 User = get_user_model()
-OFFICIAL_EMAIL = "official@xpertcreation.com"
+OFFICIAL_EMAIL = "khalid@xpertcreation.com"            # daily posts come from Khalid (@khalidxpert)
 GROUP_ID = 1
 SITE = "https://xpertcreation.com"
 LAND = "/var/www/xpertcreation-landing"
