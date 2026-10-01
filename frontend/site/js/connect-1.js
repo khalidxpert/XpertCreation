@@ -150,7 +150,7 @@
     var old = b.parentNode.querySelector(".xcmeta"); if (old) old.remove();
     var parts = [];
     if (m.feeling) parts.push("is <b>" + esc(m.feeling) + "</b>");
-    if (m.place) parts.push("at <b>\uD83D\uDCCD " + esc(m.place) + "</b>");
+    if (m.place) parts.push('at <a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(m.place) + '" target="_blank" rel="noopener"><b>\uD83D\uDCCD ' + esc(m.place) + '</b></a>');
     if (m.tagged && m.tagged.length) parts.push("with " + m.tagged.map(function(p){ return '<a href="/u/' + esc(p.username) + '">' + esc(p.name) + '</a>'; }).join(m.tagged.length === 2 ? " and " : ", "));
     if (!parts.length) return;
     var s = document.createElement("span"); s.className = "xcmeta"; s.innerHTML = " " + parts.join(" ");

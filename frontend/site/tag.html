@@ -189,8 +189,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function go(q){ q = String(q || "").trim().replace(/^#/, ""); if (/^[A-Za-z][A-Za-z0-9_]{1,49}$/.test(q)) location.href = "/tag/" + q.toLowerCase(); }
   function card(p){
-    return '<div class="tgp"><div class="au">' + (p.avatar ? '<img src="' + esc(p.avatar) + '" alt="">' : '<span class="ph">' + esc((p.author || "?").charAt(0)) + '</span>')
-      + '<div><b>' + esc(p.author) + '</b><small>' + esc(p.when) + '</small></div></div><div class="bd">' + linkify(p.body) + '</div>'
+    var pic = p.avatar ? '<img src="' + esc(p.avatar) + '" alt="">' : '<span class="ph">' + esc((p.author || "?").charAt(0)) + '</span>';
+    var nm = esc(p.author);
+    if (p.author_url){ pic = '<a href="' + esc(p.author_url) + '">' + pic + '</a>'; nm = '<a href="' + esc(p.author_url) + '" style="color:inherit;text-decoration:none">' + nm + '</a>'; }
+    return '<div class="tgp"><div class="au">' + pic
+      + '<div><b>' + nm + '</b><small>' + esc(p.when) + '</small></div></div><div class="bd">' + linkify(p.body) + '</div>'
       + (p.image ? '<a href="/post/' + p.id + '"><img class="im" src="' + esc(p.image) + '" alt="" loading="lazy"></a>' : '')
       + '<div class="ft"><span>\u2764 ' + p.reactions + '</span><span>\uD83D\uDCAC ' + p.comments + '</span><a href="/post/' + p.id + '">Open post \u2192</a></div></div>';
   }

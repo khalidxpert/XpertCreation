@@ -30,9 +30,9 @@ def _media(p):
 
 
 def _avatar(u):
-    a = getattr(u, "avatar", None)
     try:
-        return a.url if a and hasattr(a, "url") else _media(str(a or ""))
+        from accounts.views import avatar_url          # the account stores a picture key, not a path
+        return avatar_url(getattr(u, "avatar", "")) or ""
     except Exception:
         return ""
 
@@ -52,6 +52,7 @@ def tag_posts(request, name):
     return Response({"tag": name.lower(), "total": total, "page": page, "more": page * PER_PAGE < total,
                      "posts": [{"id": p.id, "body": p.body, "image": _media((p.images or [None])[0]) if p.images else "",
                                 "author": getattr(p.author, "full_name", "") or "Member", "avatar": _avatar(p.author),
+                                "author_url": ("/u/" + p.author.username) if getattr(p.author, "username", None) else "",
                                 "when": timezone.localtime(p.created_at).strftime("%d %b %Y"),
                                 "reactions": p.reactions_count, "comments": p.comments_count} for p in rows]})
 
