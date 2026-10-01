@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .models import PostMeta
+from .models import CommentReaction, PostMeta
 
 U = get_user_model()
 FEELINGS = {"happy": "\U0001F60A happy", "loved": "\U0001F970 loved", "blessed": "\U0001F64F blessed", "excited": "\U0001F929 excited",
@@ -134,3 +134,100 @@ def by_username(request, username):
     except Exception:
         pass
     return HttpResponseRedirect("/feed?user=%d" % u.pk)
+
+
+# ---- reactions on comments, and who reacted (posts and comments) ----
+COMMENT_KINDS = ["like", "love", "haha", "wow", "sad", "clap"]
+
+
+def _people_rows(pairs, viewer):
+    """[(user, kind)] -> rows with profile link and whether the viewer is connected."""
+    from network.models import ProProfile
+    try:
+        from feed.views import _connected_ids
+        conn = set(_connected_ids(viewer)) if viewer.is_authenticated else set()
+    except Exception:
+        conn = set()
+    slugs = dict(ProProfile.objects.filter(user_id__in=[u.pk for u, _ in pairs]).values_list("user_id", "slug"))
+    out = []
+    for u, k in pairs:
+        d = _person(u); d.update({"kind": k, "slug": slugs.get(u.pk, ""), "connected": u.pk in conn,
+                                  "me": viewer.is_authenticated and u.pk == viewer.pk})
+        out.append(d)
+    return out
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def post_reactors(request, pk):
+    from feed.models import Post
+    from feed.views import _can_see
+    p = Post.objects.filter(pk=pk).first()
+    if not p or not _can_see(p, request.user):
+        return Response({"detail": "Not found."}, status=404)
+    rows = p.reactions.select_related("user").order_by("-created_at")[:300]
+    return Response({"people": _people_rows([(r.user, r.kind) for r in rows], request.user)})
+
+
+def _comment_visible(c, u):
+    from feed.views import _can_see
+    return c and not c.hidden and _can_see(c.post, u)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def comment_counts(request):
+    """?ids=1,2,3 : reaction counts, the top kinds and your own reaction, for comments you can see."""
+    from django.db.models import Count
+    from feed.models import Comment
+    ids = [int(x) for x in re.findall(r"\d+", str(request.GET.get("ids") or ""))[:100]]
+    ok = [c.id for c in Comment.objects.filter(pk__in=ids).select_related("post") if _comment_visible(c, request.user)]
+    out = {i: {"count": 0, "top": [], "mine": ""} for i in ok}
+    for row in CommentReaction.objects.filter(comment_id__in=ok).values("comment_id", "kind").annotate(n=Count("id")).order_by("-n"):
+        o = out[row["comment_id"]]; o["count"] += row["n"]
+        if len(o["top"]) < 3: o["top"].append(row["kind"])
+    if request.user.is_authenticated:
+        for cid, k in CommentReaction.objects.filter(comment_id__in=ok, user=request.user).values_list("comment_id", "kind"):
+            out[cid]["mine"] = k
+    return Response({"comments": out})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def comment_react(request, pk):
+    """{kind} to react (or change), {kind: ""} to remove. The comment's writer is told about a new reaction."""
+    from feed.models import Comment
+    c = Comment.objects.filter(pk=pk).select_related("post", "author").first()
+    if not _comment_visible(c, request.user):
+        return Response({"detail": "Not found."}, status=404)
+    kind = str(request.data.get("kind") or "")
+    old = CommentReaction.objects.filter(comment=c, user=request.user).first()
+    if not kind:
+        if old: old.delete()
+    elif kind in COMMENT_KINDS:
+        if old:
+            old.kind = kind; old.save(update_fields=["kind"])
+        else:
+            CommentReaction.objects.create(comment=c, user=request.user, kind=kind)
+            if c.author_id != request.user.pk:
+                try:
+                    from network.views import _name
+                    from notifications.views import notify
+                    notify(c.author, "reaction", "%s reacted to your comment." % _name(request.user), "/post/%d" % c.post_id)
+                except Exception:
+                    pass
+    else:
+        return Response({"detail": "Unknown reaction."}, status=400)
+    n = CommentReaction.objects.filter(comment=c).count()
+    return Response({"count": n, "mine": kind})
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def comment_reactors(request, pk):
+    from feed.models import Comment
+    c = Comment.objects.filter(pk=pk).select_related("post").first()
+    if not _comment_visible(c, request.user):
+        return Response({"detail": "Not found."}, status=404)
+    rows = CommentReaction.objects.filter(comment=c).select_related("user").order_by("-created_at")[:300]
+    return Response({"people": _people_rows([(r.user, r.kind) for r in rows], request.user)})
