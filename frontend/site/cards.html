@@ -151,7 +151,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
-<script src="/js/bizcard-1.js?v=4"></script>
+<script src="/js/bizcard-1.js?v=5"></script>
 </head>
 <body>
 <header class="top">
@@ -565,7 +565,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 /* xcTplThumbs: picture previews on the Design templates, drawn with the card's own name and company. */
 (function(){
   var MAP = {mandala: "mandala", corporate: "corporate", minimal: "minimal", gold: "gold", islamic: "islamic", gradient: "gradient", medical: "medical", shop: "shop", tech: "tech", maroon: "maroon"};
-  function load(cb){ if (window.XCPrint) return cb(); var s = document.createElement("script"); s.src = "/js/printcard-1.js?v=1"; s.onload = cb; document.head.appendChild(s); }
+  function load(cb){ if (window.XCPrint) return cb(); var s = document.createElement("script"); s.src = "/js/printcard-1.js?v=2"; s.onload = cb; document.head.appendChild(s); }
   function data(){
     var h1 = document.querySelector(".xcb h1"), co = document.querySelector(".xcb .h3") || document.querySelector(".xcb .h2"), ti = document.querySelector(".xcb .h2");
     return {business: (co && co.textContent.trim()) || "Your company", category: "Digital business card", name: (h1 && h1.textContent.trim()) || "Your name", title: (ti && ti !== co && ti.textContent.trim()) || "",

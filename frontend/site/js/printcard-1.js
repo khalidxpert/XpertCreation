@@ -2,6 +2,7 @@
    Card: 3.5 x 2 in at 300 dpi = 1050 x 600. Draws on any canvas 2D context. */
 (function(root){
   "use strict";
+  var BG = false;   /* true while drawing the artwork only (no text), for the online card header */
   var W = 1050, H = 600, SANS = "Poppins, 'Segoe UI', Arial, sans-serif", SERIF = "Georgia, 'Times New Roman', serif";
   function font(ctx, w, s, fam){ ctx.font = (w || "") + " " + s + "px " + (fam || SANS); }
   function fit(ctx, text, max, size, w, fam, min){
@@ -10,13 +11,14 @@
     font(ctx, w, min, fam); return min;
   }
   function txt(ctx, text, x, y, o){
-    if (!text) return; o = o || {};
+    if (!text || BG) return; o = o || {};
     fit(ctx, text, o.max || 900, o.size || 28, o.w || "", o.fam, o.min);
     ctx.fillStyle = o.c || "#111"; ctx.textAlign = o.a || "left"; ctx.textBaseline = "alphabetic"; ctx.fillText(String(text), x, y);
   }
   function rr(ctx, x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
   function initials(d){ var n = (d.business || d.name || "X").trim().split(/\s+/); return ((n[0] || "")[0] + ((n[1] || "")[0] || "")).toUpperCase(); }
   function badge(ctx, d, x, y, r, bg, fg){
+    if (BG) return;
     ctx.save(); ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = bg; ctx.fill();
     if (d.logoImg){ ctx.clip(); var s = r * 2; ctx.drawImage(d.logoImg, x - r, y - r, s, s); }
     else { font(ctx, "bold", r * 0.9); ctx.fillStyle = fg; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(initials(d), x, y + 2); }
@@ -153,6 +155,7 @@
     txt(ctx, d.qrLabel || "", 600, 335, {size: 22, w: "bold", c: fg, max: 400});
     txt(ctx, d.website || "", 600, 470, {size: 24, c: sub, max: 400});
   }
-  root.XCPrint = {W: W, H: H, TEMPLATES: T, front: function(ctx, id, d){ var t = T.filter(function(x){ return x.id === id; })[0] || T[0]; ctx.save(); t.draw(ctx, d); ctx.restore(); },
+  root.XCPrint = {W: W, H: H, TEMPLATES: T,
+                  art: function(ctx, id){ var t = T.filter(function(x){ return x.id === id; })[0] || T[0]; BG = true; ctx.save(); try { t.draw(ctx, {}); } finally { ctx.restore(); BG = false; } }, front: function(ctx, id, d){ var t = T.filter(function(x){ return x.id === id; })[0] || T[0]; ctx.save(); t.draw(ctx, d); ctx.restore(); },
                   back: function(ctx, id, d, qr){ var t = T.filter(function(x){ return x.id === id; })[0] || T[0]; ctx.save(); back(ctx, t, d, qr); ctx.restore(); }};
 })(typeof window !== "undefined" ? window : globalThis);
