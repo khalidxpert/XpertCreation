@@ -3,6 +3,7 @@ Allow: /
 
 # Nothing useful to a search engine, and some of it is private.
 Disallow: /account
+Disallow: /account/delete
 Disallow: /login
 Disallow: /register
 Disallow: /chat
@@ -37,7 +38,3 @@ Disallow: /search/
 Disallow: /dl/
 
 Sitemap: https://xpertcreation.com/sitemap.xml
-Disallow: /account/delete
-Sitemap: https://xpertcreation.com/sitemap.xml
-Sitemap: https://xpertcreation.com/sitemap-dynamic.xml
-Sitemap: https://xpertcreation.com/sitemap-tags.xml
