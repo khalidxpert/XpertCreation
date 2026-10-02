@@ -70,6 +70,8 @@ INSTALLED_APPS = [
     "network",
     "pets",
     "screen",
+    "mcq",
+    "notices",
     "rates",
     "prefs",
     "stories",
