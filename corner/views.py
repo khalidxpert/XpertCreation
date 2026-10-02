@@ -70,7 +70,7 @@ def islamic(request):
     out = {"friday": today.weekday() == 4, "hijri": a.hijri if a else "", "ramadan": _ramadan(today),
            "source": "Quran text and translations: AlQuran Cloud (Tanzil). Urdu: Fateh Muhammad Jalandhari. English: Saheeh International. Hijri date: AlAdhan (may differ by a day from the local moon sighting)."}
     if a:
-        out["ayah"] = {"ref": a.ref, "surah": a.surah, "arabic": a.arabic, "urdu": a.urdu, "english": a.english, "link": "https://quran.com/" + a.ref.replace(":", "/")}
+        out["ayah"] = {"ref": a.ref, "surah": a.surah, "arabic": a.arabic, "urdu": a.urdu, "english": a.english, "link": "/islamic?surah=" + a.ref.split(":")[0] + "#a" + a.ref.split(":")[1]}
     return Response(out)
 
 
@@ -158,3 +158,25 @@ def recipe(request, pk):
     if request.method == "DELETE":
         r.delete(); return Response({"deleted": True})
     r.approved = True; r.save(update_fields=["approved"]); return Response({"approved": True})
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def surah(request, n):
+    """A whole surah (Arabic, Urdu, English), fetched once from AlQuran Cloud and kept on our server."""
+    if not 1 <= n <= 114:
+        return Response({"detail": "No such surah."}, status=404)
+    path = os.path.join(settings.MEDIA_ROOT, "quran", "%d.json" % n)
+    if os.path.exists(path):
+        return Response(json.load(open(path, encoding="utf-8")))
+    try:
+        ar, ur, en = _get("https://api.alquran.cloud/v1/surah/%d/editions/quran-uthmani,ur.jalandhry,en.sahih" % n)["data"]
+    except Exception:
+        return Response({"detail": "Could not load this surah right now."}, status=503)
+    out = {"number": n, "name": ar["englishName"], "arabic_name": ar["name"],
+           "ayahs": [{"n": a["numberInSurah"], "ar": a["text"], "ur": ur["ayahs"][i]["text"], "en": en["ayahs"][i]["text"]} for i, a in enumerate(ar["ayahs"])],
+           "source": "Quran text and translations: AlQuran Cloud (Tanzil). Urdu: Fateh Muhammad Jalandhari. English: Saheeh International."}
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    json.dump(out, open(path, "w", encoding="utf-8"), ensure_ascii=False)
+    return Response(out)

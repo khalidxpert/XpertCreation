@@ -175,14 +175,25 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   "use strict";
   var box = document.getElementById("isl");
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  var sn = parseInt(new URLSearchParams(location.search).get("surah"), 10);
+  if (sn){
+    fetch("/api/corner/surah/" + sn + "/").then(function(r){ return r.json(); }).then(function(d){
+      if (!d.ayahs){ box.innerHTML = '<p class="fnote">Could not load this surah. Try again.</p>'; return; }
+      box.innerHTML = '<p><a href="/islamic">\u2190 Islamic corner</a></p><h1 style="font-size:24px;margin:6px 0 10px">' + esc(d.name) + ' <span class="issm">' + esc(d.arabic_name) + ' \u00b7 ' + d.ayahs.length + ' ayahs</span></h1>'
+        + d.ayahs.map(function(a){ return '<div class="isb" id="a' + a.n + '"><span class="issm">' + d.number + ':' + a.n + '</span><div class="isar">' + esc(a.ar) + '</div><div class="isur">' + esc(a.ur) + '</div><div class="isen">' + esc(a.en) + '</div></div>'; }).join("")
+        + '<p class="issm">' + esc(d.source) + '</p>';
+      var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView({block: "center"});
+    }).catch(function(){ box.innerHTML = '<p class="fnote">Could not load this surah. Try again.</p>'; });
+    return;
+  }
   fetch("/api/corner/islamic/").then(function(r){ return r.json(); }).then(function(d){
     var a = d.ayah, h = '<h1 style="font-size:24px;margin:6px 0 2px">\uD83D\uDD4C Islamic corner</h1><p class="issm" style="margin:0 0 12px">' + esc(d.hijri) + '</p>';
     if (d.friday) h += '<div class="isb isfri">\uD83C\uDF19 Jumma Mubarak</div>';
     if (a) h += '<div class="isb"><b>\uD83D\uDCD6 Ayah of the day</b> <span class="issm">\u00b7 ' + esc(a.surah) + ', ' + esc(a.ref) + '</span><div class="isar" style="margin-top:8px">' + esc(a.arabic) + '</div>'
       + '<div class="isur">' + esc(a.urdu) + '</div><div class="isen">' + esc(a.english) + '</div>'
-      + '<p style="margin:12px 0 0"><a href="' + esc(a.link) + '" target="_blank" rel="noopener">Read the surah with tafsir on quran.com \u2197</a></p></div>';
+      + '<p style="margin:12px 0 0"><a href="' + esc(a.link) + '" style="font-weight:800">\uD83D\uDCD6 Read the full surah</a></p></div>';
     if (d.ramadan) h += '<div class="isb"><b>\uD83C\uDF19 Ramadan</b><p style="margin:6px 0 0">Ramadan is expected to begin in about <b>' + d.ramadan.days + ' days</b> (' + esc(d.ramadan.starts) + '), subject to moon sighting by the Ruet-e-Hilal Committee.</p></div>';
-    h += '<div class="isg"><a href="/tools">\uD83D\uDD52 Prayer times</a><a href="/tools">\uD83E\uDDED Qibla direction</a><a href="/tools">\uD83D\uDCB0 Zakat calculator</a><a href="https://sunnah.com" target="_blank" rel="noopener">\uD83D\uDCDA Hadith collections (sunnah.com) \u2197</a></div>'
+    h += '<div class="isg"><a href="/tools">\uD83D\uDD52 Prayer times</a><a href="/tools">\uD83E\uDDED Qibla direction</a><a href="/tools">\uD83D\uDCB0 Zakat calculator</a></div>'
       + '<p class="issm" style="margin-top:14px">' + esc(d.source) + '</p>';
     box.innerHTML = h;
   }).catch(function(){ box.innerHTML = '<p class="fnote">Could not load. Try again.</p>'; });
