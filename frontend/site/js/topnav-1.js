@@ -5,7 +5,7 @@
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
   var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Academy", "/academy/"], ["Vocabulary", "/vocabulary"], ["MCQs", "/mcq"], ["Islamic", "/islamic"], ["Tools", "/tools"], ["Jobs", "/jobs"], ["Gov jobs", "/board"], ["Pets", "/pets"],
-               ["Shows", "/shows"], ["Sports", "/sports"], ["Rates", "/rates"], ["Recipes", "/recipes"], ["Poetry", "/poetry"], ["Games", "/games"], ["Chat", "/chat"], ["Groups", "/groups"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
+               ["Shows", "/shows"], ["Sports", "/sports"], ["Predict", "/predict"], ["Rates", "/rates"], ["Recipes", "/recipes"], ["Poetry", "/poetry"], ["Bills", "/bills"], ["Travel", "/travel"], ["Games", "/games"], ["Chat", "/chat"], ["Groups", "/groups"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   try { if (/[?&]guest=1/.test(location.search)) sessionStorage.setItem("xc_guest", "1"); } catch (e) {}
   function here(u){
@@ -58,6 +58,9 @@
     "/islamic": '<path d="M19.5 14.5A8 8 0 1 1 9.5 4.5a6.2 6.2 0 0 0 10 10z"/>',
     "/recipes": '<path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M8.5 7.5c0-1 1-1 1-2.5M12 7.5c0-1 1-1 1-2.5M15.5 7.5c0-1 1-1 1-2.5"/>',
     "/poetry": '<path d="M20 4C13 4 8 9 8 16v4"/><path d="M8 16c4.5 0 9-3 10.5-9"/>',
+    "/predict": '<circle cx="12" cy="12" r="8"/><path d="M8.5 6.5c2 1.5 2 9.5 0 11M15.5 6.5c-2 1.5-2 9.5 0 11"/>',
+    "/bills": '<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',
+    "/travel": '<rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M8 21l2-4M16 21l-2-4"/><circle cx="9" cy="14" r=".5"/><circle cx="15" cy="14" r=".5"/>',
     "/sports": '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3a3 3 0 0 1-3 4M7 5H4a3 3 0 0 0 3 4"/>',
     "/": '<path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
     "/academy/": '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',

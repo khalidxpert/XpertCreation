@@ -161,7 +161,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=29" defer></script>
+<script src="/js/topnav-1.js?v=30" defer></script>
 
 <div class="wrap" style="max-width:760px"><div id="isl"><p class="fnote">Loading…</p></div></div>
 <style>.isb{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:16px;margin-bottom:12px}
@@ -193,7 +193,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<div class="isur">' + esc(a.urdu) + '</div><div class="isen">' + esc(a.english) + '</div>'
       + '<p style="margin:12px 0 0"><a href="' + esc(a.link) + '" style="font-weight:800">\uD83D\uDCD6 Read the full surah</a></p></div>';
     if (d.ramadan) h += '<div class="isb"><b>\uD83C\uDF19 Ramadan</b><p style="margin:6px 0 0">Ramadan is expected to begin in about <b>' + d.ramadan.days + ' days</b> (' + esc(d.ramadan.starts) + '), subject to moon sighting by the Ruet-e-Hilal Committee.</p></div>';
-    h += '<div class="isg"><a href="/tools">\uD83D\uDD52 Prayer times</a><a href="/tools">\uD83E\uDDED Qibla direction</a><a href="/tools">\uD83D\uDCB0 Zakat calculator</a></div>'
+    h += '<div class="isg"><a href="/tools/prayer-times">\uD83D\uDD52 Prayer times</a><a href="/tools/qibla-direction">\uD83E\uDDED Qibla direction</a><a href="/tools/zakat-calculator">\uD83D\uDCB0 Zakat calculator</a></div>'
       + '<p class="issm" style="margin-top:14px">' + esc(d.source) + '</p>';
     box.innerHTML = h;
   }).catch(function(){ box.innerHTML = '<p class="fnote">Could not load. Try again.</p>'; });
