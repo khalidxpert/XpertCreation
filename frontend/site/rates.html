@@ -194,7 +194,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function card(r, gold, dec){
     var ch = r.change == null ? "" : '<span class="ch ' + (r.change > 0 ? "up" : r.change < 0 ? "dn" : "") + '">' + (r.change > 0 ? "\u25B2 " : r.change < 0 ? "\u25BC " : "") + pk(Math.abs(r.change), dec) + ' since yesterday</span>';
-    return '<div class="rtc' + (gold ? " rtgold" : "") + '"><small>' + esc(r.label) + ' \u00b7 ' + esc(r.extra) + '</small><b>' + pk(r.value, dec) + '</b>' + ch + spark(r.history) + '</div>';
+    return '<div class="rtc' + (gold ? " rtgold" : "") + '"><small>' + (r.flag ? '<img src="https://flagcdn.com/40x30/' + r.flag + '.png" alt="" width="20" height="15" loading="lazy" style="vertical-align:-2px;margin-right:6px;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.08)">' : '') + esc(r.label) + ' \u00b7 ' + esc(r.extra) + '</small><b>' + pk(r.value, dec) + '</b>' + ch + spark(r.history) + '</div>';
   }
   function share(){
     var g = D.metals_fuel, c = D.currencies, f = function(k, a){ return a.filter(function(x){ return x.key === k; })[0] || {}; };
@@ -211,8 +211,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<p class="rtn" style="margin:4px 0 0">Gold, silver and fuel are updated by the XpertCreation team from official announcements and the Lahore market. Currency rates refresh every few hours.</p>'
       + '<h2 style="font-size:18px;margin:16px 0 0">Gold, silver and fuel</h2><div class="rtg">' + D.metals_fuel.map(function(r){ return card(r, /gold/.test(r.key), /petrol|diesel|lpg/.test(r.key) ? 2 : 0); }).join("") + '</div>'
       + '<div class="rtbox"><b>Currency converter</b><div class="rtcv" style="margin-top:8px"><input id="rtamt" type="number" value="100" min="0"><span class="eq">=</span><b id="rtout" style="font-size:20px"></b></div>'
-      + '<select id="rtcur" style="margin-top:8px;width:100%">' + cur.map(function(c){ return '<option value="' + c.key + '">' + c.extra + ' ' + esc(c.label) + ' (' + c.key.toUpperCase() + ')</option>'; }).join("") + '</select></div>'
-      + '<h2 style="font-size:18px;margin:0">Currencies (PKR for 1 unit)</h2><div class="rtg">' + D.currencies.map(function(r){ return card({label: r.extra + " " + r.label, extra: r.key.toUpperCase(), value: r.value, change: r.change, history: r.history}, false, 2); }).join("") + '</div>'
+      + '<select id="rtcur" style="margin-top:8px;width:100%">' + cur.map(function(c){ return '<option value="' + c.key + '">' + esc(c.label) + ' (' + c.key.toUpperCase() + ')</option>'; }).join("") + '</select></div>'
+      + '<h2 style="font-size:18px;margin:0">Currencies (PKR for 1 unit)</h2><div class="rtg">' + D.currencies.map(function(r){ return card({label: r.label, flag: ({usd: "us", eur: "eu", gbp: "gb", sar: "sa", aed: "ae", cad: "ca", aud: "au", cny: "cn", kwd: "kw", qar: "qa", myr: "my", nok: "no"})[r.key], extra: r.key.toUpperCase(), value: r.value, change: r.change, history: r.history}, false, 2); }).join("") + '</div>'
       + '<p class="rtn">' + esc(D.currency_source) + '. Updated ' + esc(ago((D.currencies[0] || {}).updated)) + '. These are guides only; check with your bank or dealer before buying or selling.</p>';
     if (D.staff) h += '<div class="rtbox"><b>Update gold and fuel (staff)</b><div class="rtst" style="margin-top:8px">' + D.metals_fuel.map(function(r){ return '<div><label>' + esc(r.label) + ' (' + esc(r.extra) + ')</label><input data-rk="' + r.key + '" inputmode="decimal" placeholder="' + (r.value || "") + '" style="width:100%"></div>'; }).join("")
       + '</div><button class="rtbtn" data-rsave style="margin-top:10px">Save today\'s rates</button> <span id="rtsm" class="rtn"></span></div>';
