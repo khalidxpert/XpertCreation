@@ -165,8 +165,12 @@ def posts(request):
             qs = qs.filter(author_id__in=ids)
         elif scope.startswith("user:"):
             from network.models import ProProfile
-            p = ProProfile.objects.filter(slug=scope[5:]).first()
-            qs = qs.filter(author_id=p.user_id) if p else qs.none()
+            key = scope[5:]
+            if key.isdigit():                     # /feed?user=<member number>
+                qs = qs.filter(author_id=int(key))
+            else:                                 # a profile address, like khalidxpert
+                p = ProProfile.objects.filter(slug=key).first()
+                qs = qs.filter(author_id=p.user_id) if p else qs.none()
         if scope in ("all", "following") and u.is_authenticated:
             # your own posts are on your wall; only a post you made in the last 15 minutes stays in your feed
             from datetime import timedelta as _td
