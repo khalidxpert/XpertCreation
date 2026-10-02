@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Get the blue tick — XpertConnect</title>
+<title>Urdu poetry: Ghalib, Mir and Iqbal couplets with meaning — XpertCreation</title>
 <!-- seo:start -->
-<meta name="description" content="Meet the team behind XpertCreation: the people who build and run free learning, tools and community from Lahore, Pakistan.">
-<link rel="canonical" href="https://xpertcreation.com/get-verified">
+<meta name="description" content="A couplet of the day and classic Urdu couplets by Ghalib, Mir and Iqbal with simple meanings in Urdu and English.">
+<link rel="canonical" href="https://xpertcreation.com/poetry">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="XpertCreation">
@@ -151,68 +151,37 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
-<meta name="robots" content="noindex">
 </head>
 <body>
 <header class="top">
   <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
     <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
-    <b>XpertConnect</b></a>
+    <b>Poetry</b></a>
   <span class="sp"></span>
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
 <script src="/js/topnav-1.js?v=27" defer></script>
 
-<div class="wrap" style="max-width:640px"><div id="gv"><p class="fnote">Loading…</p></div></div>
-<style>.gvb{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:16px;padding:16px;margin-bottom:12px}.gvb h2{margin:0 0 6px;font-size:17px}.gvb .sub{color:var(--ink-soft,#5A657C);font-size:13.5px;margin:0 0 10px}
-.gvb label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft,#5A657C);margin:10px 0 4px}.gvb input,.gvb select{width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid var(--line,#E4E8F2);border-radius:10px;font:inherit}
-.gvbtn{padding:11px 16px;border-radius:11px;border:0;background:#1B4DFF;color:#fff;font:inherit;font-weight:800;cursor:pointer;margin-top:12px;display:inline-block;text-decoration:none}.gvbtn.g{background:var(--paper,#F6F7FB);color:var(--ink,#0D1424);border:1.5px solid var(--line,#E4E8F2)}
-.gvst{border-radius:12px;padding:12px 14px;font-weight:700;margin-bottom:12px}.gvst.draft{background:#F1F5F9}.gvst.pending{background:#FEF3C7;color:#92400E}.gvst.approved{background:#DCFCE7;color:#166534}.gvst.rejected{background:#FEE2E2;color:#991B1B}
-.gvdoc{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line,#E4E8F2);font-size:14px}.gvdoc span{flex:1}.gvmsg{min-height:18px;font-size:13.5px;margin-top:8px}.gvmsg.bad{color:#B91C1C}.gvmsg.ok{color:#166534}
-.gv2{display:grid;grid-template-columns:1fr 1fr;gap:8px}</style>
+<div class="wrap" style="max-width:720px"><div id="po"><p class="fnote">Loading…</p></div></div>
+<style>.pob{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:18px;margin-bottom:12px}
+.pot{direction:rtl;text-align:center;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;font-size:23px;line-height:2.3;white-space:pre-line;color:#3B0764}
+.pom{direction:rtl;text-align:right;font-family:"Noto Nastaliq Urdu",serif;font-size:16px;line-height:2;color:#334155;margin-top:8px}.poe{font-size:15px;color:#475569;margin-top:6px;line-height:1.6}
+.pop{font-weight:800;color:#6D28D9;text-align:center;margin-top:6px}.poday{background:linear-gradient(135deg,#F5F3FF,#FCE7F3);border-color:#E9D5FF}</style>
 <script>
 (function(){
   "use strict";
-  var box = document.getElementById("gv"), K = null;
-  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
-  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
-  function api(p, o){ o = o || {}; var h = {}; if (!(o.body instanceof FormData)) h["Content-Type"] = "application/json"; if (o.method && o.method !== "GET") h["X-CSRFToken"] = ck("xc_csrf");
-    return fetch("/api/companies/kyc/" + p, {method: o.method || "GET", credentials: "same-origin", headers: h, body: o.body ? (o.body instanceof FormData ? o.body : JSON.stringify(o.body)) : undefined})
-      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, status: r.status, data: d}; }); }); }
-  function msg(t, k){ var m = document.getElementById("gvm"); if (m){ m.className = "gvmsg " + (k || ""); m.textContent = t; } }
-  function draw(){
-    var lock = K.status === "pending" || K.ticked;
-    var st = K.ticked ? "\u2714 You have the blue tick." : {draft: "Not requested yet.", pending: "\u23F3 Your documents are with our team. We may contact you on WhatsApp.", approved: "\u2714 Blue tick given.", rejected: "Not approved: " + (K.review_note || "")}[K.status];
-    var h = '<h1 style="font-size:23px">\u2714 Get the blue tick</h1><div class="gvst ' + (K.ticked ? "approved" : K.status) + '">' + esc(st) + '</div>';
-    if (!K.has_profile) h += '<div class="gvb"><h2>First: your XpertConnect profile</h2><p class="sub">The blue tick shows on your profile, so create it first.</p><a class="gvbtn" href="/me/profile">Create my profile</a></div>';
-    h += '<div class="gvb"><h2>What we need</h2><p class="sub">Your <b>CNIC (front and back)</b> or <b>passport</b>, an <b>address proof</b> (a utility bill or bank statement), and your <b>WhatsApp</b> number so our team can contact you. Documents are private: only you and our moderators can open them, and they are deleted 30 days after the decision.</p>'
-      + '<label>WhatsApp number</label><input id="gvwa" value="' + esc(K.whatsapp) + '" placeholder="+923001234567"' + (lock ? " disabled" : "") + '>'
-      + '<label>Documents</label>' + (K.docs.length ? K.docs.map(function(d){ return '<div class="gvdoc"><span>\uD83D\uDCC4 <b>' + esc(d.kind_label) + '</b> \u00b7 ' + esc(d.name) + '</span><a href="/api/companies/kyc/docs/' + d.id + '/" target="_blank" rel="noopener">Open</a>' + (lock ? '' : ' <button class="gvbtn g" style="margin:0;padding:6px 10px" data-del="' + d.id + '">\u00d7</button>') + '</div>'; }).join("") : '<p class="sub">None yet.</p>')
-      + (lock ? '' : '<div class="gv2" style="margin-top:8px"><select id="gvkind"><option value="cnic_front">CNIC front</option><option value="cnic_back">CNIC back</option><option value="passport">Passport</option><option value="address">Address proof</option><option value="other">Other proof</option></select>'
-        + '<label class="gvbtn g" style="margin:0;text-align:center">Upload PDF / photo<input type="file" id="gvfile" accept=".pdf,image/jpeg,image/png" style="display:none"></label></div>'
-        + '<button class="gvbtn" data-a="submit"' + (K.has_profile ? '' : ' disabled') + '>Send for review</button>')
-      + '<div class="gvmsg" id="gvm"></div></div>';
-    box.innerHTML = h;
-  }
-  function load(){
-    fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
-      if (!u){ box.innerHTML = '<div class="gvb"><p>Sign in to request the blue tick.</p><a class="gvbtn" href="/login">Sign in</a></div>'; return; }
-      api("me/").then(function(r){ K = r.data; draw(); });
-    });
-  }
-  function saveWa(){ var w = (document.getElementById("gvwa") || {}).value || ""; return w === (K.whatsapp || "") ? Promise.resolve({ok: true}) : api("me/", {method: "POST", body: {whatsapp: w}}); }
-  document.addEventListener("change", function(e){
-    if (e.target.id !== "gvfile" || !e.target.files[0]) return;
-    var fd = new FormData(); fd.append("file", e.target.files[0]); fd.append("kind", document.getElementById("gvkind").value); msg("Uploading\u2026");
-    saveWa().then(function(){ api("me/docs/", {method: "POST", body: fd}).then(function(r){ if (!r.ok){ msg(r.data.detail, "bad"); return; } K = r.data; draw(); msg("Uploaded.", "ok"); }); });
+  var box = document.getElementById("po");
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function card(p, day){ var t = p.text + "\n\u2014 " + p.poet;
+    return '<div class="pob' + (day ? " poday" : "") + '">' + (day ? '<b>\uD83D\uDCD6 Poetry of the day</b>' : '') + '<div class="pot">' + esc(p.text) + '</div><div class="pop">\u2014 ' + esc(p.poet) + '</div>'
+      + '<div class="pom">' + esc(p.urdu) + '</div><div class="poe">' + esc(p.english) + '</div>'
+      + (day ? '<p style="margin:10px 0 0"><a href="https://wa.me/?text=' + encodeURIComponent(t + "\n\nxpertcreation.com/poetry") + '" target="_blank" rel="noopener" style="font-weight:800">Share on WhatsApp</a></p>' : '') + '</div>'; }
+  fetch("/api/corner/poetry/").then(function(r){ return r.json(); }).then(function(d){
+    box.innerHTML = '<h1 style="font-size:24px;margin:6px 0 10px">\uD83D\uDCD6 Urdu poetry</h1>' + card(d.today, true) + '<h2 style="font-size:18px">More couplets</h2>'
+      + d.all.filter(function(p){ return p.text !== d.today.text; }).map(function(p){ return card(p, false); }).join("")
+      + '<p style="color:var(--ink-soft);font-size:13px">Classic couplets by Mirza Ghalib, Mir Taqi Mir and Allama Iqbal (Bang-e-Dra, 1924), with simple meanings.</p>';
   });
-  document.addEventListener("click", function(e){
-    var t = e.target.closest("[data-a],[data-del]"); if (!t) return;
-    if (t.hasAttribute("data-del")){ api("me/docs/", {method: "DELETE", body: {doc: +t.getAttribute("data-del")}}).then(function(r){ if (r.ok){ K = r.data; draw(); } }); return; }
-    saveWa().then(function(r){ if (!r.ok){ msg(r.data.detail, "bad"); return; } api("me/submit/", {method: "POST", body: {}}).then(function(r2){ if (!r2.ok){ msg(r2.data.detail, "bad"); return; } K = r2.data; draw(); msg("Sent. Our team will review it.", "ok"); }); });
-  });
-  load();
 })();
 </script>
 
