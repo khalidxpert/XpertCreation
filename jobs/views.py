@@ -165,6 +165,14 @@ def jobs(request):
     f, e = _clean(request.data)
     if e:
         return _err(e)
+    # Only verified businesses (company KYC approved) may post jobs; staff and moderators may too.
+    if not _mod(u):
+        from companies.models import Company
+        cos = list(Company.objects.filter(owner=u, status=Company.APPROVED, hidden=False).order_by("id"))
+        if not cos:
+            return _err("To post a job you need a verified business account. Create your company page and verify it under My company (xpertcreation.com/company/manage).", status.HTTP_403_FORBIDDEN)
+        typed = str(f.get("company") or "").strip().lower()
+        f["company"] = next((c.name for c in cos if c.name.lower() == typed), cos[0].name)
     j = Job.objects.create(poster=u, **f)
     return Response({"job": _out(j, u)}, status=status.HTTP_201_CREATED)
 
