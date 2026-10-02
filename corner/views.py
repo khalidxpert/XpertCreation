@@ -70,7 +70,7 @@ def islamic(request):
     out = {"friday": today.weekday() == 4, "hijri": a.hijri if a else "", "ramadan": _ramadan(today),
            "source": "Quran text and translations: AlQuran Cloud (Tanzil). Urdu: Kanz-ul-Iman by Imam Ahmed Raza Khan. English: translation of Kanz-ul-Iman. Hijri date: AlAdhan (may differ by a day from the local moon sighting)."}
     if a:
-        out["ayah"] = {"ref": a.ref, "surah": a.surah, "arabic": a.arabic, "urdu": a.urdu, "english": a.english, "link": "/islamic?surah=" + a.ref.split(":")[0] + "#a" + a.ref.split(":")[1]}
+        out["ayah"] = {"ref": a.ref, "surah": a.surah, "arabic": a.arabic, "urdu": a.urdu, "english": a.english, "link": "/quran/%s-%s#a%s" % (a.ref.split(":")[0], __import__("django.utils.text", fromlist=["slugify"]).slugify(a.surah.split(" (")[0]) or "surah", a.ref.split(":")[1])}
     return Response(out)
 
 
