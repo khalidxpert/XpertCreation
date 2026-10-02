@@ -70,13 +70,15 @@ class Command(BaseCommand):
             s = slugify(r.title) or "recipe"; s = s if s not in seen else "%s-%d" % (s, r.id); seen.add(s); r.slug_ = s
         for r in rows:
             img = (B + settings.MEDIA_URL.rstrip("/") + "/" + r.photo) if r.photo else ""
+            imgs = [img] if img else self._card(r)
+            img = img or (imgs[1] if imgs else "")
             ing = ["%s %s %s" % (("%g" % x[0]) if isinstance(x[0], (int, float)) else x[0], x[1], x[2]) for x in r.ingredients]
             by = (getattr(r.author, "full_name", "") or getattr(r.author, "username", "")) if r.author else "XpertCreation kitchen"
             ld = {"@context": "https://schema.org", "@type": "Recipe", "name": r.title, "description": r.intro or r.title, "recipeCuisine": "Pakistani",
                   "recipeCategory": r.category, "totalTime": "PT%dM" % r.minutes, "recipeYield": "%d servings" % r.serves, "recipeIngredient": ing,
                   "recipeInstructions": [{"@type": "HowToStep", "text": s} for s in r.steps], "author": {"@type": "Organization" if not r.author else "Person", "name": by},
                   "datePublished": r.created_at.date().isoformat()}
-            if img: ld["image"] = [img]
+            if imgs: ld["image"] = imgs
             more = " ".join('<a href="/recipes/%s">%s</a>' % (x.slug_, E(x.title)) for x in rows if x.id != r.id)[:4000]
             body = (CSS + '<p class="sxm"><a href="/recipes">\u2190 All recipes</a></p>' + ('<img src="%s" alt="%s" style="width:100%%;max-height:380px;object-fit:cover;border-radius:16px">' % (E(img), E(r.title)) if img else "")
                     + '<h1 style="font-size:27px;margin:10px 0 4px">%s</h1><p class="sxm">%s</p><p>\u23F1 %d minutes \u00b7 serves %d \u00b7 by %s</p>' % (E(r.title), E(r.intro), r.minutes, r.serves, E(by))
@@ -89,6 +91,36 @@ class Command(BaseCommand):
         d = os.path.join(self.land, "recipes")
         for f in os.listdir(d) if os.path.isdir(d) else []:
             if f.endswith(".html") and f not in keep: os.remove(os.path.join(d, f))
+
+    def _card(self, r):
+        """A branded picture for a recipe without a photo, in the three shapes Google recommends."""
+        from PIL import Image, ImageDraw, ImageFont
+        C = {"main": ((176, 40, 59), (245, 166, 35)), "rice": ((19, 138, 114), (52, 211, 153)), "snack": ((234, 88, 12), (250, 204, 21)),
+             "sweet": ((190, 24, 93), (249, 168, 212)), "side": ((22, 101, 52), (163, 230, 53)), "bread": ((146, 64, 14), (251, 191, 36))}.get(r.category, ((176, 40, 59), (245, 166, 35)))
+        def font(sz, bold=True):
+            for f in ("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"):
+                if os.path.exists(f): return ImageFont.truetype(f, sz)
+            return ImageFont.load_default()
+        d = os.path.join(self.land, "recipes", "img"); os.makedirs(d, exist_ok=True); out = []
+        for tag, (W, H) in (("1x1", (1200, 1200)), ("4x3", (1200, 900)), ("16x9", (1200, 675))):
+            fn = os.path.join(d, "%s-%s.webp" % (r.slug_, tag))
+            if not os.path.exists(fn):
+                im = Image.new("RGB", (W, H)); px = ImageDraw.Draw(im)
+                for y in range(H):
+                    t = y / H; px.line([(0, y), (W, y)], fill=tuple(int(C[0][i] + (C[1][i] - C[0][i]) * t) for i in range(3)))
+                px.rounded_rectangle((60, 60, W - 60, H - 60), radius=40, outline=(255, 255, 255), width=4)
+                words, lines, f = r.title.split(), [], font(110)
+                for w_ in words:
+                    if lines and px.textlength(lines[-1] + " " + w_, font=f) < W - 200: lines[-1] += " " + w_
+                    else: lines.append(w_)
+                y = H // 2 - len(lines) * 65 - 40
+                for ln in lines:
+                    px.text((W // 2, y), ln, font=f, fill="white", anchor="mm"); y += 130
+                px.text((W // 2, y + 10), "Pakistani recipe  \u00b7  %d min  \u00b7  serves %d" % (r.minutes, r.serves), font=font(44, False), fill=(255, 255, 255), anchor="mm")
+                px.text((W // 2, H - 110), "xpertcreation.com/recipes", font=font(38), fill=(255, 255, 255), anchor="mm")
+                im.save(fn, "WEBP", quality=85)
+            out.append(B + "/recipes/img/%s-%s.webp" % (r.slug_, tag))
+        return out
 
     # ---- quran
     def _surah(self, n):
