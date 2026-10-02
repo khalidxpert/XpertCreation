@@ -810,6 +810,18 @@ body.signed-in .hello{margin-top:4px}
 <a class="modbar" id="modlink" href="/moderate"><span class="e5">&#128737;&#65039;</span><span class="t"><b>Moderation</b><small id="modsub">Review comments waiting to be read</small></span><span class="cnt2" id="modcnt" hidden></span></a>
 <div class="hello" id="hello"></div>
 <div id="xcConnectCard"></div>
+<a id="xcrates" href="/rates" style="display:none;margin:12px 0;padding:14px 16px;border-radius:18px;text-decoration:none;color:#3B2F00;background:linear-gradient(135deg,#FFF8E1,#FDE68A);border:1.5px solid #F5D36A;gap:12px;align-items:center"></a>
+<script>
+window.addEventListener("load", function(){ setTimeout(function(){
+  fetch("/api/rates/").then(function(r){ return r.json(); }).then(function(d){
+    var f = function(k, a){ return (a.filter(function(x){ return x.key === k; })[0] || {}).value; }, g = f("gold24", d.metals_fuel), u = f("usd", d.currencies), el = document.getElementById("xcrates");
+    if (!el || (!g && !u)) return;
+    var n = function(v, x){ return v ? "Rs " + Number(v).toLocaleString("en-PK", {maximumFractionDigits: x || 0}) : "\u2014"; };
+    el.innerHTML = '<span style="font-size:30px">\uD83D\uDCB0</span><span style="flex:1"><small style="display:block;font-weight:800;font-size:12.5px;opacity:.75">TODAY\u2019S RATES</small><b>Gold ' + n(g) + '/tola</b> \u00b7 <b>$1 = ' + n(u, 2) + '</b></span><span style="font-weight:800;white-space:nowrap">All rates \u2192</span>';
+    el.style.display = "flex";
+  }).catch(function(){});
+}, 900); });
+</script>
 <a class="xcwod" id="xcwod" href="/vocabulary" style="display:none"></a>
 <style>.xcwod{display:flex;gap:12px;align-items:center;margin:12px 0;padding:14px 16px;border-radius:18px;text-decoration:none;color:var(--ink,#0D1424);background:var(--card,#fff);border:1.5px solid #BFD6FF;box-shadow:0 6px 18px rgba(27,77,255,.08)}
 .xcwod .i{font-size:30px}.xcwod .t{flex:1;min-width:0}.xcwod small{display:block;color:var(--ink-soft,#5A657C);font-weight:700;font-size:12.5px}
