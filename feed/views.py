@@ -167,6 +167,15 @@ def posts(request):
             from network.models import ProProfile
             p = ProProfile.objects.filter(slug=scope[5:]).first()
             qs = qs.filter(author_id=p.user_id) if p else qs.none()
+        if scope in ("all", "following") and u.is_authenticated:
+            # your own posts are on your wall; only a post you made in the last 15 minutes stays in your feed
+            from datetime import timedelta as _td
+            from django.db.models import Q as _Q
+            from django.utils import timezone as _tz
+            last = qs.filter(author=u).order_by("-id").first()
+            t = (getattr(last, "created_at", None) or getattr(last, "created", None)) if last else None
+            keep = [last.id] if (t and _tz.now() - t < _td(minutes=15)) else []
+            qs = qs.exclude(_Q(author=u) & ~_Q(id__in=keep))
         try:
             before = int(request.GET.get("before") or 0)
         except ValueError:
