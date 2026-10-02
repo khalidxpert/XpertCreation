@@ -810,6 +810,20 @@ body.signed-in .hello{margin-top:4px}
 <a class="modbar" id="modlink" href="/moderate"><span class="e5">&#128737;&#65039;</span><span class="t"><b>Moderation</b><small id="modsub">Review comments waiting to be read</small></span><span class="cnt2" id="modcnt" hidden></span></a>
 <div class="hello" id="hello"></div>
 <div id="xcConnectCard"></div>
+<a class="xcwod" id="xcwod" href="/vocabulary" style="display:none"></a>
+<style>.xcwod{display:flex;gap:12px;align-items:center;margin:12px 0;padding:14px 16px;border-radius:18px;text-decoration:none;color:var(--ink,#0D1424);background:var(--card,#fff);border:1.5px solid #BFD6FF;box-shadow:0 6px 18px rgba(27,77,255,.08)}
+.xcwod .i{font-size:30px}.xcwod .t{flex:1;min-width:0}.xcwod small{display:block;color:var(--ink-soft,#5A657C);font-weight:700;font-size:12.5px}
+.xcwod b{font-size:20px}.xcwod .u{display:block;direction:rtl;text-align:left;font-size:17px;color:#0F5132}.xcwod .go{font-weight:800;color:#1B4DFF;white-space:nowrap}</style>
+<script>
+window.addEventListener("load", function(){ setTimeout(function(){
+  fetch("/vocab/words-1.json").then(function(r){ return r.json(); }).then(function(d){
+    var W = d.words, w = W[Math.floor(Date.now() / 86400000) % W.length], el = document.getElementById("xcwod"); if (!el || !w) return;
+    var e = function(x){ return String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;"); };
+    el.innerHTML = '<span class="i">\uD83D\uDCDA</span><span class="t"><small>WORD OF THE DAY</small><b>' + e(w.w) + '</b> <span style="color:var(--ink-soft,#5A657C)">\u2014 ' + e(w.m) + '</span><span class="u">' + e(w.ur) + '</span></span><span class="go">Practise \u2192</span>';
+    el.style.display = "flex";
+  }).catch(function(){});
+}, 800); });
+</script>
 <section class="xcvid" aria-label="XpertCreation video">
   <button type="button" class="xcv-play" data-yt="PAi7YGh1w2A" aria-label="Play the XpertCreation video">
     <img src="https://i.ytimg.com/vi/PAi7YGh1w2A/hqdefault.jpg" alt="XpertCreation in 90 seconds" loading="lazy" width="480" height="360">
