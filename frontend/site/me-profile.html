@@ -719,5 +719,19 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
 </footer>
 
+<script>
+/* The Blue tick box now goes through KYC at /get-verified. */
+(function(){
+  function fix(){
+    var h = [].filter.call(document.querySelectorAll("h2"), function(x){ return x.textContent.trim() === "Blue tick"; })[0];
+    if (!h || h.getAttribute("data-kyc")) return;
+    var box = h.nextElementSibling; if (!box) return;
+    h.setAttribute("data-kyc", "1");
+    box.innerHTML = '<p style="margin:0 0 10px">The blue tick shows people your profile is really you. To get it, send your ID and address proof for a quick check by our team.</p>'
+      + '<a href="/get-verified" style="display:inline-block;padding:10px 16px;border-radius:12px;background:#1B4DFF;color:#fff;font-weight:800;text-decoration:none">\u2714 Get the blue tick</a>';
+  }
+  new MutationObserver(fix).observe(document.body, {childList: true, subtree: true}); fix();
+})();
+</script>
 </body>
 </html>

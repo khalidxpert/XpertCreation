@@ -531,5 +531,21 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 </footer>
 
 <script src="/js/share-1.js" defer></script>
+<script>
+/* XpertConnect profile: a "Digital card" button when the member has one. */
+(function(){
+  var m = location.pathname.match(/^\/in\/([a-z0-9-]+)/i); if (!m) return;
+  var card = null;
+  fetch("/api/feedx/card-of/" + m[1] + "/").then(function(r){ return r.ok ? r.json() : {}; }).then(function(d){ card = d.card || ""; put(); }).catch(function(){});
+  function put(){
+    if (!card || document.getElementById("xcProfCard")) return;
+    var h = document.querySelector("h1"); if (!h) return;
+    var a = document.createElement("a"); a.id = "xcProfCard"; a.href = card; a.target = "_blank"; a.rel = "noopener"; a.textContent = "\uD83D\uDCC7 Digital card";
+    a.style.cssText = "display:inline-block;margin-top:8px;padding:8px 14px;border-radius:99px;background:#1B4DFF;color:#fff;font-weight:800;font-size:13.5px;text-decoration:none";
+    h.parentNode.insertBefore(a, h.nextSibling);
+  }
+  new MutationObserver(put).observe(document.body, {childList: true, subtree: true});
+})();
+</script>
 </body>
 </html>

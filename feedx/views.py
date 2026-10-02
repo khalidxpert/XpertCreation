@@ -269,3 +269,22 @@ def card_owner(request, slug):
     own = "owner" if "owner" in f else ("user" if "user" in f else None)
     mine = bool(c and own and request.user.is_authenticated and getattr(c, own + "_id") == request.user.pk)
     return Response({"mine": mine, "edit": ("/cards?edit=%d" % c.id) if mine else ""})
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def card_of(request, slug):
+    """The digital card (if any) of the member whose XpertConnect profile this is."""
+    from bizcards.models import Card
+    from network.models import ProProfile
+    p = ProProfile.objects.filter(slug=slug).first()
+    f = {x.name for x in Card._meta.fields}
+    own = "owner" if "owner" in f else ("user" if "user" in f else None)
+    if not p or not own:
+        return Response({"card": ""})
+    qs = Card.objects.filter(**{own: p.user})
+    if "hidden" in f: qs = qs.filter(hidden=False)
+    if "active" in f: qs = qs.filter(active=True)
+    c = qs.order_by("-id").first()
+    return Response({"card": ("/c/" + c.slug) if c else ""})
