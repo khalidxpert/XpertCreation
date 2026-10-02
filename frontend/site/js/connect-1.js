@@ -376,3 +376,115 @@
   // the post's reaction count looks tappable
   var s2 = document.createElement("style"); s2.textContent = ".fstats > span{cursor:pointer}.fstats > span:hover{text-decoration:underline}"; document.head.appendChild(s2);
 })();
+/* Status (stories): a row of round photos at the top of XpertConnect, a full-screen viewer, and "Your story". */
+(function(){
+  "use strict";
+  if (location.pathname.replace(/\/+$/, "") !== "/feed" || /[?&]user=/.test(location.search)) return;
+  var BG = {blue: "linear-gradient(135deg,#1B4DFF,#7C3AED)", sunset: "linear-gradient(135deg,#F97316,#DB2777)", green: "linear-gradient(135deg,#059669,#34D399)", night: "linear-gradient(135deg,#0F172A,#334155)",
+            pink: "linear-gradient(135deg,#EC4899,#F9A8D4)", gold: "linear-gradient(135deg,#F59E0B,#FDE68A)", sky: "linear-gradient(135deg,#0284C7,#7DD3FC)", red: "#DC2626", purple: "#7C3AED", black: "#111827"};
+  var G = [], me = null, cur = null, timer = null;
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function send(u, m, body){ var h = {"X-CSRFToken": ck("xc_csrf")}; if (!(body instanceof FormData)){ h["Content-Type"] = "application/json"; body = body ? JSON.stringify(body) : undefined; }
+    return fetch(u, {method: m, credentials: "same-origin", headers: h, body: body}).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, data: d}; }); }); }
+  var css = document.createElement("style");
+  css.textContent = ".xcst{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 10px;margin:4px 0 6px;scrollbar-width:none}.xcst::-webkit-scrollbar{display:none}"
+    + ".xcsi{flex:0 0 auto;width:72px;text-align:center;cursor:pointer;border:0;background:none;padding:0;font:inherit}"
+    + ".xcsr{width:66px;height:66px;border-radius:50%;padding:3px;margin:0 auto 4px;background:linear-gradient(135deg,#1B4DFF,#7C3AED,#EC4899)}.xcsr.seen{background:#CBD5E1}"
+    + ".xcsr span,.xcsr img{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--card,#fff);background:#EEF2FF;color:#1B4DFF;font-weight:800;font-size:22px;box-sizing:border-box}"
+    + ".xcsi small{display:block;font-size:12px;color:var(--ink,#0D1424);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"
+    + ".xcsadd .xcsr{background:none;padding:0;border:2px dashed #93A4C3}.xcsadd .xcsr span{font-size:30px;border:0}"
+    + ".xcsv{position:fixed;inset:0;z-index:500;background:#000;color:#fff;display:flex;flex-direction:column;user-select:none}"
+    + ".xcsv .bars{display:flex;gap:4px;padding:10px 10px 6px}.xcsv .bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.35);overflow:hidden}.xcsv .bars b{display:block;height:100%;width:0;background:#fff}"
+    + ".xcsv .top{display:flex;gap:10px;align-items:center;padding:4px 12px}.xcsv .top img,.xcsv .top span.a{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#334;display:grid;place-items:center;font-weight:800}"
+    + ".xcsv .top b{flex:1;font-size:15px}.xcsv .top small{opacity:.75;font-weight:400;margin-left:6px}.xcsv .top button{border:0;background:none;color:#fff;font-size:26px;cursor:pointer;padding:4px 8px}"
+    + ".xcsv .body{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}.xcsv .body img{max-width:100%;max-height:100%;object-fit:contain}"
+    + ".xcsv .tx{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;box-sizing:border-box;font-size:28px;font-weight:800;line-height:1.35;white-space:pre-wrap}"
+    + ".xcsv .cap{position:absolute;bottom:16px;left:16px;right:16px;text-align:center;background:rgba(0,0,0,.45);padding:10px 12px;border-radius:12px;font-size:16px}"
+    + ".xcsv .nav{position:absolute;top:0;bottom:0;width:35%;z-index:2}.xcsv .nav.l{left:0}.xcsv .nav.r{right:0}"
+    + ".xcsv .foot{display:flex;gap:10px;justify-content:center;padding:12px}.xcsv .foot button{border:0;border-radius:99px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;background:rgba(255,255,255,.15);color:#fff}"
+    + ".xcsc{position:fixed;inset:0;z-index:510;background:var(--card,#fff);color:var(--ink,#0D1424);overflow:auto;padding:12px 16px 30px}"
+    + ".xcsc .hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}.xcsc .hd b{flex:1;font-size:18px}.xcsc .hd button{border:0;background:none;font-size:24px;cursor:pointer}"
+    + ".xcsc .pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}.xcsc .pick button,.xcsc .pick label{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px;border-radius:16px;border:1.5px solid var(--line,#E4E8F2);background:var(--paper,#F6F7FB);font:inherit;font-weight:800;cursor:pointer}"
+    + ".xcsc .pv{border-radius:16px;overflow:hidden;background:#000;aspect-ratio:9/16;max-height:60vh;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}.xcsc .pv img{max-width:100%;max-height:100%}"
+    + ".xcsc textarea,.xcsc input,.xcsc select{width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line,#E4E8F2);font:inherit;margin-bottom:10px}"
+    + ".xcsc .tv{aspect-ratio:9/16;max-height:55vh;margin:0 auto 10px;border-radius:16px;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}"
+    + ".xcsc .tv textarea{background:transparent;border:0;color:#fff;text-align:center;font-size:24px;font-weight:800;min-height:160px;outline:none;margin:0}.xcsc .tv textarea::placeholder{color:rgba(255,255,255,.7)}"
+    + ".xcsc .dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}.xcsc .dots button{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #CBD5E1;cursor:pointer}.xcsc .dots button.on{box-shadow:0 0 0 3px #1B4DFF}"
+    + ".xcsc .go{width:100%;border:0;border-radius:14px;padding:14px;background:#1B4DFF;color:#fff;font:inherit;font-weight:800;font-size:16px;cursor:pointer}";
+  document.head.appendChild(css);
+  var row = document.createElement("div"); row.className = "xcst";
+  function place(){ var c = document.getElementById("composer"); if (c && !row.parentNode) c.parentNode.insertBefore(row, c); }
+  function av(u, cls){ return u.avatar_url ? '<img src="' + esc(u.avatar_url) + '" alt="">' : '<span class="' + (cls || "") + '">' + esc((u.name || "?").charAt(0).toUpperCase()) + '</span>'; }
+  function load(){
+    fetch("/api/stories/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+      if (!d) return; G = d.groups || []; place();
+      var mine = G.filter(function(g){ return g.mine; })[0];
+      row.innerHTML = '<button class="xcsi xcsadd" data-st-new><div class="xcsr"><span>+</span></div><small>Your story</small></button>'
+        + G.map(function(g, i){ return '<button class="xcsi" data-st-open="' + i + '"><div class="xcsr' + (g.seen_all ? " seen" : "") + '">' + av(g.user) + '</div><small>' + (g.mine ? "You" : esc(g.user.name.split(" ")[0])) + '</small></button>'; }).join("");
+    }).catch(function(){});
+  }
+  function open(gi, ii){
+    var g = G[gi]; if (!g) return close();
+    if (ii == null){ ii = 0; for (var k = 0; k < g.items.length; k++) if (!g.items[k].seen){ ii = k; break; } }
+    if (ii >= g.items.length) return open(gi + 1, 0);
+    if (ii < 0) return gi > 0 ? open(gi - 1, G[gi - 1].items.length - 1) : null;
+    cur = {g: gi, i: ii}; var it = g.items[ii];
+    var v = document.querySelector(".xcsv") || document.body.appendChild(Object.assign(document.createElement("div"), {className: "xcsv"}));
+    document.body.style.overflow = "hidden";
+    v.innerHTML = '<div class="bars">' + g.items.map(function(x, k){ return '<i><b style="width:' + (k < ii ? 100 : 0) + '%"></b></i>'; }).join("") + '</div>'
+      + '<div class="top">' + (g.user.avatar_url ? '<img src="' + esc(g.user.avatar_url) + '" alt="">' : '<span class="a">' + esc(g.user.name.charAt(0)) + '</span>') + '<b>' + esc(g.mine ? "Your story" : g.user.name) + '<small>' + esc(it.when) + '</small></b><button data-st-close aria-label="Close">\u2715</button></div>'
+      + '<div class="body"><div class="nav l" data-st-prev></div><div class="nav r" data-st-next></div>'
+      + (it.kind === "photo" ? '<img src="' + esc(it.image) + '" alt="">' + (it.text ? '<div class="cap">' + esc(it.text) + '</div>' : '') : '<div class="tx" style="background:' + (BG[it.bg] || BG.blue) + '">' + esc(it.text) + '</div>') + '</div>'
+      + (g.mine ? '<div class="foot"><button data-st-viewers="' + it.id + '">\uD83D\uDC41 Seen by</button><button data-st-del="' + it.id + '">\uD83D\uDDD1 Delete</button></div>' : '');
+    if (!g.mine && !it.seen){ it.seen = true; send("/api/stories/" + it.id + "/seen/", "POST", {}); }
+    var bar = v.querySelectorAll(".bars b")[ii];
+    clearTimeout(timer); if (bar){ bar.style.transition = "none"; bar.style.width = "0"; setTimeout(function(){ bar.style.transition = "width 5s linear"; bar.style.width = "100%"; }, 30); }
+    timer = setTimeout(function(){ open(cur.g, cur.i + 1); }, 5000);
+  }
+  function close(){ clearTimeout(timer); var v = document.querySelector(".xcsv"); if (v) v.remove(); document.body.style.overflow = ""; cur = null; load(); }
+  function creator(){
+    var c = document.createElement("div"); c.className = "xcsc"; document.body.appendChild(c); document.body.style.overflow = "hidden";
+    var st = {file: null, bg: "blue"};
+    function hd(t){ return '<div class="hd"><button data-sc-x aria-label="Close">\u2715</button><b>' + t + '</b></div>'; }
+    var aud = '<select id="xcsaud"><option value="connections">\uD83E\uDD1D My connections</option><option value="everyone">\uD83C\uDF10 Everyone</option></select>';
+    function home(){ c.innerHTML = hd("Create story") + '<div class="pick"><label>\uD83D\uDCF7<span>Photo</span><input type="file" accept="image/*" id="xcsfile" hidden></label><button data-sc-text>\u270D\uFE0F<span>Text</span></button></div>'; }
+    function photo(){ c.innerHTML = hd("Photo story") + '<div class="pv"><img id="xcspv" alt=""></div><input id="xcscap" maxlength="300" placeholder="Add a caption (optional)">' + aud + '<button class="go" data-sc-share>Share to your story</button><p id="xcsm" style="text-align:center"></p>';
+      var r = new FileReader(); r.onload = function(){ document.getElementById("xcspv").src = r.result; }; r.readAsDataURL(st.file); }
+    function text(){ c.innerHTML = hd("Text story") + '<div class="tv" id="xcstv" style="background:' + BG[st.bg] + '"><textarea id="xcstx" maxlength="300" placeholder="Type something\u2026"></textarea></div>'
+      + '<div class="dots">' + Object.keys(BG).map(function(k){ return '<button data-sc-bg="' + k + '"' + (k === st.bg ? ' class="on"' : '') + ' style="background:' + BG[k] + '"></button>'; }).join("") + '</div>' + aud + '<button class="go" data-sc-share>Share to your story</button><p id="xcsm" style="text-align:center"></p>'; }
+    home();
+    c.addEventListener("change", function(e){ if (e.target.id === "xcsfile" && e.target.files[0]){ st.file = e.target.files[0]; photo(); } });
+    c.addEventListener("click", function(e){
+      var t = e.target;
+      if (t.closest("[data-sc-x]")){ c.remove(); document.body.style.overflow = ""; return; }
+      if (t.closest("[data-sc-text]")){ st.file = null; text(); return; }
+      var b = t.closest("[data-sc-bg]"); if (b){ st.bg = b.getAttribute("data-sc-bg"); document.getElementById("xcstv").style.background = BG[st.bg]; [].forEach.call(c.querySelectorAll("[data-sc-bg]"), function(x){ x.classList.toggle("on", x === b); }); return; }
+      if (t.closest("[data-sc-share]")){
+        var fd = new FormData(); fd.append("audience", document.getElementById("xcsaud").value);
+        if (st.file){ fd.append("image", st.file); fd.append("text", (document.getElementById("xcscap") || {}).value || ""); } else { fd.append("text", (document.getElementById("xcstx") || {}).value || ""); fd.append("bg", st.bg); }
+        var m = document.getElementById("xcsm"); m.textContent = "Sharing\u2026";
+        send("/api/stories/", "POST", fd).then(function(r){ if (!r.ok){ m.textContent = (r.data && r.data.detail) || "Could not share."; return; } c.remove(); document.body.style.overflow = ""; load(); });
+      }
+    });
+  }
+  document.addEventListener("click", function(e){
+    var t = e.target, x;
+    if (t.closest("[data-st-new]")){ creator(); return; }
+    if ((x = t.closest("[data-st-open]"))){ open(+x.getAttribute("data-st-open")); return; }
+    if (!document.querySelector(".xcsv")) return;
+    if (t.closest("[data-st-close]")){ close(); return; }
+    if (t.closest("[data-st-next]")){ open(cur.g, cur.i + 1); return; }
+    if (t.closest("[data-st-prev]")){ open(cur.g, cur.i - 1); return; }
+    if ((x = t.closest("[data-st-viewers]"))){
+      clearTimeout(timer);
+      fetch("/api/stories/" + x.getAttribute("data-st-viewers") + "/", {credentials: "same-origin"}).then(function(r){ return r.json(); }).then(function(d){
+        var list = (d.viewers || []).map(function(p){ return '<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #2a2f3a">' + (p.avatar_url ? '<img src="' + esc(p.avatar_url) + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover">' : '') + '<b style="flex:1">' + esc(p.name) + '</b><small style="opacity:.7">' + esc(p.when) + '</small></div>'; }).join("") || '<p style="opacity:.7">No one yet.</p>';
+        var f = document.querySelector(".xcsv .foot"); f.outerHTML = '<div class="foot" style="display:block;max-height:40vh;overflow:auto;text-align:left"><b>\uD83D\uDC41 Seen by ' + (d.viewers || []).length + '</b>' + list + '</div>';
+      }); return;
+    }
+    if ((x = t.closest("[data-st-del]"))){ if (!confirm("Delete this story?")) return; send("/api/stories/" + x.getAttribute("data-st-del") + "/", "DELETE").then(close); }
+  });
+  document.addEventListener("keydown", function(e){ if (!document.querySelector(".xcsv")) return; if (e.key === "Escape") close(); if (e.key === "ArrowRight") open(cur.g, cur.i + 1); if (e.key === "ArrowLeft") open(cur.g, cur.i - 1); });
+  load();
+})();
