@@ -498,6 +498,11 @@ def people(request):
         qs = qs.filter(skills__name__iexact=skill)
     if request.GET.get("open") in YES:
         qs = qs.filter(open_to_work=True)
+    try:
+        from prefs.views import hide_from_search
+        qs = hide_from_search(qs, v, "user")
+    except ImportError:
+        pass
     qs = qs.annotate(en=Count("skills__endorsements", distinct=True)).distinct()
     total = qs.count()
     size = 24
@@ -580,6 +585,13 @@ def connect(request, slug):
         return _err("That is your own profile.")
     if not getattr(me_, "is_email_verified", False):
         return _err("Verify your email before connecting with anyone.", 403)
+    try:
+        from prefs.views import may_request
+        why = may_request(me_, other)
+        if why:
+            return _err(why, 403)
+    except ImportError:
+        pass
     now = timezone.now()
     c = _between(me_, other)
     if c and c.state == Connection.ACCEPTED:

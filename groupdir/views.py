@@ -24,6 +24,11 @@ def _ensure_code(g):
 
 def on_create(g, data):
     """Called by group creation: list it if the creator ticked 'show in the directory'."""
+    try:
+        from prefs.views import on_group_create
+        on_group_create(g, data)
+    except Exception:
+        pass
     if str(data.get("listed")).lower() in ("1", "true", "yes", "on"):
         _ensure_code(g)
         Listing.objects.create(group=g, listed=True)
@@ -63,7 +68,7 @@ def directory(request):
         out.append({"rank": i + 1, "id": g.id, "name": g.name, "photo": _url(g.photo), "purpose": g.description, "channel": g.only_admins_send,
                     "members": g.n, "active_week": getattr(g, "act", 0), "new_members_week": getattr(g, "grow", 0),
                     "created": timezone.localtime(g.created_at).strftime("%d %b %Y"), "creator": _creator(g.created_by) if g.created_by_id else None,
-                    "join": "/group/join/" + g.invite_code})
+                    "join": "/group/join/" + g.invite_code, "only": _only(g)})
     return Response({"groups": out, "sort": sort})
 
 
@@ -100,3 +105,11 @@ def mine(request):
     out = [{"id": g.id, "name": g.name, "channel": g.only_admins_send, "listed": bool(getattr(g, "listing", None) and g.listing.listed),
             "has_link": bool(g.invite_code)} for g in ChatGroup.objects.filter(pk__in=list(gids)).select_related("listing").order_by("name")]
     return Response({"groups": out})
+
+
+def _only(g):
+    try:
+        from prefs.views import group_only
+        return group_only(g)
+    except Exception:
+        return ""

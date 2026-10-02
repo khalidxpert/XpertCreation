@@ -113,6 +113,12 @@ def _add_people(g, adder, ids, greet_them=True):
         from .groupbot import banned
         if banned(g, p):
             skipped += 1; continue
+        try:
+            from prefs.views import may_join
+            if may_join(g, p):
+                skipped += 1; continue
+        except ImportError:
+            pass
         if count >= MAX_MEMBERS:
             break
         try:
@@ -439,6 +445,13 @@ def group_join(request, code):
         from .groupbot import banned, greet
         if banned(g, request.user):
             return _err("You can't join this group.", 403)
+        try:
+            from prefs.views import may_join
+            why = may_join(g, request.user)
+            if why:
+                return _err(why, 403)
+        except ImportError:
+            pass
         if GroupMember.objects.filter(group=g).count() >= MAX_MEMBERS:
             return _err("This group is full.")
         GroupMember.objects.create(group=g, user=request.user)

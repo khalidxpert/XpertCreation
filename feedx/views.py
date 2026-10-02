@@ -44,6 +44,11 @@ def people(request):
         conn = set(_connected_ids(request.user))
     except Exception:
         conn = set()
+    try:
+        from prefs.views import hide_from_search
+        qs = hide_from_search(qs, request.user, None)
+    except ImportError:
+        pass
     rows = list(qs.order_by("full_name")[:60])
     rows.sort(key=lambda u: (u.pk not in conn, (u.full_name or "").lower()))
     people = [dict(_person(u), connected=u.pk in conn) for u in rows[:8]]
