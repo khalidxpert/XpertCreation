@@ -561,5 +561,44 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   new MutationObserver(run).observe(document.body, {childList: true, subtree: true}); run();
 })();
 </script>
+<script>
+/* xcTplThumbs: picture previews on the Design templates, drawn with the card's own name and company. */
+(function(){
+  var MAP = {mandala: "mandala", corporate: "corporate", minimal: "minimal", gold: "gold", islamic: "islamic", gradient: "gradient", medical: "medical", shop: "shop", tech: "tech", maroon: "maroon"};
+  function load(cb){ if (window.XCPrint) return cb(); var s = document.createElement("script"); s.src = "/js/printcard-1.js?v=1"; s.onload = cb; document.head.appendChild(s); }
+  function data(){
+    var h1 = document.querySelector(".xcb h1"), co = document.querySelector(".xcb .h3") || document.querySelector(".xcb .h2"), ti = document.querySelector(".xcb .h2");
+    return {business: (co && co.textContent.trim()) || "Your company", category: "Digital business card", name: (h1 && h1.textContent.trim()) || "Your name", title: (ti && ti !== co && ti.textContent.trim()) || "",
+            phone: "+92 300 0000000", email: "you@company.com", address: "Main Boulevard", city: "Lahore", website: "xpertcreation.com"};
+  }
+  function own(ctx, id, d){
+    var W = 1050, H = 600;
+    if (id === "dark"){ ctx.fillStyle = "#0B1020"; ctx.fillRect(0, 0, W, H); ctx.fillStyle = "#141B2E"; ctx.fillRect(60, 330, W - 120, 200); }
+    else if (id === "hero"){ var g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#6B7280"); g.addColorStop(1, "#111827"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    else { ctx.fillStyle = "#F4F6FB"; ctx.fillRect(0, 0, W, H); ctx.fillStyle = "#1B4DFF"; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(W, 0); ctx.lineTo(W, 300); ctx.quadraticCurveTo(W / 2, 360, 0, 300); ctx.fill(); }
+    ctx.fillStyle = "#fff"; ctx.font = "bold 64px Poppins, Arial, sans-serif"; ctx.textAlign = id === "hero" ? "left" : "center";
+    ctx.fillText(d.name, id === "hero" ? 60 : W / 2, id === "hero" ? 470 : 180);
+    ctx.font = "34px Poppins, Arial, sans-serif"; ctx.globalAlpha = .85; ctx.fillText(d.business, id === "hero" ? 60 : W / 2, id === "hero" ? 525 : 240); ctx.globalAlpha = 1;
+  }
+  var busy = false;
+  function decorate(){
+    var btns = document.querySelectorAll(".xctpl button[data-tpl]"); if (!btns.length || busy) return;
+    var todo = [].filter.call(btns, function(b){ return !b.querySelector("canvas.xcth"); }); if (!todo.length) return;
+    busy = true;
+    load(function(){
+      var d = data();
+      todo.forEach(function(b){
+        var id = b.getAttribute("data-tpl"), c = document.createElement("canvas"); c.width = 1050; c.height = 600; c.className = "xcth";
+        c.style.cssText = "width:100%;display:block;border-radius:8px;margin:0 0 6px;box-shadow:0 2px 6px rgba(13,20,36,.12)";
+        var ctx = c.getContext("2d");
+        if (MAP[id] && window.XCPrint) XCPrint.front(ctx, MAP[id], d); else own(ctx, id, d);
+        b.insertBefore(c, b.firstChild); b.style.padding = "6px";
+      });
+      busy = false;
+    });
+  }
+  new MutationObserver(decorate).observe(document.body, {childList: true, subtree: true}); decorate();
+})();
+</script>
 </body>
 </html>
