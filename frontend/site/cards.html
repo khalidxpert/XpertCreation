@@ -534,28 +534,31 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
 <script src="/js/share-1.js" defer></script>
 <script>
-/* Printable card templates: a "Print card" tab in the editor and a Print button on each card in My cards. */
+/* Printable card templates: a "Print card" tab in the editor (same look as the other tabs), and a Print button on each card in My cards. */
 (function(){
-  function slugNow(){ var m = (document.body.innerText || "").match(/xpertcreation\.com\/c\/([a-z0-9-]{3,40})/i); return m ? m[1].toLowerCase() : ""; }
-  function addTab(){
+  function slugNow(){ var m = (document.body.innerText || "").match(/xpertcreation\.com\/\s*c\/([a-z0-9-]{3,40})/i); return m ? m[1].toLowerCase() : ""; }
+  function run(){
     var stats = [].filter.call(document.querySelectorAll("button, a"), function(b){ return b.textContent.trim() === "Stats"; })[0];
-    if (stats && !document.getElementById("xcPrintTab")){
-      var a = document.createElement("a"); a.id = "xcPrintTab"; a.className = stats.className; a.textContent = "\uD83D\uDDA8 Print card";
-      a.style.textDecoration = "none"; a.style.textAlign = "center"; a.target = "_blank"; a.rel = "noopener";
-      a.addEventListener("click", function(){ a.href = "/cards/print" + (slugNow() ? "?card=" + slugNow() : ""); });
-      a.href = "/cards/print" + (slugNow() ? "?card=" + slugNow() : "");
-      stats.parentNode.insertBefore(a, stats.nextSibling);
+    if (stats){
+      var t = document.getElementById("xcPrintTab");
+      if (!t){
+        t = stats.cloneNode(false); t.id = "xcPrintTab"; t.removeAttribute("data-step"); t.removeAttribute("data-tab"); t.type = "button";
+        t.textContent = "\uD83D\uDDA8\uFE0F Print"; t.style.whiteSpace = "nowrap";
+        t.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); window.open("/cards/print" + (slugNow() ? "?card=" + slugNow() : ""), "_blank", "noopener"); });
+        stats.parentNode.insertBefore(t, stats.nextSibling);
+      }
+      return;                                    /* inside the editor: no extra Print links */
     }
     [].forEach.call(document.querySelectorAll('a[href^="/c/"], a[href*="xpertcreation.com/c/"]'), function(l){
-      if (l.getAttribute("data-xcpr") || l.closest("#xcPrintTab")) return;
+      if (l.getAttribute("data-xcpr")) return;
       var m = (l.getAttribute("href") || "").match(/\/c\/([a-z0-9-]{3,40})\/?$/i); if (!m) return;
       l.setAttribute("data-xcpr", "1");
-      var b = document.createElement("a"); b.href = "/cards/print?card=" + m[1].toLowerCase(); b.textContent = "\uD83D\uDDA8 Print"; b.target = "_blank"; b.rel = "noopener";
-      b.style.cssText = "margin-left:8px;font-weight:700;font-size:13px;text-decoration:none;padding:3px 10px;border-radius:99px;background:#EEF2FF;color:#1B4DFF;white-space:nowrap";
+      var b = document.createElement("a"); b.href = "/cards/print?card=" + m[1].toLowerCase(); b.textContent = "Print"; b.target = "_blank"; b.rel = "noopener";
+      b.style.cssText = "margin-left:8px;font-weight:700;font-size:13px;text-decoration:none;padding:4px 12px;border-radius:99px;background:#1B4DFF;color:#fff;white-space:nowrap";
       l.insertAdjacentElement("afterend", b);
     });
   }
-  new MutationObserver(addTab).observe(document.body, {childList: true, subtree: true}); addTab();
+  new MutationObserver(run).observe(document.body, {childList: true, subtree: true}); run();
 })();
 </script>
 </body>
