@@ -13,8 +13,7 @@ CURRENCIES = [("usd", "US Dollar", "\U0001F1FA\U0001F1F8"), ("eur", "Euro", "\U0
               ("sar", "Saudi Riyal", "\U0001F1F8\U0001F1E6"), ("aed", "UAE Dirham", "\U0001F1E6\U0001F1EA"), ("cad", "Canadian Dollar", "\U0001F1E8\U0001F1E6"),
               ("aud", "Australian Dollar", "\U0001F1E6\U0001F1FA"), ("cny", "Chinese Yuan", "\U0001F1E8\U0001F1F3"), ("kwd", "Kuwaiti Dinar", "\U0001F1F0\U0001F1FC"),
               ("qar", "Qatari Riyal", "\U0001F1F6\U0001F1E6"), ("myr", "Malaysian Ringgit", "\U0001F1F2\U0001F1FE"), ("nok", "Norwegian Krone", "\U0001F1F3\U0001F1F4")]
-MANUAL = [("gold24", "Gold 24 karat", "per tola"), ("gold22", "Gold 22 karat", "per tola"), ("silver", "Silver", "per tola"),
-          ("petrol", "Petrol", "per litre"), ("diesel", "High-speed diesel", "per litre"), ("lpg", "LPG", "per kg")]
+MANUAL = []   # gold and fuel removed: no one to update them daily (add entries back here to show them again)
 MKEYS = {k for k, _, _ in MANUAL}
 
 

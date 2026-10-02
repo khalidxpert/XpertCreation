@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Gold rate, dollar rate and petrol price in Pakistan today — XpertCreation</title>
+<title>Dollar, riyal and dirham rates in Pakistan today — XpertCreation</title>
 <!-- seo:start -->
-<meta name="description" content="Today's gold rate per tola, dollar and riyal rates in PKR, and petrol and diesel prices in Pakistan, with 30-day charts and a currency converter.">
+<meta name="description" content="Today's dollar, riyal, dirham, pound and euro rates in rupees, with 30-day charts and a currency converter. Updated every few hours.">
 <link rel="canonical" href="https://xpertcreation.com/rates">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
@@ -199,22 +199,22 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function share(){
     var g = D.metals_fuel, c = D.currencies, f = function(k, a){ return a.filter(function(x){ return x.key === k; })[0] || {}; };
     var t = "\uD83D\uDCB0 Today's rates (XpertCreation)\n"
-      + "Gold 24k: " + pk(f("gold24", g).value) + " / tola\nGold 22k: " + pk(f("gold22", g).value) + " / tola\n"
-      + "Petrol: " + pk(f("petrol", g).value, 2) + " / litre\n"
+      
+      
       + "1 USD = " + pk(f("usd", c).value, 2) + "\n1 SAR = " + pk(f("sar", c).value, 2) + "\n1 AED = " + pk(f("aed", c).value, 2) + "\n"
       + "\nMore: https://xpertcreation.com/rates";
     return "https://wa.me/?text=" + encodeURIComponent(t);
   }
   function draw(){
     var cur = D.currencies.filter(function(x){ return x.value != null; });
-    var h = '<div class="rth"><h1>\uD83D\uDCB0 Gold, dollar and petrol rates</h1><a class="rtbtn wa" target="_blank" rel="noopener" href="' + share() + '">Share on WhatsApp</a></div>'
-      + '<p class="rtn" style="margin:4px 0 0">Gold, silver and fuel are updated by the XpertCreation team from official announcements and the Lahore market. Currency rates refresh every few hours.</p>'
-      + '<h2 style="font-size:18px;margin:16px 0 0">Gold, silver and fuel</h2><div class="rtg">' + D.metals_fuel.map(function(r){ return card(r, /gold/.test(r.key), /petrol|diesel|lpg/.test(r.key) ? 2 : 0); }).join("") + '</div>'
+    var h = '<div class="rth"><h1>\uD83D\uDCB1 Currency rates in Pakistan</h1><a class="rtbtn wa" target="_blank" rel="noopener" href="' + share() + '">Share on WhatsApp</a></div>'
+      + '<p class="rtn" style="margin:4px 0 0">Rupee rates for 12 currencies, refreshed automatically every few hours.</p>'
+      + '<div class="rtg" style="display:none">' + D.metals_fuel.map(function(r){ return card(r, /gold/.test(r.key), /petrol|diesel|lpg/.test(r.key) ? 2 : 0); }).join("") + '</div>'
       + '<div class="rtbox"><b>Currency converter</b><div class="rtcv" style="margin-top:8px"><input id="rtamt" type="number" value="100" min="0"><span class="eq">=</span><b id="rtout" style="font-size:20px"></b></div>'
       + '<select id="rtcur" style="margin-top:8px;width:100%">' + cur.map(function(c){ return '<option value="' + c.key + '">' + esc(c.label) + ' (' + c.key.toUpperCase() + ')</option>'; }).join("") + '</select></div>'
       + '<h2 style="font-size:18px;margin:0">Currencies (PKR for 1 unit)</h2><div class="rtg">' + D.currencies.map(function(r){ return card({label: r.label, flag: ({usd: "us", eur: "eu", gbp: "gb", sar: "sa", aed: "ae", cad: "ca", aud: "au", cny: "cn", kwd: "kw", qar: "qa", myr: "my", nok: "no"})[r.key], extra: r.key.toUpperCase(), value: r.value, change: r.change, history: r.history}, false, 2); }).join("") + '</div>'
       + '<p class="rtn">' + esc(D.currency_source) + '. Updated ' + esc(ago((D.currencies[0] || {}).updated)) + '. These are guides only; check with your bank or dealer before buying or selling.</p>';
-    if (D.staff) h += '<div class="rtbox"><b>Update gold and fuel (staff)</b><div class="rtst" style="margin-top:8px">' + D.metals_fuel.map(function(r){ return '<div><label>' + esc(r.label) + ' (' + esc(r.extra) + ')</label><input data-rk="' + r.key + '" inputmode="decimal" placeholder="' + (r.value || "") + '" style="width:100%"></div>'; }).join("")
+    if (D.staff && D.metals_fuel.length) h += '<div class="rtbox"><b>Update gold and fuel (staff)</b><div class="rtst" style="margin-top:8px">' + D.metals_fuel.map(function(r){ return '<div><label>' + esc(r.label) + ' (' + esc(r.extra) + ')</label><input data-rk="' + r.key + '" inputmode="decimal" placeholder="' + (r.value || "") + '" style="width:100%"></div>'; }).join("")
       + '</div><button class="rtbtn" data-rsave style="margin-top:10px">Save today\'s rates</button> <span id="rtsm" class="rtn"></span></div>';
     box.innerHTML = h; conv();
   }

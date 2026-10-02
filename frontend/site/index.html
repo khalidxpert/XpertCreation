@@ -817,7 +817,7 @@ window.addEventListener("load", function(){ setTimeout(function(){
     var f = function(k, a){ return (a.filter(function(x){ return x.key === k; })[0] || {}).value; }, g = f("gold24", d.metals_fuel), u = f("usd", d.currencies), el = document.getElementById("xcrates");
     if (!el || (!g && !u)) return;
     var n = function(v, x){ return v ? "Rs " + Number(v).toLocaleString("en-PK", {maximumFractionDigits: x || 0}) : "\u2014"; };
-    el.innerHTML = '<span style="font-size:30px">\uD83D\uDCB0</span><span style="flex:1"><small style="display:block;font-weight:800;font-size:12.5px;opacity:.75">TODAY\u2019S RATES</small><b>Gold ' + n(g) + '/tola</b> \u00b7 <b>$1 = ' + n(u, 2) + '</b></span><span style="font-weight:800;white-space:nowrap">All rates \u2192</span>';
+    el.innerHTML = '<span style="font-size:30px">\uD83D\uDCB0</span><span style="flex:1"><small style="display:block;font-weight:800;font-size:12.5px;opacity:.75">TODAY\u2019S RATES</small><b>$1 = ' + n(u, 2) + '</b> \u00b7 <b>1 SAR = ' + n(f("sar", d.currencies), 2) + '</b></span><span style="font-weight:800;white-space:nowrap">All rates \u2192</span>';
     el.style.display = "flex";
   }).catch(function(){});
 }, 900); });
