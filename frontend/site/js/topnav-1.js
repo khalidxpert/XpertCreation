@@ -198,3 +198,24 @@
   setTimeout(chatBadge, 800);
   setInterval(chatBadge, 60000);
 })();
+
+/* xcNavArrows: small arrows when the menu row is longer than the screen */
+(function(){
+  function setup(){
+    var n = document.querySelector(".tnav"); if (!n || n.getAttribute("data-arr")) return !!n;
+    n.setAttribute("data-arr", "1");
+    var st = document.createElement("style");
+    st.textContent = ".xcna{flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);color:var(--ink,#0D1424);font-size:18px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(13,20,36,.12);padding:0}"
+      + ".xcna.on{display:flex}@media(max-width:820px){.xcna{display:none!important}}";
+    document.head.appendChild(st);
+    function mk(t, d){ var b = document.createElement("button"); b.type = "button"; b.className = "xcna"; b.textContent = t; b.setAttribute("aria-label", d < 0 ? "Scroll menu left" : "Scroll menu right");
+      b.addEventListener("click", function(){ n.scrollBy({left: d * Math.max(200, n.clientWidth * 0.6), behavior: "smooth"}); }); return b; }
+    var l = mk("\u2039", -1), r = mk("\u203A", 1);
+    n.parentNode.insertBefore(l, n); n.parentNode.insertBefore(r, n.nextSibling);
+    function upd(){ l.classList.toggle("on", n.scrollLeft > 4); r.classList.toggle("on", n.scrollLeft + n.clientWidth < n.scrollWidth - 4); }
+    n.addEventListener("scroll", upd, {passive: true}); window.addEventListener("resize", upd); setTimeout(upd, 50); setTimeout(upd, 600);
+    var on = n.querySelector(".on, [aria-current], .thi"); if (on && on.offsetLeft + on.offsetWidth > n.clientWidth) n.scrollLeft = on.offsetLeft - 40;
+    return true;
+  }
+  if (!setup()){ var mo = new MutationObserver(function(){ if (setup()) mo.disconnect(); }); mo.observe(document.documentElement, {childList: true, subtree: true}); }
+})();
