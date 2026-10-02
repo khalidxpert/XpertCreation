@@ -256,3 +256,16 @@ def comment_reactors(request, pk):
         return Response({"detail": "Not found."}, status=404)
     rows = CommentReaction.objects.filter(comment=c).select_related("user").order_by("-created_at")[:300]
     return Response({"people": _people_rows([(r.user, r.kind) for r in rows], request.user)})
+
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def card_owner(request, slug):
+    """Is the person looking at this card its owner? (for the Edit button on the card page)"""
+    from bizcards.models import Card
+    c = Card.objects.filter(slug=slug).first()
+    f = {x.name for x in Card._meta.fields}
+    own = "owner" if "owner" in f else ("user" if "user" in f else None)
+    mine = bool(c and own and request.user.is_authenticated and getattr(c, own + "_id") == request.user.pk)
+    return Response({"mine": mine, "edit": ("/cards?edit=%d" % c.id) if mine else ""})

@@ -57,4 +57,15 @@ html,body{margin:0;background:#E9ECF3}#xcpub{max-width:480px;margin:0 auto;min-h
   });
 })();
 </script>
+<script>
+(function(){
+  var m = location.pathname.match(/^\/c\/([a-z0-9-]{3,40})/); if (!m) return;
+  fetch("/api/feedx/card-owner/" + m[1] + "/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (!d || !d.mine) return;
+    var a = document.createElement("a"); a.href = d.edit || "/cards"; a.textContent = "\u270F\uFE0F Edit card";
+    a.style.cssText = "position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;background:#1B4DFF;color:#fff;font:700 14px system-ui,sans-serif;padding:10px 18px;border-radius:99px;text-decoration:none;box-shadow:0 8px 22px rgba(27,77,255,.35)";
+    document.body.appendChild(a);
+  }).catch(function(){});
+})();
+</script>
 </body></html>
