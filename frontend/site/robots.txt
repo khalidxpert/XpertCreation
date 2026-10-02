@@ -38,3 +38,5 @@ Disallow: /search/
 Disallow: /dl/
 
 Sitemap: https://xpertcreation.com/sitemap.xml
+Sitemap: https://xpertcreation.com/sitemap-dynamic.xml
+Sitemap: https://xpertcreation.com/sitemap-tags.xml
