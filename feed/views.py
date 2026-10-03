@@ -187,7 +187,20 @@ def posts(request):
         if before:
             qs = qs.filter(id__lt=before)
         rows = list(qs.order_by("-id")[:PAGE + 1])
-        return Response({"posts": _page(rows[:PAGE], u), "more": len(rows) > PAGE})
+        _b = set()
+        try:
+            from shop.views import boosted_post_ids
+            _b = boosted_post_ids()
+            if _b and scope == "all" and not before:          # boosted posts first on For you (up to 3)
+                top = list(qs.filter(id__in=_b).order_by("-id")[:3]); tids = {x.id for x in top}
+                rows = top + [x for x in rows if x.id not in tids]
+        except ImportError:
+            pass
+        out = _page(rows[:PAGE], u)
+        for _p in out:
+            if isinstance(_p, dict) and _p.get("id") in _b:
+                _p["boosted"] = True
+        return Response({"posts": out, "more": len(rows) > PAGE})
 
     # ---- a new post ----
     if not u.is_authenticated:

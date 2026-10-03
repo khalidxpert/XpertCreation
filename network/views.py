@@ -508,7 +508,7 @@ def people(request):
     size = 24
     page = _int(request.GET.get("page"), 1, 1000) or 1
     rows = list(qs.select_related("user").prefetch_related("skills")
-                .order_by("-verified", "-en", "-updated_at")[(page - 1) * size: page * size])
+                .annotate(xboost=__import__("shop.views", fromlist=["boost_case"]).boost_case("user_id")).order_by("-xboost", "-verified", "-en", "-updated_at")[(page - 1) * size: page * size])
     return Response({"total": total, "page": page, "pages": (total + size - 1) // size,
                      "people": [_card(p) for p in rows]})
 
