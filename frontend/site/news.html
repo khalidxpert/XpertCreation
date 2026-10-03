@@ -143,17 +143,18 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,36px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=32" defer></script>
+<script src="/js/topnav-1.js?v=33" defer></script>
 
 <div class="wrap">
   <h1>News</h1>
-  <p class="lead">Headlines from Dawn, Geo and BBC Urdu, or world news.</p>
+  <p class="lead">Headlines from Dawn, Geo and BBC Urdu, world news, or tech news.</p>
   <div class="regions">
     <button class="on" data-region="pk">Pakistan</button>
     <button data-region="world">World</button>
+    <button data-region="tech">Tech</button>
   </div>
-  <div id="list4"><div class="empty6">Loading\u2026</div></div>
-  <p class="credit2">Headlines only. Each links to the publisher\u2019s own site.</p>
+  <div id="list4"><div class="empty6">Loading…</div></div>
+  <p class="credit2">Headlines only. Each links to the publisher’s own site.</p>
 </div>
 
 <script>
@@ -165,7 +166,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,36px);
     .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 
   function load(){
-    document.getElementById("list4").innerHTML = '<div class="empty6">Loading\\u2026</div>';
+    document.getElementById("list4").innerHTML = '<div class="empty6">Loading\…</div>';
     fetch("/api/news/?region=" + region, {credentials:"same-origin"})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(d){

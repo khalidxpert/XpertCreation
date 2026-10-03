@@ -25,6 +25,13 @@ FEEDS = {
         ("BBC News", "https://feeds.bbci.co.uk/news/world/rss.xml"),
         ("Al Jazeera", "https://www.aljazeera.com/xml/rss/all.xml"),
     ],
+    "tech": [
+        ("TechJuice", "https://www.techjuice.pk/feed/"),
+        ("ProPakistani", "https://propakistani.pk/category/technology/feed/"),
+        ("BBC Technology", "https://feeds.bbci.co.uk/news/technology/rss.xml"),
+        ("TechCrunch", "https://techcrunch.com/feed/"),
+        ("Ars Technica", "https://feeds.arstechnica.com/arstechnica/index"),
+    ],
 }
 
 TTL = 900   # 15 minutes: news moves, but not every thirty seconds
