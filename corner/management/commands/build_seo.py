@@ -23,6 +23,9 @@ def _page(src, body, title, desc, path, jsonld=None):
     s = re.sub(r'<link rel="canonical" href="[^"]*">', '<link rel="canonical" href="' + B + path + '">', s, 1)
     s = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="' + E(title) + '">', s, 1)
     s = re.sub(r'<meta property="og:url" content="[^"]*">', '<meta property="og:url" content="' + B + path + '">', s, 1)
+    s = re.sub(r'<meta property="og:description" content="[^"]*">', '<meta property="og:description" content="' + E(desc) + '">', s, 1)
+    s = re.sub(r'<meta name="twitter:title" content="[^"]*">', '<meta name="twitter:title" content="' + E(title) + '">', s, 1)
+    s = re.sub(r'<meta name="twitter:description" content="[^"]*">', '<meta name="twitter:description" content="' + E(desc) + '">', s, 1)
     if jsonld:
         s = s.replace("</head>", '<script type="application/ld+json">' + json.dumps(jsonld, ensure_ascii=False).replace("</", "<\\/") + "</script>\n</head>", 1)
     i, j = s.index(A_WRAP), s.index(A_BELL)
