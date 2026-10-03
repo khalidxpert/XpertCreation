@@ -1,5 +1,12 @@
 """Pay per order: profile boost, post boost, featured job, Company Pro, blue tick fee.
 Mode: off (nothing for sale), test (staff only, 'simulate payment'), live (members, real gateway - added later)."""
+import hashlib
+import hmac
+import json
+import os
+import re
+import urllib.parse
+import urllib.request
 from datetime import timedelta
 
 from django.apps import apps
@@ -10,6 +17,50 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from .models import Order, ShopSetting
+
+
+# ---- Safepay (standard checkout: init with the public key, return checked with the secret key)
+def _sp():
+    """Safepay settings from the API's .env (keys are never sent to the browser)."""
+    env = {}
+    try:
+        from django.conf import settings
+        path = os.path.join(settings.BASE_DIR, ".env")
+        env = dict(re.findall(r"^(SAFEPAY_[A-Z_]+)=(.*)$", open(path).read(), re.M))
+    except Exception:
+        pass
+    e = (env.get("SAFEPAY_ENV") or "").strip()
+    return {"env": e, "pub": (env.get("SAFEPAY_PUBLIC_KEY") or "").strip(), "sec": (env.get("SAFEPAY_SECRET_KEY") or "").strip(),
+            "api": "https://sandbox.api.getsafepay.com" if e == "sandbox" else "https://api.getsafepay.com",
+            "checkout": "https://sandbox.api.getsafepay.com/components" if e == "sandbox" else "https://getsafepay.com/components"}
+
+
+def sp_ready():
+    c = _sp(); return bool(c["env"] in ("sandbox", "production") and c["pub"] and c["sec"])
+
+
+def _sp_init(amount):
+    c = _sp()
+    body = json.dumps({"client": c["pub"], "amount": amount, "currency": "PKR", "environment": c["env"]}).encode()
+    req = urllib.request.Request(c["api"] + "/order/v1/init", data=body, headers={"Content-Type": "application/json", "Accept": "application/json",
+                                 "User-Agent": "Mozilla/5.0 (compatible; XpertCreation/1.0; +https://xpertcreation.com)"})
+    d = json.loads(urllib.request.urlopen(req, timeout=20).read().decode())
+    return d["data"]["token"]
+
+
+def _sp_checkout_url(order, token):
+    c = _sp(); site = "https://xpertcreation.com"
+    q = {"env": c["env"], "beacon": token, "source": "custom", "order_id": str(order.id),
+         "redirect_url": site + "/api/shop/safepay/return/", "cancel_url": site + "/promote?cancel=1"}
+    return c["checkout"] + "?" + urllib.parse.urlencode(q)
+
+
+def sp_sig_ok(tracker, sig):
+    sec = _sp()["sec"]
+    if not (sec and tracker and sig):
+        return False
+    good = hmac.new(sec.encode(), tracker.encode(), hashlib.sha256).hexdigest()
+    return hmac.compare_digest(good, str(sig))
 
 CATALOG = {
     "profile_boost": {"name": "Profile boost", "what": "Show first in People search, with a Boosted mark.", "target": "self",
@@ -138,6 +189,14 @@ def order(request):
     if tid is None:
         return Response({"detail": label}, status=400)
     o = Order.objects.create(user=u, product=p, plan=plan, target_id=tid, target_label=label[:160], amount=price(p, plan, s), provider="test" if s.mode == "test" else "")
+    if sp_ready():
+        try:
+            tok = _sp_init(o.amount)
+        except Exception:
+            o.status = "cancelled"; o.note = "could not start payment"; o.save(update_fields=["status", "note"])
+            return Response({"detail": "Could not start the payment. Please try again in a minute."}, status=502)
+        o.provider, o.provider_ref = "safepay-" + _sp()["env"], tok; o.save(update_fields=["provider", "provider_ref"])
+        return Response({"order": _out(o), "next": "gateway", "checkout": _sp_checkout_url(o, tok)}, status=201)
     return Response({"order": _out(o), "next": "simulate" if s.mode == "test" else "gateway"}, status=201)
 
 
@@ -172,8 +231,8 @@ def admin(request):
     s = setting()
     if request.method == "POST":
         if request.data.get("mode") in ("off", "test", "live"):
-            if request.data["mode"] == "live" and not request.data.get("gateway_ready"):
-                return Response({"detail": "Live needs a connected payment gateway first."}, status=400)
+            if request.data["mode"] == "live" and not (sp_ready() and _sp()["env"] == "production"):
+                return Response({"detail": "Live needs Safepay production keys first (sandbox keys are for TEST mode)."}, status=400)
             s.mode = request.data["mode"]
         if isinstance(request.data.get("prices"), dict):
             pr = {}
@@ -185,7 +244,7 @@ def admin(request):
         s.save()
     rows = Order.objects.select_related("user").order_by("-id")[:100]
     paid = Order.objects.filter(status="paid").exclude(provider="test")
-    return Response({"mode": s.mode, "catalog": _catalog(s), "orders": [dict(_out(o), user=(getattr(o.user, "full_name", "") or o.user.username)) for o in rows],
+    return Response({"mode": s.mode, "gateway": ("Safepay " + _sp()["env"]) if sp_ready() else "none", "catalog": _catalog(s), "orders": [dict(_out(o), user=(getattr(o.user, "full_name", "") or o.user.username)) for o in rows],
                      "totals": {"orders": paid.count(), "rupees": sum(paid.values_list("amount", flat=True))}})
 
 
@@ -200,3 +259,24 @@ def refund(request, pk):
     o.status, o.ends_at, o.note = "refunded", timezone.now(), str(request.data.get("note") or "")[:300]
     o.save(update_fields=["status", "ends_at", "note"])
     return Response({"order": _out(o), "note": "Marked refunded and switched off. Send the money back through the payment provider."})
+
+
+
+# ---- Safepay sends the member back here after paying (GET or POST); the signature decides.
+from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
+def safepay_return(request):
+    d = request.POST if request.method == "POST" else request.GET
+    tracker, sig, oid = d.get("tracker") or d.get("beacon") or "", d.get("sig") or d.get("signature") or "", d.get("order_id") or ""
+    o = Order.objects.filter(pk=int(oid) if str(oid).isdigit() else 0, provider_ref=tracker).first()
+    if not o or not sp_sig_ok(tracker, sig):
+        return HttpResponseRedirect("/promote?failed=1")
+    if o.status == "pending":
+        ref = d.get("reference") or ""
+        if ref:
+            o.note = ("safepay ref " + ref)[:300]
+        _activate(o)
+    return HttpResponseRedirect("/promote?paid=%d" % o.id)

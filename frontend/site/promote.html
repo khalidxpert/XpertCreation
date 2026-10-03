@@ -171,7 +171,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 <script>
 (function(){
   "use strict";
-  var box = document.getElementById("sp"), D = null, T = {post: [], job: [], company: []};
+  var box = document.getElementById("sp"), D = null, T = {post: [], job: [], company: []}; var qp = new URLSearchParams(location.search);
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
   function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
   function rs(n){ return "Rs " + Number(n).toLocaleString("en-PK"); }
@@ -184,6 +184,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function draw(){
     var h = '<h1 style="font-size:24px;margin:6px 0 0">\uD83D\uDC8E Promote</h1><p style="color:var(--ink-soft);margin:4px 0 0">Get seen by more people on XpertConnect. Pay once per order; nothing renews by itself.</p>';
+    if (qp.get("paid")) h += '<div class="spt" style="background:#DCFCE7;color:#166534">\u2714 Payment received. Your item is now active.</div>';
+    if (qp.get("cancel")) h += '<div class="spt">Payment cancelled. Nothing was charged.</div>';
+    if (qp.get("failed")) h += '<div class="spt" style="background:#FEE2E2;color:#991B1B">We could not confirm that payment. If money was taken, email khalid@xpertcreation.com with your order number.</div>';
     if (D.mode === "off" || (!D.can_buy && D.mode === "test")) h += '<div class="spt">Paid items are coming soon.</div>';
     if (D.mode === "test" && D.can_buy) h += '<div class="spt">TEST MODE: only staff can see this. Payments are simulated; no money is taken.</div>';
     if (D.can_buy) h += D.catalog.map(function(c){ return '<div class="spc"><h2>' + esc(c.name) + '</h2><p>' + esc(c.what) + '</p>' + picker(c)
@@ -210,7 +213,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   document.addEventListener("click", function(e){
     var t = e.target.closest("[data-buy],[data-sim],[data-cancel]"); if (!t) return;
     if (t.hasAttribute("data-buy")){ var k = t.getAttribute("data-buy"), sel = document.getElementById("tg_" + k);
-      post("/api/shop/orders/", {product: k, plan: t.getAttribute("data-plan"), target: sel ? sel.value : null}).then(function(r){ if (!r.ok){ alert(r.d.detail || "Could not create the order."); return; } load(); }); return; }
+      post("/api/shop/orders/", {product: k, plan: t.getAttribute("data-plan"), target: sel ? sel.value : null}).then(function(r){ if (!r.ok){ alert(r.d.detail || "Could not create the order."); return; } if (r.d.checkout){ location.href = r.d.checkout; return; } load(); }); return; }
     if (t.hasAttribute("data-sim")){ post("/api/shop/orders/" + t.getAttribute("data-sim") + "/simulate/").then(load); return; }
     if (t.hasAttribute("data-cancel")) post("/api/shop/orders/" + t.getAttribute("data-cancel") + "/cancel/").then(load);
   });
