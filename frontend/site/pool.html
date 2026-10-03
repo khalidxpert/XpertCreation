@@ -474,29 +474,102 @@ function freeSpot(balls, x, y){
     }
     ctx.restore();
   }
+  // ---- looks: 10 cues and 6 tables (drawing only; physics unchanged)
+  var CUES = {
+    classic:  {name: "Classic maple", shaft: ["#EBD7AE", "#D9BC86"], butt: ["#8A5A2B", "#3E2410"], ring: "#F5F0E1", tip: "#2B6CB0"},
+    ebony:    {name: "Ebony & silver", shaft: ["#F3F4F6", "#D1D5DB"], butt: ["#1F2937", "#030712"], ring: "#C0C7D1", tip: "#1E40AF"},
+    carbon:   {name: "Carbon black", shaft: ["#4B5563", "#1F2937"], butt: ["#111827", "#000000"], ring: "#DC2626", tip: "#DC2626"},
+    gold:     {name: "Royal gold", shaft: ["#FDE68A", "#F59E0B"], butt: ["#B45309", "#78350F"], ring: "#FFF7D6", tip: "#1E3A8A"},
+    pakistan: {name: "Pakistan", shaft: ["#EBD7AE", "#D9BC86"], butt: ["#01652B", "#01411C"], ring: "#FFFFFF", tip: "#01411C", band: "#FFFFFF"},
+    ocean:    {name: "Ocean blue", shaft: ["#DBEAFE", "#93C5FD"], butt: ["#1D4ED8", "#172554"], ring: "#E0F2FE", tip: "#0EA5E9"},
+    rose:     {name: "Rose", shaft: ["#FCE7F3", "#F9A8D4"], butt: ["#BE185D", "#500724"], ring: "#FFF1F2", tip: "#BE185D"},
+    neon:     {name: "Neon", shaft: ["#A7F3D0", "#34D399"], butt: ["#7C3AED", "#2E1065"], ring: "#22D3EE", tip: "#22D3EE", glow: "#22D3EE"},
+    rosewood: {name: "Rosewood", shaft: ["#E3B98B", "#C68B59"], butt: ["#7C2D12", "#3B0A05"], ring: "#FDE68A", tip: "#2B6CB0"},
+    tiger:    {name: "Tiger", shaft: ["#F3D9A6", "#E0B56C"], butt: ["#D97706", "#92400E"], ring: "#111111", tip: "#2B6CB0", stripes: "#1C1917"}
+  };
+  var TABLES = {
+    classic: {name: "Classic green", felt: ["#219150", "#10603A"], cushion: "#14713F", wood: ["#8A5A31", "#5B3A1E", "#6E4524"], dia: "#EBD9B0", rim: "#3B2412"},
+    blue:    {name: "Tournament blue", felt: ["#2F6FE4", "#173B8F"], cushion: "#1E4FC2", wood: ["#5E3B28", "#36200F", "#4A2E1E"], dia: "#F1E3C2", rim: "#24160B"},
+    red:     {name: "Red & black", felt: ["#C02424", "#7A1515"], cushion: "#9B1C1C", wood: ["#3F3F46", "#141417", "#27272A"], dia: "#D1D5DB", rim: "#0A0A0A"},
+    royal:   {name: "Black & gold", felt: ["#2B2B30", "#0B0B0D"], cushion: "#1C1C20", wood: ["#D4A93A", "#8B6508", "#B88A1E"], dia: "#FFF2B8", rim: "#5C430A"},
+    oak:     {name: "Natural oak", felt: ["#178A43", "#0F5B2E"], cushion: "#137339", wood: ["#DDB07D", "#A97142", "#C68E5A"], dia: "#5B3A1E", rim: "#6B4424"},
+    neon:    {name: "Night neon", felt: ["#4C1D95", "#1A1240"], cushion: "#3B1680", wood: ["#1F2937", "#030712", "#111827"], dia: "#22D3EE", rim: "#22D3EE", glow: "#22D3EE"}
+  };
+  var cueKey = "classic", tableKey = "classic";
+  try { cueKey = CUES[localStorage.getItem("xc_pool_cue")] ? localStorage.getItem("xc_pool_cue") : "classic"; tableKey = TABLES[localStorage.getItem("xc_pool_table")] ? localStorage.getItem("xc_pool_table") : "classic"; } catch (e) {}
+  var feltPat = {};
+  function feltTexture(){
+    if (feltPat[tableKey]) return feltPat[tableKey];
+    var c = document.createElement("canvas"); c.width = c.height = 64; var x = c.getContext("2d");
+    for (var i = 0; i < 260; i++){ x.fillStyle = Math.random() < 0.5 ? "rgba(255,255,255,0.035)" : "rgba(0,0,0,0.05)"; x.fillRect(Math.random() * 64, Math.random() * 64, 1.2, 1.2); }
+    return (feltPat[tableKey] = ctx.createPattern(c, "repeat"));
+  }
+  function paintTable(){
+    var T = TABLES[tableKey];
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 24; ctx.shadowOffsetY = 10;
+    ctx.fillStyle = T.wood[1]; roundRect(-RAIL, -RAIL, W + RAIL * 2, H + RAIL * 2, 26); ctx.fill(); ctx.restore();
+    var wood = ctx.createLinearGradient(0, -RAIL, 0, H + RAIL); wood.addColorStop(0, T.wood[0]); wood.addColorStop(0.5, T.wood[1]); wood.addColorStop(1, T.wood[2]);
+    ctx.fillStyle = wood; roundRect(-RAIL + 3, -RAIL + 3, W + RAIL * 2 - 6, H + RAIL * 2 - 6, 23); ctx.fill();
+    var shine = ctx.createLinearGradient(0, -RAIL, 0, -RAIL + 14); shine.addColorStop(0, "rgba(255,255,255,.28)"); shine.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = shine; roundRect(-RAIL + 3, -RAIL + 3, W + RAIL * 2 - 6, 16, 12); ctx.fill();
+    if (T.glow){ ctx.save(); ctx.strokeStyle = T.glow; ctx.lineWidth = 2; ctx.shadowColor = T.glow; ctx.shadowBlur = 14; roundRect(-RAIL + 6, -RAIL + 6, W + RAIL * 2 - 12, H + RAIL * 2 - 12, 20); ctx.stroke(); ctx.restore(); }
+    var felt = ctx.createRadialGradient(W / 2, H / 2, 40, W / 2, H / 2, W * 0.62); felt.addColorStop(0, T.felt[0]); felt.addColorStop(1, T.felt[1]);
+    ctx.fillStyle = felt; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = feltTexture(); ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = T.cushion; ctx.lineWidth = 9; ctx.strokeRect(-1.5, -1.5, W + 3, H + 3);
+    ctx.strokeStyle = "rgba(0,0,0,.28)"; ctx.lineWidth = 2; ctx.strokeRect(3, 3, W - 6, H - 6);
+    ctx.strokeStyle = "rgba(255,255,255,.13)"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(HEAD_X, 0); ctx.lineTo(HEAD_X, H); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.3)"; ctx.beginPath(); ctx.arc(FOOT[0], FOOT[1], 2.6, 0, Math.PI * 2); ctx.fill();
+    var D = []; [0.125, 0.25, 0.375, 0.625, 0.75, 0.875].forEach(function(f){ D.push([W * f, -RAIL / 2]); D.push([W * f, H + RAIL / 2]); });
+    [0.25, 0.5, 0.75].forEach(function(f){ D.push([-RAIL / 2, H * f]); D.push([W + RAIL / 2, H * f]); });
+    D.forEach(function(d){ ctx.save(); ctx.translate(d[0], d[1]); ctx.rotate(Math.PI / 4); ctx.fillStyle = T.dia; ctx.fillRect(-2.6, -2.6, 5.2, 5.2); ctx.restore(); });
+    POCKETS.forEach(function(p){
+      ctx.beginPath(); ctx.arc(p[0], p[1], POCKET_R + 4, 0, Math.PI * 2); ctx.fillStyle = T.rim; ctx.fill();
+      var g = ctx.createRadialGradient(p[0], p[1], 2, p[0], p[1], POCKET_R + 1); g.addColorStop(0, "#000"); g.addColorStop(0.75, "#0A0A0A"); g.addColorStop(1, "#262626");
+      ctx.beginPath(); ctx.arc(p[0], p[1], POCKET_R + 1, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+    });
+  }
   function cueStick(){
-    var c = balls[0], back = 18 + power * 70, dx = Math.cos(aim), dy = Math.sin(aim);
-    var x1 = c.x - dx * (R + back), y1 = c.y - dy * (R + back), x2 = x1 - dx * 440, y2 = y1 - dy * 440;
-    ctx.save(); ctx.lineCap = "round";
-    ctx.strokeStyle = "rgba(0,0,0,.3)"; ctx.lineWidth = 13; ctx.beginPath(); ctx.moveTo(x1 + 3, y1 + 4); ctx.lineTo(x2 + 3, y2 + 4); ctx.stroke();
-    var g = ctx.createLinearGradient(x1, y1, x2, y2); g.addColorStop(0, "#F1E3C6"); g.addColorStop(0.03, "#2B6CB0"); g.addColorStop(0.05, "#E8D2A6"); g.addColorStop(0.7, "#B7793F"); g.addColorStop(1, "#4A2A14");
-    ctx.strokeStyle = g; ctx.lineWidth = 11; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    var C = CUES[cueKey], c = balls[0], back = 18 + power * 70, dx = Math.cos(aim), dy = Math.sin(aim), L = 450;
+    var x1 = c.x - dx * (R + back), y1 = c.y - dy * (R + back), x2 = x1 - dx * L, y2 = y1 - dy * L, nx = -dy, ny = dx;
+    function at(f){ return [x1 - dx * L * f, y1 - dy * L * f]; }
+    function band(f0, f1, w0, w1, fill){
+      var a = at(f0), b = at(f1); ctx.beginPath();
+      ctx.moveTo(a[0] + nx * w0, a[1] + ny * w0); ctx.lineTo(b[0] + nx * w1, b[1] + ny * w1); ctx.lineTo(b[0] - nx * w1, b[1] - ny * w1); ctx.lineTo(a[0] - nx * w0, a[1] - ny * w0);
+      ctx.closePath(); ctx.fillStyle = fill; ctx.fill();
+    }
+    var wAt = function(f){ return 3.6 + f * 3.4; };
+    ctx.save();
+    ctx.globalAlpha = 0.3; ctx.translate(3, 5); band(0, 1, wAt(0), wAt(1), "#000"); ctx.translate(-3, -5); ctx.globalAlpha = 1;
+    if (C.glow){ ctx.shadowColor = C.glow; ctx.shadowBlur = 12; }
+    var sg = ctx.createLinearGradient(at(0.04)[0], at(0.04)[1], at(0.62)[0], at(0.62)[1]); sg.addColorStop(0, C.shaft[0]); sg.addColorStop(1, C.shaft[1]);
+    band(0.04, 0.62, wAt(0.04), wAt(0.62), sg); ctx.shadowBlur = 0;
+    var bg = ctx.createLinearGradient(at(0.62)[0], at(0.62)[1], x2, y2); bg.addColorStop(0, C.butt[0]); bg.addColorStop(1, C.butt[1]);
+    band(0.62, 1, wAt(0.62), wAt(1), bg);
+    band(0.6, 0.625, wAt(0.6) + 0.4, wAt(0.625) + 0.4, C.ring); band(0.93, 0.95, wAt(0.93) + 0.3, wAt(0.95) + 0.3, C.ring);
+    if (C.band) band(0.74, 0.8, wAt(0.74) + 0.2, wAt(0.8) + 0.2, C.band);
+    if (C.stripes) [0.68, 0.73, 0.78, 0.83, 0.88].forEach(function(f){ band(f, f + 0.018, wAt(f) + 0.1, wAt(f + 0.018) + 0.1, C.stripes); });
+    band(0.012, 0.04, wAt(0.012), wAt(0.04), "#F7F3EA");
+    band(0, 0.012, wAt(0), wAt(0.012), C.tip);
+    var hi = at(0.05), hj = at(0.95); ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(hi[0] + nx * 1.4, hi[1] + ny * 1.4); ctx.lineTo(hj[0] + nx * 2.6, hj[1] + ny * 2.6); ctx.stroke();
     ctx.restore();
   }
+  function looksMenu(){
+    var top = document.querySelector(".pooltop"); if (!top || document.getElementById("poolcue")) return;
+    function sel(id, label, list, cur){ var s = document.createElement("select"); s.id = id; s.setAttribute("aria-label", label);
+      s.innerHTML = Object.keys(list).map(function(k){ return '<option value="' + k + '"' + (k === cur ? " selected" : "") + '>' + label + ": " + list[k].name + '</option>'; }).join(""); return s; }
+    var a = sel("poolcue", "\uD83C\uDFB1 Cue", CUES, cueKey), b = sel("pooltable", "Table", TABLES, tableKey);
+    var h = top.querySelector("h1"); top.insertBefore(b, h ? h.nextSibling : null); top.insertBefore(a, h ? h.nextSibling : null);
+    a.addEventListener("change", function(){ cueKey = a.value; try { localStorage.setItem("xc_pool_cue", cueKey); } catch (e) {} draw(); });
+    b.addEventListener("change", function(){ tableKey = b.value; try { localStorage.setItem("xc_pool_table", tableKey); } catch (e) {} draw(); });
+  }
+  looksMenu();
   function draw(){
     if (!balls) return;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height);
     tableTransform();
-    ctx.fillStyle = "#5B3A1E"; roundRect(-RAIL, -RAIL, W + RAIL * 2, H + RAIL * 2, 26); ctx.fill();
-    var wood = ctx.createLinearGradient(0, -RAIL, 0, H + RAIL); wood.addColorStop(0, "#7A4E2A"); wood.addColorStop(0.5, "#5B3A1E"); wood.addColorStop(1, "#6B4424");
-    ctx.fillStyle = wood; roundRect(-RAIL + 4, -RAIL + 4, W + RAIL * 2 - 8, H + RAIL * 2 - 8, 22); ctx.fill();
-    var felt = ctx.createRadialGradient(W / 2, H / 2, 40, W / 2, H / 2, W * 0.62); felt.addColorStop(0, "#1F8A4C"); felt.addColorStop(1, "#11643A");
-    ctx.fillStyle = felt; ctx.fillRect(0, 0, W, H);
-    ctx.strokeStyle = "rgba(0,0,0,.25)"; ctx.lineWidth = 3; ctx.strokeRect(1.5, 1.5, W - 3, H - 3);
-    ctx.strokeStyle = "rgba(255,255,255,.12)"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(HEAD_X, 0); ctx.lineTo(HEAD_X, H); ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.beginPath(); ctx.arc(FOOT[0], FOOT[1], 2.5, 0, Math.PI * 2); ctx.fill();
-    [[W * 0.125, -RAIL / 2], [W * 0.375, -RAIL / 2], [W * 0.625, -RAIL / 2], [W * 0.875, -RAIL / 2], [W * 0.125, H + RAIL / 2], [W * 0.375, H + RAIL / 2], [W * 0.625, H + RAIL / 2], [W * 0.875, H + RAIL / 2]].forEach(function(d){ ctx.fillStyle = "#E7D3A8"; ctx.beginPath(); ctx.arc(d[0], d[1], 2.6, 0, Math.PI * 2); ctx.fill(); });
-    POCKETS.forEach(function(p){ ctx.beginPath(); ctx.arc(p[0], p[1], POCKET_R + 2, 0, Math.PI * 2); ctx.fillStyle = "#0B0B0B"; ctx.fill(); ctx.strokeStyle = "#3B2412"; ctx.lineWidth = 3; ctx.stroke(); });
+    paintTable();
     balls.forEach(function(b){ if (!b.in && b.n) drawBall(b); });
     if (!balls[0].in) drawBall(balls[0]);
     if (!busy && !st.over && humanTurn()){
