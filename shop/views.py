@@ -32,7 +32,7 @@ def _sp():
     e = (env.get("SAFEPAY_ENV") or "").strip()
     return {"env": e, "pub": (env.get("SAFEPAY_PUBLIC_KEY") or "").strip(), "sec": (env.get("SAFEPAY_SECRET_KEY") or "").strip(),
             "api": "https://sandbox.api.getsafepay.com" if e == "sandbox" else "https://api.getsafepay.com",
-            "checkout": "https://sandbox.api.getsafepay.com/components" if e == "sandbox" else "https://getsafepay.com/components"}
+            "checkout": ("https://sandbox.api.getsafepay.com" if e == "sandbox" else "https://api.getsafepay.com") + "/checkout/pay"}
 
 
 def sp_ready():
@@ -48,9 +48,17 @@ def _sp_init(amount):
     return d["data"]["token"]
 
 
+def _sp_pass():
+    """A short-lived checkout pass from Safepay (asked for with the secret key, which never leaves the server)."""
+    c = _sp()
+    req = urllib.request.Request(c["api"] + "/client/passport/v1/token", data=b"{}", headers={"Content-Type": "application/json", "Accept": "application/json",
+                                 "X-SFPY-MERCHANT-SECRET": c["sec"], "User-Agent": "Mozilla/5.0 (compatible; XpertCreation/1.0; +https://xpertcreation.com)"})
+    return json.loads(urllib.request.urlopen(req, timeout=20).read().decode())["data"]
+
+
 def _sp_checkout_url(order, token):
     c = _sp(); site = "https://xpertcreation.com"
-    q = {"env": c["env"], "beacon": token, "source": "custom", "order_id": str(order.id),
+    q = {"env": c["env"], "beacon": token, "source": "custom", "order_id": str(order.id), "tbt": _sp_pass(),
          "redirect_url": site + "/api/shop/safepay/return/", "cancel_url": site + "/promote?cancel=1"}
     return c["checkout"] + "?" + urllib.parse.urlencode(q)
 
