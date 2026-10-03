@@ -646,6 +646,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   // True from the moment a move leaves until the server answers. A poll
   // landing in that gap would bring back a list without the move in it.
   var sending = false;
+  var mseq = 0;   // goes up with every move we send; a refresh that started before it is out of date
 
   function startPoll(){
     stopPoll();
@@ -653,8 +654,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       if (!room) return stopPoll();
       if (sending) return;              // apni chaal raaste mein hai
       if (document.hidden) return;      // chhupe tab par server ko na thakayen
+      var at = mseq;
       api("/rooms/" + room.code + "/").then(function(r){
-        if (!r.ok) return;
+        if (!r.ok || sending || at !== mseq) return;   // answer from before our last move: ignore it
         soakUp(r.data);
       });
     }, 2000);
@@ -751,6 +753,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   }
 
   function sendMove(mv, san){
+    mseq++;
     if (!room) return;
     var over = "";
     var after = apply(state, mv);
