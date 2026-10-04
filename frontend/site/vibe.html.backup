@@ -422,16 +422,6 @@ a{color:var(--brand);text-decoration:none}
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(d){
       DATA = d;
-      // A fresh 8 each time: skip questions this person saw recently (remembered on this device).
-      (function(){
-        var all = d.questions, n = 8; if (!all || all.length <= n) return;
-        var seen = []; try { seen = JSON.parse(localStorage.getItem("xc_vibe_seen") || "[]"); } catch(e){}
-        var idx = all.map(function(_, i){ return i; }), fresh = idx.filter(function(i){ return seen.indexOf(all[i].q) < 0; });
-        if (fresh.length < n){ seen = []; fresh = idx; }
-        for (var i = fresh.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = fresh[i]; fresh[i] = fresh[j]; fresh[j] = t; }
-        d.questions = fresh.slice(0, n).map(function(i){ return all[i]; });
-        try { localStorage.setItem("xc_vibe_seen", JSON.stringify(seen.concat(d.questions.map(function(x){ return x.q; })).slice(-40))); } catch(e){}
-      })();
       // A shared link opens straight on that creature, which is the whole
       // point of sharing one.
       try { savedVibe = localStorage.getItem("xc_vibe"); } catch(e){}

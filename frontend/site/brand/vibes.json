@@ -337,6 +337,1062 @@
      ]
     }
    ]
+  },
+  {
+   "q": "Your phone dies in the middle of the day.",
+   "a": [
+    {
+     "t": "Honestly? Peace at last",
+     "v": [
+      "witch",
+      "elf"
+     ]
+    },
+    {
+     "t": "You find a charger in four minutes flat",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Perfect excuse to disappear for a bit",
+     "v": [
+      "dracula",
+      "ghost"
+     ]
+    },
+    {
+     "t": "You borrow a stranger's phone and make a new friend",
+     "v": [
+      "dodo",
+      "siren"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "A group project. Who are you?",
+   "a": [
+    {
+     "t": "The one quietly doing all the work",
+     "v": [
+      "elf",
+      "witch"
+     ]
+    },
+    {
+     "t": "The one giving everyone their jobs",
+     "v": [
+      "dragon",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "The one who saves it at the last minute",
+     "v": [
+      "phoenix",
+      "siren"
+     ]
+    },
+    {
+     "t": "The one who brought snacks and good vibes",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Pick a place to spend a free afternoon.",
+   "a": [
+    {
+     "t": "An old library nobody visits",
+     "v": [
+      "ghost",
+      "elf"
+     ]
+    },
+    {
+     "t": "A rooftop with a view of the whole city",
+     "v": [
+      "dragon",
+      "dracula"
+     ]
+    },
+    {
+     "t": "By the sea, as long as possible",
+     "v": [
+      "siren",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "A forest trail with no signal",
+     "v": [
+      "werewolf",
+      "witch"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Someone says “we need to talk”.",
+   "a": [
+    {
+     "t": "Already planning three replies in your head",
+     "v": [
+      "witch",
+      "dracula"
+     ]
+    },
+    {
+     "t": "“Fine. Talk.”",
+     "v": [
+      "dragon",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Overthink for an hour, then it was nothing",
+     "v": [
+      "dodo",
+      "elf"
+     ]
+    },
+    {
+     "t": "Smile. You probably already know",
+     "v": [
+      "siren",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Your ideal weekend plan is…",
+   "a": [
+    {
+     "t": "No plan. Whatever happens, happens",
+     "v": [
+      "werewolf",
+      "dodo"
+     ]
+    },
+    {
+     "t": "A long list, and you finish all of it",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Blanket, chai and absolutely nobody",
+     "v": [
+      "witch",
+      "dracula"
+     ]
+    },
+    {
+     "t": "A late night with your favourite people",
+     "v": [
+      "siren",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "What do people notice about you first?",
+   "a": [
+    {
+     "t": "Your eyes. They say a lot",
+     "v": [
+      "siren",
+      "dracula"
+     ]
+    },
+    {
+     "t": "Your confidence",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Your weird sense of humour",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    },
+    {
+     "t": "How calm you are",
+     "v": [
+      "elf",
+      "witch"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Pick a superpower.",
+   "a": [
+    {
+     "t": "Fly over everything",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Read every mind in the room",
+     "v": [
+      "witch",
+      "siren"
+     ]
+    },
+    {
+     "t": "Turn invisible whenever you want",
+     "v": [
+      "ghost",
+      "dracula"
+     ]
+    },
+    {
+     "t": "Talk to animals",
+     "v": [
+      "elf",
+      "werewolf"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "The lights go off during a storm.",
+   "a": [
+    {
+     "t": "Finally, the good kind of dark",
+     "v": [
+      "dracula",
+      "ghost"
+     ]
+    },
+    {
+     "t": "You light candles and feel like a main character",
+     "v": [
+      "witch",
+      "siren"
+     ]
+    },
+    {
+     "t": "You go outside to watch the lightning",
+     "v": [
+      "werewolf",
+      "dragon"
+     ]
+    },
+    {
+     "t": "You trip over something. Twice",
+     "v": [
+      "dodo",
+      "elf"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "How do you reply to messages?",
+   "a": [
+    {
+     "t": "Instantly, with five emojis",
+     "v": [
+      "dodo",
+      "siren"
+     ]
+    },
+    {
+     "t": "Three days later, with a perfect reply",
+     "v": [
+      "dracula",
+      "witch"
+     ]
+    },
+    {
+     "t": "Voice note, straight to the point",
+     "v": [
+      "dragon",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "You read it, reply in your head, forget to send",
+     "v": [
+      "ghost",
+      "elf"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "You fail at something important.",
+   "a": [
+    {
+     "t": "Cry for a day, then come back twice as strong",
+     "v": [
+      "phoenix",
+      "elf"
+     ]
+    },
+    {
+     "t": "Nobody will ever know it bothered you",
+     "v": [
+      "dracula",
+      "witch"
+     ]
+    },
+    {
+     "t": "You try again tomorrow, louder",
+     "v": [
+      "dragon",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "You laugh about it. Mostly",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Choose a colour for your room.",
+   "a": [
+    {
+     "t": "Black, obviously",
+     "v": [
+      "dracula",
+      "ghost"
+     ]
+    },
+    {
+     "t": "Deep red and gold",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Ocean blue",
+     "v": [
+      "siren",
+      "elf"
+     ]
+    },
+    {
+     "t": "Purple with fairy lights",
+     "v": [
+      "witch",
+      "dodo"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "A friend is late again.",
+   "a": [
+    {
+     "t": "You leave. Time is not free",
+     "v": [
+      "dragon",
+      "dracula"
+     ]
+    },
+    {
+     "t": "You wait and quietly judge",
+     "v": [
+      "witch",
+      "ghost"
+     ]
+    },
+    {
+     "t": "You are late too, so it works out",
+     "v": [
+      "dodo",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "You made new friends while waiting",
+     "v": [
+      "siren",
+      "phoenix"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "What is your secret talent?",
+   "a": [
+    {
+     "t": "Knowing who is lying",
+     "v": [
+      "witch",
+      "dracula"
+     ]
+    },
+    {
+     "t": "Making anyone laugh",
+     "v": [
+      "dodo",
+      "siren"
+     ]
+    },
+    {
+     "t": "Surviving anything",
+     "v": [
+      "phoenix",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Remembering every tiny detail",
+     "v": [
+      "elf",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "You get to name a pet. You choose…",
+   "a": [
+    {
+     "t": "Something royal, like Sultan",
+     "v": [
+      "dragon",
+      "siren"
+     ]
+    },
+    {
+     "t": "Something spooky, like Shadow",
+     "v": [
+      "ghost",
+      "dracula"
+     ]
+    },
+    {
+     "t": "Something silly, like Aloo",
+     "v": [
+      "dodo",
+      "elf"
+     ]
+    },
+    {
+     "t": "Something wild, like Storm",
+     "v": [
+      "werewolf",
+      "phoenix"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Your friends call you when…",
+   "a": [
+    {
+     "t": "They need someone to fix everything",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "They need the truth, not comfort",
+     "v": [
+      "witch",
+      "dracula"
+     ]
+    },
+    {
+     "t": "They need to laugh",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    },
+    {
+     "t": "They need someone gentle",
+     "v": [
+      "elf",
+      "siren"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Pick a time of day.",
+   "a": [
+    {
+     "t": "3 am, when the world is quiet",
+     "v": [
+      "dracula",
+      "ghost"
+     ]
+    },
+    {
+     "t": "Sunrise. A fresh start",
+     "v": [
+      "phoenix",
+      "elf"
+     ]
+    },
+    {
+     "t": "Golden hour, for the photos",
+     "v": [
+      "siren",
+      "dodo"
+     ]
+    },
+    {
+     "t": "Full moon night",
+     "v": [
+      "werewolf",
+      "witch"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Someone copies your style.",
+   "a": [
+    {
+     "t": "Flattered. Obviously you are iconic",
+     "v": [
+      "siren",
+      "dragon"
+     ]
+    },
+    {
+     "t": "You change your whole style the next day",
+     "v": [
+      "phoenix",
+      "dracula"
+     ]
+    },
+    {
+     "t": "You do not even notice",
+     "v": [
+      "dodo",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "You notice. You say nothing. You remember",
+     "v": [
+      "witch",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "What scares you most?",
+   "a": [
+    {
+     "t": "Being ordinary",
+     "v": [
+      "dragon",
+      "siren"
+     ]
+    },
+    {
+     "t": "Losing your people",
+     "v": [
+      "werewolf",
+      "elf"
+     ]
+    },
+    {
+     "t": "Nothing. You are the scary one",
+     "v": [
+      "ghost",
+      "dracula"
+     ]
+    },
+    {
+     "t": "Giving up",
+     "v": [
+      "phoenix",
+      "dodo"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "You win a lot of money tomorrow.",
+   "a": [
+    {
+     "t": "Build your own empire",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Buy a quiet house far from everyone",
+     "v": [
+      "witch",
+      "elf"
+     ]
+    },
+    {
+     "t": "Travel everywhere, starting tonight",
+     "v": [
+      "werewolf",
+      "siren"
+     ]
+    },
+    {
+     "t": "Buy something completely ridiculous first",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Pick a movie for tonight.",
+   "a": [
+    {
+     "t": "A horror film, lights off",
+     "v": [
+      "ghost",
+      "dracula"
+     ]
+    },
+    {
+     "t": "An action film with a big comeback",
+     "v": [
+      "phoenix",
+      "dragon"
+     ]
+    },
+    {
+     "t": "An old comedy you have seen ten times",
+     "v": [
+      "dodo",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "A fantasy world you can get lost in",
+     "v": [
+      "elf",
+      "witch"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "How do you handle an argument?",
+   "a": [
+    {
+     "t": "Win it. With facts",
+     "v": [
+      "dragon",
+      "witch"
+     ]
+    },
+    {
+     "t": "Walk away. Not worth your energy",
+     "v": [
+      "dracula",
+      "elf"
+     ]
+    },
+    {
+     "t": "Get loud, then hug it out",
+     "v": [
+      "werewolf",
+      "dodo"
+     ]
+    },
+    {
+     "t": "Stay calm until they confuse themselves",
+     "v": [
+      "siren",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Your dream job is…",
+   "a": [
+    {
+     "t": "Running the whole company",
+     "v": [
+      "dragon",
+      "siren"
+     ]
+    },
+    {
+     "t": "Something nobody fully understands",
+     "v": [
+      "ghost",
+      "witch"
+     ]
+    },
+    {
+     "t": "Anything outdoors with no boss",
+     "v": [
+      "werewolf",
+      "elf"
+     ]
+    },
+    {
+     "t": "Anything, as long as it is fun",
+     "v": [
+      "dodo",
+      "phoenix"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Choose a drink.",
+   "a": [
+    {
+     "t": "Strong black coffee",
+     "v": [
+      "dracula",
+      "dragon"
+     ]
+    },
+    {
+     "t": "Herbal tea, lots of thoughts",
+     "v": [
+      "witch",
+      "elf"
+     ]
+    },
+    {
+     "t": "Doodh patti, extra sweet",
+     "v": [
+      "dodo",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Something bright and fancy",
+     "v": [
+      "siren",
+      "phoenix"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "You hear a strange noise at night.",
+   "a": [
+    {
+     "t": "Go and investigate. Alone",
+     "v": [
+      "ghost",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Pretend you did not hear it",
+     "v": [
+      "elf",
+      "dodo"
+     ]
+    },
+    {
+     "t": "You are probably the strange noise",
+     "v": [
+      "dracula",
+      "witch"
+     ]
+    },
+    {
+     "t": "Turn on every light and take charge",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "What would your diary be called?",
+   "a": [
+    {
+     "t": "Things I Survived",
+     "v": [
+      "phoenix",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Do Not Read. Seriously",
+     "v": [
+      "witch",
+      "dracula"
+     ]
+    },
+    {
+     "t": "Oops, Again",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    },
+    {
+     "t": "Notes From My Kingdom",
+     "v": [
+      "dragon",
+      "siren"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "You walk past a mirror.",
+   "a": [
+    {
+     "t": "You check it every time. You look great",
+     "v": [
+      "siren",
+      "dragon"
+     ]
+    },
+    {
+     "t": "You do not really look",
+     "v": [
+      "werewolf",
+      "elf"
+     ]
+    },
+    {
+     "t": "You make a funny face at yourself",
+     "v": [
+      "dodo",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Sometimes it feels like it is watching you",
+     "v": [
+      "ghost",
+      "witch"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Which compliment means the most?",
+   "a": [
+    {
+     "t": "“You are so strong”",
+     "v": [
+      "phoenix",
+      "dragon"
+     ]
+    },
+    {
+     "t": "“You are so kind”",
+     "v": [
+      "elf",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "“You are so mysterious”",
+     "v": [
+      "dracula",
+      "siren"
+     ]
+    },
+    {
+     "t": "“You are so funny”",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "A new person joins your group.",
+   "a": [
+    {
+     "t": "You decide in five seconds if you like them",
+     "v": [
+      "dragon",
+      "witch"
+     ]
+    },
+    {
+     "t": "You make them feel welcome straight away",
+     "v": [
+      "elf",
+      "dodo"
+     ]
+    },
+    {
+     "t": "You watch them closely for a while",
+     "v": [
+      "dracula",
+      "ghost"
+     ]
+    },
+    {
+     "t": "They will be your best friend by tonight",
+     "v": [
+      "siren",
+      "werewolf"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Pick a season.",
+   "a": [
+    {
+     "t": "Winter. Dark evenings, warm blankets",
+     "v": [
+      "dracula",
+      "witch"
+     ]
+    },
+    {
+     "t": "Monsoon. Thunder and chai",
+     "v": [
+      "ghost",
+      "siren"
+     ]
+    },
+    {
+     "t": "Spring. Everything grows back",
+     "v": [
+      "phoenix",
+      "elf"
+     ]
+    },
+    {
+     "t": "Summer. Out all day",
+     "v": [
+      "werewolf",
+      "dodo"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Your bag is full of…",
+   "a": [
+    {
+     "t": "Everything anyone could ever need",
+     "v": [
+      "elf",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Snacks, mostly",
+     "v": [
+      "dodo",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Just a phone and keys. Minimal",
+     "v": [
+      "dracula",
+      "dragon"
+     ]
+    },
+    {
+     "t": "Things you cannot explain",
+     "v": [
+      "ghost",
+      "witch"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "How do you take a photo?",
+   "a": [
+    {
+     "t": "Fifty selfies, keep one",
+     "v": [
+      "siren",
+      "dodo"
+     ]
+    },
+    {
+     "t": "Of the sky, never of yourself",
+     "v": [
+      "elf",
+      "ghost"
+     ]
+    },
+    {
+     "t": "You are always the one taking them",
+     "v": [
+      "phoenix",
+      "witch"
+     ]
+    },
+    {
+     "t": "You do not. Live the moment",
+     "v": [
+      "werewolf",
+      "dragon"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Your energy at a wedding is…",
+   "a": [
+    {
+     "t": "Running the dance floor",
+     "v": [
+      "siren",
+      "dodo"
+     ]
+    },
+    {
+     "t": "Organising everything behind the scenes",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Eating quietly, watching everyone",
+     "v": [
+      "witch",
+      "ghost"
+     ]
+    },
+    {
+     "t": "Leaving early without telling anyone",
+     "v": [
+      "dracula",
+      "werewolf"
+     ]
+    }
+   ]
   }
  ]
 }

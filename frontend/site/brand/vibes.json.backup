@@ -1,0 +1,342 @@
+{
+ "vibes": {
+  "dragon": {
+   "emoji": "🐉",
+   "name": "Dragon",
+   "line": "I’m not made to fit the world — I’m made to rule my own. 👑🐉",
+   "desc": "🐉🔥 You carry a fearless energy — strong-minded, confident, and fiercely protective. You don’t start fires, but you definitely know how to finish them. 😈⚡ You’re loyal to your people, ruthless with disrespect, and never afraid to stand alone. 🖤",
+   "c1": "#B91C1C",
+   "c2": "#5B1010"
+  },
+  "phoenix": {
+   "emoji": "🔥",
+   "name": "Phoenix",
+   "line": "You don’t burn out — you rise from the ashes. ❤️‍🔥",
+   "desc": "🔥 You’re the one who always comes back stronger. You’re ambitious, resilient, and impossible to keep down for long. ✨ You may go through your own storms, but somehow you always turn them into a comeback. 🪂❤️‍🔥 You don’t just survive — you reinvent yourself and rise again. 🌅",
+   "c1": "#EA580C",
+   "c2": "#7C2D12"
+  },
+  "siren": {
+   "emoji": "🧜",
+   "name": "Siren",
+   "line": "You don’t chase attention — you make it follow you. 🧜‍♀️✨",
+   "desc": "🧜‍♀️ You’re impossible to ignore. You have a magnetic presence, a sharp mind, and a way of pulling people in without even trying. ✨🌊 You know exactly how to get what you want — and you’re not afraid to use your charm. 😏💙 You’re mysterious, confident, and just a little dangerous when underestimated.",
+   "c1": "#0891B2",
+   "c2": "#164E63"
+  },
+  "dracula": {
+   "emoji": "🧛",
+   "name": "Dracula",
+   "line": "Too powerful to be ordinary, too mysterious to be understood. 🩸",
+   "desc": "🦇 You have that “don’t mess with me” energy. You’re bold, magnetic, fiercely independent, and just mysterious enough to keep everyone guessing. You don’t need to be the loudest in the room — you somehow become the one everyone notices. 🖤",
+   "c1": "#7F1D1D",
+   "c2": "#3B0764"
+  },
+  "witch": {
+   "emoji": "🧙",
+   "name": "Witch",
+   "line": "Peace is my power, and disturbing it is your warning. 🕯️🔮",
+   "desc": "🔮 You crave silence, peace, and your own little world. 🌙 You can be ruthless with anyone who disturbs your peace, but fiercely protective and soft with your own people. 🖤 Cold to strangers, loyal to your circle, and absolutely unapologetic about cutting off anyone who interrupts your calm. ✨",
+   "c1": "#7C3AED",
+   "c2": "#3B0764"
+  },
+  "ghost": {
+   "emoji": "👻",
+   "name": "Spooky Ghost",
+   "line": "A little creepy, a little chaotic, and impossible to explain. 👻🌙",
+   "desc": "👻 You’re the spooky one with chaotic energy. You love creepy things, random surprises, and making people jump just for fun. 😭🖤 You’re mysterious, playful, and definitely not as innocent as you look. 👀🌙 You’re the kind of thing people know exists… they just don’t want to believe it. 🕸️✨",
+   "c1": "#64748B",
+   "c2": "#1E293B"
+  },
+  "werewolf": {
+   "emoji": "🐺",
+   "name": "Werewolf",
+   "line": "Too hot to blend in, too wild to be tamed. 🐺",
+   "desc": "🐺 You’re wild, loyal, and always running a little hotter than everyone else. Your energy is intense, your temper is quick, and your instincts are impossible to ignore. You protect your people fiercely, live by your own rules, and somehow always feel 10°C hotter than the environment. 🌙 You’re fiercely independent and hate being told what to do. 😤 You feel things deeply, love hard, and once someone earns your trust, you’ll have their back no matter what. 🐾🔥",
+   "c1": "#4B5563",
+   "c2": "#111827"
+  },
+  "elf": {
+   "emoji": "🧝",
+   "name": "Elf",
+   "line": "Too magical for the ordinary world. ✨",
+   "desc": "🌿 You notice the tiny things everyone else misses. You’re calm, curious, slightly mysterious — and somehow always giving main-character-in-an-enchanted-forest energy ✨",
+   "c1": "#059669",
+   "c2": "#064E3B"
+  },
+  "dodo": {
+   "emoji": "🐦",
+   "name": "Dodo Bird",
+   "line": "Life is too short to stress — let’s see what happens ✨🪶",
+   "desc": "🦔 You’re the silly one who makes everything more fun. You’re always in chill mode, turning random moments into unforgettable memories. You don’t take life too seriously — you just go with the flow and live by “Why stress when we can just see what happens?” 😭",
+   "c1": "#0D9488",
+   "c2": "#134E4A"
+  }
+ },
+ "questions": [
+  {
+   "q": "You walk into a party where you know nobody. What happens?",
+   "a": [
+    {
+     "t": "Find the quietest corner and stay there",
+     "v": [
+      "ghost",
+      "elf"
+     ]
+    },
+    {
+     "t": "Somehow end up as the main character",
+     "v": [
+      "dragon",
+      "siren"
+     ]
+    },
+    {
+     "t": "Find the strangest person and become friends",
+     "v": [
+      "dodo",
+      "witch"
+     ]
+    },
+    {
+     "t": "Leave after twenty minutes",
+     "v": [
+      "werewolf",
+      "dracula"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "It is midnight. What are you actually doing?",
+   "a": [
+    {
+     "t": "Awake and thinking about something",
+     "v": [
+      "witch",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Music, headphones, lights off",
+     "v": [
+      "siren",
+      "dracula"
+     ]
+    },
+    {
+     "t": "Reading something you should have finished weeks ago",
+     "v": [
+      "elf",
+      "ghost"
+     ]
+    },
+    {
+     "t": "Out. It was not planned",
+     "v": [
+      "dodo",
+      "werewolf"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Someone wrongs a person you care about.",
+   "a": [
+    {
+     "t": "You handle it. Quietly. Later",
+     "v": [
+      "witch",
+      "ghost"
+     ]
+    },
+    {
+     "t": "You handle it. Immediately",
+     "v": [
+      "dragon",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "You cut them off and never explain",
+     "v": [
+      "dracula",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "You are hurt more than angry",
+     "v": [
+      "dodo",
+      "elf"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "How do people describe you when you are not there?",
+   "a": [
+    {
+     "t": "Hard to read",
+     "v": [
+      "dracula",
+      "ghost"
+     ]
+    },
+    {
+     "t": "Intense",
+     "v": [
+      "dragon",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "Kind, but do not push it",
+     "v": [
+      "elf",
+      "witch"
+     ]
+    },
+    {
+     "t": "Nobody agrees on a description",
+     "v": [
+      "dodo",
+      "siren"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Pick a place you would rather be.",
+   "a": [
+    {
+     "t": "Deep water, no bottom in sight",
+     "v": [
+      "siren",
+      "phoenix"
+     ]
+    },
+    {
+     "t": "An old forest, early morning",
+     "v": [
+      "elf",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "A city at 3am",
+     "v": [
+      "dracula",
+      "ghost"
+     ]
+    },
+    {
+     "t": "Somewhere nobody has heard of",
+     "v": [
+      "dodo",
+      "witch"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Your phone rings. Unknown number.",
+   "a": [
+    {
+     "t": "Ignore. They will text if it matters",
+     "v": [
+      "ghost",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Answer. Could be interesting",
+     "v": [
+      "dodo",
+      "siren"
+     ]
+    },
+    {
+     "t": "Answer, but say very little",
+     "v": [
+      "dracula",
+      "witch"
+     ]
+    },
+    {
+     "t": "Look it up first",
+     "v": [
+      "dragon",
+      "elf"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "What do you do when things go badly wrong?",
+   "a": [
+    {
+     "t": "Disappear for a while, then come back different",
+     "v": [
+      "phoenix",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "Rebuild immediately. No pause",
+     "v": [
+      "phoenix",
+      "dragon"
+     ]
+    },
+    {
+     "t": "Sit with it. Understand it first",
+     "v": [
+      "witch",
+      "elf"
+     ]
+    },
+    {
+     "t": "Laugh, eventually",
+     "v": [
+      "dodo",
+      "ghost"
+     ]
+    }
+   ]
+  },
+  {
+   "q": "Choose the compliment that would actually land.",
+   "a": [
+    {
+     "t": "You are the most interesting person here",
+     "v": [
+      "siren",
+      "dodo"
+     ]
+    },
+    {
+     "t": "I always feel safe around you",
+     "v": [
+      "elf",
+      "dragon"
+     ]
+    },
+    {
+     "t": "You are terrifying and I mean that well",
+     "v": [
+      "dracula",
+      "werewolf"
+     ]
+    },
+    {
+     "t": "You have survived a lot and it shows in a good way",
+     "v": [
+      "phoenix",
+      "witch"
+     ]
+    }
+   ]
+  }
+ ]
+}
