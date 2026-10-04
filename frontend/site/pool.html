@@ -190,7 +190,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .phelp{margin-top:12px;font-size:13.5px;color:var(--ink-soft,#5A657C)}
 </style>
 <div class="pooltop"><h1>&#127921; 8-Ball Pool</h1>
-  <select id="pmode" aria-label="Opponent"><option value="easy">vs Computer: Easy</option><option value="medium">vs Computer: Medium</option><option value="hard">vs Computer: Hard</option><option value="two">2 players (same phone)</option></select>
+  <select id="pmode" aria-label="Opponent"><option value="easy">vs Computer: Easy</option><option value="medium">vs Computer: Medium</option><option value="hard">vs Computer: Hard</option><option value="online">Play a friend online</option><option value="two">2 players (same phone)</option></select>
   <button id="pnew">New game</button></div>
 <div class="pls"><div class="pl" id="p0"></div><div class="pl" id="p1"></div></div>
 <div id="poolwrap"><canvas id="pool" aria-label="Pool table"></canvas><div id="pover" hidden><div><b id="pwin"></b><button id="pagain">Play again</button></div></div></div>
@@ -580,8 +580,8 @@ function freeSpot(balls, x, y){
   function roundRect(x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
   // ---- game flow
   var aiAim = null;
-  function humanTurn(){ return mode === "two" || st.turn === 0; }
-  function playerName(i){ return mode === "two" ? "Player " + (i + 1) : names[i]; }
+  function humanTurn(){ return mode === "online" ? onlineMyTurn() : (mode === "two" || st.turn === 0); }
+  function playerName(i){ return mode === "online" ? (i === myIdx ? "You" : "Friend") : mode === "two" ? "Player " + (i + 1) : names[i]; }
   function chips(i){
     var g = st.groups[i];
     if (!g) return '<small>' + (st.open ? "Table open" : "") + '</small>';
@@ -596,25 +596,28 @@ function freeSpot(balls, x, y){
     $("pshoot").disabled = busy || st.over || !humanTurn();
   }
   function newGame(){
-    balls = rack(); st = {turn: 0, groups: [null, null], open: true, over: false, winner: null, ballInHand: false, breakShot: true};
+    balls = rack(mode === "online" && room ? seedOf(room.code) : undefined); st = {turn: 0, groups: [null, null], open: true, over: false, winner: null, ballInHand: false, breakShot: true};
     placing = true; aim = 0; busy = false; aiAim = null; $("pover").hidden = true;
     hud("Break! You may move the white ball behind the line, then aim and shoot."); draw();
   }
   function afterShot(){
     var res = judge(st, balls, ev), msg;
+    if (mode === "online" && onlineReplay){ onlineReplay = false; applySnap(onlineSnapPending); afterRemote(onlineSnapPending); draw(); return; }
+    if (mode === "online" && onlineShooting){ onlineShooting = false; onlineSend(res); }
     placing = false;
     if (st.over){
       var won = st.winner;
-      if (mode !== "two"){ var s = stats(); if (won === 0) s.w++; else s.l++; try { localStorage.setItem("xc_pool_stats", JSON.stringify(s)); } catch (e) {} }
+      if (mode !== "two" && mode !== "online"){ var s = stats(); if (won === 0) s.w++; else s.l++; try { localStorage.setItem("xc_pool_stats", JSON.stringify(s)); } catch (e) {} }
       $("pwin").textContent = (mode === "two" ? "Player " + (won + 1) + " wins!" : won === 0 ? "You win! \uD83C\uDFC6" : "The computer wins.") + (res.msg !== "WIN" ? " " + res.msg : "");
+      if (mode === "online"){ overShown = true; $("pwin").textContent = (won === myIdx ? "You win! \uD83C\uDFC6" : "Your friend wins.") + (res.msg !== "WIN" ? " " + res.msg : ""); }
       $("pover").hidden = false; hud(""); draw(); return;
     }
-    var you = mode !== "two" && st.turn === 0;
+    var you = mode === "online" ? st.turn === myIdx : (mode !== "two" && st.turn === 0);
     if (res.foul) msg = "Foul: " + res.foul.replace("You must", you ? "You must" : "They had to") + " " + (you ? "You have" : playerName(st.turn) + " has") + " the ball in hand.";
     else if (res.keepTurn) msg = "Nice! " + (you ? "You go" : playerName(st.turn) + " goes") + " again.";
     else msg = you ? "Your turn." : playerName(st.turn) + "'s turn.";
     hud(msg); draw();
-    if (!humanTurn()) setTimeout(aiTurn, 800);
+    if (!humanTurn() && mode !== "online") setTimeout(aiTurn, 800);
   }
   function run(){
     busy = true; ev = []; hud(); var last = performance.now();
@@ -628,7 +631,7 @@ function freeSpot(balls, x, y){
       if (moving(balls)) requestAnimationFrame(frame); else { busy = false; afterShot(); }
     })(last);
   }
-  function fire(){ if (busy || st.over || !humanTurn()) return; if (!freeSpot(balls, balls[0].x, balls[0].y)) return; shoot(balls, aim, power); run(); }
+  function fire(){ if (busy || st.over || !humanTurn()) return; if (!freeSpot(balls, balls[0].x, balls[0].y)) return; if (mode === "online"){ onlineShot = {ang: aim, power: power, cx: balls[0].x, cy: balls[0].y}; onlineShooting = true; } shoot(balls, aim, power); run(); }
   function aiTurn(){
     if (st.over || humanTurn()) return;
     if (st.ballInHand) placeForAI(st, balls, st.turn);
@@ -640,6 +643,75 @@ function freeSpot(balls, x, y){
       if (k < 1) requestAnimationFrame(turn); else { aim = s.ang; aiAim = null; shoot(balls, s.ang, s.power); run(); }
     })(t0);
   }
+  // ---- online: play a friend (rooms on the server; the shooter sends the shot + the final positions)
+  var room = null, me = null, myIdx = 0, lastN = 0, onlineShot = null, onlineShooting = false, onlineReplay = false, onlineSnapPending = null, overShown = false;
+  function ck2(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function gapi(p, b){ return fetch("/api/games/rooms" + p, {method: b ? "POST" : "GET", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck2("xc_csrf")}, body: b ? JSON.stringify(b) : undefined})
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, status: r.status, d: d}; }); }); }
+  function seedOf(code){ var h = 7; String(code || "").split("").forEach(function(c){ h = (h * 31 + c.charCodeAt(0)) & 0xffff; }); return h || 1; }
+  function onlineMyTurn(){ return !!room && room.stage === "playing" && !!st && st.turn === myIdx && !onlineReplay; }
+  var panel = document.createElement("div"); panel.id = "ponline"; panel.hidden = true;
+  panel.style.cssText = "background:var(--card,#fff);border:1.5px solid var(--line,#E4E8F2);border-radius:14px;padding:12px;margin:0 0 10px;font-size:14.5px";
+  var topBar = document.querySelector(".pooltop"); if (topBar) topBar.parentNode.insertBefore(panel, topBar.nextSibling);
+  function esc2(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+  function showPanel(){
+    panel.hidden = mode !== "online"; if (panel.hidden) return;
+    var b = "border:0;border-radius:10px;padding:9px 13px;font:inherit;font-weight:800;cursor:pointer;margin:4px 6px 4px 0";
+    if (!room){ panel.innerHTML = "<b>Play a friend online</b><div style=\"margin-top:6px\"><button data-on=\"create\" style=\"" + b + ";background:#1B4DFF;color:#fff\">Create game</button>"
+      + "<input id=\"pcode\" placeholder=\"Code\" maxlength=\"8\" style=\"width:110px;padding:9px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit;text-transform:uppercase\"> <button data-on=\"join\" style=\"" + b + ";background:#0D1424;color:#fff\">Join</button></div><div id=\"ponmsg\" style=\"color:#B91C1C\"></div>"; return; }
+    var link = "https://xpertcreation.com/pool?join=" + room.code;
+    if (room.stage === "open") panel.innerHTML = "<b>Code: " + esc2(room.code) + "</b> \u00b7 waiting for your friend to join\u2026<div style=\"margin-top:6px\"><a target=\"_blank\" rel=\"noopener\" style=\"" + b + ";display:inline-block;background:#25D366;color:#fff;text-decoration:none\" href=\"https://wa.me/?text="
+      + encodeURIComponent("Play 8-Ball Pool with me on XpertCreation! \uD83C\uDFB1 " + link) + "\">Invite on WhatsApp</a><button data-on=\"leave\" style=\"" + b + ";background:#F1F4FA\">Cancel</button></div>";
+    else panel.innerHTML = "<b>Online game " + esc2(room.code) + "</b> \u00b7 you are " + (myIdx === 0 ? "Player 1 (you break)" : "Player 2") + (room.stage === "over" ? " \u00b7 game over" : "")
+      + " <button data-on=\"leave\" style=\"" + b + ";background:#F1F4FA\">" + (room.stage === "over" ? "Close" : "Leave game") + "</button>";
+  }
+  function setRoom(d){
+    var fresh = !room || room.code !== d.code; room = d; me = d.you || me; myIdx = me === "guest" ? 1 : 0;
+    if (fresh){ lastN = 0; overShown = false; newGame(); hud(myIdx === 0 ? "You break! Move the white ball behind the line if you like, then shoot." : "Your friend breaks first. Watch their shot."); }
+    var s = d.state || {};
+    if (s.n && s.n > lastN && !busy){
+      if (s.by !== me && s.n === lastN + 1 && s.shot) replay(s);
+      else { applySnap(s.snap); lastN = s.n; afterRemote(s.snap); }
+    }
+    if (room.stage === "over" && !overShown && !(s.snap && s.snap.st && s.snap.st.over) && lastN === (s.n || 0)){
+      overShown = true; st.over = true; $("pwin").textContent = (room.result === me ? "Your friend left. You win! \uD83C\uDFC6" : "The game ended."); $("pover").hidden = false; hud("");
+    }
+    showPanel(); hud(); draw();
+  }
+  function applySnap(snap){
+    if (!snap || !snap.balls) return;
+    snap.balls.forEach(function(sb){ var b = balls.filter(function(x){ return x.n === sb.n; })[0]; if (b){ b.x = sb.x; b.y = sb.y; b.in = !!sb.in; b.vx = b.vy = 0; } });
+    st = JSON.parse(JSON.stringify(snap.st)); placing = false;
+  }
+  function afterRemote(snap){
+    var res = (snap && snap.res) || {}, mine = st.turn === myIdx;
+    if (st.over){ if (!overShown){ overShown = true; $("pwin").textContent = (st.winner === myIdx ? "You win! \uD83C\uDFC6" : "Your friend wins.") + (res.msg && res.msg !== "WIN" ? " " + res.msg : ""); $("pover").hidden = false; } hud(""); return; }
+    hud(res.foul ? "Foul: " + res.foul + " " + (mine ? "You have the ball in hand." : "Your friend has the ball in hand.") : mine ? "Your turn." : "Your friend's turn.");
+  }
+  function replay(s){
+    lastN = s.n; var c = balls[0]; c.in = false; c.x = s.shot.cx; c.y = s.shot.cy; aim = s.shot.ang; power = s.shot.power;
+    onlineReplay = true; onlineSnapPending = s.snap; shoot(balls, s.shot.ang, s.shot.power); run();
+  }
+  function onlineSend(res){
+    var snap = {balls: balls.map(function(b){ return {n: b.n, x: Math.round(b.x * 100) / 100, y: Math.round(b.y * 100) / 100, in: !!b.in}; }),
+                st: JSON.parse(JSON.stringify(st)), res: {foul: res.foul || null, keepTurn: !!res.keepTurn, msg: res.msg || ""}};
+    gapi("/" + room.code + "/move/", {shot: onlineShot, snap: snap}).then(function(r){
+      if (!r.ok){ hud("Your shot could not be sent: " + ((r.d && r.d.detail) || "try again") + "."); return; }
+      room = r.d; lastN = (r.d.state && r.d.state.n) || lastN; showPanel(); hud();
+    });
+  }
+  function leaveOnline(){ if (room) gapi("/" + room.code + "/leave/", {}); room = null; me = null; lastN = 0; showPanel(); }
+  panel.addEventListener("click", function(e){
+    var t = e.target.closest("[data-on]"); if (!t) return; var a = t.getAttribute("data-on"), m = document.getElementById("ponmsg");
+    if (a === "create") gapi("/create/", {game: "pool"}).then(function(r){ if (r.status === 401 || r.status === 403){ location.href = "/login"; return; } if (!r.ok){ if (m) m.textContent = r.d.detail || "Could not create a game."; return; } setRoom(r.d); });
+    if (a === "join"){ var code = (document.getElementById("pcode").value || "").trim().toUpperCase(); if (!code) return;
+      gapi("/join/", {code: code}).then(function(r){ if (r.status === 401 || r.status === 403){ location.href = "/login"; return; } if (!r.ok){ if (m) m.textContent = r.d.detail || "Could not join."; return; } setRoom(r.d); }); }
+    if (a === "leave"){ leaveOnline(); newGame(); }
+  });
+  setInterval(function(){
+    if (mode !== "online" || !room || busy || document.hidden) return;
+    gapi("/" + room.code + "/").then(function(r){ if (r.ok && !busy) setRoom(r.d); });
+  }, 1500);
   // ---- input
   function pos(e){ var t = e.touches ? e.touches[0] : e; return toTable(t.clientX, t.clientY); }
   function down(e){
@@ -663,13 +735,16 @@ function freeSpot(balls, x, y){
   $("ppower").oninput = function(){ power = this.value / 100; $("ppv").textContent = this.value + "%"; draw(); };
   $("pshoot").onclick = fire;
   $("pl").onclick = function(){ aim -= 0.004; draw(); }; $("pr").onclick = function(){ aim += 0.004; draw(); };
-  $("pnew").onclick = function(){ if (!st || st.over || confirm("Start a new game?")) newGame(); };
-  $("pagain").onclick = newGame;
+  $("pnew").onclick = function(){ if (!st || st.over || confirm("Start a new game?")){ if (mode === "online") leaveOnline(); newGame(); } };
+  $("pagain").onclick = function(){ if (mode === "online") leaveOnline(); newGame(); };
   $("pmode").value = mode;
-  $("pmode").onchange = function(){ mode = this.value; try { localStorage.setItem("xc_pool_mode", mode); } catch (e) {} newGame(); };
+  $("pmode").onchange = function(){ var was = mode; mode = this.value; if (was === "online" && mode !== "online") leaveOnline(); if (mode !== "online"){ try { localStorage.setItem("xc_pool_mode", mode); } catch (e) {} } showPanel(); newGame(); };
   window.addEventListener("resize", layout);
   $("ppower").value = 55; $("ppv").textContent = "55%";
   newGame(); layout();
+  var jq = new URLSearchParams(location.search).get("join");
+  if (jq){ mode = "online"; $("pmode").value = "online"; showPanel();
+    gapi("/join/", {code: jq.toUpperCase()}).then(function(r){ if (r.status === 401 || r.status === 403){ location.href = "/login?next=" + encodeURIComponent(location.pathname + location.search); return; } if (r.ok) setRoom(r.d); else { showPanel(); var m = document.getElementById("ponmsg"); if (m) m.textContent = r.d.detail || "Could not join."; } }); }
 })();
 
 </script>

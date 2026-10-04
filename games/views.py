@@ -341,7 +341,7 @@ def my_stats(request):
 # frontend har do second halat poochta hai. Chess ki chaalein tez tez
 # nahi hoti, to ye kaafi hai aur server par bojh bhi kam.
 
-ROOM_GAMES = {"chess", "tictac"}
+ROOM_GAMES = {"chess", "tictac", "pool"}
 # H aur X, U aur V, S aur 5, Z aur 2 — ye chhote font mein mil jate
 # hain. Sirf wo harf rakhe hain jo saaf alag nazar aate hain.
 ROOM_CODE_CHARS = "ACDEFGJKLMNPQRTWY3479"   # I, O, 0, 1 nahi — parhne mein galti hoti hai
@@ -472,6 +472,7 @@ def room_move(request, code):
         return _err("That game is not running.")
     if room.turn != side:
         return _err("Not your turn.")
+    pool_next = None
 
     if room.game == "tictac":
         # Nau khane — jaanch yahin ho sakti hai, is liye yahin hoti hai.
@@ -501,6 +502,25 @@ def room_move(request, code):
             room.result = "draw"
             room.stage = Room.OVER
 
+    elif room.game == "pool":
+        # Pool: the shooter's browser works out the shot and sends the final positions; we keep the latest one.
+        import json as _json
+        shot, snap = request.data.get("shot"), request.data.get("snap")
+        if not isinstance(shot, dict) or not isinstance(snap, dict) or not isinstance(snap.get("st"), dict):
+            return _err("Send the shot.")
+        if len(_json.dumps(snap)) > 15000 or len(_json.dumps(shot)) > 400:
+            return _err("That shot is too big.")
+        n = int((room.state or {}).get("n") or 0) + 1
+        if n > 400:
+            return _err("That game has gone on long enough.")
+        room.state = {"n": n, "by": side, "shot": shot, "snap": snap}
+        nxt = snap["st"].get("turn")
+        pool_next = "host" if nxt == 0 else "guest" if nxt == 1 else None
+        if snap["st"].get("over"):
+            w = snap["st"].get("winner")
+            room.stage = Room.OVER
+            room.result = "host" if w == 0 else "guest" if w == 1 else "draw"
+
     else:
         # Chess: chaal browser mein jaanchi ja chuki hai. Server sirf halat
         # rakhta hai aur baari sambhalta hai.
@@ -523,7 +543,7 @@ def room_move(request, code):
                           else "draw"
 
     if room.stage == Room.PLAYING:
-        room.turn = "guest" if side == "host" else "host"
+        room.turn = pool_next if (room.game == "pool" and pool_next) else ("guest" if side == "host" else "host")
     room.moved_at = timezone.now()
     room.save(update_fields=["state", "turn", "stage", "result", "moved_at"])
     return Response(_room_json(room, request.user))
