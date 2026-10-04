@@ -226,4 +226,4 @@
   if (!setup()){ var mo = new MutationObserver(function(){ if (setup()) mo.disconnect(); }); mo.observe(document.documentElement, {childList: true, subtree: true}); }
 })();
 /* Share on XpertConnect, next to every WhatsApp share button */
-(function(){ if (document.querySelector("script[src*='xcshare-1.js']")) return; var s = document.createElement("script"); s.src = "/js/xcshare-1.js?v=1"; s.defer = true; document.head.appendChild(s); })();
+(function(){ if (document.querySelector("script[src*='xcshare-1.js']")) return; var s = document.createElement("script"); s.src = "/js/xcshare-1.js?v=2"; s.defer = true; document.head.appendChild(s); })();

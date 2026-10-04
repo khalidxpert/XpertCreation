@@ -61,5 +61,7 @@
   function scan(root){ [].forEach.call((root || document).querySelectorAll ? (root || document).querySelectorAll("a[href*='wa.me'], a[href*='api.whatsapp.com']") : [], function(a){ if (isShare(a)) add(a); }); }
   new MutationObserver(function(list){ list.forEach(function(mu){ [].forEach.call(mu.addedNodes, function(n){ if (n.nodeType === 1){ if (n.matches && n.matches("a") && isShare(n)) add(n); else scan(n); } }); }); })
     .observe(document.body, {childList: true, subtree: true});
+  document.addEventListener("click", function(e){ var b = e.target.closest && e.target.closest("[data-xcshare]"); if (!b) return; e.preventDefault();
+    var h = (document.querySelector("h1") || {}).textContent || document.title; open(h.replace(/\s+/g, " ").trim() + "\n" + location.href.split("#")[0]); });
   scan(document);
 })();
