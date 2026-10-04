@@ -168,6 +168,42 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .blg a b{display:block;font-size:16px}.blg a small{color:var(--ink-soft,#5A657C)}.bln{color:var(--ink-soft,#5A657C);font-size:13.5px;line-height:1.55}</style>
 <h1 style="font-size:24px;margin:6px 0 0">&#9889; Check your electricity and gas bill</h1>
 <p class="bln">Tap your company, then enter the 14-digit reference number printed on your bill. These are the companies' official bill pages; they open in a new tab.</p>
+<div id="mybills" style="background:var(--card,#fff);border:1.5px solid #BFD6FF;border-radius:18px;padding:16px;margin:12px 0 16px"></div>
+<script>
+(function(){
+  "use strict";
+  var box = document.getElementById("mybills"), D = null;
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function send(u, m, b){ return fetch(u, {method: m, credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: b ? JSON.stringify(b) : undefined}).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); }); }
+  var inp = "padding:9px 10px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit;margin:4px 6px 4px 0";
+  function draw(){
+    var h = '<b style="font-size:17px">\uD83D\uDCCC My billers</b><p style="margin:4px 0 10px;color:var(--ink-soft,#5A657C);font-size:14px">Save your bills once. Open them in one tap, and get an email and a notification 3 days before the due day.</p>';
+    h += D.billers.length ? D.billers.map(function(b){
+      var hot = b.days_left <= 3;
+      return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line,#E4E8F2)"><span style="flex:1;min-width:180px"><b>' + esc(b.nickname) + '</b> \u00b7 ' + esc(b.company_name)
+        + '<br><small style="color:var(--ink-soft,#5A657C)">' + esc(b.ref) + ' \u00b7 due around the ' + b.due_day + (b.due_day === 1 || b.due_day === 21 ? "st" : b.due_day === 2 || b.due_day === 22 ? "nd" : b.due_day === 3 || b.due_day === 23 ? "rd" : "th")
+        + ' \u00b7 <span style="font-weight:800;color:' + (hot ? "#B91C1C" : "#166534") + '">' + (b.days_left === 0 ? "due today" : b.days_left + " days left") + '</span></small></span>'
+        + '<a href="' + esc(b.link) + '" target="_blank" rel="noopener" style="padding:8px 12px;border-radius:10px;background:#1B4DFF;color:#fff;font-weight:800;text-decoration:none">View bill</a>'
+        + '<button data-del="' + b.id + '" style="border:0;background:none;color:#B91C1C;font:inherit;cursor:pointer">Delete</button></div>'; }).join("") : '<p style="margin:0 0 6px">No billers saved yet.</p>';
+    h += '<details style="margin-top:8px"' + (D.billers.length ? "" : " open") + '><summary style="cursor:pointer;font-weight:800;color:#1B4DFF">+ Add biller</summary><div style="margin-top:8px">'
+      + '<input id="bn" placeholder="Name, e.g. Home electricity" maxlength="40" style="' + inp + '"><select id="bc" style="' + inp + '">' + D.companies.map(function(c){ return '<option value="' + c.key + '">' + esc(c.name) + '</option>'; }).join("") + '</select>'
+      + '<input id="br" placeholder="Reference number (14 digits)" inputmode="numeric" style="' + inp + ';min-width:220px"><select id="bd" style="' + inp + '">'
+      + Array.apply(null, Array(28)).map(function(_, i){ return '<option value="' + (i + 1) + '"' + (i + 1 === 15 ? " selected" : "") + '>Due around day ' + (i + 1) + '</option>'; }).join("") + '</select>'
+      + '<button data-add style="border:0;border-radius:10px;padding:10px 16px;background:#0D1424;color:#fff;font:inherit;font-weight:800;cursor:pointer">Save</button> <span id="bm" style="color:#B91C1C"></span>'
+      + '<p style="font-size:12.5px;color:var(--ink-soft,#5A657C);margin:6px 0 0">Your reference numbers are private: only you can see them. Check the due date on your first bill and pick the closest day.</p></div></details>';
+    box.innerHTML = h;
+  }
+  function v(id){ return (document.getElementById(id) || {}).value || ""; }
+  function load(){ fetch("/api/billers/", {credentials: "same-origin"}).then(function(r){ if (r.status === 401 || r.status === 403){ box.innerHTML = '<b>\uD83D\uDCCC My billers</b><p style="margin:6px 0 0">Save your bills and get reminders before the due date. <a href="/login">Sign in</a> to start.</p>'; return null; } return r.json(); }).then(function(d){ if (d){ D = d; draw(); } }); }
+  box.addEventListener("click", function(e){
+    var t = e.target, x;
+    if ((x = t.closest("[data-del]"))){ if (confirm("Delete this biller?")) send("/api/billers/" + x.getAttribute("data-del") + "/", "DELETE").then(load); return; }
+    if (t.closest("[data-add]")) send("/api/billers/", "POST", {nickname: v("bn"), company: v("bc"), ref: v("br"), due_day: v("bd")}).then(function(r){ if (!r.ok){ document.getElementById("bm").textContent = r.d.detail || "Could not save."; return; } load(); });
+  });
+  load();
+})();
+</script>
 <p><a href="/tools/electricity-bill-calculator" style="display:inline-block;padding:11px 16px;border-radius:12px;background:#1B4DFF;color:#fff;font-weight:800;text-decoration:none">&#129518; Estimate your bill from units used</a></p>
 <h2 style="font-size:18px">Electricity</h2>
 <div class="blg">
