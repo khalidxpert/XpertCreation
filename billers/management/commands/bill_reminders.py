@@ -30,8 +30,8 @@ class Command(BaseCommand):
             if left not in (3, 0) or b.last_reminded == today:
                 continue
             when = "today" if left == 0 else "in 3 days (%s)" % due.strftime("%-d %B")
-            text = "Your %s bill (%s) is due %s." % (company_name(b.company), b.nickname, when)
-            link = bill_link(b.company, b.ref)
+            text = "Your %s bill (%s) is due %s." % (company_name(b.company, b), b.nickname, when)
+            link = bill_link(b.company, b.ref, b) or "https://xpertcreation.com/bills"
             if notify:
                 try:
                     notify(b.user, "bill", text, "/bills")
