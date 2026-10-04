@@ -187,7 +187,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<input class="bti" id="btq" list="btl" placeholder="Type a city, e.g. Multan" value="' + esc(cur) + '"><datalist id="btl">' + have.map(function(c){ return '<option value="' + esc(c) + '">'; }).join("") + '</datalist>'
       + '<div class="btc">' + POP.filter(function(c){ return have.indexOf(c) >= 0; }).map(function(c){ return '<button data-city="' + c + '"' + (c === cur ? ' class="on"' : '') + '>' + c + '</button>'; }).join("") + '</div>'; }
   function show(){
-    if (!cur){ box.innerHTML = head() + '<p style="color:var(--ink-soft)">Choose a city to see its bus terminals.</p>'; return; }
+    if (!cur){ box.innerHTML = head() + '<h3 style="margin:6px 0 8px">All cities (' + CITIES.length + ')</h3><div class="btc">' + CITIES.map(function(c){ return '<button data-city="' + esc(c.city) + '">' + esc(c.city) + (c.n > 1 ? ' <small style="opacity:.6">' + c.n + '</small>' : '') + '</button>'; }).join("") + '</div>'; bind(); return; }
     get("/api/bus/terminals/?city=" + encodeURIComponent(cur)).then(function(d){
       var T = d.terminals || [], h = head();
       if (!T.length) h += '<div class="btt">No Daewoo or Niazi terminal found in <b>' + esc(cur) + '</b>. Try a nearby city.</div>';
