@@ -9,6 +9,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Afsana, Bookmark, Comment, Follow, Like, Qist, Report
+from .moderation import check, rules
 
 PER_DAY_NEW, PER_DAY_QIST, MAX_BODY = 3, 10, 30000
 
@@ -31,8 +32,12 @@ def _notify(user, text, link):
             continue
 
 
+def _trusted(u):
+    return _staff(u) or Afsana.objects.filter(author=u, status="published", hidden=False).count() >= 2
+
+
 def _card(a, n_qists=None):
-    return {"id": a.id, "title": a.title, "writer": _name(a.author), "writer_id": a.author_id, "category": a.category, "lang": a.lang,
+    return {"status": a.status, "note": a.review_note, "id": a.id, "title": a.title, "writer": _name(a.author), "writer_id": a.author_id, "category": a.category, "lang": a.lang,
             "summary": a.summary, "qists": n_qists if n_qists is not None else a.qists.count(), "likes": a.likes, "views": a.views,
             "complete": a.complete, "updated": a.updated_at.isoformat()}
 
@@ -47,16 +52,17 @@ def _visible(u):
 def afsanay(request):
     u = request.user
     if request.method == "GET":
-        qs = _visible(u).filter(hidden=False).annotate(nq=Count("qists")).filter(nq__gt=0)
+        qs = _visible(u).filter(hidden=False, status="published").annotate(nq=Count("qists", filter=Q(qists__approved=True))).filter(nq__gt=0)
         g = request.GET
         if g.get("cat") in dict(Afsana.CATS): qs = qs.filter(category=g["cat"])
         if g.get("lang") in ("ur", "en"): qs = qs.filter(lang=g["lang"])
         if g.get("writer", "").isdigit(): qs = qs.filter(author_id=int(g["writer"]))
         if g.get("q"): qs = qs.filter(Q(title__icontains=g["q"][:60]) | Q(summary__icontains=g["q"][:60]))
-        if g.get("mine") and u.is_authenticated: qs = _visible(u).filter(author=u).annotate(nq=Count("qists"))
+        if g.get("mine") and u.is_authenticated: qs = Afsana.objects.filter(author=u).select_related("author").annotate(nq=Count("qists"))
         if g.get("saved") and u.is_authenticated: qs = qs.filter(id__in=Bookmark.objects.filter(user=u).values("afsana_id"))
         qs = qs.order_by("-likes", "-views") if g.get("sort") == "top" else qs.order_by("-updated_at")
-        return Response({"afsanay": [_card(a, a.nq) for a in qs[:60]], "cats": [{"key": k, "name": n} for k, n in Afsana.CATS]})
+        return Response({"afsanay": [_card(a, a.nq) for a in qs[:60]], "cats": [{"key": k, "name": n} for k, n in Afsana.CATS], "staff": _staff(u),
+                         "pending": Afsana.objects.filter(status="pending").count() + Qist.objects.filter(approved=False, afsana__status="published").count() if _staff(u) else 0})
     if not u.is_authenticated:
         return Response({"detail": "Sign in to write."}, status=401)
     d = request.data
@@ -67,22 +73,32 @@ def afsanay(request):
         return Response({"detail": "You can start up to %d new stories a day." % PER_DAY_NEW}, status=429)
     if not d.get("own"):
         return Response({"detail": "Please confirm this is your own writing."}, status=400)
+    summary, qt = str(d.get("summary") or "").strip()[:300], str(d.get("qist_title") or "").strip()[:120]
+    ok, why, kind = check("\n".join([title, summary, qt, body[:MAX_BODY]]))
+    if not ok and kind == "rules":
+        return Response({"detail": why}, status=400)
+    live = ok and kind != "unchecked" and _trusted(u)
     a = Afsana.objects.create(author=u, title=title, category=d.get("category") if d.get("category") in dict(Afsana.CATS) else "family",
-                              lang="en" if d.get("lang") == "en" else "ur", summary=str(d.get("summary") or "").strip()[:300])
-    Qist.objects.create(afsana=a, n=1, title=str(d.get("qist_title") or "").strip()[:120], body=body[:MAX_BODY])
-    for f in Follow.objects.filter(writer=u).select_related("follower")[:500]:
-        _notify(f.follower, "%s published a new story: %s" % (_name(u), title), "/afsanay?id=%d" % a.id)
-    return Response(_card(a, 1), status=201)
+                              lang="en" if d.get("lang") == "en" else "ur", summary=summary, status="published" if live else "pending")
+    Qist.objects.create(afsana=a, n=1, title=qt, body=body[:MAX_BODY], approved=live, flag=why)
+    if live:
+        for f in Follow.objects.filter(writer=u).select_related("follower")[:500]:
+            _notify(f.follower, "%s published a new story: %s" % (_name(u), title), "/afsanay?id=%d" % a.id)
+    out = _card(a, 1); out["review"] = not live
+    return Response(out, status=201)
 
 
 @api_view(["GET", "DELETE", "POST"])
 @permission_classes([AllowAny])
 def afsana(request, pk):
     u = request.user; a = _visible(u).filter(pk=pk).first()
+    if a and a.status != "published" and not (u.is_authenticated and (a.author_id == u.pk or _staff(u))):
+        a = None
     if not a:
         return Response({"detail": "Story not found."}, status=404)
     if request.method == "GET":
-        out = _card(a); out["list"] = [{"n": q.n, "title": q.title, "date": q.created_at.isoformat()} for q in a.qists.order_by("n")]
+        own = u.is_authenticated and (a.author_id == u.pk or _staff(u))
+        out = _card(a); out["list"] = [{"n": q.n, "title": q.title, "date": q.created_at.isoformat(), "pending": not q.approved} for q in a.qists.order_by("n") if q.approved or own]
         out["mine"] = u.is_authenticated and a.author_id == u.pk; out["staff"] = _staff(u); out["hidden"] = a.hidden
         if u.is_authenticated:
             out.update(liked=Like.objects.filter(user=u, afsana=a).exists(), saved=Bookmark.objects.filter(user=u, afsana=a).exists(),
@@ -102,11 +118,14 @@ def afsana(request, pk):
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def qist(request, pk, n):
-    a = _visible(request.user).filter(pk=pk).first(); q = a and a.qists.filter(n=n).first()
+    u = request.user; a = _visible(u).filter(pk=pk).first(); q = a and a.qists.filter(n=n).first()
+    own = bool(a and u.is_authenticated and (a.author_id == u.pk or _staff(u)))
+    if q and (not q.approved or a.status != "published") and not own:
+        q = None
     if not q:
         return Response({"detail": "Not found."}, status=404)
     Afsana.objects.filter(pk=a.pk).update(views=F("views") + 1)
-    last = a.qists.order_by("-n").values_list("n", flat=True).first()
+    last = (a.qists if own else a.qists.filter(approved=True)).order_by("-n").values_list("n", flat=True).first()
     return Response({"story": a.title, "id": a.id, "lang": a.lang, "writer": _name(a.author), "n": q.n, "title": q.title, "body": q.body,
                      "prev": q.n - 1 if q.n > 1 else None, "next": q.n + 1 if q.n < last else None, "complete": a.complete})
 
@@ -122,9 +141,16 @@ def add_qist(request, pk):
         return Response({"detail": "A qist needs at least 200 characters."}, status=400)
     if Qist.objects.filter(afsana__author=u, created_at__gte=timezone.now() - timedelta(days=1)).count() >= PER_DAY_QIST:
         return Response({"detail": "You can publish up to %d qists a day." % PER_DAY_QIST}, status=429)
+    qt = str(request.data.get("title") or "").strip()[:120]
+    ok, why, kind = check(qt + "\n" + body[:MAX_BODY])
+    if not ok and kind == "rules":
+        return Response({"detail": why}, status=400)
+    live = ok and kind != "unchecked" and _trusted(u) and a.status == "published"
     n = (a.qists.order_by("-n").values_list("n", flat=True).first() or 0) + 1
-    Qist.objects.create(afsana=a, n=n, title=str(request.data.get("title") or "").strip()[:120], body=body[:MAX_BODY])
+    Qist.objects.create(afsana=a, n=n, title=qt, body=body[:MAX_BODY], approved=live, flag=why)
     a.complete = bool(request.data.get("complete")); a.save()
+    if not live:
+        return Response({"n": n, "review": True}, status=201)
     who = set(Bookmark.objects.filter(afsana=a).values_list("user_id", flat=True)) | set(Follow.objects.filter(writer=u).values_list("follower_id", flat=True))
     from django.contrib.auth import get_user_model
     for r in get_user_model().objects.filter(pk__in=list(who)[:1000]).exclude(pk=u.pk):
@@ -158,6 +184,9 @@ def act(request, pk, what):
         body = str(request.data.get("body") or "").strip()[:1000]
         if len(body) < 2:
             return Response({"detail": "Write a comment."}, status=400)
+        ok, why, kind = check(body)
+        if not ok:
+            return Response({"detail": why if kind == "rules" else "This comment can't be posted. Please keep it kind."}, status=400)
         if Comment.objects.filter(user=u, created_at__gte=timezone.now() - timedelta(minutes=10)).count() >= 10:
             return Response({"detail": "Slow down a little."}, status=429)
         c = Comment.objects.create(afsana=a, user=u, body=body)
@@ -171,3 +200,48 @@ def act(request, pk, what):
             a.hidden = True; a.save(update_fields=["hidden"])
         return Response({"reported": True})
     return Response({"detail": "Unknown action."}, status=400)
+
+
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def review(request):
+    """Staff: stories and qists waiting for review; approve or reject (with a reason)."""
+    if not _staff(request.user):
+        return Response({"detail": "Staff only."}, status=403)
+    if request.method == "GET":
+        S = Afsana.objects.filter(status="pending").select_related("author").order_by("created_at")[:50]
+        Qs = Qist.objects.filter(approved=False, afsana__status="published").select_related("afsana", "afsana__author").order_by("created_at")[:50]
+        def first(a):
+            q = a.qists.order_by("n").first(); return (q.body[:3000], q.flag) if q else ("", "")
+        return Response({"stories": [dict(_card(a), first=first(a)[0], flag=first(a)[1]) for a in S],
+                         "qists": [{"id": q.id, "story": q.afsana.title, "story_id": q.afsana_id, "writer": _name(q.afsana.author), "n": q.n, "title": q.title,
+                                    "body": q.body[:3000], "flag": q.flag} for q in Qs]})
+    d = request.data; act, why = d.get("action"), str(d.get("reason") or "").strip()[:300]
+    if d.get("type") == "story":
+        a = Afsana.objects.filter(pk=d.get("id")).first()
+        if not a:
+            return Response({"detail": "Not found."}, status=404)
+        if act == "approve":
+            a.status, a.review_note = "published", ""; a.save(); a.qists.filter(n=1).update(approved=True, flag="")
+            _notify(a.author, "Your story \u201c%s\u201d is now published. \U0001F389" % a.title, "/afsanay?id=%d" % a.id)
+            for f in Follow.objects.filter(writer=a.author).select_related("follower")[:500]:
+                _notify(f.follower, "%s published a new story: %s" % (_name(a.author), a.title), "/afsanay?id=%d" % a.id)
+        else:
+            a.status, a.review_note = "rejected", why or "It does not follow our story rules."; a.save()
+            _notify(a.author, "Your story \u201c%s\u201d was not published: %s" % (a.title, a.review_note), "/afsanay?mine=1")
+        return Response({"ok": True})
+    q = Qist.objects.filter(pk=d.get("id")).select_related("afsana", "afsana__author").first()
+    if not q:
+        return Response({"detail": "Not found."}, status=404)
+    if act == "approve":
+        q.approved, q.flag = True, ""; q.save()
+        who = set(Bookmark.objects.filter(afsana=q.afsana).values_list("user_id", flat=True)) | set(Follow.objects.filter(writer=q.afsana.author).values_list("follower_id", flat=True))
+        from django.contrib.auth import get_user_model
+        for r in get_user_model().objects.filter(pk__in=list(who)[:1000]).exclude(pk=q.afsana.author_id):
+            _notify(r, "New qist %d of \u201c%s\u201d by %s" % (q.n, q.afsana.title, _name(q.afsana.author)), "/afsanay?id=%d&q=%d" % (q.afsana_id, q.n))
+        _notify(q.afsana.author, "Qist %d of \u201c%s\u201d is now published." % (q.n, q.afsana.title), "/afsanay?id=%d" % q.afsana_id)
+    else:
+        _notify(q.afsana.author, "Qist %d of \u201c%s\u201d was not published: %s" % (q.n, q.afsana.title, why or "it does not follow our story rules"), "/afsanay?id=%d" % q.afsana_id)
+        q.delete()
+    return Response({"ok": True})

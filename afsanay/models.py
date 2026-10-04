@@ -13,6 +13,8 @@ class Afsana(models.Model):
     lang = models.CharField(max_length=2, default="ur")
     summary = models.CharField(max_length=300, blank=True, default="")
     hidden = models.BooleanField(default=False, db_index=True)
+    status = models.CharField(max_length=10, default="published", db_index=True)   # pending | published | rejected
+    review_note = models.CharField(max_length=300, blank=True, default="")
     complete = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)
@@ -25,6 +27,8 @@ class Qist(models.Model):
     n = models.PositiveSmallIntegerField()
     title = models.CharField(max_length=120, blank=True, default="")
     body = models.TextField()
+    approved = models.BooleanField(default=True, db_index=True)
+    flag = models.CharField(max_length=200, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -190,13 +190,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var u = "/api/afsanay/?cat=" + st.cat + "&sort=" + st.sort + "&lang=" + st.lang + (st.list ? "&" + st.list + "=1" : "") + (st.writer ? "&writer=" + st.writer : "");
     get(u).then(function(r){
       CATS = r.d.cats || CATS;
-      var h = head() + '<div class="aft"><a class="afb p" href="/afsanay?write=1" data-go="?write=1">\u270D\uFE0F Write a story</a> <button data-list="saved"' + (st.list === "saved" ? ' class="on"' : '') + '>\uD83D\uDD16 Saved</button> <button data-list="mine"' + (st.list === "mine" ? ' class="on"' : '') + '>My stories</button></div>'
+      var h = head() + '<div class="aft"><a class="afb p" href="/afsanay?write=1" data-go="?write=1">\u270D\uFE0F Write a story</a> ' + (r.d.staff ? '<button class="afb" data-go="?review=1" style="border-color:#B91C1C;color:#B91C1C">\uD83D\uDEE1 Review' + (r.d.pending ? ' (' + r.d.pending + ')' : '') + '</button> ' : '') + '<button data-list="saved"' + (st.list === "saved" ? ' class="on"' : '') + '>\uD83D\uDD16 Saved</button> <button data-list="mine"' + (st.list === "mine" ? ' class="on"' : '') + '>My stories</button></div>'
         + '<div class="aft">' + [["", "All"]].concat(CATS.map(function(c){ return [c.key, c.name]; })).map(function(c){ return '<button data-cat="' + c[0] + '"' + (st.cat === c[0] && !st.list ? ' class="on"' : '') + '>' + c[1] + '</button>'; }).join("") + '</div>'
         + '<div class="aft">' + [["", "Newest"], ["top", "Most liked"]].map(function(s){ return '<button data-sort="' + s[0] + '"' + (st.sort === s[0] ? ' class="on"' : '') + '>' + s[1] + '</button>'; }).join("")
         + [["", "Urdu & English"], ["ur", "\u0627\u0631\u062F\u0648"], ["en", "English"]].map(function(s){ return '<button data-lang="' + s[0] + '"' + (st.lang === s[0] ? ' class="on"' : '') + '>' + s[1] + '</button>'; }).join("") + '</div>';
       var A = (r.d.afsanay || []);
       h += A.length ? A.map(function(a){ return '<div class="afc" data-go="?id=' + a.id + '"><h3 class="' + (a.lang === "ur" ? "ur" : "") + '">' + esc(a.title) + '</h3>' + (a.summary ? '<p class="' + (a.lang === "ur" ? "ur" : "") + '">' + esc(a.summary) + '</p>' : '')
-          + '<div class="afm">\u270D\uFE0F ' + esc(a.writer) + ' \u00b7 ' + esc(cat(a.category)) + ' \u00b7 ' + a.qists + ' qist' + (a.qists === 1 ? '' : 's') + (a.complete ? ' \u00b7 complete' : '') + ' \u00b7 \u2764\uFE0F ' + a.likes + ' \u00b7 \uD83D\uDC41 ' + a.views + '</div></div>'; }).join("")
+          + '<div class="afm">' + (a.status && a.status !== "published" ? '<b style="color:' + (a.status === "pending" ? "#B45309" : "#B91C1C") + '">' + (a.status === "pending" ? "\u23F3 Waiting for review" : "\u2716 Not published") + '</b> \u00b7 ' : '') + '\u270D\uFE0F ' + esc(a.writer) + ' \u00b7 ' + esc(cat(a.category)) + ' \u00b7 ' + a.qists + ' qist' + (a.qists === 1 ? '' : 's') + (a.complete ? ' \u00b7 complete' : '') + ' \u00b7 \u2764\uFE0F ' + a.likes + ' \u00b7 \uD83D\uDC41 ' + a.views + '</div></div>'; }).join("")
         : '<p>No stories here yet. ' + (st.list ? '' : 'Be the first to <a href="/afsanay?write=1">write one</a>!') + '</p>';
       box.innerHTML = h;
     });
@@ -205,12 +205,15 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     get("/api/afsanay/" + id + "/").then(function(r){
       if (!r.ok){ box.innerHTML = head() + '<p>That story was not found. <a href="/afsanay">All stories</a></p>'; return; }
       var a = r.d, ur = a.lang === "ur" ? "ur" : "";
-      var h = '<p><a href="/afsanay" data-go="">\u2190 All stories</a></p><div class="afc" style="cursor:default"><h3 class="' + ur + '" style="font-size:24px">' + esc(a.title) + '</h3>' + (a.summary ? '<p class="' + ur + '">' + esc(a.summary) + '</p>' : '')
+      var h = '<p><a href="/afsanay" data-go="">\u2190 All stories</a></p>'
+        + (a.status === "pending" ? '<div class="afc" style="cursor:default;background:#FFFBEB;border-color:#FCD34D">\u23F3 <b>Waiting for review.</b> Our team checks new stories, usually within 24 hours. You will get a notification.</div>'
+          : a.status === "rejected" ? '<div class="afc" style="cursor:default;background:#FEF2F2;border-color:#FCA5A5">\u2716 <b>Not published:</b> ' + esc(a.note || "") + '</div>' : '')
+        + '<div class="afc" style="cursor:default"><h3 class="' + ur + '" style="font-size:24px">' + esc(a.title) + '</h3>' + (a.summary ? '<p class="' + ur + '">' + esc(a.summary) + '</p>' : '')
         + '<div class="afm">\u270D\uFE0F <a href="/afsanay?writer=' + a.writer_id + '">' + esc(a.writer) + '</a> \u00b7 ' + esc(cat(a.category)) + ' \u00b7 \u2764\uFE0F ' + a.likes + ' \u00b7 \uD83D\uDC41 ' + a.views + (a.complete ? ' \u00b7 complete' : ' \u00b7 continuing') + (a.hidden ? ' \u00b7 <b style="color:#B91C1C">hidden</b>' : '') + '</div>'
         + '<div class="aft" style="margin-top:10px">' + (a.list.length ? '<a class="afb p" href="/afsanay?id=' + a.id + '&q=1" data-go="?id=' + a.id + '&q=1">\uD83D\uDCD6 Start reading</a>' : '')
         + (a.mine ? '' : '<button data-act="like">' + (a.liked ? '\u2764\uFE0F Liked' : '\uD83E\uDD0D Like') + '</button><button data-act="save">' + (a.saved ? '\uD83D\uDD16 Saved' : '\uD83D\uDD16 Save') + '</button><button data-act="follow">' + (a.following ? '\u2714 Following' : '+ Follow writer') + '</button>')
         + '<a class="afb" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(a.title + " \u2014 read on XpertCreation: https://xpertcreation.com/afsanay?id=" + a.id) + '">WhatsApp</a></div></div>'
-        + '<div class="afc" style="cursor:default"><b>Qists</b>' + a.list.map(function(x){ return '<div style="padding:8px 0;border-top:1px solid var(--line,#E4E8F2)"><a href="/afsanay?id=' + a.id + '&q=' + x.n + '" data-go="?id=' + a.id + '&q=' + x.n + '">Qist ' + x.n + (x.title ? ': ' + esc(x.title) : '') + '</a> <span class="afm">\u00b7 ' + day(x.date) + '</span></div>'; }).join("") + '</div>';
+        + '<div class="afc" style="cursor:default"><b>Qists</b>' + a.list.map(function(x){ return '<div style="padding:8px 0;border-top:1px solid var(--line,#E4E8F2)"><a href="/afsanay?id=' + a.id + '&q=' + x.n + '" data-go="?id=' + a.id + '&q=' + x.n + '">Qist ' + x.n + (x.title ? ': ' + esc(x.title) : '') + '</a>' + (x.pending ? ' <span class="afm" style="color:#B45309">\u23F3 waiting for review</span>' : '') + ' <span class="afm">\u00b7 ' + day(x.date) + '</span></div>'; }).join("") + '</div>';
       if (a.mine) h += '<div class="afc" style="cursor:default"><b>Add the next qist</b><input class="afi" id="nt" placeholder="Qist title (optional)" maxlength="120"><textarea class="afi ' + ur + '" id="nb" rows="10" placeholder="Write the next part (at least 200 characters)"></textarea>'
         + '<label><input type="checkbox" id="nc"> This is the last qist (story complete)</label><p><button class="afb p" data-act="qist">Publish qist</button> <span id="nm" style="color:#B91C1C"></span></p><p class="afm">Your followers and readers who saved this story get a notification.</p>'
         + '<p><button class="afb" data-act="delete" style="color:#B91C1C">Delete this story</button></p></div>';
@@ -246,13 +249,29 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     });
   }
   function v(id){ return (document.getElementById(id) || {}).value || ""; }
+  function review(){
+    get("/api/afsanay/review/").then(function(r){
+      if (!r.ok){ box.innerHTML = '<p>Staff only. <a href="/afsanay">All stories</a></p>'; return; }
+      var item = function(type, id, head, body, flag){ return '<div class="afc" style="cursor:default"><b>' + head + '</b>' + (flag ? '<div style="color:#B91C1C;font-weight:700;margin:4px 0">\u26A0 ' + esc(flag) + '</div>' : '')
+        + '<details><summary style="cursor:pointer;color:#1B4DFF;font-weight:700">Read the text</summary><div class="afr ur" style="font-size:16px;margin-top:8px">' + esc(body) + '</div></details>'
+        + '<div class="aft" style="margin-top:8px"><button class="afb p" data-rv="approve" data-t="' + type + '" data-i="' + id + '">\u2714 Approve</button><button class="afb" data-rv="reject" data-t="' + type + '" data-i="' + id + '" style="color:#B91C1C">\u2716 Reject</button></div></div>'; };
+      var h = '<p><a href="/afsanay" data-go="">\u2190 All stories</a></p><h1 style="font-size:24px">\uD83D\uDEE1 Review queue</h1>';
+      h += r.d.stories.length || r.d.qists.length ? r.d.stories.map(function(a){ return item("story", a.id, 'New story: ' + esc(a.title) + ' <span class="afm">by ' + esc(a.writer) + ' \u00b7 ' + esc(cat(a.category)) + '</span>', a.first, a.flag); }).join("")
+        + r.d.qists.map(function(x){ return item("qist", x.id, 'Qist ' + x.n + ' of \u201c' + esc(x.story) + '\u201d <span class="afm">by ' + esc(x.writer) + '</span>', x.body, x.flag); }).join("") : '<p>Nothing waiting. \uD83C\uDF89</p>';
+      box.innerHTML = h;
+    });
+  }
   function route(){ q = new URLSearchParams(location.search);
+    if (q.get("review")) return review();
     if (q.get("write")) return write(); if (q.get("id") && q.get("q")) return read(q.get("id"), q.get("q")); if (q.get("id")) return detail(q.get("id"));
     st.writer = q.get("writer") || "";
     list(); }
   box.addEventListener("click", function(e){
     var t = e.target, x;
     if ((x = t.closest("[data-go]"))){ e.preventDefault(); go(x.getAttribute("data-go")); return; }
+    if ((x = t.closest("[data-rv]"))){ var ac = x.getAttribute("data-rv"), why = "";
+      if (ac === "reject"){ why = prompt("Reason for the writer (for example: copied from a digest, not family-friendly):"); if (why === null) return; }
+      send("/api/afsanay/review/", {type: x.getAttribute("data-t"), id: +x.getAttribute("data-i"), action: ac, reason: why}).then(function(){ review(); }); return; }
     if ((x = t.closest("[data-cat]"))){ st.cat = x.getAttribute("data-cat"); st.list = ""; st.writer = ""; list(); return; }
     if ((x = t.closest("[data-sort]"))){ st.sort = x.getAttribute("data-sort"); list(); return; }
     if ((x = t.closest("[data-lang]"))){ st.lang = x.getAttribute("data-lang"); list(); return; }
@@ -262,10 +281,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var need = function(r){ if (r.status === 401 || r.status === 403 && act !== "qist"){ location.href = "/login"; return false; } return true; };
     if (act === "publish") return send("/api/afsanay/", {title: v("wt"), category: v("wc"), lang: v("wl"), summary: v("ws"), qist_title: v("wq"), body: v("wb"), own: document.getElementById("wo").checked}).then(function(r){
       if (r.status === 401){ location.href = "/login"; return; } if (!r.ok){ document.getElementById("wm").textContent = r.d.detail || "Could not publish."; return; } go("?id=" + r.d.id); });
-    if (act === "qist") return send("/api/afsanay/" + id + "/qist/", {title: v("nt"), body: v("nb"), complete: document.getElementById("nc").checked}).then(function(r){ if (!r.ok){ document.getElementById("nm").textContent = r.d.detail || "Could not publish."; return; } detail(id); });
+    if (act === "qist") return send("/api/afsanay/" + id + "/qist/", {title: v("nt"), body: v("nb"), complete: document.getElementById("nc").checked}).then(function(r){ if (!r.ok){ document.getElementById("nm").textContent = r.d.detail || "Could not publish."; return; } if (r.d.review) alert("Sent for review. It will appear once our team approves it."); detail(id); });
     if (act === "delete"){ if (confirm("Delete this story and all its qists? This cannot be undone.")) send("/api/afsanay/" + id + "/", null, "DELETE").then(function(){ go(""); }); return; }
     if (act === "hide") return send("/api/afsanay/" + id + "/", {hidden: x.textContent.indexOf("Unhide") < 0}).then(function(){ detail(id); });
-    if (act === "comment") return send("/api/afsanay/" + id + "/comment/", {body: v("cb")}).then(function(r){ if (need(r)) detail(id); });
+    if (act === "comment") return send("/api/afsanay/" + id + "/comment/", {body: v("cb")}).then(function(r){ if (need(r)){ if (!r.ok) alert(r.d.detail || "Could not post."); detail(id); } });
     if (act === "report"){ var why = prompt("Why are you reporting this story? (for example: copied from a digest, not family-friendly)"); if (why) send("/api/afsanay/" + id + "/report/", {reason: why}).then(function(r){ if (need(r)) alert("Thank you. Our team will check it."); }); return; }
     send("/api/afsanay/" + id + "/" + act + "/").then(function(r){ if (need(r)) detail(id); });
   });
