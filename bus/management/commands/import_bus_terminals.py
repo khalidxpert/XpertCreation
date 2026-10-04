@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 from bus.models import Company, Terminal
 
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124 Safari/537.36"}
-MULTI = ["dera ismail khan", "dera ghazi khan", "rahim yar khan", "mandi bahauddin", "toba tek singh", "chak jhumra", "kot addu", "ahmed pur east", "haweli lakha", "peer mahal"]
+MULTI = ["dera ismail khan", "dera ghazi khan", "rahim yar khan", "mandi bahauddin", "toba tek singh", "chak jhumra", "kot addu", "ahmed pur east", "haweli lakha", "peer mahal", "shah maqsood", "khan pur", "chowk bahadurpur", "okara city", "hyderabad city"]
 
 
 def fetch(url):
