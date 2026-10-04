@@ -24,7 +24,7 @@ def lines(page):
 
 
 def city_of(name):
-    n = re.sub(r"\(.*?\)", "", name).strip().lower().replace("-", " ")
+    n = re.sub(r"\(.*?\)", "", name).strip().lower().replace("-", " ").split(",")[-1].strip()
     for m in MULTI:
         if n.startswith(m): return m.title()
     return (n.split() or [""])[0].title()

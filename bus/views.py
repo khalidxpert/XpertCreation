@@ -103,3 +103,16 @@ def report(request, pk):
     if len(note) < 3: return Response({"detail": "Tell us what is wrong."}, status=400)
     Report.objects.create(route=r, user=request.user if request.user.is_authenticated else None, note=note)
     return Response({"ok": True})
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def terminals(request):
+    """Cities with terminals, and the terminals of one city (Daewoo, Niazi; from their official websites)."""
+    from django.db.models import Count
+    out = {"cities": [{"city": x["city"], "n": x["n"]} for x in Terminal.objects.values("city").annotate(n=Count("id")).order_by("city")]}
+    c = city(request.GET.get("city"))
+    if c:
+        out["terminals"] = [{"company": t.company.name, "website": t.company.website, "helpline": t.company.helpline, "name": t.name, "map": t.map_url}
+                            for t in Terminal.objects.filter(city__iexact=c).select_related("company").order_by("company__name", "name")]
+    return Response(out)
