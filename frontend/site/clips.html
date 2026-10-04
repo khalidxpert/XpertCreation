@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>XpertClips: short videos — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Watch and share short videos on XpertClips: swipe, like, comment and post your own clips, free on XpertCreation.">
+<link rel="canonical" href="https://xpertcreation.com/clips">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="The team — XpertCreation">
+<meta property="og:description" content="Meet the team behind XpertCreation: the people who build and run free learning, tools and community from Lahore, Pakistan.">
+<meta property="og:url" content="https://xpertcreation.com/team">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The team — XpertCreation">
+<meta name="twitter:description" content="Meet the team behind XpertCreation: the people who build and run free learning, tools and community from Lahore, Pakistan.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"The team","url":"https://xpertcreation.com/team","description":"Who builds and looks after XpertCreation.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --go:#00B37E;--bad:#DC2626;--line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:9px}
+
+.member{display:flex;align-items:center;gap:14px;padding:15px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;margin-bottom:10px}
+.member .av3{width:54px;height:54px;border-radius:17px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.member .ph3{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;font-size:21px;flex:0 0 auto}
+.member .t{flex:1;min-width:0}
+.member .t b{display:block;font-size:15px;font-weight:700}
+.member .t small{display:block;font-size:12.5px;color:var(--brand);font-weight:600;margin-top:2px}
+.member .soc{display:flex;gap:7px}
+.member .soc a{width:34px;height:34px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:15px}
+
+.apply2{background:var(--card);border:1px dashed var(--line);border-radius:18px;
+  padding:18px;text-align:center;margin-top:22px}
+.apply2 b{display:block;font-size:14.5px;font-weight:700}
+.apply2 p{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+.apply2 button{margin-top:13px;padding:12px 24px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:13.5px}
+
+#appform{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:18px;margin-top:14px}
+#appform.on{display:block}
+#appform label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:12px 0 5px}
+#appform label:first-of-type{margin-top:0}
+#appform textarea,#appform input{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:14.5px;font-family:inherit;outline:none}
+#appform textarea{min-height:90px;resize:vertical}
+#appform textarea:focus,#appform input:focus{border-color:var(--brand);background:#fff}
+#appform .hint3{font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+#appform .go6{width:100%;margin-top:14px;padding:13px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:14px}
+.appstate{padding:13px 15px;border-radius:14px;font-size:13.5px;margin-top:14px;line-height:1.55}
+.appstate.pending{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.appstate.accepted{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.3);color:#00734F}
+.appstate.declined{background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Clips</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js?v=40" defer></script>
+
+<div id="clp"></div>
+<style>
+body.clipsmode{background:#000}body.clipsmode .wrap,body.clipsmode footer,body.clipsmode .xcfoot{display:none}
+#clp{position:relative}.clf{height:calc(100dvh - var(--clh,64px));overflow-y:scroll;scroll-snap-type:y mandatory;background:#000;scrollbar-width:none;overscroll-behavior:contain}.clf::-webkit-scrollbar{display:none}
+.cli{height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#000}
+.cli video{width:100%;height:100%;object-fit:contain;background:#000}@media(max-aspect-ratio:3/4){.cli video{object-fit:cover}}
+.clr{position:absolute;right:10px;bottom:90px;display:flex;flex-direction:column;gap:16px;align-items:center;z-index:3}.clr button,.clr a{border:0;background:none;color:#fff;font:inherit;font-weight:800;font-size:13px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.clr .ic{font-size:30px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}.clr .av{width:46px;height:46px;border-radius:50%;border:2px solid #fff;object-fit:cover;background:#334155;display:flex;align-items:center;justify-content:center;font-size:20px}
+.clr .on .ic{color:#F43F5E}.clc{position:absolute;left:12px;right:80px;bottom:22px;color:#fff;z-index:3;text-shadow:0 1px 4px rgba(0,0,0,.7)}.clc b{font-size:16px}.clc p{margin:4px 0 0;font-size:15px;line-height:1.4;max-height:4.2em;overflow:hidden}.clc .tag{color:#93C5FD;font-weight:700}
+.clt{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;z-index:4;pointer-events:none}.clt>*{pointer-events:auto}
+.clt b{color:#fff;font-size:18px;text-shadow:0 1px 4px rgba(0,0,0,.6)}.clt button,.clt a{border:0;border-radius:99px;padding:8px 14px;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;background:rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(6px)}.clt .up{background:#F43F5E}
+.clheart{position:absolute;font-size:96px;z-index:5;animation:clh .8s ease-out forwards;pointer-events:none}@keyframes clh{0%{transform:scale(.4);opacity:0}30%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:0}}
+.clpause{position:absolute;font-size:64px;color:rgba(255,255,255,.8);z-index:2;pointer-events:none}
+.clsheet{position:fixed;left:0;right:0;bottom:0;max-height:75dvh;background:#fff;color:#0D1424;border-radius:18px 18px 0 0;z-index:800;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(0,0,0,.4);font-family:inherit}
+.clsheet .hd{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #E4E8F2;font-weight:800}.clsheet .bd{overflow:auto;padding:10px 16px;flex:1}.clsheet .ft{display:flex;gap:8px;padding:10px 12px max(10px,env(safe-area-inset-bottom));border-top:1px solid #E4E8F2}
+.clsheet input,.clsheet textarea{flex:1;border:1.5px solid #E4E8F2;border-radius:12px;padding:10px;font:inherit}.clsheet button{border:0;border-radius:12px;padding:10px 14px;font:inherit;font-weight:800;cursor:pointer;background:#1B4DFF;color:#fff}.clsheet .x{background:#F1F4FA;color:#0D1424}
+.clbar{height:8px;border-radius:99px;background:#E4E8F2;overflow:hidden;margin:10px 0}.clbar i{display:block;height:100%;background:#F43F5E;width:0}
+.clgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;padding:12px;background:#0B1220;min-height:calc(100dvh - var(--clh,64px));align-content:start}.clgrid>div{position:relative;aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:#1F2937;color:#fff;font-size:12.5px}
+.clgrid img,.clgrid video{width:100%;height:100%;object-fit:cover}.clgrid .s{position:absolute;left:6px;right:6px;bottom:6px;text-shadow:0 1px 3px #000}.clgrid .s b{display:block}.clgrid button{border:0;border-radius:8px;padding:5px 8px;font:inherit;font-weight:800;cursor:pointer;margin:3px 3px 0 0}
+.clempty{color:#fff;text-align:center;padding:60px 20px}
+</style>
+<script>
+(function(){
+  "use strict";
+  var root = document.getElementById("clp"), feedEl = null, items = [], seen = [], muted = true, loading = false, me = null, single = null;
+  document.body.classList.add("clipsmode");
+  var hdr = document.querySelector("header, .topnav, .xctop"); if (hdr) document.documentElement.style.setProperty("--clh", hdr.getBoundingClientRect().height + "px");
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function get(u){ return fetch(u, {credentials: "same-origin"}).then(function(r){ return r.json().then(function(d){ return {ok: r.ok, status: r.status, d: d}; }); }); }
+  function send(u, b, m){ return fetch(u, {method: m || "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: b ? JSON.stringify(b) : undefined}).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, status: r.status, d: d}; }); }); }
+  function cap(t){ return esc(t).replace(/(^|\s)(#[\w\u0600-\u06FF]+)/g, '$1<span class="tag">$2</span>'); }
+  function fmt(n){ return n >= 1000000 ? (n / 1e6).toFixed(1) + "M" : n >= 1000 ? (n / 1e3).toFixed(1) + "K" : String(n); }
+  fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){ me = u; }).catch(function(){});
+  function top(title){ return '<div class="clt"><b>\uD83C\uDFAC ' + title + '</b><span><a href="/clips?mine=1">My clips</a> <button class="up" data-up>+ Post</button></span></div>'; }
+  function slide(c){
+    return '<div class="cli" data-id="' + c.id + '"><video src="' + esc(c.video) + '" poster="' + esc(c.thumb) + '" playsinline loop muted preload="metadata"></video>'
+      + '<div class="clr"><a href="/clips?user=' + c.user_id + '" aria-label="' + esc(c.user) + '">' + (c.avatar ? '<img class="av" src="' + esc(c.avatar) + '" alt="">' : '<span class="av">\uD83D\uDC64</span>') + '</a>'
+      + '<button data-like class="' + (c.liked ? "on" : "") + '" aria-label="Like"><span class="ic">\u2764\uFE0E</span><span data-n data-v="' + c.likes + '">' + fmt(c.likes) + '</span></button>'
+      + '<button data-com aria-label="Comments"><span class="ic">\uD83D\uDCAC</span><span data-c data-v="' + c.comments + '">' + fmt(c.comments) + '</span></button>'
+      + '<button data-share aria-label="Share"><span class="ic">\u2197\uFE0F</span><span>Share</span></button>'
+      + '<button data-snd aria-label="Sound"><span class="ic">' + (muted ? "\uD83D\uDD07" : "\uD83D\uDD0A") + '</span></button>'
+      + '<button data-more aria-label="More"><span class="ic">\u22EF</span></button></div>'
+      + '<div class="clc"><b>@' + esc(c.username || c.user) + '</b><p dir="auto">' + cap(c.caption) + '</p></div></div>';
+  }
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ var v = e.target.querySelector("video"); if (!v) return;
+      if (e.isIntersecting && e.intersectionRatio > 0.6){ v.muted = muted; var p = v.play(); if (p && p.catch) p.catch(function(){});
+        var id = +e.target.getAttribute("data-id"); if (seen.indexOf(id) < 0){ seen.push(id); setTimeout(function(){ if (!v.paused) send("/api/clips/" + id + "/view/"); }, 2000); }
+        var idx = items.indexOf(id); if (idx >= items.length - 3) more();
+        var nx = e.target.nextElementSibling; if (nx){ var nv = nx.querySelector("video"); if (nv && nv.preload !== "auto") nv.preload = "auto"; }
+      } else { v.pause(); }
+    });
+  }, {threshold: [0, 0.6, 1]}) : null;
+  function add(list){
+    var h = list.map(slide).join(""); var tmp = document.createElement("div"); tmp.innerHTML = h;
+    [].slice.call(tmp.children).forEach(function(el){ items.push(+el.getAttribute("data-id")); feedEl.appendChild(el); if (io) io.observe(el); });
+  }
+  function more(){ if (loading || single !== null) return; loading = true;
+    get("/api/clips/?seen=" + seen.concat(items).slice(-200).join(",")).then(function(r){ loading = false; var L = (r.d.clips || []).filter(function(c){ return items.indexOf(c.id) < 0; }); if (L.length) add(L); }); }
+  function feed(url, title){
+    root.innerHTML = top(title) + '<div class="clf"></div>'; feedEl = root.querySelector(".clf"); items = [];
+    get(url).then(function(r){ var L = r.d.clips || []; if (!L.length && single === null){ feedEl.innerHTML = '<div class="clempty"><h2>No clips yet</h2><p>Be the first: tap <b>+ Post</b> and share a short video.</p></div>'; return; } add(L); if (single !== null){ single = null; more(); } });
+  }
+  function grid(title, list, mine, staff){
+    root.innerHTML = top(title) + '<div class="clgrid">' + (list.length ? list.map(function(c){
+      var st = {processing: "\u23F3 Preparing\u2026", pending: "\u23F3 Waiting for review", published: "\u2714 Live \u00b7 " + fmt(c.views) + " views", failed: "\u2716 Failed", rejected: "\u2716 Not published"}[c.status] || c.status;
+      return '<div>' + (c.thumb ? '<img src="' + esc(c.thumb) + '" alt="">' : '') + (staff && c.video ? '<video src="' + esc(c.video) + '" controls playsinline preload="none" style="position:absolute;inset:0"></video>' : '')
+        + '<div class="s"><b>' + esc(staff ? "@" + (c.username || c.user) : st) + '</b>' + esc(c.caption).slice(0, 60) + (c.note ? '<br><i>' + esc(c.note) + '</i>' : '')
+        + (mine ? '<br>' + (c.status === "published" ? '<button data-goid="' + c.id + '">Watch</button>' : '') + '<button data-del="' + c.id + '" style="background:#FEE2E2;color:#B91C1C">Delete</button>' : '')
+        + (staff ? '<br><button data-rv="approve" data-i="' + c.id + '" style="background:#DCFCE7;color:#166534">\u2714 Approve</button><button data-rv="reject" data-i="' + c.id + '" style="background:#FEE2E2;color:#B91C1C">\u2716 Reject</button>' : '') + '</div></div>'; }).join("")
+      : '<p class="clempty">Nothing here yet.</p>') + '</div>';
+  }
+  function sheet(title, body, foot){ var s = document.createElement("div"); s.className = "clsheet"; s.innerHTML = '<div class="hd"><span>' + title + '</span><button class="x" data-close>\u2715</button></div><div class="bd">' + body + '</div>' + (foot ? '<div class="ft">' + foot + '</div>' : ''); document.body.appendChild(s); return s; }
+  function comments(id){
+    var s = sheet("Comments", "Loading\u2026", '<input placeholder="Add a comment" maxlength="500"><button data-post>Post</button>'); s.setAttribute("data-id", id);
+    var load = function(){ get("/api/clips/" + id + "/comments/").then(function(r){ var C = r.d.comments || []; s.querySelector(".bd").innerHTML = C.length ? C.map(function(c){ return '<p style="margin:0 0 10px"><b>' + esc(c.who) + '</b><br><span dir="auto">' + esc(c.body) + '</span></p>'; }).join("") : '<p>No comments yet. Say something nice!</p>'; }); };
+    load(); s._load = load;
+  }
+  function upload(){
+    if (!me){ location.href = "/login?next=/clips"; return; }
+    var s = sheet("Post a clip", '<p style="margin:0 0 8px">A short video, up to <b>60 seconds</b>. Keep it family-friendly.</p><input type="file" accept="video/*" id="clf"><textarea id="clcap" rows="2" maxlength="300" placeholder="Caption, #hashtags" style="width:100%;box-sizing:border-box;margin-top:8px"></textarea><div class="clbar"><i></i></div><p id="clmsg" style="margin:0"></p>',
+      '<button class="x" data-close>Cancel</button><button data-send>Post</button>');
+    s.querySelector("[data-send]").onclick = function(){
+      var f = document.getElementById("clf").files[0], m = document.getElementById("clmsg"), b = this; if (!f){ m.textContent = "Choose a video first."; return; }
+      if (f.size > 100 * 1024 * 1024){ m.textContent = "That video is too big (up to 100 MB)."; return; }
+      var v = document.createElement("video"); v.preload = "metadata"; v.muted = true;
+      var go = function(){ b.disabled = true; m.textContent = "Uploading\u2026"; var fd = new FormData(); fd.append("video", f); fd.append("caption", document.getElementById("clcap").value);
+        var x = new XMLHttpRequest(); x.open("POST", "/api/clips/upload/"); x.withCredentials = true; x.setRequestHeader("X-CSRFToken", ck("xc_csrf"));
+        x.upload.onprogress = function(e){ if (e.lengthComputable) s.querySelector(".clbar i").style.width = Math.round(e.loaded / e.total * 100) + "%"; };
+        x.onload = function(){ var d = {}; try { d = JSON.parse(x.responseText); } catch (e) {}
+          if (x.status >= 200 && x.status < 300){ s.querySelector(".clbar i").style.width = "100%"; m.innerHTML = "\u2714 " + esc(d.detail || "Uploaded.") + ' <a href="/clips?mine=1">My clips</a>'; b.remove(); }
+          else { m.textContent = d.detail || "Upload failed. Try again."; b.disabled = false; } };
+        x.onerror = function(){ m.textContent = "Upload failed. Check your connection."; b.disabled = false; }; x.send(fd); };
+      v.onloadedmetadata = function(){ URL.revokeObjectURL(v.src); if (v.duration && v.duration > 61){ m.textContent = "That video is " + Math.round(v.duration) + " seconds. Please choose one up to 60 seconds."; return; } go(); };
+      v.onerror = function(){ go(); }; v.src = URL.createObjectURL(f);
+    };
+  }
+  var tapT = null;
+  root.addEventListener("click", function(e){
+    var t = e.target, x, sl = t.closest(".cli"), id = sl ? +sl.getAttribute("data-id") : 0;
+    if (t.closest("[data-up]")){ upload(); return; }
+    if ((x = t.closest("[data-goid]"))){ location.href = "/clips?id=" + x.getAttribute("data-goid"); return; }
+    if ((x = t.closest("[data-del]"))){ if (confirm("Delete this clip?")) send("/api/clips/" + x.getAttribute("data-del") + "/", null, "DELETE").then(route); return; }
+    if ((x = t.closest("[data-rv]"))){ var why = ""; if (x.getAttribute("data-rv") === "reject"){ why = prompt("Reason for the creator:"); if (why === null) return; }
+      send("/api/clips/review/", {id: +x.getAttribute("data-i"), action: x.getAttribute("data-rv"), reason: why}).then(route); return; }
+    if (!sl) return;
+    if ((x = t.closest("[data-like]"))){ if (!me){ location.href = "/login?next=/clips"; return; } send("/api/clips/" + id + "/like/").then(function(r){ x.classList.toggle("on", !!r.d.liked); var n = x.querySelector("[data-n]"), nv = Math.max(0, (+n.getAttribute("data-v") || 0) + (r.d.liked ? 1 : -1)); n.setAttribute("data-v", nv); n.textContent = fmt(nv); }); return; }
+    if (t.closest("[data-com]")){ comments(id); return; }
+    if (t.closest("[data-snd]")){ muted = !muted; [].forEach.call(root.querySelectorAll(".cli video"), function(v){ v.muted = muted; }); [].forEach.call(root.querySelectorAll("[data-snd] .ic"), function(i){ i.textContent = muted ? "\uD83D\uDD07" : "\uD83D\uDD0A"; }); return; }
+    if (t.closest("[data-share]")){ var url = "https://xpertcreation.com/clips?id=" + id, txt = "\uD83C\uDFAC Watch this clip on XpertCreation: " + url;
+      if (navigator.share){ navigator.share({title: "XpertClips", text: "\uD83C\uDFAC Watch this clip on XpertCreation", url: url}).catch(function(){}); return; }
+      sheet("Share", '<p><a href="https://wa.me/?text=' + encodeURIComponent(txt) + '" target="_blank" rel="noopener" style="display:inline-block;padding:10px 14px;border-radius:12px;background:#25D366;color:#fff;font-weight:800;text-decoration:none">WhatsApp</a></p><p><button data-copy="' + esc(url) + '">\uD83D\uDD17 Copy link</button></p>'); return; }
+    if (t.closest("[data-more]")){ var s = sheet("More", '<p><button data-report="' + id + '" style="background:#FEE2E2;color:#B91C1C">\u26A0 Report this clip</button></p>'); return; }
+    if (t.closest(".clr, .clc a")) return;
+    var v = sl.querySelector("video");
+    if (tapT){ clearTimeout(tapT); tapT = null; var lk = sl.querySelector("[data-like]"); if (me && !lk.classList.contains("on")) lk.click();
+      var h = document.createElement("div"); h.className = "clheart"; h.textContent = "\u2764\uFE0F"; sl.appendChild(h); setTimeout(function(){ h.remove(); }, 800); return; }
+    tapT = setTimeout(function(){ tapT = null; if (v.paused){ v.play(); var p = sl.querySelector(".clpause"); if (p) p.remove(); } else { v.pause(); var q = document.createElement("div"); q.className = "clpause"; q.textContent = "\u25B6"; sl.appendChild(q); } }, 260);
+  });
+  document.addEventListener("click", function(e){
+    var t = e.target, s = t.closest(".clsheet"); if (!s) return;
+    if (t.closest("[data-close]")){ s.remove(); return; }
+    if (t.closest("[data-copy]")){ try { navigator.clipboard.writeText(t.closest("[data-copy]").getAttribute("data-copy")); t.textContent = "\u2714 Copied"; } catch (x) {} return; }
+    if (t.closest("[data-report]")){ var why = prompt("Why are you reporting this clip?"); if (why) send("/api/clips/" + t.closest("[data-report]").getAttribute("data-report") + "/report/", {reason: why}).then(function(r){ if (r.status === 401){ location.href = "/login"; return; } s.querySelector(".bd").innerHTML = "<p>Thank you. Our team will check it.</p>"; }); return; }
+    if (t.closest("[data-post]")){ var inp = s.querySelector("input"), id = s.getAttribute("data-id"); if (!me){ location.href = "/login?next=/clips"; return; }
+      send("/api/clips/" + id + "/comments/", {body: inp.value}).then(function(r){ if (!r.ok){ alert(r.d.detail || "Could not post."); return; } inp.value = ""; s._load();
+        var c = root.querySelector('.cli[data-id="' + id + '"] [data-c]'); if (c){ var cv = (+c.getAttribute("data-v") || 0) + 1; c.setAttribute("data-v", cv); c.textContent = fmt(cv); } }); }
+  });
+  function route(){
+    var q = new URLSearchParams(location.search);
+    if (q.get("review")) return get("/api/clips/review/").then(function(r){ if (!r.ok){ grid("Review", [], false, false); return; } grid("Review (staff)", (r.d.pending || []).concat(r.d.reported || []), false, true); });
+    if (q.get("mine")) return get("/api/clips/mine/").then(function(r){ if (r.status === 401 || r.status === 403){ location.href = "/login?next=/clips?mine=1"; return; } grid("My clips", r.d.clips || [], true, false); });
+    if (q.get("user")) return feed("/api/clips/?user=" + encodeURIComponent(q.get("user")), "Clips");
+    if (q.get("id")){ single = +q.get("id"); return feed("/api/clips/?id=" + single, "For you"); }
+    feed("/api/clips/", "For you");
+  }
+  route();
+})();
+</script>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="/feed">XpertConnect</a></li>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li><li><a href="https://www.trustpilot.com/review/xpertcreation.com" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.6-5 4.5 1.5 6.6L12 17l-6 3.4 1.5-6.6-5-4.5 6.6-.6z"/></svg>Review us on Trustpilot</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert/XpertCreation" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+<script src="/js/share-1.js?v=21" defer></script>
+</body>
+</html>

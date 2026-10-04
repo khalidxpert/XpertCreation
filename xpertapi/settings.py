@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "network",
     "pets",
     "screen",
+    "clips",
     "library",
     "afsanay",
     "billers",
