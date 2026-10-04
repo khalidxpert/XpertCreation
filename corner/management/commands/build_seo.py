@@ -79,14 +79,14 @@ class Command(BaseCommand):
             by = (getattr(r.author, "full_name", "") or getattr(r.author, "username", "")) if r.author else "XpertCreation kitchen"
             ld = {"@context": "https://schema.org", "@type": "Recipe", "name": r.title, "description": r.intro or r.title, "recipeCuisine": "Pakistani",
                   "recipeCategory": r.category, "totalTime": "PT%dM" % r.minutes, "recipeYield": "%d servings" % r.serves, "recipeIngredient": ing,
-                  "recipeInstructions": [{"@type": "HowToStep", "text": s} for s in r.steps], "author": {"@type": "Organization" if not r.author else "Person", "name": by},
+                  "recipeInstructions": [{"@type": "HowToStep", "name": "Step %d" % (k + 1), "text": s, "url": B + "/recipes/" + r.slug_ + "#step-%d" % (k + 1)} for k, s in enumerate(r.steps)], "keywords": ", ".join(["Pakistani recipe", r.title, {"main": "main dish", "rice": "rice dish", "snack": "snack", "sweet": "dessert", "side": "side dish", "bread": "bread"}.get(r.category, r.category), "how to make " + r.title.lower()]), "author": {"@type": "Organization" if not r.author else "Person", "name": by},
                   "datePublished": r.created_at.date().isoformat()}
             if imgs: ld["image"] = imgs
             more = " ".join('<a href="/recipes/%s">%s</a>' % (x.slug_, E(x.title)) for x in rows if x.id != r.id)[:4000]
             body = (CSS + '<p class="sxm"><a href="/recipes">\u2190 All recipes</a></p>' + ('<img src="%s" alt="%s" style="width:100%%;max-height:380px;object-fit:cover;border-radius:16px">' % (E(img), E(r.title)) if img else "")
                     + '<h1 style="font-size:27px;margin:10px 0 4px">%s</h1><p class="sxm">%s</p><p>\u23F1 %d minutes \u00b7 serves %d \u00b7 by %s</p>' % (E(r.title), E(r.intro), r.minutes, r.serves, E(by))
                     + '<div class="sx"><h2>Ingredients</h2><ul>' + "".join("<li>%s</li>" % E(x) for x in ing) + "</ul></div>"
-                    + '<div class="sx"><h2>Method</h2><ol>' + "".join("<li>%s</li>" % E(s) for s in r.steps) + "</ol></div>"
+                    + '<div class="sx"><h2>Method</h2><ol>' + "".join('<li id="step-%d">%s</li>' % (k + 1, E(s)) for k, s in enumerate(r.steps)) + "</ol></div>"
                     + '<p><a href="/recipes?r=%d" style="font-weight:800">Change the number of servings \u2192</a></p><div class="sx sxl"><h2>More Pakistani recipes</h2>%s</div>' % (r.id, more))
             self.w("/recipes/" + r.slug_, _page(src, body, "%s recipe \u2014 easy Pakistani recipe | XpertCreation" % r.title,
                                                   "%s: %s Ingredients and step-by-step method, %d minutes, serves %d." % (r.title, r.intro, r.minutes, r.serves), "/recipes/" + r.slug_, ld))
