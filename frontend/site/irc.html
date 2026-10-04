@@ -100,7 +100,7 @@
 </head>
 <body class="flex flex-col h-full w-full select-none md:select-text bg-obsidian-900 text-slate-100 font-sans antialiased">
 
-  <!-- TOP LIVE CRYPTO MARKET & PROTOCOL STATUS STRIP -->
+  <!-- top status strip -->
   <div class="h-7 bg-obsidian-950 border-b border-obsidian-600/80 px-2.5 flex items-center justify-between text-[11px] font-mono shrink-0 z-30">
     <!-- Left: Live RFC 1459 / IRCv3 Protocol Indicator -->
     <div class="flex items-center gap-2 min-w-0">
@@ -343,7 +343,7 @@
 
         <!-- Mobile-First Quick Command & Crypto Action Strip -->
         <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 mb-1.5 border-b border-obsidian-700/80 text-[11px] font-mono">
-          <button type="button" onclick="app.joinOrSwitchChannel('#latinchain')" class="px-2 py-1 rounded bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 shrink-0 font-semibold">#latinchain</button>
+          <button type="button" onclick="app.joinOrSwitchChannel('#xpertconnect')" class="px-2 py-1 rounded bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 shrink-0 font-semibold">#xpertconnect</button>
           <button type="button" onclick="app.insertCommandPrefix('/join #')" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-cyan-400 border border-obsidian-600 shrink-0">/join</button>
           <button type="button" onclick="app.insertCommandPrefix('/nick ')" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-cyan-400 border border-obsidian-600 shrink-0">/nick</button>
           <button type="button" onclick="app.insertCommandPrefix('/me ')" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-cyan-400 border border-obsidian-600 shrink-0">/me</button>
@@ -548,13 +548,13 @@
         </div>
         <div class="flex flex-wrap gap-1.5">
           <span class="text-[11px] font-mono text-slate-400 w-full">Popular channels:</span>
-          <button type="button" onclick="document.getElementById('joinTargetInput').value='#latinchain'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-purple-300 font-semibold">#latinchain</button>
-          <button type="button" onclick="document.getElementById('joinTargetInput').value='#pi-network'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-purple-300 font-semibold">π #pi-network</button>
-          <button type="button" onclick="document.getElementById('joinTargetInput').value='#pi-node'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-amber-300">#pi-node</button>
-          <button type="button" onclick="document.getElementById('joinTargetInput').value='#pi-ecosystem'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-purple-400">#pi-ecosystem</button>
-          <button type="button" onclick="document.getElementById('joinTargetInput').value='#solana'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-emerald-400">#solana</button>
-          <button type="button" onclick="document.getElementById('joinTargetInput').value='#lightning'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-amber-400">#lightning</button>
-          <button type="button" onclick="document.getElementById('joinTargetInput').value='#zk-proofs'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-cyan-400">#zk-proofs</button>
+          <button type="button" onclick="document.getElementById('joinTargetInput').value='#xpertconnect'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-purple-300 font-semibold">#xpertconnect</button>
+          <button type="button" onclick="document.getElementById('joinTargetInput').value='#xpertacademy'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-purple-300 font-semibold">#xpertacademy</button>
+          <button type="button" onclick="document.getElementById('joinTargetInput').value='#jobs'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-amber-300">#jobs</button>
+          <button type="button" onclick="document.getElementById('joinTargetInput').value='#pakistan'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-purple-400">#pakistan</button>
+          <button type="button" onclick="document.getElementById('joinTargetInput').value='#tech'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-emerald-400">#tech</button>
+          <button type="button" onclick="document.getElementById('joinTargetInput').value='#games'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-amber-400">#games</button>
+          <button type="button" onclick="document.getElementById('joinTargetInput').value='#help'" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-xs font-mono text-cyan-400">#help</button>
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="app.closeJoinChannelModal()" class="px-4 py-2 rounded-xl bg-obsidian-700 text-xs font-mono text-slate-300">Cancel</button>
@@ -665,55 +665,53 @@
      * and streams live Pi Network (PI) & cryptocurrency market data.
      */
     const CRYPTO_CHANNEL_DIRECTORY = [
-      { name: '#xpertcreation', category: 'XpertCreation', badgeColor: 'text-cyan-300 border-cyan-500/40 bg-cyan-500/15', defaultTopic: 'Welcome to XpertCreation IRC. Be kind, no spam. Register your nick: /msg NickServ register <password>' },
-      { name: '#help', category: 'XpertCreation', badgeColor: 'text-emerald-300 border-emerald-500/40 bg-emerald-500/15', defaultTopic: 'Questions about XpertCreation and this chat. Ask anything!' },
       {
-        name: '#latinchain',
-        category: 'LatinChain Platform',
-        badgeColor: 'text-purple-300 border-purple-500/40 bg-purple-500/15',
-        defaultTopic: 'LatinChain Platform & ecosystem dApps.'
-      },,
-      {
-        name: '#pi-node',
-        category: 'Not Pi Core Team related',
-        badgeColor: 'text-amber-300 border-amber-500/30 bg-purple-500/10',
-        defaultTopic: 'Pi Node operators, Docker consensus containers, port-forwarding 31400-31409, SuperNodes & Horizon API.'
+        name: '#xpertcreation',
+        category: 'XpertCreation',
+        badgeColor: 'text-cyan-300 border-cyan-500/40 bg-cyan-500/15',
+        defaultTopic: 'Welcome to XpertCreation IRC. Be kind, no spam. Register your nick: /msg NickServ register <password>'
       },
       {
-        name: '#bitcoin',
-        category: 'Layer-1 / PoW',
-        badgeColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10',
-        defaultTopic: 'Bitcoin Core protocol, BIPs, UTXO management, Lightning Network & Mempool fee dynamics.'
+        name: '#xpertconnect',
+        category: 'XpertConnect',
+        badgeColor: 'text-blue-300 border-blue-500/40 bg-blue-500/15',
+        defaultTopic: 'Networking on XpertConnect: people, companies, profiles and opportunities.'
       },
       {
-        name: '#ethereum',
-        category: 'EVM & L2 Rollups',
-        badgeColor: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10',
-        defaultTopic: 'Ethereum mainnet, Solidity smart contracts, ZK/Optimistic Rollups, MEV & EIP discussions.'
+        name: '#xpertacademy',
+        category: 'XpertAcademy',
+        badgeColor: 'text-emerald-300 border-emerald-500/40 bg-emerald-500/15',
+        defaultTopic: 'Free courses, certificates, study help and questions for XpertAcademy learners.'
       },
       {
-        name: '#monero',
-        category: 'Privacy / XMR',
-        badgeColor: 'text-orange-400 border-orange-500/30 bg-orange-500/10',
-        defaultTopic: 'Monero (XMR), RingCT, Stealth Addresses, FCMP++, RandomX mining & zero-knowledge privacy.'
+        name: '#help',
+        category: 'Support',
+        badgeColor: 'text-emerald-300 border-emerald-500/40 bg-emerald-500/15',
+        defaultTopic: 'Questions about XpertCreation and this chat. Ask anything!'
       },
       {
-        name: '#defi',
-        category: 'DEX & Yield',
-        badgeColor: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10',
-        defaultTopic: 'Decentralized Finance, AMM liquidity pools, lending protocols, perpetuals & smart contract security.'
+        name: '#jobs',
+        category: 'Careers',
+        badgeColor: 'text-amber-300 border-amber-500/40 bg-amber-500/15',
+        defaultTopic: 'Job posts, hiring, CV tips and interview help. No spam or paid job offers.'
       },
       {
-        name: '#blockchain',
-        category: 'Consensus & Dev',
-        badgeColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
-        defaultTopic: 'Distributed systems, BFT/SCP consensus algorithms, cryptographic primitives & cross-chain bridges.'
+        name: '#pakistan',
+        category: 'Community',
+        badgeColor: 'text-green-300 border-green-500/40 bg-green-500/15',
+        defaultTopic: 'Pakistan: news, cities, culture and everyday life. Keep it respectful.'
       },
       {
-        name: '#crypto-trading',
-        category: 'Orderflow & TA',
-        badgeColor: 'text-rose-400 border-rose-500/30 bg-rose-500/10',
-        defaultTopic: 'Real-time spot/derivatives orderflow, Pi/Crypto market liquidity, on-chain whale tracking & macro.'
+        name: '#tech',
+        category: 'Technology',
+        badgeColor: 'text-indigo-300 border-indigo-500/40 bg-indigo-500/15',
+        defaultTopic: 'Programming, web, AI, phones and gadgets.'
+      },
+      {
+        name: '#games',
+        category: 'Fun',
+        badgeColor: 'text-rose-300 border-rose-500/40 bg-rose-500/15',
+        defaultTopic: 'XpertCreation games: pool, chess, ludo, carrom and more. Find a partner here.'
       }
     ];
     
@@ -762,7 +760,7 @@
           previousNicks: new Set(),
           username: initialUsername,
           realname: 'XpertCreation IRC (NEXUS//IRC by Cesar Cordero)',
-          autoChannels: ['#xpertcreation', '#pi-network', '#help'],
+          autoChannels: ['#xpertcreation', '#xpertconnect', '#xpertacademy', '#help'],
           connected: false,
           connecting: false,
           registered: false,
@@ -782,7 +780,7 @@
     
         // Optional 2nd Real WebSocket Peer Connection (for live multi-client round-trip verification)
         this.peerWs = null;
-        this.peerNick = `Peer_${Math.floor(10 + Math.random() * 89)}`;
+        this.peerNick = `PiOracle_${Math.floor(10 + Math.random() * 89)}`;
         this.peerConnected = false;
     
         // Live Crypto & Pi Network Prices state
@@ -793,7 +791,7 @@
           SOL: { price: null, change24h: null },
           XMR: { price: null, change24h: null }
         };
-        this.krakenWs = null;
+        
     
         this.initBuffers();
         this.bindScrollListener();
@@ -849,8 +847,6 @@
     
         // Start real WebSocket connection to IRC server
         this.connect();
-    
-        // (price feed removed: XpertCreation is non-crypto)
       }
     
       connect() {
@@ -1924,12 +1920,6 @@
             break;
           }
     
-          case 'ticker': {
-            const sym = (parts[0] || 'PI').toUpperCase();
-            this.shareTickerToChannel(sym);
-            break;
-          }
-    
           case 'dev':
           case 'author': {
             this.openDeveloperModal();
@@ -1968,179 +1958,11 @@
        * Spawns a REAL 2nd independent WebSocket connection to the exact same remote IRC server
        * so the user can immediately verify live server round-trip routing in any channel!
        */
-      toggleLivePeerBot() {
-        const led = document.getElementById('peerBotLed');
-        const label = document.getElementById('peerBotLabel');
-    
-        if (this.peerWs && this.peerConnected) {
-          try { this.peerWs.send('QUIT :Peer verifier closing'); this.peerWs.close(); } catch (e) {}
-          this.peerWs = null;
-          this.peerConnected = false;
-          led.className = 'w-2 h-2 rounded-full bg-slate-500';
-          label.textContent = 'Spawn 2nd Live WSS Peer';
-          this.showToast('Closed 2nd live WebSocket peer session', 'amber');
-          return;
-        }
-    
-        const url = this.state.serverUrl.trim();
-        this.showToast(`Connecting 2nd live WebSocket peer (${this.peerNick}) to ${url}...`, 'cyan');
-        led.className = 'w-2 h-2 rounded-full bg-amber-400 led-pulse';
-        label.textContent = `Connecting ${this.peerNick}...`;
-    
-        try {
-          this.peerWs = this.state.subprotocolMode === 'ircv3'
-            ? new WebSocket(url, ['text.ircv3.net', 'binary.ircv3.net'])
-            : new WebSocket(url);
-        } catch (e) {
-          this.showToast('Could not spawn 2nd WebSocket peer', 'red');
-          return;
-        }
-    
-        this.peerWs.addEventListener('open', () => {
-          this.peerConnected = true;
-          this.peerWs.send(`NICK ${this.peerNick}`);
-          this.peerWs.send(`USER peerbot 0 * :NEXUS Live WSS Verification Peer`);
-        });
-    
-        this.peerWs.addEventListener('message', async (ev) => {
-          const data = typeof ev.data === 'string' ? ev.data : await ev.data.text();
-          const lines = data.split(/\r?\n/);
-          for (const line of lines) {
-            if (line.startsWith('PING')) {
-              const tok = line.split(' ')[1] || ':keepalive';
-              this.peerWs.send(`PONG ${tok}`);
-            } else if (line.includes(' 001 ')) {
-              led.className = 'w-2 h-2 rounded-full bg-emerald-400 led-pulse';
-              label.textContent = `Peer Online: ${this.peerNick}`;
-              const targetChan = this.state.activeBuffer.startsWith('#') ? this.state.activeBuffer : '#latinchain';
-              this.peerWs.send(`JOIN ${targetChan}`);
-              setTimeout(() => {
-                const piPrice = this.tickers.PI.price ? `$${this.tickers.PI.price}` : 'live';
-                const btcPrice = this.tickers.BTC.price ? `$${this.tickers.BTC.price}` : 'live';
-                this.peerWs.send(`PRIVMSG ${targetChan} :[LIVE WSS PEER] Hello ${this.state.nick}! I am connected via a 2nd real WebSocket to ${this.state.serverUrl}. Mention "${this.peerNick}", type "!pi" or "!price" to test real IRC routing! (PI: ${piPrice} | BTC: ${btcPrice})`);
-              }, 700);
-            } else if (line.includes('PRIVMSG')) {
-              // If user mentions peerNick or types !price / !pi, respond over the real IRC server
-              const trailIdx = line.indexOf(' :');
-              const msgContent = trailIdx !== -1 ? line.slice(trailIdx + 2) : '';
-              const chanMatch = line.match(/PRIVMSG\s+(#[a-zA-Z0-9_-]+)/i);
-              if (chanMatch && !line.startsWith(`:${this.peerNick}!`)) {
-                const replyChan = chanMatch[1];
-                const cleanMsg = msgContent.trim().toLowerCase();
-                if (cleanMsg.includes(this.peerNick.toLowerCase()) || cleanMsg === '!price' || cleanMsg === '!pi') {
-                  const summary = Object.entries(this.tickers)
-                    .map(([k, v]) => `${k}: $${v.price || '--'}`)
-                    .join(' | ');
-                  setTimeout(() => {
-                    if (this.peerWs && this.peerWs.readyState === WebSocket.OPEN) {
-                      this.peerWs.send(`PRIVMSG ${replyChan} :[PI & CRYPTO ORACLE via IRC] Live Snapshot -> ${summary}`);
-                    }
-                  }, 450);
-                }
-              }
-            }
-          }
-        });
-    
-        this.peerWs.addEventListener('close', () => {
-          this.peerConnected = false;
-          led.className = 'w-2 h-2 rounded-full bg-slate-500';
-          label.textContent = 'Spawn 2nd Live WSS Peer';
-        });
-      }
-    
-      /**
-       * Connects to CoinGecko REST + Kraken public WebSocket v2 (`wss://ws.kraken.com/v2`)
-       * to display real-time PI (Pi Network), BTC, ETH, SOL, and XMR prices in the top bar.
-       */
-      initCryptoMarketStream() {
-        const fetchSpotPrices = () => {
-          fetch('https://api.coingecko.com/api/v3/simple/price?ids=pi-network,bitcoin,ethereum,solana,monero&vs_currencies=usd&include_24hr_change=true')
-            .then(r => r.json())
-            .then(data => {
-              if (data['pi-network']) this.updateTickerUI('PI', data['pi-network'].usd, data['pi-network'].usd_24h_change);
-              if (data.bitcoin) this.updateTickerUI('BTC', data.bitcoin.usd, data.bitcoin.usd_24h_change);
-              if (data.ethereum) this.updateTickerUI('ETH', data.ethereum.usd, data.ethereum.usd_24h_change);
-              if (data.solana) this.updateTickerUI('SOL', data.solana.usd, data.solana.usd_24h_change);
-              if (data.monero) this.updateTickerUI('XMR', data.monero.usd, data.monero.usd_24h_change);
-            })
-            .catch(() => {});
-        };
-    
-        // Initial REST fetch and periodic refresh for Pi Network & Crypto spot prices
-        fetchSpotPrices();
-        setInterval(fetchSpotPrices, 45000);
-    
-        // Live WebSocket stream from Kraken Public WS
-        try {
-          this.krakenWs = new WebSocket('wss://ws.kraken.com/v2');
-          this.krakenWs.addEventListener('open', () => {
-            this.krakenWs.send(JSON.stringify({
-              method: 'subscribe',
-              params: {
-                channel: 'ticker',
-                symbol: ['BTC/USD', 'ETH/USD', 'SOL/USD', 'XMR/USD']
-              }
-            }));
-          });
-          this.krakenWs.addEventListener('message', (ev) => {
-            try {
-              const msg = JSON.parse(ev.data);
-              if (msg.channel === 'ticker' && Array.isArray(msg.data)) {
-                msg.data.forEach(item => {
-                  const sym = item.symbol.split('/')[0];
-                  if (this.tickers[sym]) {
-                    this.updateTickerUI(sym, item.last, item.change_pct);
-                  }
-                });
-              }
-            } catch (e) {}
-          });
-        } catch (e) {}
-      }
-    
-      updateTickerUI(sym, price, changePct) {
-        const numPrice = Number(price);
-        if (isNaN(numPrice)) return;
-        const formattedPrice = numPrice >= 100
-          ? numPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-          : (numPrice < 1 ? numPrice.toFixed(4) : numPrice.toFixed(2));
-    
-        this.tickers[sym].price = formattedPrice;
-        const priceEl = document.getElementById(`price-${sym}`);
-        if (priceEl) priceEl.textContent = `$${formattedPrice}`;
-    
-        if (changePct !== undefined && changePct !== null) {
-          const numChg = Number(changePct);
-          this.tickers[sym].change24h = numChg.toFixed(2);
-          const chgEl = document.getElementById(`chg-${sym}`);
-          if (chgEl) {
-            const sign = numChg >= 0 ? '+' : '';
-            chgEl.textContent = `${sign}${numChg.toFixed(2)}%`;
-            chgEl.className = `text-[10px] tabular-nums ${numChg >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-          }
-        }
-      }
-    
-      shareTickerToChannel(sym) {
-        const t = this.tickers[sym];
-        const priceStr = t && t.price ? `$${t.price} (${t.change24h >= 0 ? '+' : ''}${t.change24h || '0.00'}%)` : 'fetching...';
-        const target = this.state.activeBuffer;
-        const payload = `📊 [$${sym}/USD Live Spot] ${priceStr} — via NEXUS//IRC`;
-    
-        if (this.state.connected && target !== '*status') {
-          if (this.sendRaw(`PRIVMSG ${target} :${payload}`)) {
-            if (!this.state.enabledCaps.has('echo-message')) {
-              this.addChatMessage(target, this.state.nick, payload);
-            }
-          }
-        } else {
-          const input = document.getElementById('ircMessageInput');
-          input.value = payload;
-          input.focus();
-        }
-      }
-    
+      toggleLivePeerBot() {}
+      initCryptoMarketStream() {}
+      updateTickerUI() {}
+      shareTickerToChannel() {}
+
       joinOrSwitchChannel(chanName) {
         const clean = chanName.startsWith('#') ? chanName : `#${chanName}`;
         const buf = this.ensureBuffer(clean, 'channel');
@@ -2415,7 +2237,7 @@
       }
       shareDeveloperInfoToChannel() {
         const target = this.state.activeBuffer;
-        const msg = '⚡ Developer: César (OpenSource Expert) Cordero Rodríguez | LatinChain: https://latinchain.pinet.com | For contracts: https://rockcesar.github.io#contact | Code (AGPLv3): https://github.com/rockcesar/rockcesar.github.io/tree/main/chatirc';
+        const msg = '⚡ Developer: César (OpenSource Expert) Cordero Rodríguez | For contracts: https://rockcesar.github.io#contact | Code (AGPLv3): https://github.com/rockcesar/rockcesar.github.io/tree/main/chatirc';
         if (this.state.connected && target !== '*status') {
           if (this.sendRaw(`PRIVMSG ${target} :${msg}`)) {
             if (!this.state.enabledCaps.has('echo-message')) {
