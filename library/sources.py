@@ -38,10 +38,12 @@ def parse(link):
     if m:
         n = m.group(1); out = {"source": "gutenberg", "source_id": n, "source_url": "https://www.gutenberg.org/ebooks/%s.html.images" % n,
                                "cover": "https://www.gutenberg.org/cache/epub/%s/pg%s.cover.medium.jpg" % (n, n), "rights": "Public domain in the USA (Project Gutenberg)"}
-        try:
-            g = _json("https://gutendex.com/books/" + n)
-        except Exception:
-            g = {}
+        g = _gutenberg_rdf(n)
+        if not g.get("title"):
+            try:
+                g = _json("https://gutendex.com/books/" + n)
+            except Exception:
+                g = {}
         a = (g.get("authors") or [{}])[0]
         out.update(title=str(g.get("title") or "Project Gutenberg book %s" % n)[:200], author=str(a.get("name") or "")[:160],
                    year="", lang=(g.get("languages") or ["en"])[0][:2], description=", ".join(g.get("subjects") or [])[:600])
@@ -53,3 +55,16 @@ def parse(link):
                 "title": title[:200], "author": "", "year": "", "lang": "ur" if m.group(1) == "ur" else "ar" if m.group(1) == "ar" else "en",
                 "cover": "", "rights": "Wikisource (public domain or free licence)", "description": ""}
     raise ValueError("Paste a link from archive.org, gutenberg.org or wikisource.org.")
+
+
+def _gutenberg_rdf(n):
+    """Book details straight from gutenberg.org (its own RDF file), shaped like Gutendex's answer."""
+    try:
+        x = urllib.request.urlopen(urllib.request.Request("https://www.gutenberg.org/ebooks/%s.rdf" % n, headers=UA), timeout=25).read().decode("utf-8", "ignore")
+    except Exception:
+        return {}
+    t = re.search(r"<dcterms:title>(.*?)</dcterms:title>", x, re.S); a = re.search(r"<pgterms:name>(.*?)</pgterms:name>", x, re.S)
+    l = re.search(r"<dcterms:language>.*?<rdf:value[^>]*>(.*?)</rdf:value>", x, re.S)
+    subj = re.findall(r"<dcterms:subject>.*?<rdf:value>(.*?)</rdf:value>", x, re.S)
+    return {"title": re.sub(r"\s+", " ", t.group(1)).strip() if t else "", "authors": [{"name": a.group(1).strip()}] if a else [],
+            "languages": [l.group(1).strip()] if l else ["en"], "subjects": [re.sub(r"\s+", " ", v).strip() for v in subj[:6]]}
