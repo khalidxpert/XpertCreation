@@ -43,6 +43,15 @@ class Command(BaseCommand):
             st = {"group": g.id, "next": 0}
             save()
             self.stdout.write("shairi: channel created (id %d, invite /group/join/%s)" % (g.id, g.invite_code))
+        # Quiet channel: mute everyone once (new members too); someone who unmutes later keeps that choice.
+        try:
+            done = set(st.get("muted", []))
+            new = list(GroupMember.objects.filter(group=g).exclude(user_id__in=done).values_list("user_id", flat=True))
+            if new:
+                GroupMember.objects.filter(group=g, user_id__in=new).update(muted=True)
+                st["muted"] = sorted(done | set(new)); save()
+        except Exception:
+            pass
         if o["setup_only"]:
             return
         order = list(range(len(POETRY)))
