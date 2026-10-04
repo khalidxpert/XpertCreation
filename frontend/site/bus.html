@@ -198,13 +198,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         h += nx ? '<div class="bsn" style="background:#DCFCE7;color:#166534"><b>Next today: ' + t12(nx.t) + ' (' + esc(nx.r.company) + ')</b> \u00b7 in ' + dur(nx.m - mins) + '</div>' : '<div class="bsn">No more buses today. These are tomorrow\u2019s times.</div>';
         h += rows.map(function(x){ var r = x.r, ft = r.from_terminal;
           return '<div class="bsr' + (x === nx ? " next" : "") + '"><div class="t">' + t12(x.t) + '</div><div><b>' + esc(r.company) + '</b>' + (r.service ? ' \u00b7 ' + esc(r.service) : '') + (r.minutes ? ' \u00b7 ' + dur(r.minutes) : '')
-            + '<small>' + (ft ? (ft.map ? '<a href="' + esc(ft.map) + '" target="_blank" rel="noopener">\uD83D\uDCCD ' + esc(ft.name) + '</a>' : '\uD83D\uDCCD ' + esc(ft.name)) + ' \u00b7 ' : '') + 'checked ' + esc(r.checked) + ' \u00b7 <a href="#" data-rep="' + r.id + '">Report wrong timing</a></small></div>'
+            + '<small>' + (ft ? (ft.map ? '<a href="#" data-mapq="' + esc(decodeURIComponent((ft.map.split("query=")[1] || "").replace(/\+/g, " "))) + '" data-mapt="' + esc(ft.name) + '">\uD83D\uDCCD ' + esc(ft.name) + '</a>' : '\uD83D\uDCCD ' + esc(ft.name)) + ' \u00b7 ' : '') + 'checked ' + esc(r.checked) + ' \u00b7 <a href="#" data-rep="' + r.id + '">Report wrong timing</a></small></div>'
             + '<div class="fare">' + (r.fare ? 'Rs ' + Number(r.fare).toLocaleString("en-PK") : '') + '</div></div>'; }).join("");
       }
       h += '<div class="bsn">Times and fares change. Please confirm with the company before you travel.</div>';
     }
     h += '<h3 style="margin:18px 0 8px">Book or check with the companies</h3>' + (D.companies.length ? D.companies.map(function(c){ return '<div class="bsc"><b>' + esc(c.name) + '</b>'
-      + (c.website ? ' \u00b7 <a href="' + esc(c.website) + '" target="_blank" rel="noopener">Website / booking</a>' : '') + (c.helpline ? ' \u00b7 <a href="tel:' + esc(c.helpline.replace(/[^\d+]/g, "")) + '">\u260E ' + esc(c.helpline) + '</a>' : '') + '</div>'; }).join("") : '<p>Coming soon.</p>');
+      + (c.website ? ' \u00b7 <a href="' + esc(c.website) + '" target="_blank" rel="noopener" title="Opens their website in a new tab">Book a seat on ' + esc(c.name.split(" ")[0]) + ' \u2197</a>' : '') + (c.helpline ? ' \u00b7 <a href="tel:' + esc(c.helpline.replace(/[^\d+]/g, "")) + '">\u260E ' + esc(c.helpline) + '</a>' : '') + '</div>'; }).join("") : '<p>Coming soon.</p>');
     if (D.staff) h += '<div class="bsst"><b>Staff: update timings</b><p style="font-size:13.5px;color:var(--ink-soft);margin:4px 0">One route per line: <code>Company, From, To, times, journey time, fare, class</code>. Times can be like <code>06:00 7:30 2:30pm</code>. Pasting a route again updates it.</p>'
       + '<textarea class="bsi" id="bl" placeholder="Daewoo Express, Lahore, Islamabad, 06:00 07:00 08:30, 4h30, 2600, Executive"></textarea><p><button class="bsb" data-bulk>Save routes</button> <span id="bm"></span></p>'
       + '<p style="margin:12px 0 4px"><b>Company</b></p><input class="bsi" id="cn" placeholder="Name, e.g. Daewoo Express"><input class="bsi" id="cw" placeholder="Website (https://…)" style="margin-top:6px"><input class="bsi" id="ch" placeholder="Helpline" style="margin-top:6px"><p><button class="bsb" data-co>Save company</button></p>'
@@ -216,6 +216,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function v(id){ return (document.getElementById(id) || {}).value || ""; }
   box.addEventListener("click", function(e){
     var t = e.target, x;
+    if ((x = t.closest("[data-mapq]"))){ e.preventDefault(); var mw = document.createElement("div");
+      mw.style.cssText = "position:fixed;inset:0;z-index:900;background:rgba(13,20,36,.6);display:flex;align-items:center;justify-content:center;padding:12px";
+      mw.innerHTML = '<div style="background:#fff;border-radius:16px;width:min(720px,100%);overflow:hidden"><div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-weight:800;color:#0D1424"><span>\uD83D\uDCCD ' + esc(x.getAttribute("data-mapt")) + '</span><button data-mclose style="border:0;background:#F1F4FA;border-radius:10px;padding:8px 12px;font:inherit;font-weight:800;cursor:pointer">\u2715 Close</button></div>'
+        + '<iframe src="https://maps.google.com/maps?q=' + encodeURIComponent(x.getAttribute("data-mapq")) + '&output=embed" style="width:100%;height:60vh;border:0" loading="lazy" title="Map"></iframe></div>';
+      mw.addEventListener("click", function(ev){ if (ev.target === mw || ev.target.closest("[data-mclose]")) mw.remove(); }); document.body.appendChild(mw); return; }
     if (t.closest("[data-swap]")){ var a = v("bf"); document.getElementById("bf").value = v("bt"); document.getElementById("bt").value = a; return; }
     if (t.closest("[data-go]")){ F = v("bf"); T = v("bt"); if (!F || !T) return; history.replaceState(null, "", "/bus?from=" + encodeURIComponent(F) + "&to=" + encodeURIComponent(T)); load(); return; }
     if ((x = t.closest("[data-rep]"))){ e.preventDefault(); var n = prompt("What is wrong? (for example: the 10:15 bus now leaves at 10:30)"); if (!n) return;
