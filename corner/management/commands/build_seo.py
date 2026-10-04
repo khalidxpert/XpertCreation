@@ -57,7 +57,7 @@ class Command(BaseCommand):
     def handle(self, *a, **o):
         self.land, self.urls, self.changed = o["land"], [], 0
         src = open(os.path.join(self.land, "team.html"), encoding="utf-8").read()
-        self.recipes(src); self.quran(src, o["surahs"]); self.mcq(src); self.board(src)
+        self.recipes(src); self.quran(src, o["surahs"]); self.mcq(src); self.board(src); self.bus(src); self.library(src); self.afsanay(src)
         sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
             "  <url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n" % (B, p, d) for p, d in self.urls) + "</urlset>\n"
         open(os.path.join(self.land, "sitemap-content.xml"), "w").write(sm)
@@ -202,3 +202,87 @@ class Command(BaseCommand):
         d = os.path.join(self.land, "board")
         for f in os.listdir(d) if os.path.isdir(d) else []:
             if f.endswith(".html") and f not in keep: os.remove(os.path.join(d, f))
+
+    # ---- bus terminal cities
+    def bus(self, src):
+        try:
+            from bus.models import Terminal
+        except Exception:
+            return
+        from collections import OrderedDict
+        by = OrderedDict()
+        for t in Terminal.objects.select_related("company").order_by("city", "company__name", "name"):
+            by.setdefault(t.city, []).append(t)
+        keep = set()
+        for city, T in by.items():
+            slug = slugify(city) or "city"; cards, ld = [], []
+            for t in T:
+                head, _, rest = t.name.partition(": "); addr, _, phone = rest.partition(" \u00b7 \u260E ")
+                cards.append('<div class="sx"><b>%s</b> \u00b7 %s%s%s</div>' % (E(t.company.name), E(head), ("<br>" + E(addr)) if addr else "", ("<br>\u260E <a href=\"tel:%s\">%s</a>" % (E(re.sub(r"[^\d+]", "", phone)[:13]), E(phone))) if phone else ""))
+                item = {"@type": "BusStation", "name": "%s %s" % (t.company.name, head), "address": {"@type": "PostalAddress", "streetAddress": addr or head, "addressLocality": city, "addressCountry": "PK"}}
+                if phone: item["telephone"] = phone
+                ld.append(item)
+            body = (CSS + '<p class="sxm"><a href="/bus">\u2190 All bus terminals</a></p><h1 style="font-size:26px;margin:8px 0 4px">Bus terminals in %s</h1>' % E(city)
+                    + '<p class="sxm">Daewoo and Niazi Express terminals in %s with address and phone number. <a href="/bus?city=%s">Open the map \u2192</a></p>' % (E(city), E(city)) + "".join(cards)
+                    + '<p class="sxm">From the companies\u2019 official websites. Call the terminal to confirm times and fares before you travel.</p>')
+            self.w("/bus/" + slug, _page(src, body, "Bus terminals in %s: Daewoo and Niazi address and phone \u2014 XpertCreation" % city,
+                                         "Daewoo and Niazi Express bus terminals in %s: address, phone number and map." % city, "/bus/" + slug, {"@context": "https://schema.org", "@graph": ld}))
+            keep.add(slug + ".html")
+        self._clean("bus", keep)
+
+    # ---- library books
+    def library(self, src):
+        try:
+            from library.models import Book
+        except Exception:
+            return
+        keep = set()
+        for b in Book.objects.filter(active=True).order_by("id"):
+            slug = "%d-%s" % (b.id, slugify(b.title)[:60] or "book")
+            ld = {"@context": "https://schema.org", "@type": "Book", "name": b.title, "inLanguage": b.lang, "url": B + "/library/" + slug}
+            if b.author: ld["author"] = {"@type": "Person", "name": b.author}
+            if b.cover: ld["image"] = b.cover
+            body = (CSS + '<p class="sxm"><a href="/library">\u2190 Library</a></p><div style="display:flex;gap:16px;flex-wrap:wrap">'
+                    + ('<img src="%s" alt="" style="width:160px;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,.12)">' % E(b.cover) if b.cover else "")
+                    + '<div style="flex:1;min-width:220px"><h1 style="font-size:26px;margin:0 0 6px">%s</h1><p><b>%s</b>%s</p>' % (E(b.title), E(b.author), (" \u00b7 " + E(b.year)) if b.year else "")
+                    + ('<p class="sxm">%s</p>' % E(b.description) if b.description else "")
+                    + '<p><a href="/library?id=%d" style="display:inline-block;padding:11px 16px;border-radius:12px;background:#A16207;color:#fff;font-weight:800;text-decoration:none">\U0001F4D6 Read online free</a></p>' % b.id
+                    + '<p class="sxm">Source: %s%s</p></div></div>' % ({"archive": "Internet Archive", "gutenberg": "Project Gutenberg", "wikisource": "Wikisource"}.get(b.source, b.source), (" \u00b7 " + E(b.rights)) if b.rights else ""))
+            self.w("/library/" + slug, _page(src, body, "%s%s: read online free \u2014 XpertCreation Library" % (b.title, (" by " + b.author) if b.author else ""),
+                                             ("Read %s%s online free. %s" % (b.title, (" by " + b.author) if b.author else "", b.description))[:300], "/library/" + slug, ld))
+            keep.add(slug + ".html")
+        self._clean("library", keep)
+
+    # ---- afsanay (published, approved stories only)
+    def afsanay(self, src):
+        try:
+            from afsanay.models import Afsana
+        except Exception:
+            return
+        keep = set(); CATS = dict(Afsana.CATS)
+        for a in Afsana.objects.filter(status="published", hidden=False).select_related("author").order_by("id"):
+            q = a.qists.filter(approved=True).order_by("n").first()
+            if not q:
+                continue
+            n = a.qists.filter(approved=True).count(); slug = "%d-%s" % (a.id, slugify(a.title)[:60] or "story")
+            who = (getattr(a.author, "full_name", "") or "").strip() or getattr(a.author, "username", "") or "Writer"
+            ur = ' class="ur"' if a.lang == "ur" else ""
+            ld = {"@context": "https://schema.org", "@type": "ShortStory", "name": a.title, "inLanguage": a.lang, "genre": CATS.get(a.category, a.category),
+                  "author": {"@type": "Person", "name": who}, "datePublished": a.created_at.date().isoformat(), "url": B + "/afsanay/" + slug}
+            body = (CSS + '<style>.ur{direction:rtl;text-align:right;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;line-height:2.2}</style>'
+                    + '<p class="sxm"><a href="/afsanay">\u2190 Afsanay</a></p><h1%s style="font-size:26px;margin:8px 0 4px">%s</h1>' % (ur, E(a.title))
+                    + '<p class="sxm">\u270D\uFE0F %s \u00b7 %s \u00b7 %d qist%s%s</p>' % (E(who), E(CATS.get(a.category, a.category)), n, "" if n == 1 else "s", " \u00b7 complete" if a.complete else "")
+                    + ('<p%s>%s</p>' % (ur, E(a.summary)) if a.summary else "")
+                    + '<div class="sx"><h2>Qist 1%s</h2><div%s style="white-space:pre-wrap;font-size:18px">%s</div></div>' % ((": " + E(q.title)) if q.title else "", ur, E(q.body))
+                    + ('<p><a href="/afsanay?id=%d&q=2" style="display:inline-block;padding:11px 16px;border-radius:12px;background:#7C3AED;color:#fff;font-weight:800;text-decoration:none">Continue reading: Qist 2 \u2192</a></p>' % a.id if n > 1 else "")
+                    + '<p><a href="/afsanay?id=%d">Like, save or comment on this story \u2192</a></p>' % a.id)
+            self.w("/afsanay/" + slug, _page(src, body, "%s \u2014 %s by %s | Afsanay on XpertCreation" % (a.title, CATS.get(a.category, "story"), who),
+                                             ("%s. %s" % (a.title, a.summary or q.body[:200]))[:300], "/afsanay/" + slug, ld))
+            keep.add(slug + ".html")
+        self._clean("afsanay", keep)
+
+    def _clean(self, folder, keep):
+        d = os.path.join(self.land, folder)
+        for f in os.listdir(d) if os.path.isdir(d) else []:
+            if f.endswith(".html") and f not in keep:
+                os.remove(os.path.join(d, f))
