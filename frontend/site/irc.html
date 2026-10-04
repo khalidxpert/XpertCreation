@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>XpertCreation IRC — NEXUS//IRC — Real-Time Pi Network, Crypto & Blockchain WebSocket IRC Client</title>
+  <title>XpertCreation IRC — live chat rooms</title>
   <!-- Google Fonts: Inter for UI Chrome & JetBrains Mono for IRC Protocol/Logs -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,34 +112,7 @@
       <span id="topPingBadge" class="text-emerald-400/90 tabular-nums hidden md:inline">-- ms</span>
     </div>
 
-    <!-- Center/Right: Real-Time Crypto Price Stream (Click to broadcast into IRC channel) -->
-    <div id="cryptoTickerBar" class="flex items-center gap-3 overflow-x-auto no-scrollbar py-0.5">
-      <button onclick="app.shareTickerToChannel('PI')" title="Click to post live Pi Network (PI) price to active IRC channel" class="flex items-center gap-1 hover:bg-obsidian-800 px-1.5 py-0.5 rounded border border-purple-500/30 bg-purple-500/10 transition shrink-0">
-        <span class="text-purple-400 font-bold">π PI</span>
-        <span id="price-PI" class="text-slate-200 tabular-nums">$--.--</span>
-        <span id="chg-PI" class="text-[10px] text-slate-400 tabular-nums">--%</span>
-      </button>
-      <button onclick="app.shareTickerToChannel('BTC')" title="Click to post live BTC price to active IRC channel" class="flex items-center gap-1 hover:bg-obsidian-800 px-1.5 py-0.5 rounded transition shrink-0">
-        <span class="text-amber-400 font-bold">BTC</span>
-        <span id="price-BTC" class="text-slate-200 tabular-nums">$--,--</span>
-        <span id="chg-BTC" class="text-[10px] text-slate-400 tabular-nums">--%</span>
-      </button>
-      <button onclick="app.shareTickerToChannel('ETH')" title="Click to post live ETH price to active IRC channel" class="flex items-center gap-1 hover:bg-obsidian-800 px-1.5 py-0.5 rounded transition shrink-0">
-        <span class="text-indigo-400 font-bold">ETH</span>
-        <span id="price-ETH" class="text-slate-200 tabular-nums">$--,--</span>
-        <span id="chg-ETH" class="text-[10px] text-slate-400 tabular-nums">--%</span>
-      </button>
-      <button onclick="app.shareTickerToChannel('SOL')" title="Click to post live SOL price to active IRC channel" class="flex items-center gap-1 hover:bg-obsidian-800 px-1.5 py-0.5 rounded transition shrink-0">
-        <span class="text-emerald-400 font-bold">SOL</span>
-        <span id="price-SOL" class="text-slate-200 tabular-nums">$--.--</span>
-        <span id="chg-SOL" class="text-[10px] text-slate-400 tabular-nums">--%</span>
-      </button>
-      <button onclick="app.shareTickerToChannel('XMR')" title="Click to post live XMR price to active IRC channel" class="flex items-center gap-1 hover:bg-obsidian-800 px-1.5 py-0.5 rounded transition shrink-0">
-        <span class="text-orange-400 font-bold">XMR</span>
-        <span id="price-XMR" class="text-slate-200 tabular-nums">$--.--</span>
-        <span id="chg-XMR" class="text-[10px] text-slate-400 tabular-nums">--%</span>
-      </button>
-    </div>
+    
   </div>
 
   <!-- MAIN WORKSPACE -->
@@ -162,7 +135,7 @@
               <h1 class="font-bold text-sm tracking-tight text-white">NEXUS<span class="text-cyan-400 font-mono">//IRC</span></h1>
               <span class="text-[10px] font-mono uppercase px-1.5 py-0.2 bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 rounded">IRCv3</span>
             </div>
-            <p class="text-[11px] text-slate-400 font-mono truncate max-w-[155px]" id="sidebarNickDisplay">nick: PioneerNode</p>
+            <p class="text-[11px] text-slate-400 font-mono truncate max-w-[155px]" id="sidebarNickDisplay">nick: Guest</p>
           </div>
         </div>
         <div class="flex items-center gap-1">
@@ -188,13 +161,7 @@
         </div>
 
         <!-- Real 2nd WebSocket Peer Verification Button -->
-        <button id="btnSpawnPeer" onclick="app.toggleLivePeerBot()" class="w-full py-1.5 px-2 rounded-lg text-[11px] font-mono bg-obsidian-700/80 hover:bg-obsidian-600 text-amber-300 border border-amber-500/30 flex items-center justify-between transition">
-          <span class="flex items-center gap-1.5">
-            <span id="peerBotLed" class="w-2 h-2 rounded-full bg-slate-500"></span>
-            <span id="peerBotLabel">Spawn 2nd Live WSS Peer</span>
-          </span>
-          <span class="text-[10px] px-1 rounded bg-obsidian-900 text-slate-400">REAL ECHO</span>
-        </button>
+        
       </div>
 
       <!-- Scrollable Channel & Buffer Tree -->
@@ -223,7 +190,7 @@
         <!-- Crypto & Blockchain Directory (1-Tap Join on Current IRC Network) -->
         <div>
           <div class="px-2 mb-1.5 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-amber-400/90">
-            <span>Pi, Crypto &amp; Chain Hub</span>
+            <span>XpertCreation channels</span>
             <span class="text-[9px] text-slate-400">1-Tap Join</span>
           </div>
           <div id="cryptoDirectoryList" class="space-y-1"></div>
@@ -253,15 +220,12 @@
                 César <span class="text-cyan-400 font-mono text-[11px]">(OpenSource Expert)</span> Cordero Rodríguez
               </div>
             </div>
-            <button onclick="app.openDeveloperModal()" title="View Developer Profile & LatinChain" class="px-1.5 py-0.5 rounded bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-[10px] font-mono shrink-0 transition">
+            <button onclick="app.openDeveloperModal()" title="View developer profile" class="px-1.5 py-0.5 rounded bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-[10px] font-mono shrink-0 transition">
               Info
             </button>
           </div>
           <div class="grid grid-cols-2 gap-1.5 pt-0.5 font-mono text-[10px]">
-            <a href="https://latinchain.pinet.com" target="_blank" rel="noopener noreferrer" class="py-1 px-2 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 flex items-center justify-center gap-1 font-semibold transition truncate">
-              <span>π LatinChain</span>
-              <span>↗</span>
-            </a>
+            
             <a href="https://rockcesar.github.io#contact" target="_blank" rel="noopener noreferrer" class="py-1 px-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30 flex items-center justify-center gap-1 font-semibold transition truncate">
               <span>💼 Contracts</span>
               <span>↗</span>
@@ -300,7 +264,7 @@
           <!-- Active Channel Name & Topic -->
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <h2 id="activeBufferTitle" class="font-mono font-bold text-sm sm:text-base text-white truncate">#latinchain</h2>
+              <h2 id="activeBufferTitle" class="font-mono font-bold text-sm sm:text-base text-white truncate">#xpertcreation</h2>
               <span id="activeBufferModes" class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-obsidian-700 text-cyan-400 border border-obsidian-600 hidden sm:inline">+nt</span>
               <span id="activeCategoryPill" class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 hidden sm:inline">Pi Open Mainnet</span>
             </div>
@@ -380,9 +344,6 @@
         <!-- Mobile-First Quick Command & Crypto Action Strip -->
         <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 mb-1.5 border-b border-obsidian-700/80 text-[11px] font-mono">
           <button type="button" onclick="app.joinOrSwitchChannel('#latinchain')" class="px-2 py-1 rounded bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 shrink-0 font-semibold">#latinchain</button>
-          <button type="button" onclick="app.shareTickerToChannel('PI')" class="px-2 py-1 rounded bg-purple-500/15 hover:bg-purple-500/25 text-amber-300 border border-purple-500/30 shrink-0">📊 Post PI</button>
-          <button type="button" onclick="app.shareTickerToChannel('BTC')" class="px-2 py-1 rounded bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 shrink-0">📊 Post BTC</button>
-          <button type="button" onclick="app.shareTickerToChannel('ETH')" class="px-2 py-1 rounded bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 border border-indigo-500/30 shrink-0">📊 Post ETH</button>
           <button type="button" onclick="app.insertCommandPrefix('/join #')" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-cyan-400 border border-obsidian-600 shrink-0">/join</button>
           <button type="button" onclick="app.insertCommandPrefix('/nick ')" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-cyan-400 border border-obsidian-600 shrink-0">/nick</button>
           <button type="button" onclick="app.insertCommandPrefix('/me ')" class="px-2 py-1 rounded bg-obsidian-700 hover:bg-obsidian-600 text-cyan-400 border border-obsidian-600 shrink-0">/me</button>
@@ -405,7 +366,7 @@
               autocorrect="off"
               autocapitalize="none"
               spellcheck="false"
-              placeholder="Message #bitcoin or type /help, /join #channel, /whois..."
+              placeholder="Message #xpertcreation or type /help, /join #channel, /whois..."
               oninput="app.handleComposerInput(this.value)"
               onkeydown="app.handleComposerKeydown(event)"
               class="w-full bg-obsidian-900 text-slate-100 placeholder-slate-500 font-mono text-sm px-3.5 py-2.5 rounded-xl border border-obsidian-600 focus:outline-none focus:border-cyan-500 transition"
@@ -429,7 +390,7 @@
       <div class="p-3 border-b border-obsidian-600 flex items-center justify-between bg-obsidian-900/60">
         <div>
           <h3 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">Channel Peers (NAMES)</h3>
-          <p id="rightDrawerChannelLabel" class="text-[11px] font-mono text-cyan-400">#bitcoin</p>
+          <p id="rightDrawerChannelLabel" class="text-[11px] font-mono text-cyan-400">#xpertcreation</p>
         </div>
         <button onclick="app.closeDrawers()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -469,7 +430,7 @@
           <div class="text-[10px] uppercase tracking-wider text-slate-400">Developer</div>
           <div class="text-slate-200 font-sans font-semibold text-xs">César (OpenSource Expert) Cordero Rodríguez</div>
           <div class="flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5 text-[11px]">
-            <a href="https://latinchain.pinet.com" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-purple-300 underline">LatinChain ↗</a>
+            
             <span class="text-slate-600">•</span>
             <a href="https://rockcesar.github.io#contact" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 underline">Contracts ↗</a>
             <span class="text-slate-600">•</span>
@@ -533,14 +494,14 @@
           </div>
           <div>
             <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Username / Ident</label>
-            <input id="inputUsername" type="text" value="cryptonode" maxlength="16" class="w-full bg-obsidian-900 border border-obsidian-600 rounded-xl px-3 py-2 font-mono text-xs text-slate-200 focus:outline-none focus:border-cyan-500" />
+            <input id="inputUsername" type="text" value="xpert" maxlength="16" class="w-full bg-obsidian-900 border border-obsidian-600 rounded-xl px-3 py-2 font-mono text-xs text-slate-200 focus:outline-none focus:border-cyan-500" />
           </div>
         </div>
 
         <!-- Auto-Join Crypto Channels -->
         <div>
-          <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Auto-Join LatinChain, Pi Network, Crypto &amp; Blockchain Channels (comma-separated)</label>
-          <input id="inputAutoChannels" type="text" value="#latinchain,#pi-network,#pi-node,#bitcoin,#ethereum,#monero,#defi,#blockchain,#crypto-trading" class="w-full bg-obsidian-900 border border-obsidian-600 rounded-xl px-3 py-2 font-mono text-xs text-emerald-300 focus:outline-none focus:border-cyan-500" />
+          <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Auto-join channels (comma-separated)</label>
+          <input id="inputAutoChannels" type="text" value="#xpertcreation,#xpertconnect,#xpertacademy,#help" class="w-full bg-obsidian-900 border border-obsidian-600 rounded-xl px-3 py-2 font-mono text-xs text-emerald-300 focus:outline-none focus:border-cyan-500" />
         </div>
       </div>
 
@@ -577,16 +538,16 @@
   <div id="joinModal" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
     <div class="bg-obsidian-800 border border-obsidian-500 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
       <div class="px-5 py-3.5 bg-obsidian-900 border-b border-obsidian-600 flex items-center justify-between">
-        <h3 class="font-bold text-sm text-white font-mono">Join Crypto Channel or Message Peer</h3>
+        <h3 class="font-bold text-sm text-white font-mono">Join a channel or message someone</h3>
         <button onclick="app.closeJoinChannelModal()" class="text-slate-400 hover:text-white">✕</button>
       </div>
       <form onsubmit="app.handleJoinSubmit(event)" class="p-5 space-y-4">
         <div>
           <label class="block text-xs font-mono uppercase text-slate-400 mb-1">Channel Name (starts with #) or Peer Nickname</label>
-          <input id="joinTargetInput" type="text" placeholder="#latinchain, #pi-network, #pi-ecosystem or #solana" required class="w-full bg-obsidian-900 border border-obsidian-600 rounded-xl px-3.5 py-2.5 font-mono text-sm text-white focus:outline-none focus:border-cyan-500" />
+          <input id="joinTargetInput" type="text" placeholder="#xpertconnect, #jobs or #help" required class="w-full bg-obsidian-900 border border-obsidian-600 rounded-xl px-3.5 py-2.5 font-mono text-sm text-white focus:outline-none focus:border-cyan-500" />
         </div>
         <div class="flex flex-wrap gap-1.5">
-          <span class="text-[11px] font-mono text-slate-400 w-full">Popular Pi Network, Crypto &amp; Blockchain Channels:</span>
+          <span class="text-[11px] font-mono text-slate-400 w-full">Popular channels:</span>
           <button type="button" onclick="document.getElementById('joinTargetInput').value='#latinchain'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-purple-300 font-semibold">#latinchain</button>
           <button type="button" onclick="document.getElementById('joinTargetInput').value='#pi-network'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-purple-300 font-semibold">π #pi-network</button>
           <button type="button" onclick="document.getElementById('joinTargetInput').value='#pi-node'" class="px-2 py-1 rounded bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-xs font-mono text-amber-300">#pi-node</button>
@@ -615,20 +576,8 @@
           NEXUS//IRC connects directly via native browser WebSockets (<code class="font-mono text-cyan-400">wss://</code>) to IRCv3 networks like Ergo and UnrealIRCd. Legacy TCP-only networks like <strong>Libera.Chat</strong> and <strong>OFTC</strong> require their own dedicated WebIRC proxy origins. You can launch their official crypto channels below or connect any <code class="font-mono text-cyan-400">wss://</code> bouncer (ZNC/Soju/Ergo) in Server Settings:
         </p>
         <div class="space-y-2 font-mono">
-          <a href="https://web.libera.chat/#bitcoin,#ethereum,#monero,#crypto" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 rounded-xl bg-obsidian-900 hover:bg-obsidian-700 border border-obsidian-600 transition">
-            <div>
-              <div class="text-amber-400 font-bold">Libera.Chat Official WebIRC</div>
-              <div class="text-[11px] text-slate-400">#bitcoin, #ethereum, #monero, #crypto</div>
-            </div>
-            <span class="text-cyan-400">↗ Launch</span>
-          </a>
-          <a href="https://webchat.oftc.net/?channels=bitcoin-wizards,Tor" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3 rounded-xl bg-obsidian-900 hover:bg-obsidian-700 border border-obsidian-600 transition">
-            <div>
-              <div class="text-emerald-400 font-bold">OFTC Official WebChat</div>
-              <div class="text-[11px] text-slate-400">#bitcoin-wizards, #tor</div>
-            </div>
-            <span class="text-cyan-400">↗ Launch</span>
-          </a>
+          
+          
         </div>
       </div>
     </div>
@@ -644,7 +593,7 @@
           </div>
           <div>
             <h3 class="font-bold text-sm sm:text-base text-white">About the Developer</h3>
-            <p class="text-[11px] font-mono text-purple-300">OpenSource, Pi Network &amp; Blockchain Architecture</p>
+            <p class="text-[11px] font-mono text-purple-300">OpenSource Expert</p>
           </div>
         </div>
         <button onclick="app.closeDeveloperModal()" class="text-slate-400 hover:text-white">✕</button>
@@ -658,25 +607,13 @@
             César <span class="text-amber-400 font-mono text-sm">(OpenSource Expert)</span> Cordero Rodríguez
           </div>
           <p class="text-xs text-slate-400 leading-relaxed pt-1">
-            Blockchain &amp; Decentralized Web3 Architect specializing in Open Source technologies, Pi Network ecosystem dApps, and real-time cryptographic communication protocols.
-          </p>
+            Open-source developer and author of NEXUS//IRC.</p>
         </div>
 
         <!-- Links Grid -->
         <div class="space-y-2.5 font-mono">
           <!-- LatinChain -->
-          <a href="https://latinchain.pinet.com" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 transition group">
-            <div class="min-w-0 pr-3">
-              <div class="text-xs text-purple-300 font-bold flex items-center gap-1.5">
-                <span>π LatinChain</span>
-                <span class="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-amber-300 border border-purple-500/30">PiNet Ecosystem</span>
-              </div>
-              <div class="text-xs text-slate-300 truncate mt-0.5">https://latinchain.pinet.com</div>
-            </div>
-            <span class="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-200 group-hover:bg-purple-500 group-hover:text-obsidian-950 font-bold text-xs transition shrink-0">
-              Visit ↗
-            </span>
-          </a>
+          
 
           <!-- For Contracts -->
           <a href="https://rockcesar.github.io#contact" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-3.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 transition group">
@@ -735,13 +672,7 @@
         category: 'LatinChain Platform',
         badgeColor: 'text-purple-300 border-purple-500/40 bg-purple-500/15',
         defaultTopic: 'LatinChain Platform & ecosystem dApps.'
-      },
-      {
-        name: '#pi-network',
-        category: 'Not Pi Core Team related',
-        badgeColor: 'text-purple-300 border-purple-500/40 bg-purple-500/15',
-        defaultTopic: 'Pi Network Open Mainnet, Pioneers hub, Stellar Consensus Protocol (SCP), Pi Wallet & ecosystem dApps.'
-      },
+      },,
       {
         name: '#pi-node',
         category: 'Not Pi Core Team related',
@@ -797,8 +728,7 @@
       { cmd: '/names', syntax: '/names [#channel]', desc: 'Request updated channel member list (353)' },
       { cmd: '/list', syntax: '/list', desc: 'List all active public channels on the IRC server' },
       { cmd: '/history', syntax: '/history [count]', desc: 'Fetch IRCv3 CHATHISTORY from the server' },
-      { cmd: '/ticker', syntax: '/ticker <PI|BTC|ETH|SOL|XMR>', desc: 'Broadcast live Pi Network or Crypto price to channel' },
-      { cmd: '/dev', syntax: '/dev', desc: 'View Developer info (César Cordero Rodríguez & LatinChain)' },
+      { cmd: '/dev', syntax: '/dev', desc: 'View developer info (César Cordero Rodríguez)' },
       { cmd: '/ping', syntax: '/ping', desc: 'Measure live round-trip latency to the IRC server' },
       { cmd: '/raw', syntax: '/raw <IRC COMMAND>', desc: 'Send a raw RFC 1459 command directly over WSS' },
       { cmd: '/clear', syntax: '/clear', desc: 'Clear messages in the active buffer view' },
@@ -821,8 +751,8 @@
           savedUsername = localStorage.getItem(STORAGE_KEYS.USERNAME);
         } catch (e) {}
     
-        const initialNick = (savedNick && savedNick.trim()) ? savedNick.trim() : `Pioneer_${randSuffix}`;
-        const initialUsername = (savedUsername && savedUsername.trim()) ? savedUsername.trim() : 'pinode';
+        const initialNick = (savedNick && savedNick.trim()) ? savedNick.trim() : `Guest_${randSuffix}`;
+        const initialUsername = (savedUsername && savedUsername.trim()) ? savedUsername.trim() : 'xpert';
     
         this.state = {
           serverUrl: 'wss://xpertcreation.com/webirc',
@@ -852,7 +782,7 @@
     
         // Optional 2nd Real WebSocket Peer Connection (for live multi-client round-trip verification)
         this.peerWs = null;
-        this.peerNick = `PiOracle_${Math.floor(10 + Math.random() * 89)}`;
+        this.peerNick = `Peer_${Math.floor(10 + Math.random() * 89)}`;
         this.peerConnected = false;
     
         // Live Crypto & Pi Network Prices state
@@ -920,8 +850,7 @@
         // Start real WebSocket connection to IRC server
         this.connect();
     
-        // Start real Crypto & Pi Network Market Ticker Stream
-        this.initCryptoMarketStream();
+        // (price feed removed: XpertCreation is non-crypto)
       }
     
       connect() {
@@ -1651,7 +1580,7 @@
     
         const input = document.getElementById('ircMessageInput');
         if (input) {
-          input.placeholder = `Message ${buf.name} or type /help, /join, /whois, /ticker BTC...`;
+          input.placeholder = `Message ${buf.name} or type /help, /join, /whois...`;
         }
       }
     
