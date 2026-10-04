@@ -1078,7 +1078,9 @@
             const capTail = params[params.length - 1] || '';
             if (subcmd === 'LS') {
               const isMultiline = params[2] === '*';
-              const offered = capTail.split(/\s+/);
+              this._capAcc = (this._capAcc || []).concat(capTail.split(/\s+/).filter(Boolean));
+              if (isMultiline) break;
+              const offered = this._capAcc; this._capAcc = [];
               const desired = ['message-tags', 'server-time', 'echo-message', 'batch', 'chathistory', 'labeled-response'];
               if (window.XC_SSO && this.state.serverUrl.indexOf('xpertcreation.com') >= 0) desired.push('sasl');
               const toReq = [];
