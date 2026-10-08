@@ -233,7 +233,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function status(t){ var s = document.getElementById("xrst"); if (!s) return; s.textContent = t || ""; s.classList.toggle("on", !!t); }
   function layout(){
     root.innerHTML = '<aside class="xrs" id="xrside"></aside><section class="xrm"><div class="xrh"><button class="xrmenu" data-open="xrside" aria-label="Rooms">\u2630</button><div style="min-width:0;flex:1;display:flex;flex-direction:column"><b id="xrt"></b><small id="xrtopic"></small></div><button class="xrppl" data-open="xru" aria-label="People">\uD83D\uDC65</button></div>'
-      + '<div class="xrst" id="xrst"></div><div class="xrl" id="xrl"></div><div class="xre">' + ["\uD83D\uDE00", "\uD83D\uDE02", "\u2764\uFE0F", "\uD83D\uDC4D", "\uD83D\uDE4F", "\uD83C\uDF89", "\uD83D\uDE0A", "\uD83E\uDD14"].map(function(e){ return '<button data-emo="' + e + '">' + e + '</button>'; }).join("") + '</div>'
+      + '<div class="xrst" id="xrst"></div><div id="xrmotd" style="display:none;margin:8px 14px 0;padding:10px 34px 10px 12px;border-radius:12px;background:#EEF2FF;color:#1E3A8A;font-size:13.5px;line-height:1.55;position:relative;white-space:pre-line"></div><div class="xrl" id="xrl"></div><div class="xre">' + ["\uD83D\uDE00", "\uD83D\uDE02", "\u2764\uFE0F", "\uD83D\uDC4D", "\uD83D\uDE4F", "\uD83C\uDF89", "\uD83D\uDE0A", "\uD83E\uDD14"].map(function(e){ return '<button data-emo="' + e + '">' + e + '</button>'; }).join("") + '</div>'
       + '<form class="xri" id="xrform" autocomplete="off"><input id="xrinput" maxlength="450" placeholder="Message"><button type="submit">Send</button></form></section><aside class="xru" id="xru"></aside>';
     root.insertAdjacentHTML("afterend", '<p class="xrcr">XpertCreation Chat Rooms \u00b7 be kind, no spam \u00b7 type <b>/help</b> for commands</p>');
     document.getElementById("xrform").addEventListener("submit", function(e){ e.preventDefault(); var i = document.getElementById("xrinput"); input(i.value); i.value = ""; });
@@ -272,6 +272,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       case "904": case "905": case "906": status("Sign-in failed. Retrying\u2026"); break;
       case "001": me = p[0]; tries = 0; status(""); send("JOIN " + AUTO.join(",")); break;
       case "433": status("That name is in use."); break;
+      case "375": motd = []; break;
+      case "372": motd.push(strip(p[p.length - 1] || "").replace(/^- ?/, "")); break;
+      case "376": showMotd(); break;
       case "BATCH": if (p[0][0] === "+"){ if (/chathistory/.test(p[1] || "")) batches[p[0].slice(1)] = p[2]; } else delete batches[p[0].slice(1)]; break;
       case "JOIN": var jc = p[0], jb = buf(jc);
         if (m.nick === me){ jb.joined = true; jb.users = {}; jb.msgs = []; if (caps.chathistory || caps["draft/chathistory"]) send("CHATHISTORY LATEST " + jc + " * 60"); if (jc.toLowerCase() === cur.toLowerCase() || !buf(cur).joined) show(jc); }
@@ -299,6 +302,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         if (/^4\d\d$/.test(m.cmd) && m.cmd !== "433") add(cur, {sys: true, text: p.slice(1).join(" ")}, true);
     }
   }
+  var motd = [];
+  function showMotd(){
+    var el = document.getElementById("xrmotd"); if (!el || !motd.length) return;
+    el.innerHTML = '<button data-motdx aria-label="Close" style="position:absolute;top:6px;right:8px;border:0;background:none;font-size:16px;cursor:pointer;color:inherit">\u2715</button>' + motd.map(function(l, i){ return i === 0 ? "<b>" + esc(l) + "</b>" : link(l); }).join("\n");
+    el.style.display = "block";
+  }
   function connect(){
     status(tries ? "Reconnecting\u2026" : "");
     fetch("/api/irc/token/", {credentials: "same-origin"}).then(function(r){ if (r.status === 401 || r.status === 403) throw "signin"; if (!r.ok) throw "down"; return r.json(); }).then(function(d){
@@ -317,6 +326,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var t = e.target, x;
     if ((x = t.closest("[data-b]"))) return show(x.getAttribute("data-b"));
     if ((x = t.closest("[data-join]"))) return send("JOIN " + x.getAttribute("data-join"));
+    if (t.closest("[data-motdx]")){ document.getElementById("xrmotd").style.display = "none"; return; }
     if (t.closest("[data-jo]")){ var v = (document.getElementById("xrjoin").value || "").trim(); if (!v) return; if (isChan(v) || !/^[A-Za-z_\[\]\\`^{}|][\w\-\[\]\\`^{}|]*$/.test(v)){ send("JOIN " + (isChan(v) ? v : "#" + v.replace(/[^\w-]/g, ""))); } else { buf(v); show(v); } return; }
     if ((x = t.closest("[data-u]"))){ var u = x.getAttribute("data-u"); if (u && u !== me){ buf(u); show(u); } return; }
     if ((x = t.closest("[data-emo]"))){ var i = document.getElementById("xrinput"); i.value += x.getAttribute("data-emo"); i.focus(); return; }
