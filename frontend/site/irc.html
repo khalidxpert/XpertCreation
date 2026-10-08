@@ -10,13 +10,14 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
 .xrtop{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#010409;border-bottom:1px solid #21262D}.xrtop img{width:22px;height:22px;border-radius:6px}.xrtop b{color:#E6EDF3}
 .xrtop .irc{font-size:11px;border:1px solid #1F6FEB;color:#58A6FF;border-radius:4px;padding:0 5px}#xrnet{color:#D29922;font-size:12px;margin-left:8px}#xrnet.on{color:#3FB950}
 .xrtop .back{margin-left:auto;font-size:12px;color:#8B949E;text-decoration:none}.xrtop .back:hover{color:#E6EDF3}
-.xrbody{flex:1;display:grid;grid-template-columns:200px minmax(0,1fr) 180px;min-height:0;overflow:hidden}
+.xrbody{flex:1 1 0;display:grid;grid-template-columns:200px minmax(0,1fr) 180px;grid-template-rows:minmax(0,1fr);min-height:0;overflow:hidden}
+.xrbody>*{min-height:0}.xrtop,.xrfoot,.xrh,.xri,.xrst{flex:0 0 auto}
 .xrs,.xru{background:#0D1117;overflow:auto;padding:6px}.xrs{border-right:1px solid #21262D}.xru{border-left:1px solid #21262D}
 .xrs h4,.xru h4{margin:10px 6px 4px;font-size:11px;color:#6E7681;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 .xrb{display:flex;width:100%;border:0;background:none;color:#C9D1D9;text-align:left;padding:4px 8px;border-radius:4px;cursor:pointer}.xrb:hover{background:#161B22}.xrb.on{background:#1F6FEB33;color:#E6EDF3;box-shadow:inset 2px 0 #1F6FEB}
 .xrb .u{margin-left:auto;color:#0B0F14;background:#D29922;border-radius:3px;font-size:11px;padding:0 5px}.xrb .u:not(.m){background:#F85149;color:#fff}
 .xrj{display:flex;gap:4px;margin:8px 4px}.xrj input{flex:1;min-width:0;background:#010409;border:1px solid #30363D;color:#E6EDF3;padding:4px 6px;border-radius:4px}.xrj button{background:#21262D;border:1px solid #30363D;color:#C9D1D9;border-radius:4px;cursor:pointer}
-.xrm{display:flex;flex-direction:column;min-width:0;background:#0B0F14}.xrh{display:flex;gap:10px;align-items:baseline;padding:6px 12px;border-bottom:1px solid #21262D;background:#0D1117}.xrh b{color:#E6EDF3}.xrh small{color:#8B949E;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.xrm{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;background:#0B0F14}.xrh{display:flex;gap:10px;align-items:baseline;padding:6px 12px;border-bottom:1px solid #21262D;background:#0D1117}.xrh b{color:#E6EDF3}.xrh small{color:#8B949E;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .xrl{flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 12px;min-height:0}.xrmsg.motd{max-width:100%}.xrmsg{white-space:pre-wrap;word-wrap:break-word;padding:1px 0}.xrmsg .t{color:#6E7681}.xrmsg .br{color:#6E7681}.xrmsg .n{cursor:pointer;font-weight:700}
 .xrmsg .ar{color:#6E7681}.xrmsg.sys{color:#8B949E}.xrmsg.j .ar{color:#3FB950}.xrmsg.p .ar{color:#F85149}.xrmsg.j,.xrmsg.p{color:#8B949E}.xrmsg.act{color:#D2A8FF}.xrmsg.hl{background:#D2992226;box-shadow:inset 2px 0 #D29922}.xrmsg.me .n{text-decoration:underline dotted}
 .xrday{color:#6E7681;text-align:center;margin:6px 0}
@@ -29,7 +30,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
 .xrwall{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}.xrwall h2{color:#E6EDF3;margin:10px 0 6px}.xrwall p{color:#8B949E}.xrwall a{display:inline-block;margin:6px;padding:8px 16px;border:1px solid #30363D;border-radius:6px;text-decoration:none}.xrwall a.go{background:#238636;color:#fff;border-color:#238636}
 .xrload{flex:1;display:flex;align-items:center;justify-content:center;color:#8B949E}
 .xrmenu,.xrppl{display:none;background:#21262D;border:1px solid #30363D;color:#C9D1D9;border-radius:4px;padding:2px 8px;cursor:pointer}
-@media(max-width:860px){.xrbody{grid-template-columns:minmax(0,1fr)}.xrtop .fs{margin-left:auto}.xrtop .xrppl{margin-left:6px!important}.xrs,.xru{display:none;position:fixed;top:0;bottom:0;z-index:50;width:min(260px,82vw);box-shadow:0 0 40px #000}.xrs{left:0}.xru{right:0}.xrs.open,.xru.open{display:block}.xrmenu,.xrppl{display:inline-block}.xrtop .back{display:none}.xrtop .xrppl{margin-left:auto}#xrnet{font-size:11px}}
+@media(max-width:860px){.xrbody{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}.xrtop .fs{margin-left:auto}.xrtop .xrppl{margin-left:6px!important}.xrs,.xru{display:none;position:fixed;top:0;bottom:0;z-index:50;width:min(260px,82vw);box-shadow:0 0 40px #000}.xrs{left:0}.xru{right:0}.xrs.open,.xru.open{display:block}.xrmenu,.xrppl{display:inline-block}.xrtop .back{display:none}.xrtop .xrppl{margin-left:auto}#xrnet{font-size:11px}}
 </style>
 </head><body><div id="xr" class="xr"><div class="xrload">* connecting to irc.xpertcreation.com…</div></div>
 <script>
@@ -74,7 +75,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
     L.innerHTML = h || '<div class="xrmsg sys"><span class="ar">-!-</span> no messages yet</div>'; if (atEnd || b._jump || (b._stick && Date.now() < b._stick)){ L.scrollTop = L.scrollHeight; b._jump = false; }
     document.getElementById("xrt").textContent = b.name; document.getElementById("xrtopic").textContent = b.name === "*status" ? "irc.xpertcreation.com \u00b7 XpertCreation IRC network" : (b.topic || (isChan(b.name) ? "(no topic)" : "Private query"));
     var U = Object.keys(b.users).sort(function(a, c){ var w = function(x){ return b.users[x] === 'op' ? 2 : b.users[x] === 'v' ? 1 : 0; }; return w(c) - w(a) || a.toLowerCase().localeCompare(c.toLowerCase()); });
-    document.getElementById("xru").innerHTML = isChan(b.name) ? '<h4>' + U.length + ' in this room</h4>' + U.map(function(u){ return '<button data-u="' + esc(u) + '"><span style="color:' + color(u) + ';font-weight:700">' + (b.users[u] === 'op' ? '@' : b.users[u] === 'v' ? '+' : '') + esc(u) + '</span></button>'; }).join("") : '<h4>Private chat</h4>';
+    document.getElementById("xru").innerHTML = isChan(b.name) ? '<h4>' + U.length + ' in this room</h4>' + U.map(function(u){ return '<button data-u="' + esc(u) + '"><span style="color:' + color(u) + ';font-weight:700">' + (b.users[u] === 'op' ? '@' : b.users[u] === 'v' ? '+' : '') + esc(u) + '</span></button>'; }).join("") : (b.name === '*status' ? '<h4>Server</h4><div style="padding:0 8px;color:#8B949E;font-size:12px">irc.xpertcreation.com<br>members only</div>' : '<h4>Private chat</h4>');
     document.getElementById("xrinput").placeholder = b.name === "*status" ? "type /join #channel or /help" : "message " + b.name; var pr = document.getElementById("xrprompt"); if (pr) pr.textContent = "[" + (me || "\u2026") + "]";
   }
   function drawSide(){
