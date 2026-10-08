@@ -137,6 +137,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
     if (t.slice(0, 2) === "//") t = t.slice(1);
     say(cur, t);
   }
+  var wantRoom = null;
   var whoisTo = null, hist = [], hpos = -1, draft = "", tabState = null;
   try { hist = JSON.parse(localStorage.getItem("xc_irc_hist") || "[]").slice(-50); } catch (x) { hist = []; }
   function tabComplete(inp){
@@ -173,7 +174,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
       case "AUTHENTICATE": if (p[0] === "+" && sso) send("AUTHENTICATE " + btoa(unescape(encodeURIComponent(sso.nick + "\0" + sso.nick + "\0" + sso.token)))); break;
       case "903": send("CAP END"); break;
       case "904": case "905": case "906": status("Sign-in failed. Retrying\u2026"); break;
-      case "001": me = p[0]; tries = 0; status(""); add("*status", {sys: true, text: strip(p[p.length - 1] || "Welcome")}, true); netState(true); send("JOIN " + AUTO.join(","));
+      case "001": me = p[0]; tries = 0; status(""); var hj = decodeURIComponent((location.hash || "").replace(/^#/, "")).toLowerCase(); if (/^[a-z0-9_-]{2,30}$/.test(hj)){ wantRoom = "#" + hj; if (AUTO.indexOf(wantRoom) < 0) send("JOIN " + wantRoom); } add("*status", {sys: true, text: strip(p[p.length - 1] || "Welcome")}, true); netState(true); send("JOIN " + AUTO.join(","));
         if (caps.chathistory || caps["draft/chathistory"]) send("CHATHISTORY TARGETS timestamp=2000-01-01T00:00:00.000Z timestamp=" + new Date(Date.now() + 60000).toISOString() + " 30");
         break;
       case "CHATHISTORY": if (p[0] === "TARGETS" && p[1] && !isChan(p[1])){ var db = buf(p[1]); db.msgs = []; send("CHATHISTORY LATEST " + p[1] + " * 40"); drawSide(); } break;
@@ -193,7 +194,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
       case "002": case "003": case "251": case "255": case "265": case "266": add("*status", {sys: true, text: strip(p[p.length - 1] || "")}, true); break;
       case "BATCH": if (p[0][0] === "+"){ if (/chathistory/.test(p[1] || "")) batches[p[0].slice(1)] = p[2]; } else delete batches[p[0].slice(1)]; break;
       case "JOIN": var jc = p[0], jb = buf(jc);
-        if (m.nick === me){ jb.joined = true; jb.users = {}; jb.msgs = []; if (caps.chathistory || caps["draft/chathistory"]) send("CHATHISTORY LATEST " + jc + " * 60"); if (jc.toLowerCase() === cur.toLowerCase() || cur === "*status" || !buf(cur).joined) show(jc); }
+        if (m.nick === me){ jb.joined = true; jb.users = {}; jb.msgs = []; if (caps.chathistory || caps["draft/chathistory"]) send("CHATHISTORY LATEST " + jc + " * 60"); if (wantRoom ? jc.toLowerCase() === wantRoom : (jc.toLowerCase() === cur.toLowerCase() || cur === "*status" || !buf(cur).joined)) show(jc); }
         else { jb.users[m.nick] = ""; if (!hist) add(jc, {kind: "join", who: m.nick, chan: jc, time: time}, true); }
         drawSide(); if (jc.toLowerCase() === cur.toLowerCase()) drawMsgs(); break;
       case "PART": var pb = buf(p[0]); if (m.nick === me){ pb.joined = false; var k = p[0].toLowerCase(); order = order.filter(function(x){ return x !== k; }); delete bufs[k]; if (k === cur.toLowerCase()) show(AUTO[0]); else drawSide(); }

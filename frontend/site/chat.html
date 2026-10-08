@@ -215,11 +215,11 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=41" defer></script>
+<script src="/js/topnav-1.js?v=43" defer></script>
 
 <div class="wrap">
   <h1>Chat</h1>
-    <div class="newc3"><button id="newchat3" type="button">+ New chat</button><button id="newgroup3" type="button" class="ghost3">+ New group</button><a href="/groups" class="ghost3" style="text-decoration:none;display:inline-flex;align-items:center">🔎 Find groups</a><button id="sel3" type="button" class="ghost3">Select</button><a href="/irc" class="ghost3" style="text-decoration:none">💬 Chat rooms</a></div>
+    <div class="newc3"><button id="newchat3" type="button">+ New chat</button><button id="newgroup3" type="button" class="ghost3">+ New group</button><a href="/groups" class="ghost3" style="text-decoration:none;display:inline-flex;align-items:center">🔎 Find groups</a><button id="sel3" type="button" class="ghost3">Select</button><a href="/chat-rooms" id="xcrooms" class="ghost3" style="text-decoration:none">💬 Chat rooms</a></div>
   <div id="selbar3"></div>
   <div id="grp3"></div>
   <p style="margin:6px 0 0;text-align:right"><a href="#" id="gprivacy3" style="font-size:13px">Groups privacy</a></p>
@@ -907,5 +907,11 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 })();
 </script>
 <script src="/js/translate-1.js?v=1" defer></script>
+<script>
+/* live count on the Chat rooms button */
+(function(){ var a = document.getElementById("xcrooms"); if (!a) return;
+  fetch("/irc-stats.json?t=" + Date.now(), {cache: "no-store"}).then(function(r){ return r.json(); }).then(function(d){ if (d && d.online > 0) a.textContent = "\uD83D\uDCAC Chat rooms \u00b7 " + d.online + " online"; }).catch(function(){});
+})();
+</script>
 </body>
 </html>
