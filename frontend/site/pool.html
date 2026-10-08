@@ -151,6 +151,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
+<style>
+body.poolfull header,body.poolfull nav,body.poolfull footer,body.poolfull .xcfoot,body.poolfull .top,body.poolfull .pooltop h1{display:none!important}
+body.poolfull{overflow:hidden}body.poolfull .wrap{padding-top:4px!important;margin-top:0!important}body.poolfull .pooltop{margin:2px 0 4px!important}
+#pfs{font-size:18px;line-height:1}
+</style>
 </head>
 <body>
 <header class="top">
@@ -191,7 +196,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 </style>
 <div class="pooltop"><h1>&#127921; 8-Ball Pool</h1>
   <select id="pmode" aria-label="Opponent"><option value="easy">vs Computer: Easy</option><option value="medium">vs Computer: Medium</option><option value="hard">vs Computer: Hard</option><option value="online">Play a friend online</option><option value="two">2 players (same phone)</option></select>
-  <button id="pnew">New game</button></div>
+  <button id="pnew">New game</button><button id="pfs" type="button" title="Full screen" aria-label="Full screen">&#x26F6;</button></div>
 <div class="pls"><div class="pl" id="p0"></div><div class="pl" id="p1"></div></div>
 <div id="poolwrap"><canvas id="pool" aria-label="Pool table"></canvas><div id="pover" hidden><div><b id="pwin"></b><button id="pagain">Play again</button></div></div></div>
 <div id="pmsg"></div>
@@ -412,7 +417,7 @@ function freeSpot(balls, x, y){
   // ---- layout
   function layout(){
     var w = wrapEl.clientWidth, portrait = window.innerHeight > window.innerWidth && w < 700;
-    vertical = portrait;
+    vertical = portrait; document.body.classList.toggle("poolfull", portrait);
     var tw = W + RAIL * 2, th = H + RAIL * 2;
     var top = wrapEl.getBoundingClientRect().top + (window.scrollY || 0);
     var ctl = document.querySelector(".pctl"), below = (ctl ? ctl.offsetHeight : 80) + ($("pmsg").offsetHeight || 30) + 28;
@@ -714,11 +719,13 @@ function freeSpot(balls, x, y){
   }, 1500);
   // ---- input
   function pos(e){ var t = e.touches ? e.touches[0] : e; return toTable(t.clientX, t.clientY); }
+  var aimStart = null;
   function down(e){
     if (busy || st.over || !humanTurn()) return;
     var p = pos(e), c = balls[0];
-    if ((st.ballInHand || placing) && Math.hypot(p.x - c.x, p.y - c.y) < R * 3) dragging = "ball"; else dragging = "aim";
-    move(e); e.preventDefault();
+    if ((st.ballInHand || placing) && Math.hypot(p.x - c.x, p.y - c.y) < R * 3){ dragging = "ball"; move(e); }
+    else { dragging = "aim"; aimStart = {a: aim, p: Math.atan2(p.y - c.y, p.x - c.x), x: p.x, y: p.y, moved: false}; }
+    e.preventDefault();
   }
   function move(e){
     if (!dragging) return;
@@ -726,10 +733,13 @@ function freeSpot(balls, x, y){
     if (dragging === "ball"){
       var x = Math.max(R, Math.min((placing && st.breakShot) ? HEAD_X : W - R, p.x)), y = Math.max(R, Math.min(H - R, p.y));
       if (freeSpot(balls, x, y)){ c.x = x; c.y = y; }
-    } else aim = Math.atan2(p.y - c.y, p.x - c.x);
+    } else if (aimStart){
+      if (!aimStart.moved && Math.hypot(p.x - aimStart.x, p.y - aimStart.y) < 12) return;   // a tap does not move the aim
+      aimStart.moved = true; aim = aimStart.a + (Math.atan2(p.y - c.y, p.x - c.x) - aimStart.p);   // drag turns the cue like a dial
+    }
     draw(); e.preventDefault();
   }
-  function up(){ dragging = null; }
+  function up(){ dragging = null; aimStart = null; }
   cv.addEventListener("mousedown", down); window.addEventListener("mousemove", move); window.addEventListener("mouseup", up);
   cv.addEventListener("touchstart", down, {passive: false}); cv.addEventListener("touchmove", move, {passive: false}); cv.addEventListener("touchend", up);
   $("ppower").oninput = function(){ power = this.value / 100; $("ppv").textContent = this.value + "%"; draw(); };
@@ -739,6 +749,11 @@ function freeSpot(balls, x, y){
   $("pagain").onclick = function(){ if (mode === "online") leaveOnline(); newGame(); };
   $("pmode").value = mode;
   $("pmode").onchange = function(){ var was = mode; mode = this.value; if (was === "online" && mode !== "online") leaveOnline(); if (mode !== "online"){ try { localStorage.setItem("xc_pool_mode", mode); } catch (e) {} } showPanel(); newGame(); };
+  $("pfs").onclick = function(){ var d = document.documentElement;
+    if (!document.fullscreenElement && !document.webkitFullscreenElement){ var f = d.requestFullscreen || d.webkitRequestFullscreen; if (f) f.call(d); }
+    else { var x = document.exitFullscreen || document.webkitExitFullscreen; if (x) x.call(document); } };
+  document.addEventListener("fullscreenchange", function(){ setTimeout(layout, 60); });
+  window.addEventListener("orientationchange", function(){ setTimeout(layout, 150); });
   window.addEventListener("resize", layout);
   $("ppower").value = 55; $("ppv").textContent = "55%";
   newGame(); layout();
