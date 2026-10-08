@@ -19,7 +19,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
 .xrl{flex:1;overflow:auto;padding:6px 12px}.xrmsg{white-space:pre-wrap;word-wrap:break-word;padding:1px 0}.xrmsg .t{color:#6E7681}.xrmsg .br{color:#6E7681}.xrmsg .n{cursor:pointer;font-weight:700}
 .xrmsg .ar{color:#6E7681}.xrmsg.sys{color:#8B949E}.xrmsg.j .ar{color:#3FB950}.xrmsg.p .ar{color:#F85149}.xrmsg.j,.xrmsg.p{color:#8B949E}.xrmsg.act{color:#D2A8FF}.xrmsg.hl{background:#D2992226;box-shadow:inset 2px 0 #D29922}.xrmsg.me .n{text-decoration:underline dotted}
 .xrday{color:#6E7681;text-align:center;margin:6px 0}
-.xrmsg.art{white-space:pre;color:#58A6FF;overflow-x:auto;font-size:13px;line-height:1.25}@media(max-width:860px){.xrmsg.art{font-size:9px}}
+.xrmsg.art,.xrmsg.motd{white-space:pre;overflow-x:auto;line-height:1.3}.xrmsg.motd{color:#C9D1D9;padding:0}@media(max-width:860px){.xrmsg.motd{font-size:9.5px}}
 .xrst{display:none;padding:4px 12px;background:#D29922;color:#0B0F14;font-size:12px}.xrst.on{display:block}
 .xri{display:flex;align-items:center;gap:6px;padding:6px 10px;border-top:1px solid #21262D;background:#010409}#xrprompt{color:#3FB950;white-space:nowrap}
 .xri input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#E6EDF3;font:inherit;font-size:15px;padding:6px 0}.xri button{background:#238636;border:0;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer}
@@ -62,6 +62,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
     var n = function(x){ return '<span class="n" data-u="' + esc(x) + '" style="color:' + color(x) + '">' + esc(x) + '</span>'; };
     if (m.kind === "join") return '<div class="xrmsg j">' + t + '<span class="ar">--&gt;</span> ' + n(m.who) + ' has joined ' + esc(m.chan) + '</div>';
     if (m.kind === "part") return '<div class="xrmsg p">' + t + '<span class="ar">&lt;--</span> ' + n(m.who) + ' ' + esc(m.text) + '</div>';
+    if (m.motd) return '<div class="xrmsg motd"><span class="ar">-</span> ' + link(m.text) + '</div>';
     if (m.sys) return '<div class="xrmsg sys' + (m.art ? " art" : "") + '">' + t + '<span class="ar">-!-</span> ' + link(m.text) + '</div>';
     if (m.act) return '<div class="xrmsg act' + (hl ? " hl" : "") + '">' + t + '<span class="ar">*</span> ' + n(m.nick) + ' ' + link(m.text) + '</div>';
     return '<div class="xrmsg' + (m.nick === me ? " me" : "") + (hl ? " hl" : "") + '">' + t + '<span class="br">&lt;</span>' + n(m.nick) + '<span class="br">&gt;</span> ' + link(m.text) + '</div>';
@@ -166,8 +167,8 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
       case "367": add(p[1], {sys: true, text: "Ban: " + p[2]}, true); break;
       case "MODE": if (isChan(p[0])){ add(p[0], {sys: true, text: m.nick + " sets mode " + p.slice(1).join(" "), time: time}, hist); if (/[ov]/.test(p[1] || "")) send("NAMES " + p[0]); } break;
       case "353": var nb = buf(p[2]); if (nb._namesDone){ nb.users = {}; nb._namesDone = false; } (p[3] || "").split(" ").filter(Boolean).forEach(function(n){ var pre = (n.match(/^[~&@%+]+/) || [""])[0]; nb.users[n.slice(pre.length)] = /[~&@%]/.test(pre) ? "op" : (/\+/.test(pre) ? "v" : ""); }); break;
-      case "375": case "372": var ml = strip(p[p.length - 1] || "").replace(/^- ?/, ""); add("*status", {sys: true, text: ml, art: /[_\\\/|]{2}|\|_/.test(ml) && !/https?:/.test(ml)}, true); break;
-      case "376": add("*status", {sys: true, text: "End of message of the day. Type /help for commands."}, true); break;
+      case "375": case "372": add("*status", {motd: true, text: strip(p[p.length - 1] || "").replace(/^- ?/, "")}, true); break;
+      case "376": add("*status", {motd: true, text: ""}, true); add("*status", {sys: true, text: "End of message of the day. Type /help for commands."}, true); break;
       case "002": case "003": case "251": case "255": case "265": case "266": add("*status", {sys: true, text: strip(p[p.length - 1] || "")}, true); break;
       case "BATCH": if (p[0][0] === "+"){ if (/chathistory/.test(p[1] || "")) batches[p[0].slice(1)] = p[2]; } else delete batches[p[0].slice(1)]; break;
       case "JOIN": var jc = p[0], jb = buf(jc);
