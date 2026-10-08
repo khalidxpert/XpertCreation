@@ -19,6 +19,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
 .xrl{flex:1;overflow:auto;padding:6px 12px}.xrmsg{white-space:pre-wrap;word-wrap:break-word;padding:1px 0}.xrmsg .t{color:#6E7681}.xrmsg .br{color:#6E7681}.xrmsg .n{cursor:pointer;font-weight:700}
 .xrmsg .ar{color:#6E7681}.xrmsg.sys{color:#8B949E}.xrmsg.j .ar{color:#3FB950}.xrmsg.p .ar{color:#F85149}.xrmsg.j,.xrmsg.p{color:#8B949E}.xrmsg.act{color:#D2A8FF}.xrmsg.hl{background:#D2992226;box-shadow:inset 2px 0 #D29922}.xrmsg.me .n{text-decoration:underline dotted}
 .xrday{color:#6E7681;text-align:center;margin:6px 0}
+.xrmsg.art{white-space:pre;color:#58A6FF;overflow-x:auto;font-size:13px;line-height:1.25}@media(max-width:860px){.xrmsg.art{font-size:9px}}
 .xrst{display:none;padding:4px 12px;background:#D29922;color:#0B0F14;font-size:12px}.xrst.on{display:block}
 .xri{display:flex;align-items:center;gap:6px;padding:6px 10px;border-top:1px solid #21262D;background:#010409}#xrprompt{color:#3FB950;white-space:nowrap}
 .xri input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#E6EDF3;font:inherit;font-size:15px;padding:6px 0}.xri button{background:#238636;border:0;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer}
@@ -61,7 +62,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
     var n = function(x){ return '<span class="n" data-u="' + esc(x) + '" style="color:' + color(x) + '">' + esc(x) + '</span>'; };
     if (m.kind === "join") return '<div class="xrmsg j">' + t + '<span class="ar">--&gt;</span> ' + n(m.who) + ' has joined ' + esc(m.chan) + '</div>';
     if (m.kind === "part") return '<div class="xrmsg p">' + t + '<span class="ar">&lt;--</span> ' + n(m.who) + ' ' + esc(m.text) + '</div>';
-    if (m.sys) return '<div class="xrmsg sys">' + t + '<span class="ar">-!-</span> ' + link(m.text) + '</div>';
+    if (m.sys) return '<div class="xrmsg sys' + (m.art ? " art" : "") + '">' + t + '<span class="ar">-!-</span> ' + link(m.text) + '</div>';
     if (m.act) return '<div class="xrmsg act' + (hl ? " hl" : "") + '">' + t + '<span class="ar">*</span> ' + n(m.nick) + ' ' + link(m.text) + '</div>';
     return '<div class="xrmsg' + (m.nick === me ? " me" : "") + (hl ? " hl" : "") + '">' + t + '<span class="br">&lt;</span>' + n(m.nick) + '<span class="br">&gt;</span> ' + link(m.text) + '</div>';
   }
@@ -70,8 +71,8 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
     b.msgs.forEach(function(m){ var d = m.time.toDateString(); if (d !== day){ day = d; h += '<div class="xrday">' + m.time.toLocaleDateString([], {weekday: "short", day: "numeric", month: "short"}) + '</div>'; } h += line(m); });
     L.innerHTML = h || '<div class="xrmsg sys"><span class="ar">-!-</span> no messages yet</div>'; if (atEnd || b._jump){ L.scrollTop = L.scrollHeight; b._jump = false; }
     document.getElementById("xrt").textContent = b.name; document.getElementById("xrtopic").textContent = b.name === "*status" ? "irc.xpertcreation.com \u00b7 XpertCreation IRC network" : (b.topic || (isChan(b.name) ? "(no topic)" : "Private query"));
-    var U = Object.keys(b.users).sort(function(a, c){ return (b.users[c] ? 1 : 0) - (b.users[a] ? 1 : 0) || a.toLowerCase().localeCompare(c.toLowerCase()); });
-    document.getElementById("xru").innerHTML = isChan(b.name) ? '<h4>' + U.length + ' in this room</h4>' + U.map(function(u){ return '<button data-u="' + esc(u) + '"><span style="color:' + color(u) + ';font-weight:700">' + (b.users[u] ? '@' : '') + esc(u) + '</span></button>'; }).join("") : '<h4>Private chat</h4>';
+    var U = Object.keys(b.users).sort(function(a, c){ var w = function(x){ return b.users[x] === 'op' ? 2 : b.users[x] === 'v' ? 1 : 0; }; return w(c) - w(a) || a.toLowerCase().localeCompare(c.toLowerCase()); });
+    document.getElementById("xru").innerHTML = isChan(b.name) ? '<h4>' + U.length + ' in this room</h4>' + U.map(function(u){ return '<button data-u="' + esc(u) + '"><span style="color:' + color(u) + ';font-weight:700">' + (b.users[u] === 'op' ? '@' : b.users[u] === 'v' ? '+' : '') + esc(u) + '</span></button>'; }).join("") : '<h4>Private chat</h4>';
     document.getElementById("xrinput").placeholder = b.name === "*status" ? "type /join #channel or /help" : "message " + b.name; var pr = document.getElementById("xrprompt"); if (pr) pr.textContent = "[" + (me || "\u2026") + "]";
   }
   function drawSide(){
@@ -96,17 +97,44 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
     if (cur === "*status" && t[0] !== "/"){ add("*status", {sys: true, text: "You are in the status window. Join a channel first: /join #xpertcreation"}); return; }
     if (t[0] === "/" && t[1] !== "/"){
       var sp = t.indexOf(" "), c = (sp < 0 ? t.slice(1) : t.slice(1, sp)).toLowerCase(), rest = sp < 0 ? "" : t.slice(sp + 1).trim();
-      if (c === "join" && rest){ var r = rest.split(" ")[0]; if (!isChan(r)) r = "#" + r; send("JOIN " + r); return; }
-      if (c === "part" || c === "leave"){ if (isChan(cur)){ send("PART " + cur + " :Bye"); } return; }
-      if ((c === "msg" || c === "query") && rest){ var to = rest.split(" ")[0], tx = rest.slice(to.length).trim(); buf(to); if (tx) say(to, tx); show(to); return; }
+      var a = rest ? rest.split(/\s+/) : [], ch = isChan(cur) ? cur : "", need = function(){ if (!ch){ add(cur, {sys: true, text: "Use this inside a channel."}); return false; } return true; };
+      if (c === "join" && rest){ var r = a[0]; if (!isChan(r)) r = "#" + r; send("JOIN " + r); return; }
+      if (c === "part" || c === "leave"){ if (ch) send("PART " + ch + " :" + (rest || "Bye")); return; }
+      if ((c === "msg" || c === "query") && rest){ var to = a[0], tx = rest.slice(to.length).trim(); if (/^(nickserv|chanserv|hostserv|histserv)$/i.test(to)){ send("PRIVMSG " + to + " :" + tx); return; } buf(to); if (tx) say(to, tx); show(to); return; }
+      if (c === "ns" || c === "nickserv"){ send("PRIVMSG NickServ :" + (rest || "help")); return; }
+      if (c === "cs" || c === "chanserv"){ send("PRIVMSG ChanServ :" + (rest || "help")); return; }
+      if (c === "hs" || c === "hostserv"){ send("PRIVMSG HostServ :" + (rest || "help")); return; }
       if (c === "me" && rest){ send("PRIVMSG " + cur + " :\x01ACTION " + rest + "\x01"); if (!caps["echo-message"]) add(cur, {nick: me, text: rest, act: true}); return; }
-      if (c === "topic" && rest && isChan(cur)){ send("TOPIC " + cur + " :" + rest); return; }
-      if (c === "help"){ add(cur, {sys: true, text: "Commands: /join #room \u00b7 /part \u00b7 /msg name text \u00b7 /me action \u00b7 /topic text. Tap a name to chat privately."}); return; }
+      if (c === "topic"){ if (need()) send(rest ? "TOPIC " + ch + " :" + rest : "TOPIC " + ch); return; }
+      if (c === "whois" && a[0]){ whoisTo = cur; send("WHOIS " + a[0]); return; }
+      if (/^(op|deop|voice|devoice)$/.test(c) && a[0]){ if (need()) send("MODE " + ch + " " + {op: "+o", deop: "-o", voice: "+v", devoice: "-v"}[c] + " " + a[0]); return; }
+      if (c === "kick" && a[0]){ if (need()) send("KICK " + ch + " " + a[0] + " :" + (a.slice(1).join(" ") || "Please follow the rules")); return; }
+      if ((c === "ban" || c === "unban") && a[0]){ if (need()) send("MODE " + ch + " " + (c === "ban" ? "+b " : "-b ") + (a[0].indexOf("!") < 0 && a[0].indexOf("@") < 0 ? a[0] + "!*@*" : a[0])); return; }
+      if (c === "mode"){ send("MODE " + (a[0] && /^[+-]/.test(a[0]) && ch ? ch + " " + rest : (rest || ch))); return; }
+      if (c === "invite" && a[0]){ if (need()) send("INVITE " + a[0] + " " + ch); return; }
+      if (c === "away"){ send(rest ? "AWAY :" + rest : "AWAY"); add(cur, {sys: true, text: rest ? "You are marked as away: " + rest : "You are back."}); return; }
+      if (c === "back"){ send("AWAY"); return; }
+      if (c === "list"){ show("*status"); send("LIST"); return; }
+      if (c === "names"){ if (need()) send("NAMES " + ch); return; }
+      if (c === "oper" && a.length >= 2){ send("OPER " + a[0] + " " + a.slice(1).join(" ")); return; }
+      if (c === "kill" && a[0]){ send("KILL " + a[0] + " :" + (a.slice(1).join(" ") || "Breaking the rules")); return; }
+      if ((c === "quote" || c === "raw") && rest){ send(rest); return; }
+      if (c === "clear"){ buf(cur).msgs = []; drawMsgs(); return; }
+      if (c === "help"){ HELP.forEach(function(h){ add(cur, {sys: true, text: h}); }); return; }
       add(cur, {sys: true, text: "Unknown command. Type /help"}); return;
     }
     if (t.slice(0, 2) === "//") t = t.slice(1);
     say(cur, t);
   }
+  var whoisTo = null;
+  var HELP = ["XpertCreation IRC commands — one username everywhere: your nick is your XpertCreation username. New? Register free at https://xpertcreation.com/register",
+    "Chat:      /join #room  · /part [reason]  · /msg nick text  · /me action  · /topic [text]  · /names  · /list  · /clear",
+    "People:    /whois nick  · /away [reason]  · /back  · /invite nick",
+    "Operators: /op nick  · /deop nick  · /voice nick  · /devoice nick  · /kick nick [reason]  · /ban nick  · /unban nick  · /mode +i  (inside a channel)",
+    "NickServ:  /ns info  · /ns info nick   (nick registration is automatic with your XpertCreation account)",
+    "ChanServ:  /cs register #room  · /cs info #room  · /cs op #room nick  · /cs deop #room nick  · /cs amode #room +o nick  · /cs help",
+    "IRCops:    /oper name password  · /kill nick [reason]  · /quote RAW COMMAND",
+    "Tips: tap a nick to chat privately · hover a time to see the full date · type // to send a message starting with /"];
   function say(to, t){ if (to === "*") return; send("PRIVMSG " + to + " :" + t); if (!caps["echo-message"]) add(to, {nick: me, text: t}); }
   function onLine(raw){
     var m = parse(raw), p = m.params, time = m.tags.time ? new Date(m.tags.time) : null, hist = !!(m.tags.batch && batches[m.tags.batch]);
@@ -128,7 +156,17 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
         break;
       case "CHATHISTORY": if (p[0] === "TARGETS" && p[1] && !isChan(p[1])){ var db = buf(p[1]); db.msgs = []; send("CHATHISTORY LATEST " + p[1] + " * 40"); drawSide(); } break;
       case "433": status("That name is in use."); break;
-      case "375": case "372": add("*status", {sys: true, text: strip(p[p.length - 1] || "").replace(/^- ?/, "")}, true); break;
+      case "311": case "312": case "313": case "317": case "319": case "330": case "338": case "378": case "379": case "671": case "320": case "276": case "301":
+        add(whoisTo || cur, {sys: true, text: p.slice(1).join(" ").replace(/ :?/, " ")}, true); break;
+      case "318": add(whoisTo || cur, {sys: true, text: "End of WHOIS"}, true); whoisTo = null; break;
+      case "322": add("*status", {sys: true, text: p[1] + " (" + p[2] + " users) " + strip(p[3] || "")}, true); break;
+      case "323": add("*status", {sys: true, text: "End of channel list"}, true); break;
+      case "381": add(cur, {sys: true, text: "★ You are now an IRC operator."}, true); break;
+      case "324": add(p[1], {sys: true, text: "Channel modes: " + p.slice(2).join(" ")}, true); break;
+      case "367": add(p[1], {sys: true, text: "Ban: " + p[2]}, true); break;
+      case "MODE": if (isChan(p[0])){ add(p[0], {sys: true, text: m.nick + " sets mode " + p.slice(1).join(" "), time: time}, hist); if (/[ov]/.test(p[1] || "")) send("NAMES " + p[0]); } break;
+      case "353": var nb = buf(p[2]); if (nb._namesDone){ nb.users = {}; nb._namesDone = false; } (p[3] || "").split(" ").filter(Boolean).forEach(function(n){ var pre = (n.match(/^[~&@%+]+/) || [""])[0]; nb.users[n.slice(pre.length)] = /[~&@%]/.test(pre) ? "op" : (/\+/.test(pre) ? "v" : ""); }); break;
+      case "375": case "372": var ml = strip(p[p.length - 1] || "").replace(/^- ?/, ""); add("*status", {sys: true, text: ml, art: /[_\\\/|]{2}|\|_/.test(ml) && !/https?:/.test(ml)}, true); break;
       case "376": add("*status", {sys: true, text: "End of message of the day. Type /help for commands."}, true); break;
       case "002": case "003": case "251": case "255": case "265": case "266": add("*status", {sys: true, text: strip(p[p.length - 1] || "")}, true); break;
       case "BATCH": if (p[0][0] === "+"){ if (/chathistory/.test(p[1] || "")) batches[p[0].slice(1)] = p[2]; } else delete batches[p[0].slice(1)]; break;
@@ -143,8 +181,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
       case "NICK": order.forEach(function(k){ var b = bufs[k]; if (m.nick in b.users){ b.users[p[0]] = b.users[m.nick]; delete b.users[m.nick]; if (k === cur.toLowerCase()) drawMsgs(); } }); if (m.nick === me) me = p[0]; break;
       case "332": buf(p[1]).topic = strip(p[2] || ""); drawMsgs(); break;
       case "TOPIC": buf(p[0]).topic = strip(p[1] || ""); add(p[0], {sys: true, text: m.nick + " changed the topic: " + strip(p[1] || ""), time: time}, hist); break;
-      case "353": var nb = buf(p[2]); (p[3] || "").split(" ").filter(Boolean).forEach(function(n){ var pre = (n.match(/^[~&@%+]+/) || [""])[0]; nb.users[n.slice(pre.length)] = /[~&@%]/.test(pre) ? "op" : ""; }); break;
-      case "366": if (p[1].toLowerCase() === cur.toLowerCase()) drawMsgs(); break;
+      case "366": buf(p[1])._namesDone = true; if (p[1].toLowerCase() === cur.toLowerCase()) drawMsgs(); break;
       case "PRIVMSG": case "NOTICE":
         var target = p[0], text = strip(p[1] || ""), act = /^\x01ACTION /.test(p[1] || "");
         if (/^\x01/.test(p[1] || "") && !act) break;
