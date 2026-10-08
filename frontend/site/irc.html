@@ -22,6 +22,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
 .xrmsg .ar{color:#6E7681}.xrmsg.sys{color:#8B949E}.xrmsg.j .ar{color:#3FB950}.xrmsg.p .ar{color:#F85149}.xrmsg.j,.xrmsg.p{color:#8B949E}.xrmsg.act{color:#D2A8FF}.xrmsg.hl{background:#D2992226;box-shadow:inset 2px 0 #D29922}.xrmsg.me .n{text-decoration:underline dotted}
 .xrday{color:#6E7681;text-align:center;margin:6px 0}
 .xrmsg.art,.xrmsg.motd{white-space:pre;overflow-x:auto;line-height:1.3}.xrmsg.motd{color:#C9D1D9;padding:0}@media(max-width:860px){.xrmsg.motd{font-size:9.5px}}
+.xrguest{gap:10px;align-items:center;flex-wrap:wrap;padding:5px 12px;background:#1F6FEB22;border-bottom:1px solid #1F6FEB55;font-size:12.5px;flex:0 0 auto}.xrguest span{flex:1;min-width:200px}.xrguest a{color:#58A6FF;text-decoration:none;border:1px solid #1F6FEB;border-radius:4px;padding:1px 8px}
 .xrst{display:none;padding:4px 12px;background:#D29922;color:#0B0F14;font-size:12px}.xrst.on{display:block}
 .xri{display:flex;align-items:center;gap:6px;padding:6px 10px;border-top:1px solid #21262D;background:#010409}#xrprompt{color:#3FB950;white-space:nowrap}
 .xri input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#E6EDF3;font:inherit;font-size:15px;padding:6px 0}.xri button{background:#238636;border:0;color:#fff;border-radius:4px;padding:4px 10px;cursor:pointer}
@@ -36,7 +37,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
 <script>
 (function(){
   "use strict";
-  var AUTO = ["#xpertcreation", "#xpertconnect", "#xpertacademy", "#help"], ROOMS = ["#xpertcreation", "#xpertconnect", "#xpertacademy", "#help", "#jobs", "#pakistan", "#tech", "#games"];
+  var AUTO = ["#xpertcreation", "#xpertconnect", "#xpertacademy", "#help", "#shairi"], ROOMS = ["#xpertcreation", "#xpertconnect", "#xpertacademy", "#help", "#shairi", "#jobs", "#pakistan", "#tech", "#games"];
   var root = document.getElementById("xr"), ws = null, me = "", sso = null, caps = {}, capAcc = [], bufs = {}, order = [], cur = "*status", batches = {}, tries = 0, wantClose = false;
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function link(s){ return esc(s).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]'"])/g, '<a href="$1" target="_blank" rel="noopener nofollow">$1</a>'); }
@@ -89,7 +90,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
   function status(t){ var s = document.getElementById("xrst"); if (!s) return; s.textContent = t || ""; s.classList.toggle("on", !!t); }
   function layout(){
     root.innerHTML = '<header class="xrtop"><button class="xrmenu" data-open="xrside" aria-label="Channels">\u2630</button><img src="/brand/xpertconnect/xc-icon-64.png" alt=""><b>XpertCreation</b><span class="irc">IRC</span><span id="xrnet">\u25CF connecting\u2026</span><button class="fs" data-fs title="Full screen" aria-label="Full screen">\u26F6</button><a href="/" class="back">\u2190 xpertcreation.com</a><button class="xrppl" data-open="xru" aria-label="Nicks">\uD83D\uDC65</button></header>'
-      + '<div class="xrbody"><aside class="xrs" id="xrside"></aside><section class="xrm"><div class="xrh"><b id="xrt"></b><small id="xrtopic"></small></div><div class="xrst" id="xrst"></div><div class="xrl" id="xrl"></div>'
+      + '<div class="xrbody"><aside class="xrs" id="xrside"></aside><section class="xrm"><div class="xrh"><b id="xrt"></b><small id="xrtopic"></small></div><div class="xrst" id="xrst"></div><div id="xrguest" class="xrguest" style="display:none"><span>You are a <b>guest</b>. Sign in to chat with your own name and register channels.</span><a href="/login?next=/irc">/login</a><a href="/register">/register (free)</a></div><div class="xrl" id="xrl"></div>'
       + '<form class="xri" id="xrform" autocomplete="off"><span id="xrprompt">[\u2026]</span><input id="xrinput" maxlength="450" spellcheck="false"><button type="submit">\u21B5</button></form></section><aside class="xru" id="xru"></aside></div>'
       + '<footer class="xrfoot">XpertCreation IRC \u00b7 irc.xpertcreation.com \u00b7 \u00a9 XpertCreation \u00b7 Founder: Syed Khalid Hussain Shah</footer>';
     var inp = document.getElementById("xrinput");
@@ -164,8 +165,9 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
         if (p[1] === "LS"){ capAcc = capAcc.concat(p[p.length - 1].split(" ").filter(Boolean)); if (p[2] === "*") break;
           var want = ["sasl", "server-time", "message-tags", "echo-message", "batch", "chathistory", "draft/chathistory", "away-notify", "multi-prefix", "account-notify", "extended-join"];
           var have = capAcc.map(function(c){ return c.split("=")[0]; }).filter(function(c){ return want.indexOf(c) >= 0; }); capAcc = [];
+          if (!sso) have = have.filter(function(c){ return c !== "sasl"; });
           if (have.length) send("CAP REQ :" + have.join(" ")); else send("CAP END"); }
-        else if (p[1] === "ACK"){ p[p.length - 1].split(" ").forEach(function(c){ if (c) caps[c.replace(/^-/, "")] = c[0] !== "-"; }); if (caps.sasl) send("AUTHENTICATE PLAIN"); else send("CAP END"); }
+        else if (p[1] === "ACK"){ p[p.length - 1].split(" ").forEach(function(c){ if (c) caps[c.replace(/^-/, "")] = c[0] !== "-"; }); if (caps.sasl && sso) send("AUTHENTICATE PLAIN"); else send("CAP END"); }
         else if (p[1] === "NAK") send("CAP END");
         break;
       case "AUTHENTICATE": if (p[0] === "+" && sso) send("AUTHENTICATE " + btoa(unescape(encodeURIComponent(sso.nick + "\0" + sso.nick + "\0" + sso.token)))); break;
@@ -219,17 +221,15 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
   function netState(on){ var d = document.getElementById("xrnet"); if (d){ d.className = on ? "on" : ""; d.textContent = on ? "\u25CF connected to irc.xpertcreation.com" : "\u25CF connecting\u2026"; } }
   function connect(){
     status(tries ? "Reconnecting\u2026" : "");
-    fetch("/api/irc/token/", {credentials: "same-origin"}).then(function(r){ if (r.status === 401 || r.status === 403) throw "signin"; if (!r.ok) throw "down"; return r.json(); }).then(function(d){
-      sso = d; caps = {}; capAcc = []; batches = {};
-      ws = new WebSocket("wss://xpertcreation.com/webirc", ["text.ircv3.net"]);
-      ws.onopen = function(){ send("CAP LS 302"); send("NICK " + d.nick); send("USER xc 0 * :XpertCreation member"); };
-      ws.onmessage = function(e){ String(e.data).split(/\r?\n/).forEach(function(l){ if (l) onLine(l); }); };
-      ws.onclose = function(){ netState(false); if (wantClose) return; tries++; status("Connection lost. Reconnecting\u2026"); order.forEach(function(k){ bufs[k].users = {}; }); setTimeout(connect, Math.min(30000, 1500 * tries)); };
-    }).catch(function(e){
-      if (e === "signin"){ root.innerHTML = '<div class="xrwall"><div><img src="/brand/xpertconnect/xc-icon-64.png" alt="" style="width:56px"><h2>XpertCreation IRC</h2><p>* Members only. Sign in with your XpertCreation account to join<br>#xpertcreation #xpertconnect #xpertacademy #help and more.</p>'
-        + '<a href="/login?next=/irc" class="go">/login</a><a href="/register">/register (free)</a><p><a href="/">\u2190 back to xpertcreation.com</a></p></div></div>'; return; }
-      tries++; status("Chat rooms are not reachable right now. Retrying\u2026"); setTimeout(connect, Math.min(30000, 2000 * tries));
-    });
+    fetch("/api/irc/token/", {credentials: "same-origin"}).then(function(r){ if (r.status === 401 || r.status === 403) return null; if (!r.ok) throw "down"; return r.json(); })
+      .then(function(d){ openWs(d); }).catch(function(){ tries++; status("Chat rooms are not reachable right now. Retrying\u2026"); setTimeout(connect, Math.min(30000, 2000 * tries)); });
+  }
+  function openWs(d){
+    sso = d; caps = {}; capAcc = []; batches = {}; var g = document.getElementById("xrguest"); if (g) g.style.display = d ? "none" : "flex";
+    ws = new WebSocket("wss://xpertcreation.com/webirc", ["text.ircv3.net"]);
+    ws.onopen = function(){ send("CAP LS 302"); send("NICK " + (d ? d.nick : "Guest")); send("USER " + (d ? "xc" : "guest") + " 0 * :" + (d ? "XpertCreation member" : "XpertCreation guest")); };
+    ws.onmessage = function(e){ String(e.data).split(/\r?\n/).forEach(function(l){ if (l) onLine(l); }); };
+    ws.onclose = function(){ netState(false); if (wantClose) return; tries++; status("Connection lost. Reconnecting\u2026"); order.forEach(function(k){ bufs[k].users = {}; }); setTimeout(connect, Math.min(30000, 1500 * tries)); };
   }
   document.addEventListener("click", function(e){
     var t = e.target, x;
