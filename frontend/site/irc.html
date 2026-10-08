@@ -227,7 +227,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
   function openWs(d){
     sso = d; caps = {}; capAcc = []; batches = {}; var g = document.getElementById("xrguest"); if (g) g.style.display = d ? "none" : "flex";
     ws = new WebSocket("wss://xpertcreation.com/webirc", ["text.ircv3.net"]);
-    ws.onopen = function(){ send("CAP LS 302"); send("NICK " + (d ? d.nick : "Guest")); send("USER " + (d ? "xc" : "guest") + " 0 * :" + (d ? "XpertCreation member" : "XpertCreation guest")); };
+    ws.onopen = function(){ send("CAP LS 302"); send("NICK " + (d ? d.nick : "Guest")); var idt = d ? (String(d.nick).toLowerCase().replace(/[^a-z0-9._-]/g, "").slice(0, 19) || "member") : "guest"; send("USER " + idt + " 0 * :" + (d ? "XpertCreation member" : "XpertCreation guest")); };
     ws.onmessage = function(e){ String(e.data).split(/\r?\n/).forEach(function(l){ if (l) onLine(l); }); };
     ws.onclose = function(){ netState(false); if (wantClose) return; tries++; status("Connection lost. Reconnecting\u2026"); order.forEach(function(k){ bufs[k].users = {}; }); setTimeout(connect, Math.min(30000, 1500 * tries)); };
   }
