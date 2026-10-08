@@ -59,6 +59,12 @@ class Command(BaseCommand):
         i = st.get("next", 0) % len(order)
         p = POETRY[order[i]]
         text = "\U0001F4D6 %s\n\n\u2014 %s\n\n%s\n%s\n\nxpertcreation.com/poetry" % (p[1], p[0], p[2], p[3])
+        # also post this couplet to IRC #shairi (ShairiBot picks it up)
+        try:
+            import time as _t
+            open("/var/lib/xc-ircbot/queue/%d.txt" % int(_t.time() * 1000), "w", encoding="utf-8").write(text)
+        except Exception:
+            pass
         try:
             from notifications.groupbot import say
             say(g, text[:2000])
