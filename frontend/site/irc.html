@@ -3,20 +3,21 @@
 <title>XpertCreation IRC — irc.xpertcreation.com</title><meta name="description" content="XpertCreation IRC: live chat rooms for members on irc.xpertcreation.com.">
 <link rel="icon" href="/brand/xpertconnect/xc-icon-64.png" type="image/png"><meta name="theme-color" content="#010409"><meta name="robots" content="noindex">
 <style>
-html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 ui-monospace,"JetBrains Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#0B0F14;color:#C9D1D9;font:14px/1.45 ui-monospace,"JetBrains Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace}
 *{box-sizing:border-box}a{color:#58A6FF}button{font:inherit}
-.xr{display:flex;flex-direction:column;height:100dvh}
+.xr{display:flex;flex-direction:column;height:100vh;height:100dvh;width:100vw;overflow:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.xrtop .fs{margin-left:auto;background:#21262D;border:1px solid #30363D;color:#C9D1D9;border-radius:4px;padding:0 7px;cursor:pointer;font-size:14px}.xrtop .fs+.back{margin-left:10px}
 .xrtop{display:flex;align-items:center;gap:8px;padding:6px 12px;background:#010409;border-bottom:1px solid #21262D}.xrtop img{width:22px;height:22px;border-radius:6px}.xrtop b{color:#E6EDF3}
 .xrtop .irc{font-size:11px;border:1px solid #1F6FEB;color:#58A6FF;border-radius:4px;padding:0 5px}#xrnet{color:#D29922;font-size:12px;margin-left:8px}#xrnet.on{color:#3FB950}
 .xrtop .back{margin-left:auto;font-size:12px;color:#8B949E;text-decoration:none}.xrtop .back:hover{color:#E6EDF3}
-.xrbody{flex:1;display:grid;grid-template-columns:200px 1fr 180px;min-height:0}
+.xrbody{flex:1;display:grid;grid-template-columns:200px minmax(0,1fr) 180px;min-height:0;overflow:hidden}
 .xrs,.xru{background:#0D1117;overflow:auto;padding:6px}.xrs{border-right:1px solid #21262D}.xru{border-left:1px solid #21262D}
 .xrs h4,.xru h4{margin:10px 6px 4px;font-size:11px;color:#6E7681;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 .xrb{display:flex;width:100%;border:0;background:none;color:#C9D1D9;text-align:left;padding:4px 8px;border-radius:4px;cursor:pointer}.xrb:hover{background:#161B22}.xrb.on{background:#1F6FEB33;color:#E6EDF3;box-shadow:inset 2px 0 #1F6FEB}
 .xrb .u{margin-left:auto;color:#0B0F14;background:#D29922;border-radius:3px;font-size:11px;padding:0 5px}.xrb .u:not(.m){background:#F85149;color:#fff}
 .xrj{display:flex;gap:4px;margin:8px 4px}.xrj input{flex:1;min-width:0;background:#010409;border:1px solid #30363D;color:#E6EDF3;padding:4px 6px;border-radius:4px}.xrj button{background:#21262D;border:1px solid #30363D;color:#C9D1D9;border-radius:4px;cursor:pointer}
 .xrm{display:flex;flex-direction:column;min-width:0;background:#0B0F14}.xrh{display:flex;gap:10px;align-items:baseline;padding:6px 12px;border-bottom:1px solid #21262D;background:#0D1117}.xrh b{color:#E6EDF3}.xrh small{color:#8B949E;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.xrl{flex:1;overflow:auto;padding:6px 12px}.xrmsg{white-space:pre-wrap;word-wrap:break-word;padding:1px 0}.xrmsg .t{color:#6E7681}.xrmsg .br{color:#6E7681}.xrmsg .n{cursor:pointer;font-weight:700}
+.xrl{flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 12px;min-height:0}.xrmsg.motd{max-width:100%}.xrmsg{white-space:pre-wrap;word-wrap:break-word;padding:1px 0}.xrmsg .t{color:#6E7681}.xrmsg .br{color:#6E7681}.xrmsg .n{cursor:pointer;font-weight:700}
 .xrmsg .ar{color:#6E7681}.xrmsg.sys{color:#8B949E}.xrmsg.j .ar{color:#3FB950}.xrmsg.p .ar{color:#F85149}.xrmsg.j,.xrmsg.p{color:#8B949E}.xrmsg.act{color:#D2A8FF}.xrmsg.hl{background:#D2992226;box-shadow:inset 2px 0 #D29922}.xrmsg.me .n{text-decoration:underline dotted}
 .xrday{color:#6E7681;text-align:center;margin:6px 0}
 .xrmsg.art,.xrmsg.motd{white-space:pre;overflow-x:auto;line-height:1.3}.xrmsg.motd{color:#C9D1D9;padding:0}@media(max-width:860px){.xrmsg.motd{font-size:9.5px}}
@@ -28,7 +29,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
 .xrwall{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}.xrwall h2{color:#E6EDF3;margin:10px 0 6px}.xrwall p{color:#8B949E}.xrwall a{display:inline-block;margin:6px;padding:8px 16px;border:1px solid #30363D;border-radius:6px;text-decoration:none}.xrwall a.go{background:#238636;color:#fff;border-color:#238636}
 .xrload{flex:1;display:flex;align-items:center;justify-content:center;color:#8B949E}
 .xrmenu,.xrppl{display:none;background:#21262D;border:1px solid #30363D;color:#C9D1D9;border-radius:4px;padding:2px 8px;cursor:pointer}
-@media(max-width:860px){.xrbody{grid-template-columns:1fr}.xrs,.xru{display:none;position:fixed;top:0;bottom:0;z-index:50;width:min(260px,82vw);box-shadow:0 0 40px #000}.xrs{left:0}.xru{right:0}.xrs.open,.xru.open{display:block}.xrmenu,.xrppl{display:inline-block}.xrtop .back{display:none}.xrtop .xrppl{margin-left:auto}#xrnet{font-size:11px}}
+@media(max-width:860px){.xrbody{grid-template-columns:minmax(0,1fr)}.xrtop .fs{margin-left:auto}.xrtop .xrppl{margin-left:6px!important}.xrs,.xru{display:none;position:fixed;top:0;bottom:0;z-index:50;width:min(260px,82vw);box-shadow:0 0 40px #000}.xrs{left:0}.xru{right:0}.xrs.open,.xru.open{display:block}.xrmenu,.xrppl{display:inline-block}.xrtop .back{display:none}.xrtop .xrppl{margin-left:auto}#xrnet{font-size:11px}}
 </style>
 </head><body><div id="xr" class="xr"><div class="xrload">* connecting to irc.xpertcreation.com…</div></div>
 <script>
@@ -70,7 +71,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
   function drawMsgs(){
     var b = buf(cur), L = document.getElementById("xrl"); if (!L) return; var atEnd = L.scrollHeight - L.scrollTop - L.clientHeight < 80, day = "", h = "";
     b.msgs.forEach(function(m){ var d = m.time.toDateString(); if (d !== day){ day = d; h += '<div class="xrday">' + m.time.toLocaleDateString([], {weekday: "short", day: "numeric", month: "short"}) + '</div>'; } h += line(m); });
-    L.innerHTML = h || '<div class="xrmsg sys"><span class="ar">-!-</span> no messages yet</div>'; if (atEnd || b._jump){ L.scrollTop = L.scrollHeight; b._jump = false; }
+    L.innerHTML = h || '<div class="xrmsg sys"><span class="ar">-!-</span> no messages yet</div>'; if (atEnd || b._jump || (b._stick && Date.now() < b._stick)){ L.scrollTop = L.scrollHeight; b._jump = false; }
     document.getElementById("xrt").textContent = b.name; document.getElementById("xrtopic").textContent = b.name === "*status" ? "irc.xpertcreation.com \u00b7 XpertCreation IRC network" : (b.topic || (isChan(b.name) ? "(no topic)" : "Private query"));
     var U = Object.keys(b.users).sort(function(a, c){ var w = function(x){ return b.users[x] === 'op' ? 2 : b.users[x] === 'v' ? 1 : 0; }; return w(c) - w(a) || a.toLowerCase().localeCompare(c.toLowerCase()); });
     document.getElementById("xru").innerHTML = isChan(b.name) ? '<h4>' + U.length + ' in this room</h4>' + U.map(function(u){ return '<button data-u="' + esc(u) + '"><span style="color:' + color(u) + ';font-weight:700">' + (b.users[u] === 'op' ? '@' : b.users[u] === 'v' ? '+' : '') + esc(u) + '</span></button>'; }).join("") : '<h4>Private chat</h4>';
@@ -86,15 +87,22 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
   function show(name){ cur = name; var b = buf(name); b.unread = 0; b.mention = false; b._jump = true; drawSide(); drawMsgs(); document.querySelectorAll(".xrs,.xru").forEach(function(e){ e.classList.remove("open"); }); var i = document.getElementById("xrinput"); if (i && window.innerWidth > 900) i.focus(); }
   function status(t){ var s = document.getElementById("xrst"); if (!s) return; s.textContent = t || ""; s.classList.toggle("on", !!t); }
   function layout(){
-    root.innerHTML = '<header class="xrtop"><button class="xrmenu" data-open="xrside" aria-label="Channels">\u2630</button><img src="/brand/xpertconnect/xc-icon-64.png" alt=""><b>XpertCreation</b><span class="irc">IRC</span><span id="xrnet">\u25CF connecting\u2026</span><a href="/" class="back">\u2190 xpertcreation.com</a><button class="xrppl" data-open="xru" aria-label="Nicks">\uD83D\uDC65</button></header>'
+    root.innerHTML = '<header class="xrtop"><button class="xrmenu" data-open="xrside" aria-label="Channels">\u2630</button><img src="/brand/xpertconnect/xc-icon-64.png" alt=""><b>XpertCreation</b><span class="irc">IRC</span><span id="xrnet">\u25CF connecting\u2026</span><button class="fs" data-fs title="Full screen" aria-label="Full screen">\u26F6</button><a href="/" class="back">\u2190 xpertcreation.com</a><button class="xrppl" data-open="xru" aria-label="Nicks">\uD83D\uDC65</button></header>'
       + '<div class="xrbody"><aside class="xrs" id="xrside"></aside><section class="xrm"><div class="xrh"><b id="xrt"></b><small id="xrtopic"></small></div><div class="xrst" id="xrst"></div><div class="xrl" id="xrl"></div>'
       + '<form class="xri" id="xrform" autocomplete="off"><span id="xrprompt">[\u2026]</span><input id="xrinput" maxlength="450" spellcheck="false"><button type="submit">\u21B5</button></form></section><aside class="xru" id="xru"></aside></div>'
       + '<footer class="xrfoot">XpertCreation IRC \u00b7 irc.xpertcreation.com \u00b7 \u00a9 XpertCreation \u00b7 Founder: Syed Khalid Hussain Shah</footer>';
-    document.getElementById("xrform").addEventListener("submit", function(e){ e.preventDefault(); var i = document.getElementById("xrinput"); input(i.value); i.value = ""; });
+    var inp = document.getElementById("xrinput");
+    document.getElementById("xrform").addEventListener("submit", function(e){ e.preventDefault(); var v = inp.value; if (v.trim()){ hist.push(v); if (hist.length > 50) hist.shift(); try { localStorage.setItem("xc_irc_hist", JSON.stringify(hist)); } catch (x) {} } hpos = -1; input(v); inp.value = ""; tabState = null; });
+    inp.addEventListener("keydown", function(e){
+      if (e.key === "ArrowUp" && hist.length){ e.preventDefault(); if (hpos < 0) draft = inp.value; hpos = Math.min(hist.length - 1, hpos + 1); inp.value = hist[hist.length - 1 - hpos]; setTimeout(function(){ inp.setSelectionRange(inp.value.length, inp.value.length); }, 0); return; }
+      if (e.key === "ArrowDown" && hpos >= 0){ e.preventDefault(); hpos--; inp.value = hpos < 0 ? draft : hist[hist.length - 1 - hpos]; return; }
+      if (e.key === "Tab"){ e.preventDefault(); tabComplete(inp); return; }
+      tabState = null;
+    });
     drawSide(); drawMsgs();
   }
   function input(t){
-    t = t.trim(); if (!t) return; var b = buf(cur);
+    t = t.trim(); if (!t) return; var b = buf(cur); b._stick = Date.now() + 4000; buf("*status")._stick = Date.now() + 4000; b._jump = true;
     if (cur === "*status" && t[0] !== "/"){ add("*status", {sys: true, text: "You are in the status window. Join a channel first: /join #xpertcreation"}); return; }
     if (t[0] === "/" && t[1] !== "/"){
       var sp = t.indexOf(" "), c = (sp < 0 ? t.slice(1) : t.slice(1, sp)).toLowerCase(), rest = sp < 0 ? "" : t.slice(sp + 1).trim();
@@ -127,7 +135,17 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
     if (t.slice(0, 2) === "//") t = t.slice(1);
     say(cur, t);
   }
-  var whoisTo = null;
+  var whoisTo = null, hist = [], hpos = -1, draft = "", tabState = null;
+  try { hist = JSON.parse(localStorage.getItem("xc_irc_hist") || "[]").slice(-50); } catch (x) { hist = []; }
+  function tabComplete(inp){
+    var v = inp.value, c = inp.selectionStart;
+    if (!tabState){ var st = v.lastIndexOf(" ", c - 1) + 1, w = v.slice(st, c); if (!w) return;
+      var U = Object.keys(buf(cur).users || {}).concat(order.filter(function(k){ return isChan(bufs[k].name); }).map(function(k){ return bufs[k].name; }));
+      var m = U.filter(function(u){ return u.toLowerCase().indexOf(w.toLowerCase()) === 0 && u !== me; }).sort(); if (!m.length) return;
+      tabState = {st: st, end: c, list: m, i: -1, tail: v.slice(c)}; }
+    tabState.i = (tabState.i + 1) % tabState.list.length; var pick = tabState.list[tabState.i], suf = tabState.st === 0 && !isChan(pick) ? ": " : " ";
+    inp.value = v.slice(0, tabState.st) + pick + suf + tabState.tail; var pos = tabState.st + pick.length + suf.length; inp.setSelectionRange(pos, pos);
+  }
   var HELP = ["XpertCreation IRC commands — one username everywhere: your nick is your XpertCreation username. New? Register free at https://xpertcreation.com/register",
     "Chat:      /join #room  · /part [reason]  · /msg nick text  · /me action  · /topic [text]  · /names  · /list  · /clear",
     "People:    /whois nick  · /away [reason]  · /back  · /invite nick",
@@ -135,7 +153,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
     "NickServ:  /ns info  · /ns info nick   (nick registration is automatic with your XpertCreation account)",
     "ChanServ:  /cs register #room  · /cs info #room  · /cs op #room nick  · /cs deop #room nick  · /cs amode #room +o nick  · /cs help",
     "IRCops:    /oper name password  · /kill nick [reason]  · /quote RAW COMMAND",
-    "Tips: tap a nick to chat privately · hover a time to see the full date · type // to send a message starting with /"];
+    "Keys: \u2191 \u2193 previous messages \u00b7 Tab completes a nick \u00b7 \u26F6 full screen", "Tips: tap a nick to chat privately · hover a time to see the full date · type // to send a message starting with /"];
   function say(to, t){ if (to === "*") return; send("PRIVMSG " + to + " :" + t); if (!caps["echo-message"]) add(to, {nick: me, text: t}); }
   function onLine(raw){
     var m = parse(raw), p = m.params, time = m.tags.time ? new Date(m.tags.time) : null, hist = !!(m.tags.batch && batches[m.tags.batch]);
@@ -219,6 +237,7 @@ html,body{margin:0;height:100%;background:#0B0F14;color:#C9D1D9;font:14px/1.45 u
     if (t.closest("[data-jo]")){ var v = (document.getElementById("xrjoin").value || "").trim(); if (!v) return; if (isChan(v) || !/^[A-Za-z_\[\]\\`^{}|][\w\-\[\]\\`^{}|]*$/.test(v)){ send("JOIN " + (isChan(v) ? v : "#" + v.replace(/[^\w-]/g, ""))); } else { buf(v); show(v); } return; }
     if ((x = t.closest("[data-u]"))){ var u = x.getAttribute("data-u"); if (u && u !== me){ buf(u); show(u); } return; }
     if ((x = t.closest("[data-emo]"))){ var i = document.getElementById("xrinput"); i.value += x.getAttribute("data-emo"); i.focus(); return; }
+    if (t.closest("[data-fs]")){ var de = document.documentElement; if (!document.fullscreenElement && !document.webkitFullscreenElement){ var rf = de.requestFullscreen || de.webkitRequestFullscreen; if (rf) rf.call(de); } else { var xf = document.exitFullscreen || document.webkitExitFullscreen; if (xf) xf.call(document); } return; }
     if ((x = t.closest("[data-open]"))){ document.getElementById(x.getAttribute("data-open")).classList.toggle("open"); return; }
     if (!t.closest(".xrs,.xru")) document.querySelectorAll(".xrs.open,.xru.open").forEach(function(el){ el.classList.remove("open"); });
   });
