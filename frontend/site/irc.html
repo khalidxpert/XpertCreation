@@ -210,7 +210,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function line(m){
     var hl = m.text && me && new RegExp("\\b" + me.replace(/[^\w]/g, "\\$&") + "\\b", "i").test(m.text) && m.nick !== me;
-    return '<div class="xrmsg' + (m.sys ? " sys" : "") + (m.act ? " act" : "") + (m.nick === me ? " me" : "") + (hl ? " hl" : "") + '"><span class="t">' + m.time.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}) + '</span>'
+    return '<div class="xrmsg' + (m.sys ? " sys" : "") + (m.act ? " act" : "") + (m.nick === me ? " me" : "") + (hl ? " hl" : "") + '"><span class="t" title="' + esc(m.time.toLocaleString([], {weekday: "short", day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"})) + '">' + m.time.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}) + '</span>'
       + (m.sys ? link(m.text) : (m.act ? '<span class="n" data-u="' + esc(m.nick) + '" style="color:' + color(m.nick) + '">\u2022 ' + esc(m.nick) + '</span>' + link(m.text) : '<span class="n" data-u="' + esc(m.nick) + '" style="color:' + color(m.nick) + '">' + esc(m.nick) + '</span>' + link(m.text))) + '</div>';
   }
   function drawMsgs(){
@@ -270,7 +270,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       case "AUTHENTICATE": if (p[0] === "+" && sso) send("AUTHENTICATE " + btoa(unescape(encodeURIComponent(sso.nick + "\0" + sso.nick + "\0" + sso.token)))); break;
       case "903": send("CAP END"); break;
       case "904": case "905": case "906": status("Sign-in failed. Retrying\u2026"); break;
-      case "001": me = p[0]; tries = 0; status(""); send("JOIN " + AUTO.join(",")); break;
+      case "001": me = p[0]; tries = 0; status(""); send("JOIN " + AUTO.join(","));
+        if (caps.chathistory || caps["draft/chathistory"]) send("CHATHISTORY TARGETS timestamp=2000-01-01T00:00:00.000Z timestamp=" + new Date(Date.now() + 60000).toISOString() + " 30");
+        break;
+      case "CHATHISTORY": if (p[0] === "TARGETS" && p[1] && !isChan(p[1])){ var db = buf(p[1]); db.msgs = []; send("CHATHISTORY LATEST " + p[1] + " * 40"); drawSide(); } break;
       case "433": status("That name is in use."); break;
       case "375": motd = []; break;
       case "372": motd.push(strip(p[p.length - 1] || "").replace(/^- ?/, "")); break;
@@ -295,6 +298,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         if (act) text = text.replace(/^\x01ACTION /, "").replace(/\x01$/, "");
         if (!m.nick || m.nick.indexOf(".") >= 0 && m.cmd === "NOTICE"){ if (m.cmd === "NOTICE" && !/^\*/.test(target)) add(cur, {sys: true, text: text}, true); break; }
         var where = isChan(target) ? target : (m.nick === me ? target : m.nick);
+        if (hist && !isChan(where) && batches[m.tags.batch] && !isChan(batches[m.tags.batch])) where = batches[m.tags.batch];
         if (/^(NickServ|ChanServ|HistServ|HostServ)$/i.test(m.nick) && m.cmd === "NOTICE"){ add(cur, {sys: true, text: m.nick + ": " + text}, true); break; }
         add(where, {nick: m.nick, text: text, act: act, time: time, hl: me && text.toLowerCase().indexOf(me.toLowerCase()) >= 0}, hist); break;
       case "ERROR": status("Disconnected: " + (p[0] || "")); break;
