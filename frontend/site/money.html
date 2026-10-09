@@ -472,7 +472,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     wallet: {e: "\ud83d\udcf1", c: "#EEF1FF", label: "Mobile wallet"},
     bank:   {e: "\ud83c\udfe6", c: "#FFF4E5", label: "Bank"},
     card:   {e: "💳", c: "#FDECEC", label: "Credit card"},
-    line:   {e: "🏛️", c: "#EEF0FF", label: "Credit line"}
+    line:   {e: "🏛️", c: "#EEF0FF", label: "Credit line"},
+    loan:   {e: "📄", c: "#FFF1E6", label: "Bank loan"}
   };
 
   var PRESETS = [
@@ -491,7 +492,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     {type: "bank",   name: "Faysal Bank"},
     {type: "bank",   name: "Bank Al Habib"},
     {type: "card",   name: "Credit card"},
-    {type: "line",   name: "ReadyLine"}
+    {type: "line",   name: "ReadyLine"},
+    {type: "loan",   name: "Bank loan"}
   ];
 
   function esc(s){
@@ -607,12 +609,12 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     if (n === 0) return '<span style="color:#B45309;font-weight:700">Due today</span>';
     return "Due " + niceDate(d.due) + (n <= 7 ? " (in " + n + " day" + (n === 1 ? "" : "s") + ")" : "");
   }
-  function cardOwed(){ var s = 0; st.accounts.forEach(function(a){ if ((a.type === "card" || a.type === "line")){ var b = balanceOf(st, a.id); if (b < 0) s -= b; } }); return s; }
-  function inHand(){ var s = 0; st.accounts.forEach(function(a){ if (a.type !== "card" && a.type !== "line") s += balanceOf(st, a.id); }); return s; }
+  function cardOwed(){ var s = 0; st.accounts.forEach(function(a){ if ((a.type === "card" || a.type === "line" || a.type === "loan")){ var b = balanceOf(st, a.id); if (b < 0) s -= b; } }); return s; }
+  function inHand(){ var s = 0; st.accounts.forEach(function(a){ if (a.type !== "card" && a.type !== "line" && a.type !== "loan") s += balanceOf(st, a.id); }); return s; }
   function openTotal(kind){ var s = 0; dueList().forEach(function(d){ if (d.kind === kind) s += dueLeft(d); }); return s; }
   function byType(){
     var g = {};
-    st.accounts.forEach(function(a){ if ((a.type === "card" || a.type === "line")) return; g[a.type] = (g[a.type] || 0) + balanceOf(st, a.id); });
+    st.accounts.forEach(function(a){ if ((a.type === "card" || a.type === "line" || a.type === "loan")) return; g[a.type] = (g[a.type] || 0) + balanceOf(st, a.id); });
     return g;
   }
 
@@ -637,7 +639,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         + (left && left !== d.amt ? '<span class="bl">of ' + rs(d.amt) + '</span>' : '') + '</span></div>';
     }
     if (tab === "pay"){
-      var cards = st.accounts.filter(function(a){ return (a.type === "card" || a.type === "line") && balanceOf(st, a.id) < 0; });
+      var cards = st.accounts.filter(function(a){ return (a.type === "card" || a.type === "line" || a.type === "loan") && balanceOf(st, a.id) < 0; });
       if (cards.length){
         h += '<div class="head" style="margin-top:4px"><h3>Credit cards &amp; ReadyLine</h3></div><div class="txs">' + cards.map(function(a){
           var b = -balanceOf(st, a.id);
@@ -772,9 +774,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + line("= Net balance", net, net < 0 ? "out" : "in", true) + '</div>';
     var up = dueList().filter(function(d){ return dueLeft(d) > 0 && d.due && daysTo(d.due) <= 30; }).sort(function(a, b){ return a.due < b.due ? -1 : 1; });
     st.accounts.forEach(function(a){
-      if (!(a.type === "card" || a.type === "line") || !a.dueDay || balanceOf(st, a.id) >= 0) return;
+      if (!(a.type === "card" || a.type === "line" || a.type === "loan") || !a.dueDay || balanceOf(st, a.id) >= 0) return;
       var n = new Date(), dd = new Date(n.getFullYear(), n.getMonth(), a.dueDay); if (dd < new Date(today() + "T00:00:00")) dd = new Date(n.getFullYear(), n.getMonth() + 1, a.dueDay);
-      up.push({kind: "pay", cat: "card", party: a.name, due: ymd(dd), left: -balanceOf(st, a.id)});
+      up.push({kind: "pay", cat: "card", party: a.name, due: ymd(dd), left: a.type === "loan" && a.limit ? Math.min(a.limit, -balanceOf(st, a.id)) : -balanceOf(st, a.id)});
     });
     up.sort(function(a, b){ return a.due < b.due ? -1 : 1; });
     h += '<div class="head"><h3>Next 30 days</h3></div>';
@@ -793,7 +795,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     // counting only cash, banks and wallets (the same accounts as "Money in hand"). Card spending is listed
     // separately, because it has not left your bank yet - it is in Credit card dues until you pay the bill.
     var nowD = new Date(), m0 = ymd(new Date(nowD.getFullYear(), nowD.getMonth(), 1)), tdy = today();
-    var cset = {}; st.accounts.forEach(function(a){ if (a.type !== "card" && a.type !== "line") cset[a.id] = 1; });
+    var cset = {}; st.accounts.forEach(function(a){ if (a.type !== "card" && a.type !== "line" && a.type !== "loan") cset[a.id] = 1; });
     function ceff(x){ var v = 0;
       if (x.kind === "in" && cset[x.acc]) v += x.amt;
       if (x.kind === "out" && cset[x.acc]) v -= x.amt;
@@ -808,8 +810,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       else {
         if (v > 0) cIn += v; else cOut -= v;
         var A2 = accById(x.acc), B2 = accById(x.to);
-        if (x.kind === "out" && A2 && (A2.type === "card" || A2.type === "line")) cardSp += x.amt;
-        if (x.kind === "move" && B2 && (B2.type === "card" || B2.type === "line") && cset[x.acc]) billPd += x.amt;
+        if (x.kind === "out" && A2 && (A2.type === "card" || A2.type === "line" || A2.type === "loan")) cardSp += x.amt;
+        if (x.kind === "move" && B2 && (B2.type === "card" || B2.type === "line" || B2.type === "loan") && cset[x.acc]) billPd += x.amt;
       }
     });
     var cClose = cOpen + cIn - cOut;
@@ -872,7 +874,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
      always the true balance. Above it: how much came into / went out of each account. */
   function cashBookPage(){
     var kind = view.ck || "all", r = periodRange(), one = view.racc && view.racc !== "all" && accById(view.racc) ? view.racc : null;
-    var ids = one ? [one] : st.accounts.filter(function(a){ return a.type !== "card" && a.type !== "line"; }).map(function(a){ return a.id; });
+    var ids = one ? [one] : st.accounts.filter(function(a){ return a.type !== "card" && a.type !== "line" && a.type !== "loan"; }).map(function(a){ return a.id; });
     var set = {}; ids.forEach(function(id){ set[id] = 1; });
     function eff(t){
       var v = 0;
@@ -1096,7 +1098,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     st.accounts.forEach(function(a){
       var T = TYPES[a.type] || TYPES.cash;
       var b = balanceOf(st, a.id);
-      var sub = a.type === "bank" && a.number ? masked(a.number) : (a.type === "card" || a.type === "line") ? (b < 0 ? T.label + " · owed " + rs(-b) : T.label) : T.label;
+      var sub = a.type === "bank" && a.number ? masked(a.number) : (a.type === "card" || a.type === "line" || a.type === "loan") ? (b < 0 ? T.label + " · owed " + rs(-b) : T.label) : T.label;
       h += '<div class="acc" data-open="' + esc(a.id) + '">'
         + '<span class="ic" style="background:' + T.c + '">' + T.e + '</span>'
         + '<span class="nm"><b>' + esc(a.name) + '</b><small>' + esc(sub) + '</small></span>'
@@ -1119,19 +1121,21 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<span class="ic" style="width:40px;height:40px;border-radius:12px;display:grid;'
       + 'place-items:center;font-size:19px;background:' + T.c + '">' + T.e + '</span>'
       + '<h2>' + esc(a.name) + '</h2></div>'
-      + ((a.type === "card" || a.type === "line")
+      + ((a.type === "card" || a.type === "line" || a.type === "loan")
           ? '<div class="big' + (b < 0 ? " neg" : "") + '">' + (b <= 0 ? 'Owed ' + rs(-b) : 'In credit ' + rs(b)) + '</div>'
-            + (a.limit ? '<div class="row">Limit ' + rs(a.limit) + ' · available ' + rs(Math.max(0, a.limit + Math.min(0, b))) + '</div>' : '')
+            + (a.limit ? (a.type === "loan" ? '<div class="row">Instalment ' + rs(a.limit) + (a.dueDay ? ' on day ' + a.dueDay + ' of each month' : '') + '</div>'
+                : '<div class="row">Limit ' + rs(a.limit) + ' · available ' + rs(Math.max(0, a.limit + Math.min(0, b))) + '</div>') : '')
             + (a.type === "card" ? '<div class="row">Spend with <b>Spent</b>; pay the bill with <b>Pay card bill</b> (from your bank).</div>'
+               : a.type === "loan" ? '<div class="row">Pay each instalment with <b>Move</b> (your bank → this loan). If the bank adds markup, record it as <b>Paid</b> from this loan with a head.</div>'
                : '<div class="row">Use money from it with <b>Move</b> (ReadyLine → your bank) or <b>Paid</b>; pay it back with <b>Move</b> (your bank → ReadyLine).</div>')
           : '<div class="big' + (b < 0 ? " neg" : "") + '">' + rs(b) + '</div>');
 
     if (a.type === "bank"){
       if (a.title) h += '<div class="row">Title: <code>' + esc(a.title) + '</code></div>';
       if (a.number) h += '<div class="row">Account: <code data-secret="' + esc(a.number)
-        + '">' + esc(masked(a.number)) + '</code> <button type="button" data-reveal>Show</button></div>';
+        + '">' + esc(masked(a.number)) + '</code> <button type="button" data-reveal>Show</button> <button type="button" data-copy="' + esc(a.number) + '">Copy</button></div>';
       if (a.iban) h += '<div class="row">IBAN: <code data-secret="' + esc(a.iban)
-        + '">' + esc(masked(a.iban)) + '</code> <button type="button" data-reveal>Show</button></div>';
+        + '">' + esc(masked(a.iban)) + '</code> <button type="button" data-reveal>Show</button> <button type="button" data-copy="' + esc(a.iban) + '">Copy</button></div>';
     }
     if (a.opening || a.openDate) h += '<div class="row">Opening balance: ' + rs(a.opening || 0) + (a.openDate ? ' on ' + niceDate(a.openDate) : '') + '</div>';
 
@@ -1352,7 +1356,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + chips
       + '<div class="f"><label>Type</label><select id="aType">'
       + '<option value="cash">Cash</option><option value="wallet">Mobile wallet</option>'
-      + '<option value="bank">Bank</option><option value="card">Credit card</option><option value="line">Credit line (ReadyLine)</option></select></div>'
+      + '<option value="bank">Bank</option><option value="card">Credit card</option><option value="line">Credit line (ReadyLine)</option><option value="loan">Bank loan</option></select></div>'
       + '<div class="f"><label>Name</label><input id="aName" maxlength="40" placeholder="e.g. Meezan Bank"></div>'
       + '<div id="aBank">'
       + '<div class="f"><label>Account title (optional)</label><input id="aTitle" maxlength="60"></div>'
@@ -1360,8 +1364,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<div class="f"><label>IBAN (optional)</label><input id="aIban" maxlength="34" autocomplete="off" '
       + 'placeholder="PK36 MEZN 0000 ..." style="text-transform:uppercase"></div>'
       + '</div>'
-      + '<div id="aCard" style="display:none;gap:8px"><div class="f" style="flex:1"><label>Card limit (optional)</label><input id="aLimit" inputmode="decimal"></div>'
-      + '<div class="f" style="flex:1"><label>Bill due day (1-31)</label><input id="aDueDay" inputmode="numeric" maxlength="2"></div></div>'
+      + '<div id="aCard" style="display:none;gap:8px"><div class="f" style="flex:1"><label id="aLimitL">Card limit (optional)</label><input id="aLimit" inputmode="decimal"></div>'
+      + '<div class="f" style="flex:1"><label id="aDueL">Bill due day (1-31)</label><input id="aDueDay" inputmode="numeric" maxlength="2"></div></div>'
       + '<div style="display:flex;gap:8px"><div class="f" style="flex:1.2"><label id="aOpenL">Opening balance (Rs)</label><input id="aOpen" type="text" '
       + 'inputmode="decimal" placeholder="What is in it"></div>'
       + '<div class="f" style="flex:1"><label>As on date</label><input id="aOpenDate" type="date" value="' + today() + '"></div></div>'
@@ -1375,7 +1379,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       document.getElementById("aNum").value = acc.number || "";
       document.getElementById("aIban").value = acc.iban || "";
       document.getElementById("aOpen").value = acc.opening ? (acc.type === "card" || acc.type === "line" ? Math.abs(acc.opening) : acc.opening) / 100 : "";
-      if (acc.type === "card" || acc.type === "line"){ document.getElementById("aLimit").value = acc.limit ? acc.limit / 100 : ""; document.getElementById("aDueDay").value = acc.dueDay || ""; }
+      if (acc.type === "card" || acc.type === "line" || acc.type === "loan"){ document.getElementById("aLimit").value = acc.limit ? acc.limit / 100 : ""; document.getElementById("aDueDay").value = acc.dueDay || ""; }
       document.getElementById("aOpenDate").value = acc.openDate || (acc.created ? ymd(new Date(acc.created)) : "");
     }
     document.getElementById("aType").value = newType;
@@ -1387,7 +1391,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     var w = document.getElementById("aBank");
     if (t && w) w.style.display = t.value === "bank" ? "" : "none";
     var cw = document.getElementById("aCard"); if (t && cw) cw.style.display = t.value === "card" || t.value === "line" ? "flex" : "none";
-    var ol = document.getElementById("aOpenL"); if (t && ol) ol.textContent = t.value === "card" ? "Amount you owe on it now (Rs)" : t.value === "line" ? "Amount used (owed) now (Rs)" : "Opening balance (Rs)";
+    var ol = document.getElementById("aOpenL"); if (t && ol) ol.textContent = t.value === "card" ? "Amount you owe on it now (Rs)" : t.value === "line" ? "Amount used (owed) now (Rs)" : t.value === "loan" ? "Loan amount still owed now (Rs)" : "Opening balance (Rs)";
+    var ll = document.getElementById("aLimitL"); if (t && ll) ll.textContent = t.value === "loan" ? "Monthly instalment (optional)" : "Limit (optional)";
+    var dl = document.getElementById("aDueL"); if (t && dl) dl.textContent = t.value === "loan" ? "Instalment day (1-31)" : "Bill due day (1-31)";
   }
 
   function saveAcc(){
@@ -1395,7 +1401,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     var name = document.getElementById("aName").value.trim().slice(0, 40);
     var openRaw = document.getElementById("aOpen").value.trim();
     var opening = openRaw ? toPaisa(openRaw) : 0;
-    if (type === "card" || type === "line") opening = -Math.abs(opening);
+    if (type === "card" || type === "line" || type === "loan") opening = -Math.abs(opening);
     var msg = document.getElementById("aMsg");
 
     if (!name){ msg.textContent = "Give it a name."; return; }
@@ -1596,6 +1602,12 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       tomb(tid);
       st.tx = st.tx.filter(function(x){ return x.id !== tid; });
       if (save()) render();
+      return;
+    }
+    if (t.hasAttribute("data-copy")){
+      var cv = t.getAttribute("data-copy");
+      var cdone = function(){ t.textContent = "Copied ✓"; setTimeout(function(){ t.textContent = "Copy"; }, 1600); };
+      if (navigator.clipboard) navigator.clipboard.writeText(cv).then(cdone, function(){ prompt("Copy this:", cv); }); else prompt("Copy this:", cv);
       return;
     }
     if (t.hasAttribute("data-reveal")){
