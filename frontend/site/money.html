@@ -224,7 +224,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   var KEY = "xc_money_v1";
 
-  function blankState(){ return {v: 1, accounts: [], tx: [], del: {}, lastBackup: 0}; }
+  function blankState(){ return {v: 1, accounts: [], tx: [], heads: [], del: {}, lastBackup: 0}; }
 
   function toPaisa(v){
     var n = parseFloat(String(v).replace(/,/g, ""));
@@ -289,7 +289,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var raw = localStorage.getItem(KEY);
       if (!raw) return;
       var d = JSON.parse(raw);
-      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)){ st = d; if (!st.del) st.del = {}; }
+      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)){ st = d; if (!st.del) st.del = {}; if (!Array.isArray(st.heads)) st.heads = []; }
     } catch (e) {}
   }
 
@@ -362,7 +362,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       });
       return order.map(function(id){ return m[id]; });
     }
-    return {v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), del: del,
+    return {v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), heads: un(a.heads, b.heads), del: del,
             lastBackup: Math.max(a.lastBackup || 0, b.lastBackup || 0)};
   }
 
@@ -412,6 +412,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         st = server || blankState(); meta.rev = r.d.rev;
       }
       if (!st.del) st.del = {};
+      if (!Array.isArray(st.heads)) st.heads = [];
       saveMeta(); keepLocal();
       if (!same(before, st) && !document.getElementById("sheet")) render();
       else if (view.page === "home" && !document.getElementById("sheet")) render();
@@ -500,12 +501,171 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   /* ================= screens ================= */
 
+  /* ================= heads (what the money was for) =================
+     Every received or paid entry can have a head - Tuition fee, Rent,
+     Salary... - so the report can add them up head by head. Default heads
+     have fixed ids, so two phones never create the same head twice. */
+
+  var DEFAULT_HEADS = [
+    ["h_tuition", "out", "Tuition / school fee"], ["h_grocery", "out", "Groceries"], ["h_rent", "out", "Rent"],
+    ["h_elec", "out", "Electricity bill"], ["h_gas", "out", "Gas bill"], ["h_net", "out", "Mobile & internet"],
+    ["h_fuel", "out", "Fuel & transport"], ["h_medical", "out", "Medical"], ["h_shop", "out", "Shopping"],
+    ["h_committee", "out", "Committee"], ["h_charity", "out", "Charity / Sadqa"], ["h_other_out", "out", "Other expense"],
+    ["h_salary", "in", "Salary"], ["h_business", "in", "Business income"], ["h_client", "in", "Client payment"],
+    ["h_rent_in", "in", "Rent received"], ["h_other_in", "in", "Other income"]
+  ];
+
+  function ensureHeads(){
+    if (!Array.isArray(st.heads)) st.heads = [];
+    var have = {}, del = st.del || {};
+    st.heads.forEach(function(h){ have[h.id] = 1; });
+    DEFAULT_HEADS.forEach(function(d){
+      if (!have[d[0]] && !del[d[0]]) st.heads.push({id: d[0], kind: d[1], name: d[2], created: 1});
+    });
+  }
+
+  function headById(id){
+    return (st.heads || []).filter(function(h){ return h.id === id; })[0] || null;
+  }
+
+  function headOptions(kind, sel){
+    ensureHeads();
+    var list = st.heads.filter(function(h){ return h.kind === kind; })
+      .sort(function(a, b){ return a.name.localeCompare(b.name); });
+    return '<option value="">— No head —</option>'
+      + list.map(function(h){
+          return '<option value="' + esc(h.id) + '"' + (h.id === sel ? " selected" : "") + '>' + esc(h.name) + '</option>';
+        }).join("")
+      + '<option value="__new">+ Add a new head…</option>';
+  }
+
+  function newHead(kind){
+    var name = (prompt("Name of the new " + (kind === "in" ? "receipt" : "payment") + " head\n(for example: Tuition fee)") || "").trim().slice(0, 40);
+    if (!name) return null;
+    ensureHeads();
+    var same = st.heads.filter(function(h){ return h.kind === kind && h.name.toLowerCase() === name.toLowerCase(); })[0];
+    if (same) return same;
+    var h = {id: "h" + uid(), kind: kind, name: name, created: Date.now()};
+    st.heads.push(h);
+    return h;
+  }
+
+  /* ================= head-wise report ================= */
+
+  function ymd(d){
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function periodRange(){
+    var n = new Date(), p = view.period || "month";
+    if (p === "month") return [ymd(new Date(n.getFullYear(), n.getMonth(), 1)), ymd(n)];
+    if (p === "last") return [ymd(new Date(n.getFullYear(), n.getMonth() - 1, 1)), ymd(new Date(n.getFullYear(), n.getMonth(), 0))];
+    if (p === "year") return [n.getFullYear() + "-01-01", ymd(n)];
+    if (p === "custom") return [view.from || "0000-01-01", view.to || "9999-12-31"];
+    return ["0000-01-01", "9999-12-31"];
+  }
+
+  function repEntries(){
+    var r = periodRange();
+    return st.tx.filter(function(t){
+      if (t.kind === "move" || t.date < r[0] || t.date > r[1]) return false;
+      return !view.racc || view.racc === "all" || t.acc === view.racc;
+    });
+  }
+
+  function repFilters(){
+    var p = view.period || "month";
+    var h = '<div class="filter" style="flex-wrap:wrap">'
+      + [["month", "This month"], ["last", "Last month"], ["year", "This year"], ["all", "All"], ["custom", "Dates…"]].map(function(x){
+          return '<button type="button" data-period="' + x[0] + '"' + (p === x[0] ? ' class="on"' : '') + '>' + x[1] + '</button>';
+        }).join("") + '</div>';
+    if (p === "custom"){
+      h += '<div style="display:flex;gap:8px;margin-bottom:9px"><div class="f" style="flex:1;margin:0"><label>From</label>'
+        + '<input type="date" id="rFrom" value="' + esc(view.from || "") + '"></div>'
+        + '<div class="f" style="flex:1;margin:0"><label>To</label><input type="date" id="rTo" value="' + esc(view.to || "") + '"></div></div>';
+    }
+    h += '<div class="f"><select id="rAcc"><option value="all">All accounts</option>'
+      + st.accounts.map(function(a){
+          return '<option value="' + esc(a.id) + '"' + (view.racc === a.id ? " selected" : "") + '>' + esc(a.name) + '</option>';
+        }).join("") + '</select></div>';
+    return h;
+  }
+
+  function repPage(){
+    ensureHeads();
+    var list = repEntries();
+    var h = '<button type="button" class="back" data-home>&larr; All accounts</button>'
+      + '<div class="head" style="margin-top:0"><h3>📊 Head-wise report</h3>'
+      + '<button type="button" data-heads>Manage heads</button></div>' + repFilters();
+    var sum = {in: 0, out: 0};
+    list.forEach(function(t){ sum[t.kind] += t.amt; });
+    h += '<div class="total"><small>Net for this period</small><div class="amt">' + rs(sum.in - sum.out) + '</div>'
+      + '<div class="sub"><span>Received<b>' + rs(sum.in) + '</b></span><span>Paid<b>' + rs(sum.out) + '</b></span>'
+      + '<span>Entries<b>' + list.length + '</b></span></div></div>';
+    [["out", "Paid by head"], ["in", "Received by head"]].forEach(function(k){
+      var g = {}, total = sum[k[0]];
+      list.forEach(function(t){
+        if (t.kind !== k[0]) return;
+        var key = t.head && headById(t.head) ? t.head : "";
+        g[key] = g[key] || {amt: 0, n: 0}; g[key].amt += t.amt; g[key].n++;
+      });
+      var rows = Object.keys(g).sort(function(a, b){ return g[b].amt - g[a].amt; });
+      h += '<div class="head"><h3>' + k[1] + '</h3><span style="font-weight:800;font-size:14px" class="am ' + k[0] + '">' + rs(total) + '</span></div>';
+      if (!rows.length){ h += '<div class="txs"><div class="empty">Nothing in this period.</div></div>'; return; }
+      h += '<div class="txs">' + rows.map(function(id){
+        var H = headById(id), pc = total ? Math.round(g[id].amt * 100 / total) : 0;
+        return '<div class="tx" data-rhead="' + esc(id || "_none") + '" data-rkind="' + k[0] + '" style="cursor:pointer;flex-wrap:wrap">'
+          + '<span class="md"><b>' + esc(H ? H.name : "No head") + '</b><small>' + g[id].n + ' entr' + (g[id].n === 1 ? "y" : "ies") + ' · ' + pc + '%</small></span>'
+          + '<span class="am ' + k[0] + '">' + rs(g[id].amt) + '</span>'
+          + '<span style="flex-basis:100%;height:5px;border-radius:3px;background:var(--line);margin-top:7px;overflow:hidden">'
+          + '<span style="display:block;height:100%;width:' + pc + '%;background:var(--' + k[0] + ')"></span></span></div>';
+      }).join("") + '</div>';
+    });
+    h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:10px">Moves between your own accounts are not counted. '
+      + 'Tap an entry anywhere to give it a head.</p>';
+    return h;
+  }
+
+  function repHeadPage(){
+    var id = view.rhead === "_none" ? "" : view.rhead;
+    var H = headById(id);
+    var list = repEntries().filter(function(t){
+      return t.kind === view.rkind && ((t.head && headById(t.head) ? t.head : "") === id);
+    });
+    var total = 0; list.forEach(function(t){ total += t.amt; });
+    return '<button type="button" class="back" data-report>&larr; Report</button>'
+      + '<div class="adetail"><h2>' + esc(H ? H.name : "No head") + '</h2>'
+      + '<div class="big">' + rs(total) + '</div>'
+      + '<div class="row">' + (view.rkind === "in" ? "Received" : "Paid") + ' · ' + list.length + ' entries · '
+      + niceDate(periodRange()[0]).replace("1 Jan 0", "start") + ' – ' + niceDate(periodRange()[1]).replace(/^31 Dec 9999$/, "today") + '</div></div>'
+      + txList(list, null, 0);
+  }
+
+  function headsSheet(){
+    ensureHeads();
+    function block(kind, title){
+      var list = st.heads.filter(function(h){ return h.kind === kind; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+      return '<div class="head" style="margin-top:6px"><h3>' + title + '</h3><button type="button" data-addhead="' + kind + '">+ Add</button></div>'
+        + '<div class="txs" style="margin-bottom:12px">' + list.map(function(h){
+            var n = st.tx.filter(function(t){ return t.head === h.id; }).length;
+            return '<div class="tx"><span class="md"><b>' + esc(h.name) + '</b><small>' + n + ' entries</small></span>'
+              + '<button type="button" class="del" style="opacity:.8" data-renhead="' + esc(h.id) + '" title="Rename">✎</button>'
+              + '<button type="button" class="del" data-delhead="' + esc(h.id) + '" title="Delete">✕</button></div>';
+          }).join("") + '</div>';
+    }
+    openSheet('<h3>Heads</h3>' + block("out", "Payment heads") + block("in", "Receipt heads")
+      + '<div class="bt"><button type="button" data-close>Done</button></div>');
+  }
+
+
   var view = {page: "home", acc: null, filter: "all"};
 
   function render(){
     var app = document.getElementById("app");
     document.getElementById("fab").style.display = st.accounts.length ? "" : "none";
     if (view.page === "acc" && accById(view.acc)) app.innerHTML = accPage();
+    else if (view.page === "rep") app.innerHTML = repPage();
+    else if (view.page === "rephead") app.innerHTML = repHeadPage();
     else { view.page = "home"; app.innerHTML = homePage(); }
     window.scrollTo(0, 0);
   }
@@ -529,6 +689,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<div class="sub"><span>Received this month<b>' + rs(t.inM) + '</b></span>'
       + '<span>Paid this month<b>' + rs(t.outM) + '</b></span></div></div>';
 
+    h += '<button type="button" class="back" data-report style="margin:0 0 4px">\ud83d\udcca Head-wise report &rarr;</button>';
     h += '<div class="head"><h3>Accounts</h3>'
       + '<button type="button" data-addacc>+ Add</button></div><div class="accs">';
     st.accounts.forEach(function(a){
@@ -566,7 +727,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       if (a.iban) h += '<div class="row">IBAN: <code data-secret="' + esc(a.iban)
         + '">' + esc(masked(a.iban)) + '</code> <button type="button" data-reveal>Show</button></div>';
     }
-    if (a.opening) h += '<div class="row">Opening balance: ' + rs(a.opening) + '</div>';
+    if (a.opening || a.openDate) h += '<div class="row">Opening balance: ' + rs(a.opening || 0) + (a.openDate ? ' on ' + niceDate(a.openDate) : '') + '</div>';
 
     h += '<div class="acts"><button type="button" data-editacc="' + esc(a.id) + '">Edit</button>'
       + '<button type="button" class="danger" data-delacc="' + esc(a.id) + '">Delete</button></div>'
@@ -601,15 +762,16 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         // Seen from one account, a move is money going out or coming in
         sign = forAcc ? (t.to === forAcc ? "+" : "\u2212") : "";
       } else {
-        title = t.note || (t.kind === "in" ? "Received" : "Paid");
+        var HD = t.head ? headById(t.head) : null;
+        title = t.note || (HD ? HD.name : (t.kind === "in" ? "Received" : "Paid"));
         sign = t.kind === "in" ? "+" : "\u2212";
       }
       var sub = niceDate(t.date)
         + (t.kind !== "move" && !forAcc && A ? " \u00b7 " + A.name : "")
         + (t.kind === "move" && t.note ? " \u00b7 " + t.note : "")
-        + (t.kind !== "move" && t.note && forAcc ? "" : "");
+        + (t.kind !== "move" && t.note && HD ? " \u00b7 " + HD.name : "");
       var mark = t.kind === "in" ? "+" : t.kind === "out" ? "\u2212" : "\u21c4";
-      return '<div class="tx"><span class="dot ' + cls + '">' + mark + '</span>'
+      return '<div class="tx" data-edittx="' + esc(t.id) + '" style="cursor:pointer"><span class="dot ' + cls + '">' + mark + '</span>'
         + '<span class="md"><b>' + esc(title) + '</b><small>' + esc(sub) + '</small></span>'
         + '<span class="am ' + cls + '">' + sign + rs(t.amt).replace("\u2212", "") + '</span>'
         + '<button type="button" class="del" data-deltx="' + esc(t.id)
@@ -657,14 +819,17 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   var sheetKind = "in";
 
+  var editingTx = null;
+
   function entrySheet(kind){
     sheetKind = kind;
+    var ET = editingTx ? st.tx.filter(function(x){ return x.id === editingTx; })[0] : null;
     var opts = st.accounts.map(function(a){
       return '<option value="' + esc(a.id) + '">' + esc(a.name) + ' (' + rs(balanceOf(st, a.id)) + ')</option>';
     }).join("");
     var pre = view.page === "acc" ? view.acc : (st.accounts[0] || {}).id;
 
-    openSheet('<h3>New entry</h3>'
+    openSheet('<h3>' + (ET ? 'Edit entry' : 'New entry') + '</h3>'
       + '<div class="seg">'
       + '<button type="button" class="in' + (kind === "in" ? " on" : "") + '" data-kind="in">Received</button>'
       + '<button type="button" class="out' + (kind === "out" ? " on" : "") + '" data-kind="out">Paid</button>'
@@ -676,6 +841,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<select id="eAcc">' + opts + '</select></div>'
       + '<div class="f" id="eToW"' + (kind === "move" ? "" : ' style="display:none"') + '>'
       + '<label>To</label><select id="eTo">' + opts + '</select></div>'
+      + '<div class="f" id="eHeadW"' + (kind === "move" ? ' style="display:none"' : '') + '><label>Head</label>'
+      + '<select id="eHead">' + (kind === "move" ? '' : headOptions(kind, ET && ET.kind === kind ? ET.head : '')) + '</select></div>'
       + '<div class="f"><label>Date</label><input id="eDate" type="date" value="' + today() + '"></div>'
       + '<div class="f"><label>Note</label><input id="eNote" type="text" maxlength="120" '
       + 'placeholder="' + (kind === "in" ? "Salary, client payment\u2026" : kind === "out"
@@ -691,11 +858,20 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var other = st.accounts.filter(function(a){ return a.id !== pre; })[0];
       if (other) to.value = other.id;
     }
+    if (ET){
+      document.getElementById("eAmt").value = ET.amt / 100;
+      if (s) s.value = ET.acc;
+      if (to && ET.to) to.value = ET.to;
+      document.getElementById("eDate").value = ET.date;
+      document.getElementById("eNote").value = ET.note || "";
+    }
   }
 
   function saveEntry(){
+    var hs = document.getElementById("eHead");
     var e = {
-      id: uid(), kind: sheetKind,
+      id: editingTx || uid(), kind: sheetKind,
+      head: sheetKind !== "move" && hs && hs.value !== "__new" ? hs.value : "",
       amt: toPaisa(document.getElementById("eAmt").value),
       acc: document.getElementById("eAcc").value,
       to: sheetKind === "move" ? document.getElementById("eTo").value : null,
@@ -705,7 +881,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     };
     var err = validEntry(st, e);
     if (err){ document.getElementById("eMsg").textContent = err; return; }
-    st.tx.push(e);
+    if (editingTx){
+      var old = st.tx.filter(function(x){ return x.id === editingTx; })[0];
+      if (old){ e.created = old.created; e.upd = Date.now(); st.tx[st.tx.indexOf(old)] = e; } else st.tx.push(e);
+    } else st.tx.push(e);
+    editingTx = null;
     if (save()){ closeSheet(); render(); }
   }
 
@@ -733,8 +913,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<div class="f"><label>IBAN (optional)</label><input id="aIban" maxlength="34" autocomplete="off" '
       + 'placeholder="PK36 MEZN 0000 ..." style="text-transform:uppercase"></div>'
       + '</div>'
-      + '<div class="f"><label>Opening balance (Rs)</label><input id="aOpen" type="text" '
-      + 'inputmode="decimal" placeholder="What is in it right now"></div>'
+      + '<div style="display:flex;gap:8px"><div class="f" style="flex:1.2"><label>Opening balance (Rs)</label><input id="aOpen" type="text" '
+      + 'inputmode="decimal" placeholder="What is in it"></div>'
+      + '<div class="f" style="flex:1"><label>As on date</label><input id="aOpenDate" type="date" value="' + today() + '"></div></div>'
       + '<div class="msg" id="aMsg"></div>'
       + '<div class="bt"><button type="button" data-close>Cancel</button>'
       + '<button type="button" class="go" data-saveacc>Save</button></div>');
@@ -745,6 +926,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       document.getElementById("aNum").value = acc.number || "";
       document.getElementById("aIban").value = acc.iban || "";
       document.getElementById("aOpen").value = acc.opening ? acc.opening / 100 : "";
+      document.getElementById("aOpenDate").value = acc.openDate || (acc.created ? ymd(new Date(acc.created)) : "");
     }
     document.getElementById("aType").value = newType;
     bankFields();
@@ -774,7 +956,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       return;
     }
 
-    var data = {type: type, name: name, opening: opening,
+    var data = {type: type, name: name, opening: opening, openDate: document.getElementById("aOpenDate").value || "",
                 title: type === "bank" ? document.getElementById("aTitle").value.trim().slice(0, 60) : "",
                 number: type === "bank" ? document.getElementById("aNum").value.replace(/\s+/g, "").slice(0, 30) : "",
                 iban: type === "bank" ? iban : ""};
@@ -835,8 +1017,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         + "What is on this phone now will be lost.");
       if (!ok) return;
       var keep = {};
-      d.accounts.concat(d.tx).forEach(function(x){ if (x && x.id) keep[x.id] = 1; });
-      st.accounts.concat(st.tx).forEach(function(x){ if (!keep[x.id]) tomb(x.id); });
+      d.accounts.concat(d.tx, d.heads || []).forEach(function(x){ if (x && x.id) keep[x.id] = 1; });
+      st.accounts.concat(st.tx, st.heads || []).forEach(function(x){ if (!keep[x.id]) tomb(x.id); });
+      if (!Array.isArray(d.heads)) d.heads = [];
       var dl = st.del || {};
       d.del = d.del || {};
       for (var k in dl) if (!keep[k]) d.del[k] = dl[k];
@@ -849,20 +1032,46 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   /* ================= clicks ================= */
 
   document.addEventListener("click", function(e){
-    var t = e.target.closest ? e.target.closest("button, .acc") : null;
+    var t = e.target.closest ? e.target.closest("button, .acc, [data-edittx], [data-rhead]") : null;
     if (!t) return;
 
-    if (t.hasAttribute("data-new")){ entrySheet(t.getAttribute("data-new")); return; }
+    if (t.hasAttribute("data-new")){ editingTx = null; entrySheet(t.getAttribute("data-new")); return; }
+    if (t.hasAttribute("data-edittx")){
+      var ex = st.tx.filter(function(x){ return x.id === t.getAttribute("data-edittx"); })[0];
+      if (ex){ editingTx = ex.id; entrySheet(ex.kind); }
+      return;
+    }
+    if (t.hasAttribute("data-report")){ view = {page: "rep", acc: null, filter: "all", period: view.period || "month", racc: view.racc || "all", from: view.from, to: view.to}; render(); return; }
+    if (t.hasAttribute("data-period")){ view.period = t.getAttribute("data-period"); render(); return; }
+    if (t.hasAttribute("data-rhead")){ view.page = "rephead"; view.rhead = t.getAttribute("data-rhead"); view.rkind = t.getAttribute("data-rkind"); render(); return; }
+    if (t.hasAttribute("data-heads")){ headsSheet(); return; }
+    if (t.hasAttribute("data-addhead")){ if (newHead(t.getAttribute("data-addhead")) && save()){ headsSheet(); render(); } return; }
+    if (t.hasAttribute("data-renhead")){
+      var rh = headById(t.getAttribute("data-renhead"));
+      var nn = rh ? (prompt("New name for this head", rh.name) || "").trim().slice(0, 40) : "";
+      if (nn){ rh.name = nn; rh.upd = Date.now(); if (save()){ headsSheet(); render(); } }
+      return;
+    }
+    if (t.hasAttribute("data-delhead")){
+      var dh = headById(t.getAttribute("data-delhead"));
+      if (!dh || !confirm("Delete the head \"" + dh.name + "\"?\n\nIts entries stay; they just show as \"No head\".")) return;
+      tomb(dh.id); st.heads = st.heads.filter(function(x){ return x.id !== dh.id; });
+      if (save()){ headsSheet(); render(); }
+      return;
+    }
     if (t.hasAttribute("data-kind")){
       var cur = {amt: document.getElementById("eAmt").value,
                  date: document.getElementById("eDate").value,
                  note: document.getElementById("eNote").value,
-                 acc: document.getElementById("eAcc").value};
+                 acc: document.getElementById("eAcc").value,
+                 head: (document.getElementById("eHead") || {}).value || ""};
       entrySheet(t.getAttribute("data-kind"));
       document.getElementById("eAmt").value = cur.amt;
       document.getElementById("eDate").value = cur.date;
       document.getElementById("eNote").value = cur.note;
       document.getElementById("eAcc").value = cur.acc;
+      var eh = document.getElementById("eHead");
+      if (eh && cur.head && cur.head !== "__new" && headById(cur.head) && headById(cur.head).kind === sheetKind) eh.value = cur.head;
       return;
     }
     if (t.hasAttribute("data-saveentry")){ saveEntry(); return; }
@@ -922,6 +1131,13 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   document.addEventListener("change", function(e){
     if (e.target.id === "aType") bankFields();
+    if (e.target.id === "eHead" && e.target.value === "__new"){
+      var nh = newHead(sheetKind);
+      e.target.innerHTML = headOptions(sheetKind, nh ? nh.id : "");
+      e.target.value = nh ? nh.id : "";
+    }
+    if (e.target.id === "rAcc"){ view.racc = e.target.value; render(); }
+    if (e.target.id === "rFrom" || e.target.id === "rTo"){ view[e.target.id === "rFrom" ? "from" : "to"] = e.target.value; render(); }
     if (e.target.id === "impFile" && e.target.files && e.target.files[0]) doImport(e.target.files[0]);
   });
 
