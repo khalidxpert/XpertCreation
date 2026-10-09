@@ -72,6 +72,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 .tx .md b{display:block;font-size:14px;font-weight:600;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
 .tx .md small{color:var(--ink-soft);font-size:11.5px}
+.tx .bl{display:block;font-size:11px;color:var(--ink-soft);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:1px}
+.tx .amw{text-align:right}
 .tx .am{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;
   font-size:14px}
 .tx .am.in{color:var(--in)}.tx .am.out{color:var(--out)}.tx .am.move{color:var(--mv)}
@@ -746,7 +748,33 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     return h;
   }
 
+  /* Closing balance after every entry, per account: entries in date order (same date: the order they were
+     added), starting from the opening balance. */
+  function runningBalances(){
+    var bal = {}, out = {};
+    st.accounts.forEach(function(a){ bal[a.id] = a.opening || 0; });
+    st.tx.slice().sort(function(x, y){
+      if (x.date !== y.date) return x.date < y.date ? -1 : 1;
+      return (x.created || 0) - (y.created || 0);
+    }).forEach(function(t){
+      if (t.kind === "in" && t.acc in bal) bal[t.acc] += t.amt;
+      if ((t.kind === "out" || t.kind === "move") && t.acc in bal) bal[t.acc] -= t.amt;
+      if (t.kind === "move" && t.to in bal) bal[t.to] += t.amt;
+      if (t.acc in bal) out[t.id + "|" + t.acc] = bal[t.acc];
+      if (t.kind === "move" && t.to in bal) out[t.id + "|" + t.to] = bal[t.to];
+    });
+    return out;
+  }
+
+  function balTag(t, forAcc, BAL){
+    var acc = forAcc || t.acc, v = BAL[t.id + "|" + acc];
+    if (v === undefined) return "";
+    var A = accById(acc);
+    return '<span class="bl' + (v < 0 ? " neg" : "") + '">' + (forAcc ? "Bal " : esc(A ? A.name : "") + " bal ") + rs(v) + '</span>';
+  }
+
   function txList(list, forAcc, limit){
+    var BAL = runningBalances();
     list.sort(function(x, y){
       if (x.date !== y.date) return x.date < y.date ? 1 : -1;
       return (y.created || 0) - (x.created || 0);
@@ -773,7 +801,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var mark = t.kind === "in" ? "+" : t.kind === "out" ? "\u2212" : "\u21c4";
       return '<div class="tx" data-edittx="' + esc(t.id) + '" style="cursor:pointer"><span class="dot ' + cls + '">' + mark + '</span>'
         + '<span class="md"><b>' + esc(title) + '</b><small>' + esc(sub) + '</small></span>'
-        + '<span class="am ' + cls + '">' + sign + rs(t.amt).replace("\u2212", "") + '</span>'
+        + '<span class="amw"><span class="am ' + cls + '">' + sign + rs(t.amt).replace("\u2212", "") + '</span>'
+        + balTag(t, forAcc, BAL) + '</span>'
         + '<button type="button" class="del" data-deltx="' + esc(t.id)
         + '" title="Delete">\u2715</button></div>';
     }).join("") + '</div>';
