@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Step counter with live map — walk, run, ride — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Free step counter with a live map: count steps with your phone's motion sensor, see your walk, run or ride on the map, with distance, pace, calories and a daily goal.">
+<link rel="canonical" href="https://xpertcreation.com/steps">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Step counter with live map — XpertCreation">
+<meta property="og:description" content="Count your steps and see your walk live on the map: distance, pace, calories and a daily goal.">
+<meta property="og:url" content="https://xpertcreation.com/steps">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Step counter with live map — XpertCreation">
+<meta name="twitter:description" content="Count your steps and see your walk live on the map: distance, pace, calories and a daily goal.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Step counter","url":"https://xpertcreation.com/steps","applicationCategory":"HealthApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"PKR"},"publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --go:#00B37E;--bad:#DC2626;--line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:9px}
+
+.member{display:flex;align-items:center;gap:14px;padding:15px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;margin-bottom:10px}
+.member .av3{width:54px;height:54px;border-radius:17px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.member .ph3{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;font-size:21px;flex:0 0 auto}
+.member .t{flex:1;min-width:0}
+.member .t b{display:block;font-size:15px;font-weight:700}
+.member .t small{display:block;font-size:12.5px;color:var(--brand);font-weight:600;margin-top:2px}
+.member .soc{display:flex;gap:7px}
+.member .soc a{width:34px;height:34px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:15px}
+
+.apply2{background:var(--card);border:1px dashed var(--line);border-radius:18px;
+  padding:18px;text-align:center;margin-top:22px}
+.apply2 b{display:block;font-size:14.5px;font-weight:700}
+.apply2 p{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+.apply2 button{margin-top:13px;padding:12px 24px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:13.5px}
+
+#appform{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:18px;margin-top:14px}
+#appform.on{display:block}
+#appform label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:12px 0 5px}
+#appform label:first-of-type{margin-top:0}
+#appform textarea,#appform input{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:14.5px;font-family:inherit;outline:none}
+#appform textarea{min-height:90px;resize:vertical}
+#appform textarea:focus,#appform input:focus{border-color:var(--brand);background:#fff}
+#appform .hint3{font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+#appform .go6{width:100%;margin-top:14px;padding:13px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:14px}
+.appstate{padding:13px 15px;border-radius:14px;font-size:13.5px;margin-top:14px;line-height:1.55}
+.appstate.pending{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.appstate.accepted{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.3);color:#00734F}
+.appstate.declined{background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Health</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js?v=44" defer></script>
+
+
+<div class="wrap" style="max-width:720px">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+.sc-h{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.sc-h h1{flex:1;min-width:200px}
+.sc-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.sc-today{display:flex;gap:16px;align-items:center}
+.sc-ring{position:relative;width:118px;height:118px;flex:0 0 auto}
+.sc-ring svg{width:118px;height:118px;transform:rotate(-90deg)}
+.sc-ring .in{position:absolute;inset:0;display:grid;place-items:center;text-align:center;line-height:1.1}
+.sc-ring .in b{font-family:var(--display);font-size:24px;letter-spacing:-.03em;display:block}
+.sc-ring .in small{font-size:11px;color:var(--ink-soft)}
+.sc-mini{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;flex:1}
+.sc-mini div{font-size:12px;color:var(--ink-soft)}
+.sc-mini b{display:block;font-size:17px;color:var(--ink);font-weight:800}
+.sc-modes{display:flex;gap:6px;margin-bottom:10px}
+.sc-modes button{flex:1;padding:9px 6px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:13.5px}
+.sc-modes button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+#scmap{height:340px;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#E8ECF4;position:relative;z-index:1}
+#scmap .nomap{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;font-size:13px;color:var(--ink-soft)}
+.sc-live{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.sc-live div{background:var(--paper);border-radius:12px;padding:8px 6px;text-align:center;font-size:11px;color:var(--ink-soft)}
+.sc-live b{display:block;font-size:19px;color:var(--ink);font-weight:800;letter-spacing:-.02em}
+.sc-btns{display:flex;gap:8px}
+.sc-btns button{flex:1;padding:14px;border-radius:14px;font-weight:800;font-size:15px}
+.sc-go{background:#16A34A;color:#fff}.sc-pause{background:#F59E0B;color:#fff}.sc-stop{background:var(--bad);color:#fff}
+.sc-sec{background:var(--paper);border:1.5px solid var(--line)}
+.sc-note{font-size:12px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+.sc-msg{font-size:13px;padding:9px 12px;border-radius:12px;background:rgba(27,77,255,.07);color:#1B3A9C;margin-top:9px}
+.sc-msg.bad{background:rgba(220,38,38,.08);color:#991B1B}
+.sc-week{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:8px}
+.sc-week div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10.5px;color:var(--ink-soft)}
+.sc-week i{display:block;width:100%;border-radius:7px 7px 3px 3px;background:#CBD5E1;min-height:3px}
+.sc-week .met i{background:#16A34A}.sc-week .td{font-weight:800;color:var(--ink)}
+.sc-week span{margin-top:4px}
+.sc-list a{display:flex;gap:10px;align-items:center;padding:11px 2px;border-bottom:1px solid var(--line);color:inherit}
+.sc-list a:last-child{border-bottom:0}
+.sc-list .ic{width:38px;height:38px;border-radius:12px;background:var(--paper);display:grid;place-items:center;font-size:19px;flex:0 0 auto}
+.sc-list .t{flex:1;min-width:0;font-size:13px;color:var(--ink-soft)}
+.sc-list .t b{display:block;color:var(--ink);font-size:14.5px}
+.sc-list .del{font-size:12px;color:var(--bad);font-weight:700;padding:6px}
+.sc-set label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;margin:10px 0 4px}
+.sc-set input{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:15px;background:var(--paper)}
+.sc-set .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sc-done{border:2px solid #16A34A}
+.sc-done .big{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.03em}
+.sc-tabs{display:flex;gap:6px;margin:16px 0 8px}
+.sc-tabs button{padding:8px 13px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:13px}
+.sc-tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sc-signin{font-size:13px;padding:10px 12px;border-radius:12px;background:#FEF3C7;color:#78350F;margin-bottom:12px}
+[hidden]{display:none!important}
+</style>
+
+<div class="sc-h"><h1>Step counter</h1></div>
+<p class="lead" style="margin:-6px 0 14px">Counts your steps with the phone's motion sensor and draws your walk live on the map: distance, time, pace and calories. Your walks are saved to your account.</p>
+<div id="scsignin" class="sc-signin" hidden></div>
+<div id="scresume" class="sc-msg" hidden></div>
+
+<div class="sc-card sc-today">
+  <div class="sc-ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#E4E8F2" stroke-width="12"/>
+    <circle id="scarc" cx="60" cy="60" r="52" fill="none" stroke="#16A34A" stroke-width="12" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg>
+    <div class="in"><div><b id="sctsteps">0</b><small id="scgoal">of 8,000 steps</small></div></div></div>
+  <div class="sc-mini">
+    <div>Today<b id="sctdist">0 km</b></div><div>Calories<b id="sctkcal">0</b></div>
+    <div>Active time<b id="sctmin">0 min</b></div><div>This week<b id="scwk">0</b></div>
+  </div>
+</div>
+
+<div class="sc-card">
+  <div class="sc-modes" id="scmodes"><button data-k="walk" class="on">&#128694; Walk</button><button data-k="run">&#127939; Run</button><button data-k="cycle">&#128690; Ride</button></div>
+  <div id="scmap"><div class="nomap" id="scnomap">Loading the map…</div></div>
+  <div class="sc-live">
+    <div>Steps<b id="lsteps">0</b></div><div>Distance<b id="ldist">0.00</b><span id="ldu">km</span></div>
+    <div>Time<b id="ltime">0:00</b></div><div id="lpacel">Pace<b id="lpace">–</b><span id="lpu">min/km</span></div>
+  </div>
+  <div class="sc-btns" id="scidle"><button class="sc-go" id="scstart">&#9654; Start</button></div>
+  <div class="sc-btns" id="scrun" hidden><button class="sc-pause" id="scpause">&#10074;&#10074; Pause</button><button class="sc-stop" id="scfinish">&#9632; Finish</button></div>
+  <div id="sclivemsg" class="sc-msg" hidden></div>
+  <p class="sc-note">Keep this page open while you walk. The screen stays on while the walk is running. Phone browsers stop GPS and the motion sensor when the screen is off or you switch apps, so the steps and route pause until you come back.</p>
+</div>
+
+<div id="scdone" class="sc-card sc-done" hidden></div>
+
+<div class="sc-tabs" id="sctabs"><button data-t="week" class="on">This week</button><button data-t="list">My walks</button><button data-t="set">Settings</button></div>
+<div class="sc-card" id="tweek"><b style="font-size:14px">Steps per day</b><div class="sc-week" id="scweek"></div><p class="sc-note" id="scweeknote"></p></div>
+<div class="sc-card sc-list" id="tlist" hidden><div id="sclist"></div></div>
+<div class="sc-card sc-set" id="tset" hidden>
+  <label for="sggoal">Daily goal (steps)</label><input id="sggoal" type="number" inputmode="numeric" min="500" max="100000" step="500">
+  <div class="row3"><div><label for="sgh">Height (cm)</label><input id="sgh" type="number" inputmode="numeric" min="90" max="230"></div>
+  <div><label for="sgw">Weight (kg)</label><input id="sgw" type="number" inputmode="numeric" min="20" max="250"></div>
+  <div><label for="sgs">Motion sensor</label><input id="sgs" type="text" readonly value="checking…"></div></div>
+  <p class="sc-note">Height sets your step length (used when the phone has no motion sensor). Weight is used for calories. Calories are an estimate.</p>
+  <div class="sc-btns" style="margin-top:12px"><button class="sc-go" id="sgsave" style="background:var(--ink)">Save</button></div>
+  <div id="sgmsg" class="sc-msg" hidden></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="/js/share-result-1.js" defer></script>
+<script>
+(function(){
+  "use strict";
+  function $(i){ return document.getElementById(i); }
+  function esc(x){ return String(x == null ? "" : x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function ls(k, v){ try { if (v === undefined){ var s = localStorage.getItem(k); return s ? JSON.parse(s) : null; }
+    if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e){ return null; } }
+  function api(method, path, body){
+    var o = {method: method, credentials: "same-origin", headers: {}};
+    if (body || method === "DELETE"){ o.headers = {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}; if (body) o.body = JSON.stringify(body); }
+    return fetch("/api/steps/" + path, o).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {s: r.status, d: d}; }); })
+      .catch(function(){ return {s: 0, d: {detail: "No internet."}}; });
+  }
+  function n0(x){ return Math.round(x).toLocaleString("en-US"); }
+  function km(m){ return (m / 1000).toFixed(m < 10000 ? 2 : 1); }
+  function clock(s){ s = Math.round(s); var h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, x = s % 60;
+    return (h ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (x < 10 ? "0" : "") + x; }
+  function dayStr(d){ d = d || new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function hav(a, b){ var R = 6371000, r = Math.PI / 180, dl = (b[0] - a[0]) * r, dn = (b[1] - a[1]) * r;
+    var x = Math.sin(dl / 2) * Math.sin(dl / 2) + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dn / 2) * Math.sin(dn / 2);
+    return 2 * R * Math.asin(Math.min(1, Math.sqrt(x))); }
+  var ICON = {walk: "🚶", run: "🏃", cycle: "🚲"}, NAME = {walk: "Walk", run: "Run", cycle: "Ride"};
+
+  // ---------- settings, signed-in state, saved walks
+  var prefs = ls("xc_steps_prefs") || {goal: 8000, height_cm: 168, weight_kg: 70};
+  var member = null, walks = ls("xc_steps_walks") || [], days = {};
+  function stride(kind){ return prefs.height_cm / 100 * (kind === "run" ? 0.65 : 0.415); }
+  function kcalFor(kind, m){ return Math.round(prefs.weight_kg * m / 1000 * (kind === "run" ? 1.0 : kind === "cycle" ? 0.3 : 0.75)); }
+  function rebuildDays(){
+    days = {};
+    walks.forEach(function(w){ var d = days[w.day] || (days[w.day] = {steps: 0, dist_m: 0, kcal: 0, secs: 0});
+      d.steps += w.steps; d.dist_m += w.dist_m; d.kcal += w.kcal; d.secs += w.secs; });
+  }
+
+  // ---------- map
+  var map = null, line = null, dot = null, viewLine = null;
+  function initMap(){
+    if (!window.L){ $("scnomap").textContent = "The map could not load. Steps, distance and time still work."; return; }
+    $("scnomap").remove();
+    map = L.map("scmap", {zoomControl: true, attributionControl: true}).setView([30.3753, 69.3451], 5);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, subdomains: "abc",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+    line = L.polyline([], {color: "#1B4DFF", weight: 5, opacity: .9}).addTo(map);
+    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(function(p){
+      if (!run) map.setView([p.coords.latitude, p.coords.longitude], 16); }, function(){}, {enableHighAccuracy: true, timeout: 10000, maximumAge: 60000});
+  }
+  function showDot(ll, acc){
+    if (!map) return;
+    if (!dot){ dot = L.circleMarker(ll, {radius: 8, color: "#fff", weight: 3, fillColor: "#1B4DFF", fillOpacity: 1}).addTo(map); }
+    else dot.setLatLng(ll);
+  }
+
+  // ---------- the running walk
+  var run = null, kind = "walk", watchId = null, tick = null, wake = null;
+  function blank(){ return {kind: kind, started_at: new Date().toISOString(), day: dayStr(), secs: 0, steps: 0, sensorSteps: 0,
+    dist_m: 0, path: [], paused: false, lastT: Date.now(), sensor: false}; }
+
+  // step detection: smooth the total acceleration, count a step on each peak above the moving average.
+  // The first steps are held back until 4 come in a steady rhythm, so shaking or picking up the phone is not counted.
+  var mag = 9.8, avg = 9.8, above = false, lastStep = 0, held = 0, heldT = 0, gotMotion = false;
+  function onMotion(e){
+    var a = e.accelerationIncludingGravity; if (!a || a.x == null) return;
+    gotMotion = true;
+    if (!run || run.paused || run.kind === "cycle") return;
+    var raw = Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+    mag = mag * 0.75 + raw * 0.25; avg = avg * 0.97 + mag * 0.03;
+    var now = Date.now(), th = run.kind === "run" ? 2.2 : 1.1;
+    if (!above && mag > avg + th){
+      above = true;
+      var gap = now - lastStep;
+      if (gap > 260){
+        if (gap > 2000){ held = 1; heldT = now; }
+        else if (held > 0 && held < 4){ held++; if (held === 4){ run.sensorSteps += 4; held = 0; } }
+        else run.sensorSteps++;
+        lastStep = now;
+      }
+    } else if (above && mag < avg + th * 0.4) above = false;
+  }
+  function motionOn(){
+    return new Promise(function(done){
+      if (!window.DeviceMotionEvent){ done(false); return; }
+      var add = function(){ window.addEventListener("devicemotion", onMotion); done(true); };
+      if (typeof DeviceMotionEvent.requestPermission === "function"){
+        DeviceMotionEvent.requestPermission().then(function(s){ if (s === "granted") add(); else done(false); }).catch(function(){ done(false); });
+      } else add();
+    });
+  }
+  function onPos(p){
+    var c = p.coords, ll = [c.latitude, c.longitude];
+    showDot(ll, c.accuracy);
+    if (!run || run.paused) return;
+    if (c.accuracy > 35){ say("Waiting for a clearer GPS signal (±" + Math.round(c.accuracy) + " m)…"); return; }
+    say("");
+    var last = run.path[run.path.length - 1], t = p.timestamp || Date.now();
+    if (!last){ run.path.push(ll); run.lastFix = t; if (map) { line.setLatLngs(run.path); map.setView(ll, 17); } save(); return; }
+    var d = hav(last, ll), dt = Math.max(1, (t - (run.lastFix || t)) / 1000), maxV = run.kind === "cycle" ? 25 : run.kind === "run" ? 9 : 4;
+    if (d < Math.max(4, c.accuracy * 0.5)) return;          // standing still: GPS wobble, not movement
+    if (d / dt > maxV * 1.6) return;                         // a jump no walker could make: bad fix
+    run.dist_m += d; run.path.push(ll); run.lastFix = t;
+    if (map){ line.addLatLng(ll); map.panTo(ll, {animate: true}); }
+  }
+  var note = "";   // a lasting note (no motion sensor) shown whenever there is no newer message
+  function say(t, bad){ t = t || note; var m = $("sclivemsg"); m.hidden = !t; m.textContent = t; m.className = "sc-msg" + (bad ? " bad" : ""); }
+  function steps(){ if (!run) return 0; if (run.kind === "cycle") return 0;
+    return run.sensor ? run.sensorSteps : Math.round(run.dist_m / stride(run.kind)); }
+  function draw(){
+    var s = run ? run.secs : 0, d = run ? run.dist_m : 0;
+    $("lsteps").textContent = n0(steps()); $("ldist").textContent = km(d); $("ltime").textContent = clock(s);
+    if (kind === "cycle"){ $("lpacel").firstChild.nodeValue = "Speed"; $("lpace").textContent = d > 20 && s ? (d / s * 3.6).toFixed(1) : "–"; $("lpu").textContent = "km/h"; }
+    else { $("lpacel").firstChild.nodeValue = "Pace"; $("lpace").textContent = d > 50 ? clock(s / (d / 1000)) : "–"; $("lpu").textContent = "min/km"; }
+  }
+  function save(){ if (run) ls("xc_steps_live", run); }
+  function wakeOn(){ if (navigator.wakeLock && run && !run.paused) navigator.wakeLock.request("screen").then(function(w){ wake = w; }).catch(function(){}); }
+  function start(resume){
+    if (!navigator.geolocation){ say("This browser has no GPS access.", true); return; }
+    if (!resume) run = blank();
+    kind = run.kind; setMode();
+    $("scidle").hidden = true; $("scrun").hidden = false; $("scdone").hidden = true; $("scresume").hidden = true;
+    $("scpause").innerHTML = "&#10074;&#10074; Pause"; run.paused = false; run.lastT = Date.now();
+    motionOn().then(function(ok){
+      setTimeout(function(){
+        if (!run) return;
+        run.sensor = ok && gotMotion && run.kind !== "cycle";
+        note = run.kind !== "cycle" && !run.sensor ? "No motion sensor found, so steps are worked out from the distance you cover." : ""; say("");
+      }, 3000);
+    });
+    if (map && run.path.length) line.setLatLngs(run.path);
+    watchId = navigator.geolocation.watchPosition(onPos, function(e){
+      say(e.code === 1 ? "Location is blocked. Allow location for this site in your browser settings, then tap Start again." : "Looking for GPS…", e.code === 1);
+    }, {enableHighAccuracy: true, maximumAge: 0, timeout: 20000});
+    clearInterval(tick);
+    tick = setInterval(function(){
+      if (!run || run.paused) return;
+      var now = Date.now(), gap = (now - run.lastT) / 1000; run.lastT = now;
+      if (gap < 30) run.secs += gap;                       // the page was asleep longer than that: don't count it as moving time
+      draw(); if (Math.round(run.secs) % 5 === 0) save();
+    }, 1000);
+    wakeOn(); draw(); save();
+  }
+  function pause(){
+    if (!run) return;
+    run.paused = !run.paused; run.lastT = Date.now();
+    $("scpause").innerHTML = run.paused ? "&#9654; Resume" : "&#10074;&#10074; Pause";
+    if (run.paused && wake){ wake.release().catch(function(){}); wake = null; } else wakeOn();
+    save();
+  }
+  function stopAll(){
+    if (watchId != null) navigator.geolocation.clearWatch(watchId); watchId = null;
+    clearInterval(tick); window.removeEventListener("devicemotion", onMotion);
+    if (wake){ wake.release().catch(function(){}); wake = null; }
+  }
+  function finish(){
+    if (!run) return;
+    stopAll();
+    var w = {kind: run.kind, started_at: run.started_at, day: run.day, secs: Math.round(run.secs), steps: steps(),
+      steps_est: !run.sensor && run.kind !== "cycle", dist_m: Math.round(run.dist_m), path: run.path};
+    w.kcal = kcalFor(w.kind, w.dist_m);
+    run = null; note = ""; ls("xc_steps_live", null);
+    $("scidle").hidden = false; $("scrun").hidden = true; say("");
+    if (w.secs < 20 && w.dist_m < 20 && w.steps < 20){ say("That was too short to save."); draw(); return; }
+    keep(w); done(w); draw();
+  }
+  function keep(w){
+    walks = walks.filter(function(x){ return x.started_at !== w.started_at; }); walks.unshift(w);
+    walks.sort(function(a, b){ return a.started_at < b.started_at ? 1 : -1; });
+    if (!member){ ls("xc_steps_walks", walks.slice(0, 300)); rebuildDays(); paint(); return; }
+    w.pending = true; ls("xc_steps_walks", walks.filter(function(x){ return x.pending; }));
+    rebuildDays(); paint();
+    api("POST", "walks/", w).then(function(r){
+      if (r.s === 200 || r.s === 201){ w.id = r.d.id; delete w.pending; ls("xc_steps_walks", walks.filter(function(x){ return x.pending; })); paint(); }
+      else if (r.s) say(r.d.detail || "Could not save. It is kept on this phone and will be sent later.", true);
+    });
+  }
+  function shareText(w){ return "I " + (w.kind === "cycle" ? "rode " + km(w.dist_m) + " km" : (w.kind === "run" ? "ran " : "walked ") + n0(w.steps) + " steps (" + km(w.dist_m) + " km)")
+    + " in " + clock(w.secs) + " with the XpertCreation step counter."; }
+  function done(w){
+    var b = $("scdone"); b.hidden = false;
+    b.innerHTML = '<b style="font-size:13px;color:#16A34A">' + ICON[w.kind] + " " + NAME[w.kind] + ' saved</b>'
+      + '<div class="big">' + (w.kind === "cycle" ? km(w.dist_m) + " km" : n0(w.steps) + " steps") + '</div>'
+      + '<div class="sc-mini" style="margin:8px 0 10px"><div>Distance<b>' + km(w.dist_m) + ' km</b></div><div>Time<b>' + clock(w.secs) + '</b></div>'
+      + '<div>Calories (about)<b>' + n0(w.kcal) + '</b></div><div>' + (w.kind === "cycle" ? "Speed" : "Pace") + '<b>'
+      + (w.kind === "cycle" ? (w.secs ? (w.dist_m / w.secs * 3.6).toFixed(1) + " km/h" : "–") : (w.dist_m > 50 ? clock(w.secs / (w.dist_m / 1000)) + " /km" : "–")) + '</b></div></div>'
+      + '<div id="scshare"></div>';
+    var host = $("scshare"), big = w.kind === "cycle" ? km(w.dist_m) + " km" : n0(w.steps) + " steps";
+    if (window.XCResult) XCResult.show({host: host, title: "Step counter", big: big, sub: km(w.dist_m) + " km in " + clock(w.secs), text: shareText(w), url: "https://xpertcreation.com/steps"});
+    else host.innerHTML = '<a class="sc-sec" style="display:inline-block;padding:10px 14px;border-radius:12px;font-weight:700;color:#fff;background:#25D366" target="_blank" rel="noopener" href="https://wa.me/?text='
+      + encodeURIComponent(shareText(w) + " https://xpertcreation.com/steps") + '">Share on WhatsApp</a>';
+    b.scrollIntoView({behavior: "smooth", block: "center"});
+  }
+
+  // ---------- today, week, list
+  function paint(){
+    var t = days[dayStr()] || {steps: 0, dist_m: 0, kcal: 0, secs: 0};
+    var live = run ? steps() : 0, st = t.steps + live, f = Math.min(1, st / prefs.goal);
+    $("sctsteps").textContent = n0(st); $("scgoal").textContent = "of " + n0(prefs.goal) + " steps";
+    $("scarc").style.strokeDashoffset = String(326.7 * (1 - f)); $("scarc").style.stroke = f >= 1 ? "#16A34A" : "#1B4DFF";
+    $("sctdist").textContent = km(t.dist_m + (run ? run.dist_m : 0)) + " km"; $("sctkcal").textContent = n0(t.kcal);
+    $("sctmin").textContent = Math.round((t.secs + (run ? run.secs : 0)) / 60) + " min";
+    var wk = 0, html = "", mx = prefs.goal, list = [], met = 0;
+    for (var i = 6; i >= 0; i--){ var d = new Date(); d.setDate(d.getDate() - i); var k = dayStr(d), v = (days[k] || {}).steps || 0;
+      if (i === 0) v += live; wk += v; mx = Math.max(mx, v); list.push([d, v, i === 0]); if (v >= prefs.goal) met++; }
+    list.forEach(function(x){ html += '<div class="' + (x[1] >= prefs.goal ? "met " : "") + (x[2] ? "td" : "") + '" title="' + n0(x[1]) + ' steps">'
+      + '<small>' + (x[1] >= 1000 ? (x[1] / 1000).toFixed(1) + "k" : x[1] || "") + '</small><i style="height:' + Math.round(x[1] / mx * 85) + '%"></i><span>'
+      + x[0].toLocaleDateString("en-US", {weekday: "short"}) + '</span></div>'; });
+    $("scweek").innerHTML = html; $("scwk").textContent = n0(wk);
+    $("scweeknote").textContent = "Goal reached on " + met + " of the last 7 days. Daily average " + n0(wk / 7) + " steps.";
+    var L2 = walks.slice(0, 60).map(function(w, i){
+      var dt = new Date(w.started_at);
+      return '<a href="#" data-i="' + i + '"><span class="ic">' + ICON[w.kind] + '</span><span class="t"><b>'
+        + (w.kind === "cycle" ? km(w.dist_m) + " km ride" : n0(w.steps) + " steps · " + km(w.dist_m) + " km") + '</b>'
+        + esc(dt.toLocaleDateString("en-GB", {day: "numeric", month: "short"}) + ", " + dt.toLocaleTimeString("en-US", {hour: "numeric", minute: "2-digit"}))
+        + " · " + clock(w.secs) + (w.pending ? " · not sent yet" : "") + '</span><span class="del" data-del="' + i + '">Delete</span></a>';
+    }).join("");
+    $("sclist").innerHTML = L2 || '<p class="sc-note">No walks yet. Tap Start and go for a walk.</p>';
+  }
+  function showWalk(w){
+    var put = function(path){
+      if (!map || !path || !path.length) return;
+      if (viewLine) viewLine.remove();
+      viewLine = L.polyline(path, {color: "#16A34A", weight: 5}).addTo(map);
+      map.fitBounds(viewLine.getBounds(), {padding: [24, 24]});
+      $("scmap").scrollIntoView({behavior: "smooth", block: "center"});
+    };
+    if (w.path && w.path.length) put(w.path);
+    else if (w.id) api("GET", "walks/" + w.id + "/").then(function(r){ if (r.s === 200){ w.path = r.d.path; put(w.path); } });
+    done(w);
+  }
+
+  // ---------- events
+  $("scstart").onclick = function(){ start(false); };
+  $("scpause").onclick = pause;
+  $("scfinish").onclick = function(){ if (confirm("Finish and save this " + NAME[run.kind].toLowerCase() + "?")) finish(); };
+  $("scmodes").onclick = function(e){ var b = e.target.closest("button"); if (!b || run) return; kind = b.getAttribute("data-k"); setMode(); draw(); };
+  function setMode(){ [].forEach.call($("scmodes").children, function(b){ b.className = b.getAttribute("data-k") === kind ? "on" : ""; }); }
+  $("sctabs").onclick = function(e){ var b = e.target.closest("button"); if (!b) return; var t = b.getAttribute("data-t");
+    [].forEach.call($("sctabs").children, function(x){ x.className = x === b ? "on" : ""; });
+    $("tweek").hidden = t !== "week"; $("tlist").hidden = t !== "list"; $("tset").hidden = t !== "set"; };
+  $("sclist").onclick = function(e){
+    var a = e.target.closest("a"); if (!a) return; e.preventDefault();
+    var di = e.target.getAttribute("data-del");
+    if (di != null){
+      var w = walks[+di]; if (!w || !confirm("Delete this walk?")) return;
+      walks.splice(+di, 1); rebuildDays(); paint();
+      if (member && w.id) api("DELETE", "walks/" + w.id + "/"); else ls("xc_steps_walks", member ? walks.filter(function(x){ return x.pending; }) : walks);
+      return;
+    }
+    showWalk(walks[+a.getAttribute("data-i")]);
+  };
+  $("sgsave").onclick = function(){
+    var g = +$("sggoal").value, h = +$("sgh").value, k = +$("sgw").value, m = $("sgmsg"); m.hidden = false;
+    if (!(g >= 500 && g <= 100000 && h >= 90 && h <= 230 && k >= 20 && k <= 250)){ m.className = "sc-msg bad"; m.textContent = "Goal 500 to 100,000 steps, height 90 to 230 cm, weight 20 to 250 kg."; return; }
+    prefs = {goal: g, height_cm: h, weight_kg: k}; ls("xc_steps_prefs", prefs); paint();
+    m.className = "sc-msg"; m.textContent = "Saved.";
+    if (member) api("POST", "prefs/", prefs);
+  };
+  function fillPrefs(){ $("sggoal").value = prefs.goal; $("sgh").value = prefs.height_cm; $("sgw").value = prefs.weight_kg; }
+  document.addEventListener("visibilitychange", function(){
+    if (document.visibilityState === "visible"){ if (run){ run.lastT = Date.now(); wakeOn(); } if (member) load(); }
+    else save();
+  });
+  window.addEventListener("beforeunload", function(e){ if (run){ save(); e.preventDefault(); e.returnValue = ""; } });
+
+  // ---------- a walk left running (page closed or phone restarted)
+  function offerResume(){
+    var r = ls("xc_steps_live"); if (!r || !r.started_at) return;
+    var b = $("scresume"); b.hidden = false;
+    b.innerHTML = "You have an unfinished " + NAME[r.kind || "walk"].toLowerCase() + " from " + esc(new Date(r.started_at).toLocaleTimeString("en-US", {hour: "numeric", minute: "2-digit"}))
+      + " (" + km(r.dist_m) + " km). <button id='rsgo' style='font-weight:800;color:#1B4DFF'>Carry on</button> · <button id='rssave' style='font-weight:800;color:#16A34A'>Save it</button> · <button id='rsdrop' style='font-weight:800;color:#991B1B'>Discard</button>";
+    $("rsgo").onclick = function(){ run = r; run.sensorSteps = run.sensorSteps || 0; start(true); };
+    $("rssave").onclick = function(){ run = r; b.hidden = true; finish(); };
+    $("rsdrop").onclick = function(){ ls("xc_steps_live", null); b.hidden = true; };
+  }
+
+  // ---------- members: load walks from the account; send walks saved on this phone before sign-in
+  function load(){
+    return api("GET", "walks/?days=60&today=" + dayStr()).then(function(r){
+      if (r.s !== 200) return;
+      var pend = (ls("xc_steps_walks") || []).filter(function(x){ return x.pending || !x.id; });
+      var seen = {}; walks = [];
+      pend.concat(r.d.walks).forEach(function(w){ if (!seen[w.started_at]){ seen[w.started_at] = 1; walks.push(w); } });
+      walks.sort(function(a, b){ return a.started_at < b.started_at ? 1 : -1; });
+      prefs = r.d.prefs || prefs; ls("xc_steps_prefs", prefs); fillPrefs();
+      rebuildDays(); paint();
+      pend.forEach(function(w){ w.pending = true; api("POST", "walks/", w).then(function(x){ if (x.s === 200 || x.s === 201){ w.id = x.d.id; delete w.pending;
+        ls("xc_steps_walks", walks.filter(function(y){ return y.pending; })); paint(); } }); });
+    });
+  }
+  window.addEventListener("devicemotion", function f(e){ gotMotion = gotMotion || !!(e.accelerationIncludingGravity && e.accelerationIncludingGravity.x != null);
+    $("sgs").value = gotMotion ? "Found" : $("sgs").value; });
+  setTimeout(function(){ if (!gotMotion) $("sgs").value = typeof (window.DeviceMotionEvent || {}).requestPermission === "function" ? "Asks on Start" : "Not found"; }, 2500);
+
+  initMap(); fillPrefs(); rebuildDays(); paint(); draw(); offerResume();
+  setInterval(function(){ if (run) paint(); }, 5000);
+  fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }).then(function(m){
+    member = m;
+    if (!m){ var s = $("scsignin"); s.hidden = false;
+      s.innerHTML = 'You are not signed in, so walks are kept on this phone only. <a href="/login?next=/steps" style="font-weight:800">Sign in</a> to save them to your account. Walks from this phone are added when you sign in.'; return; }
+    load();
+  });
+})();
+</script>
+</div>
+
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="/feed">XpertConnect</a></li>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li><li><a href="https://www.trustpilot.com/review/xpertcreation.com" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.6-5 4.5 1.5 6.6L12 17l-6 3.4 1.5-6.6-5-4.5 6.6-.6z"/></svg>Review us on Trustpilot</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert/XpertCreation" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+<script src="/js/share-1.js?v=21" defer></script>
+</body>
+</html>
