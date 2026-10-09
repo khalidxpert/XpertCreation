@@ -275,6 +275,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     if (e.amt > 100000000000) return "That amount is too large.";
     var ids = st.accounts.map(function(a){ return a.id; });
     if (ids.indexOf(e.acc) === -1) return "Pick an account.";
+    var EA = st.accounts.filter(function(a){ return a.id === e.acc; })[0];
+    if (EA && EA.type === "card" && e.kind === "in") return "A credit card does not receive money. To pay its bill, use Move from your bank to the card.";
+    if (EA && EA.type === "card" && e.kind === "move") return "Money cannot be moved out of a credit card. For spending on the card, use Paid.";
     if (e.kind === "move"){
       if (ids.indexOf(e.to) === -1) return "Pick where the money went.";
       if (e.to === e.acc) return "From and to cannot be the same account.";
@@ -1013,6 +1016,10 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   function render(){
     var app = document.getElementById("app");
     document.getElementById("fab").style.display = st.accounts.length ? "" : "none";
+    var fc = view.page === "acc" && accById(view.acc) && accById(view.acc).type === "card", fb = document.getElementById("fab");
+    fb.querySelector('[data-new="in"]').style.display = fc ? "none" : "";
+    fb.querySelector('[data-new="out"]').textContent = fc ? "💳 Spent" : "− Paid";
+    fb.querySelector('[data-new="move"]').textContent = fc ? "Pay card bill" : "↔ Move";
     if (view.page === "acc" && accById(view.acc)) app.innerHTML = accPage();
     else if (view.page === "rep") app.innerHTML = repPage();
     else if (view.page === "rephead") app.innerHTML = headLedgerPage();
@@ -1078,7 +1085,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<span class="ic" style="width:40px;height:40px;border-radius:12px;display:grid;'
       + 'place-items:center;font-size:19px;background:' + T.c + '">' + T.e + '</span>'
       + '<h2>' + esc(a.name) + '</h2></div>'
-      + '<div class="big' + (b < 0 ? " neg" : "") + '">' + rs(b) + '</div>';
+      + (a.type === "card"
+          ? '<div class="big' + (b < 0 ? " neg" : "") + '">' + (b <= 0 ? 'Owed ' + rs(-b) : 'In credit ' + rs(b)) + '</div>'
+            + (a.limit ? '<div class="row">Limit ' + rs(a.limit) + ' · available ' + rs(Math.max(0, a.limit + Math.min(0, b))) + '</div>' : '')
+            + '<div class="row">Spend with <b>Spent</b>; pay the bill with <b>Pay card bill</b> (from your bank).</div>'
+          : '<div class="big' + (b < 0 ? " neg" : "") + '">' + rs(b) + '</div>');
 
     if (a.type === "bank"){
       if (a.title) h += '<div class="row">Title: <code>' + esc(a.title) + '</code></div>';
@@ -1212,23 +1223,34 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   function entrySheet(kind){
     sheetKind = kind;
     var ET = editingTx ? st.tx.filter(function(x){ return x.id === editingTx; })[0] : null;
-    var opts = st.accounts.map(function(a){
-      return '<option value="' + esc(a.id) + '">' + esc(a.name) + ' (' + rs(balanceOf(st, a.id)) + ')</option>';
-    }).join("");
-    var pre = view.page === "acc" ? view.acc : (st.accounts[0] || {}).id;
+    // Credit cards: you spend on them (Paid) and pay their bill (Move from a bank TO the card).
+    // They never receive money and money is never moved out of them.
+    function isCard(a){ return a && a.type === "card"; }
+    function optList(f){
+      return st.accounts.filter(f).map(function(a){
+        var b = balanceOf(st, a.id);
+        return '<option value="' + esc(a.id) + '">' + esc(a.name) + (isCard(a) ? ' (owed ' + rs(Math.max(0, -b)) + ')' : ' (' + rs(b) + ')') + '</option>';
+      }).join("");
+    }
+    var opts = kind === "out" ? optList(function(){ return true; }) : optList(function(a){ return !isCard(a); });
+    var toOpts = optList(function(){ return true; });
+    var preAcc = view.page === "acc" ? accById(view.acc) : null, onCard = isCard(preAcc);
+    var firstOk = (st.accounts.filter(function(a){ return kind === "out" || !isCard(a); })[0] || {}).id;
+    var pre = preAcc && (kind === "out" || !onCard) ? preAcc.id : firstOk;
+    var preTo = onCard && kind === "move" ? preAcc.id : null;
 
     openSheet('<h3>' + (ET ? 'Edit entry' : 'New entry') + '</h3>'
       + '<div class="seg">'
-      + '<button type="button" class="in' + (kind === "in" ? " on" : "") + '" data-kind="in">Received</button>'
-      + '<button type="button" class="out' + (kind === "out" ? " on" : "") + '" data-kind="out">Paid</button>'
-      + '<button type="button" class="move' + (kind === "move" ? " on" : "") + '" data-kind="move">Move</button>'
+      + (onCard ? '' : '<button type="button" class="in' + (kind === "in" ? " on" : "") + '" data-kind="in">Received</button>')
+      + '<button type="button" class="out' + (kind === "out" ? " on" : "") + '" data-kind="out">' + (onCard ? "Spent on card" : "Paid") + '</button>'
+      + '<button type="button" class="move' + (kind === "move" ? " on" : "") + '" data-kind="move">' + (onCard ? "Pay card bill" : "Move") + '</button>'
       + '</div>'
       + '<div class="f"><label>Amount (Rs)</label>'
       + '<input class="amt" id="eAmt" type="text" inputmode="decimal" placeholder="0" autocomplete="off"></div>'
       + '<div class="f"><label id="eAccL">' + (kind === "move" ? "From" : "Account") + '</label>'
       + '<select id="eAcc">' + opts + '</select></div>'
       + '<div class="f" id="eToW"' + (kind === "move" ? "" : ' style="display:none"') + '>'
-      + '<label>To</label><select id="eTo">' + opts + '</select></div>'
+      + '<label>To</label><select id="eTo">' + toOpts + '</select></div>'
       + '<div class="f" id="eHeadW"' + (kind === "move" ? ' style="display:none"' : '') + '><label>Head</label>'
       + '<select id="eHead">' + (kind === "move" ? '' : headOptions(kind, ET && ET.kind === kind ? ET.head : '')) + '</select></div>'
       + '<div class="f"><label>Date</label><input id="eDate" type="date" value="' + today() + '"></div>'
@@ -1246,6 +1268,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var other = st.accounts.filter(function(a){ return a.id !== pre; })[0];
       if (other) to.value = other.id;
     }
+    if (to && preTo) to.value = preTo;
     if (ET){
       document.getElementById("eAmt").value = ET.amt / 100;
       if (s) s.value = ET.acc;
