@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Carrom — free online carrom board game — XpertCreation</title>
+<title>Carrom online with friends (2 or 4 players) — XpertCreation</title>
 <!-- seo:start -->
-<meta name="description" content="Play carrom free in your browser: real board and striker physics, queen and cover rules, points. Play the computer or a friend on one phone.">
-<link rel="canonical" href="https://xpertcreation.com/carrom">
+<meta name="description" content="Play carrom online with friends: 2 players, or 4 players in two teams, each on their own phone. Real striker physics, queen and cover rules.">
+<link rel="canonical" href="https://xpertcreation.com/carrom-online">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="XpertCreation">
 <meta property="og:title" content="Carrom — free online carrom board game — XpertCreation">
-<meta property="og:description" content="Play carrom free in your browser: real board and striker physics, queen and cover rules, points. Play the computer or a friend on one phone.">
-<meta property="og:url" content="https://xpertcreation.com/carrom">
+<meta property="og:description" content="Play carrom online with friends: 2 players, or 4 players in two teams, each on their own phone. Real striker physics, queen and cover rules.">
+<meta property="og:url" content="https://xpertcreation.com/carrom-online">
 <meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Carrom — free online carrom board game — XpertCreation">
-<meta name="twitter:description" content="Play carrom free in your browser: real board and striker physics, queen and cover rules, points. Play the computer or a friend on one phone.">
+<meta name="twitter:description" content="Play carrom online with friends: 2 players, or 4 players in two teams, each on their own phone. Real striker physics, queen and cover rules.">
 <meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"The team","url":"https://xpertcreation.com/team","description":"Who builds and looks after XpertCreation.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
 <!-- seo:end -->
@@ -167,7 +167,6 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 <style>
 .ctop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
 .ctop h1{margin:0;flex:1;font-size:24px}
-.ctop select,.ctop button{padding:9px 12px;border-radius:11px;border:1.5px solid var(--line,#E4E8F2);background:var(--card,#fff);font:inherit;font-weight:700;color:var(--ink,#0D1424)}
 .cpls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .cpl{background:var(--card,#fff);border:2px solid var(--line,#E4E8F2);border-radius:14px;padding:8px 10px}
 .cpl.on{border-color:#16A34A;box-shadow:0 0 0 3px rgba(22,163,74,.15)}
@@ -177,38 +176,47 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 #crmwrap{position:relative;display:flex;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none}
 #crm{display:block;border-radius:14px;box-shadow:0 18px 40px rgba(13,20,36,.28)}
 #cmsg{min-height:22px;margin:8px 2px;font-weight:700;font-size:14.5px}
-.cctl{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:16px;padding:10px 12px;display:grid;gap:8px}
+.cctl{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:16px;padding:12px;display:grid;gap:10px}
 .cctl .row{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
 .cctl label{font-weight:700;font-size:13px;white-space:nowrap}
 .cctl input[type=range]{width:100%;height:28px}
 #cpos{accent-color:#2F56D6}#cpower{accent-color:#DC2626}
-.cctl .btns{display:flex;gap:8px;justify-content:flex-end}
-.cctl button{padding:12px 16px;border-radius:12px;border:0;font:inherit;font-weight:800;cursor:pointer}
-#cshoot{background:#DC2626;color:#fff;min-width:110px}#cshoot:disabled{opacity:.45}
+.cctl .btns{display:flex;gap:8px;justify-content:flex-end;align-items:center}
+.cctl button,.xbtn{padding:12px 16px;border-radius:12px;border:0;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+.cctl input[type=text]{padding:11px 12px;border-radius:11px;border:1.5px solid var(--line,#E4E8F2);font:inherit;font-size:16px;text-transform:uppercase;width:130px}
+#cshoot{background:#DC2626;color:#fff;min-width:110px}#cshoot:disabled,#cstart:disabled{opacity:.45}
 #cl,#cr{background:var(--paper,#F6F7FB);color:var(--ink,#0D1424)}
-#cover[hidden]{display:none}
+#cover[hidden],#cskip[hidden],#cagain[hidden],#cwait[hidden]{display:none}
 #cover{position:absolute;inset:0;display:grid;place-items:center;background:rgba(13,20,36,.55);border-radius:14px}
 #cover div{background:var(--card,#fff);border-radius:18px;padding:20px 26px;text-align:center;max-width:320px}
 #cover b{display:block;font-size:19px;margin-bottom:12px}
 #cagain{padding:12px 20px;border-radius:12px;border:0;background:#16A34A;color:#fff;font:inherit;font-weight:800;cursor:pointer}
 .chelp{margin-top:12px;font-size:13.5px;color:var(--ink-soft,#5A657C)}
 </style>
-<div class="ctop"><h1>&#9898; Carrom</h1>
-  <select id="cmode" aria-label="Opponent"><option value="easy">vs Computer: Easy</option><option value="medium">vs Computer: Medium</option><option value="hard">vs Computer: Hard</option><option value="two">2 players (same phone)</option></select>
-  <button id="cnew">New board</button><a href="/carrom-online" style="padding:9px 12px;border-radius:11px;background:#16A34A;color:#fff;font-weight:800;text-decoration:none">&#127760; Play online</a></div>
-<div class="cpls"><div class="cpl" id="c0"></div><div class="cpl" id="c1"></div></div>
-<div id="crmwrap"><canvas id="crm" aria-label="Carrom board"></canvas><div id="cover" hidden><div><b id="cwin"></b><button id="cagain">Next board</button></div></div></div>
+<div class="ctop"><h1>&#9898; Carrom online</h1><a href="/carrom" style="font-weight:700">vs computer</a></div>
+<div id="lobby"><div class="cctl">
+  <b style="font-size:16px">Play with friends, each on their own phone</b>
+  <div class="btns" style="justify-content:flex-start;flex-wrap:wrap">
+    <button type="button" data-new="2" style="background:#1B4DFF;color:#fff">New table: 2 players</button>
+    <button type="button" data-new="4" style="background:#0D1424;color:#fff">New table: 4 players (2 teams)</button>
+  </div>
+  <div class="btns" style="justify-content:flex-start"><input type="text" id="ccode" maxlength="6" placeholder="Code"><button type="button" id="cjoin" style="background:var(--paper)">Join a table</button></div>
+  <p class="chelp" style="margin:0">Make a table, send the link on WhatsApp, and everyone joins on their own phone. With 4 players, partners sit opposite each other.</p>
+</div></div>
+<div id="game" hidden>
+<div class="cpls" id="cpls"></div>
+<div id="crmwrap"><canvas id="crm" aria-label="Carrom board"></canvas><div id="cover" hidden><div><b id="cwin"></b><button id="cagain">Next board</button><p id="cwait" class="chelp">Waiting for the host to deal the next board…</p></div></div></div>
 <div id="cmsg"></div>
-<div class="cctl">
+<div class="cctl" id="cctl">
   <div class="row"><label for="cpos">Striker</label><input type="range" id="cpos" min="0" max="100" value="50" aria-label="Striker position"></div>
   <div class="row"><label for="cpower">Power <span id="cpv">50%</span></label><input type="range" id="cpower" min="5" max="100" value="50" aria-label="Power"></div>
-  <div class="btns"><button id="cl" aria-label="Fine aim left">&#9664;</button><button id="cr" aria-label="Fine aim right">&#9654;</button><button id="cshoot">Shoot</button></div>
+  <div class="btns"><button id="cskip" hidden style="background:var(--paper)">Skip their turn</button><button id="cl" aria-label="Fine aim left">&#9664;</button><button id="cr" aria-label="Fine aim right">&#9654;</button><button id="cshoot">Shoot</button></div>
 </div>
 <p id="cstats" class="chelp"></p>
-<details class="chelp"><summary><b>How to play</b></summary>
-<p>Slide the striker along your baseline, drag on the board to aim (you can only shoot forward), set the power and tap <b>Shoot</b>. A red ring means the striker is touching a coin: move it.</p>
-<p>You play white, the computer black. Pocket your coin and you play again. The red queen can be pocketed once you have pocketed a coin of your own, and you must &ldquo;cover&rdquo; it by pocketing one of your coins on the next shot, or it goes back to the centre.</p>
-<p>Pocketing the striker is a foul: one of your pocketed coins returns to the centre. The queen must be pocketed before anyone&rsquo;s last coin. Clear all your coins to win the board: you score one point for each coin your opponent still has, plus 3 if you covered the queen.</p></details>
+</div>
+<details class="chelp"><summary><b>How online carrom works</b></summary>
+<p>Everyone sees the board from their own side. On your turn, slide the striker, drag on the board to aim forward, set the power and tap Shoot; the others watch your shot. Pocket your own coin and you play again.</p>
+<p>With 4 players, seats 1 and 3 are Team White and seats 2 and 4 Team Black. The queen and cover rules are the same as on the normal board. If someone stops playing, the others can skip their turn after about a minute.</p></details>
 </div>
 <script>
 (function(){
@@ -406,35 +414,57 @@ function aiMove(st, ps, side, level){
 }
 /* ENGINE END */
 
+  /* ================= online play =================
+     Seats go round the board: 0 bottom, 1 right, 2 top, 3 left. With 4 players seats 0+2 are the White team and
+     1+3 the Black team (partners sit opposite). Each phone turns the board so its own seat is at the bottom.
+     The shooter's phone runs the shot, then sends the shot and the final board; the other phones replay the same
+     shot from the same start, then settle on the saved final board so every phone ends up identical. */
   var cv = document.getElementById("crm"), ctx = cv.getContext("2d"), wrapEl = document.getElementById("crmwrap");
-  var ps, st, mode = localStorage.getItem("xc_carrom_mode") || "medium", aim = -Math.PI / 2, power = 0.5, sx = S / 2, busy = false, ev = [], scale = 1, FR = 42, aiAim = null, dragging = false;
+  var ps = null, st = null, seatTurn = 0, R = null, me = null, myName = "", code = null, version = -1, busy = false, ev = [];
+  var scale = 1, FR = 42, aim = 0, power = 0.5, u = S / 2, dragging = false, pollT = null, lastAgo = 0, playingShot = false;
   function $(i){ return document.getElementById(i); }
-  function pts(){ try { return JSON.parse(localStorage.getItem("xc_carrom_pts") || '{"me":0,"cpu":0,"w":0,"l":0}'); } catch (e) { return {me: 0, cpu: 0, w: 0, l: 0}; } }
+  function esc(x){ return String(x == null ? "" : x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function api(method, path, body){
+    var o = {method: method, credentials: "same-origin", headers: {}};
+    if (body){ o.headers = {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}; o.body = JSON.stringify(body); }
+    return fetch("/api/carrom/" + path, o).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {s: r.status, d: d}; }); });
+  }
+  function mySeat(){ return R && R.seat != null ? R.seat : 0; }
+  function team(seat){ return seat % 2; }
+  // ---- geometry for any seat (k quarter turns)
+  function rot(x, y, k){ k = ((k % 4) + 4) % 4; var cx = S / 2, dx = x - cx, dy = y - cx;
+    for (var i = 0; i < k; i++){ var t = dx; dx = -dy; dy = t; } return {x: cx + dx, y: cx + dy}; }
+  function seatPos(uu, seat){ return rot(uu, S - BASE, -seat); }          // u runs left to right as that player sees it
+  function fwd(ang, seat){ return Math.sin(ang + seat * Math.PI / 2) < -0.05; }
+  function okAt(uu, seat){
+    if (uu < LINE_A || uu > LINE_B) return false;
+    var p = seatPos(uu, seat);
+    for (var i = 1; i < ps.length; i++) if (!ps[i].in && Math.hypot(ps[i].x - p.x, ps[i].y - p.y) < RS + RC + 0.5) return false;
+    return true;
+  }
+  function putStriker(uu, seat){ var p = seatPos(uu, seat), s = ps[0]; s.in = false; s.vx = s.vy = 0; s.x = p.x; s.y = p.y; }
+  function freeU(seat){ for (var d = 0; d <= LINE_B - LINE_A; d += 2) for (var g = -1; g <= 1; g += 2){ var x = S / 2 + d * g; if (okAt(x, seat)) return x; } return S / 2; }
+  function snap(list){ return list.map(function(p){ return {id: p.id, c: p.c, x: Math.round(p.x * 100) / 100, y: Math.round(p.y * 100) / 100, in: !!p.in}; }); }
+  function load(list){ return list.map(function(p){ return {id: p.id, c: p.c, x: p.x, y: p.y, vx: 0, vy: 0, in: !!p.in, r: p.id === 0 ? RS : RC, m: p.id === 0 ? M_STRIKER : M_COIN}; }); }
+  // ---- sound
   var ac = null;
   function sound(k, vol){
-    try {
-      ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    try { ac = ac || new (window.AudioContext || window.webkitAudioContext)();
       var o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime;
-      o.type = k === "pot" ? "sine" : "square";
-      o.frequency.setValueAtTime(k === "pot" ? 180 : k === "wall" ? 160 : 900, t);
+      o.type = k === "pot" ? "sine" : "square"; o.frequency.setValueAtTime(k === "pot" ? 180 : k === "wall" ? 160 : 900, t);
       if (k === "pot") o.frequency.exponentialRampToValueAtTime(70, t + 0.25);
       g.gain.setValueAtTime(Math.min(0.35, vol || 0.15), t); g.gain.exponentialRampToValueAtTime(0.001, t + (k === "pot" ? 0.3 : 0.05));
-      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.32);
-    } catch (e) {}
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + 0.32); } catch (e) {}
   }
-  function layout(){
-    var w = Math.min(wrapEl.clientWidth, 640), full = S + FR * 2;
-    scale = w / full; cv.width = Math.round(full * scale * devicePixelRatio); cv.height = cv.width;
-    cv.style.width = Math.round(full * scale) + "px"; cv.style.height = cv.style.width; draw();
-  }
-  function tf(){ var k = scale * devicePixelRatio; ctx.setTransform(k, 0, 0, k, FR * k, FR * k); }
-  function toBoard(cx, cy){ var r = cv.getBoundingClientRect(); return {x: (cx - r.left) / scale - FR, y: (cy - r.top) / scale - FR}; }
-  function mySide(){ return st.turn; }
-  function human(){ return mode === "two" || st.turn === 0; }
-  // ---- drawing
-  function baseline(side){
-    var y = baseY(side), off = side === 0 ? 1 : -1;
-    ctx.strokeStyle = "#2B1A0E"; ctx.lineWidth = 1.6;
+  // ---- drawing (board turned so my seat is at the bottom)
+  function layout(){ var w = Math.min(wrapEl.clientWidth, 640), full = S + FR * 2; scale = w / full;
+    cv.width = Math.round(full * scale * devicePixelRatio); cv.height = cv.width; cv.style.width = Math.round(full * scale) + "px"; cv.style.height = cv.style.width; draw(); }
+  function tf(){ var k = scale * devicePixelRatio; ctx.setTransform(k, 0, 0, k, FR * k, FR * k);
+    ctx.translate(S / 2, S / 2); ctx.rotate(mySeat() * Math.PI / 2); ctx.translate(-S / 2, -S / 2); }
+  function toBoard(cx, cy){ var r = cv.getBoundingClientRect(), vx = (cx - r.left) / scale - FR, vy = (cy - r.top) / scale - FR; return rot(vx, vy, -mySeat()); }
+  function baseline(){
+    var y = S - BASE; ctx.strokeStyle = "#2B1A0E"; ctx.lineWidth = 1.6;
     ctx.beginPath(); ctx.moveTo(LINE_A, y - RS); ctx.lineTo(LINE_B, y - RS); ctx.moveTo(LINE_A, y + RS); ctx.lineTo(LINE_B, y + RS); ctx.stroke();
     [LINE_A, LINE_B].forEach(function(x){ ctx.beginPath(); ctx.arc(x, y, RS, 0, Math.PI * 2); ctx.fillStyle = "#C0262D"; ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y, RS * 0.55, 0, Math.PI * 2); ctx.fillStyle = "#F3E3C3"; ctx.fill(); });
   }
@@ -444,27 +474,16 @@ function aiMove(st, ps, side, level){
     ctx.fillStyle = fr; ctx.fillRect(-FR + 5, -FR + 5, S + FR * 2 - 10, S + FR * 2 - 10);
     var g = ctx.createRadialGradient(S / 2, S / 2, 60, S / 2, S / 2, S * 0.75); g.addColorStop(0, "#F6E7C8"); g.addColorStop(1, "#E3C999");
     ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
-    ctx.save(); ctx.globalAlpha = 0.07; ctx.strokeStyle = "#7A4E22";
-    for (var i = 0; i < 60; i++){ ctx.beginPath(); var yy = i * 12.4 + Math.sin(i) * 3; ctx.moveTo(0, yy); ctx.bezierCurveTo(S * 0.3, yy + 6, S * 0.6, yy - 6, S, yy + 3); ctx.stroke(); }
-    ctx.restore();
-    [0, 1].forEach(baseline);
-    ctx.save(); ctx.translate(S / 2, S / 2); ctx.rotate(Math.PI / 2); ctx.translate(-S / 2, -S / 2); [0, 1].forEach(baseline); ctx.restore();
+    for (var q = 0; q < 4; q++){ ctx.save(); ctx.translate(S / 2, S / 2); ctx.rotate(q * Math.PI / 2); ctx.translate(-S / 2, -S / 2); baseline(); ctx.restore(); }
     ctx.strokeStyle = "#2B1A0E"; ctx.lineWidth = 1.4;
     [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(function(d){
       var cx = S / 2 + d[0] * 250, cy = S / 2 + d[1] * 250, px = S / 2 + d[0] * 330, py = S / 2 + d[1] * 330;
       ctx.beginPath(); ctx.moveTo(S / 2 + d[0] * 120, S / 2 + d[1] * 120); ctx.lineTo(px, py); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy, 13, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - d[0] * 12, py - d[1] * 2); ctx.moveTo(px, py); ctx.lineTo(px - d[0] * 2, py - d[1] * 12); ctx.stroke();
-    });
+      ctx.beginPath(); ctx.arc(cx, cy, 13, 0, Math.PI * 2); ctx.stroke(); });
     ctx.beginPath(); ctx.arc(S / 2, S / 2, 88, 0, Math.PI * 2); ctx.stroke();
     ctx.beginPath(); ctx.arc(S / 2, S / 2, 20, 0, Math.PI * 2); ctx.fillStyle = "#C0262D"; ctx.fill(); ctx.stroke();
-    ctx.save(); ctx.translate(S / 2, S / 2); ctx.fillStyle = "rgba(192,38,45,.85)";
-    for (i = 0; i < 8; i++){ ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(7, -58); ctx.lineTo(0, -80); ctx.lineTo(-7, -58); ctx.closePath(); ctx.fill(); }
-    ctx.restore();
-    POCKETS.forEach(function(p){
-      ctx.beginPath(); ctx.arc(p[0], p[1], POCKET_R + 3, 0, Math.PI * 2); ctx.fillStyle = "#1B120A"; ctx.fill();
-      ctx.beginPath(); ctx.arc(p[0], p[1], POCKET_R - 3, 0, Math.PI * 2); ctx.fillStyle = "#050302"; ctx.fill();
-    });
+    POCKETS.forEach(function(p){ ctx.beginPath(); ctx.arc(p[0], p[1], POCKET_R + 3, 0, Math.PI * 2); ctx.fillStyle = "#1B120A"; ctx.fill();
+      ctx.beginPath(); ctx.arc(p[0], p[1], POCKET_R - 3, 0, Math.PI * 2); ctx.fillStyle = "#050302"; ctx.fill(); });
   }
   function piece(p, ghost){
     var col = p.c === "white" ? ["#FFF9EC", "#D9C9A6"] : p.c === "black" ? ["#3A2A22", "#140C08"] : p.c === "queen" ? ["#E0323B", "#8E141A"] : ["#F4F1FF", "#B9C2E8"];
@@ -477,14 +496,13 @@ function aiMove(st, ps, side, level){
     if (p.id === 0){ ctx.strokeStyle = "#2F56D6"; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.6, 0, Math.PI * 2); ctx.stroke(); }
     ctx.restore();
   }
+  function myTurn(){ return R && R.status === "play" && st && !st.over && seatTurn === mySeat() && !busy && !playingShot; }
   function guide(){
     var s = ps[0], dx = Math.cos(aim), dy = Math.sin(aim), best = null, hit = null;
-    ps.forEach(function(b){
-      if (b.in || b.id === 0) return;
+    ps.forEach(function(b){ if (b.in || b.id === 0) return;
       var fx = b.x - s.x, fy = b.y - s.y, t = fx * dx + fy * dy; if (t <= 0) return;
       var rr = RS + b.r, d2 = fx * fx + fy * fy - t * t; if (d2 > rr * rr) return;
-      var tt = t - Math.sqrt(rr * rr - d2); if (best === null || tt < best){ best = tt; hit = b; }
-    });
+      var tt = t - Math.sqrt(rr * rr - d2); if (best === null || tt < best){ best = tt; hit = b; } });
     var wall = Infinity;
     if (dx > 0) wall = Math.min(wall, (S - RS - s.x) / dx); if (dx < 0) wall = Math.min(wall, (RS - s.x) / dx);
     if (dy > 0) wall = Math.min(wall, (S - RS - s.y) / dy); if (dy < 0) wall = Math.min(wall, (RS - s.y) / dy);
@@ -492,110 +510,174 @@ function aiMove(st, ps, side, level){
     ctx.save(); ctx.setLineDash([6, 6]); ctx.strokeStyle = "rgba(43,26,14,.75)"; ctx.lineWidth = 1.6;
     ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(gx, gy); ctx.stroke(); ctx.setLineDash([]);
     ctx.beginPath(); ctx.arc(gx, gy, RS, 0, Math.PI * 2); ctx.stroke();
-    if (hit && best !== null && best <= wall){
-      var nx = hit.x - gx, ny = hit.y - gy, nl = Math.hypot(nx, ny);
-      ctx.strokeStyle = hit.c === st.colors[mySide()] || hit.c === "queen" ? "rgba(22,101,52,.9)" : "rgba(185,28,28,.9)"; ctx.lineWidth = 2.4;
-      ctx.beginPath(); ctx.moveTo(hit.x, hit.y); ctx.lineTo(hit.x + nx / nl * 80, hit.y + ny / nl * 80); ctx.stroke();
-    }
+    if (hit && best !== null && best <= wall){ var nx = hit.x - gx, ny = hit.y - gy, nl = Math.hypot(nx, ny);
+      ctx.strokeStyle = hit.c === st.colors[team(seatTurn)] || hit.c === "queen" ? "rgba(22,101,52,.9)" : "rgba(185,28,28,.9)"; ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.moveTo(hit.x, hit.y); ctx.lineTo(hit.x + nx / nl * 80, hit.y + ny / nl * 80); ctx.stroke(); }
     ctx.restore();
   }
   function draw(){
-    if (!ps) return;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); tf(); drawBoard();
+    if (!ps) return;
     ps.forEach(function(p){ if (!p.in && p.id) piece(p); });
-    var ok = strikerOK(ps, ps[0].x, mySide()) || busy;
+    var ok = !myTurn() || okAt(u, mySeat());
     if (!ps[0].in) piece(ps[0], !ok);
-    if (!busy && !st.over && (human() || aiAim != null)){
-      if (human() && ok) guide();
-      if (!ok){ ctx.save(); ctx.strokeStyle = "#DC2626"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(ps[0].x, ps[0].y, RS + 5, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
-      var a = aiAim != null ? aiAim : aim, back = 16 + power * 60, s = ps[0];
+    if (myTurn()){
+      if (ok) guide(); else { ctx.save(); ctx.strokeStyle = "#DC2626"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(ps[0].x, ps[0].y, RS + 5, 0, Math.PI * 2); ctx.stroke(); ctx.restore(); }
+      var s = ps[0], back = 16 + power * 60;
       ctx.save(); ctx.strokeStyle = "rgba(47,86,214,.55)"; ctx.lineWidth = 4; ctx.lineCap = "round";
-      ctx.beginPath(); ctx.moveTo(s.x - Math.cos(a) * (RS + 6), s.y - Math.sin(a) * (RS + 6)); ctx.lineTo(s.x - Math.cos(a) * (RS + 6 + back), s.y - Math.sin(a) * (RS + 6 + back)); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.moveTo(s.x - Math.cos(aim) * (RS + 6), s.y - Math.sin(aim) * (RS + 6)); ctx.lineTo(s.x - Math.cos(aim) * (RS + 6 + back), s.y - Math.sin(aim) * (RS + 6 + back)); ctx.stroke(); ctx.restore();
     }
   }
-  // ---- flow
-  function name(i){ return mode === "two" ? "Player " + (i + 1) : i === 0 ? "You" : "Computer"; }
+  // ---- table and HUD
+  var SIDE = ["bottom", "right", "top", "left"];
+  function who(seat){ var p = (R.players || []).filter(function(x){ return x.seat === seat; })[0]; return p ? p.name : "(empty seat)"; }
   function hud(msg){
-    [0, 1].forEach(function(i){
-      var c = st.colors[i], n = 9 - left(ps, c);
-      $("c" + i).className = "cpl" + (st.turn === i && !st.over ? " on" : "");
-      $("c" + i).innerHTML = '<b>' + name(i) + '</b><small><i class="dot ' + c + '"></i>' + (c === "white" ? "White" : "Black") + ' \u00b7 ' + n + '/9 pocketed' + (st.queenBy === i ? ' \u00b7 <i class="dot queen"></i>Queen' : '') + '</small>';
-    });
-    if (msg != null) $("cmsg").textContent = msg;
-    var p = pts(); $("cstats").textContent = mode === "two" ? "" : "Points so far: You " + p.me + " \u00b7 Computer " + p.cpu + " \u00b7 Boards won " + p.w + ", lost " + p.l;
-    var ok = !busy && !st.over && human() && strikerOK(ps, ps[0].x, mySide()) && forward(aim, mySide());
-    $("cshoot").disabled = !ok; $("cpos").disabled = busy || !human();
-  }
-  function setStriker(x){ sx = x; place(ps, x, mySide()); $("cpos").value = Math.round((x - LINE_A) / (LINE_B - LINE_A) * 100); }
-  function newGame(){
-    ps = setup(); st = {turn: 0, colors: ["white", "black"], pocketed: [[], []], queenBy: null, queenPending: null, over: false, winner: null, points: [0, 0], first: true};
-    busy = false; aiAim = null; $("cover").hidden = true; aim = -Math.PI / 2; setStriker(S / 2);
-    hud("Break! Slide the striker along your line, aim up the board and shoot."); draw();
-  }
-  function after(){
-    var res = judge(st, ps, ev), you = mode !== "two" && st.turn === 0, msg;
-    if (st.over){
-      var w = st.winner, p = pts();
-      if (mode !== "two"){ if (w === 0){ p.w++; p.me += st.points[0]; } else { p.l++; p.cpu += st.points[1]; } try { localStorage.setItem("xc_carrom_pts", JSON.stringify(p)); } catch (e) {} }
-      $("cwin").textContent = (mode === "two" ? "Player " + (w + 1) + " wins the board" : w === 0 ? "You win the board! \uD83C\uDFC6" : "The computer wins the board") + " (+" + st.points[w] + " points)";
-      $("cover").hidden = false; hud(""); draw(); return;
+    if (!R) return;
+    var n = R.size, h = "";
+    for (var seat = 0; seat < n; seat++){
+      var c = st ? st.colors[team(seat)] : (team(seat) ? "black" : "white");
+      h += '<div class="cpl' + (st && !st.over && seatTurn === seat ? " on" : "") + '"><b>' + esc(who(seat)) + (seat === mySeat() ? " (you)" : "") + '</b><small><i class="dot ' + c + '"></i>'
+        + (n === 4 ? "Team " + (c === "white" ? "White" : "Black") + " · " : (c === "white" ? "White · " : "Black · ")) + (st ? (9 - left(ps, c)) + "/9" : "") + '</small></div>';
     }
-    if (res.foul) msg = "Foul: " + res.foul + (res.msg ? " " + res.msg : "") + " " + (st.turn === 0 && mode !== "two" ? "Your turn." : name(st.turn) + "'s turn.");
-    else if (res.keep) msg = (res.msg ? res.msg + " " : "Good shot! ") + (you ? "You go again." : name(st.turn) + " goes again.");
-    else msg = (res.msg ? res.msg + " " : "") + (st.turn === 0 && mode !== "two" ? "Your turn." : name(st.turn) + "'s turn.");
-    setStriker(freeX(ps, mySide(), S / 2)); aim = mySide() === 0 ? -Math.PI / 2 : Math.PI / 2;
-    hud(msg); draw();
-    if (!human()) setTimeout(ai, 800);
+    $("cpls").innerHTML = h;
+    if (msg != null) $("cmsg").textContent = msg;
+    var pts = st ? st.points : [0, 0];
+    $("cstats").textContent = "Table " + R.code + " · Points: White " + pts[0] + " · Black " + pts[1];
+    var mt = myTurn();
+    $("cshoot").disabled = !(mt && okAt(u, mySeat()) && fwd(aim, mySeat())); $("cpos").disabled = !mt;
+    $("cctl").style.opacity = mt ? 1 : 0.55;
+    $("cskip").hidden = !(R.status === "play" && st && !st.over && seatTurn !== mySeat() && lastAgo > 75);
   }
-  function run(){
+  function turnMsg(){ return seatTurn === mySeat() ? "Your turn: slide the striker, drag on the board to aim, then Shoot." : who(seatTurn) + "'s turn…"; }
+  function adopt(d){
+    R = d; version = d.version;
+    if (d.state){ ps = load(d.state.ps); st = d.state.st; seatTurn = d.state.seat; } else { ps = null; st = null; }
+    renderLobby();
+    if (ps && st && !st.over){ if (seatTurn === mySeat()){ u = freeU(mySeat()); putStriker(u, mySeat()); aim = -Math.PI / 2 - mySeat() * Math.PI / 2; syncSlider(); } }
+    if (st && st.over) showOver(); else $("cover").hidden = true;
+    hud(st ? (st.over ? "" : turnMsg()) : null); draw();
+  }
+  function syncSlider(){ $("cpos").value = Math.round((u - LINE_A) / (LINE_B - LINE_A) * 100); }
+  function showOver(){
+    var w = st.winner;
+    $("cwin").textContent = (R.size === 4 ? "Team " + (w === 0 ? "White" : "Black") : who(w)) + " wins the board (+" + (st.lastPts || 0) + " points)";
+    $("cagain").hidden = !R.host; $("cwait").hidden = R.host; $("cover").hidden = false;
+  }
+  function renderLobby(){
+    var L = $("lobby"), G = $("game");
+    if (!R){ L.hidden = false; G.hidden = true; return; }
+    var link = location.origin + "/carrom-online?room=" + R.code, full = (R.players || []).length >= R.size;
+    if (R.status === "wait"){
+      L.hidden = false; G.hidden = true;
+      L.innerHTML = '<div class="cctl"><b style="font-size:16px">Table ' + esc(R.code) + ' · ' + R.size + ' players' + (R.size === 4 ? ' (2 teams)' : '') + '</b>'
+        + '<div>' + [0, 1, 2, 3].slice(0, R.size).map(function(s){ var p = (R.players || []).filter(function(x){ return x.seat === s; })[0];
+            return '<div style="padding:6px 0;border-bottom:1px solid var(--line)">' + (R.size === 4 ? (s % 2 ? "⚫ Team Black · " : "⚪ Team White · ") : "") + 'Seat ' + (s + 1) + ' (' + SIDE[s] + '): <b>' + (p ? esc(p.name) : '<span style="color:var(--ink-soft)">waiting…</span>') + '</b></div>'; }).join("") + '</div>'
+        + '<div class="btns" style="flex-wrap:wrap;justify-content:flex-start">'
+        + '<a class="xbtn" style="background:#25D366;color:#fff" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent("Play carrom with me on XpertCreation! Table " + R.code + ": " + link) + '">Invite on WhatsApp</a>'
+        + '<button type="button" class="xbtn" id="ccopy" style="background:var(--paper)">Copy link</button>'
+        + (R.host ? '<button type="button" class="xbtn" id="cstart" style="background:#16A34A;color:#fff"' + (full ? '' : ' disabled') + '>' + (full ? "Start the game" : "Waiting for players…") + '</button>' : '<span style="font-weight:700;color:var(--ink-soft)">' + (full ? "Waiting for the host to start…" : "Waiting for players…") + '</span>')
+        + '</div></div>';
+    } else { L.hidden = true; G.hidden = false; layout(); }
+  }
+  // ---- shooting
+  function run(after){
     busy = true; ev = []; hud(); var last = performance.now();
     (function frame(now){
       var steps = Math.min(12, Math.max(1, Math.round((now - last) / (1000 / 240)))); last = now;
-      for (var i = 0; i < steps && moving(ps); i++){
-        var b0 = ev.length; step(ps, 1 / 240, ev);
-        for (var k = b0; k < ev.length; k++){ var e = ev[k]; if (e.hit) sound("hit", Math.min(0.35, e.v / 1800)); else if (e.pot != null) sound("pot", 0.4); else if (e.wall != null) sound("wall", 0.08); }
-      }
+      for (var i = 0; i < steps && moving(ps); i++){ var b0 = ev.length; step(ps, 1 / 240, ev);
+        for (var k = b0; k < ev.length; k++){ var e = ev[k]; if (e.hit) sound("hit", Math.min(0.35, e.v / 1800)); else if (e.pot != null) sound("pot", 0.4); else if (e.wall != null) sound("wall", 0.08); } }
       draw();
       if (moving(ps)) requestAnimationFrame(frame); else { busy = false; after(); }
     })(last);
   }
-  function fire(){ if (busy || st.over || !human() || !strikerOK(ps, ps[0].x, mySide()) || !forward(aim, mySide())) return; shoot(ps, aim, power); run(); }
-  function ai(){
-    if (st.over || human()) return;
-    var m = aiMove(st, ps, st.turn, mode), from = aim, x0 = ps[0].x, t0 = performance.now();
-    hud("The computer is thinking\u2026");
-    (function turn(now){
-      var k = Math.min(1, (now - t0) / 900), e = 1 - Math.pow(1 - k, 3), d = ((m.ang - from + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
-      place(ps, x0 + (m.x - x0) * e, st.turn); aiAim = from + d * e; power = m.power; draw();
-      if (k < 1) requestAnimationFrame(turn); else { aim = m.ang; aiAim = null; place(ps, m.x, st.turn); shoot(ps, m.ang, m.power); run(); }
-    })(t0);
+  function fire(){
+    if (!myTurn() || !okAt(u, mySeat()) || !fwd(aim, mySeat())) return;
+    putStriker(u, mySeat());
+    var start = snap(ps), shotP = {x: ps[0].x, y: ps[0].y, ang: aim, power: power}, seat = mySeat();
+    shoot(ps, aim, power); stopPoll();
+    run(function(){
+      st.turn = team(seat);
+      var before = st.turn, res = judge(st, ps, ev), nextSeat = seat;
+      if (st.over){ st.lastPts = left(ps, st.colors[1 - st.winner]) + (st.queenBy === st.winner ? 3 : 0); }
+      else if (st.turn !== before) nextSeat = (seat + 1) % R.size;
+      var msg = res.foul ? "Foul: " + res.foul + " " + (res.msg || "") : res.keep ? (res.msg || "Good shot!") + " You go again." : (res.msg || "");
+      var end = {ps: snap(ps), st: st, seat: nextSeat};
+      api("POST", "rooms/" + R.code + "/shot/", {v: version, shot: shotP, start: start, end: end}).then(function(r){
+        if (r.s === 200){ version = r.d.version; R.state = end; R.status = st.over ? "over" : "play"; seatTurn = nextSeat;
+          if (st.over) showOver(); else if (seatTurn === mySeat()){ u = freeU(mySeat()); putStriker(u, mySeat()); syncSlider(); }
+          hud(msg + (st.over ? "" : " " + turnMsg())); draw();
+        } else { hud(r.d.detail || "Could not send the shot."); refresh(true); }
+        startPoll();
+      }).catch(function(){ hud("No internet - the shot was not saved."); refresh(true); startPoll(); });
+    });
+  }
+  // replay someone else's shot, then settle on the saved board
+  function replay(d){
+    var sh = d.shot; playingShot = true;
+    ps = load(sh.start); var s = ps[0]; s.in = false; s.x = sh.shot.x; s.y = sh.shot.y;
+    shoot(ps, sh.shot.ang, sh.shot.power);
+    hud(who(sh.seat) + " shoots…");
+    run(function(){ playingShot = false; adopt(d); });
+  }
+  // ---- talking to the server
+  function refresh(force){
+    if (!code) return;
+    api("GET", "rooms/" + code + "/" + (force ? "" : "?v=" + version)).then(function(r){
+      if (r.s !== 200) { if (r.s === 404){ $("cmsg").textContent = "That table does not exist any more."; stopPoll(); } return; }
+      lastAgo = r.d.ago || 0;
+      if (r.d.same){ hud(); return; }
+      if (busy || playingShot) return;
+      var d = r.d;
+      if (d.shot && d.version === version + 1 && d.shot.seat !== mySeat() && R && R.status === "play") replay(d); else adopt(d);
+    }).catch(function(){});
+  }
+  function startPoll(){ stopPoll(); pollT = setInterval(function(){ refresh(false); }, 1300); }
+  function stopPoll(){ if (pollT) clearInterval(pollT); pollT = null; }
+  function openRoom(c){
+    code = c.toUpperCase(); history.replaceState(null, "", "/carrom-online?room=" + code);
+    api("POST", "rooms/" + code + "/join/", {}).then(function(r){
+      if (r.s !== 200){ $("lobby").innerHTML = '<div class="cctl"><b>' + esc(r.d.detail || "Could not join that table.") + '</b> <a href="/carrom-online">Start or join another table</a></div>'; return; }
+      adopt(r.d); startPoll();
+    });
+  }
+  function newBoard(){
+    var p = setup(), old = st;
+    var s0 = {turn: 0, colors: ["white", "black"], pocketed: [[], []], queenBy: null, queenPending: null, over: false, winner: null, points: old ? old.points : [0, 0], first: true};
+    return {ps: snap(p), st: s0, seat: 0};
   }
   // ---- input
-  function aimAt(e){
-    var t = e.touches ? e.touches[0] : e, p = toBoard(t.clientX, t.clientY), s = ps[0], a = Math.atan2(p.y - s.y, p.x - s.x);
-    if (forward(a, mySide())) aim = a;
-    hud(); draw();
-  }
-  cv.addEventListener("mousedown", function(e){ if (busy || st.over || !human()) return; dragging = true; aimAt(e); });
+  function aimAt(e){ var t = e.touches ? e.touches[0] : e, p = toBoard(t.clientX, t.clientY), s = ps[0], a = Math.atan2(p.y - s.y, p.x - s.x);
+    if (fwd(a, mySeat())) aim = a; hud(); draw(); }
+  cv.addEventListener("mousedown", function(e){ if (!myTurn()) return; dragging = true; aimAt(e); });
   window.addEventListener("mousemove", function(e){ if (dragging) aimAt(e); });
   window.addEventListener("mouseup", function(){ dragging = false; });
-  cv.addEventListener("touchstart", function(e){ if (busy || st.over || !human()) return; dragging = true; aimAt(e); e.preventDefault(); }, {passive: false});
+  cv.addEventListener("touchstart", function(e){ if (!myTurn()) return; dragging = true; aimAt(e); e.preventDefault(); }, {passive: false});
   cv.addEventListener("touchmove", function(e){ if (dragging){ aimAt(e); e.preventDefault(); } }, {passive: false});
   cv.addEventListener("touchend", function(){ dragging = false; });
-  $("cpos").oninput = function(){ if (busy || !human()) return; place(ps, LINE_A + (LINE_B - LINE_A) * this.value / 100, mySide()); hud(); draw(); };
+  $("cpos").oninput = function(){ if (!myTurn()) return; u = LINE_A + (LINE_B - LINE_A) * this.value / 100; putStriker(u, mySeat()); hud(); draw(); };
   $("cpower").oninput = function(){ power = this.value / 100; $("cpv").textContent = this.value + "%"; draw(); };
   $("cshoot").onclick = fire;
-  $("cl").onclick = function(){ var a = aim - 0.004; if (forward(a, mySide())) aim = a; hud(); draw(); };
-  $("cr").onclick = function(){ var a = aim + 0.004; if (forward(a, mySide())) aim = a; hud(); draw(); };
-  $("cnew").onclick = function(){ if (st.over || confirm("Start a new board?")) newGame(); };
-  $("cagain").onclick = newGame;
-  $("cmode").value = mode;
-  $("cmode").onchange = function(){ mode = this.value; try { localStorage.setItem("xc_carrom_mode", mode); } catch (e) {} newGame(); };
-  window.addEventListener("resize", layout);
+  $("cl").onclick = function(){ var a = aim - 0.004; if (fwd(a, mySeat())) aim = a; hud(); draw(); };
+  $("cr").onclick = function(){ var a = aim + 0.004; if (fwd(a, mySeat())) aim = a; hud(); draw(); };
+  $("cskip").onclick = function(){ api("POST", "rooms/" + code + "/skip/", {}).then(function(r){ if (r.s === 200) adopt(r.d); else hud(r.d.detail || ""); }); };
+  $("cagain").onclick = function(){ api("POST", "rooms/" + code + "/start/", {state: newBoard()}).then(function(r){ if (r.s === 200) adopt(r.d); else alert(r.d.detail || "Could not start."); }); };
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("button, [data-new]"); if (!t) return;
+    if (t.id === "cstart"){ api("POST", "rooms/" + code + "/start/", {state: newBoard()}).then(function(r){ if (r.s === 200) adopt(r.d); else alert(r.d.detail || "Could not start."); }); }
+    if (t.id === "ccopy"){ var link = location.origin + "/carrom-online?room=" + code; if (navigator.clipboard) navigator.clipboard.writeText(link).then(function(){ t.textContent = "Copied ✓"; }); else prompt("Copy:", link); }
+    if (t.hasAttribute("data-new")){ api("POST", "rooms/", {size: t.getAttribute("data-new")}).then(function(r){ if (r.s === 200){ code = r.d.code; history.replaceState(null, "", "/carrom-online?room=" + code); adopt(r.d); startPoll(); } else alert(r.d.detail || "Could not make a table."); }); }
+    if (t.id === "cjoin"){ var c = ($("ccode").value || "").trim(); if (c) openRoom(c); }
+  });
+  window.addEventListener("resize", function(){ if (!$("game").hidden) layout(); });
+  document.addEventListener("visibilitychange", function(){ if (document.visibilityState === "visible" && code) refresh(true); });
   $("cpower").value = 50; $("cpv").textContent = "50%";
-  newGame(); layout();
-})();
+  fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(m){
+    if (!m){ $("lobby").innerHTML = '<div class="cctl"><b>Sign in to play carrom online.</b> <a href="/login?next=' + encodeURIComponent(location.pathname + location.search) + '">Sign in</a> · or <a href="/carrom">play the computer</a></div>'; return; }
+    var q = new URLSearchParams(location.search).get("room");
+    if (q) openRoom(q);
+  });
 
+})();
 </script>
 
 <script>
@@ -730,6 +812,5 @@ function aiMove(st, ps, side, level){
 </footer>
 
 <script src="/js/share-1.js?v=21" defer></script>
-<script src="/js/winshare-1.js?v=21" defer></script>
 </body>
 </html>

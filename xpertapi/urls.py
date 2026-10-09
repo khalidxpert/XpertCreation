@@ -31,6 +31,7 @@ urlpatterns = [
     path("api/bus/", include("bus.urls")),
     path("api/clips/", include("clips.urls")),
     path("api/money/", include("money.urls")),
+    path("api/carrom/", include("carromonline.urls")),
     path("api/share/", include("sharewall.urls")),
     path("api/irc/bot/", include("ircbot.urls")),
     path("api/library/", include("library.urls")),
