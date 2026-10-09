@@ -192,7 +192,8 @@ def posts(request):
             from shop.views import boosted_post_ids
             _b = boosted_post_ids()
             if _b and scope == "all" and not before:          # boosted posts first on For you (up to 3)
-                top = list(qs.filter(id__in=_b).order_by("-id")[:3]); tids = {x.id for x in top}
+                from ads.views import pick_boosted
+                top = pick_boosted(qs, _b, request, 3); tids = {x.id for x in top}
                 rows = top + [x for x in rows if x.id not in tids]
         except ImportError:
             pass
@@ -200,6 +201,7 @@ def posts(request):
         for _p in out:
             if isinstance(_p, dict) and _p.get("id") in _b:
                 _p["boosted"] = True
+                _p["ad"] = __import__("ads.views", fromlist=["token_for"]).token_for(_p["id"], request)
         return Response({"posts": out, "more": len(rows) > PAGE})
 
     # ---- a new post ----

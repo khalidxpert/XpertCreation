@@ -104,6 +104,7 @@ INSTALLED_APPS = [
     "donations",
     "notifications",
     "botlink",
+    "ads",
 ]
 
 MIDDLEWARE = [

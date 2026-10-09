@@ -377,7 +377,7 @@ def sp3_settle(o, wait=0):
     for i in range(wait + 1):
         st, amt = sp3_info(o.provider_ref)
         if st == "TRACKER_ENDED":
-            if amt is not None and int(amt) != int(o.amount) * 100:
+            if amt is None or int(amt) != int(o.amount) * 100:
                 o.note = ("amount mismatch: safepay %s, order %s" % (amt, o.amount * 100))[:300]; o.save(update_fields=["note"])
                 return False
             _activate(o); return True
