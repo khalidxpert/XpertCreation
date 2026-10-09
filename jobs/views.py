@@ -149,10 +149,17 @@ def jobs(request):
         if before:
             qs = qs.filter(id__lt=before)
         rows = list(qs.order_by("-id")[:PAGE + 1])
+        _f, _top = __import__("ads.views", fromlist=["featured_jobs"]).featured_jobs(qs, rows, before)
+        if _top is not None:
+            rows = _top
         mine = {}
         if u.is_authenticated:
             mine = dict(Application.objects.filter(applicant=u, job_id__in=[j.id for j in rows]).values_list("job_id", "status"))
-        return Response({"jobs": [_out(j, u, mine.get(j.id)) for j in rows[:PAGE]], "more": len(rows) > PAGE})
+        out = [_out(j, u, mine.get(j.id)) for j in rows[:PAGE]]
+        for _o in out:
+            if isinstance(_o, dict) and _o.get("id") in _f:
+                _o["featured"] = True
+        return Response({"jobs": out, "more": len(rows) > PAGE})
 
     if not u.is_authenticated:
         return _err("Sign in to post a job.", status.HTTP_401_UNAUTHORIZED)

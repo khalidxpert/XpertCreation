@@ -361,8 +361,8 @@ def search(request):
     qs = Company.objects.filter(hidden=False).filter(Q(domain_verified_at__isnull=False) | Q(status=Company.APPROVED))
     if q:
         qs = qs.filter(name__icontains=q)
-    return Response({"companies": [{"name": c.name, "slug": c.slug, "city": c.city, "verified": c.status == Company.APPROVED, "logo": _media(c.logo)}
-                                   for c in qs.order_by("-status", "name")[:8]]})
+    return Response({"companies": [{"name": c.name, "slug": c.slug, "city": c.city, "verified": c.status == Company.APPROVED, "logo": _media(c.logo), "pro": bool(getattr(c, "xpro", 0))}
+                                   for c in __import__("ads.views", fromlist=["pro_first"]).pro_first(qs)[:8]]})
 
 
 def place_url(place):

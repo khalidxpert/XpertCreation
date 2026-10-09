@@ -235,7 +235,7 @@ def _card(p):
             "country": (p.country or u.signup_country or "").upper(), "headline": p.headline,
             "city": p.city, "open_to_work": p.open_to_work, "verified": _ticked(p),
             "skills": [s.name for s in p.skills.all()][:3],
-            "endorsements": getattr(p, "en", 0)}
+            "endorsements": getattr(p, "en", 0), "boosted": bool(getattr(p, "xboost", 0))}
 
 
 def _clean_url(v, label):

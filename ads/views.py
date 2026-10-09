@@ -147,3 +147,43 @@ def stats(request):
         out.setdefault(str(r["order_id"]), {"views": 0, "clicks": 0, "days": []})["days"].append(
             {"day": r["day"].isoformat(), "views": r["views"], "clicks": r["clicks"]})
     return JsonResponse({"orders": out})
+
+
+# ---- step 4: Featured job and Company Pro (called from jobs/views.py and companies/views.py)
+def _pro_ids():
+    from shop.views import pro_company_ids
+    return set(pro_company_ids())
+
+
+def pro_first(qs):
+    """Company search order: Company Pro first, then verified (KYC approved), then by name."""
+    from django.db.models import Case, IntegerField, Value, When
+    try:
+        ids = list(_pro_ids())
+    except Exception:
+        ids = []
+    pro = Case(When(id__in=ids, then=Value(1)), default=Value(0), output_field=IntegerField()) if ids else Value(0, output_field=IntegerField())
+    ok = Case(When(status="approved", then=Value(1)), default=Value(0), output_field=IntegerField())
+    return qs.annotate(xpro=pro, xok=ok).order_by("-xpro", "-xok", "name")
+
+
+def featured_jobs(qs, rows, before, n=5):
+    """Find jobs: paid featured jobs, and open jobs posted by a Company Pro owner, are featured.
+    On the first page up to n of them come first, in random order so each gets a fair turn.
+    Returns (ids of featured jobs, new rows or None when the order is unchanged)."""
+    try:
+        from shop.views import featured_job_ids
+        from companies.models import Company
+        ids = set(featured_job_ids())
+        owners = list(Company.objects.filter(id__in=_pro_ids()).values_list("owner_id", flat=True))
+        if owners:
+            ids |= set(qs.filter(poster_id__in=owners).values_list("id", flat=True)[:200])
+        if not ids or before:
+            return ids, None
+        top = list(qs.filter(id__in=ids))
+        random.shuffle(top)
+        top = top[:n]
+        tids = {x.id for x in top}
+        return ids, top + [x for x in rows if x.id not in tids]
+    except Exception:
+        return set(), None

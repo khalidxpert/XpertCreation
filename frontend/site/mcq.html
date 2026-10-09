@@ -161,8 +161,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=43" defer></script>
+<script src="/js/topnav-1.js?v=44" defer></script>
 
+<script src="/js/share-result-1.js?v=1"></script>
 <div class="wrap" style="max-width:720px"><div id="mq"><p class="fnote">Loading…</p></div></div>
 <style>.mqt{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.mqt button{border:1.5px solid var(--line,#E4E8F2);background:var(--card,#fff);border-radius:99px;padding:8px 13px;font:inherit;font-weight:700;cursor:pointer}.mqt button.on{background:#0D1424;color:#fff;border-color:#0D1424}
 .mqc{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:16px;padding:14px;margin-bottom:10px}.mqc small{color:var(--ink-soft,#5A657C);font-weight:700}.mqc h3{margin:4px 0 10px;font-size:16.5px}
@@ -176,7 +177,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   var box = document.getElementById("mq"), tab = "today", Qs = [], pick = {}, mode = "today", done = null;
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
   function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
-  var CATS = [["pak", "Pakistan affairs"], ["gk", "General knowledge"], ["isl", "Islamic studies"], ["eng", "English"], ["sci", "Science"], ["cs", "Computers"]];
+  var CATS = [["pak", "Pakistan affairs"], ["gk", "General knowledge"], ["isl", "Islamic studies"], ["eng", "English"], ["sci", "Science"], ["cs", "Computers"]]; var lastCat = "";
   function head(){ return '<h1 style="font-size:24px;margin:6px 0 0">\uD83D\uDCDD Daily MCQs</h1><p style="color:var(--ink-soft);margin:4px 0 0">For PPSC, FPSC, CSS, NTS and MDCAT practice. 10 new questions every day.</p>'
     + '<div class="mqt">' + [["today", "Today's 10"], ["practice", "Practice by topic"], ["board", "\uD83C\uDFC6 This week"]].map(function(t){ return '<button data-tab="' + t[0] + '"' + (t[0] === tab ? ' class="on"' : '') + '>' + t[1] + '</button>'; }).join("") + '</div>'; }
   function questions(res){
@@ -190,10 +191,21 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (tab === "board") return board();
     var h = head();
     if (tab === "practice") h += '<div class="mqt">' + CATS.map(function(c){ return '<button data-cat="' + c[0] + '">' + c[1] + '</button>'; }).join("") + '</div>';
-    if (done) h += '<div class="mqc"><div class="mqs">' + done.score + ' / ' + done.results.length + '</div><p style="text-align:center;margin:4px 0 0">' + (done.note || (done.saved ? "Saved. Come back tomorrow for 10 new questions." + (done.streak ? " \uD83D\uDD25 " + done.streak + "-day streak" : "") : (mode === "today" ? '<a href="/login">Sign in</a> to save your score and join the weekly ranking.' : "Pick another topic for more."))) + '</p></div>';
+    if (done) h += '<div class="mqc"><div class="mqs">' + done.score + ' / ' + done.results.length + '</div><p style="text-align:center;margin:4px 0 0">' + (done.note || (done.saved ? "Saved. Come back tomorrow for 10 new questions." + (done.streak ? " \uD83D\uDD25 " + done.streak + "-day streak" : "") : (mode === "today" ? '<a href="/login">Sign in</a> to save your score and join the weekly ranking.' : "Pick another topic for more."))) + '</p></div><div id="xres"></div>';
     h += Qs.length ? questions(done && done.results) : (tab === "practice" ? '<p>Pick a topic above.</p>' : '');
     if (Qs.length && !done) h += '<button class="mqgo" data-submit>Check my answers</button>';
     box.innerHTML = h;
+    if (done && window.XCResult){
+      var n = done.results.length, s = done.score, pc = n ? Math.round(s * 100 / n) : 0;
+      var today = mode === "today";
+      XCResult.show({
+        title: today ? "Daily MCQs \u00b7 " + new Date().toLocaleDateString("en-GB", {day: "numeric", month: "short", year: "numeric"}) : "MCQ practice \u00b7 " + lastCat,
+        big: s + " / " + n,
+        sub: (pc >= 80 ? "Excellent! " : pc >= 50 ? "Well done! " : "Keep practising! ") + pc + "% correct" + (done.streak ? " \u00b7 \uD83D\uDD25 " + done.streak + "-day streak" : ""),
+        text: (today ? "I scored " + s + "/" + n + " on today's Daily MCQs on XpertCreation" : "I scored " + s + "/" + n + " in " + lastCat + " MCQs on XpertCreation")
+          + " \uD83D\uDCDD PPSC, FPSC, CSS, NTS practice. Can you beat me?",
+        url: "https://xpertcreation.com/mcq"});
+    }
   }
   function board(){
     fetch("/api/mcq/board/", {credentials: "same-origin"}).then(function(r){ return r.json(); }).then(function(d){
@@ -203,7 +215,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     });
   }
   function loadToday(){ mode = "today"; fetch("/api/mcq/today/", {credentials: "same-origin"}).then(function(r){ return r.json(); }).then(function(d){ Qs = d.questions; pick = {}; done = d.done ? {score: d.done.score, results: d.done.results, saved: true} : null; draw(); }); }
-  function loadPractice(cat){ mode = "practice"; fetch("/api/mcq/practice/?cat=" + cat).then(function(r){ return r.json(); }).then(function(d){ Qs = d.questions; pick = {}; done = null; draw(); }); }
+  function loadPractice(cat){ mode = "practice"; lastCat = (CATS.filter(function(c){ return c[0] === cat; })[0] || [0, cat])[1]; fetch("/api/mcq/practice/?cat=" + cat).then(function(r){ return r.json(); }).then(function(d){ Qs = d.questions; pick = {}; done = null; draw(); }); }
   document.addEventListener("click", function(e){
     var t = e.target.closest("[data-tab]"); if (t){ tab = t.getAttribute("data-tab"); Qs = []; done = null; if (tab === "today") loadToday(); else draw(); return; }
     var c = e.target.closest("[data-cat]"); if (c){ loadPractice(c.getAttribute("data-cat")); return; }

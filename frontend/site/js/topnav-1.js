@@ -231,3 +231,32 @@
 })();
 /* Share on XpertConnect, next to every WhatsApp share button */
 (function(){ if (document.querySelector("script[src*='xcshare-1.js']")) return; var s = document.createElement("script"); s.src = "/js/xcshare-1.js?v=2"; s.defer = true; document.head.appendChild(s); })();
+
+/* XpertCreation rewards: active time, tools and reading. Counts only while this tab is visible and was used
+   in the last minute, once a minute. Stops by itself for guests or when the campaign is off. */
+(function(){
+  if (window.XCRW) return; window.XCRW = 1;
+  var last = 0, sent = {};
+  function mark(){ last = Date.now(); }
+  ["scroll", "click", "keydown", "touchstart", "mousemove"].forEach(function(e){ window.addEventListener(e, mark, {passive: true}); });
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  var TOOLS = /^\/(tools\/[a-z0-9-]+|weather|translate|rates|bills|travel|air|bus|money|business|cards|zodiac|typing|vocabulary)$/;
+  var READ = /^\/(library|afsanay|quran|recipes|poetry)\/./;
+  function section(){
+    var p = location.pathname.replace(/\/+$/, "");
+    if (TOOLS.test(p)) return "tool:" + p.slice(1);
+    if (READ.test(p)) return "read:" + p.slice(1);
+    return "";
+  }
+  var t;
+  function beat(){
+    if (document.visibilityState !== "visible" || Date.now() - last > 60000) return;
+    var s = section(), body = {s: ""};
+    if (s && !sent[s]){ body.s = s; sent[s] = 1; }
+    fetch("/api/rewards/beat/", {method: "POST", credentials: "same-origin",
+      headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: JSON.stringify(body)})
+      .then(function(r){ if (r.status === 401 || r.status === 403 || r.status === 404) clearInterval(t); })
+      .catch(function(){});
+  }
+  t = setInterval(beat, 60000);
+})();

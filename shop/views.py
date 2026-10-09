@@ -73,11 +73,11 @@ def sp_sig_ok(tracker, sig):
 CATALOG = {
     "profile_boost": {"name": "Profile boost", "what": "Show first in People search, with a Boosted mark.", "target": "self",
                       "plans": {"7d": ("7 days", 499, 7), "30d": ("30 days", 1499, 30)}},
-    "post_boost": {"name": "Post boost", "what": "Show your post at the top of For you, marked Boosted.", "target": "post",
+    "post_boost": {"name": "Post boost", "what": "Show your post at the top of For you, marked Sponsored. See its views and clicks here.", "target": "post",
                    "plans": {"3d": ("3 days", 299, 3), "7d": ("7 days", 599, 7)}},
     "featured_job": {"name": "Featured job", "what": "Pin your job at the top of Jobs with a Featured badge.", "target": "job",
                      "plans": {"15d": ("15 days", 999, 15), "30d": ("30 days", 1799, 30)}},
-    "company_pro": {"name": "Company Pro", "what": "PRO badge, listed first among companies, featured jobs included.", "target": "company",
+    "company_pro": {"name": "Company Pro", "what": "PRO badge on your company in Jobs, all your open jobs featured, first in company search.", "target": "company",
                     "plans": {"month": ("1 month", 2499, 30), "year": ("1 year", 24999, 365)}},
     "blue_tick": {"name": "Blue tick", "what": "Identity check for the blue tick. Fully refunded if the check is rejected.", "target": "self",
                   "plans": {"once": ("one time", 999, 0)}},

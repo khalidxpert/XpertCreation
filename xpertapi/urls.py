@@ -31,6 +31,7 @@ urlpatterns = [
     path("api/bus/", include("bus.urls")),
     path("api/clips/", include("clips.urls")),
     path("api/money/", include("money.urls")),
+    path("api/share/", include("sharewall.urls")),
     path("api/irc/bot/", include("ircbot.urls")),
     path("api/library/", include("library.urls")),
     path("api/afsanay/", include("afsanay.urls")),
@@ -63,6 +64,7 @@ urlpatterns = [
     path("api/jobs/", include("jobs.urls")),
     path("api/feed/", include("feed.urls")),
     path("api/ads/", include("ads.urls")),
+    path("api/rewards/", include("rewards.urls")),
     # Mounted at the root so the link people share stays short and readable.
     path("certificate/<str:serial>/", academy_views.certificate_page, name="certificate"),
 ]

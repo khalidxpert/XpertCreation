@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "bus",
     "clips",
     "money",
+    "sharewall",
     "ircbot",
     "library",
     "afsanay",
@@ -106,6 +107,7 @@ INSTALLED_APPS = [
     "notifications",
     "botlink",
     "ads",
+    "rewards",
 ]
 
 MIDDLEWARE = [
