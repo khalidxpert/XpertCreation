@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "ircsso",
     "bus",
     "clips",
+    "money",
     "library",
     "afsanay",
     "billers",

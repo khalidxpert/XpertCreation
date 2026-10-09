@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/irc/", include("ircsso.urls")),
     path("api/bus/", include("bus.urls")),
     path("api/clips/", include("clips.urls")),
+    path("api/money/", include("money.urls")),
     path("api/library/", include("library.urls")),
     path("api/afsanay/", include("afsanay.urls")),
     path("api/billers/", include("billers.urls")),

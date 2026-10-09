@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Money &mdash; XpertCreation</title>
-<meta name="description" content="Keep track of cash, JazzCash, Easypaisa and bank balances. Everything stays on your phone.">
+<meta name="description" content="Keep track of cash, JazzCash, Easypaisa and bank balances. Saved to your XpertCreation account, on all your devices.">
 <link rel="canonical" href="https://xpertcreation.com/money">
 <link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
 <link rel="manifest" href="/manifest.json">
@@ -177,13 +177,14 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 .xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
 @media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
   .xnav a.hide-s{display:none}}
+.sst{font-size:11.5px;color:var(--ink-soft);white-space:nowrap;font-weight:600}
 .fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
 .wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
 </style>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="XpertCreation">
 <meta property="og:title" content="Money — XpertCreation">
-<meta property="og:description" content="Keep track of cash, JazzCash, Easypaisa and bank balances. Everything stays on your phone.">
+<meta property="og:description" content="Keep track of cash, JazzCash, Easypaisa and bank balances. Saved to your XpertCreation account, on all your devices.">
 <meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://xpertcreation.com/money">
@@ -195,6 +196,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
     <b>Money</b>
     <span class="sp"></span>
+    <span id="syncSt" class="sst"></span>
     <button type="button" id="bkBtn">Backup</button>
     <a href="/tools">Tools</a>
   </div>
@@ -215,14 +217,14 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   /* ================= the money engine =================
 
-     Everything is kept on this phone, in localStorage. Nothing is sent
-     anywhere. Amounts are stored as whole paisa, never as decimals -
+     Kept on this phone (localStorage) and, for signed-in members, in their
+     account on our server (encrypted). Amounts are stored as whole paisa, never as decimals -
      0.1 + 0.2 is not 0.3 in a computer, and a money page that is off by
      a paisa is a money page nobody trusts. */
 
   var KEY = "xc_money_v1";
 
-  function blankState(){ return {v: 1, accounts: [], tx: [], lastBackup: 0}; }
+  function blankState(){ return {v: 1, accounts: [], tx: [], del: {}, lastBackup: 0}; }
 
   function toPaisa(v){
     var n = parseFloat(String(v).replace(/,/g, ""));
@@ -287,17 +289,141 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var raw = localStorage.getItem(KEY);
       if (!raw) return;
       var d = JSON.parse(raw);
-      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)) st = d;
+      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)){ st = d; if (!st.del) st.del = {}; }
     } catch (e) {}
   }
 
   function save(){
-    try { localStorage.setItem(KEY, JSON.stringify(st)); return true; }
-    catch (e){
-      alert("Could not save. The phone may be out of space.");
-      return false;
-    }
+    var ok = true;
+    try { localStorage.setItem(KEY, JSON.stringify(st)); }
+    catch (e){ ok = false; }
+    meta.dirty = true; saveMeta();
+    if (SYNC.on){ push(); return true; }
+    if (!ok) alert("Could not save. The phone may be out of space.");
+    return ok;
   }
+
+  /* ================= saving to the member's account =================
+
+     Signed in, the book is also saved on our server (encrypted), so it is
+     there on every phone and survives a cleared browser. This phone keeps
+     a copy too, so the page opens instantly and works offline; changes made
+     offline are uploaded the next time the page is open with internet.
+     Two phones editing at once are merged: nothing is lost, and a delete on
+     one phone is a delete on the other (that is what "del" remembers). */
+
+  var META_KEY = "xc_money_sync";
+  var SYNC = {on: false, busy: false, again: false, state: ""};
+  var meta = {rev: 0, owner: null, dirty: false};
+  try { var mm = JSON.parse(localStorage.getItem(META_KEY) || "null"); if (mm) meta = mm; } catch (e) {}
+
+  function saveMeta(){ try { localStorage.setItem(META_KEY, JSON.stringify(meta)); } catch (e) {} }
+  function keepLocal(){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
+
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+
+  function status(kind){
+    SYNC.state = kind;
+    var el = document.getElementById("syncSt");
+    if (!el) return;
+    var T = {saved: "✔ Saved to your account", saving: "Saving…",
+             offline: "⚠ Offline — will upload later", local: "Not signed in"};
+    el.textContent = T[kind] || "";
+    el.style.color = kind === "offline" ? "#B45309" : kind === "saved" ? "#00996B" : "";
+  }
+
+  function api(method, body){
+    var o = {method: method, credentials: "same-origin", headers: {}};
+    if (body){
+      o.headers = {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")};
+      o.body = JSON.stringify(body);
+    }
+    return fetch("/api/money/", o).then(function(r){
+      return r.json().catch(function(){ return {}; }).then(function(d){ return {s: r.status, d: d}; });
+    });
+  }
+
+  function tomb(id){ st.del = st.del || {}; st.del[id] = Date.now(); }
+
+  function stamp(o){ return o.upd || o.created || 0; }
+
+  function merge(a, b){
+    a = a || blankState(); b = b || blankState();
+    var del = {}, cut = Date.now() - 400 * 86400000;
+    [a.del || {}, b.del || {}].forEach(function(d){
+      for (var k in d) if (d[k] > cut) del[k] = Math.max(del[k] || 0, d[k]);
+    });
+    function un(la, lb){
+      var m = {}, order = [];
+      (la || []).concat(lb || []).forEach(function(o){
+        if (!o || !o.id || del[o.id]) return;
+        if (!m[o.id]){ m[o.id] = o; order.push(o.id); }
+        else if (stamp(o) > stamp(m[o.id])) m[o.id] = o;
+      });
+      return order.map(function(id){ return m[id]; });
+    }
+    return {v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), del: del,
+            lastBackup: Math.max(a.lastBackup || 0, b.lastBackup || 0)};
+  }
+
+  function same(a, b){ return JSON.stringify(a) === JSON.stringify(b); }
+
+  function push(){
+    if (!SYNC.on) return;
+    if (SYNC.busy){ SYNC.again = true; return; }
+    SYNC.busy = true; status("saving");
+    api("PUT", {rev: meta.rev, data: st}).then(function(r){
+      if (r.s === 200){
+        meta.rev = r.d.rev; meta.dirty = false; saveMeta(); status("saved");
+      } else if (r.s === 409){
+        // Another phone saved first: merge both, then save the merged book.
+        var before = st;
+        st = merge(r.d.data, st); meta.rev = r.d.rev; saveMeta(); keepLocal();
+        if (!same(before, st) && !document.getElementById("sheet")) render();
+        SYNC.again = true;
+      } else if (r.s === 401 || r.s === 403){
+        SYNC.on = false; status("local");
+      } else {
+        status("offline");
+        if (r.d && r.d.detail && r.s < 500) alert(r.d.detail);
+      }
+    }).catch(function(){ status("offline"); }).then(function(){
+      SYNC.busy = false;
+      if (SYNC.again){ SYNC.again = false; push(); }
+    });
+  }
+
+  function syncStart(){
+    api("GET").then(function(r){
+      if (r.s !== 200){ SYNC.on = false; status(r.s === 401 || r.s === 403 ? "local" : "offline"); render(); return; }
+      SYNC.on = true;
+      var server = r.d.data, before = st, upload = false;
+      if (meta.owner && meta.owner !== r.d.user){
+        // Someone else signed in on this phone: show their book, not the last person's.
+        st = server || blankState(); meta = {rev: r.d.rev, owner: r.d.user, dirty: false};
+      } else if (!meta.owner){
+        // First time this phone is linked: keep what is on the phone AND what is on the server.
+        st = merge(server, st); meta.owner = r.d.user; meta.rev = r.d.rev;
+        upload = !same(st, server || null) && (st.accounts.length || st.tx.length);
+      } else if (meta.dirty){
+        if (r.d.rev !== meta.rev) st = merge(server, st);
+        meta.rev = r.d.rev; upload = true;
+      } else {
+        st = server || blankState(); meta.rev = r.d.rev;
+      }
+      if (!st.del) st.del = {};
+      saveMeta(); keepLocal();
+      if (!same(before, st) && !document.getElementById("sheet")) render();
+      else if (view.page === "home" && !document.getElementById("sheet")) render();
+      if (upload){ meta.dirty = true; saveMeta(); push(); } else status("saved");
+    }).catch(function(){ status(meta.owner ? "offline" : "local"); });
+  }
+
+  document.addEventListener("visibilitychange", function(){
+    if (document.visibilityState === "visible" && !SYNC.busy && !document.getElementById("sheet")) syncStart();
+  });
+  window.addEventListener("online", function(){ if (SYNC.on && meta.dirty) push(); else syncStart(); });
+
 
   /* Without this, a phone running short of space may quietly clear
      website data. With it, the data stays until the person deletes it. */
@@ -492,14 +618,17 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   }
 
   function privacyNote(){
-    return '<div class="note">\ud83d\udd12 Everything here is kept on this phone only. '
-      + 'Nothing is sent to any server &mdash; not to us, not to anyone. '
-      + 'That also means if you clear the browser or change phones, it is gone '
-      + 'unless you have a backup. Use <b>Backup</b> at the top.</div>';
+    if (SYNC.on) return '<div class="note">\ud83d\udd12 Saved to your XpertCreation account, encrypted. '
+      + 'Sign in on any phone or computer and it is all there. Only you can see it. '
+      + 'This phone keeps a copy too, so it works without internet and uploads later.</div>';
+    return '<div class="note" style="border-color:#1B4DFF">\ud83d\udd12 Right now this is kept on this phone only, '
+      + 'so clearing the browser or changing phones would lose it. '
+      + '<a href="/login?next=/money" style="color:var(--brand);font-weight:700">Sign in</a> '
+      + 'and it is saved to your account automatically &mdash; what is on this phone is kept and added.</div>';
   }
 
   function backupNag(){
-    if (st.tx.length < 5) return "";
+    if (st.tx.length < 5 || SYNC.on) return "";
     var days = st.lastBackup ? (Date.now() - st.lastBackup) / 86400000 : 999;
     if (days < 30) return "";
     return '<div class="note" style="border-color:#F59E0B;color:#92400E">'
@@ -652,7 +781,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
     if (editingAcc){
       var a = accById(editingAcc);
-      if (a) for (var k in data) a[k] = data[k];
+      if (a){ for (var k in data) a[k] = data[k]; a.upd = Date.now(); }
     } else {
       data.id = uid();
       data.created = Date.now();
@@ -705,6 +834,12 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         + d.accounts.length + " accounts, " + d.tx.length + " entries.\n\n"
         + "What is on this phone now will be lost.");
       if (!ok) return;
+      var keep = {};
+      d.accounts.concat(d.tx).forEach(function(x){ if (x && x.id) keep[x.id] = 1; });
+      st.accounts.concat(st.tx).forEach(function(x){ if (!keep[x.id]) tomb(x.id); });
+      var dl = st.del || {};
+      d.del = d.del || {};
+      for (var k in dl) if (!keep[k]) d.del[k] = dl[k];
       st = d;
       if (save()){ askToKeep(); closeSheet(); view = {page: "home", acc: null, filter: "all"}; render(); }
     };
@@ -755,6 +890,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var a = accById(id);
       if (!confirm("Delete " + (a ? a.name : "this account") + "?"
           + (n ? "\n\nIts " + n + " entries will be deleted too." : ""))) return;
+      tomb(id);
+      st.tx.forEach(function(x){ if (x.acc === id || x.to === id) tomb(x.id); });
       st.accounts = st.accounts.filter(function(x){ return x.id !== id; });
       st.tx = st.tx.filter(function(x){ return x.acc !== id && x.to !== id; });
       if (save()){ view = {page: "home", acc: null, filter: "all"}; render(); }
@@ -763,6 +900,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     if (t.hasAttribute("data-deltx")){
       if (!confirm("Delete this entry?")) return;
       var tid = t.getAttribute("data-deltx");
+      tomb(tid);
       st.tx = st.tx.filter(function(x){ return x.id !== tid; });
       if (save()) render();
       return;
@@ -789,6 +927,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   load();
   render();
+  syncStart();
 })();
 </script>
 <footer class="xcfoot">
