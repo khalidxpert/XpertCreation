@@ -1105,10 +1105,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '</div>';
 
     var mine = st.tx.filter(function(t){ return t.acc === a.id || t.to === a.id; });
-    var f = view.filter;
+    var f = view.filter || "all";
+    if (a.type === "card" && f === "in") f = view.filter = "all";
     h += '<div class="filter">'
-      + ['all', 'in', 'out', 'move'].map(function(k){
-          var lb = {all: "All", in: "Received", out: "Paid", move: "Moves"}[k];
+      + (a.type === "card" ? ['all', 'out', 'move'] : ['all', 'in', 'out', 'move']).map(function(k){
+          var lb = (a.type === "card" ? {all: "All", out: "Spent", move: "Bill payments"} : {all: "All", in: "Received", out: "Paid", move: "Moves"})[k];
           return '<button type="button" data-filter="' + k + '"'
             + (f === k ? ' class="on"' : '') + '>' + lb + '</button>';
         }).join("") + '</div>';
