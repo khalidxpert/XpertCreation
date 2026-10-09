@@ -192,14 +192,15 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (D.can_buy) h += D.catalog.map(function(c){ return '<div class="spc"><h2>' + esc(c.name) + '</h2><p>' + esc(c.what) + '</p>' + picker(c)
       + '<div class="spp">' + c.plans.map(function(p){ return '<button data-buy="' + c.key + '" data-plan="' + p.key + '">' + esc(p.label) + '<b>' + rs(p.price) + '</b></button>'; }).join("") + '</div></div>'; }).join("");
     if (D.orders && D.orders.length) h += '<div class="spc"><h2>My orders</h2>' + D.orders.map(function(o){
-      return '<div class="spo"><span><b>' + esc(o.name) + '</b> \u00b7 ' + esc(o.plan) + (o.for ? ' \u00b7 ' + esc(o.for) : '') + '<br><small>' + day(o.created) + (o.ends ? ' \u00b7 until ' + day(o.ends) : '') + (o.ref ? ' \u00b7 ref ' + esc(o.ref) : '') + '</small></span>'
+      return '<div class="spo"><span><b>' + esc(o.name) + '</b> \u00b7 ' + esc(o.plan) + (o.for ? ' \u00b7 ' + esc(o.for) : '') + '<br><small>' + day(o.created) + (o.ends ? ' \u00b7 until ' + day(o.ends) : '') + (o.ref ? ' \u00b7 ref ' + esc(o.ref) : '') + '</small>' + (ADS[o.id] ? '<br><small>' + ADS[o.id].views + ' views \u00b7 ' + ADS[o.id].clicks + ' clicks</small>' : '') + '</span>'
         + '<span style="text-align:right">' + rs(o.amount) + '<br><small>' + esc(o.status) + '</small>' + (o.status === "pending" ? '<br>' + (D.mode === "test" ? '<button data-sim="' + o.id + '">Simulate payment</button> ' : '') + '<button data-cancel="' + o.id + '">Cancel</button>' : '') + '</span></div>'; }).join("") + '</div>';
     h += '<p style="font-size:13px;color:var(--ink-soft)">By buying you agree to our <a href="/terms-of-sale">Terms of sale</a> and <a href="/refund-policy">Refund policy</a>. Questions: khalid@xpertcreation.com</p>';
     box.innerHTML = h;
   }
+  var ADS = {};
   function getJSON(u){ return fetch(u, {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }); }
   function load(){
-    getJSON("/api/shop/").then(function(d){
+    Promise.all([getJSON("/api/shop/"), getJSON("/api/ads/stats/")]).then(function(a){ ADS = (a[1] && a[1].orders) || {}; return a[0]; }).then(function(d){
       D = d; if (!d.can_buy) return draw();
       Promise.all([getJSON("/api/feed/posts/?scope=mine"), getJSON("/api/jobs/mine/"), getJSON("/api/companies/mine/")]).then(function(r){
         T.post = (r[0].posts || []).map(function(p){ return {id: p.id, label: String(p.text || p.body || ("Post " + p.id)).slice(0, 70)}; });
