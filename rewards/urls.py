@@ -17,4 +17,7 @@ urlpatterns = [
     path("admin/withdrawals/<int:pk>/", views.admin_act, name="rewards-admin-act"),
     path("proof/<int:pk>/", views.proof, name="rewards-proof"),
     path("card/<int:pk>/", views.card, name="rewards-card"),
+    path("invite/", views.invite, name="rewards-invite"),
+    path("draws/", views.draws, name="rewards-draws"),
+    path("ref/<str:username>/", views.ref_card, name="rewards-ref"),
 ]

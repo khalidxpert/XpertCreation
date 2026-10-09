@@ -82,3 +82,12 @@ class Command(BaseCommand):
         if added or removed:
             self.stdout.write("%s rewards_collect: %s, +%d events, -%d revoked"
                               % (now.isoformat(timespec="seconds"), "live" if not staff_only else "staff only", added, removed))
+
+        # stage 4: referrals, commissions on real payments, referral draws
+        from rewards.views import qualify_referrals, run_commissions, run_draws
+        q = qualify_referrals()
+        made, rel, rev = run_commissions()
+        dr = run_draws(c) if not staff_only or (c.enabled and c.starts_at and now >= c.starts_at) else []
+        if q or made or rel or rev or dr:
+            self.stdout.write("%s referrals: %d qualified; commissions +%d new, %d released, %d reversed; draws run: %s"
+                              % (now.isoformat(timespec="seconds"), q, made, rel, rev, dr or "-"))

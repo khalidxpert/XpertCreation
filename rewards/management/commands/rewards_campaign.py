@@ -38,6 +38,7 @@ class Command(BaseCommand):
             c.enabled = True
             c.save()
             self.stdout.write("wheel prizes scheduled: %d (secret times, one a day)" % make_slots(c))
+            self.stdout.write("referral prizes scheduled: %d" % __import__("rewards.views", fromlist=["make_draws"]).make_draws(c))
         elif o["action"] == "links":
             for k in ("youtube", "facebook"):
                 v = o[k]
@@ -63,5 +64,10 @@ class Command(BaseCommand):
         self.stdout.write("wheel prizes: %d scheduled, %d won, %d waiting now; given so far Rs %d of Rs %d"
                           % (ps.count(), ps.filter(won_by__isnull=False).count(),
                              ps.filter(won_by__isnull=True, release_at__lte=timezone.now()).count(), given_total(), c.budget))
+        from rewards.models import Commission, Referral, ReferralDraw
+        self.stdout.write("referrals: %d linked, %d qualified; commissions: %d held, %d released; referral prizes: %d scheduled, %d done"
+                          % (Referral.objects.count(), Referral.objects.filter(qualified_at__isnull=False).count(),
+                             Commission.objects.filter(status="held").count(), Commission.objects.filter(status="released").count(),
+                             ReferralDraw.objects.count(), ReferralDraw.objects.filter(done_at__isnull=False).count()))
         for r in ev.values("kind").annotate(p=Sum("points"), n=Count("id")).order_by("-p"):
             self.stdout.write("  %-9s %6d points from %5d events" % (r["kind"], r["p"], r["n"]))

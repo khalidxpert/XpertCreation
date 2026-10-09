@@ -350,6 +350,28 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   function stamp(o){ return o.upd || o.created || 0; }
 
+  /* One name = one account. If two phones each added "UBL" before they had synced, the two copies
+     become one when the books are merged: the first one (the copy already saved on the server) is
+     kept, the other one's entries move to it, and the extra copy is removed on every device. */
+  function dedupeAccounts(bk){
+    var seen = {}, map = {}, keep = [];
+    bk.accounts.forEach(function(x){
+      var k = String(x.name || "").trim().toLowerCase();
+      if (k && seen[k] && seen[k] !== x.id){ map[x.id] = seen[k]; return; }
+      seen[k] = x.id; keep.push(x);
+    });
+    if (!Object.keys(map).length) return bk;
+    var now = Date.now();
+    bk.tx.forEach(function(t){
+      if (map[t.acc]){ t.acc = map[t.acc]; t.upd = now; }
+      if (map[t.to]){ t.to = map[t.to]; t.upd = now; }
+    });
+    bk.tx = bk.tx.filter(function(t){ if (t.kind === "move" && t.acc === t.to){ bk.del[t.id] = now; return false; } return true; });
+    Object.keys(map).forEach(function(id){ bk.del[id] = now; });
+    bk.accounts = keep;
+    return bk;
+  }
+
   function merge(a, b){
     a = a || blankState(); b = b || blankState();
     var del = {}, cut = Date.now() - 400 * 86400000;
@@ -365,8 +387,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       });
       return order.map(function(id){ return m[id]; });
     }
-    return {v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), heads: un(a.heads, b.heads), dues: un(a.dues, b.dues), del: del,
-            lastBackup: Math.max(a.lastBackup || 0, b.lastBackup || 0)};
+    return dedupeAccounts({v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), heads: un(a.heads, b.heads), dues: un(a.dues, b.dues), del: del,
+            lastBackup: Math.max(a.lastBackup || 0, b.lastBackup || 0)});
   }
 
   function same(a, b){ return JSON.stringify(a) === JSON.stringify(b); }
@@ -805,6 +827,79 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     return h;
   }
 
+
+  /* ================= cash book =================
+     Opening balance at the start of the period, then every entry day by day with the balance after
+     it, then the closing balance. All accounts together (cash, banks, wallets; moves between your own
+     accounts cancel out), or one account. Received / Paid only filter the rows: the balance column is
+     always the true balance. Above it: how much came into / went out of each account. */
+  function cashBookPage(){
+    var kind = view.ck || "all", r = periodRange(), one = view.racc && view.racc !== "all" && accById(view.racc) ? view.racc : null;
+    var ids = one ? [one] : st.accounts.filter(function(a){ return a.type !== "card"; }).map(function(a){ return a.id; });
+    var set = {}; ids.forEach(function(id){ set[id] = 1; });
+    function eff(t){
+      var v = 0;
+      if (t.kind === "in" && set[t.acc]) v += t.amt;
+      if (t.kind === "out" && set[t.acc]) v -= t.amt;
+      if (t.kind === "move"){ if (set[t.acc]) v -= t.amt; if (set[t.to]) v += t.amt; }
+      return v;
+    }
+    var open = 0;
+    ids.forEach(function(id){ var a = accById(id); open += (a && a.opening) || 0; });
+    var all = st.tx.slice().sort(function(x, y){ return x.date !== y.date ? (x.date < y.date ? -1 : 1) : (x.created || 0) - (y.created || 0); });
+    var rows = [], inT = 0, outT = 0, per = {};
+    all.forEach(function(t){
+      var v = eff(t); if (!v) return;
+      if (t.date < r[0]){ open += v; return; }
+      if (t.date > r[1]) return;
+      if (v > 0) inT += v; else outT -= v;
+      rows.push({t: t, v: v});
+      var aid = v > 0 ? (t.kind === "move" ? t.to : t.acc) : t.acc;
+      per[aid] = per[aid] || {inn: 0, out: 0}; if (v > 0) per[aid].inn += v; else per[aid].out -= v;
+    });
+    var close = open + inT - outT, run = open;
+    rows.forEach(function(x){ run += x.v; x.bal = run; });
+    var shown = rows.filter(function(x){ return kind === "all" || (kind === "in" ? x.v > 0 : x.v < 0); });
+    var lbl = {all: "Cash book", "in": "Money received", out: "Money paid"}[kind];
+    var h = '<button type="button" class="back" data-home>&larr; All accounts</button>'
+      + '<div class="head" style="margin-top:0"><h3>📒 ' + lbl + '</h3></div>'
+      + '<div class="filter">' + [["all", "All"], ["in", "Received"], ["out", "Paid"]].map(function(k){
+          return '<button type="button" data-ck="' + k[0] + '"' + (kind === k[0] ? ' class="on"' : '') + '>' + k[1] + '</button>'; }).join("") + '</div>'
+      + repFilters()
+      + '<div class="total"><small>' + (one ? esc(accById(one).name) : "All accounts (cash, banks, wallets)") + '</small>'
+      + '<div class="sub" style="margin-top:6px;flex-wrap:wrap"><span>Opening<b>' + rs(open) + '</b></span><span>+ Received<b>' + rs(inT) + '</b></span>'
+      + '<span>− Paid<b>' + rs(outT) + '</b></span><span>= Closing<b>' + rs(close) + '</b></span></div></div>';
+    var accRows = Object.keys(per).filter(function(id){ return kind === "all" || (kind === "in" ? per[id].inn : per[id].out); });
+    if (accRows.length){
+      h += '<div class="head"><h3>' + (kind === "out" ? "Paid from each account" : kind === "in" ? "Received in each account" : "Each account") + '</h3></div><div class="txs">'
+        + accRows.sort(function(a, b){ return (per[b].inn + per[b].out) - (per[a].inn + per[a].out); }).map(function(id){
+            var A = accById(id), T = TYPES[(A || {}).type] || TYPES.cash;
+            return '<div class="tx"><span class="dot" style="background:' + T.c + '">' + T.e + '</span><span class="md"><b>' + esc(A ? A.name : "?") + '</b></span>'
+              + '<span class="amw">' + (kind !== "out" && per[id].inn ? '<span class="am in">+' + rs(per[id].inn) + '</span>' : '')
+              + (kind !== "in" && per[id].out ? '<span class="am out" style="display:block">−' + rs(per[id].out) + '</span>' : '') + '</span></div>';
+          }).join("") + '</div>';
+    }
+    h += '<div class="head"><h3>Ledger</h3><span style="font-size:12px;color:var(--ink-soft)">' + shown.length + ' entries</span></div>';
+    var body = '<div class="tx" style="background:var(--paper)"><span class="md"><b>Opening balance</b><small>' + niceDate(r[0]).replace(/^1 Jan 0+$/, "Start") + '</small></span>'
+      + '<span class="am">' + rs(open) + '</span></div>', lastDay = "";
+    shown.forEach(function(x){
+      var t = x.t, A = accById(t.acc), B = accById(t.to), HD = t.head ? headById(t.head) : null;
+      if (t.date !== lastDay){ lastDay = t.date; body += '<div style="padding:7px 14px 3px;font-size:11.5px;font-weight:800;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line)">' + niceDate(t.date) + '</div>'; }
+      var title = t.kind === "move" ? (A ? A.name : "?") + " → " + (B ? B.name : "?") : (t.note || (HD ? HD.name : (t.kind === "in" ? "Received" : "Paid")));
+      var sub = t.kind === "move" ? (t.note || "Move") : (A ? A.name : "") + (HD && t.note ? " · " + HD.name : "");
+      body += '<div class="tx" data-edittx="' + esc(t.id) + '" style="cursor:pointer"><span class="dot ' + (x.v > 0 ? "in" : "out") + '">' + (x.v > 0 ? "+" : "−") + '</span>'
+        + '<span class="md"><b>' + esc(title) + '</b><small>' + esc(sub) + '</small></span>'
+        + '<span class="amw"><span class="am ' + (x.v > 0 ? "in" : "out") + '">' + (x.v > 0 ? "+" : "−") + rs(Math.abs(x.v)) + '</span>'
+        + '<span class="bl' + (x.bal < 0 ? " neg" : "") + '">Bal ' + rs(x.bal) + '</span></span></div>';
+    });
+    body += '<div class="tx" style="background:var(--paper)"><span class="md"><b>Closing balance</b><small>' + niceDate(r[1]).replace(/^31 Dec 9999$/, "Today") + '</small></span>'
+      + '<span class="am" style="font-size:16px">' + rs(close) + '</span></div>';
+    h += '<div class="txs">' + body + '</div>';
+    if (kind !== "all") h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:6px">' + (kind === "in" ? "Only money received is listed" : "Only payments are listed") + '; "Bal" is still the real balance after each one.</p>';
+    if (!one) h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:6px">Moves between your own accounts are left out here, because they do not change your total. Pick one account above to see them.</p>';
+    return h;
+  }
+
   /* ================= head-wise report ================= */
 
   function ymd(d){
@@ -923,6 +1018,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     else if (view.page === "rephead") app.innerHTML = headLedgerPage();
     else if (view.page === "dues") app.innerHTML = duesPage();
     else if (view.page === "flow") app.innerHTML = flowPage();
+    else if (view.page === "cash") app.innerHTML = cashBookPage();
     else { view.page = "home"; app.innerHTML = homePage(); }
     window.scrollTo(0, 0);
   }
@@ -946,13 +1042,14 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<div class="amt">' + rs(inHand()) + '</div>'
       + '<div class="sub" style="flex-wrap:wrap;margin:6px 0 2px">' + Object.keys(gT).map(function(k){ return '<span>' + (LB[k] || k) + '<b>' + rs(gT[k]) + '</b></span>'; }).join("")
       + (cOw ? '<span>Card dues<b>' + rs(cOw) + '</b></span>' : '') + '</div>'
-      + '<div class="sub"><span>Received this month<b>' + rs(t.inM) + '</b></span>'
-      + '<span>Paid this month<b>' + rs(t.outM) + '</b></span></div></div>';
+      + '<div class="sub"><span data-cashbook="in" style="cursor:pointer">Received this month ›<b>' + rs(t.inM) + '</b></span>'
+      + '<span data-cashbook="out" style="cursor:pointer">Paid this month ›<b>' + rs(t.outM) + '</b></span></div></div>';
 
     h += '<div style="display:flex;gap:6px 14px;flex-wrap:wrap;margin:0 0 4px">'
       + '<button type="button" class="back" data-flow style="margin:0">💼 Cash flow</button>'
       + '<button type="button" class="back" data-dues style="margin:0">🤝 Payables &amp; receivables</button>'
-      + '<button type="button" class="back" data-report style="margin:0">📊 Head-wise report</button></div>';
+      + '<button type="button" class="back" data-report style="margin:0">📊 Head-wise report</button>'
+      + '<button type="button" class="back" data-cashbook="all" style="margin:0">📒 Cash book</button></div>';
     h += '<div class="head"><h3>Accounts</h3>'
       + '<button type="button" data-addacc>+ Add</button></div><div class="accs">';
     st.accounts.forEach(function(a){
@@ -1243,6 +1340,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     var msg = document.getElementById("aMsg");
 
     if (!name){ msg.textContent = "Give it a name."; return; }
+    var dupe = st.accounts.filter(function(x){ return x.id !== editingAcc && String(x.name || "").trim().toLowerCase() === name.toLowerCase(); })[0];
+    if (dupe){ msg.textContent = "You already have an account called " + dupe.name + ". Open that one, or give this a different name (for example " + name + " 2)."; return; }
     if (!isFinite(opening)){ msg.textContent = "The opening balance is not a number."; return; }
 
     var iban = document.getElementById("aIban").value.replace(/\s+/g, "").toUpperCase();
@@ -1332,7 +1431,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   /* ================= clicks ================= */
 
   document.addEventListener("click", function(e){
-    var t = e.target.closest ? e.target.closest("button, .acc, [data-edittx], [data-rhead], [data-opendue], [data-open]") : null;
+    var t = e.target.closest ? e.target.closest("button, .acc, [data-edittx], [data-rhead], [data-opendue], [data-open], [data-cashbook]") : null;
     if (!t) return;
 
     if (t.hasAttribute("data-new")){ editingTx = null; entrySheet(t.getAttribute("data-new")); return; }
@@ -1341,6 +1440,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       if (ex){ editingTx = ex.id; entrySheet(ex.kind); }
       return;
     }
+    if (t.hasAttribute("data-cashbook")){ view = {page: "cash", acc: null, filter: "all", ck: t.getAttribute("data-cashbook"), period: "month", racc: "all"}; render(); return; }
+    if (t.hasAttribute("data-ck")){ view.ck = t.getAttribute("data-ck"); render(); return; }
     if (t.hasAttribute("data-flow")){ view = {page: "flow", acc: null, filter: "all"}; render(); return; }
     if (t.hasAttribute("data-dues")){ view = {page: "dues", acc: null, filter: "all", dtab: view.dtab || "rec"}; render(); return; }
     if (t.hasAttribute("data-dtab")){ view.dtab = t.getAttribute("data-dtab"); render(); return; }

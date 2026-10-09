@@ -128,12 +128,13 @@ def board(request):
     elif c.starts_at:
         sp = sp.filter(day__gte=timezone.localtime(c.starts_at).date())
     spins = dict(sp.values_list("user_id").annotate(n=Count("id")))
+    refs = __import__("rewards.views", fromlist=["qualified_counts"]).qualified_counts(c.starts_at)
     rows = []
     for i, r in enumerate(top, 1):
         u = users.get(r["user_id"])
         if u:
             rows.append({"rank": i, "name": _label(u), "points": r["p"], "minutes": (mins.get(u.pk) or 0) // 60,
-                         "spins": spins.get(u.pk, 0), "referrals": 0, "me": request.user.is_authenticated and u.pk == request.user.pk})
+                         "spins": spins.get(u.pk, 0), "referrals": refs.get(u.pk, 0), "me": request.user.is_authenticated and u.pk == request.user.pk})
     return Response(dict(out, period="today" if today else "all", rows=rows))
 
 
@@ -232,7 +233,8 @@ def state(request):
     """Everything the rewards page needs, in one call."""
     u, c = request.user, campaign()
     out = dict(_status(c), given=given_total(), wheel=_wheel_today(), wheel_prize=WHEEL_PER_DAY,
-               rules={"spin_points": SPIN_POINTS, "explorer_sections": EXPLORER_SECTIONS, "no_repeat_days": NO_REPEAT_DAYS})
+               rules={"spin_points": SPIN_POINTS, "explorer_sections": EXPLORER_SECTIONS, "no_repeat_days": NO_REPEAT_DAYS},
+               draws=__import__("rewards.views", fromlist=["_draws_out"])._draws_out())
     if u.is_authenticated:
         d = timezone.localdate()
         out["me"] = dict(_spin_state(u, d), name=_label(u), counting=counts_for(u, c), balance=balance(u),
@@ -649,3 +651,232 @@ def card(request, pk):
             w.save(update_fields=["loaded_at"])
         return Response({"ok": True})
     return Response({"detail": "Unknown action."}, status=400)
+
+
+# ================= stage 4: referrals, commissions, referral draws =================
+from .models import Commission, Referral, ReferralDraw                   # noqa: E402
+
+REF_COOKIE = "xc_ref"
+REF_MAX_AGE_DAYS = 14          # only accounts this new can be linked to a referrer
+COMMISSION = {1: 10, 2: 5}     # percent of every real payment: inviter, inviter's inviter
+COMMISSION_HOLD_DAYS = 7
+QUALIFY_POINTS, QUALIFY_DAYS = 30, 3
+SAME_IP_LIMIT = 3              # more referrals than this from one sign-up IP do not qualify
+REAL_PROVIDER = "safepay-production"    # test-mode and sandbox payments never pay a commission
+# Referral prizes, Rs 7,000 of the Rs 10,000 (the wheel has the other Rs 3,000):
+#   10+ qualified referrals: Rs 500 draw on days 7, 14, 21, 28
+#   50+ qualified referrals: Rs 1,000 draw on days 15 and 30, and Rs 3,000 shared equally on the last day
+DRAW_PLAN = [(10, "draw", 500, 7), (10, "draw", 500, 14), (10, "draw", 500, 21), (10, "draw", 500, 28),
+             (50, "draw", 1000, 15), (50, "draw", 1000, 30), (50, "share", 3000, 30)]
+
+
+def attach_referral(user, username):
+    """Link a new member to the member whose /r/ link they came from. Returns True when linked."""
+    if not user or not user.is_authenticated or not username:
+        return False
+    if Referral.objects.filter(user=user).exists():
+        return False
+    joined = getattr(user, "date_joined", None)
+    if joined and joined < timezone.now() - timedelta(days=REF_MAX_AGE_DAYS):
+        return False
+    ref = get_user_model().objects.filter(username__iexact=str(username)[:20], is_active=True).first()
+    if not ref or ref.pk == user.pk or getattr(ref, "is_blocked", False):
+        return False
+    up = Referral.objects.filter(user=ref).first()
+    if up and up.referrer_id == user.pk:                 # no two-way loops
+        return False
+    try:
+        Referral.objects.create(user=user, referrer=ref)
+        return True
+    except IntegrityError:
+        return False
+
+
+def qualify_referrals():
+    """A referral counts once the new member verified their email and earned 30+ points on 3+ different days.
+    Referrals from a sign-up IP that already has 3 counted referrals do not count."""
+    n = 0
+    for r in Referral.objects.filter(qualified_at__isnull=True).select_related("user")[:2000]:
+        u = r.user
+        if not getattr(u, "is_email_verified", True) or getattr(u, "is_blocked", False):
+            continue
+        days = (PointEvent.objects.filter(user=u).values("day").annotate(p=Sum("points")).filter(p__gt=0))
+        if len(days) < QUALIFY_DAYS or sum(d["p"] for d in days) < QUALIFY_POINTS:
+            continue
+        ip = getattr(u, "signup_ip", None)
+        if ip and Referral.objects.filter(referrer_id=r.referrer_id, qualified_at__isnull=False, user__signup_ip=ip).count() >= SAME_IP_LIMIT:
+            continue
+        r.qualified_at = timezone.now()
+        r.save(update_fields=["qualified_at"])
+        n += 1
+    return n
+
+
+def run_commissions():
+    """Every real paid order of a referred member gives commissions; refunds take them back."""
+    from shop.models import Order
+    now, made, released, reversed_ = timezone.now(), 0, 0, 0
+    refs = dict(Referral.objects.values_list("user_id", "referrer_id"))
+    if refs:
+        for o in Order.objects.filter(status="paid", provider=REAL_PROVIDER, user_id__in=list(refs)).only("id", "user_id", "amount", "paid_at"):
+            r1 = Referral.objects.filter(user_id=o.user_id).first()
+            if not r1 or not o.paid_at or o.paid_at < r1.created_at:
+                continue                                     # only payments made after the referral link
+            chain = [(1, r1.referrer_id)]
+            r2 = Referral.objects.filter(user_id=r1.referrer_id).first()
+            if r2 and r2.referrer_id != o.user_id:
+                chain.append((2, r2.referrer_id))
+            for level, ref_id in chain:
+                amt = int(o.amount) * COMMISSION[level] // 100
+                if amt <= 0:
+                    continue
+                _, c = Commission.objects.get_or_create(order_id=o.id, level=level, defaults={
+                    "referrer_id": ref_id, "buyer_id": o.user_id, "order_amount": o.amount, "amount": amt,
+                    "release_at": o.paid_at + timedelta(days=COMMISSION_HOLD_DAYS)})
+                made += c
+    paid = set(Order.objects.filter(status="paid", id__in=list(Commission.objects.exclude(status="reversed").values_list("order_id", flat=True))).values_list("id", flat=True))
+    for c in Commission.objects.exclude(status="reversed").select_related("buyer"):
+        who = _label(c.buyer)
+        if c.order_id not in paid:                          # refunded or cancelled
+            with transaction.atomic():
+                if c.status == "released":
+                    RewardEntry.objects.create(user_id=c.referrer_id, amount=-c.amount, kind="commission",
+                                               note="Referral share taken back: %s's order was refunded" % who)
+                c.status = "reversed"
+                c.save(update_fields=["status"])
+            reversed_ += 1
+        elif c.status == "held" and c.release_at <= now:
+            with transaction.atomic():
+                RewardEntry.objects.create(user_id=c.referrer_id, amount=c.amount, kind="commission",
+                                           note="Referral share (level %d): %s paid Rs %d" % (c.level, who, c.order_amount))
+                c.status = "released"
+                c.save(update_fields=["status"])
+            released += 1
+    return made, released, reversed_
+
+
+def make_draws(c):
+    """Called when the campaign is switched on: schedule the referral prizes on their days (9 pm Pakistan time).
+    Draws already done are kept."""
+    from datetime import datetime, time
+    ReferralDraw.objects.filter(done_at__isnull=True).delete()
+    start = timezone.localtime(c.starts_at).date()
+    days = max(1, (c.ends_at - c.starts_at).days)
+    done = set(ReferralDraw.objects.values_list("tier", "kind", "amount", "note"))
+    n = 0
+    for tier, kind, amount, day in DRAW_PLAN:
+        d = min(day, days)
+        note = "day %d" % day
+        if (tier, kind, amount, note) in done:
+            continue
+        at = timezone.make_aware(datetime.combine(start + timedelta(days=d - 1), time(21, 0)))
+        ReferralDraw.objects.create(tier=tier, kind=kind, amount=amount, draw_at=at, note=note)
+        n += 1
+    return n
+
+
+def qualified_counts(since=None):
+    qs = Referral.objects.filter(qualified_at__isnull=False)
+    if since:
+        qs = qs.filter(created_at__gte=since)
+    return dict(qs.values_list("referrer_id").annotate(n=Count("id")))
+
+
+def run_draws(c=None):
+    """Run every draw whose time has come. A tier with nobody in it keeps its prize for its next draw;
+    on the last day anything still unclaimed goes to a draw among everyone with at least 1 qualified referral."""
+    import secrets
+    c = c or campaign()
+    now, out = timezone.now(), []
+    if not c.starts_at:
+        return out
+    counts = qualified_counts(c.starts_at)
+    U = get_user_model()
+    ok_ids = set(U.objects.filter(pk__in=list(counts), is_active=True, is_blocked=False, is_staff=False, is_superuser=False)
+                 .exclude(**({"is_moderator": True} if hasattr(U, "is_moderator") else {})).values_list("pk", flat=True))
+    for dr in ReferralDraw.objects.filter(done_at__isnull=True, draw_at__lte=now).order_by("draw_at", "id"):
+        pool = sorted(uid for uid in ok_ids if counts.get(uid, 0) >= dr.tier)
+        last = dr.draw_at >= c.ends_at - timedelta(days=1)
+        if not pool:
+            nxt = ReferralDraw.objects.filter(done_at__isnull=True, tier=dr.tier, kind="draw", draw_at__gt=dr.draw_at).order_by("draw_at").first()
+            if nxt and not last:
+                nxt.amount += dr.amount
+                nxt.save(update_fields=["amount"])
+                dr.done_at, dr.note = now, (dr.note + ": nobody had %d+ yet, prize moved to the next draw" % dr.tier)[:200]
+                dr.save(update_fields=["done_at", "note"])
+                continue
+            pool = sorted(uid for uid in ok_ids if counts.get(uid, 0) >= 1)
+            if not pool:
+                if now > c.ends_at + timedelta(days=1):
+                    dr.done_at, dr.note = now, (dr.note + ": nobody qualified, not given")[:200]
+                    dr.save(update_fields=["done_at", "note"])
+                continue
+            dr.note = (dr.note + ": nobody had %d+, open to everyone with 1+" % dr.tier)[:200]
+        if given_total() + dr.amount > c.budget:
+            dr.done_at, dr.note = now, (dr.note + ": budget used up")[:200]
+            dr.save(update_fields=["done_at", "note"])
+            continue
+        if dr.kind == "share":
+            each = dr.amount // len(pool)
+            wins = [{"user": uid, "amount": each} for uid in pool] if each > 0 else []
+        else:
+            wins = [{"user": secrets.choice(pool), "amount": dr.amount}]
+        with transaction.atomic():
+            for w in wins:
+                RewardEntry.objects.create(user_id=w["user"], amount=w["amount"], kind="draw",
+                                           note="Referral %s (%d+ referrals)" % ("share" if dr.kind == "share" else "draw", dr.tier))
+                try:
+                    from notifications.views import notify
+                    notify(U.objects.get(pk=w["user"]), "reward", "You won Rs %d in the referral %s! It is in your rewards balance." % (w["amount"], "share" if dr.kind == "share" else "draw"), "/rewards")
+                except Exception:
+                    pass
+            dr.winners, dr.done_at = wins, now
+            dr.save(update_fields=["winners", "done_at", "note"])
+        out.append(dr.id)
+    return out
+
+
+def _draws_out():
+    U = get_user_model()
+    rows = []
+    for d in ReferralDraw.objects.order_by("draw_at", "id"):
+        names = {u.pk: _label(u) for u in U.objects.filter(pk__in=[w["user"] for w in (d.winners or [])])}
+        rows.append({"tier": d.tier, "kind": d.kind, "amount": d.amount, "when": timezone.localtime(d.draw_at).strftime("%d %b %Y, %I %p"),
+                     "done": bool(d.done_at), "note": d.note.split(": ", 1)[1] if ": " in d.note else "",
+                     "winners": [{"name": names.get(w["user"], "Member"), "amount": w["amount"]} for w in (d.winners or [])]})
+    return rows
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def ref_card(request, username):
+    """Public: who is inviting you (for the /r/<username> page). Name only, nothing private."""
+    u = get_user_model().objects.filter(username__iexact=str(username)[:20], is_active=True).first()
+    if not u or getattr(u, "is_blocked", False):
+        return Response({"detail": "No member with that name."}, status=404)
+    return Response({"username": u.username, "name": (getattr(u, "full_name", "") or u.username)[:60]})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def invite(request):
+    u, c = request.user, campaign()
+    mine = Referral.objects.filter(referrer=u)
+    since = c.starts_at
+    q = mine.filter(qualified_at__isnull=False)
+    qn = q.filter(created_at__gte=since).count() if since else q.count()
+    lvl2 = Referral.objects.filter(referrer_id__in=list(mine.values_list("user_id", flat=True))).count()
+    com = Commission.objects.filter(referrer=u)
+    return Response({"username": u.username or "", "link": ("https://xpertcreation.com/r/" + u.username) if u.username else "",
+                     "joined": mine.count(), "qualified": qn, "level2": lvl2,
+                     "held": com.filter(status="held").aggregate(s=Sum("amount"))["s"] or 0,
+                     "released": com.filter(status="released").aggregate(s=Sum("amount"))["s"] or 0,
+                     "rates": COMMISSION, "hold_days": COMMISSION_HOLD_DAYS,
+                     "qualify": {"points": QUALIFY_POINTS, "days": QUALIFY_DAYS}, "tiers": [10, 50],
+                     "draws": _draws_out()})
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def draws(request):
+    return Response({"draws": _draws_out()})

@@ -113,3 +113,41 @@ class Withdrawal(models.Model):
     handled_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
+
+
+class Referral(models.Model):
+    """Who invited whom (stage 4). Set once, from the /r/<username> link, for accounts up to 14 days old.
+    qualified_at: the new member verified their email and really used the site (counts for the referral draws)."""
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    referrer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    qualified_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+
+class Commission(models.Model):
+    """A referrer's share of a real payment (stage 4): 10% for the inviter, 5% for the inviter's inviter.
+    Held 7 days, then added to the rewards balance; taken back if the order is refunded."""
+    order_id = models.BigIntegerField(db_index=True)
+    level = models.PositiveSmallIntegerField()
+    referrer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    order_amount = models.PositiveIntegerField()
+    amount = models.PositiveIntegerField()
+    status = models.CharField(max_length=10, default="held", db_index=True)     # held | released | reversed
+    release_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("order_id", "level")]
+
+
+class ReferralDraw(models.Model):
+    """A scheduled referral prize (stage 4). tier 10: members with 10+ qualified referrals; tier 50: 50+.
+    kind draw = one lucky winner; kind share = split equally among everyone in the tier."""
+    tier = models.PositiveSmallIntegerField()
+    kind = models.CharField(max_length=6, default="draw")
+    amount = models.PositiveIntegerField()
+    draw_at = models.DateTimeField(db_index=True)
+    done_at = models.DateTimeField(null=True, blank=True)
+    winners = models.JSONField(default=list, blank=True)      # [{"user": id, "amount": rupees}]
+    note = models.CharField(max_length=200, blank=True, default="")

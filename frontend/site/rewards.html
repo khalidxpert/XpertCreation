@@ -203,7 +203,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 <script>
 (function(){
   "use strict";
-  var box = document.getElementById("rw"), S = null, WL = null, period = "today", rot = 0, busy = false, wmsg = "", werr = "";
+  var box = document.getElementById("rw"), S = null, WL = null, INV = null, period = "today", rot = 0, busy = false, wmsg = "", werr = "";
   var SEC = [["social", "XpertConnect"], ["academy", "Academy"], ["mcq", "MCQs"], ["games", "Games"], ["typing", "Typing"], ["tools", "Tools"], ["reading", "Reading"]];
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
@@ -264,8 +264,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function boardCard(rows){
     return '<div class="rwc"><h2>Leaderboard</h2><div class="rwtabs"><button data-p="today" class="' + (period === "today" ? "on" : "") + '">Today</button><button data-p="all" class="' + (period === "all" ? "on" : "") + '">Whole campaign</button></div>'
-      + (rows && rows.length ? '<table class="rwt"><tr><th>#</th><th>Member</th><th class="n">Points</th><th class="n">Active min</th><th class="n">Spins</th></tr>'
-        + rows.map(function(r){ return '<tr class="' + (r.me ? "me" : "") + '"><td>' + r.rank + '</td><td>' + esc(r.name) + '</td><td class="n">' + r.points + '</td><td class="n">' + r.minutes + '</td><td class="n">' + r.spins + '</td></tr>'; }).join("") + '</table>'
+      + (rows && rows.length ? '<table class="rwt"><tr><th>#</th><th>Member</th><th class="n">Points</th><th class="n">Active min</th><th class="n">Spins</th><th class="n">Referrals</th></tr>'
+        + rows.map(function(r){ return '<tr class="' + (r.me ? "me" : "") + '"><td>' + r.rank + '</td><td>' + esc(r.name) + '</td><td class="n">' + r.points + '</td><td class="n">' + r.minutes + '</td><td class="n">' + r.spins + '</td><td class="n">' + (r.referrals || 0) + '</td></tr>'; }).join("") + '</table>'
         : '<p style="margin-top:10px">Nobody on the board yet.</p>') + '</div>';
   }
   function winnersCard(w){
@@ -283,7 +283,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<li>One ' + rs(S.wheel_prize) + ' wheel prize is released each day at a secret random time between 9 am and 11 pm (Pakistan time). The first eligible spin after that time wins it. If nobody spins, it waits for the next spin, so every prize is really given.</li>'
       + '<li>A wheel winner cannot win the wheel again for ' + r.no_repeat_days + ' days, so more members get a turn. Staff and moderators cannot win.</li>'
       + '<li>The whole campaign gives at most ' + rs(S.budget) + '. Every prize is listed on this page.</li>'
-      + '<li>Withdraw your balance to EasyPaisa, JazzCash, a bank, mobile load or a scratch card (Jazz, Zong, Telenor or Ufone) in Pakistan, or tell us how to pay you in any other country. Every payout is listed on this page.</li><li>Before your first withdrawal: a post on XpertConnect, <code>!claim</code> with your code in IRC #xpertcreation, and joining us on YouTube and Facebook.</li><li>Coming next: referral draws.</li></ul></div>';
+      + '<li>Withdraw your balance to EasyPaisa, JazzCash, a bank, mobile load or a scratch card (Jazz, Zong, Telenor or Ufone) in Pakistan, or tell us how to pay you in any other country. Every payout is listed on this page.</li><li>Before your first withdrawal: a post on XpertConnect, <code>!claim</code> with your code in IRC #xpertcreation, and joining us on YouTube and Facebook.</li><li>Invite friends with your link xpertcreation.com/r/your-username. Friends who qualify put you in the referral prizes: Rs 500 draws for 10+, Rs 1,000 draws and a Rs 3,000 share for 50+.</li></ul></div>';
   }
   function walletCard(){
     if (!WL) return "";
@@ -362,26 +362,50 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     [].forEach.call(f.querySelectorAll("[data-for]"), function(el){ el.style.display = (" " + el.getAttribute("data-for") + " ").indexOf(" " + m + " ") >= 0 ? "" : "none"; });
     var l = document.getElementById("rwaccl"); if (l) l.textContent = m === "bank" ? "Account number or IBAN" : "Mobile number";
   }
+  function inviteCard(){
+    if (!INV) return "";
+    var h = '<div class="rwc"><h2>Invite friends</h2>';
+    if (!INV.link) return h + '<p>Choose a username first (tap your photo, then Account), and your invite link will appear here.</p></div>';
+    var share = "Join me on XpertCreation: free courses, jobs, tools and rewards. " + INV.link;
+    h += '<p>Your invite link:</p><input readonly value="' + esc(INV.link) + '" style="width:100%;box-sizing:border-box;padding:9px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit">'
+      + '<button class="rwbtn p" data-copy="' + esc(INV.link) + '">Copy link</button><a class="rwbtn" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(share) + '">Share on WhatsApp</a>'
+      + '<div class="rwst"><div><b>' + INV.joined + '</b><small>joined with your link</small></div><div><b>' + INV.qualified + '</b><small>qualified this campaign</small></div>'
+      + '<div><b>' + INV.level2 + '</b><small>joined through your friends</small></div><div><b>' + rs(INV.released) + '</b><small>earned from referrals' + (INV.held ? ' (+' + rs(INV.held) + ' on hold)' : '') + '</small></div></div>'
+      + '<p style="font-size:14px">A friend counts once they verify their email and earn ' + INV.qualify.points + ' points on ' + INV.qualify.days + ' different days. '
+      + 'Whenever a friend pays for anything on XpertCreation, you get ' + INV.rates["1"] + '% (and ' + INV.rates["2"] + '% when their friends pay), added to your balance after ' + INV.hold_days + ' days.</p>';
+    var goal = INV.qualified < 10 ? 10 : 50;
+    if (INV.qualified < 50) h += '<p style="font-size:14px"><b>' + (goal - INV.qualified) + ' more</b> qualified friends to enter the ' + (goal === 10 ? 'Rs 500 draws (10+)' : 'Rs 1,000 draws and the Rs 3,000 share (50+)') + '.</p>';
+    else h += '<p style="font-size:14px"><b>You are in every referral prize.</b></p>';
+    return h + '</div>';
+  }
+  function drawsCard(){
+    var d = S.draws || []; if (!d.length) return "";
+    return '<div class="rwc"><h2>Referral prizes</h2><p>For members whose invited friends qualified during the campaign. Draws are at 9 pm Pakistan time.</p><table class="rwt"><tr><th>When</th><th>Who can win</th><th class="n">Prize</th><th>Result</th></tr>'
+      + d.map(function(x){ return '<tr><td>' + esc(x.when) + '</td><td>' + x.tier + '+ referrals' + (x.kind === "share" ? ', shared equally' : '') + '</td><td class="n">' + rs(x.amount) + '</td><td>'
+        + (x.winners && x.winners.length ? x.winners.map(function(w){ return esc(w.name) + ' (' + rs(w.amount) + ')'; }).join(", ") : (x.done ? esc(x.note || "No winner") : "Coming")) + '</td></tr>'; }).join("") + '</table>'
+      + '<p style="font-size:13px;margin-top:8px">If nobody has enough referrals yet, the prize moves to that group\'s next draw. On the last day, anything still unclaimed goes to a draw among everyone with at least one qualified referral.</p></div>';
+  }
   function draw(board, win){
     var pct = S.budget ? Math.min(100, Math.round(S.given / S.budget * 100)) : 0;
     var h = '<div class="rwh"><h1>&#127873; Rewards</h1><p>Use XpertCreation, earn points, spin the wheel. ' + rs(S.given) + ' of ' + rs(S.budget) + ' given.</p><div class="rwbar"><i style="width:' + pct + '%"></i></div>'
       + (S.starts ? '<p style="font-size:13px">' + day(S.starts) + ' to ' + day(S.ends) + '</p>' : '') + '</div>';
     if (!S.on) h += '<div class="rwn">' + (S.me && S.me.counting ? "Test mode: only staff earn points and spins are test spins." : "The rewards campaign starts soon. Get ready: complete your profile and verify your email.") + '</div>';
-    h += meCard() + walletCard() + (S.on ? todayCard() : "") + boardCard(board) + winnersCard(win) + rulesCard();
+    h += meCard() + walletCard() + inviteCard() + (S.on ? todayCard() : "") + boardCard(board) + drawsCard() + winnersCard(win) + rulesCard();
     box.innerHTML = h;
     showFields();
     if (WL) scratchCards();
   }
   function load(){
-    Promise.all([api("/api/rewards/state/"), api("/api/rewards/board/?period=" + period), api("/api/rewards/winners/"), api("/api/rewards/wallet/")]).then(function(a){
+    Promise.all([api("/api/rewards/state/"), api("/api/rewards/board/?period=" + period), api("/api/rewards/winners/"), api("/api/rewards/wallet/"), api("/api/rewards/invite/")]).then(function(a){
       S = a[0].d || {}; if (!a[0].ok){ box.innerHTML = '<p class="fnote">Could not load rewards. Try again.</p>'; return; }
-      WL = a[3].ok ? a[3].d : null;
+      WL = a[3].ok ? a[3].d : null; INV = a[4].ok ? a[4].d : null;
       draw((a[1].d || {}).rows || [], a[2].d || {});
     });
   }
   box.addEventListener("click", function(e){
     var t = e.target;
     if (t.getAttribute && t.getAttribute("data-p")){ period = t.getAttribute("data-p"); load(); return; }
+    if (t.getAttribute && t.getAttribute("data-copy")){ var cv = t.getAttribute("data-copy"); try { navigator.clipboard.writeText(cv); t.textContent = "Copied"; } catch (x) { window.prompt("Copy your link:", cv); } return; }
     var act = t.getAttribute && t.getAttribute("data-act");
     function step(which){ return api2("/api/rewards/step/", {which: which}).then(function(r){ werr = r.ok ? "" : (r.d.detail || "Not done yet."); wmsg = r.ok ? "Step done." : ""; load(); }); }
     if (act === "post"){
