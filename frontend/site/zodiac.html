@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Star signs and what they mean — XpertCreation</title>
 <!-- seo:start -->
-<meta name="description" content="Find your star sign from your birthday and read what it is said to mean. For fun, not for decisions.">
+<meta name="description" content="Daily star signs written fresh every morning from the real sky: Moon phase, planets and a reading for all 12 signs in English and Urdu. For fun, not for decisions.">
 <link rel="canonical" href="https://xpertcreation.com/zodiac">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
@@ -456,7 +456,8 @@ document.addEventListener("DOMContentLoaded", function(){
 <script>
 (function(){
   "use strict";
-  var DATA = null, current = null;
+  var DATA = null, current = null, TODAY = null, URDU = false;
+  function niceDay(ds){ var p = String(ds || "").split("-"); var m = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; return p.length === 3 ? parseInt(p[2], 10) + " " + m[parseInt(p[1], 10) - 1] + " " + p[0] : ds; }
 
   var EMOJI = {Aries:"\u2648",Taurus:"\u2649",Gemini:"\u264A",Cancer:"\u264B",
     Leo:"\u264C",Virgo:"\u264D",Libra:"\u264E",Scorpio:"\u264F",
@@ -494,7 +495,18 @@ document.addEventListener("DOMContentLoaded", function(){
       + (d.color ? '<span>' + esc(d.color) + '</span>' : '')
       + '</div></div>';
 
-    if (d.today){
+    // Fresh every day: /brand/zodiac-today.json is written each morning on the server
+    // from the real sky (see the sky box above). Falls back to the old text if it is missing.
+    var T = TODAY && TODAY.signs && TODAY.signs[current];
+    if (T){
+      var sk = TODAY.sky || {}, bd = sk.bodies || {};
+      h += '<div class="today"><div class="lbl">Today · ' + esc(niceDay(TODAY.date))
+        + (T.today_ur ? '<button type="button" id="zur" style="float:right;font-size:12px;font-weight:800;color:var(--gold);letter-spacing:0;text-transform:none">' + (URDU ? "English" : "اردو") + '</button>' : '') + '</div>'
+        + (URDU && T.today_ur ? '<p dir="rtl" lang="ur" style="font-size:17px;line-height:1.9">' + esc(T.today_ur) + '</p>' : '<p>' + esc(T.today) + '</p>')
+        + '<p style="font-size:12.5px;color:var(--ink-soft);margin-top:9px">Mood: <b>' + esc(T.mood || "") + '</b> · Colour: <b>' + esc(T.colour || "") + '</b>'
+        + (bd.Moon ? ' · Moon in <b>' + esc(bd.Moon.sign) + '</b> (' + esc(((sk.moon || {}).phase || "").toLowerCase()) + ')' : '')
+        + (sk.retrograde && sk.retrograde.length ? ' · ' + esc(sk.retrograde.join(" and ")) + ' retrograde' : '') + '</p></div>';
+    } else if (d.today){
       h += '<div class="today"><div class="lbl">Today</div><p>'
         + esc(d.today) + '</p></div>';
     }
@@ -510,15 +522,17 @@ document.addEventListener("DOMContentLoaded", function(){
 
     [["love","\ud83d\udc9b Love"],["career","\ud83d\udcbc Work"],
      ["health","\ud83c\udf3f Health"]].forEach(function(pair){
-      if (d[pair[0]]){
-        h += '<div class="sec"><h4>' + pair[1] + '</h4><p>'
-          + esc(d[pair[0]]) + '</p></div>';
+      var tv = T && T[pair[0] === "career" ? "work" : pair[0]], txt = tv || d[pair[0]];
+      if (txt){
+        h += '<div class="sec"><h4>' + pair[1] + (tv ? ' <small style="font-weight:600;color:var(--ink-soft);font-size:11px">today</small>' : '') + '</h4><p>'
+          + esc(txt) + '</p></div>';
       }
     });
 
-    if (d.lucky && d.lucky.length){
+    var LK = (T && T.lucky) || d.lucky;
+    if (LK && LK.length){
       h += '<div class="sec"><h4>\ud83c\udf40 Lucky numbers</h4><div class="lucky">'
-        + d.lucky.map(function(n){ return '<span>' + n + '</span>'; }).join("")
+        + LK.map(function(n){ return '<span>' + n + '</span>'; }).join("")
         + '</div></div>';
     }
 
@@ -530,6 +544,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
     el.innerHTML = h;
   }
+
+  document.getElementById("detail").addEventListener("click", function(e){
+    if (e.target.id === "zur"){ URDU = !URDU; detail(); }
+  });
 
   document.getElementById("grid").addEventListener("click", function(e){
     var s = e.target.closest("[data-sign]");
@@ -544,6 +562,10 @@ document.addEventListener("DOMContentLoaded", function(){
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(d){
       DATA = d;
+      fetch("/brand/zodiac-today.json?d=" + new Date(Date.now() + 5 * 3600e3).toISOString().slice(0, 10), {cache: "no-store"})
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(t){ if (t && t.signs){ TODAY = t; detail(); } })
+        .catch(function(){});
       var q = new URLSearchParams(location.search).get("sign");
       if (q && DATA[q]) current = q;
       grid(); detail();

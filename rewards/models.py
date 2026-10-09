@@ -91,7 +91,7 @@ class Withdrawal(models.Model):
     """A request to be paid from the rewards balance. The amount leaves the balance when requested
     and comes back if the request is rejected or cancelled."""
     METHODS = [("easypaisa", "EasyPaisa"), ("jazzcash", "JazzCash"), ("bank", "Bank transfer"),
-               ("load", "Mobile load"), ("other", "Other (arrange with admin)")]
+               ("load", "Mobile load"), ("scratch", "Scratch card"), ("other", "Other (arrange with admin)")]
     STATES = [("requested", "Waiting"), ("paid", "Paid"), ("rejected", "Rejected"), ("cancelled", "Cancelled")]
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
     amount = models.PositiveIntegerField()
@@ -106,6 +106,10 @@ class Withdrawal(models.Model):
     status = models.CharField(max_length=10, choices=STATES, default="requested", db_index=True)
     admin_note = models.CharField(max_length=300, blank=True, default="")
     proof_path = models.CharField(max_length=200, blank=True, default="")
+    card_pin = models.TextField(max_length=300, blank=True, default="")      # scratch card PIN(s); shown only to the member
+    revealed_at = models.DateTimeField(null=True, blank=True)
+    loaded_at = models.DateTimeField(null=True, blank=True)
     handled_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     handled_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+

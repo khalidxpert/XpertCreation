@@ -160,7 +160,7 @@ from django.db.models import Count, Q                                    # noqa:
 from .models import PrizeSlot, RewardEntry, Spin                         # noqa: E402
 
 WHEEL_PER_DAY = 100            # one Rs 100 wheel prize a day
-WHEEL_BUDGET = 3000            # wheel share of the Rs 10,000 (referral draws 4,000, scratch cards 3,000)
+WHEEL_BUDGET = 3000            # wheel share of the Rs 10,000 (referral draws 4,000; Rs 3,000 not yet assigned)
 SPIN_POINTS = 30               # points needed today for the daily spin
 EXPLORER_SECTIONS = 5          # sections used today for the bonus spin
 NO_REPEAT_DAYS = 7             # a wheel winner cannot win the wheel again for 7 days
@@ -311,8 +311,10 @@ from .models import RewardSteps, Withdrawal                              # noqa:
 
 MIN_WITHDRAW = 100             # rupees
 KYC_ABOVE = 1000               # paid out in total above this needs the ID check (blue-tick KYC)
-IRC_CHECK = False              # switched on in stage 3b, when XpertBot can confirm the !claim code
+IRC_CHECK = True               # XpertBot confirms "!claim <code>" typed in #xpertcreation (stage 3b)
 MAX_PROOF = 8 * 1024 * 1024
+SCRATCH_NETWORKS = ("jazz", "zong", "telenor", "ufone")
+SCRATCH_AMOUNTS = (100, 300, 500, 1000)
 POST_TEXT = "I am earning rewards on XpertCreation: use the site, earn points and spin the lucky wheel. Free for everyone: https://xpertcreation.com/rewards"
 METHOD_NAMES = dict(Withdrawal.METHODS)
 
@@ -355,11 +357,13 @@ def _w_out(w, admin=False):
          "when": timezone.localtime(w.created_at).strftime("%d %b %Y %H:%M"),
          "handled": timezone.localtime(w.handled_at).strftime("%d %b %Y %H:%M") if w.handled_at else "",
          "proof": bool(w.proof_path), "account_name": w.account_name, "account_no": w.account_no,
-         "bank_name": w.bank_name, "network": w.network}
+         "bank_name": w.bank_name, "network": w.network,
+         "card": bool(w.card_pin) and w.status == "paid", "revealed": bool(w.revealed_at), "loaded": bool(w.loaded_at)}
     if admin:
         u = w.user
         d.update({"member": _label(u), "user_id": u.pk, "email": u.email, "balance": balance(u), "kyc": _kyc_ok(u),
-                  "paid_before": Withdrawal.objects.filter(user=u, status="paid").aggregate(s=Sum("amount"))["s"] or 0})
+                  "paid_before": Withdrawal.objects.filter(user=u, status="paid").aggregate(s=Sum("amount"))["s"] or 0,
+                  "pin_saved": bool(w.card_pin)})
     return d
 
 
@@ -433,9 +437,17 @@ def withdraw(request):
         return Response({"detail": "Enter the bank name and the account number or IBAN."}, status=400)
     if method in ("easypaisa", "jazzcash", "bank") and country != "PK":
         return Response({"detail": "EasyPaisa, JazzCash and Pakistani bank transfers are for Pakistan. Choose Other and tell us how to pay you."}, status=400)
+    if method == "scratch":
+        if network.lower() not in SCRATCH_NETWORKS:
+            return Response({"detail": "Choose the network for your scratch card: Jazz, Zong, Telenor or Ufone."}, status=400)
+        if amount not in SCRATCH_AMOUNTS:
+            return Response({"detail": "Scratch cards come in Rs 100, 300, 500 or 1,000."}, status=400)
+        if country != "PK":
+            return Response({"detail": "Scratch cards are Pakistani mobile cards. Choose Other and tell us how to pay you."}, status=400)
+        network = network.capitalize()
     if method == "other" and len(details) < 10:
         return Response({"detail": "Tell us how you would like to be paid in your country."}, status=400)
-    key = _digits(acc) if method != "other" else ""
+    key = _digits(acc) if method not in ("other", "scratch") else ""
     if key and Withdrawal.objects.filter(account_key=key).exclude(user=u).exclude(status__in=["rejected", "cancelled"]).exists():
         return Response({"detail": "This account number is already used by another member. Each member must use their own account."}, status=400)
     with transaction.atomic():
@@ -527,15 +539,22 @@ def admin_act(request, pk):
             return Response({"detail": "Request not found or already handled."}, status=404)
         if action == "paid":
             f = request.FILES.get("proof")
-            if not f:
+            pin = str(request.data.get("pin") or "").strip()[:300]
+            if w.method == "scratch":
+                if len(_digits(pin)) < 8:
+                    return Response({"detail": "Type the scratch card PIN (the numbers under the silver strip)."}, status=400)
+                w.card_pin = pin
+            elif not f:
                 return Response({"detail": "Upload the payment screenshot."}, status=400)
-            try:
-                w.proof_path = _save_proof(f, w.id)
-            except ValueError as e:
-                return Response({"detail": str(e)}, status=400)
+            if f:
+                try:
+                    w.proof_path = _save_proof(f, w.id)
+                except ValueError as e:
+                    return Response({"detail": str(e)}, status=400)
             w.status, w.handled_by, w.handled_at, w.admin_note = "paid", u, timezone.now(), note
             w.save()
-            text = "Your rewards withdrawal of Rs %d is paid (%s)." % (w.amount, METHOD_NAMES.get(w.method, w.method))
+            text = ("Your Rs %d %s scratch card is ready. Open Rewards and scratch it to see the PIN." % (w.amount, w.network)) if w.method == "scratch" \
+                else "Your rewards withdrawal of Rs %d is paid (%s)." % (w.amount, METHOD_NAMES.get(w.method, w.method))
         elif action == "reject":
             if not note:
                 return Response({"detail": "Write the reason, so the member knows."}, status=400)
@@ -577,3 +596,56 @@ def proof(request, pk):
     r["X-Content-Type-Options"] = "nosniff"
     r["Cache-Control"] = "private, no-store"
     return r
+
+
+# ================= stage 3b: IRC !claim check and scratch card payouts =================
+from django.views.decorators.csrf import csrf_exempt                     # noqa: E402
+
+
+
+
+@csrf_exempt
+def irc_claim(request):
+    """Called only by XpertBot (header X-IRC-Bot-Secret, same check as !post). The bot sends the IRC account
+    the member is signed in as and the code from their rewards page."""
+    import json as _json
+    from django.http import JsonResponse
+    from ircbot.views import _ok
+    if request.method != "POST" or not _ok(request):
+        return JsonResponse({"detail": "Not allowed."}, status=403)
+    try:
+        d = _json.loads(request.body.decode() or "{}")
+    except Exception:
+        d = {}
+    acct, code = str(d.get("account") or "").strip(), str(d.get("code") or "").strip().upper()
+    u = get_user_model().objects.filter(username__iexact=acct, is_active=True).first() if acct else None
+    if not u:
+        return JsonResponse({"detail": "No XpertCreation member with that name."}, status=404)
+    s = RewardSteps.objects.filter(user=u).first()
+    if not s or s.code != code:
+        return JsonResponse({"detail": "That is not your code. Copy it from xpertcreation.com/rewards (signed in as %s)." % u.username}, status=400)
+    if not s.irc_at:
+        s.irc_at = timezone.now()
+        s.save(update_fields=["irc_at"])
+    return JsonResponse({"ok": True, "detail": "Done! The IRC step is complete for %s. Go back to xpertcreation.com/rewards." % u.username})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def card(request, pk):
+    """The member's own scratch card: action reveal (gives the PIN while they scratch) or loaded (they used it)."""
+    w = Withdrawal.objects.filter(pk=pk, user=request.user, method="scratch", status="paid").first()
+    if not w or not w.card_pin:
+        return Response({"detail": "Card not found."}, status=404)
+    action, now = str(request.data.get("action") or "reveal"), timezone.now()
+    if action == "reveal":
+        if not w.revealed_at:
+            w.revealed_at = now
+            w.save(update_fields=["revealed_at"])
+        return Response({"pin": w.card_pin, "network": w.network, "amount": w.amount})
+    if action == "loaded":
+        if not w.loaded_at:
+            w.loaded_at = now
+            w.save(update_fields=["loaded_at"])
+        return Response({"ok": True})
+    return Response({"detail": "Unknown action."}, status=400)

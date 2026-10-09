@@ -16,4 +16,5 @@ urlpatterns = [
     path("admin/withdrawals/", views.admin_list, name="rewards-admin-list"),
     path("admin/withdrawals/<int:pk>/", views.admin_act, name="rewards-admin-act"),
     path("proof/<int:pk>/", views.proof, name="rewards-proof"),
+    path("card/<int:pk>/", views.card, name="rewards-card"),
 ]

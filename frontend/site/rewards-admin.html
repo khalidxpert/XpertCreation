@@ -196,11 +196,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + kv("Bank", w.bank_name) + kv("Network", w.network) + kv("Member says", w.details) + kv("Email", w.email)
       + '<span>ID check</span><b>' + (w.kyc ? "Approved" : "Not done") + '</b>'
       + '<span>Balance now</span><b>' + rs(w.balance) + '</b><span>Paid before</span><b>' + rs(w.paid_before) + '</b>'
-      + kv("Requested", w.when) + kv("Handled", w.handled) + kv("Note", w.note) + '</div>';
+      + kv("Requested", w.when) + kv("Handled", w.handled) + kv("Note", w.note) + (w.pin_saved ? '<span>Card PIN</span><b>saved (only the member sees it)</b>' : '') + '</div>';
     if (w.proof) h += '<a href="/api/rewards/proof/' + w.id + '/" target="_blank">Open payment screenshot</a>';
     if (w.status === "requested"){
       h += '<div class="rabox" data-w="' + w.id + '"><p><b>After you send the money:</b> upload the screenshot and mark it paid. The member is told, and it shows on the public payouts list (without account details).</p>'
-        + '<input type="file" accept="image/*" class="raproof"><input type="text" class="ranote" maxlength="300" placeholder="Note for the member (transaction ID, reason, or message)">'
+        + (w.method === "scratch" ? '<p><b>Scratch card:</b> buy a ' + esc(w.network) + ' card of ' + rs(w.amount) + ' and type its PIN. Only the member can see it, when they scratch.</p><textarea class="rapin" rows="2" maxlength="300" placeholder="Card PIN (two cards? one PIN per line)"></textarea>' : '')
+        + '<input type="file" accept="image/*" class="raproof"' + (w.method === "scratch" ? ' title="optional for scratch cards"' : '') + '><input type="text" class="ranote" maxlength="300" placeholder="Note for the member (transaction ID, reason, or message)">'
         + '<button class="rabtn ok" data-a="paid">Mark paid</button><button class="rabtn msg" data-a="note">Send message only</button><button class="rabtn no" data-a="reject">Reject (money back to member)</button>'
         + (err[w.id] ? '<div class="raerr">' + esc(err[w.id]) + '</div>' : '') + '</div>';
     }
@@ -226,7 +227,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var wrap = t.closest("[data-w]"), id = wrap.getAttribute("data-w"), fd = new FormData();
     var note = wrap.querySelector(".ranote").value.trim(), file = wrap.querySelector(".raproof").files[0];
     if (a === "reject" && !confirm("Reject this withdrawal? The money goes back to the member's balance.")) return;
-    fd.append("action", a); fd.append("note", note); if (a === "paid" && file) fd.append("proof", file);
+    var pinEl = wrap.querySelector(".rapin");
+    fd.append("action", a); fd.append("note", note); if (a === "paid" && file) fd.append("proof", file); if (a === "paid" && pinEl) fd.append("pin", pinEl.value.trim());
     t.disabled = true;
     fetch("/api/rewards/admin/withdrawals/" + id + "/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}, body: fd})
       .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); })

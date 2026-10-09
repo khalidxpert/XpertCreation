@@ -195,6 +195,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .rwf label{display:block;font-size:13px;font-weight:700;margin:8px 0 3px}.rwf input,.rwf select,.rwf textarea{width:100%;box-sizing:border-box;padding:9px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit}
 .rwerr{color:#B91C1C;font-weight:700;margin-top:8px}.rwok{color:#166534;font-weight:700;margin-top:8px}
 .rwwd{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--line,#E4E8F2);padding:8px 0;font-size:14px}
+.rwscr{position:relative;max-width:340px;margin:8px 0 4px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#FDE68A,#F59E0B);color:#1F2937;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.rwscr .net{font-weight:800;font-size:15px}.rwscr .amt{font-size:22px;font-weight:900}
+.rwscr .pinbox{position:relative;margin-top:10px;height:56px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;font:800 20px/1 monospace;letter-spacing:2px;text-align:center;padding:0 8px}
+.rwscr canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:10px;touch-action:none;cursor:grab}
 </style>
 <script>
 (function(){
@@ -279,7 +283,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<li>One ' + rs(S.wheel_prize) + ' wheel prize is released each day at a secret random time between 9 am and 11 pm (Pakistan time). The first eligible spin after that time wins it. If nobody spins, it waits for the next spin, so every prize is really given.</li>'
       + '<li>A wheel winner cannot win the wheel again for ' + r.no_repeat_days + ' days, so more members get a turn. Staff and moderators cannot win.</li>'
       + '<li>The whole campaign gives at most ' + rs(S.budget) + '. Every prize is listed on this page.</li>'
-      + '<li>Withdraw your balance to EasyPaisa, JazzCash, a bank or mobile load in Pakistan, or tell us how to pay you in any other country. Every payout is listed on this page.</li><li>Coming next: scratch cards and referral draws.</li></ul></div>';
+      + '<li>Withdraw your balance to EasyPaisa, JazzCash, a bank, mobile load or a scratch card (Jazz, Zong, Telenor or Ufone) in Pakistan, or tell us how to pay you in any other country. Every payout is listed on this page.</li><li>Before your first withdrawal: a post on XpertConnect, <code>!claim</code> with your code in IRC #xpertcreation, and joining us on YouTube and Facebook.</li><li>Coming next: referral draws.</li></ul></div>';
   }
   function walletCard(){
     if (!WL) return "";
@@ -290,7 +294,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     h += st.need.irc ? stp("irc", "Say hello in IRC #xpertcreation", '<small>Open <a href="/irc" target="_blank">Chat rooms</a>, sign in, and in #xpertcreation type:</small><br><code style="font-size:16px;font-weight:800">!claim ' + esc(st.code) + '</code>')
                      : '<div class="rwstep"><div class="ic">&#183;</div><div><b>IRC step</b><small>Coming soon. Not needed yet.</small></div></div>';
     if (st.need.youtube) h += stp("youtube", "Subscribe to our YouTube channel", '<br><a class="rwbtn" href="' + esc(st.youtube_url) + '" target="_blank" rel="noopener">Open YouTube</a><button class="rwbtn p" data-act="youtube">I subscribed</button>');
-    if (st.need.facebook) h += stp("facebook", "Follow our Facebook page", '<br><a class="rwbtn" href="' + esc(st.facebook_url) + '" target="_blank" rel="noopener">Open Facebook</a><button class="rwbtn p" data-act="facebook">I followed</button>');
+    if (st.need.facebook) h += stp("facebook", "Join us on Facebook", '<br><a class="rwbtn" href="' + esc(st.facebook_url) + '" target="_blank" rel="noopener">Open Facebook</a><button class="rwbtn p" data-act="facebook">I joined</button>');
     if (st.all_done){
       h += '<form class="rwf" id="rwwform"><p style="margin-top:12px"><b>Withdraw</b> (smallest Rs ' + WL.rules.min + '; above Rs ' + WL.rules.kyc_above + ' in total needs the <a href="/get-verified">identity check</a>)</p>'
         + '<label>Amount (Rs)</label><input name="amount" type="number" min="' + WL.rules.min + '" max="' + WL.balance + '" value="' + Math.min(WL.balance, Math.max(WL.rules.min, WL.balance)) + '">'
@@ -299,7 +303,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<div data-for="easypaisa jazzcash bank"><label>Account holder name</label><input name="account_name"></div>'
         + '<div data-for="easypaisa jazzcash load bank"><label id="rwaccl">Mobile number</label><input name="account_no"></div>'
         + '<div data-for="bank"><label>Bank name</label><input name="bank_name"></div>'
-        + '<div data-for="load"><label>Network (Jazz, Zong, Telenor, Ufone or other)</label><input name="network"></div>'
+        + '<div data-for="load scratch"><label>Network</label><select name="network"><option>Jazz</option><option>Zong</option><option>Telenor</option><option>Ufone</option></select></div>'
+        + '<div data-for="scratch"><small>Scratch cards come in Rs 100, 300, 500 or 1,000. When it is ready you scratch it here to see the PIN.</small></div>'
         + '<div data-for="other"><label>How should we pay you? (method, details)</label><textarea name="details" rows="3"></textarea></div>'
         + '<button class="rwgo" type="submit" style="margin:12px 0 0">Request withdrawal</button></form>';
     }
@@ -307,8 +312,49 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (wmsg) h += '<div class="rwok">' + esc(wmsg) + '</div>';
     if (WL.withdrawals.length) h += '<p style="margin-top:12px"><b>Your withdrawals</b></p>' + WL.withdrawals.map(function(w){
       return '<div class="rwwd"><span>' + rs(w.amount) + ' by ' + esc(w.method_label) + '<br><small style="color:#64748B">' + esc(w.when) + (w.note ? ' &middot; ' + esc(w.note) : '') + '</small></span><span style="text-align:right"><b>' + esc({requested: "Waiting", paid: "Paid", rejected: "Not paid", cancelled: "Cancelled"}[w.status] || w.status) + '</b>'
-        + (w.proof ? '<br><a href="/api/rewards/proof/' + w.id + '/" target="_blank">Payment screenshot</a>' : '') + (w.status === "requested" ? '<br><button class="rwbtn" data-cancel="' + w.id + '">Cancel</button>' : '') + '</span></div>'; }).join("");
+        + (w.proof ? '<br><a href="/api/rewards/proof/' + w.id + '/" target="_blank">Payment screenshot</a>' : '') + (w.status === "requested" ? '<br><button class="rwbtn" data-cancel="' + w.id + '">Cancel</button>' : '') + '</span></div>'
+        + (w.card ? card(w) : ''); }).join("");
     return h + '</div>';
+  }
+  function card(w){
+    return '<div class="rwscr" data-card="' + w.id + '"><div class="net">' + esc(w.network) + ' scratch card</div><div class="amt">' + rs(w.amount) + '</div>'
+      + '<div class="pinbox"><span class="pin">' + (w.revealed ? '<button class="rwbtn" data-show="' + w.id + '">Show PIN</button>' : '') + '</span>' + (w.revealed ? '' : '<canvas></canvas>') + '</div>'
+      + '<div class="rwcardafter" style="margin-top:8px;font-size:13px">' + (w.revealed ? after(w) : 'Rub the silver strip with your finger or mouse.') + '</div></div>';
+  }
+  function after(w){
+    return 'Load it with the recharge code printed on your network\'s cards, or in your network\'s app.'
+      + (w.loaded ? ' <b>&#10003; Loaded</b>' : ' <button class="rwbtn p" data-loaded="' + w.id + '">Done, I loaded it</button>');
+  }
+  function reveal(id){ return api2("/api/rewards/card/" + id + "/", {action: "reveal"}).then(function(r){ return r.ok ? r.d.pin : ""; }); }
+  function scratchCards(){
+    [].forEach.call(box.querySelectorAll(".rwscr canvas"), function(cv){
+      var el = cv.closest(".rwscr"), id = el.getAttribute("data-card"), w = (WL.withdrawals || []).filter(function(x){ return String(x.id) === id; })[0];
+      var pb = cv.parentNode, W0 = pb.clientWidth || 300, H0 = pb.clientHeight || 56;
+      cv.width = W0; cv.height = H0;
+      var ctx = cv.getContext && cv.getContext("2d"), down = false, asked = false, n = 0, finished = false;
+      if (!ctx){ cv.parentNode.removeChild(cv); el.querySelector(".pin").innerHTML = '<button class="rwbtn p" data-show="' + id + '">Tap to reveal PIN</button>'; el.querySelector(".rwcardafter").textContent = "Tap the button to see your PIN."; return; }
+      ctx.fillStyle = "#9CA3AF"; ctx.fillRect(0, 0, W0, H0);
+      ctx.fillStyle = "#F9FAFB"; ctx.font = "bold 15px sans-serif"; ctx.textAlign = "center"; ctx.fillText("Rub here to scratch", W0 / 2, H0 / 2 + 5);
+      ctx.globalCompositeOperation = "destination-out";
+      function pos(e){ var r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+      function finish(){
+        if (finished) return; finished = true;
+        cv.style.transition = "opacity .4s"; cv.style.opacity = "0"; setTimeout(function(){ if (cv.parentNode) cv.parentNode.removeChild(cv); }, 450);
+        el.querySelector(".rwcardafter").innerHTML = after(w || {id: id});
+      }
+      function rub(e){
+        if (!down) return; e.preventDefault();
+        var p = pos(e); ctx.beginPath(); ctx.arc(p[0], p[1], 20, 0, 7); ctx.fill();
+        if (++n > 35) finish();
+      }
+      cv.addEventListener("pointerdown", function(e){
+        down = true;
+        if (!asked){ asked = true; reveal(id).then(function(pin){ el.querySelector(".pin").textContent = pin || "Try again"; }); }
+        rub(e);
+      });
+      cv.addEventListener("pointermove", rub);
+      window.addEventListener("pointerup", function(){ down = false; });
+    });
   }
   function showFields(){
     var f = document.getElementById("rwwform"); if (!f) return;
@@ -324,6 +370,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     h += meCard() + walletCard() + (S.on ? todayCard() : "") + boardCard(board) + winnersCard(win) + rulesCard();
     box.innerHTML = h;
     showFields();
+    if (WL) scratchCards();
   }
   function load(){
     Promise.all([api("/api/rewards/state/"), api("/api/rewards/board/?period=" + period), api("/api/rewards/winners/"), api("/api/rewards/wallet/")]).then(function(a){
@@ -346,6 +393,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     }
     if (act === "checkpost"){ step("post"); return; }
     if (act === "youtube" || act === "facebook"){ step(act); return; }
+    if (t.getAttribute && t.getAttribute("data-show")){ var sid = t.getAttribute("data-show"), sp = t.parentNode, sc = t.closest(".rwscr"); reveal(sid).then(function(pin){ sp.textContent = pin; var cw = (WL.withdrawals || []).filter(function(x){ return String(x.id) === sid; })[0] || {id: sid}; var af = sc && sc.querySelector(".rwcardafter"); if (af) af.innerHTML = after(cw); }); return; }
+    if (t.getAttribute && t.getAttribute("data-loaded")){ api2("/api/rewards/card/" + t.getAttribute("data-loaded") + "/", {action: "loaded"}).then(function(){ wmsg = "Great, enjoy your load!"; werr = ""; load(); }); return; }
     if (t.getAttribute && t.getAttribute("data-cancel")){
       if (!confirm("Cancel this withdrawal? The money goes back to your balance.")) return;
       api2("/api/rewards/withdraw/" + t.getAttribute("data-cancel") + "/cancel/", {}).then(function(){ wmsg = "Cancelled."; werr = ""; load(); }); return;
