@@ -226,7 +226,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   var KEY = "xc_money_v1";
 
-  function blankState(){ return {v: 1, accounts: [], tx: [], heads: [], del: {}, lastBackup: 0}; }
+  function blankState(){ return {v: 1, accounts: [], tx: [], heads: [], dues: [], del: {}, lastBackup: 0}; }
 
   function toPaisa(v){
     var n = parseFloat(String(v).replace(/,/g, ""));
@@ -260,6 +260,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     var ym = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
     st.tx.forEach(function(t){
       if (String(t.date).slice(0, 7) !== ym) return;
+      if (isLoanMove(t)) return;   // lending / borrowing is money moving, not income or spending
       // Moving money between your own accounts is neither earning nor
       // spending, so it stays out of the month's in and out.
       if (t.kind === "in") inM += t.amt;
@@ -291,7 +292,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var raw = localStorage.getItem(KEY);
       if (!raw) return;
       var d = JSON.parse(raw);
-      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)){ st = d; if (!st.del) st.del = {}; if (!Array.isArray(st.heads)) st.heads = []; }
+      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)){ st = d; if (!st.del) st.del = {}; if (!Array.isArray(st.heads)) st.heads = []; if (!Array.isArray(st.dues)) st.dues = []; }
     } catch (e) {}
   }
 
@@ -364,7 +365,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       });
       return order.map(function(id){ return m[id]; });
     }
-    return {v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), heads: un(a.heads, b.heads), del: del,
+    return {v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), heads: un(a.heads, b.heads), dues: un(a.dues, b.dues), del: del,
             lastBackup: Math.max(a.lastBackup || 0, b.lastBackup || 0)};
   }
 
@@ -415,6 +416,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       }
       if (!st.del) st.del = {};
       if (!Array.isArray(st.heads)) st.heads = [];
+      if (!Array.isArray(st.dues)) st.dues = [];
       saveMeta(); keepLocal();
       if (!same(before, st) && !document.getElementById("sheet")) render();
       else if (view.page === "home" && !document.getElementById("sheet")) render();
@@ -443,7 +445,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   var TYPES = {
     cash:   {e: "\ud83d\udcb5", c: "#E7F7EF", label: "Cash"},
     wallet: {e: "\ud83d\udcf1", c: "#EEF1FF", label: "Mobile wallet"},
-    bank:   {e: "\ud83c\udfe6", c: "#FFF4E5", label: "Bank"}
+    bank:   {e: "\ud83c\udfe6", c: "#FFF4E5", label: "Bank"},
+    card:   {e: "💳", c: "#FDECEC", label: "Credit card"}
   };
 
   var PRESETS = [
@@ -460,7 +463,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     {type: "bank",   name: "Allied Bank"},
     {type: "bank",   name: "Bank Alfalah"},
     {type: "bank",   name: "Faysal Bank"},
-    {type: "bank",   name: "Bank Al Habib"}
+    {type: "bank",   name: "Bank Al Habib"},
+    {type: "card",   name: "Credit card"}
   ];
 
   function esc(s){
@@ -552,6 +556,255 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     return h;
   }
 
+
+  /* ================= payables, receivables, bills, credit cards, cash flow =================
+     A due is money someone owes you (rec) or you owe (pay): a person, or a bill.
+     It does not touch any account until money actually moves: "Record payment"
+     adds a normal Received/Paid entry linked to the due (t.due), and what is
+     left is the amount minus those entries. Credit cards are accounts whose
+     balance goes below zero as you spend; what is owed on them counts as payable. */
+
+  function isLoanMove(t){
+    if (t.dueOrigin) return true;
+    if (!t.due) return false;
+    return st.tx.some(function(x){ return x.dueOrigin === t.due; });
+  }
+  function dueList(){ if (!Array.isArray(st.dues)) st.dues = []; return st.dues; }
+  function dueById(id){ return dueList().filter(function(d){ return d.id === id; })[0] || null; }
+  function dueSettled(d){ var s = 0; st.tx.forEach(function(t){ if (t.due === d.id) s += t.amt; }); return s; }
+  function dueLeft(d){ return Math.max(0, d.amt - dueSettled(d)); }
+  function daysTo(ds){ if (!ds) return null; var a = new Date(ds + "T00:00:00"), b = new Date(today() + "T00:00:00"); return Math.round((a - b) / 86400000); }
+  function whenTxt(d){
+    var n = daysTo(d.due); if (n === null) return "No due date";
+    if (n < 0) return '<span style="color:var(--out);font-weight:700">Overdue ' + (-n) + ' day' + (n === -1 ? "" : "s") + '</span>';
+    if (n === 0) return '<span style="color:#B45309;font-weight:700">Due today</span>';
+    return "Due " + niceDate(d.due) + (n <= 7 ? " (in " + n + " day" + (n === 1 ? "" : "s") + ")" : "");
+  }
+  function cardOwed(){ var s = 0; st.accounts.forEach(function(a){ if (a.type === "card"){ var b = balanceOf(st, a.id); if (b < 0) s -= b; } }); return s; }
+  function inHand(){ var s = 0; st.accounts.forEach(function(a){ if (a.type !== "card") s += balanceOf(st, a.id); }); return s; }
+  function openTotal(kind){ var s = 0; dueList().forEach(function(d){ if (d.kind === kind) s += dueLeft(d); }); return s; }
+  function byType(){
+    var g = {};
+    st.accounts.forEach(function(a){ if (a.type === "card") return; g[a.type] = (g[a.type] || 0) + balanceOf(st, a.id); });
+    return g;
+  }
+
+  function duesPage(){
+    var tab = view.dtab || "rec";
+    var rec = openTotal("rec"), pay = openTotal("pay") + cardOwed();
+    var h = '<button type="button" class="back" data-home>&larr; All accounts</button>'
+      + '<div class="total"><small>Payables &amp; receivables</small>'
+      + '<div class="sub" style="margin-top:6px"><span>To receive<b>' + rs(rec) + '</b></span><span>To pay<b>' + rs(pay) + '</b></span>'
+      + '<span>Difference<b>' + rs(rec - pay) + '</b></span></div></div>'
+      + '<div class="filter"><button type="button" data-dtab="rec"' + (tab === "rec" ? ' class="on"' : '') + '>To receive</button>'
+      + '<button type="button" data-dtab="pay"' + (tab === "pay" ? ' class="on"' : '') + '>To pay</button></div>'
+      + '<div class="bt" style="margin:0 0 10px"><button type="button" class="go" data-adddue="' + tab + '">+ ' + (tab === "rec" ? "Someone owes me" : "I owe / a bill") + '</button></div>';
+    var list = dueList().filter(function(d){ return d.kind === tab; });
+    var open = list.filter(function(d){ return dueLeft(d) > 0; }).sort(function(a, b){ return (a.due || "9999") < (b.due || "9999") ? -1 : 1; });
+    var done = list.filter(function(d){ return dueLeft(d) === 0; });
+    function row(d){
+      var left = dueLeft(d), icon = d.cat === "bill" ? "🧾" : "👤";
+      return '<div class="tx" data-opendue="' + esc(d.id) + '" style="cursor:pointer"><span class="dot ' + (tab === "rec" ? "in" : "out") + '">' + icon + '</span>'
+        + '<span class="md"><b>' + esc(d.party) + (d.monthly ? " ↻" : "") + '</b><small>' + (left ? whenTxt(d) : "Settled") + (d.note ? " · " + esc(d.note) : "") + '</small></span>'
+        + '<span class="amw"><span class="am ' + (tab === "rec" ? "in" : "out") + '">' + rs(left || d.amt) + '</span>'
+        + (left && left !== d.amt ? '<span class="bl">of ' + rs(d.amt) + '</span>' : '') + '</span></div>';
+    }
+    if (tab === "pay"){
+      var cards = st.accounts.filter(function(a){ return a.type === "card" && balanceOf(st, a.id) < 0; });
+      if (cards.length){
+        h += '<div class="head" style="margin-top:4px"><h3>Credit cards</h3></div><div class="txs">' + cards.map(function(a){
+          var b = -balanceOf(st, a.id);
+          return '<div class="tx" data-open="' + esc(a.id) + '" style="cursor:pointer"><span class="dot out">💳</span><span class="md"><b>' + esc(a.name) + '</b><small>'
+            + (a.dueDay ? "Bill due on day " + a.dueDay + " · " : "") + 'pay it with Move from your bank</small></span>'
+            + '<span class="amw"><span class="am out">' + rs(b) + '</span>' + (a.limit ? '<span class="bl">limit ' + rs(a.limit) + '</span>' : '') + '</span></div>';
+        }).join("") + '</div>';
+      }
+    }
+    h += '<div class="head"><h3>' + (tab === "rec" ? "Open" : "People & bills") + '</h3></div>'
+      + (open.length ? '<div class="txs">' + open.map(row).join("") + '</div>' : '<div class="txs"><div class="empty">Nothing open.</div></div>');
+    if (done.length) h += '<div class="head"><h3 style="color:var(--ink-soft)">Settled (' + done.length + ')</h3></div><div class="txs" style="opacity:.75">'
+      + done.sort(function(a, b){ return (b.upd || b.created) - (a.upd || a.created); }).slice(0, 30).map(row).join("") + '</div>';
+    return h;
+  }
+
+  var editingDue = null, dueKind = "rec";
+  function dueSheet(kind, d){
+    editingDue = d ? d.id : null; dueKind = d ? d.kind : kind;
+    var k = dueKind, acc = st.accounts.filter(function(a){ return a.type !== "card"; }).concat(st.accounts.filter(function(a){ return a.type === "card"; }));
+    var opts = acc.map(function(a){ return '<option value="' + esc(a.id) + '">' + esc(a.name) + '</option>'; }).join("");
+    openSheet('<h3>' + (d ? "Edit" : "New") + ' ' + (k === "rec" ? "money to receive" : "money to pay") + '</h3>'
+      + (!d ? '<div class="seg"><button type="button" class="in' + (k === "rec" ? " on" : "") + '" data-duekind="rec">To receive</button>'
+      + '<button type="button" class="out' + (k === "pay" ? " on" : "") + '" data-duekind="pay">To pay</button></div>' : '')
+      + (k === "pay" ? '<div class="f"><label>What is it</label><select id="dCat"><option value="person">A person (I owe them)</option><option value="bill">A bill</option></select></div>' : '')
+      + '<div class="f"><label id="dPartyL">' + (k === "rec" ? "Who owes you" : "Name or bill") + '</label><input id="dParty" maxlength="50" list="dSug" placeholder="'
+      + (k === "rec" ? "e.g. Ali (loan)" : "e.g. Electricity bill, Ahmed") + '">'
+      + '<datalist id="dSug"><option>Electricity bill</option><option>Gas bill</option><option>Internet bill</option><option>Mobile bill</option><option>Rent</option><option>School fee</option><option>Committee</option><option>Water bill</option></datalist></div>'
+      + '<div style="display:flex;gap:8px"><div class="f" style="flex:1.2"><label>Amount (Rs)</label><input class="amt" id="dAmt" type="text" inputmode="decimal" placeholder="0"></div>'
+      + '<div class="f" style="flex:1"><label>Due date</label><input id="dDue" type="date"></div></div>'
+      + '<div class="f"><label>Note</label><input id="dNote" maxlength="100" placeholder="optional"></div>'
+      + '<label style="display:flex;gap:8px;align-items:center;font-size:13.5px;margin:0 0 10px"><input type="checkbox" id="dMonthly"> Repeats every month (bills, fees, rent)</label>'
+      + (!d ? '<label style="display:flex;gap:8px;align-items:center;font-size:13.5px;margin:0 0 6px"><input type="checkbox" id="dMoved"> '
+          + (k === "rec" ? "I gave this money now (a loan) from:" : "I received this money now (borrowed) into:") + '</label>'
+          + '<div class="f" id="dAccW" style="display:none"><select id="dAcc">' + opts + '</select></div>' : '')
+      + '<div class="msg" id="dMsg"></div><div class="bt"><button type="button" data-close>Cancel</button><button type="button" class="go" data-savedue>Save</button></div>');
+    if (d){
+      document.getElementById("dParty").value = d.party; document.getElementById("dAmt").value = d.amt / 100;
+      document.getElementById("dDue").value = d.due || ""; document.getElementById("dNote").value = d.note || "";
+      document.getElementById("dMonthly").checked = !!d.monthly;
+      if (d.kind === "pay") document.getElementById("dCat").value = d.cat || "person";
+    }
+  }
+
+  function saveDue(){
+    var amt = toPaisa(document.getElementById("dAmt").value), party = document.getElementById("dParty").value.trim().slice(0, 50);
+    var msg = document.getElementById("dMsg");
+    if (!party){ msg.textContent = "Write a name."; return; }
+    if (!isFinite(amt) || amt <= 0){ msg.textContent = "Enter an amount above zero."; return; }
+    var cat = dueKind === "pay" ? document.getElementById("dCat").value : "person";
+    var data = {kind: dueKind, cat: cat, party: party, amt: amt, due: document.getElementById("dDue").value || "",
+                note: document.getElementById("dNote").value.trim().slice(0, 100), monthly: document.getElementById("dMonthly").checked};
+    if (editingDue){
+      var d = dueById(editingDue); if (d){ for (var k in data) d[k] = data[k]; d.upd = Date.now(); }
+    } else {
+      data.id = "d" + uid(); data.created = Date.now(); dueList().push(data);
+      var mv = document.getElementById("dMoved");
+      if (mv && mv.checked){
+        st.tx.push({id: uid(), kind: dueKind === "rec" ? "out" : "in", amt: amt, acc: document.getElementById("dAcc").value, to: null,
+                    date: today(), note: (dueKind === "rec" ? "Loan to " : "Borrowed from ") + party, head: "", dueOrigin: data.id, created: Date.now()});
+      }
+    }
+    if (save()){ closeSheet(); render(); }
+  }
+
+  var payingDue = null;
+  function dueDetail(d){
+    var left = dueLeft(d), paid = st.tx.filter(function(t){ return t.due === d.id; });
+    openSheet('<h3>' + (d.cat === "bill" ? "🧾 " : "👤 ") + esc(d.party) + '</h3>'
+      + '<div class="adetail" style="margin-bottom:10px"><div class="big ' + (d.kind === "rec" ? "" : "neg") + '">' + rs(left) + '</div>'
+      + '<div class="row">' + (left ? (d.kind === "rec" ? "still to receive" : "still to pay") : "Settled") + ' · total ' + rs(d.amt)
+      + (d.due ? ' · ' + whenTxt(d) : '') + (d.monthly ? ' · repeats monthly' : '') + '</div>'
+      + (d.note ? '<div class="row">' + esc(d.note) + '</div>' : '') + '</div>'
+      + (paid.length ? '<div class="txs" style="margin-bottom:10px">' + paid.map(function(t){
+          var A = accById(t.acc);
+          return '<div class="tx"><span class="md"><b>' + rs(t.amt) + '</b><small>' + niceDate(t.date) + (A ? " · " + esc(A.name) : "") + '</small></span></div>';
+        }).join("") + '</div>' : '')
+      + '<div class="bt" style="flex-wrap:wrap">' + (left ? '<button type="button" class="go" data-paydue="' + esc(d.id) + '">' + (d.kind === "rec" ? "Record money received" : "Record payment") + '</button>' : '')
+      + '<button type="button" data-editdue="' + esc(d.id) + '">Edit</button><button type="button" data-deldue="' + esc(d.id) + '" style="color:var(--out)">Delete</button></div>');
+  }
+
+  function payDueSheet(d){
+    payingDue = d.id;
+    var kind = d.kind === "rec" ? "in" : "out";
+    var opts = st.accounts.map(function(a){ return '<option value="' + esc(a.id) + '">' + esc(a.name) + ' (' + rs(balanceOf(st, a.id)) + ')</option>'; }).join("");
+    var hid = "";
+    if (d.cat === "bill"){ ensureHeads(); var m = st.heads.filter(function(h){ return h.kind === "out" && d.party.toLowerCase().indexOf(h.name.toLowerCase().split(" ")[0]) !== -1; })[0]; if (m) hid = m.id; }
+    openSheet('<h3>' + (kind === "in" ? "Money received from " : "Payment to ") + esc(d.party) + '</h3>'
+      + '<div class="f"><label>Amount (Rs)</label><input class="amt" id="pAmt" type="text" inputmode="decimal" value="' + (dueLeft(d) / 100) + '"></div>'
+      + '<div class="f"><label>' + (kind === "in" ? "Into account" : "From account") + '</label><select id="pAcc">' + opts + '</select></div>'
+      + '<div class="f"><label>Head</label><select id="pHead">' + headOptions(kind, hid) + '</select></div>'
+      + '<div class="f"><label>Date</label><input id="pDate" type="date" value="' + today() + '"></div>'
+      + '<div class="msg" id="pMsg"></div><div class="bt"><button type="button" data-close>Cancel</button><button type="button" class="go" data-savepay>Save</button></div>');
+  }
+
+  function savePay(){
+    var d = dueById(payingDue); if (!d) return closeSheet();
+    var e = {id: uid(), kind: d.kind === "rec" ? "in" : "out", amt: toPaisa(document.getElementById("pAmt").value), acc: document.getElementById("pAcc").value, to: null,
+             date: document.getElementById("pDate").value, note: (d.kind === "rec" ? "From " : "To ") + d.party, head: document.getElementById("pHead").value === "__new" ? "" : document.getElementById("pHead").value,
+             due: d.id, created: Date.now()};
+    var err = validEntry(st, e);
+    if (err){ document.getElementById("pMsg").textContent = err; return; }
+    if (e.amt > dueLeft(d)){ document.getElementById("pMsg").textContent = "That is more than what is left (" + rs(dueLeft(d)) + ")."; return; }
+    st.tx.push(e); d.upd = Date.now();
+    if (d.monthly && dueLeft(d) === 0 && !dueList().some(function(x){ return x.prev === d.id; })){
+      var nd = d.due ? new Date(d.due + "T00:00:00") : new Date();
+      var next = new Date(nd.getFullYear(), nd.getMonth() + 1, Math.min(nd.getDate(), 28));
+      dueList().push({id: "d" + uid(), kind: d.kind, cat: d.cat, party: d.party, amt: d.amt, due: ymd(next), note: d.note, monthly: true, prev: d.id, created: Date.now()});
+    }
+    if (save()){ closeSheet(); render(); }
+  }
+
+  function flowPage(){
+    var hand = inHand(), rec = openTotal("rec"), payP = 0, payB = 0, card = cardOwed();
+    dueList().forEach(function(d){ if (d.kind === "pay"){ if (d.cat === "bill") payB += dueLeft(d); else payP += dueLeft(d); } });
+    var net = hand + rec - payP - payB - card, g = byType(), t = totals(st);
+    var LBL = {cash: "💵 Cash", bank: "🏦 Banks", wallet: "📱 Mobile wallets"};
+    function line(label, v, cls, bold){
+      return '<div class="tx"><span class="md"><b' + (bold ? ' style="font-size:15px"' : ' style="font-weight:600"') + '>' + label + '</b></span>'
+        + '<span class="am ' + (cls || "") + '"' + (bold ? ' style="font-size:16px"' : '') + '>' + rs(v) + '</span></div>';
+    }
+    var h = '<button type="button" class="back" data-home>&larr; All accounts</button>'
+      + '<div class="total"><small>Cash flow · net position</small><div class="amt' + (net < 0 ? " neg" : "") + '">' + rs(net) + '</div>'
+      + '<div class="sub"><span>In hand<b>' + rs(hand) + '</b></span><span>To receive<b>' + rs(rec) + '</b></span><span>To pay<b>' + rs(payP + payB + card) + '</b></span></div></div>'
+      + '<div class="head"><h3>Money in hand</h3></div><div class="txs">'
+      + Object.keys(g).map(function(k){ return line(LBL[k] || k, g[k], g[k] < 0 ? "out" : ""); }).join("")
+      + line("Total in hand", hand, "", true) + '</div>'
+      + '<div class="head"><h3>Position</h3></div><div class="txs">'
+      + line("Money in hand", hand, "", false)
+      + line("+ To receive (" + dueList().filter(function(d){ return d.kind === "rec" && dueLeft(d) > 0; }).length + ")", rec, "in")
+      + line("− I owe people", payP, "out") + line("− Bills to pay", payB, "out") + line("− Credit card dues", card, "out")
+      + line("= Net balance", net, net < 0 ? "out" : "in", true) + '</div>';
+    var up = dueList().filter(function(d){ return dueLeft(d) > 0 && d.due && daysTo(d.due) <= 30; }).sort(function(a, b){ return a.due < b.due ? -1 : 1; });
+    st.accounts.forEach(function(a){
+      if (a.type !== "card" || !a.dueDay || balanceOf(st, a.id) >= 0) return;
+      var n = new Date(), dd = new Date(n.getFullYear(), n.getMonth(), a.dueDay); if (dd < new Date(today() + "T00:00:00")) dd = new Date(n.getFullYear(), n.getMonth() + 1, a.dueDay);
+      up.push({kind: "pay", cat: "card", party: a.name, due: ymd(dd), left: -balanceOf(st, a.id)});
+    });
+    up.sort(function(a, b){ return a.due < b.due ? -1 : 1; });
+    h += '<div class="head"><h3>Next 30 days</h3></div>';
+    if (!up.length) h += '<div class="txs"><div class="empty">Nothing due in the next 30 days.</div></div>';
+    else {
+      var run = hand;
+      h += '<div class="txs">' + up.map(function(d){
+        var v = d.left != null ? d.left : dueLeft(d); run += d.kind === "rec" ? v : -v;
+        return '<div class="tx"' + (d.id ? ' data-opendue="' + esc(d.id) + '" style="cursor:pointer"' : '') + '><span class="dot ' + (d.kind === "rec" ? "in" : "out") + '">' + (d.cat === "card" ? "💳" : d.cat === "bill" ? "🧾" : "👤") + '</span>'
+          + '<span class="md"><b>' + esc(d.party) + '</b><small>' + whenTxt(d) + '</small></span>'
+          + '<span class="amw"><span class="am ' + (d.kind === "rec" ? "in" : "out") + '">' + (d.kind === "rec" ? "+" : "−") + rs(v) + '</span>'
+          + '<span class="bl' + (run < 0 ? " neg" : "") + '">then ' + rs(run) + '</span></span></div>';
+      }).join("") + '</div><p style="font-size:12px;color:var(--ink-soft);margin-top:6px">"then" is what you would have in hand if everything is paid on its date.</p>';
+    }
+    h += '<div class="head"><h3>This month</h3></div><div class="txs">' + line("Received", t.inM, "in") + line("Paid", t.outM, "out") + line("Net", t.inM - t.outM, t.inM - t.outM < 0 ? "out" : "in", true) + '</div>';
+    return h;
+  }
+
+  /* Head ledger: opening (everything before the period), debit = paid, credit = received, closing. */
+  function headLedgerPage(){
+    var id = view.rhead === "_none" ? "" : view.rhead, H = headById(id), r = periodRange();
+    var all = st.tx.filter(function(t){
+      if (t.kind === "move" || isLoanMove(t)) return false;
+      if (view.racc && view.racc !== "all" && t.acc !== view.racc) return false;
+      if (!id && t.kind !== view.rkind) return false;
+      return (t.head && headById(t.head) ? t.head : "") === id;
+    }).sort(function(a, b){ return a.date !== b.date ? (a.date < b.date ? -1 : 1) : (a.created || 0) - (b.created || 0); });
+    var open = 0, dr = 0, cr = 0, rows = [];
+    all.forEach(function(t){
+      var v = t.kind === "out" ? t.amt : -t.amt;
+      if (t.date < r[0]) open += v;
+      else if (t.date <= r[1]){ if (t.kind === "out") dr += t.amt; else cr += t.amt; rows.push(t); }
+    });
+    var close = open + dr - cr;
+    function drcr(v){ return rs(Math.abs(v)) + (v === 0 ? "" : v > 0 ? " Dr" : " Cr"); }
+    var run = open;
+    var h = '<button type="button" class="back" data-report>&larr; Report</button>'
+      + '<div class="adetail"><h2>' + esc(H ? H.name : "No head") + '</h2><div class="row">'
+      + niceDate(r[0]).replace(/^1 Jan 0+$/, "Start") + ' – ' + niceDate(r[1]).replace(/^31 Dec 9999$/, "today")
+      + (view.racc && view.racc !== "all" && accById(view.racc) ? ' · ' + esc(accById(view.racc).name) : ' · all accounts') + '</div></div>'
+      + '<div class="txs">'
+      + '<div class="tx"><span class="md"><b style="font-weight:600">Opening</b></span><span class="am">' + drcr(open) + '</span></div>'
+      + '<div class="tx"><span class="md"><b style="font-weight:600">Debit (paid)</b></span><span class="am out">' + rs(dr) + '</span></div>'
+      + '<div class="tx"><span class="md"><b style="font-weight:600">Credit (received)</b></span><span class="am in">' + rs(cr) + '</span></div>'
+      + '<div class="tx"><span class="md"><b>Closing</b></span><span class="am" style="font-size:16px">' + drcr(close) + '</span></div></div>'
+      + '<div class="head"><h3>Ledger</h3><span style="font-size:12px;color:var(--ink-soft)">' + rows.length + ' entries</span></div>';
+    if (!rows.length) return h + '<div class="txs"><div class="empty">No entries in this period.</div></div>';
+    h += '<div class="txs">' + rows.map(function(t){
+      run += t.kind === "out" ? t.amt : -t.amt;
+      var A = accById(t.acc);
+      return '<div class="tx" data-edittx="' + esc(t.id) + '" style="cursor:pointer"><span class="dot ' + t.kind + '">' + (t.kind === "in" ? "Cr" : "Dr") + '</span>'
+        + '<span class="md"><b>' + esc(t.note || (H ? H.name : (t.kind === "in" ? "Received" : "Paid"))) + '</b><small>' + niceDate(t.date) + (A ? " · " + esc(A.name) : "") + '</small></span>'
+        + '<span class="amw"><span class="am ' + t.kind + '">' + rs(t.amt) + '</span><span class="bl">' + drcr(run) + '</span></span></div>';
+    }).join("") + '</div>';
+    return h;
+  }
+
   /* ================= head-wise report ================= */
 
   function ymd(d){
@@ -570,7 +823,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   function repEntries(){
     var r = periodRange();
     return st.tx.filter(function(t){
-      if (t.kind === "move" || t.date < r[0] || t.date > r[1]) return false;
+      if (t.kind === "move" || t.date < r[0] || t.date > r[1] || isLoanMove(t)) return false;
       return !view.racc || view.racc === "all" || t.acc === view.racc;
     });
   }
@@ -623,7 +876,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
           + '<span style="display:block;height:100%;width:' + pc + '%;background:var(--' + k[0] + ')"></span></span></div>';
       }).join("") + '</div>';
     });
-    h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:10px">Moves between your own accounts are not counted. '
+    h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:10px">Moves between your own accounts, and loans given or taken (and their repayments), are not counted. '
       + 'Tap an entry anywhere to give it a head.</p>';
     return h;
   }
@@ -667,7 +920,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     document.getElementById("fab").style.display = st.accounts.length ? "" : "none";
     if (view.page === "acc" && accById(view.acc)) app.innerHTML = accPage();
     else if (view.page === "rep") app.innerHTML = repPage();
-    else if (view.page === "rephead") app.innerHTML = repHeadPage();
+    else if (view.page === "rephead") app.innerHTML = headLedgerPage();
+    else if (view.page === "dues") app.innerHTML = duesPage();
+    else if (view.page === "flow") app.innerHTML = flowPage();
     else { view.page = "home"; app.innerHTML = homePage(); }
     window.scrollTo(0, 0);
   }
@@ -686,18 +941,24 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     }
 
     var t = totals(st);
-    var h = '<div class="total"><small>Total balance</small>'
-      + '<div class="amt">' + rs(t.all) + '</div>'
+    var gT = byType(), LB = {cash: "Cash", bank: "Banks", wallet: "Wallets"}, cOw = cardOwed();
+    var h = '<div class="total"><small>Money in hand · all accounts</small>'
+      + '<div class="amt">' + rs(inHand()) + '</div>'
+      + '<div class="sub" style="flex-wrap:wrap;margin:6px 0 2px">' + Object.keys(gT).map(function(k){ return '<span>' + (LB[k] || k) + '<b>' + rs(gT[k]) + '</b></span>'; }).join("")
+      + (cOw ? '<span>Card dues<b>' + rs(cOw) + '</b></span>' : '') + '</div>'
       + '<div class="sub"><span>Received this month<b>' + rs(t.inM) + '</b></span>'
       + '<span>Paid this month<b>' + rs(t.outM) + '</b></span></div></div>';
 
-    h += '<button type="button" class="back" data-report style="margin:0 0 4px">\ud83d\udcca Head-wise report &rarr;</button>';
+    h += '<div style="display:flex;gap:6px 14px;flex-wrap:wrap;margin:0 0 4px">'
+      + '<button type="button" class="back" data-flow style="margin:0">💼 Cash flow</button>'
+      + '<button type="button" class="back" data-dues style="margin:0">🤝 Payables &amp; receivables</button>'
+      + '<button type="button" class="back" data-report style="margin:0">📊 Head-wise report</button></div>';
     h += '<div class="head"><h3>Accounts</h3>'
       + '<button type="button" data-addacc>+ Add</button></div><div class="accs">';
     st.accounts.forEach(function(a){
       var T = TYPES[a.type] || TYPES.cash;
       var b = balanceOf(st, a.id);
-      var sub = a.type === "bank" && a.number ? masked(a.number) : T.label;
+      var sub = a.type === "bank" && a.number ? masked(a.number) : a.type === "card" ? (b < 0 ? "Credit card · owed " + rs(-b) : "Credit card") : T.label;
       h += '<div class="acc" data-open="' + esc(a.id) + '">'
         + '<span class="ic" style="background:' + T.c + '">' + T.e + '</span>'
         + '<span class="nm"><b>' + esc(a.name) + '</b><small>' + esc(sub) + '</small></span>'
@@ -795,6 +1056,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         sign = t.kind === "in" ? "+" : "\u2212";
       }
       var sub = niceDate(t.date)
+        + (t.due && !t.note && dueById(t.due) ? " · " + dueById(t.due).party : "")
         + (t.kind !== "move" && !forAcc && A ? " \u00b7 " + A.name : "")
         + (t.kind === "move" && t.note ? " \u00b7 " + t.note : "")
         + (t.kind !== "move" && t.note && HD ? " \u00b7 " + HD.name : "");
@@ -912,7 +1174,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     if (err){ document.getElementById("eMsg").textContent = err; return; }
     if (editingTx){
       var old = st.tx.filter(function(x){ return x.id === editingTx; })[0];
-      if (old){ e.created = old.created; e.upd = Date.now(); st.tx[st.tx.indexOf(old)] = e; } else st.tx.push(e);
+      if (old){ e.created = old.created; e.upd = Date.now(); if (old.due) e.due = old.due; if (old.dueOrigin) e.dueOrigin = old.dueOrigin; st.tx[st.tx.indexOf(old)] = e; } else st.tx.push(e);
     } else st.tx.push(e);
     editingTx = null;
     if (save()){ closeSheet(); render(); }
@@ -934,7 +1196,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + chips
       + '<div class="f"><label>Type</label><select id="aType">'
       + '<option value="cash">Cash</option><option value="wallet">Mobile wallet</option>'
-      + '<option value="bank">Bank</option></select></div>'
+      + '<option value="bank">Bank</option><option value="card">Credit card</option></select></div>'
       + '<div class="f"><label>Name</label><input id="aName" maxlength="40" placeholder="e.g. Meezan Bank"></div>'
       + '<div id="aBank">'
       + '<div class="f"><label>Account title (optional)</label><input id="aTitle" maxlength="60"></div>'
@@ -942,7 +1204,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<div class="f"><label>IBAN (optional)</label><input id="aIban" maxlength="34" autocomplete="off" '
       + 'placeholder="PK36 MEZN 0000 ..." style="text-transform:uppercase"></div>'
       + '</div>'
-      + '<div style="display:flex;gap:8px"><div class="f" style="flex:1.2"><label>Opening balance (Rs)</label><input id="aOpen" type="text" '
+      + '<div id="aCard" style="display:none;gap:8px"><div class="f" style="flex:1"><label>Card limit (optional)</label><input id="aLimit" inputmode="decimal"></div>'
+      + '<div class="f" style="flex:1"><label>Bill due day (1-31)</label><input id="aDueDay" inputmode="numeric" maxlength="2"></div></div>'
+      + '<div style="display:flex;gap:8px"><div class="f" style="flex:1.2"><label id="aOpenL">Opening balance (Rs)</label><input id="aOpen" type="text" '
       + 'inputmode="decimal" placeholder="What is in it"></div>'
       + '<div class="f" style="flex:1"><label>As on date</label><input id="aOpenDate" type="date" value="' + today() + '"></div></div>'
       + '<div class="msg" id="aMsg"></div>'
@@ -954,7 +1218,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       document.getElementById("aTitle").value = acc.title || "";
       document.getElementById("aNum").value = acc.number || "";
       document.getElementById("aIban").value = acc.iban || "";
-      document.getElementById("aOpen").value = acc.opening ? acc.opening / 100 : "";
+      document.getElementById("aOpen").value = acc.opening ? (acc.type === "card" ? Math.abs(acc.opening) : acc.opening) / 100 : "";
+      if (acc.type === "card"){ document.getElementById("aLimit").value = acc.limit ? acc.limit / 100 : ""; document.getElementById("aDueDay").value = acc.dueDay || ""; }
       document.getElementById("aOpenDate").value = acc.openDate || (acc.created ? ymd(new Date(acc.created)) : "");
     }
     document.getElementById("aType").value = newType;
@@ -965,6 +1230,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     var t = document.getElementById("aType");
     var w = document.getElementById("aBank");
     if (t && w) w.style.display = t.value === "bank" ? "" : "none";
+    var cw = document.getElementById("aCard"); if (t && cw) cw.style.display = t.value === "card" ? "flex" : "none";
+    var ol = document.getElementById("aOpenL"); if (t && ol) ol.textContent = t.value === "card" ? "Amount you owe on it now (Rs)" : "Opening balance (Rs)";
   }
 
   function saveAcc(){
@@ -972,6 +1239,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     var name = document.getElementById("aName").value.trim().slice(0, 40);
     var openRaw = document.getElementById("aOpen").value.trim();
     var opening = openRaw ? toPaisa(openRaw) : 0;
+    if (type === "card") opening = -Math.abs(opening);
     var msg = document.getElementById("aMsg");
 
     if (!name){ msg.textContent = "Give it a name."; return; }
@@ -986,6 +1254,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     }
 
     var data = {type: type, name: name, opening: opening, openDate: document.getElementById("aOpenDate").value || "",
+                limit: type === "card" ? (toPaisa(document.getElementById("aLimit").value) || 0) : 0,
+                dueDay: type === "card" ? Math.min(31, parseInt(document.getElementById("aDueDay").value, 10) || 0) : 0,
                 title: type === "bank" ? document.getElementById("aTitle").value.trim().slice(0, 60) : "",
                 number: type === "bank" ? document.getElementById("aNum").value.replace(/\s+/g, "").slice(0, 30) : "",
                 iban: type === "bank" ? iban : ""};
@@ -1046,9 +1316,10 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         + "What is on this phone now will be lost.");
       if (!ok) return;
       var keep = {};
-      d.accounts.concat(d.tx, d.heads || []).forEach(function(x){ if (x && x.id) keep[x.id] = 1; });
-      st.accounts.concat(st.tx, st.heads || []).forEach(function(x){ if (!keep[x.id]) tomb(x.id); });
+      d.accounts.concat(d.tx, d.heads || [], d.dues || []).forEach(function(x){ if (x && x.id) keep[x.id] = 1; });
+      st.accounts.concat(st.tx, st.heads || [], st.dues || []).forEach(function(x){ if (!keep[x.id]) tomb(x.id); });
       if (!Array.isArray(d.heads)) d.heads = [];
+      if (!Array.isArray(d.dues)) d.dues = [];
       var dl = st.del || {};
       d.del = d.del || {};
       for (var k in dl) if (!keep[k]) d.del[k] = dl[k];
@@ -1061,13 +1332,36 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   /* ================= clicks ================= */
 
   document.addEventListener("click", function(e){
-    var t = e.target.closest ? e.target.closest("button, .acc, [data-edittx], [data-rhead]") : null;
+    var t = e.target.closest ? e.target.closest("button, .acc, [data-edittx], [data-rhead], [data-opendue], [data-open]") : null;
     if (!t) return;
 
     if (t.hasAttribute("data-new")){ editingTx = null; entrySheet(t.getAttribute("data-new")); return; }
     if (t.hasAttribute("data-edittx")){
       var ex = st.tx.filter(function(x){ return x.id === t.getAttribute("data-edittx"); })[0];
       if (ex){ editingTx = ex.id; entrySheet(ex.kind); }
+      return;
+    }
+    if (t.hasAttribute("data-flow")){ view = {page: "flow", acc: null, filter: "all"}; render(); return; }
+    if (t.hasAttribute("data-dues")){ view = {page: "dues", acc: null, filter: "all", dtab: view.dtab || "rec"}; render(); return; }
+    if (t.hasAttribute("data-dtab")){ view.dtab = t.getAttribute("data-dtab"); render(); return; }
+    if (t.hasAttribute("data-adddue")){ dueSheet(t.getAttribute("data-adddue"), null); return; }
+    if (t.hasAttribute("data-duekind")){
+      var kp = {p: document.getElementById("dParty").value, a: document.getElementById("dAmt").value, d: document.getElementById("dDue").value, n: document.getElementById("dNote").value};
+      dueSheet(t.getAttribute("data-duekind"), null);
+      document.getElementById("dParty").value = kp.p; document.getElementById("dAmt").value = kp.a; document.getElementById("dDue").value = kp.d; document.getElementById("dNote").value = kp.n;
+      return;
+    }
+    if (t.hasAttribute("data-savedue")){ saveDue(); return; }
+    if (t.hasAttribute("data-opendue")){ var od = dueById(t.getAttribute("data-opendue")); if (od) dueDetail(od); return; }
+    if (t.hasAttribute("data-paydue")){ var pd = dueById(t.getAttribute("data-paydue")); if (pd) payDueSheet(pd); return; }
+    if (t.hasAttribute("data-savepay")){ savePay(); return; }
+    if (t.hasAttribute("data-editdue")){ var ee = dueById(t.getAttribute("data-editdue")); if (ee) dueSheet(ee.kind, ee); return; }
+    if (t.hasAttribute("data-deldue")){
+      var dd = dueById(t.getAttribute("data-deldue"));
+      if (dd && confirm("Delete " + dd.party + "?\n\nPayments already recorded stay in your accounts.")){
+        tomb(dd.id); st.dues = dueList().filter(function(x){ return x.id !== dd.id; });
+        if (save()){ closeSheet(); render(); }
+      }
       return;
     }
     if (t.hasAttribute("data-report")){ view = {page: "rep", acc: null, filter: "all", period: view.period || "month", racc: view.racc || "all", from: view.from, to: view.to}; render(); return; }
@@ -1160,6 +1454,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   document.addEventListener("change", function(e){
     if (e.target.id === "aType") bankFields();
+    if (e.target.id === "dMoved"){ var w2 = document.getElementById("dAccW"); if (w2) w2.style.display = e.target.checked ? "" : "none"; }
+    if (e.target.id === "pHead" && e.target.value === "__new"){
+      var k2 = (dueById(payingDue) || {}).kind === "rec" ? "in" : "out", nh2 = newHead(k2);
+      e.target.innerHTML = headOptions(k2, nh2 ? nh2.id : ""); e.target.value = nh2 ? nh2.id : "";
+    }
     if (e.target.id === "eHead" && e.target.value === "__new"){
       var nh = newHead(sheetKind);
       e.target.innerHTML = headOptions(sheetKind, nh ? nh.id : "");
