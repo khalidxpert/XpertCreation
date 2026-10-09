@@ -787,7 +787,39 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
           + '<span class="bl' + (run < 0 ? " neg" : "") + '">then ' + rs(run) + '</span></span></div>';
       }).join("") + '</div><p style="font-size:12px;color:var(--ink-soft);margin-top:6px">"then" is what you would have in hand if everything is paid on its date.</p>';
     }
-    h += '<div class="head"><h3>This month</h3></div><div class="txs">' + line("Received", t.inM, "in") + line("Paid", t.outM, "out") + line("Net", t.inM - t.outM, t.inM - t.outM < 0 ? "out" : "in", true) + '</div>';
+    // This month, reconciled to the money in hand: opening (1st of the month) + received - paid = closing,
+    // counting only cash, banks and wallets (the same accounts as "Money in hand"). Card spending is listed
+    // separately, because it has not left your bank yet - it is in Credit card dues until you pay the bill.
+    var nowD = new Date(), m0 = ymd(new Date(nowD.getFullYear(), nowD.getMonth(), 1)), tdy = today();
+    var cset = {}; st.accounts.forEach(function(a){ if (a.type !== "card") cset[a.id] = 1; });
+    function ceff(x){ var v = 0;
+      if (x.kind === "in" && cset[x.acc]) v += x.amt;
+      if (x.kind === "out" && cset[x.acc]) v -= x.amt;
+      if (x.kind === "move"){ if (cset[x.acc]) v -= x.amt; if (cset[x.to]) v += x.amt; }
+      return v; }
+    var cOpen = 0, cIn = 0, cOut = 0, cLater = 0, cardSp = 0, billPd = 0;
+    st.accounts.forEach(function(a){ if (cset[a.id]) cOpen += a.opening || 0; });
+    st.tx.forEach(function(x){
+      var v = ceff(x);
+      if (x.date < m0) cOpen += v;
+      else if (x.date > tdy) cLater += v;
+      else {
+        if (v > 0) cIn += v; else cOut -= v;
+        var A2 = accById(x.acc), B2 = accById(x.to);
+        if (x.kind === "out" && A2 && A2.type === "card") cardSp += x.amt;
+        if (x.kind === "move" && B2 && B2.type === "card" && cset[x.acc]) billPd += x.amt;
+      }
+    });
+    var cClose = cOpen + cIn - cOut;
+    h += '<div class="head"><h3>This month · reconciled</h3><span style="font-size:12px;color:var(--ink-soft)">cash, banks, wallets</span></div><div class="txs">'
+      + line("Opening in hand (" + niceDate(m0) + ")", cOpen, "")
+      + line("+ Received", cIn, "in") + line("− Paid" + (billPd ? " (incl. card bills " + rs(billPd) + ")" : ""), cOut, "out")
+      + line("= Closing in hand (today)", cClose, "", true)
+      + (cLater ? line("+ Entries dated after today", cLater, cLater < 0 ? "out" : "in") : "")
+      + line(Math.abs(cClose + cLater - hand) < 1 ? "✔ Matches Money in hand" : "⚠ Money in hand", hand, Math.abs(cClose + cLater - hand) < 1 ? "in" : "out", true)
+      + '</div>'
+      + (cardSp ? '<p style="font-size:12px;color:var(--ink-soft);margin-top:6px">Also spent on credit cards this month: <b>' + rs(cardSp) + '</b>. That has not left your bank yet, so it is under Credit card dues, not here.</p>' : '')
+      + '<p style="font-size:12px;color:var(--ink-soft);margin-top:4px">Tap 📒 Cash book on the home page to see every entry behind these numbers.</p>';
     return h;
   }
 
