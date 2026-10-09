@@ -226,7 +226,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 
   var KEY = "xc_money_v1";
 
-  function blankState(){ return {v: 1, accounts: [], tx: [], heads: [], dues: [], del: {}, lastBackup: 0}; }
+  function blankState(){ return {v: 1, accounts: [], tx: [], heads: [], dues: [], budget: [], del: {}, lastBackup: 0}; }
 
   function toPaisa(v){
     var n = parseFloat(String(v).replace(/,/g, ""));
@@ -295,7 +295,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var raw = localStorage.getItem(KEY);
       if (!raw) return;
       var d = JSON.parse(raw);
-      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)){ st = d; if (!st.del) st.del = {}; if (!Array.isArray(st.heads)) st.heads = []; if (!Array.isArray(st.dues)) st.dues = []; }
+      if (d && Array.isArray(d.accounts) && Array.isArray(d.tx)){ st = d; if (!st.del) st.del = {}; if (!Array.isArray(st.heads)) st.heads = []; if (!Array.isArray(st.dues)) st.dues = []; if (!Array.isArray(st.budget)) st.budget = []; }
     } catch (e) {}
   }
 
@@ -390,7 +390,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       });
       return order.map(function(id){ return m[id]; });
     }
-    return dedupeAccounts({v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), heads: un(a.heads, b.heads), dues: un(a.dues, b.dues), del: del,
+    return dedupeAccounts({v: 1, accounts: un(a.accounts, b.accounts), tx: un(a.tx, b.tx), heads: un(a.heads, b.heads), dues: un(a.dues, b.dues), budget: un(a.budget, b.budget), del: del,
             lastBackup: Math.max(a.lastBackup || 0, b.lastBackup || 0)});
   }
 
@@ -442,6 +442,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       if (!st.del) st.del = {};
       if (!Array.isArray(st.heads)) st.heads = [];
       if (!Array.isArray(st.dues)) st.dues = [];
+      if (!Array.isArray(st.budget)) st.budget = [];
       saveMeta(); keepLocal();
       if (!same(before, st) && !document.getElementById("sheet")) render();
       else if (view.page === "home" && !document.getElementById("sheet")) render();
@@ -757,26 +758,27 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     dueList().forEach(function(d){ if (d.kind === "pay"){ if (d.cat === "bill") payB += dueLeft(d); else payP += dueLeft(d); } });
     var net = hand + rec - payP - payB - card, g = byType(), t = totals(st);
     var LBL = {cash: "💵 Cash", bank: "🏦 Banks", wallet: "📱 Mobile wallets"};
-    function line(label, v, cls, bold){
-      return '<div class="tx"><span class="md"><b' + (bold ? ' style="font-size:15px"' : ' style="font-weight:600"') + '>' + label + '</b></span>'
+    function line(label, v, cls, bold, go){
+      return '<div class="tx"' + (go ? ' ' + go + ' style="cursor:pointer"' : '') + '><span class="md"><b' + (bold ? ' style="font-size:15px"' : ' style="font-weight:600"') + '>' + label + (go ? ' <span style="color:var(--ink-soft);font-weight:600">›</span>' : '') + '</b></span>'
         + '<span class="am ' + (cls || "") + '"' + (bold ? ' style="font-size:16px"' : '') + '>' + rs(v) + '</span></div>';
     }
     var h = '<button type="button" class="back" data-home>&larr; All accounts</button>'
       + '<div class="total"><small>Cash flow · net position</small><div class="amt' + (net < 0 ? " neg" : "") + '">' + rs(net) + '</div>'
       + '<div class="sub"><span>In hand<b>' + rs(hand) + '</b></span><span>To receive<b>' + rs(rec) + '</b></span><span>To pay<b>' + rs(payP + payB + card) + '</b></span></div></div>'
       + '<div class="head"><h3>Money in hand</h3></div><div class="txs">'
-      + Object.keys(g).map(function(k){ return line(LBL[k] || k, g[k], g[k] < 0 ? "out" : ""); }).join("")
-      + line("Total in hand", hand, "", true) + '</div>'
+      + Object.keys(g).map(function(k){ return line(LBL[k] || k, g[k], g[k] < 0 ? "out" : "", false, 'data-cashbook="all" data-ctype="' + k + '"'); }).join("")
+      + line("Total in hand", hand, "", true, 'data-cashbook="all"') + '</div>'
       + '<div class="head"><h3>Position</h3></div><div class="txs">'
-      + line("Money in hand", hand, "", false)
-      + line("+ To receive (" + dueList().filter(function(d){ return d.kind === "rec" && dueLeft(d) > 0; }).length + ")", rec, "in")
-      + line("− I owe people", payP, "out") + line("− Bills to pay", payB, "out") + line("− Card / ReadyLine dues", card, "out")
+      + line("Money in hand", hand, "", false, 'data-cashbook="all"')
+      + line("+ To receive (" + dueList().filter(function(d){ return d.kind === "rec" && dueLeft(d) > 0; }).length + ")", rec, "in", false, 'data-gotodues="rec"')
+      + line("− I owe people", payP, "out", false, 'data-gotodues="pay"') + line("− Bills to pay", payB, "out", false, 'data-gotodues="pay"')
+      + line("− Card / ReadyLine dues", card, "out", false, 'data-gotodues="pay"')
       + line("= Net balance", net, net < 0 ? "out" : "in", true) + '</div>';
     var up = dueList().filter(function(d){ return dueLeft(d) > 0 && d.due && daysTo(d.due) <= 30; }).sort(function(a, b){ return a.due < b.due ? -1 : 1; });
     st.accounts.forEach(function(a){
       if (!(a.type === "card" || a.type === "line" || a.type === "loan") || !a.dueDay || balanceOf(st, a.id) >= 0) return;
       var n = new Date(), dd = new Date(n.getFullYear(), n.getMonth(), a.dueDay); if (dd < new Date(today() + "T00:00:00")) dd = new Date(n.getFullYear(), n.getMonth() + 1, a.dueDay);
-      up.push({kind: "pay", cat: "card", party: a.name, due: ymd(dd), left: a.type === "loan" && a.limit ? Math.min(a.limit, -balanceOf(st, a.id)) : -balanceOf(st, a.id)});
+      up.push({kind: "pay", cat: "card", acc: a.id, party: a.name, due: ymd(dd), left: a.type === "loan" && a.limit ? Math.min(a.limit, -balanceOf(st, a.id)) : -balanceOf(st, a.id)});
     });
     up.sort(function(a, b){ return a.due < b.due ? -1 : 1; });
     h += '<div class="head"><h3>Next 30 days</h3></div>';
@@ -785,7 +787,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       var run = hand;
       h += '<div class="txs">' + up.map(function(d){
         var v = d.left != null ? d.left : dueLeft(d); run += d.kind === "rec" ? v : -v;
-        return '<div class="tx"' + (d.id ? ' data-opendue="' + esc(d.id) + '" style="cursor:pointer"' : '') + '><span class="dot ' + (d.kind === "rec" ? "in" : "out") + '">' + (d.cat === "card" ? "💳" : d.cat === "bill" ? "🧾" : "👤") + '</span>'
+        return '<div class="tx"' + (d.id ? ' data-opendue="' + esc(d.id) + '" style="cursor:pointer"' : d.acc ? ' data-open="' + esc(d.acc) + '" style="cursor:pointer"' : '') + '><span class="dot ' + (d.kind === "rec" ? "in" : "out") + '">' + (d.cat === "card" ? "💳" : d.cat === "bill" ? "🧾" : "👤") + '</span>'
           + '<span class="md"><b>' + esc(d.party) + '</b><small>' + whenTxt(d) + '</small></span>'
           + '<span class="amw"><span class="am ' + (d.kind === "rec" ? "in" : "out") + '">' + (d.kind === "rec" ? "+" : "−") + rs(v) + '</span>'
           + '<span class="bl' + (run < 0 ? " neg" : "") + '">then ' + rs(run) + '</span></span></div>';
@@ -816,14 +818,15 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     });
     var cClose = cOpen + cIn - cOut;
     h += '<div class="head"><h3>This month · reconciled</h3><span style="font-size:12px;color:var(--ink-soft)">cash, banks, wallets</span></div><div class="txs">'
-      + line("Opening in hand (" + niceDate(m0) + ")", cOpen, "")
-      + line("+ Received", cIn, "in") + line("− Paid" + (billPd ? " (incl. card bills " + rs(billPd) + ")" : ""), cOut, "out")
-      + line("= Closing in hand (today)", cClose, "", true)
+      + line("Opening in hand (" + niceDate(m0) + ")", cOpen, "", false, 'data-cashbook="all"')
+      + line("+ Received", cIn, "in", false, 'data-cashbook="in"') + line("− Paid" + (billPd ? " (incl. card bills " + rs(billPd) + ")" : ""), cOut, "out", false, 'data-cashbook="out"')
+      + line("= Closing in hand (today)", cClose, "", true, 'data-cashbook="all"')
       + (cLater ? line("+ Entries dated after today", cLater, cLater < 0 ? "out" : "in") : "")
       + line(Math.abs(cClose + cLater - hand) < 1 ? "✔ Matches Money in hand" : "⚠ Money in hand", hand, Math.abs(cClose + cLater - hand) < 1 ? "in" : "out", true)
       + '</div>'
       + (cardSp ? '<p style="font-size:12px;color:var(--ink-soft);margin-top:6px">Also spent on credit cards / ReadyLine this month: <b>' + rs(cardSp) + '</b>. That has not left your bank yet, so it is under Credit card dues, not here.</p>' : '')
-      + '<p style="font-size:12px;color:var(--ink-soft);margin-top:4px">Tap 📒 Cash book on the home page to see every entry behind these numbers.</p>';
+      + '<p style="font-size:12px;color:var(--ink-soft);margin-top:4px">Tap any line to open the entries behind it.</p>'
+      + '<div class="bt" style="margin-top:10px"><button type="button" data-budget>🎯 Budget: surplus or deficit</button></div>';
     return h;
   }
 
@@ -845,7 +848,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     var close = open + dr - cr;
     function drcr(v){ return rs(Math.abs(v)) + (v === 0 ? "" : v > 0 ? " Dr" : " Cr"); }
     var run = open;
-    var h = '<button type="button" class="back" data-report>&larr; Report</button>'
+    var h = (view.back === "budget" ? '<button type="button" class="back" data-budget>&larr; Budget</button>' : '<button type="button" class="back" data-report>&larr; Report</button>')
       + '<div class="adetail"><h2>' + esc(H ? H.name : "No head") + '</h2><div class="row">'
       + niceDate(r[0]).replace(/^1 Jan 0+$/, "Start") + ' – ' + niceDate(r[1]).replace(/^31 Dec 9999$/, "today")
       + (view.racc && view.racc !== "all" && accById(view.racc) ? ' · ' + esc(accById(view.racc).name) : ' · all accounts') + '</div></div>'
@@ -874,7 +877,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
      always the true balance. Above it: how much came into / went out of each account. */
   function cashBookPage(){
     var kind = view.ck || "all", r = periodRange(), one = view.racc && view.racc !== "all" && accById(view.racc) ? view.racc : null;
-    var ids = one ? [one] : st.accounts.filter(function(a){ return a.type !== "card" && a.type !== "line" && a.type !== "loan"; }).map(function(a){ return a.id; });
+    var ids = one ? [one] : st.accounts.filter(function(a){ return view.rtype ? a.type === view.rtype : (a.type !== "card" && a.type !== "line" && a.type !== "loan"); }).map(function(a){ return a.id; });
     var set = {}; ids.forEach(function(id){ set[id] = 1; });
     function eff(t){
       var v = 0;
@@ -905,7 +908,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<div class="filter">' + [["all", "All"], ["in", "Received"], ["out", "Paid"]].map(function(k){
           return '<button type="button" data-ck="' + k[0] + '"' + (kind === k[0] ? ' class="on"' : '') + '>' + k[1] + '</button>'; }).join("") + '</div>'
       + repFilters()
-      + '<div class="total"><small>' + (one ? esc(accById(one).name) : "All accounts (cash, banks, wallets)") + '</small>'
+      + '<div class="total"><small>' + (one ? esc(accById(one).name) : view.rtype ? ({cash: "Cash", bank: "All banks", wallet: "All mobile wallets"}[view.rtype] || view.rtype) : "All accounts (cash, banks, wallets)") + '</small>'
       + '<div class="sub" style="margin-top:6px;flex-wrap:wrap"><span>Opening<b>' + rs(open) + '</b></span><span>+ Received<b>' + rs(inT) + '</b></span>'
       + '<span>− Paid<b>' + rs(outT) + '</b></span><span>= Closing<b>' + rs(close) + '</b></span></div></div>';
     var accRows = Object.keys(per).filter(function(id){ return kind === "all" || (kind === "in" ? per[id].inn : per[id].out); });
@@ -937,6 +940,115 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     if (kind !== "all") h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:6px">' + (kind === "in" ? "Only money received is listed" : "Only payments are listed") + '; "Bal" is still the real balance after each one.</p>';
     if (!one) h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:6px">Moves between your own accounts are left out here, because they do not change your total. Pick one account above to see them.</p>';
     return h;
+  }
+
+
+  /* ================= budget =================
+     Lines like "Salary 250,000 a month" (income) or "School fee 30,000 a month" (expense), each tied to a
+     head, so the actual figure is simply the entries with that head. For a month or a quarter: budget,
+     actual so far, what is expected by the end, and the surplus or deficit. */
+  function budgetList(){ if (!Array.isArray(st.budget)) st.budget = []; return st.budget; }
+  function budgetRange(p){
+    var n = new Date(), y = n.getFullYear(), m = n.getMonth(), MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    if (p === "q" || p === "nextq"){
+      var q0 = Math.floor(m / 3) * 3 + (p === "nextq" ? 3 : 0), a = new Date(y, q0, 1), b = new Date(y, q0 + 3, 0);
+      return {r: [ymd(a), ymd(b)], n: 3, label: MN[a.getMonth()] + "–" + MN[b.getMonth()] + " " + b.getFullYear()};
+    }
+    var s = new Date(y, m + (p === "nextm" ? 1 : 0), 1), e = new Date(s.getFullYear(), s.getMonth() + 1, 0);
+    return {r: [ymd(s), ymd(e)], n: 1, label: MN[s.getMonth()] + " " + s.getFullYear()};
+  }
+  function perMonth(b){ return b.freq === "q" ? b.amt / 3 : b.freq === "y" ? b.amt / 12 : b.amt; }
+  function actualOf(kind, head, r){
+    var s = 0;
+    st.tx.forEach(function(t){
+      if (t.kind !== kind || t.date < r[0] || t.date > r[1] || isLoanMove(t)) return;
+      if ((t.head && headById(t.head) ? t.head : "") === head) s += t.amt;
+    });
+    return s;
+  }
+  function budgetPage(){
+    ensureHeads();
+    var p = view.bp || "month", R = budgetRange(p), r = R.r, tdy = today(), current = r[0] <= tdy && tdy <= r[1];
+    var lines = budgetList(), budgeted = {};
+    lines.forEach(function(b){ budgeted[b.kind + "|" + b.head] = 1; });
+    var tot = {in: {b: 0, a: 0, e: 0}, out: {b: 0, a: 0, e: 0}};
+    function rowsFor(kind){
+      var out = lines.filter(function(b){ return b.kind === kind; }).map(function(b){
+        var bud = Math.round(perMonth(b) * R.n), act = actualOf(kind, b.head, r), exp = Math.max(bud, act);
+        tot[kind].b += bud; tot[kind].a += act; tot[kind].e += exp;
+        return {b: b, bud: bud, act: act};
+      });
+      var other = 0;
+      st.tx.forEach(function(t){
+        if (t.kind !== kind || t.date < r[0] || t.date > r[1] || isLoanMove(t)) return;
+        var hd = t.head && headById(t.head) ? t.head : "";
+        if (!budgeted[kind + "|" + hd]) other += t.amt;
+      });
+      tot[kind].a += other; tot[kind].e += other;
+      return {rows: out, other: other};
+    }
+    var I = rowsFor("in"), O = rowsFor("out");
+    var budNet = tot.in.b - tot.out.b, actNet = tot.in.a - tot.out.a, expNet = tot.in.e - tot.out.e;
+    var h = '<button type="button" class="back" data-home>&larr; All accounts</button>'
+      + '<div class="head" style="margin-top:0"><h3>🎯 Budget</h3><span style="font-size:12px;color:var(--ink-soft)">' + esc(R.label) + '</span></div>'
+      + '<div class="filter" style="flex-wrap:wrap">' + [["month", "This month"], ["nextm", "Next month"], ["q", "This quarter"], ["nextq", "Next quarter"]].map(function(x){
+          return '<button type="button" data-bp="' + x[0] + '"' + (p === x[0] ? ' class="on"' : '') + '>' + x[1] + '</button>'; }).join("") + '</div>'
+      + '<div class="total"><small>' + (expNet < 0 ? "Expected deficit" : "Expected surplus") + ' · ' + esc(R.label) + '</small>'
+      + '<div class="amt' + (expNet < 0 ? " neg" : "") + '">' + rs(expNet) + '</div>'
+      + '<div class="sub" style="flex-wrap:wrap"><span>Budget<b>' + rs(budNet) + '</b></span><span>Actual so far<b>' + rs(actNet) + '</b></span>'
+      + (current ? '<span>Expected in hand at end<b>' + rs(inHand() + (tot.in.e - tot.in.a) - (tot.out.e - tot.out.a)) + '</b></span>' : '') + '</div></div>';
+    if (!lines.length){
+      h += '<div class="note" style="margin-top:0">Add what comes in every month (salary, fuel allowance, rent received…) and what goes out '
+        + '(school fees, bills, rent, groceries…). Each line uses a head, so the actual amounts come straight from your entries.</div>';
+    }
+    function section(kind, title, S){
+      var x = '<div class="head"><h3>' + title + '</h3><button type="button" data-addbud="' + kind + '">+ Add</button></div><div class="txs">';
+      if (!S.rows.length && !S.other) return x + '<div class="empty">Nothing yet.</div></div>';
+      x += S.rows.map(function(o){
+        var H = headById(o.b.head), pc = o.bud ? Math.min(100, Math.round(o.act * 100 / o.bud)) : (o.act ? 100 : 0), diff = o.bud - o.act;
+        var note = kind === "in" ? (diff > 0 ? rs(diff) + " to come" : diff < 0 ? rs(-diff) + " extra" : "all in")
+                                 : (diff > 0 ? rs(diff) + " left" : diff < 0 ? rs(-diff) + " over budget" : "on budget");
+        var bad = kind === "out" ? diff < 0 : false;
+        return '<div class="tx" data-editbud="' + esc(o.b.id) + '" style="cursor:pointer;flex-wrap:wrap">'
+          + '<span class="md"><b>' + esc(H ? H.name : "(deleted head)") + '</b><small>Budget ' + rs(o.bud) + ' · actual ' + rs(o.act)
+          + (o.b.freq && o.b.freq !== "m" ? ' · ' + (o.b.freq === "q" ? "quarterly" : "yearly") : '') + '</small></span>'
+          + '<span class="amw"><span class="am ' + (bad ? "out" : kind) + '" style="font-size:13px">' + note + '</span></span>'
+          + '<span style="flex-basis:100%;height:5px;border-radius:3px;background:var(--line);margin-top:7px;overflow:hidden">'
+          + '<span style="display:block;height:100%;width:' + pc + '%;background:var(--' + (bad ? "out" : kind) + ')"></span></span></div>';
+      }).join("");
+      if (S.other) x += '<div class="tx"><span class="md"><b>Other (not in budget)</b><small>entries with other heads or no head</small></span><span class="am ' + kind + '">' + rs(S.other) + '</span></div>';
+      x += '<div class="tx" style="background:var(--paper)"><span class="md"><b>Total</b><small>budget ' + rs(tot[kind].b) + ' · actual ' + rs(tot[kind].a) + '</small></span>'
+        + '<span class="am ' + kind + '">' + rs(tot[kind].e) + '</span></div></div>';
+      return x;
+    }
+    h += section("in", "Income", I) + section("out", "Expenses", O);
+    h += '<p style="font-size:12px;color:var(--ink-soft);margin-top:8px">Expected = the budget, or the actual if it is already more. '
+      + 'Tap a line to change it or see its entries. Give your entries the same head (for example Salary, School fee) so they count here.</p>';
+    return h;
+  }
+  var editingBud = null, budKind = "out";
+  function budSheet(kind, b){
+    editingBud = b ? b.id : null; budKind = b ? b.kind : kind;
+    openSheet('<h3>' + (b ? "Edit budget line" : (budKind === "in" ? "Monthly income" : "Monthly expense")) + '</h3>'
+      + (!b ? '<div class="seg"><button type="button" class="in' + (budKind === "in" ? " on" : "") + '" data-budkind="in">Income</button>'
+          + '<button type="button" class="out' + (budKind === "out" ? " on" : "") + '" data-budkind="out">Expense</button></div>' : '')
+      + '<div class="f"><label>Head</label><select id="bHead">' + headOptions(budKind, b ? b.head : "") + '</select></div>'
+      + '<div style="display:flex;gap:8px"><div class="f" style="flex:1.2"><label>Amount (Rs)</label><input class="amt" id="bAmt" type="text" inputmode="decimal" placeholder="0"></div>'
+      + '<div class="f" style="flex:1"><label>How often</label><select id="bFreq"><option value="m">Every month</option><option value="q">Every quarter</option><option value="y">Every year</option></select></div></div>'
+      + '<div class="msg" id="bMsg"></div><div class="bt" style="flex-wrap:wrap"><button type="button" data-close>Cancel</button>'
+      + (b ? '<button type="button" data-budentries="' + esc(b.id) + '">See entries</button><button type="button" data-delbud="' + esc(b.id) + '" style="color:var(--out)">Delete</button>' : '')
+      + '<button type="button" class="go" data-savebud>Save</button></div>');
+    if (b){ document.getElementById("bAmt").value = b.amt / 100; document.getElementById("bFreq").value = b.freq || "m"; }
+  }
+  function saveBud(){
+    var head = document.getElementById("bHead").value, amt = toPaisa(document.getElementById("bAmt").value), msg = document.getElementById("bMsg");
+    if (!head || head === "__new"){ msg.textContent = "Pick a head (or add a new one)."; return; }
+    if (!isFinite(amt) || amt <= 0){ msg.textContent = "Enter an amount above zero."; return; }
+    var same = budgetList().filter(function(x){ return x.kind === budKind && x.head === head && x.id !== editingBud; })[0];
+    var b = editingBud ? budgetList().filter(function(x){ return x.id === editingBud; })[0] : same;
+    if (!b){ b = {id: "b" + uid(), kind: budKind, created: Date.now()}; budgetList().push(b); }
+    b.head = head; b.amt = amt; b.freq = document.getElementById("bFreq").value; b.upd = Date.now();
+    if (save()){ closeSheet(); render(); }
   }
 
   /* ================= head-wise report ================= */
@@ -1062,6 +1174,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     else if (view.page === "dues") app.innerHTML = duesPage();
     else if (view.page === "flow") app.innerHTML = flowPage();
     else if (view.page === "cash") app.innerHTML = cashBookPage();
+    else if (view.page === "budget") app.innerHTML = budgetPage();
     else { view.page = "home"; app.innerHTML = homePage(); }
     window.scrollTo(0, 0);
   }
@@ -1092,7 +1205,8 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<button type="button" class="back" data-flow style="margin:0">💼 Cash flow</button>'
       + '<button type="button" class="back" data-dues style="margin:0">🤝 Payables &amp; receivables</button>'
       + '<button type="button" class="back" data-report style="margin:0">📊 Head-wise report</button>'
-      + '<button type="button" class="back" data-cashbook="all" style="margin:0">📒 Cash book</button></div>';
+      + '<button type="button" class="back" data-cashbook="all" style="margin:0">📒 Cash book</button>'
+      + '<button type="button" class="back" data-budget style="margin:0">🎯 Budget</button></div>';
     h += '<div class="head"><h3>Accounts</h3>'
       + '<button type="button" data-addacc>+ Add</button></div><div class="accs">';
     st.accounts.forEach(function(a){
@@ -1481,10 +1595,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         + "What is on this phone now will be lost.");
       if (!ok) return;
       var keep = {};
-      d.accounts.concat(d.tx, d.heads || [], d.dues || []).forEach(function(x){ if (x && x.id) keep[x.id] = 1; });
-      st.accounts.concat(st.tx, st.heads || [], st.dues || []).forEach(function(x){ if (!keep[x.id]) tomb(x.id); });
+      d.accounts.concat(d.tx, d.heads || [], d.dues || [], d.budget || []).forEach(function(x){ if (x && x.id) keep[x.id] = 1; });
+      st.accounts.concat(st.tx, st.heads || [], st.dues || [], st.budget || []).forEach(function(x){ if (!keep[x.id]) tomb(x.id); });
       if (!Array.isArray(d.heads)) d.heads = [];
       if (!Array.isArray(d.dues)) d.dues = [];
+      if (!Array.isArray(d.budget)) d.budget = [];
       var dl = st.del || {};
       d.del = d.del || {};
       for (var k in dl) if (!keep[k]) d.del[k] = dl[k];
@@ -1497,7 +1612,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
   /* ================= clicks ================= */
 
   document.addEventListener("click", function(e){
-    var t = e.target.closest ? e.target.closest("button, .acc, [data-edittx], [data-rhead], [data-opendue], [data-open], [data-cashbook]") : null;
+    var t = e.target.closest ? e.target.closest("button, .acc, [data-edittx], [data-rhead], [data-opendue], [data-open], [data-cashbook], [data-gotodues], [data-editbud]") : null;
     if (!t) return;
 
     if (t.hasAttribute("data-new")){ editingTx = null; entrySheet(t.getAttribute("data-new")); return; }
@@ -1506,7 +1621,24 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       if (ex){ editingTx = ex.id; entrySheet(ex.kind); }
       return;
     }
-    if (t.hasAttribute("data-cashbook")){ view = {page: "cash", acc: null, filter: "all", ck: t.getAttribute("data-cashbook"), period: "month", racc: "all"}; render(); return; }
+    if (t.hasAttribute("data-cashbook")){ view = {page: "cash", acc: null, filter: "all", ck: t.getAttribute("data-cashbook"), period: "month", racc: "all", rtype: t.getAttribute("data-ctype") || null}; render(); return; }
+    if (t.hasAttribute("data-gotodues")){ view = {page: "dues", acc: null, filter: "all", dtab: t.getAttribute("data-gotodues")}; render(); return; }
+    if (t.hasAttribute("data-budget")){ view = {page: "budget", acc: null, filter: "all", bp: view.bp || "month"}; render(); return; }
+    if (t.hasAttribute("data-bp")){ view.bp = t.getAttribute("data-bp"); render(); return; }
+    if (t.hasAttribute("data-addbud")){ budSheet(t.getAttribute("data-addbud"), null); return; }
+    if (t.hasAttribute("data-budkind")){ budSheet(t.getAttribute("data-budkind"), null); return; }
+    if (t.hasAttribute("data-editbud")){ var eb = budgetList().filter(function(x){ return x.id === t.getAttribute("data-editbud"); })[0]; if (eb) budSheet(eb.kind, eb); return; }
+    if (t.hasAttribute("data-savebud")){ saveBud(); return; }
+    if (t.hasAttribute("data-delbud")){
+      var dbid = t.getAttribute("data-delbud");
+      if (confirm("Delete this budget line? Your entries are not touched.")){ tomb(dbid); st.budget = budgetList().filter(function(x){ return x.id !== dbid; }); if (save()){ closeSheet(); render(); } }
+      return;
+    }
+    if (t.hasAttribute("data-budentries")){
+      var bb = budgetList().filter(function(x){ return x.id === t.getAttribute("data-budentries"); })[0], BR = budgetRange(view.bp || "month");
+      if (bb){ closeSheet(); view = {page: "rephead", acc: null, filter: "all", rhead: bb.head, rkind: bb.kind, period: "custom", from: BR.r[0], to: BR.r[1], racc: "all", back: "budget"}; render(); }
+      return;
+    }
     if (t.hasAttribute("data-ck")){ view.ck = t.getAttribute("data-ck"); render(); return; }
     if (t.hasAttribute("data-flow")){ view = {page: "flow", acc: null, filter: "all"}; render(); return; }
     if (t.hasAttribute("data-dues")){ view = {page: "dues", acc: null, filter: "all", dtab: view.dtab || "rec"}; render(); return; }
@@ -1637,7 +1769,10 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       e.target.innerHTML = headOptions(sheetKind, nh ? nh.id : "");
       e.target.value = nh ? nh.id : "";
     }
-    if (e.target.id === "rAcc"){ view.racc = e.target.value; render(); }
+    if (e.target.id === "rAcc"){ view.racc = e.target.value; view.rtype = null; render(); }
+    if (e.target.id === "bHead" && e.target.value === "__new"){
+      var nhb = newHead(budKind); e.target.innerHTML = headOptions(budKind, nhb ? nhb.id : ""); e.target.value = nhb ? nhb.id : "";
+    }
     if (e.target.id === "rFrom" || e.target.id === "rTo"){ view[e.target.id === "rFrom" ? "from" : "to"] = e.target.value; render(); }
     if (e.target.id === "impFile" && e.target.files && e.target.files[0]) doImport(e.target.files[0]);
   });
