@@ -423,7 +423,7 @@ def safepay_return(request):
     if not o:
         return _Redirect3("/promote?failed=1")
     if sp3_settle(o, wait=3):
-        return _Redirect3("/promote?paid=%d" % o.id)
+        return _Redirect3("/receipt?order=%d&paid=1" % o.id)
     return _Redirect3("/promote?failed=1&order=%d" % o.id)
 
 
@@ -467,3 +467,146 @@ def shop(request):
                                       created_at__gte=_tz3.now() - _td3(hours=2)).order_by("-id")[:3]:
             sp3_settle(o)
     return _shop_v2(request._request)
+
+
+# ---- Receipts (installed by setup_safepay_pages_v1): a receipt page for every paid order, and a receipt email.
+import threading as _th4
+from django.conf import settings as _set4
+from django.core.mail import EmailMultiAlternatives as _Mail4, get_connection as _conn4
+from django.utils import timezone as _tz4
+from django.utils.html import escape as _esc4
+
+BIZ = {"name": "XpertCreation", "kind": "Sole proprietorship", "owner": "Syed Khalid Hussain Shah", "ntn": "3361230-7",
+       "address": "1-S-3B/2, Ghazali Park, Wahdat Colony, Lahore 54000, Pakistan", "phone": "+92 300 946 2916",
+       "email": "khalid@xpertcreation.com", "site": "https://xpertcreation.com"}
+
+
+def _env4(k):
+    v = os.environ.get(k)
+    if v:
+        return v
+    try:
+        for line in open(os.path.join(str(_set4.BASE_DIR), ".env")):
+            line = line.strip()
+            if line.startswith(k + "=") or line.startswith(k + " ="):
+                return line.split("=", 1)[1].strip().strip('"').strip("'")
+    except OSError:
+        pass
+    return ""
+
+
+def _rcpt_no(o):
+    return "XC-%06d" % o.id
+
+
+def _receipt_data(o):
+    c = CATALOG.get(o.product, {})
+    plan = c.get("plans", {}).get(o.plan, (o.plan, 0, 0))
+    local = lambda t: _tz4.localtime(t).strftime("%d %b %Y, %I:%M %p") if t else ""
+    ref = o.provider_ref if o.provider.startswith("safepay") else ""
+    m = re.search(r"safepay ref (\S+)", o.note or "")
+    u = o.user
+    return {"no": _rcpt_no(o), "id": o.id, "status": o.status, "item": c.get("name", o.product), "plan": plan[0], "for": o.target_label,
+            "amount": o.amount, "currency": "PKR", "ordered": local(o.created_at), "paid": local(o.paid_at),
+            "starts": local(o.starts_at) if o.product != "blue_tick" else "", "ends": local(o.ends_at) if o.product != "blue_tick" else "",
+            "method": "Card / wallet via Safepay" if o.provider.startswith("safepay") else ("Test payment (no money taken)" if o.provider in ("", "test") else o.provider),
+            "tracker": ref, "reference": m.group(1) if m else "", "test": not o.provider.startswith("safepay-production"),
+            "customer": (getattr(u, "full_name", "") or u.username), "email": u.email, "username": u.username, "biz": BIZ}
+
+
+def _mine(request, pk):
+    o = Order.objects.select_related("user").filter(pk=pk).first()
+    if not o or not (o.user_id == request.user.id or _staff(request.user)):
+        return None
+    return o
+
+
+@_api_view3(["GET"])
+@_perm3([_IsAuth3])
+def receipt(request, pk):
+    o = _mine(request, pk)
+    if not o:
+        return _Resp3({"detail": "Receipt not found."}, status=404)
+    if o.status == "pending" and o.provider.startswith("safepay-"):
+        sp3_settle(o)                                   # just back from Safepay: confirm before showing
+    if o.status not in ("paid", "refunded"):
+        return _Resp3({"detail": "This order is not paid.", "status": o.status}, status=409)
+    return _Resp3(_receipt_data(o))
+
+
+@_api_view3(["POST"])
+@_perm3([_IsAuth3])
+def receipt_email(request, pk):
+    o = _mine(request, pk)
+    if not o or o.status not in ("paid", "refunded"):
+        return _Resp3({"detail": "Receipt not found."}, status=404)
+    ok = _send_receipt(o)
+    return _Resp3({"ok": ok, "to": o.user.email} if ok else {"detail": "Could not send the email. Please try again later."}, status=200 if ok else 502)
+
+
+def _receipt_html(d):
+    rows = [("Receipt no.", d["no"]), ("Status", "Refunded" if d["status"] == "refunded" else "Paid"), ("Date paid", d["paid"]),
+            ("Item", "%s (%s)" % (d["item"], d["plan"])), ("For", d["for"]), ("Active", ("%s to %s" % (d["starts"], d["ends"])) if d["starts"] else ""),
+            ("Paid by", d["method"]), ("Safepay tracker", d["tracker"]), ("Payment reference", d["reference"]), ("Customer", "%s (%s)" % (d["customer"], d["email"]))]
+    tr = "".join('<tr><td style="padding:7px 0;color:#5A657C;font-size:13px;width:42%%">%s</td><td style="padding:7px 0;font-size:13px;font-weight:600">%s</td></tr>'
+                 % (_esc4(k), _esc4(v)) for k, v in rows if v)
+    b = d["biz"]
+    test = (('<p style="background:#FEF3C7;color:#78350F;padding:8px 10px;border-radius:8px;font-size:12px">%s</p>' % ("Test payment: no real money was taken." if d["method"].startswith("Test") else "Test mode: Safepay sandbox, no real money was taken."))
+            if d["test"] else "")
+    return """<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#F6F7FB;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0D1424">
+<div style="max-width:520px;margin:0 auto;background:#fff;border-radius:16px;padding:26px;border:1px solid #E4E8F2">
+<table style="width:100%%"><tr><td><img src="https://xpertcreation.com/brand/icon-180.png" width="40" height="40" alt="" style="border-radius:10px;vertical-align:middle">
+<b style="font-size:18px;vertical-align:middle;margin-left:8px">XpertCreation</b></td><td style="text-align:right;font-size:12px;color:#5A657C">Receipt<br><b style="color:#0D1424">%s</b></td></tr></table>
+<p style="font-size:14px;margin:18px 0 4px">Thank you for your payment, %s.</p>
+<div style="font-size:30px;font-weight:800;letter-spacing:-.02em;margin:2px 0 12px">Rs %s</div>%s
+<table style="width:100%%;border-top:1px solid #E4E8F2;border-collapse:collapse">%s</table>
+<p style="margin:18px 0"><a href="%s/receipt?order=%d" style="background:#1B4DFF;color:#fff;padding:11px 16px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px">View or print receipt</a></p>
+<p style="font-size:12px;color:#5A657C;line-height:1.6;border-top:1px solid #E4E8F2;padding-top:12px;margin:0">
+%s (%s, owner %s), NTN %s<br>%s<br>%s &middot; %s<br>
+Refunds: <a href="%s/refund-policy" style="color:#1B4DFF">refund policy</a> &middot; Complaints: <a href="%s/ownership#complaints" style="color:#1B4DFF">how we handle them</a>
+&middot; <a href="%s/terms-of-sale" style="color:#1B4DFF">terms of sale</a><br>This is an automatic email. To reach us, write to %s.</p>
+</div></body></html>""" % (_esc4(d["no"]), _esc4(d["customer"]), "{:,}".format(d["amount"]), test, tr, b["site"], d["id"],
+                           b["name"], b["kind"], b["owner"], b["ntn"], b["address"], b["phone"], b["email"], b["site"], b["site"], b["site"], b["email"])
+
+
+def _receipt_text(d):
+    b = d["biz"]
+    lines = ["XpertCreation - payment receipt %s" % d["no"], "", "Amount: Rs %s (PKR)" % "{:,}".format(d["amount"]),
+             "Item: %s (%s)" % (d["item"], d["plan"]), "For: %s" % d["for"], "Date paid: %s" % d["paid"], "Paid by: %s" % d["method"]]
+    if d["tracker"]:
+        lines.append("Safepay tracker: %s" % d["tracker"])
+    if d["test"]:
+        lines.append("TEST MODE: no real money was taken.")
+    lines += ["", "View or print: %s/receipt?order=%d" % (b["site"], d["id"]), "",
+              "%s, %s, NTN %s, %s, %s, %s" % (b["name"], b["kind"], b["ntn"], b["address"], b["phone"], b["email"]),
+              "Refund policy: %s/refund-policy" % b["site"]]
+    return "\n".join(lines)
+
+
+def _send_receipt(o):
+    """Send the receipt from the receipt mailbox if one is set in .env (RECEIPT_EMAIL_USER / RECEIPT_EMAIL_PASSWORD), else from the site's normal sender."""
+    if not o.user.email:
+        return False
+    d = _receipt_data(o)
+    user, pw = _env4("RECEIPT_EMAIL_USER"), _env4("RECEIPT_EMAIL_PASSWORD")
+    try:
+        conn = _conn4(username=user, password=pw) if (user and pw) else _conn4()
+        sender = "XpertCreation <%s>" % (user if (user and pw) else _set4.EMAIL_HOST_USER)
+        m = _Mail4(subject="Your XpertCreation receipt %s - Rs %s" % (d["no"], "{:,}".format(d["amount"])), body=_receipt_text(d),
+                   from_email=sender, to=[o.user.email], reply_to=[BIZ["email"]], connection=conn)
+        m.attach_alternative(_receipt_html(d), "text/html")
+        m.send(fail_silently=False)
+        return True
+    except Exception:
+        import logging
+        logging.getLogger(__name__).exception("receipt email for order %s failed", o.id)
+        return False
+
+
+_activate_v3 = _activate
+
+
+def _activate(o):
+    """Same as before, then email the receipt (in the background, so a slow mail server never holds up the payment)."""
+    _activate_v3(o)
+    _th4.Thread(target=_send_receipt, args=(o,), daemon=True).start()

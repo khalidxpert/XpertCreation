@@ -7,3 +7,6 @@ urlpatterns = [path("", views.shop, name="shop"), path("orders/", views.order, n
                path("admin/", views.admin, name="shop-admin"),
                path("safepay/return/", views.safepay_return, name="shop-safepay-return")]
 urlpatterns += [path("safepay/webhook/", views.safepay_webhook, name="shop-safepay-webhook")]
+
+urlpatterns += [path("orders/<int:pk>/receipt/", views.receipt, name="shop-receipt"),
+                path("orders/<int:pk>/receipt/email/", views.receipt_email, name="shop-receipt-email")]

@@ -184,7 +184,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function draw(){
     var h = '<h1 style="font-size:24px;margin:6px 0 0">\uD83D\uDC8E Promote</h1><p style="color:var(--ink-soft);margin:4px 0 0">Get seen by more people on XpertConnect. Pay once per order; nothing renews by itself.</p>';
-    if (qp.get("paid")) h += '<div class="spt" style="background:#DCFCE7;color:#166534">\u2714 Payment received. Your item is now active.</div>';
+    if (qp.get("paid")) h += '<div class="spt" style="background:#DCFCE7;color:#166534">\u2714 Payment received. Your item is now active. <a href="/receipt?order=' + encodeURIComponent(qp.get("paid")) + '" style="color:#166534;font-weight:800;text-decoration:underline">See your receipt</a></div>';
     if (qp.get("cancel")) h += '<div class="spt">Payment cancelled. Nothing was charged.</div>';
     if (qp.get("failed")) h += '<div class="spt" style="background:#FEE2E2;color:#991B1B">We could not confirm that payment. If money was taken, email khalid@xpertcreation.com with your order number.</div>';
     if (D.mode === "off" || (!D.can_buy && D.mode === "test")) h += '<div class="spt">Paid items are coming soon.</div>';
@@ -193,7 +193,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<div class="spp">' + c.plans.map(function(p){ return '<button data-buy="' + c.key + '" data-plan="' + p.key + '">' + esc(p.label) + '<b>' + rs(p.price) + '</b></button>'; }).join("") + '</div></div>'; }).join("");
     if (D.orders && D.orders.length) h += '<div class="spc"><h2>My orders</h2>' + D.orders.map(function(o){
       return '<div class="spo"><span><b>' + esc(o.name) + '</b> \u00b7 ' + esc(o.plan) + (o.for ? ' \u00b7 ' + esc(o.for) : '') + '<br><small>' + day(o.created) + (o.ends ? ' \u00b7 until ' + day(o.ends) : '') + (o.ref ? ' \u00b7 ref ' + esc(o.ref) : '') + '</small>' + (ADS[o.id] ? '<br><small>' + ADS[o.id].views + ' views \u00b7 ' + ADS[o.id].clicks + ' clicks</small>' : '') + '</span>'
-        + '<span style="text-align:right">' + rs(o.amount) + '<br><small>' + esc(o.status) + '</small>' + (o.status === "pending" ? '<br>' + (D.mode === "test" ? '<button data-sim="' + o.id + '">Simulate payment</button> ' : '') + '<button data-cancel="' + o.id + '">Cancel</button>' : '') + '</span></div>'; }).join("") + '</div>';
+        + '<span style="text-align:right">' + rs(o.amount) + '<br><small>' + esc(o.status) + '</small>' + ((o.status === "paid" || o.status === "refunded") ? '<br><a href="/receipt?order=' + o.id + '" style="font-size:12px;font-weight:700">Receipt</a>' : '') + (o.status === "pending" ? '<br>' + (D.mode === "test" ? '<button data-sim="' + o.id + '">Simulate payment</button> ' : '') + '<button data-cancel="' + o.id + '">Cancel</button>' : '') + '</span></div>'; }).join("") + '</div>';
     h += '<p style="font-size:13px;color:var(--ink-soft)">By buying you agree to our <a href="/terms-of-sale">Terms of sale</a> and <a href="/refund-policy">Refund policy</a>. Questions: khalid@xpertcreation.com</p>';
     box.innerHTML = h;
   }
@@ -335,6 +335,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         <li><a href="/tools">Tools</a></li>
         <li><a href="/privacy">Privacy</a></li>
         <li><a href="/terms">Terms</a></li>
+        <li><a href="/terms-of-sale">Terms of sale</a></li>
+        <li><a href="/refund-policy">Refund policy</a></li>
+        <li><a href="/ownership">Ownership &amp; complaints</a></li>
         <li><a href="/account/delete">Delete account</a></li>
       </ul>
     </div>
