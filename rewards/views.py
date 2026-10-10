@@ -897,7 +897,9 @@ def invite_list(request):
             return {"name": "Deleted member", "username": ""}
         if not full and (getattr(x, "hide_from_leaderboard", False) or not x.username):
             return {"name": "Member #%d" % x.pk, "username": ""}
-        return {"name": (getattr(x, "full_name", "") or x.username or "Member #%d" % x.pk)[:60], "username": x.username or ""}
+        from django.apps import apps as _apps5
+        _pp = _apps5.get_model("network", "ProProfile").objects.filter(user=x).values_list("slug", flat=True).first()
+        return {"name": (getattr(x, "full_name", "") or x.username or "Member #%d" % x.pk)[:60], "username": x.username or "", "id": x.pk, "slug": _pp or ""}
     if kind == "earned":
         rows = []
         cs = list(Commission.objects.filter(referrer=u).order_by("-created_at")[:300])

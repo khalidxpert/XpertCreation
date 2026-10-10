@@ -377,7 +377,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (!INVL.rows) return h + '<p>Loading\u2026</p></div>';
     if (!INVL.rows.length) return h + '<p style="font-size:13.5px">Nobody here yet. Share your link to invite friends.</p></div>';
     return h + INVL.rows.map(function(x){
-      var nm = x.username ? '<a href="/in/' + encodeURIComponent(x.username) + '"><b>' + esc(x.name) + '</b></a> <small style="display:inline">@' + esc(x.username) + '</small>' : '<b>' + esc(x.name) + '</b>';
+      var lk = x.slug ? "/in/" + encodeURIComponent(x.slug) : (x.id ? "/feed?user=" + x.id : "");
+      var nm = (lk ? '<a href="' + lk + '"><b>' + esc(x.name) + '</b></a>' : '<b>' + esc(x.name) + '</b>') + (x.username ? ' <small style="display:inline">@' + esc(x.username) + '</small>' : '');
       var av = '<span class="av">' + esc((x.name || "?").charAt(0).toUpperCase()) + '</span>', s = "";
       if (INVL.kind === "earned"){
         s = day(x.when) + ' \u00B7 Level ' + x.level + ': paid ' + rs(x.order) + ', your share <b>' + rs(x.amount) + '</b><br>'

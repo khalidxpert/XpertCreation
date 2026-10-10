@@ -262,8 +262,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         headTag("meta[name=robots]", function(){ var m = document.createElement("meta"); m.name = "robots"; return m; })
           .setAttribute("content", "noindex");
         box.innerHTML = "<div class='card'><b>" + esc(r.data.detail || "Could not load this profile.") + "</b>"
-          + "<p class='muted'>Some profiles are for members only. <a href='/login'>Sign in</a> to see them.</p>"
+          + "<p class='muted' id='inwhy'></p>"
           + "<p><a class='btn' href='/people'>Browse people</a></p></div>";
+        fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(x){ return x.ok ? x.json() : null; }).catch(function(){ return null; }).then(function(m){
+          var w = document.getElementById("inwhy"); if (!w) return;
+          w.innerHTML = m ? "This member has not made a profile page yet, or keeps it hidden. You can still find their posts on XpertConnect."
+                          : "Some profiles are for members only. <a href='/login?next=" + encodeURIComponent(location.pathname) + "'>Sign in</a> to see them.";
+        });
         return;
       }
       P = r.data;

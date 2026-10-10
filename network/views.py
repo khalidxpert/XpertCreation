@@ -252,7 +252,8 @@ def _clean_url(v, label):
 
 
 def _find(slug, viewer):
-    p = ProProfile.objects.select_related("user").filter(slug=str(slug)[:60]).first()
+    p = (ProProfile.objects.select_related("user").filter(slug=str(slug)[:60]).first()
+         or ProProfile.objects.select_related("user").filter(user__username__iexact=str(slug)[:60]).first())   # /in/<username> works too
     if not p or not _viewable(p, viewer):
         return None
     return p
