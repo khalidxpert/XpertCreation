@@ -336,7 +336,7 @@ body.rtl .wafab{right:auto;left:16px}
   try {
     if (new URLSearchParams(location.search).get("pick") === "1") picking = true;
   } catch (e) {}
-  var editingName = false, editingBday = false;
+  var editingName = false, editingBday = false, editingPhone = false;
   var MONTHS_LIST = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
   function avatarFor(key){
@@ -607,6 +607,24 @@ body.rtl .wafab{right:auto;left:16px}
           + '<button class="pick" data-a="editname">Edit</button></div>';
       }
 
+      // Phone / WhatsApp: needed to open a Store shop, and for buyers and sellers to reach you.
+      var myNum = me.whatsapp || me.phone || "";
+      h += '<div id="phone"></div>';
+      if (!myNum || editingPhone){
+        h += '<div class="fld" style="margin-top:20px">'
+          + '<label for="phn">Phone / WhatsApp number</label>'
+          + '<input id="phn" type="tel" inputmode="tel" autocomplete="tel" placeholder="03001234567 or +923001234567" value="' + esc(myNum) + '">'
+          + '<p class="note">Needed to open a Store shop, and so buyers and sellers can reach you about an order. It is not shown on your public profile.</p>'
+          + '<button class="btn" data-a="savephone" style="margin-top:10px">Save number</button>'
+          + (myNum ? '<button class="btn ghost" data-a="cancelphone">Cancel</button>' : '')
+          + '</div>';
+      } else {
+        h += '<div class="setrow" style="margin-top:20px">'
+          + '<span class="t"><b>\ud83d\udcf1 ' + esc(myNum) + '</b>'
+          + '<small>Your phone / WhatsApp number. Not shown on your public profile.</small></span>'
+          + '<button class="pick" data-a="editphone">Edit</button></div>';
+      }
+
       // A saved date is shown, not opened for editing. A filled field with a
       // cursor in it reads as though the value had been lost.
       if (!me.birth_day || editingBday){
@@ -857,6 +875,21 @@ body.rtl .wafab{right:auto;left:16px}
         });
     }
 
+    if (a === "editphone"){ editingPhone = true; return draw(); }
+    if (a === "cancelphone"){ editingPhone = false; msg = ""; return draw(); }
+    if (a === "savephone"){
+      var pn = String(val("phn") || "").replace(/[\s()-]/g, "");
+      if (!/^\+?\d{10,15}$/.test(pn)){ msg = "Enter a valid number, for example 03001234567."; msgType = "err"; return draw(); }
+      busy = true; draw();
+      return api("/auth/whatsapp/", {method:"POST", body:{whatsapp: pn, show_whatsapp_on_accept: !!me.show_whatsapp_on_accept}}).then(function(r){
+        busy = false;
+        if (!r.ok) return fail(r);
+        me.whatsapp = pn; editingPhone = false;
+        var back = /[?&]back=store/.test(location.search);
+        msg = back ? "Number saved. Taking you back to the Store\u2026" : "Number saved."; msgType = "ok"; draw();
+        if (back) setTimeout(function(){ location.href = "/store#seller"; }, 1200);
+      });
+    }
     if (a === "editbday"){ editingBday = true; return draw(); }
     if (a === "cancelbday"){ editingBday = false; msg = ""; return draw(); }
 
@@ -996,6 +1029,7 @@ body.rtl .wafab{right:auto;left:16px}
     if (me && (screen === "login" || screen === "register")) screen = "account";
     if (!me && screen === "account") screen = "login";
     draw();
+    if (me && location.hash === "#phone"){ var pe = document.getElementById("phone"), pi = document.getElementById("phn"); if (!pi){ editingPhone = true; draw(); pi = document.getElementById("phn"); pe = document.getElementById("phone"); } if (pe) pe.scrollIntoView({block: "center"}); if (pi) pi.focus(); }
   });
 })();
 </script>
