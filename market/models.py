@@ -17,6 +17,7 @@ class Gig(models.Model):
     price = models.PositiveIntegerField()                       # rupees
     days = models.PositiveSmallIntegerField(default=3)          # delivery time
     revisions = models.PositiveSmallIntegerField(default=1)
+    images = models.JSONField(default=list, blank=True)       # up to 3 picture paths under /media/market/
     active = models.BooleanField(default=True, db_index=True)
     hidden = models.BooleanField(default=False, db_index=True)  # hidden by a moderator
     orders_done = models.PositiveIntegerField(default=0)

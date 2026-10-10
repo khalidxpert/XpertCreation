@@ -37,8 +37,36 @@ def _name(u):
     return ((getattr(u, "full_name", "") or u.username or "Member #%d" % u.pk) if u else "Deleted member")[:60]
 
 
+def _avatar(u):
+    try:
+        from accounts.views import avatar_url
+        return avatar_url(getattr(u, "avatar", "")) or ""
+    except Exception:
+        return ""
+
+
 def _who(u):
-    return {"id": u.pk, "name": _name(u), "username": u.username or ""} if u else {"id": 0, "name": "Deleted member", "username": ""}
+    return ({"id": u.pk, "name": _name(u), "username": u.username or "", "avatar": _avatar(u)} if u else
+            {"id": 0, "name": "Deleted member", "username": "", "avatar": ""})
+
+
+def _level(done, rating):
+    """Seller level from real completed orders and stars (shown on every card)."""
+    if done >= 50 and (rating or 0) >= 4.8:
+        return "Top rated"
+    if done >= 20 and (rating or 0) >= 4.6:
+        return "Level 2"
+    if done >= 5 and (rating or 0) >= 4.5:
+        return "Level 1"
+    return "New seller"
+
+
+def _seller_stats(uid):
+    done = Order.objects.filter(seller_id=uid, status="completed").count()
+    agg = Review.objects.filter(order__seller_id=uid).aggregate(s=Sum("rating"))
+    n = Review.objects.filter(order__seller_id=uid).count()
+    r = round((agg["s"] or 0) / n, 1) if n else None
+    return {"done": done, "rating": r, "ratings": n, "level": _level(done, r)}
 
 
 def _txt(v, n):
@@ -95,8 +123,11 @@ def _gig(g, full=False):
     d = {"id": g.id, "title": g.title, "category": g.category, "cat": CAT_KEYS.get(g.category, ""), "price": g.price, "days": g.days,
          "revisions": g.revisions, "active": g.active and not g.hidden, "orders": g.orders_done,
          "rating": round(g.rating_sum / g.rating_n, 1) if g.rating_n else None, "ratings": g.rating_n, "seller": _who(g.seller),
-         "summary": g.description[:160]}
+         "summary": g.description[:160], "images": ["/media/" + p for p in (g.images or [])], "when": g.created_at.isoformat()}
     if full:
+        d["seller_stats"] = _seller_stats(g.seller_id)
+        d["seller_since"] = getattr(g.seller, "date_joined", g.created_at).isoformat()
+        d["more"] = [_gig(x) for x in Gig.objects.filter(seller_id=g.seller_id, active=True, hidden=False).exclude(pk=g.pk).select_related("seller")[:4]]
         d["description"] = g.description
         d["reviews"] = [{"rating": r.rating, "text": r.text, "by": _name(r.order.buyer), "when": r.created_at.isoformat()}
                         for r in Review.objects.filter(order__gig=g).select_related("order__buyer").order_by("-id")[:20]]
@@ -136,7 +167,23 @@ def gigs(request):
     q = _txt(request.GET.get("q"), 60)
     if q:
         qs = qs.filter(Q(title__icontains=q) | Q(description__icontains=q))
-    return Response({"gigs": [_gig(g) for g in qs[:60]]})
+    lo, hi, dd = _int(request.GET.get("min"), 0, MAX_PRICE), _int(request.GET.get("max"), 0, MAX_PRICE), _int(request.GET.get("days"), 1, 60)
+    if lo:
+        qs = qs.filter(price__gte=lo)
+    if hi:
+        qs = qs.filter(price__lte=hi)
+    if dd:
+        qs = qs.filter(days__lte=dd)
+    sort = {"new": ["-id"], "low": ["price", "-id"], "high": ["-price", "-id"], "rated": ["-rating_sum", "-orders_done", "-id"]}.get(request.GET.get("sort"), ["-orders_done", "-rating_sum", "-id"])
+    rows = list(qs.order_by(*sort)[:60])
+    lv = {}
+    out = []
+    for g in rows:
+        if g.seller_id not in lv:
+            lv[g.seller_id] = _seller_stats(g.seller_id)["level"]
+        d = _gig(g); d["level"] = lv[g.seller_id]; out.append(d)
+    counts = dict(Gig.objects.filter(active=True, hidden=False).values_list("category").annotate(n=__import__("django.db.models", fromlist=["Count"]).Count("id")))
+    return Response({"gigs": out, "total": qs.count(), "counts": counts})
 
 
 def _save_gig(request, g):
@@ -680,3 +727,74 @@ def admin_payout(request, pk):
         else:
             return _err("Unknown action.")
     return Response(_payout(p))
+
+
+
+# ---------------------------------------------------------------- gig pictures (up to 3, cropped to 3:2 webp)
+from rest_framework.decorators import parser_classes                                   # noqa: E402
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser             # noqa: E402
+
+MAX_PICS, MAX_PIC_MB = 3, 6
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser, JSONParser])
+def gig_image(request, pk):
+    import os
+    import secrets
+    from django.conf import settings
+    g = Gig.objects.filter(pk=pk, seller=request.user).first()
+    if not g:
+        return _err("Only the seller can change the pictures.", 403)
+    pics = list(g.images or [])
+    if request.data.get("remove") is not None:
+        i = _int(request.data.get("remove"), 0, 10)
+        if i is not None and i < len(pics):
+            old = pics.pop(i)
+            try:
+                os.remove(os.path.join(str(settings.MEDIA_ROOT), old))
+            except OSError:
+                pass
+        g.images = pics; g.save(update_fields=["images"])
+        return Response(_gig(g, True))
+    if request.data.get("first") is not None:
+        i = _int(request.data.get("first"), 0, 10)
+        if i is not None and i < len(pics):
+            pics.insert(0, pics.pop(i)); g.images = pics; g.save(update_fields=["images"])
+        return Response(_gig(g, True))
+    f = request.FILES.get("file")
+    if not f:
+        return _err("Choose a picture.")
+    if len(pics) >= MAX_PICS:
+        return _err("A service can have %d pictures. Remove one first." % MAX_PICS)
+    if f.size > MAX_PIC_MB * 1024 * 1024:
+        return _err("The picture is over %d MB." % MAX_PIC_MB)
+    from PIL import Image, ImageOps
+    try:
+        im = Image.open(f); im.load()
+    except Exception:
+        return _err("That file is not a picture we can read.")
+    im = ImageOps.exif_transpose(im).convert("RGB")
+    im = ImageOps.fit(im, (1200, 800), Image.LANCZOS)
+    rel = os.path.join("market", timezone.localdate().strftime("%Y%m"), "%d_%s.webp" % (g.id, secrets.token_hex(6)))
+    full = os.path.join(str(settings.MEDIA_ROOT), rel)
+    os.makedirs(os.path.dirname(full), exist_ok=True)
+    im.save(full, "WEBP", quality=82)
+    g.images = pics + [rel]; g.save(update_fields=["images"])
+    return Response(_gig(g, True))
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def seller(request, username):
+    from django.contrib.auth import get_user_model
+    u = get_user_model().objects.filter(username__iexact=username[:30], is_active=True).first()
+    if not u:
+        return _err("Seller not found.", 404)
+    gs = Gig.objects.filter(seller=u, active=True, hidden=False).select_related("seller")
+    st = _seller_stats(u.pk)
+    revs = [{"rating": r.rating, "text": r.text, "by": _name(r.order.buyer), "when": r.created_at.isoformat(), "gig": r.order.title}
+            for r in Review.objects.filter(order__seller=u).select_related("order__buyer").order_by("-id")[:20]]
+    return Response({"seller": _who(u), "stats": st, "since": getattr(u, "date_joined", timezone.now()).isoformat(), "kyc": _kyc(u),
+                     "gigs": [dict(_gig(g), level=st["level"]) for g in gs], "reviews": revs})
