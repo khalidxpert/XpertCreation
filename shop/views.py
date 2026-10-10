@@ -632,3 +632,25 @@ def _target(u, kind, tid):
         L = apps.get_model("realestate", "Listing"); l = L.objects.filter(pk=tid, owner=u, status="active", hidden=False).first()
         return (l.pk, ("%s, %s" % (l.title, l.city))[:150]) if l else (None, "That property is not yours, or it is not active.")
     return _target_v4(u, kind, tid)
+
+
+# ---- Store items (installed by setup_store_v1): merchant plans (Gold / Platinum) and Product boost.
+CATALOG["merchant_gold"] = {"name": "Merchant Gold plan", "what": "Up to 100 live products in your Store shop and a Gold badge (Bronze is free with 10).", "target": "merchant",
+                            "plans": {"month": ("1 month", 1999, 30), "quarter": ("3 months", 5499, 90)}}
+CATALOG["merchant_platinum"] = {"name": "Merchant Platinum plan", "what": "Up to 1,000 live products, a Platinum badge and your shop featured on the Store home page.", "target": "merchant",
+                                "plans": {"month": ("1 month", 4999, 30), "quarter": ("3 months", 13999, 90)}}
+CATALOG["product_boost"] = {"name": "Product boost", "what": "Your product shown in the boosted showcase on the home page and first in the Store, with a Featured badge.", "target": "product",
+                            "plans": {"7d": ("7 days", 599, 7), "30d": ("30 days", 1799, 30)}}
+_target_v5 = _target
+
+
+def _target(u, kind, tid):
+    if kind == "merchant":
+        M = apps.get_model("store", "Merchant"); m = M.objects.filter(user=u, status="approved").first()
+        return (m.pk, m.name) if m else (None, "Open your Store shop first (it must be approved).")
+    if kind == "product":
+        if not tid:
+            return None, "Choose which product to boost."
+        P = apps.get_model("store", "Product"); p = P.objects.filter(pk=tid, merchant__user=u, active=True, hidden=False).first()
+        return (p.pk, p.title[:150]) if p else (None, "That product is not yours, or it is not live.")
+    return _target_v5(u, kind, tid)

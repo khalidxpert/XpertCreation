@@ -806,8 +806,51 @@ body.signed-in .hello{margin-top:4px}
   </header>
 
   <div id="bday"></div>
+<section id="xcshow" hidden style="margin:6px 0 14px">
+<style>
+#xcshow .hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}#xcshow .hd b{font-size:16px;letter-spacing:-.01em}#xcshow .hd a{margin-left:auto;font-size:12.5px;font-weight:800;color:#F85606;text-decoration:none}
+#xcshow .vp{overflow:hidden;border-radius:16px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent)}
+#xcshow .tr{display:flex;gap:10px;width:max-content;animation:xcsh var(--d,40s) linear infinite}
+#xcshow .vp:hover .tr,#xcshow .vp:active .tr{animation-play-state:paused}
+@keyframes xcsh{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){#xcshow .tr{animation:none}#xcshow .vp{overflow-x:auto}}
+#xcshow .c{flex:0 0 160px;background:#fff;border:1px solid #E4E8F2;border-radius:14px;overflow:hidden;text-decoration:none;color:#0D1424;display:flex;flex-direction:column}
+#xcshow .c:hover{border-color:#F85606;box-shadow:0 8px 20px rgba(13,20,36,.1)}
+#xcshow .im{position:relative;height:120px;background:#F1F5F9;display:grid;place-items:center;font-size:40px;overflow:hidden}#xcshow .im img{width:100%;height:120px;object-fit:cover;background:#fff}
+#xcshow .im.av img{width:64px;height:64px;border-radius:50%;object-fit:cover}
+#xcshow .lb{position:absolute;top:6px;left:6px;font-size:10.5px;font-weight:900;color:#fff;padding:2px 7px;border-radius:7px}
+#xcshow .st{position:absolute;top:6px;right:6px;font-size:10px;font-weight:900;background:#FBBF24;color:#3B2A00;padding:2px 6px;border-radius:6px}
+#xcshow .tx{padding:8px 9px;display:flex;flex-direction:column;gap:2px}#xcshow .tx b{font-size:12.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
+#xcshow .tx small{font-size:11px;color:#5A657C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#xcshow .tx i{font-style:normal;font-weight:900;color:#F85606;font-size:13px}
+</style>
+<div class="hd"><span style="font-size:18px">&#11088;</span><b>Featured on XpertCreation</b><a href="/promote">Advertise here &rsaquo;</a></div>
+<div class="vp"><div class="tr" id="xcshowt"></div></div>
+<script>
+(function(){
+  var T = {profile: ["#1B4DFF", "&#128100;", "linear-gradient(135deg,#DBEAFE,#E0E7FF)"], job: ["#0E7490", "&#128188;", "linear-gradient(135deg,#CFFAFE,#E0F2FE)"], gig: ["#7C3AED", "&#10024;", "linear-gradient(135deg,#EDE9FE,#FCE7F3)"],
+           property: ["#16A34A", "&#127968;", "linear-gradient(135deg,#DCFCE7,#E0F2FE)"], product: ["#F85606", "&#128717;", "linear-gradient(135deg,#FFEDD5,#FEF3C7)"]};
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function pk(n){ n = +n || 0; var f = function(x){ return (Math.round(x * 100) / 100).toString(); }; return n >= 1e7 ? f(n / 1e7) + " Crore" : n >= 1e5 ? f(n / 1e5) + " Lakh" : n.toLocaleString("en-US"); }
+  fetch("/api/store/showcase/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : {items: []}; }).catch(function(){ return {items: []}; }).then(function(d){
+    var it = d.items || []; if (!it.length) return;
+    var card = function(x){ var t = T[x.type] || T.product;
+      return '<a class="c" href="' + esc(x.link) + '"><div class="im' + (x.type === "profile" ? " av" : "") + '" style="background:' + t[2] + '">' + (x.image ? '<img loading="lazy" src="' + esc(x.image) + '" alt="">' : t[1])
+        + '<span class="lb" style="background:' + t[0] + '">' + esc(x.label) + '</span><span class="st">&#9733;</span></div><div class="tx"><b>' + esc(x.title) + '</b><small>' + esc(x.sub || "") + '</small>'
+        + (x.price ? '<i>Rs ' + pk(x.price) + (x.rent ? '/mo' : '') + '</i>' : '') + '</div></a>'; };
+    var html = it.map(card).join(""), tr = document.getElementById("xcshowt");
+    while (it.length < 6 && html.length) { html += it.map(card).join(""); it = it.concat(it); }
+    tr.innerHTML = html + html;
+    tr.style.setProperty("--d", Math.max(20, it.length * 4) + "s");
+    document.getElementById("xcshow").hidden = false;
+  });
+})();
+</script>
+</section>
+
 <a class="xcgold" href="/feed" aria-label="Open XpertConnect"><span class="xcg-ic"><img src="/brand/xpertconnect/xc-3d-256.png?v=3" alt="" width="46" height="46" style="width:46px;height:46px;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))"></span><span class="xcg-t"><b>XpertConnect</b><small>See what people are sharing — posts, people and jobs</small></span><span class="xcg-go">Open →</span></a>
 <a class="xcgold xcfree" href="/market" aria-label="Open Freelance and Property"><span class="xcg-ic"><svg viewBox="0 0 24 24" width="46" height="46" style="display:block"><rect x="1" y="1" width="22" height="22" rx="7" fill="#fff" opacity=".16"/><path d="M5 9.5h14v8a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 17.5z M9 9.5V7.8A1.3 1.3 0 0 1 10.3 6.5h3.4A1.3 1.3 0 0 1 15 7.8v1.7 M5 13h14" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="xcg-t"><b>Freelance &amp; Property</b><small>Hire skilled people, sell your skills, or find a house, plot or shop</small></span><span class="xcg-go">Open →</span></a>
+<a class="xcgold xcfree xcstore" href="/store" aria-label="Open the Store"><span class="xcg-ic"><svg viewBox="0 0 24 24" width="46" height="46" style="display:block"><rect x="1" y="1" width="22" height="22" rx="7" fill="#fff" opacity=".18"/><path d="M6 6.5h1.4l1.6 7.6a1.3 1.3 0 0 0 1.3 1h5.2a1.3 1.3 0 0 0 1.3-1L18 9H8" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.5" cy="17.6" r="1" fill="#fff"/><circle cx="15.5" cy="17.6" r="1" fill="#fff"/></svg></span><span class="xcg-t"><b>Store</b><small>Shop from local sellers: cash on delivery or card. Open your own shop</small></span><span class="xcg-go">Open →</span></a>
+<style>.xcgold.xcfree.xcstore{background:linear-gradient(135deg,#F85606 0%,#FF8A00 60%,#FFB800 100%);border-color:#F85606;box-shadow:0 10px 26px rgba(248,86,6,.3),inset 0 1px 0 rgba(255,255,255,.3)}.xcgold.xcfree.xcstore .xcg-go{color:#C2410C}</style>
 <style>.xcgold.xcfree{color:#fff;background:linear-gradient(135deg,#1B4DFF 0%,#13245E 60%,#0B1530 100%);border-color:#1B4DFF;box-shadow:0 10px 26px rgba(27,77,255,.3),inset 0 1px 0 rgba(255,255,255,.25)}.xcgold.xcfree .xcg-go{background:#fff;color:#13245E}</style>
 <style>.xcgold{display:flex;align-items:center;gap:14px;margin:6px 0 12px;padding:16px 18px;border-radius:20px;text-decoration:none;color:#3B2A00;background:linear-gradient(135deg,#FBE38E 0%,#E9BB2C 45%,#C8961B 100%);border:1px solid #D9A93A;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(201,151,28,.35),inset 0 1px 0 rgba(255,255,255,.65)}.xcgold::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);animation:xcshine 4.5s ease-in-out infinite}@keyframes xcshine{0%,60%{left:-60%}100%{left:130%}}.xcg-ic{font-size:32px;line-height:1}.xcg-t{flex:1;min-width:0}.xcgold b{display:block;font-size:20px;letter-spacing:-.02em}.xcgold small{font-size:13.5px;opacity:.85}.xcg-go{background:#3B2A00;color:#FBE38E;font-weight:800;padding:10px 14px;border-radius:12px;white-space:nowrap}#modlink{display:none!important}@media(prefers-reduced-motion:reduce){.xcgold::after{animation:none}}</style>
 <a class="modbar" id="modlink" href="/moderate"><span class="e5">&#128737;&#65039;</span><span class="t"><b>Moderation</b><small id="modsub">Review comments waiting to be read</small></span><span class="cnt2" id="modcnt" hidden></span></a>
@@ -2167,6 +2210,6 @@ if ("serviceWorker" in navigator){
   setInterval(go, 60000);
 })();
 </script>
-<script src="/js/topnav-1.js?v=49" defer></script>
+<script src="/js/topnav-1.js?v=50" defer></script>
 </body>
 </html>

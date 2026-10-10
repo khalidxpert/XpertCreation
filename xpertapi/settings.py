@@ -76,6 +76,8 @@ INSTALLED_APPS = [
     "money",
     "market",
     "realestate",
+    "store",
+    "companybook",
     "steps",
     "carromonline",
     "sharewall",
