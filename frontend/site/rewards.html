@@ -173,6 +173,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .rwn{background:#FEF3C7;color:#92400E;border-radius:12px;padding:10px 14px;margin:0 0 12px;font-weight:600}
 .rwst{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:8px 0}
 .rwst div{border:1px solid var(--line,#E4E8F2);border-radius:12px;padding:10px}.rwst b{display:block;font-size:20px;color:#1B4DFF}.rwst small{color:var(--ink-soft,#5A657C)}
+.rwst div[data-inv]{cursor:pointer}.rwst div[data-inv]:hover,.rwst div.on{border-color:#1B4DFF;background:#EEF2FF}.rwst div[data-inv] small:after{content:" \203A";font-weight:800;color:#1B4DFF}
+.rwlink{display:flex;gap:6px;align-items:center}.rwlink input{flex:1;min-width:0}.rwcp{flex:0 0 42px;height:40px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);background:#fff;color:#1B4DFF;display:grid;place-items:center;cursor:pointer}
+.rwil{border:1px solid var(--line,#E4E8F2);border-radius:12px;padding:10px 12px;margin:6px 0 10px}.rwil .hd{display:flex;align-items:center;gap:8px;margin-bottom:4px}.rwil .hd b{flex:1}
+.rwir{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line,#E4E8F2);padding:9px 0;font-size:13.5px}.rwir:first-of-type{border-top:0}
+.rwir .av{flex:0 0 34px;height:34px;border-radius:50%;background:#EEF2FF;color:#1B4DFF;display:grid;place-items:center;font-weight:800}.rwir .t{flex:1;min-width:0}.rwir small{display:block;color:var(--ink-soft,#5A657C)}
+.rwok{color:#166534;font-weight:700}.rwwait{color:#92400E}
 .rwchips span{display:inline-block;border-radius:99px;padding:4px 10px;margin:3px 4px 0 0;font-size:13px;font-weight:700;background:#EEF2FF;color:#64748B}
 .rwchips span.on{background:#DCFCE7;color:#166534}
 .rwwheel{position:relative;width:260px;max-width:80vw;margin:10px auto}
@@ -362,15 +368,50 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     [].forEach.call(f.querySelectorAll("[data-for]"), function(el){ el.style.display = (" " + el.getAttribute("data-for") + " ").indexOf(" " + m + " ") >= 0 ? "" : "none"; });
     var l = document.getElementById("rwaccl"); if (l) l.textContent = m === "bank" ? "Account number or IBAN" : "Mobile number";
   }
+  var INVL = null;
+  function invList(){
+    if (!INVL) return '<p style="font-size:12.5px;color:var(--ink-soft,#5A657C);margin:0 0 8px">Tap a box to see the names.</p>';
+    var T = {joined: "Joined with your link", qualified: "Qualified this campaign", level2: "Joined through your friends", earned: "Earned from referrals"};
+    var h = '<div class="rwil"><div class="hd"><b>' + T[INVL.kind] + (INVL.rows ? ' (' + INVL.rows.length + ')' : '') + '</b><button type="button" class="rwbtn" data-invclose="1" style="margin:0">Close</button></div>';
+    if (INVL.err) return h + '<p>' + esc(INVL.err) + '</p></div>';
+    if (!INVL.rows) return h + '<p>Loading\u2026</p></div>';
+    if (!INVL.rows.length) return h + '<p style="font-size:13.5px">Nobody here yet. Share your link to invite friends.</p></div>';
+    return h + INVL.rows.map(function(x){
+      var nm = x.username ? '<a href="/in/' + encodeURIComponent(x.username) + '"><b>' + esc(x.name) + '</b></a> <small style="display:inline">@' + esc(x.username) + '</small>' : '<b>' + esc(x.name) + '</b>';
+      var av = '<span class="av">' + esc((x.name || "?").charAt(0).toUpperCase()) + '</span>', s = "";
+      if (INVL.kind === "earned"){
+        s = day(x.when) + ' \u00B7 Level ' + x.level + ': paid ' + rs(x.order) + ', your share <b>' + rs(x.amount) + '</b><br>'
+          + (x.status === "released" ? '<span class="rwok">Added to your balance</span>' : x.status === "reversed" ? 'Taken back (order refunded)' : '<span class="rwwait">On hold until ' + day(x.release) + '</span>');
+      } else if (INVL.kind === "level2"){
+        s = 'Joined ' + day(x.when) + ' through ' + (x.via_username ? '@' + esc(x.via_username) : esc(x.via)) + (x.qualified ? ' \u00B7 <span class="rwok">qualified</span>' : '');
+      } else {
+        s = 'Joined ' + day(x.when) + ' \u00B7 ' + x.points + ' points on ' + x.days + ' day' + (x.days === 1 ? '' : 's') + '<br>'
+          + (x.qualified ? '<span class="rwok">\u2714 Qualified ' + day(x.qualified) + '</span>' : '<span class="rwwait">Still needs: ' + esc((x.need || []).join(", ")) + '</span>');
+      }
+      return '<div class="rwir">' + av + '<div class="t">' + nm + '<small>' + s + '</small></div></div>';
+    }).join("") + '</div>';
+  }
+  function openInv(kind){
+    var el = document.getElementById("rwinvl");
+    [].forEach.call(document.querySelectorAll(".rwst [data-inv]"), function(d){ d.className = d.getAttribute("data-inv") === kind ? "on" : ""; });
+    INVL = {kind: kind}; if (el) el.innerHTML = invList();
+    api("/api/rewards/invite/list/?kind=" + kind).then(function(r){
+      if (!INVL || INVL.kind !== kind) return;
+      if (r.ok) INVL.rows = r.d.rows || []; else INVL.err = r.d.detail || "Could not load the list.";
+      var e2 = document.getElementById("rwinvl"); if (e2) e2.innerHTML = invList();
+    });
+  }
   function inviteCard(){
     if (!INV) return "";
     var h = '<div class="rwc"><h2>Invite friends</h2>';
     if (!INV.link) return h + '<p>Choose a username first (tap your photo, then Account), and your invite link will appear here.</p></div>';
     var share = "Join me on XpertCreation: free courses, jobs, tools and rewards. " + INV.link;
-    h += '<p>Your invite link:</p><input readonly value="' + esc(INV.link) + '" style="width:100%;box-sizing:border-box;padding:9px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit">'
+    h += '<p>Your invite link:</p><div class="rwlink"><input readonly value="' + esc(INV.link) + '" style="width:100%;box-sizing:border-box;padding:9px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit">'
+      + '<button type="button" class="rwcp" data-copy="' + esc(INV.link) + '" title="Copy link" aria-label="Copy link"><svg viewBox="0 0 24 24" width="18" height="18" style="pointer-events:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></button></div>'
       + '<button class="rwbtn p" data-copy="' + esc(INV.link) + '">Copy link</button><a class="rwbtn" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(share) + '">Share on WhatsApp</a>'
-      + '<div class="rwst"><div><b>' + INV.joined + '</b><small>joined with your link</small></div><div><b>' + INV.qualified + '</b><small>qualified this campaign</small></div>'
-      + '<div><b>' + INV.level2 + '</b><small>joined through your friends</small></div><div><b>' + rs(INV.released) + '</b><small>earned from referrals' + (INV.held ? ' (+' + rs(INV.held) + ' on hold)' : '') + '</small></div></div>'
+      + '<div class="rwst"><div data-inv="joined"' + (INVL && INVL.kind === "joined" ? ' class="on"' : '') + '><b>' + INV.joined + '</b><small>joined with your link</small></div><div data-inv="qualified"' + (INVL && INVL.kind === "qualified" ? ' class="on"' : '') + '><b>' + INV.qualified + '</b><small>qualified this campaign</small></div>'
+      + '<div data-inv="level2"' + (INVL && INVL.kind === "level2" ? ' class="on"' : '') + '><b>' + INV.level2 + '</b><small>joined through your friends</small></div><div data-inv="earned"' + (INVL && INVL.kind === "earned" ? ' class="on"' : '') + '><b>' + rs(INV.released) + '</b><small>earned from referrals' + (INV.held ? ' (+' + rs(INV.held) + ' on hold)' : '') + '</small></div></div>'
+      + '<div id="rwinvl">' + invList() + '</div>'
       + '<p style="font-size:14px">A friend counts once they verify their email and earn ' + INV.qualify.points + ' points on ' + INV.qualify.days + ' different days. '
       + 'Whenever a friend pays for anything on XpertCreation, you get ' + INV.rates["1"] + '% (and ' + INV.rates["2"] + '% when their friends pay), added to your balance after ' + INV.hold_days + ' days.</p>';
     var goal = INV.qualified < 10 ? 10 : 50;
@@ -405,7 +446,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   box.addEventListener("click", function(e){
     var t = e.target;
     if (t.getAttribute && t.getAttribute("data-p")){ period = t.getAttribute("data-p"); load(); return; }
-    if (t.getAttribute && t.getAttribute("data-copy")){ var cv = t.getAttribute("data-copy"); try { navigator.clipboard.writeText(cv); t.textContent = "Copied"; } catch (x) { window.prompt("Copy your link:", cv); } return; }
+    if (t.getAttribute && t.getAttribute("data-copy")){ var cv = t.getAttribute("data-copy"); try { navigator.clipboard.writeText(cv); if (t.className === "rwcp"){ t.innerHTML = "\u2714"; setTimeout(function(){ t.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" style="pointer-events:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>'; }, 1500); } else t.textContent = "Copied"; } catch (x) { window.prompt("Copy your link:", cv); } return; }
+    var iv = t.closest ? t.closest("[data-inv]") : null;
+    if (iv){ openInv(iv.getAttribute("data-inv")); return; }
+    if (t.getAttribute && t.getAttribute("data-invclose")){ INVL = null; [].forEach.call(document.querySelectorAll(".rwst [data-inv]"), function(d){ d.className = ""; }); var el = document.getElementById("rwinvl"); if (el) el.innerHTML = invList(); return; }
     var act = t.getAttribute && t.getAttribute("data-act");
     function step(which){ return api2("/api/rewards/step/", {which: which}).then(function(r){ werr = r.ok ? "" : (r.d.detail || "Not done yet."); wmsg = r.ok ? "Step done." : ""; load(); }); }
     if (act === "post"){

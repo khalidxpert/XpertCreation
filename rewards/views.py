@@ -726,7 +726,10 @@ def run_commissions():
             r2 = Referral.objects.filter(user_id=r1.referrer_id).first()
             if r2 and r2.referrer_id != o.user_id:
                 chain.append((2, r2.referrer_id))
+            house = _house_ids()
             for level, ref_id in chain:
+                if ref_id in house:
+                    continue                             # no commission for the owner and the team
                 amt = int(o.amount) * COMMISSION[level] // 100
                 if amt <= 0:
                     continue
@@ -794,6 +797,7 @@ def run_draws(c=None):
     U = get_user_model()
     ok_ids = set(U.objects.filter(pk__in=list(counts), is_active=True, is_blocked=False, is_staff=False, is_superuser=False)
                  .exclude(**({"is_moderator": True} if hasattr(U, "is_moderator") else {})).values_list("pk", flat=True))
+    ok_ids -= _house_ids()                       # the owner and the team never win referral prizes
     for dr in ReferralDraw.objects.filter(done_at__isnull=True, draw_at__lte=now).order_by("draw_at", "id"):
         pool = sorted(uid for uid in ok_ids if counts.get(uid, 0) >= dr.tier)
         last = dr.draw_at >= c.ends_at - timedelta(days=1)
@@ -880,3 +884,106 @@ def invite(request):
 @permission_classes([AllowAny])
 def draws(request):
     return Response({"draws": _draws_out()})
+
+
+# ---- My referrals: who joined with my link, who qualified, friends of friends, what I earned (setup_referral_list_v1)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def invite_list(request):
+    u, kind = request.user, request.GET.get("kind", "joined")
+    U = get_user_model()
+    def who(x, full=True):
+        if not x:
+            return {"name": "Deleted member", "username": ""}
+        if not full and (getattr(x, "hide_from_leaderboard", False) or not x.username):
+            return {"name": "Member #%d" % x.pk, "username": ""}
+        return {"name": (getattr(x, "full_name", "") or x.username or "Member #%d" % x.pk)[:60], "username": x.username or ""}
+    if kind == "earned":
+        rows = []
+        cs = list(Commission.objects.filter(referrer=u).order_by("-created_at")[:300])
+        buyers = {b.pk: b for b in U.objects.filter(pk__in=[c.buyer_id for c in cs])}
+        for c in cs:
+            rows.append(dict(who(buyers.get(c.buyer_id), c.level == 1), when=c.created_at.isoformat(), level=c.level, order=c.order_amount,
+                             amount=c.amount, status=c.status, release=c.release_at.isoformat()))
+        return Response({"kind": kind, "rows": rows})
+    if kind == "level2":
+        mine = list(Referral.objects.filter(referrer=u).values_list("user_id", flat=True))
+        rs = list(Referral.objects.filter(referrer_id__in=mine).select_related("user", "referrer").order_by("-created_at")[:300])
+        return Response({"kind": kind, "rows": [dict(who(r.user, False), when=r.created_at.isoformat(), via=who(r.referrer)["name"],
+                                                     via_username=r.referrer.username or "", qualified=bool(r.qualified_at)) for r in rs]})
+    qs = Referral.objects.filter(referrer=u).select_related("user").order_by("-created_at")
+    if kind == "qualified":
+        c = campaign()
+        qs = qs.filter(qualified_at__isnull=False)
+        if c and c.starts_at:
+            qs = qs.filter(created_at__gte=c.starts_at)
+    rs = list(qs[:300])
+    pts = {}
+    for row in PointEvent.objects.filter(user_id__in=[r.user_id for r in rs]).values("user_id", "day").annotate(p=Sum("points")).filter(p__gt=0):
+        t = pts.setdefault(row["user_id"], [0, 0]); t[0] += row["p"]; t[1] += 1
+    out = []
+    for r in rs:
+        p, d = pts.get(r.user_id, [0, 0])
+        verified = bool(getattr(r.user, "is_email_verified", True))
+        need = []
+        if not r.qualified_at:
+            if not verified:
+                need.append("verify email")
+            if p < QUALIFY_POINTS:
+                need.append("%d more points" % (QUALIFY_POINTS - p))
+            if d < QUALIFY_DAYS:
+                need.append("%d more active day%s" % (QUALIFY_DAYS - d, "" if QUALIFY_DAYS - d == 1 else "s"))
+        out.append(dict(who(r.user), when=r.created_at.isoformat(), qualified=r.qualified_at.isoformat() if r.qualified_at else "",
+                        points=p, days=d, verified=verified, need=need))
+    return Response({"kind": kind, "rows": out, "qualify": {"points": QUALIFY_POINTS, "days": QUALIFY_DAYS}})
+
+
+# ---- Default upline (setup_referral_list_v1): members who joined without anyone's link go under the owner's account.
+# Waits 30 minutes after sign-up so a member who did come from a /r/ link is linked to that person first.
+# The owner and the team never get referral prizes or commissions (they run the campaign).
+DEFAULT_REFERRER = "khalidxpert"
+DEFAULT_AFTER = timedelta(minutes=30)
+
+
+def _house_ids():
+    U = get_user_model()
+    q = U.objects.filter(is_staff=True) | U.objects.filter(is_superuser=True)
+    if hasattr(U, "is_moderator"):
+        q = q | U.objects.filter(is_moderator=True)
+    ids = set(q.values_list("pk", flat=True))
+    top = U.objects.filter(username__iexact=DEFAULT_REFERRER).first()
+    if top:
+        ids.add(top.pk)
+    return ids
+
+
+def default_referrals(limit=5000):
+    """Put every member without an upline under DEFAULT_REFERRER. Returns how many were linked."""
+    U = get_user_model()
+    top = U.objects.filter(username__iexact=DEFAULT_REFERRER, is_active=True).first()
+    if not top:
+        return 0
+    up = Referral.objects.filter(user=top).values_list("referrer_id", flat=True).first()
+    have = Referral.objects.values_list("user_id", flat=True)
+    qs = (U.objects.filter(is_active=True, date_joined__lte=timezone.now() - DEFAULT_AFTER).exclude(pk=top.pk)
+          .exclude(pk__in=have).order_by("pk"))
+    if up:
+        qs = qs.exclude(pk=up)                       # no loop with the owner's own upline
+    n = 0
+    for u in qs[:limit]:
+        try:
+            Referral.objects.create(user=u, referrer=top); n += 1
+        except IntegrityError:
+            pass
+    return n
+
+
+_qualify_referrals_v0 = qualify_referrals
+
+
+def qualify_referrals():
+    try:
+        default_referrals()
+    except Exception:
+        pass
+    return _qualify_referrals_v0()

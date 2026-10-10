@@ -18,6 +18,7 @@ urlpatterns = [
     path("proof/<int:pk>/", views.proof, name="rewards-proof"),
     path("card/<int:pk>/", views.card, name="rewards-card"),
     path("invite/", views.invite, name="rewards-invite"),
+    path("invite/list/", views.invite_list, name="rewards-invite-list"),
     path("draws/", views.draws, name="rewards-draws"),
     path("ref/<str:username>/", views.ref_card, name="rewards-ref"),
 ]
