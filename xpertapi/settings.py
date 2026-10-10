@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "bus",
     "clips",
     "money",
+    "market",
     "steps",
     "carromonline",
     "sharewall",

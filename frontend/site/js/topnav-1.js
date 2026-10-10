@@ -4,7 +4,7 @@
   var head = document.querySelector("header.top") || document.querySelector("header.topbar");
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
-  var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Clips", "/clips"], ["Chat rooms", "/chat-rooms"], ["Academy", "/academy/"], ["Vocabulary", "/vocabulary"], ["MCQs", "/mcq"], ["Islamic", "/islamic"], ["Tools", "/tools"], ["Translate", "/translate"], ["Jobs", "/jobs"], ["Gov jobs", "/board"], ["Pets", "/pets"],
+  var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Clips", "/clips"], ["Chat rooms", "/chat-rooms"], ["Academy", "/academy/"], ["Vocabulary", "/vocabulary"], ["MCQs", "/mcq"], ["Islamic", "/islamic"], ["Tools", "/tools"], ["Translate", "/translate"], ["Jobs", "/jobs"], ["Freelance", "/market"], ["Gov jobs", "/board"], ["Pets", "/pets"],
                ["Shows", "/shows"], ["Kids", "/kids"], ["News", "/news"], ["Sports", "/sports"], ["Predict", "/predict"], ["Rates", "/rates"], ["Recipes", "/recipes"], ["Poetry", "/poetry"], ["Afsanay", "/afsanay"], ["Library", "/library"], ["Bills", "/bills"], ["Travel", "/travel"], ["Games", "/games"], ["Chat", "/chat"], ["Groups", "/groups"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   try { if (/[?&]guest=1/.test(location.search)) sessionStorage.setItem("xc_guest", "1"); } catch (e) {}
@@ -74,6 +74,7 @@
     "/tools": '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>',
     "/people": '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 5a3 3 0 0 1 0 6"/><path d="M17 15c2 .5 4 2 4 5"/>',
     "/feed": '<image href="/brand/xpertconnect/xc-icon-64.png?v=3" x="0" y="0" width="24" height="24"/>',
+    "/market": '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
     "/jobs": '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/>',
     "/pets": '<circle cx="7" cy="9" r="1.6"/><circle cx="12" cy="6" r="1.6"/><circle cx="17" cy="9" r="1.6"/><path d="M12 12c-3 0-5 3-5 5 0 1.5 1 2.5 2.5 2.5 1 0 1.7-.5 2.5-.5s1.5.5 2.5.5c1.5 0 2.5-1 2.5-2.5 0-2-2-5-5-5z"/>',
     "/shows": '<rect x="3" y="5" width="18" height="13" rx="2"/><path d="M10 9l5 2.5-5 2.5z"/><path d="M8 21h8"/>',
