@@ -293,3 +293,55 @@
   }
   if (!put()) document.addEventListener("DOMContentLoaded", put);
 })();
+
+/* xcPushPrompt: phone / desktop notifications for every signed-in member, on every page.
+   Asks once (a small card, "Not now" hides it for 5 days); if allowed before, makes sure this device is subscribed. */
+(function(){
+  if (window.XCPUSH) return; window.XCPUSH = 1;
+  if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) return;
+  if (location.pathname.replace(/\/+$/, "") === "/account") return;            // the Account page has its own switch
+  var KEY = "xc_push_later";
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function b64(s){ var pad = "=".repeat((4 - s.length % 4) % 4), raw = atob((s + pad).replace(/-/g, "+").replace(/_/g, "/")), out = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i); return out; }
+  function reg(){ return navigator.serviceWorker.register("/sw.js").then(function(){ return navigator.serviceWorker.ready; }); }
+  function subscribe(){
+    return fetch("/api/notify/push/key/").then(function(r){ return r.json(); }).then(function(k){
+      if (!k.key) throw new Error("no key");
+      return reg().then(function(r){ return r.pushManager.getSubscription().then(function(s){ return s || r.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64(k.key)}); }); });
+    }).then(function(sub){
+      return fetch("/api/notify/push/subscribe/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: JSON.stringify(sub.toJSON())});
+    });
+  }
+  function later(){ try { return Date.now() < +(localStorage.getItem(KEY) || 0); } catch (e){ return false; } }
+  function card(){
+    var st = document.createElement("style");
+    st.textContent = ".xcpp{position:fixed;left:12px;right:12px;bottom:86px;max-width:440px;margin:0 auto;z-index:9000;background:#0D1424;color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 18px 44px rgba(13,20,36,.35);display:flex;gap:12px;align-items:flex-start;font-family:inherit;animation:xcppin .35s ease-out}"
+      + "@keyframes xcppin{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}"
+      + ".xcpp i{font-style:normal;font-size:26px;line-height:1}.xcpp b{display:block;font-size:15px;margin-bottom:3px}.xcpp p{margin:0;font-size:13px;opacity:.85;line-height:1.45}"
+      + ".xcpp .bt{display:flex;gap:8px;margin-top:10px}.xcpp button{border:0;border-radius:11px;padding:9px 14px;font:inherit;font-weight:800;font-size:13.5px;cursor:pointer}"
+      + ".xcpp .on{background:#1B4DFF;color:#fff}.xcpp .no{background:rgba(255,255,255,.12);color:#fff}";
+    document.head.appendChild(st);
+    var c = document.createElement("div"); c.className = "xcpp"; c.setAttribute("role", "dialog");
+    c.innerHTML = '<i>🔔</i><div><b>Turn on notifications?</b><p>Hear about new offers, orders, messages and connection requests on this phone, even when XpertCreation is closed.</p>'
+      + '<div class="bt"><button class="on">Turn on</button><button class="no">Not now</button></div></div>';
+    document.body.appendChild(c);
+    c.querySelector(".no").onclick = function(){ try { localStorage.setItem(KEY, String(Date.now() + 5 * 864e5)); } catch (e){} c.remove(); };
+    c.querySelector(".on").onclick = function(){
+      var b = this; b.disabled = true; b.textContent = "…";
+      Notification.requestPermission().then(function(p){
+        if (p !== "granted"){ c.remove(); return; }
+        return subscribe().then(function(){ c.innerHTML = '<i>✅</i><div><b>Notifications are on</b><p>You can turn them off any time in Account.</p></div>'; setTimeout(function(){ c.remove(); }, 3500); });
+      }).catch(function(){ c.remove(); });
+    };
+  }
+  fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
+    if (!u || !u.email) return;
+    if (Notification.permission === "granted"){
+      var once = false; try { once = sessionStorage.getItem("xc_push_sync") === "1"; sessionStorage.setItem("xc_push_sync", "1"); } catch (e){}
+      if (!once) subscribe().catch(function(){});                                // re-register this device quietly
+      return;
+    }
+    if (Notification.permission === "default" && !later()) setTimeout(card, 6000);
+  }).catch(function(){});
+})();
