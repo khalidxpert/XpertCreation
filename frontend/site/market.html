@@ -161,7 +161,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=48" defer></script>
+<script src="/js/topnav-1.js?v=49" defer></script>
 
 <div class="wrap mkw" style="max-width:1180px">
 <style>
@@ -215,6 +215,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .mk-gen small{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
 .mk-heart{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.92);display:grid;place-items:center;cursor:pointer;z-index:2}
 .mk-heart svg{width:18px;height:18px;stroke:#334155;fill:none;stroke-width:2}.mk-heart.on svg{fill:#E11D48;stroke:#E11D48}
+.mk-feat{position:absolute;top:10px;left:10px;z-index:2;background:#FBBF24;color:#3B2A00;font-size:11.5px;font-weight:900;padding:4px 9px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.pt-feat{position:absolute;bottom:10px;left:10px;background:#FBBF24;color:#3B2A00;font-size:11.5px;font-weight:900;padding:4px 9px;border-radius:8px}
+.mk-boost{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;padding:11px;border-radius:12px;font-weight:800;font-size:14px;color:#3B2A00;background:linear-gradient(135deg,#FBE38E,#E9BB2C);border:1px solid #D9A93A}
 .mk-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:4px}.mk-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6)}.mk-dots i.on{background:#fff}
 .mk-sel{display:flex;align-items:center;gap:7px;margin:10px 0 4px;font-size:13.5px;font-weight:700}
 .mk-av{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:0 0 auto;background:#EEF2FF;color:var(--b);display:inline-grid;place-items:center;font-weight:800;font-size:12px}
@@ -371,7 +374,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   }
   function gigCard(g){
     return '<a class="mk-gc" href="#gig-' + g.id + '"><div class="mk-cov">' + (g.images && g.images.length ? '<img loading="lazy" src="' + esc(g.images[0]) + '" alt="">' : genCover(g))
-      + '<button class="mk-heart' + (FAV[g.id] ? " on" : "") + '" data-fav="' + g.id + '" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'
+      + (g.featured ? '<span class="mk-feat">&#9733; Featured</span>' : '') + '<button class="mk-heart' + (FAV[g.id] ? " on" : "") + '" data-fav="' + g.id + '" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></button>'
       + (g.images && g.images.length > 1 ? '<div class="mk-dots">' + g.images.map(function(x, i){ return '<i' + (i ? '' : ' class="on"') + '></i>'; }).join("") + '</div>' : '') + '</div>'
       + '<div class="mk-sel">' + av(g.seller) + '<span>' + esc(g.seller.name) + '</span>' + lvl(g.level) + '</div>'
       + '<div class="mk-gt">' + esc(g.title) + '</div>'
@@ -460,7 +463,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + (g.more && g.more.length ? '<h2 style="font-size:20px;margin:26px 0 10px">More from ' + esc(g.seller.name) + '</h2><div class="mk-grid">' + g.more.map(function(x){ x.level = st.level; return gigCard(x); }).join("") + '</div>' : '')
         + '</div><div><div class="mk-stick"><div class="mk-pricebox"><div class="pbt"><div class="pr"><span style="font-weight:800">Price</span><b>' + rs(g.price) + '</b></div>'
         + '<ul><li>' + g.days + ' day' + (g.days === 1 ? '' : 's') + ' delivery</li><li>' + g.revisions + ' revision' + (g.revisions === 1 ? '' : 's') + '</li><li>Pay safely, seller paid when you accept</li><li>Chat with the seller on the order page</li></ul></div>'
-        + '<div class="pbb" id="ob">' + (mine ? msg("This is your service.") + '<a class="mk-btn block" href="#editgig-' + g.id + '">Edit service</a>' :
+        + '<div class="pbb" id="ob">' + (mine ? msg(g.featured ? "This is your service. &#9733; It is featured right now." : "This is your service.") + '<a class="mk-btn block" href="#editgig-' + g.id + '">Edit service</a><a class="mk-boost" href="/promote?product=gig_boost&amp;target=' + g.id + '">&#128640; Boost this service</a>' :
           !M.me ? '<a class="mk-btn d block" href="/login?next=' + encodeURIComponent("/market#gig-" + g.id) + '">Sign in to order</a>' :
           '<button class="mk-btn d block" id="ocont">Continue (' + rs(g.price) + ')</button><div id="oform" hidden class="mk-f"><label for="oreq">What do you need?</label><textarea id="oreq" placeholder="Describe the work, sizes, words, deadline, examples you like..."></textarea>'
           + (M.me.can_buy ? '' : msg(M.mode === "test" ? "Test mode: only the team can buy right now." : "Buying opens soon: payments are being switched on.")) + '<button class="mk-btn p block" id="obuy" style="margin-top:10px"' + (M.me.can_buy ? '' : ' disabled') + '>Pay ' + rs(g.price) + '</button>'
@@ -776,7 +779,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function pcard(l){
     var tag = l.status !== "active" ? '<span class="pt-tag" style="background:#334155">' + esc(l.status) + '</span>' : '<span class="pt-tag ' + l.purpose + '">' + esc(l.purpose_name) + '</span>';
     return '<a class="pt-card" href="#prop-' + l.id + '"><div class="pt-img">' + (l.images.length ? '<img loading="lazy" src="' + esc(l.images[0]) + '" alt="">' : '<div class="pt-noimg">' + pi("pin").replace("15px", "40px").replace("15px", "40px") + '<small>' + esc(l.kind_name) + '</small></div>')
-      + tag + (l.images.length > 1 ? '<span class="pt-cnt">&#128247; ' + l.images.length + '</span>' : '') + (l.verified ? '<span class="pt-ver">&#10003; Verified</span>' : '') + '</div>'
+      + tag + (l.images.length > 1 ? '<span class="pt-cnt">&#128247; ' + l.images.length + '</span>' : '') + (l.verified ? '<span class="pt-ver">&#10003; Verified</span>' : '') + (l.featured ? '<span class="pt-feat">&#9733; Featured</span>' : '') + '</div>'
       + '<div class="pt-body"><div class="pt-price">' + pprice(l) + '</div><div class="pt-title">' + esc(l.title) + '</div><div class="pt-loc">' + pi("pin") + ' ' + esc(l.locality) + ', ' + esc(l.city) + '</div>'
       + '<div class="pt-facts">' + (l.bedrooms ? '<span>' + pi("bed") + ' ' + l.bedrooms + '</span>' : '') + (l.bathrooms ? '<span>' + pi("bath") + ' ' + l.bathrooms + '</span>' : '') + '<span>' + pi("area") + ' ' + esc(psize(l)) + '</span><span class="k">' + esc(l.kind_name) + '</span></div>'
       + '<div class="pt-foot">' + av(l.owner) + '<span>' + esc(l.owner.name) + (l.by_agent ? ' &middot; Agent' : '') + '</span><small>' + ago(l.when) + '</small></div></div></a>';
@@ -837,7 +840,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<div class="mk-sel" style="margin:0 0 12px">' + av(l.owner) + '<span>' + esc(l.owner.name) + '<br><small style="font-weight:600;color:var(--soft)">' + (l.by_agent ? "Agent / dealer" : "Owner") + '</small></span></div>';
       if (l.mine) h += msg("This is your listing. It stays up until " + day(l.expires) + ".") + '<a class="mk-btn block" href="#editprop-' + l.id + '">Edit and photos</a>'
         + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">' + (l.status === "active" ? '<button class="mk-btn" data-pa="' + (l.purpose === "rent" ? "rented" : "sold") + '">Mark ' + (l.purpose === "rent" ? "rented" : "sold") + '</button><button class="mk-btn" data-pa="renew">Renew 60 days</button>' : '<button class="mk-btn g" data-pa="active" style="grid-column:1/-1">Show again</button>') + '</div>'
-        + '<button class="mk-btn r block" style="margin-top:6px" data-pa="delete">Delete</button>';
+        + '<a class="mk-boost" href="/promote?product=property_boost&amp;target=' + l.id + '">&#128640; ' + (l.featured ? 'Featured now &middot; extend' : 'Boost to the top') + '</a><button class="mk-btn r block" style="margin-top:6px" data-pa="delete">Delete</button>';
       else if (l.phone_hidden) h += '<a class="mk-btn g block" href="/login?next=' + encodeURIComponent("/market#prop-" + l.id) + '">Sign in to see the phone number</a>';
       else h += '<a class="mk-btn g block" href="' + wa + '" target="_blank" rel="noopener">&#128172; WhatsApp</a><a class="mk-btn block" style="margin-top:6px" href="tel:' + esc(l.phone) + '">&#128222; Call ' + esc(l.phone) + '</a>';
       h += '<button class="mk-btn block" style="margin-top:6px" id="pshare">Share</button>' + (!l.mine && M.me ? '<button class="mk-btn r block" style="margin-top:6px;font-size:12.5px;padding:8px" data-pa="report">Report this listing</button>' : '')

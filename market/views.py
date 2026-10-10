@@ -114,6 +114,16 @@ def _balance(u):
     return Entry.objects.filter(user=u).aggregate(s=Sum("amount"))["s"] or 0
 
 
+def featured_ids(product):
+    """Targets of paid boosts running right now (Service boost / Property boost from the Promote page)."""
+    try:
+        from shop.models import Order as ShopOrder
+        now = timezone.now()
+        return set(ShopOrder.objects.filter(product=product, status="paid", starts_at__lte=now, ends_at__gt=now).values_list("target_id", flat=True))
+    except Exception:
+        return set()
+
+
 def _sys(o, text):
     Message.objects.create(order=o, sender=None, text=text)
 
@@ -175,13 +185,18 @@ def gigs(request):
     if dd:
         qs = qs.filter(days__lte=dd)
     sort = {"new": ["-id"], "low": ["price", "-id"], "high": ["-price", "-id"], "rated": ["-rating_sum", "-orders_done", "-id"]}.get(request.GET.get("sort"), ["-orders_done", "-rating_sum", "-id"])
+    fid = featured_ids("gig_boost")
+    if fid and not request.GET.get("mine"):
+        from django.db.models import Case, IntegerField, Value, When
+        qs = qs.annotate(fx=Case(When(pk__in=list(fid), then=Value(1)), default=Value(0), output_field=IntegerField()))
+        sort = ["-fx"] + sort
     rows = list(qs.order_by(*sort)[:60])
     lv = {}
     out = []
     for g in rows:
         if g.seller_id not in lv:
             lv[g.seller_id] = _seller_stats(g.seller_id)["level"]
-        d = _gig(g); d["level"] = lv[g.seller_id]; out.append(d)
+        d = _gig(g); d["level"] = lv[g.seller_id]; d["featured"] = g.id in fid; out.append(d)
     counts = dict(Gig.objects.filter(active=True, hidden=False).values_list("category").annotate(n=__import__("django.db.models", fromlist=["Count"]).Count("id")))
     return Response({"gigs": out, "total": qs.count(), "counts": counts})
 
@@ -212,7 +227,8 @@ def gig(request, pk):
         if not request.user.is_authenticated or g.seller_id != request.user.pk:
             return _err("Only the seller can change this gig.", 403)
         return _save_gig(request, g)
-    return Response(_gig(g, True))
+    d = _gig(g, True); d["featured"] = g.id in featured_ids("gig_boost")
+    return Response(d)
 
 
 def _project(p, viewer, full=False):

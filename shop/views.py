@@ -610,3 +610,25 @@ def _activate(o):
     """Same as before, then email the receipt (in the background, so a slow mail server never holds up the payment)."""
     _activate_v3(o)
     _th4.Thread(target=_send_receipt, args=(o,), daemon=True).start()
+
+
+# ---- Service boost and Property boost (installed by setup_market_v4): paid items for the marketplace and property listings.
+CATALOG["gig_boost"] = {"name": "Service boost", "what": "Your freelance service shown first in the marketplace, with a gold Featured badge.", "target": "gig",
+                        "plans": {"7d": ("7 days", 499, 7), "30d": ("30 days", 1499, 30)}}
+CATALOG["property_boost"] = {"name": "Property boost", "what": "Your property shown at the top of Property search in its city, with a gold Featured badge.", "target": "property",
+                             "plans": {"7d": ("7 days", 699, 7), "30d": ("30 days", 1999, 30)}}
+_target_v4 = _target
+
+
+def _target(u, kind, tid):
+    if kind == "gig":
+        if not tid:
+            return None, "Choose which service to boost."
+        G = apps.get_model("market", "Gig"); g = G.objects.filter(pk=tid, seller=u, active=True, hidden=False).first()
+        return (g.pk, g.title[:150]) if g else (None, "That service is not yours, or it is paused.")
+    if kind == "property":
+        if not tid:
+            return None, "Choose which property to boost."
+        L = apps.get_model("realestate", "Listing"); l = L.objects.filter(pk=tid, owner=u, status="active", hidden=False).first()
+        return (l.pk, ("%s, %s" % (l.title, l.city))[:150]) if l else (None, "That property is not yours, or it is not active.")
+    return _target_v4(u, kind, tid)

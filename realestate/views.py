@@ -167,10 +167,17 @@ def listings(request):
     if g.get("verified"):
         ids = [x.pk for x in qs[:500] if _kyc(x.owner)]
         qs = qs.filter(pk__in=ids)
-    qs = qs.order_by(*{"low": ["price"], "high": ["-price"], "views": ["-views"]}.get(g.get("sort"), ["-renewed_at", "-id"]))
+    sort = {"low": ["price"], "high": ["-price"], "views": ["-views"]}.get(g.get("sort"), ["-renewed_at", "-id"])
+    from market.views import featured_ids
+    fid = featured_ids("property_boost")
+    if fid and not g.get("mine"):
+        from django.db.models import Case, IntegerField, Value, When
+        qs = qs.annotate(fx=Case(When(pk__in=list(fid), then=Value(1)), default=Value(0), output_field=IntegerField()))
+        sort = ["-fx"] + sort
+    qs = qs.order_by(*sort)
     page = _int(g.get("page"), 1, 500) or 1
     total = qs.count()
-    return Response({"total": total, "page": page, "pages": (total + 23) // 24, "listings": [_out(l, u) for l in qs[(page - 1) * 24: page * 24]]})
+    return Response({"total": total, "page": page, "pages": (total + 23) // 24, "listings": [dict(_out(l, u), featured=l.id in fid) for l in qs[(page - 1) * 24: page * 24]]})
 
 
 @api_view(["GET", "POST", "DELETE"])
@@ -194,7 +201,8 @@ def listing(request, pk):
         return _save(request, l)
     if not (u.is_authenticated and u.pk == l.owner_id):
         Listing.objects.filter(pk=l.pk).update(views=F("views") + 1)
-    return Response(_out(l, u, True))
+    from market.views import featured_ids
+    return Response(dict(_out(l, u, True), featured=l.id in featured_ids("property_boost")))
 
 
 @api_view(["POST"])
