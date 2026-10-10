@@ -230,7 +230,7 @@
   if (!setup()){ var mo = new MutationObserver(function(){ if (setup()) mo.disconnect(); }); mo.observe(document.documentElement, {childList: true, subtree: true}); }
 })();
 /* Share on XpertConnect, next to every WhatsApp share button */
-(function(){ if (document.querySelector("script[src*='xcshare-1.js']")) return; var s = document.createElement("script"); s.src = "/js/xcshare-1.js?v=2"; s.defer = true; document.head.appendChild(s); })();
+(function(){ if (document.querySelector("script[src*='xcshare-1.js']")) return; var s = document.createElement("script"); s.src = "/js/xcshare-1.js?v=3"; s.defer = true; document.head.appendChild(s); })();
 
 /* XpertCreation rewards: active time, tools and reading. Counts only while this tab is visible and was used
    in the last minute, once a minute. Stops by itself for guests or when the campaign is off. */
