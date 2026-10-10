@@ -262,3 +262,33 @@
   }
   t = setInterval(beat, 60000);
 })();
+
+/* xcCartIcon: the Store cart in the header on every page, for everyone. The cart is kept on this phone. */
+(function(){
+  if (window.XCCART) return; window.XCCART = 1;
+  function put(){
+    var head = document.querySelector("header.top") || document.querySelector("header.topbar");
+    if (!head || head.querySelector(".tcart")) return !!head;
+    var st = document.createElement("style");
+    st.textContent = ".tcart{position:relative;flex:0 0 auto;width:36px;height:36px;margin-left:6px;border-radius:11px;display:inline-grid;place-items:center;background:#FFF4ED;border:1px solid #FED7C3;color:#F85606;text-decoration:none}"
+      + ".tcart:hover{background:#FFE8DA}.tcart svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}"
+      + ".tcart b{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 4px;border-radius:99px;background:#DC2626;color:#fff;font-size:10.5px;font-weight:800;line-height:18px;text-align:center;box-shadow:0 0 0 2px #fff}"
+      + "@media(max-width:600px){.tcart{width:34px;height:34px;margin-left:4px}}";
+    document.head.appendChild(st);
+    var a = document.createElement("a"); a.className = "tcart"; a.href = "/store#cart"; a.setAttribute("aria-label", "Shopping cart"); a.title = "Shopping cart";
+    a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><b hidden></b>';
+    var acct = head.querySelector(".tacct"), drop = head.querySelector(".tdrop");
+    if (acct) head.insertBefore(a, acct); else if (drop) head.insertBefore(a, drop); else head.appendChild(a);
+    function count(){
+      var n = 0; try { (JSON.parse(localStorage.getItem("xc_store_cart") || "[]") || []).forEach(function(x){ n += +x.qty || 0; }); } catch (e) {}
+      var b = a.querySelector("b"); b.hidden = !n; b.textContent = n > 99 ? "99+" : String(n);
+      a.setAttribute("aria-label", n ? "Shopping cart, " + n + " items" : "Shopping cart");
+    }
+    count();
+    window.addEventListener("storage", function(e){ if (!e.key || e.key === "xc_store_cart") count(); });
+    window.addEventListener("xc-cart", count); window.addEventListener("pageshow", count);
+    document.addEventListener("visibilitychange", function(){ if (!document.hidden) count(); });
+    return true;
+  }
+  if (!put()) document.addEventListener("DOMContentLoaded", put);
+})();
