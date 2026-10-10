@@ -94,7 +94,7 @@
              li: "https://www.linkedin.com/sharing/share-offsite/?url=" + u, tg: "https://t.me/share/url?url=" + u + "&text=" + encodeURIComponent(o.text)};
     host.innerHTML = '<div class="xres"><h4>' + esc(o.title) + '</h4>' + (o.big ? '<div class="big">' + esc(o.big) + '</div>' : '')
       + (o.sub ? '<div class="sub">' + esc(o.sub) + '</div>' : '') + '<div class="row">'
-      + '<button type="button" class="wall" data-r="wall"><img src="/brand/xpertconnect/xc-icon-64.png" alt="" style="width:16px;height:16px;border-radius:4px">Post on my wall</button>'
+      + '<button type="button" class="wall" data-r="wall"><img src="/brand/xpertconnect/xc-icon-64.png?v=3" alt="" style="width:16px;height:16px;border-radius:4px">Post on my wall</button>'
       + '<a class="wa" href="' + L.wa + '" target="_blank" rel="noopener">WhatsApp</a>'
       + '<a class="fb" href="' + L.fb + '" target="_blank" rel="noopener">Facebook</a>'
       + '<a class="x" href="' + L.x + '" target="_blank" rel="noopener">X</a>'

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>XpertCreation IRC — irc.xpertcreation.com</title><meta name="description" content="XpertCreation IRC: live chat rooms for members on irc.xpertcreation.com.">
-<link rel="icon" href="/brand/xpertconnect/xc-icon-64.png" type="image/png"><meta name="theme-color" content="#010409"><meta name="robots" content="noindex">
+<link rel="icon" href="/brand/xpertconnect/xc-icon-64.png?v=3" type="image/png"><meta name="theme-color" content="#010409"><meta name="robots" content="noindex">
 <style>
 html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;background:#0B0F14;color:#C9D1D9;font:14px/1.45 ui-monospace,"JetBrains Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace}
 *{box-sizing:border-box}a{color:#58A6FF}button{font:inherit}
@@ -89,7 +89,7 @@ html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;backgrou
   function show(name){ cur = name; var b = buf(name); b.unread = 0; b.mention = false; b._jump = true; drawSide(); drawMsgs(); document.querySelectorAll(".xrs,.xru").forEach(function(e){ e.classList.remove("open"); }); var i = document.getElementById("xrinput"); if (i && window.innerWidth > 900) i.focus(); }
   function status(t){ var s = document.getElementById("xrst"); if (!s) return; s.textContent = t || ""; s.classList.toggle("on", !!t); }
   function layout(){
-    root.innerHTML = '<header class="xrtop"><button class="xrmenu" data-open="xrside" aria-label="Channels">\u2630</button><img src="/brand/xpertconnect/xc-icon-64.png" alt=""><b>XpertCreation</b><span class="irc">IRC</span><span id="xrnet">\u25CF connecting\u2026</span><button class="fs" data-fs title="Full screen" aria-label="Full screen">\u26F6</button><a href="/" class="back">\u2190 xpertcreation.com</a><button class="xrppl" data-open="xru" aria-label="Nicks">\uD83D\uDC65</button></header>'
+    root.innerHTML = '<header class="xrtop"><button class="xrmenu" data-open="xrside" aria-label="Channels">\u2630</button><img src="/brand/xpertconnect/xc-icon-64.png?v=3" alt=""><b>XpertCreation</b><span class="irc">IRC</span><span id="xrnet">\u25CF connecting\u2026</span><button class="fs" data-fs title="Full screen" aria-label="Full screen">\u26F6</button><a href="/" class="back">\u2190 xpertcreation.com</a><button class="xrppl" data-open="xru" aria-label="Nicks">\uD83D\uDC65</button></header>'
       + '<div class="xrbody"><aside class="xrs" id="xrside"></aside><section class="xrm"><div class="xrh"><b id="xrt"></b><small id="xrtopic"></small></div><div class="xrst" id="xrst"></div><div id="xrguest" class="xrguest" style="display:none"><span>You are a <b>guest</b>. Sign in to chat with your own name and register channels.</span><a href="/login?next=/irc">/login</a><a href="/register">/register (free)</a></div><div class="xrl" id="xrl"></div>'
       + '<form class="xri" id="xrform" autocomplete="off"><span id="xrprompt">[\u2026]</span><input id="xrinput" maxlength="450" spellcheck="false"><button type="submit">\u21B5</button></form></section><aside class="xru" id="xru"></aside></div>'
       + '<footer class="xrfoot">XpertCreation IRC \u00b7 irc.xpertcreation.com \u00b7 \u00a9 XpertCreation \u00b7 Founder: Syed Khalid Hussain Shah</footer>';

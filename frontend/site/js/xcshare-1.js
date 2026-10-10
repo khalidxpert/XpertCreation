@@ -2,7 +2,7 @@
 (function(){
   "use strict";
   if (window.__xcshare) return; window.__xcshare = 1;
-  var ICON = "/brand/xpertconnect/xc-icon-64.png";
+  var ICON = "/brand/xpertconnect/xc-icon-64.png?v=3";
   var css = document.createElement("style");
   css.textContent = ".xcsh{display:inline-flex;align-items:center;gap:6px;cursor:pointer}.xcsh img{width:18px;height:18px;border-radius:5px;flex:0 0 auto}"
     + ".xcsh-plain{border:1.5px solid #C7D2FE;background:#EEF2FF;color:#1B4DFF;border-radius:12px;padding:9px 13px;font:inherit;font-weight:800;text-decoration:none;margin:4px 0 4px 6px}"

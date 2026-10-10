@@ -21,7 +21,7 @@
   box.innerHTML = "<b>Share this page</b><div class='row'>"
     + (navigator.share ? "<button type='button' class='nat' data-s='native'>\u2197\uFE0F Share</button>" : "")
     + "<a class='wa' data-s='wa' href='#' target='_blank' rel='noopener'>WhatsApp</a>"
-    + "<button type='button' data-xcshare='1' style='border:0;border-radius:10px;padding:8px 12px;background:#1B4DFF;color:#fff;font:inherit;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px'><img src='/brand/xpertconnect/xc-icon-64.png' alt='' style='width:16px;height:16px;border-radius:4px'>XpertConnect</button>"
+    + "<button type='button' data-xcshare='1' style='border:0;border-radius:10px;padding:8px 12px;background:#1B4DFF;color:#fff;font:inherit;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px'><img src='/brand/xpertconnect/xc-icon-64.png?v=3' alt='' style='width:16px;height:16px;border-radius:4px'>XpertConnect</button>"
     + "<a class='fb' data-s='fb' href='#' target='_blank' rel='noopener'>Facebook</a>"
     + "<a class='x' data-s='x' href='#' target='_blank' rel='noopener'>X</a>"
     + "<a class='li' data-s='li' href='#' target='_blank' rel='noopener'>LinkedIn</a>"
