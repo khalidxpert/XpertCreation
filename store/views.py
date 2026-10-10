@@ -37,7 +37,13 @@ def _staff(u):
 def _kyc(u):
     k = getattr(u, "person_kyc", None)
     try:
-        return bool(k and k.status == "approved")
+        if k and k.status == "approved":
+            return True
+    except Exception:
+        pass
+    try:   # a blue tick given by the team (profile "verified") counts as a passed ID check too
+        from network.models import ProProfile
+        return ProProfile.objects.filter(user=u, verified=True).exists()
     except Exception:
         return False
 
