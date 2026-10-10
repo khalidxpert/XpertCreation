@@ -18,6 +18,9 @@ class Gig(models.Model):
     days = models.PositiveSmallIntegerField(default=3)          # delivery time
     revisions = models.PositiveSmallIntegerField(default=1)
     images = models.JSONField(default=list, blank=True)       # up to 3 picture paths under /media/market/
+    # Basic / Standard / Premium: [{"tier", "name", "desc", "price", "days", "revisions"}]. Empty = one price (price/days/revisions above).
+    packages = models.JSONField(default=list, blank=True)
+    views = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True, db_index=True)
     hidden = models.BooleanField(default=False, db_index=True)  # hidden by a moderator
     orders_done = models.PositiveIntegerField(default=0)
@@ -83,6 +86,13 @@ class Order(models.Model):
     due_at = models.DateTimeField(null=True, blank=True)
     delivered_at = models.DateTimeField(null=True, blank=True)
     done_at = models.DateTimeField(null=True, blank=True)
+    package = models.CharField(max_length=10, blank=True, default="")          # basic | standard | premium | custom
+    buyer_seen = models.DateTimeField(null=True, blank=True)                     # for unread message counts
+    seller_seen = models.DateTimeField(null=True, blank=True)
+    reminded = models.BooleanField(default=False)                                # "due in 24 hours" sent
+    late_noted = models.BooleanField(default=False)                              # "overdue" sent
+    cancelled_by = models.CharField(max_length=10, blank=True, default="")      # buyer | seller | both | late | team
+    refund_amount = models.PositiveIntegerField(default=0)                       # what goes back to the buyer (less if milestones were paid)
 
     class Meta:
         ordering = ["-id"]
@@ -135,3 +145,100 @@ class Payout(models.Model):
 
     class Meta:
         ordering = ["-id"]
+
+
+class CustomRequest(models.Model):
+    """A buyer asks a seller for work that does not fit a package."""
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="market_requests")
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="market_requests_in")
+    gig = models.ForeignKey(Gig, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    brief = models.TextField(max_length=3000)
+    budget = models.PositiveIntegerField(default=0)
+    days = models.PositiveSmallIntegerField(default=0)
+    status = models.CharField(max_length=10, default="open", db_index=True)     # open | offered | accepted | declined | closed
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+
+class CustomOffer(models.Model):
+    """The seller's offer: price, time, revisions and (optionally) milestones. Valid 7 days. The buyer accepts and pays."""
+    request = models.ForeignKey(CustomRequest, null=True, blank=True, on_delete=models.SET_NULL, related_name="offers")
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="market_offers")
+    buyer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="market_offers_in")
+    gig = models.ForeignKey(Gig, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    title = models.CharField(max_length=120)
+    description = models.TextField(max_length=3000)
+    price = models.PositiveIntegerField()
+    days = models.PositiveSmallIntegerField(default=3)
+    revisions = models.PositiveSmallIntegerField(default=1)
+    milestones = models.JSONField(default=list, blank=True)                     # [{"title", "amount", "days"}] adding up to the price
+    status = models.CharField(max_length=10, default="pending", db_index=True)  # pending | accepted | declined | withdrawn | expired
+    expires_at = models.DateTimeField()
+    order = models.OneToOneField(Order, null=True, blank=True, on_delete=models.SET_NULL, related_name="offer")
+    created_at = models.DateTimeField(auto_now_add=True)
+    responded_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+
+class Milestone(models.Model):
+    """A part of a big order. The whole order is paid at the start; each part is released to the seller when the buyer accepts it."""
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="milestones")
+    number = models.PositiveSmallIntegerField(default=1)
+    title = models.CharField(max_length=120)
+    amount = models.PositiveIntegerField()
+    days = models.PositiveSmallIntegerField(default=3)
+    status = models.CharField(max_length=10, default="waiting", db_index=True)  # waiting | working | delivered | revision | accepted | cancelled
+    delivery = models.TextField(max_length=3000, blank=True, default="")
+    revision_note = models.TextField(max_length=1500, blank=True, default="")
+    fee = models.PositiveIntegerField(default=0)
+    started_at = models.DateTimeField(null=True, blank=True)
+    due_at = models.DateTimeField(null=True, blank=True)
+    delivered_at = models.DateTimeField(null=True, blank=True)
+    accepted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["number"]
+        constraints = [models.UniqueConstraint(fields=["order", "number"], name="market_milestone_once")]
+
+
+class OrderFile(models.Model):
+    """A file on an order (brief, delivery, revision). Kept outside the website; only the buyer, seller and team can open it."""
+    KINDS = [("brief", "Brief / sample"), ("delivery", "Delivery"), ("revision", "Revision"), ("file", "File")]
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="files")
+    by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    kind = models.CharField(max_length=10, choices=KINDS, default="file")
+    path = models.CharField(max_length=200)
+    name = models.CharField(max_length=160)
+    size = models.PositiveIntegerField(default=0)
+    note = models.CharField(max_length=200, blank=True, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["id"]
+
+
+class CancelRequest(models.Model):
+    """One side asks to cancel; the other side agrees or declines. No reply in 3 days = agreed."""
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="cancel_requests")
+    by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    reason = models.CharField(max_length=300)
+    status = models.CharField(max_length=10, default="pending", db_index=True)  # pending | accepted | declined | withdrawn | auto
+    reply = models.CharField(max_length=300, blank=True, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    responded_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+
+class CV(models.Model):
+    """A member's CV / resume: built on /market#cv, printable, can be shown on the seller page."""
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="market_cv")
+    data = models.JSONField(default=dict, blank=True)
+    template = models.CharField(max_length=12, default="classic")
+    public = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)

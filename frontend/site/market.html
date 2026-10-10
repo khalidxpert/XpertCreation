@@ -318,10 +318,66 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .pt-foot{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;margin-top:6px}.pt-foot small{margin-left:auto;color:var(--soft);font-weight:500}
 .pt-gal{aspect-ratio:4/3}.pt-gal .pt-cnt{bottom:12px;right:12px}
 [hidden]{display:none!important}
+
+/* ---- v5: packages, offers, milestones, files, cancel, CV ---- */
+.mk-bdg{display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;margin-left:5px;border-radius:99px;background:#DC2626;color:#fff;font-size:11px;font-weight:800;text-align:center;vertical-align:1px}
+.mk-pkt{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--ln)}
+.mk-pkt button{border:0;background:#F8FAFC;font:inherit;font-weight:800;font-size:13.5px;padding:12px 6px;color:var(--soft);cursor:pointer;border-bottom:3px solid transparent}
+.mk-pkt button.on{background:#fff;color:var(--ink);border-bottom-color:var(--b)}
+.mk-pkd{font-size:13.5px;color:#334155;margin:6px 0 2px;line-height:1.5}
+.mk-pkg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+@media(max-width:760px){.mk-pkg{grid-template-columns:1fr}}
+.mk-pkg>div{border:1.5px solid var(--ln);border-radius:14px;padding:10px;background:#F8FAFC}
+.mk-pkg h4{margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--b)}
+.mk-cust{display:block;text-align:center;margin-top:10px;font-weight:800;font-size:13.5px;color:var(--b);cursor:pointer;background:none;border:0;width:100%;font-family:inherit}
+.mk-ms{border:1.5px solid var(--ln);border-radius:14px;padding:12px;margin-top:10px;background:#fff}
+.mk-ms .hd{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mk-ms .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#EEF2FF;color:var(--b);font-weight:900;font-size:13px;flex:0 0 28px}
+.mk-ms .hd b{flex:1;min-width:120px}.mk-ms .amt{font-weight:900}
+.mk-ms.accepted{border-color:#BBF7D0;background:#F0FDF4}.mk-ms.accepted .n{background:#16A34A;color:#fff}
+.mk-ms.delivered{border-color:#BFDBFE;background:#EFF6FF}.mk-ms.cancelled{opacity:.55}
+.mk-ms .bt{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.mk-ms .bt .mk-btn{padding:8px 12px;font-size:13px}
+.mk-ms .dl{font-size:13.5px;white-space:pre-wrap;margin-top:8px;background:#F8FAFC;border-radius:10px;padding:8px 10px}
+.mk-bar2{height:8px;border-radius:99px;background:#EEF2F7;overflow:hidden;margin:10px 0 4px}.mk-bar2 i{display:block;height:100%;background:linear-gradient(90deg,#16A34A,#1B4DFF)}
+.mk-file{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--ln);font-size:13.5px}.mk-file:first-child{border-top:0}
+.mk-file .ic{width:36px;height:36px;border-radius:10px;background:#EEF2FF;display:grid;place-items:center;flex:0 0 36px;font-size:17px}
+.mk-file .t{flex:1;min-width:0}.mk-file .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mk-file small{color:var(--soft)}
+.mk-up{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.mk-up select{padding:9px;border-radius:10px;border:1.5px solid var(--ln);font:inherit;font-size:13.5px}
+.mk-warn{border:1.5px solid #FDE68A;background:#FFFBEB;border-radius:14px;padding:12px 14px;margin-top:10px;font-size:14px}
+.mk-warn .bt{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.mk-oc{border:1.5px solid var(--ln);border-radius:16px;padding:14px;margin-bottom:10px;background:#fff}
+.mk-oc .top{display:flex;gap:10px;align-items:center}.mk-oc .top .t{flex:1;min-width:0}.mk-oc .top b{display:block}.mk-oc .top small{color:var(--soft)}
+.mk-oc .pr{font-size:20px;font-weight:900}
+.mk-oc .ds{font-size:13.5px;color:#334155;white-space:pre-wrap;margin:8px 0}
+.mk-oc .meta{display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--soft)}
+.mk-oc .meta span{background:#F1F5F9;border-radius:8px;padding:3px 8px;font-weight:700}
+.mk-mrow{display:grid;grid-template-columns:1fr 110px 80px 34px;gap:6px;margin-top:6px}
+.mk-mrow input{padding:9px 10px!important}.mk-mrow button{border:0;background:#FEE2E2;color:#B91C1C;border-radius:10px;font-weight:900;cursor:pointer}
+.mk-cvw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px}
+@media(max-width:900px){.mk-cvw{grid-template-columns:1fr}}
+.mk-cvrow{border:1px dashed var(--ln);border-radius:12px;padding:8px 10px;margin-top:8px;position:relative}
+.mk-cvrow .x{position:absolute;top:6px;right:6px;border:0;background:#FEE2E2;color:#B91C1C;border-radius:8px;width:26px;height:26px;cursor:pointer;font-weight:900}
+.mk-cvrow .r2{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mk-cvrow .r4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+@media(max-width:600px){.mk-cvrow .r4{grid-template-columns:1fr 1fr}}
+.mk-tpl{display:flex;gap:6px;flex-wrap:wrap}.mk-tpl button{padding:8px 12px;border-radius:10px;border:1.5px solid var(--ln);background:#fff;font:inherit;font-weight:800;font-size:13px;cursor:pointer}.mk-tpl button.on{border-color:var(--b);background:#EEF2FF;color:var(--b)}
+.cv{background:#fff;color:#0D1424;border-radius:6px;box-shadow:0 10px 30px rgba(13,20,36,.12);padding:34px 36px;font-size:13px;line-height:1.5;min-height:600px}
+.cv h1{font-size:28px;margin:0;letter-spacing:-.02em}.cv .hl{font-size:15px;color:#1B4DFF;font-weight:700;margin-top:2px}
+.cv .ct{font-size:12px;color:#475569;margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 14px}
+.cv h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin:20px 0 8px;color:#1B4DFF;border-bottom:1.5px solid #E2E8F0;padding-bottom:4px}
+.cv .it{margin-bottom:10px}.cv .it b{font-size:13.5px}.cv .it .w{color:#64748B;font-size:12px}.cv .it p{margin:3px 0 0;white-space:pre-wrap}
+.cv .sk{display:flex;flex-wrap:wrap;gap:5px}.cv .sk span{background:#EEF2FF;color:#1E3A8A;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600}
+.cv.modern{padding:0;display:grid;grid-template-columns:34% 66%;overflow:hidden}
+.cv.modern .side{background:#0F172A;color:#E2E8F0;padding:30px 20px}.cv.modern .side h1{color:#fff;font-size:22px}.cv.modern .side .hl{color:#93C5FD}
+.cv.modern .side h3{color:#93C5FD;border-color:#334155}.cv.modern .side .ct{display:block;color:#CBD5E1}.cv.modern .side .ct span{display:block;margin-bottom:4px;word-break:break-word}
+.cv.modern .side .sk span{background:#1E293B;color:#E2E8F0}.cv.modern .main{padding:30px 26px}
+.cv.modern .av{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #334155;margin-bottom:12px}
+.cv.minimal{font-family:Georgia,"Times New Roman",serif}.cv.minimal h1{font-weight:400;font-size:32px}.cv.minimal .hl{color:#475569;font-weight:400;font-style:italic}
+.cv.minimal h3{color:#0D1424;border:0;letter-spacing:.2em;font-family:inherit}.cv.minimal .sk span{background:none;border:1px solid #CBD5E1;color:#334155}
+@media print{body *{visibility:hidden!important}#cvprint,#cvprint *{visibility:visible!important}#cvprint{position:absolute;left:0;top:0;width:100%}#cvprint .cv{box-shadow:none;border-radius:0}}
 </style>
 <nav class="mk-nav" id="mktabs">
-  <a href="#gigs" data-t="gigs">Explore</a><a href="#projects" data-t="projects">Projects</a><a href="#property" data-t="property">&#127968; Property</a><a href="#orders" data-t="orders">My orders</a>
-  <a href="#saved" data-t="saved">&#9825; Saved</a><a href="#sell" data-t="sell">Selling</a><a href="#wallet" data-t="wallet">Earnings</a><a href="#admin" data-t="admin" id="mkadmintab" hidden>Team</a>
+  <a href="#gigs" data-t="gigs">Explore</a><a href="#projects" data-t="projects">Projects</a><a href="#property" data-t="property">&#127968; Property</a><a href="#orders" data-t="orders">My orders<b class="mk-bdg" id="mkbu" hidden></b></a><a href="#offers" data-t="offers">Offers<b class="mk-bdg" id="mkbo" hidden></b></a>
+  <a href="#saved" data-t="saved">&#9825; Saved</a><a href="#sell" data-t="sell">Selling</a><a href="#wallet" data-t="wallet">Earnings</a><a href="#cv" data-t="cv">My CV</a><a href="#admin" data-t="admin" id="mkadmintab" hidden>Team</a>
   <span class="sp"></span><a href="#newproject" class="cta">+ Post a project</a>
 </nav>
 <div id="mkflash"></div>
@@ -446,7 +502,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function vGig(id){
     api("gigs/" + id + "/").then(function(r){
       if (!r.ok){ box.innerHTML = msg(esc(r.d.detail || "Not found."), "bad"); return; }
-      var g = r.d, mine = M.me && M.me.id === g.seller.id, st = g.seller_stats, pics = g.images || [], cur = 0;
+      var g = r.d, mine = M.me && M.me.id === g.seller.id, st = g.seller_stats, pics = g.images || [], cur = 0, PB = pkgBox(g, mine), PICK = PB ? PB.first : {price: g.price};
       var stars = function(n){ return '<span class="st">' + "&#9733;".repeat(n) + '<span style="color:#E2E8F0">' + "&#9733;".repeat(5 - n) + '</span></span>'; };
       var h = '<div class="mk-crumb"><a href="#gigs">Explore</a> &rsaquo; <a href="#cat-' + g.category + '">' + esc(catName(g.category)) + '</a></div><div class="mk-two"><div>'
         + '<h1 class="mk-gtitle">' + esc(g.title) + '</h1>'
@@ -458,25 +514,27 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<h2 style="font-size:20px;margin:26px 0 10px">About the seller</h2><div class="mk-box"><div class="mk-scard">' + av(g.seller) + '<div><b><a href="#seller-' + esc(g.seller.username) + '" style="color:var(--ink)">' + esc(g.seller.name) + '</a></b><br>'
         + '<span class="mk-badge">&#10003; ID verified</span> <small style="color:var(--soft)">' + esc(st.level) + '</small></div></div>'
         + '<div class="mk-kvs"><div>Rating<b>' + (st.rating ? '&#9733; ' + st.rating : 'New') + '</b></div><div>Orders done<b>' + st.done + '</b></div><div>Member since<b>' + new Date(g.seller_since).toLocaleDateString("en-GB", {month: "short", year: "numeric"}) + '</b></div></div>'
-        + '<p style="margin:12px 0 0"><a class="mk-btn" href="#seller-' + esc(g.seller.username) + '">See all services</a></p></div>'
+        + '<p style="margin:12px 0 0"><a class="mk-btn" href="#seller-' + esc(g.seller.username) + '">See all services</a>' + (g.cv ? ' <a class="mk-btn" href="#cv-' + esc(g.seller.username) + '">&#128196; View CV</a>' : '') + '</p></div>'
         + '<h2 style="font-size:20px;margin:26px 0 10px">Reviews</h2><div class="mk-box">' + (g.reviews.length ? g.reviews.map(function(x){ return '<div class="mk-rv"><b>' + esc(x.by) + '</b> ' + stars(x.rating) + ' <small style="color:var(--soft)">' + day(x.when) + '</small><div style="font-size:14px;margin-top:4px">' + esc(x.text) + '</div></div>'; }).join("") : '<div class="mk-empty" style="padding:16px"><b>No reviews yet</b>Order now and be the first to review.</div>') + '</div>'
         + (g.more && g.more.length ? '<h2 style="font-size:20px;margin:26px 0 10px">More from ' + esc(g.seller.name) + '</h2><div class="mk-grid">' + g.more.map(function(x){ x.level = st.level; return gigCard(x); }).join("") + '</div>' : '')
-        + '</div><div><div class="mk-stick"><div class="mk-pricebox"><div class="pbt"><div class="pr"><span style="font-weight:800">Price</span><b>' + rs(g.price) + '</b></div>'
-        + '<ul><li>' + g.days + ' day' + (g.days === 1 ? '' : 's') + ' delivery</li><li>' + g.revisions + ' revision' + (g.revisions === 1 ? '' : 's') + '</li><li>Pay safely, seller paid when you accept</li><li>Chat with the seller on the order page</li></ul></div>'
-        + '<div class="pbb" id="ob">' + (mine ? msg(g.featured ? "This is your service. &#9733; It is featured right now." : "This is your service.") + '<a class="mk-btn block" href="#editgig-' + g.id + '">Edit service</a><a class="mk-boost" href="/promote?product=gig_boost&amp;target=' + g.id + '">&#128640; Boost this service</a>' :
+        + '</div><div><div class="mk-stick"><div class="mk-pricebox">' + (PB ? PB.html : '<div class="pbt"><div class="pr"><span style="font-weight:800">Price</span><b>' + rs(g.price) + '</b></div>'
+        + '<ul><li>' + g.days + ' day' + (g.days === 1 ? '' : 's') + ' delivery</li><li>' + g.revisions + ' revision' + (g.revisions === 1 ? '' : 's') + '</li><li>Pay safely, seller paid when you accept</li><li>Chat with the seller on the order page</li></ul></div>')
+        + '<div class="pbb" id="ob">' + (mine ? msg((g.featured ? "This is your service. &#9733; It is featured right now." : "This is your service.") + " " + (g.views || 0) + " views so far.") + '<a class="mk-btn block" href="#editgig-' + g.id + '">Edit service</a><a class="mk-boost" href="/promote?product=gig_boost&amp;target=' + g.id + '">&#128640; Boost this service</a>' :
           !M.me ? '<a class="mk-btn d block" href="/login?next=' + encodeURIComponent("/market#gig-" + g.id) + '">Sign in to order</a>' :
-          '<button class="mk-btn d block" id="ocont">Continue (' + rs(g.price) + ')</button><div id="oform" hidden class="mk-f"><label for="oreq">What do you need?</label><textarea id="oreq" placeholder="Describe the work, sizes, words, deadline, examples you like..."></textarea>'
-          + (M.me.can_buy ? '' : msg(M.mode === "test" ? "Test mode: only the team can buy right now." : "Buying opens soon: payments are being switched on.")) + '<button class="mk-btn p block" id="obuy" style="margin-top:10px"' + (M.me.can_buy ? '' : ' disabled') + '>Pay ' + rs(g.price) + '</button>'
-          + '<p style="font-size:12px;color:var(--soft);margin:8px 0 0">Secure payment by Safepay. <a href="/refund-policy">Refund policy</a></p></div><div id="omsg"></div>')
+          '<button class="mk-btn d block" id="ocont">Continue (' + rs(PICK.price) + ')</button><div id="oform" hidden class="mk-f"><label for="oreq">What do you need?</label><textarea id="oreq" placeholder="Describe the work, sizes, words, deadline, examples you like..."></textarea>'
+          + (M.me.can_buy ? '' : msg(M.mode === "test" ? "Test mode: only the team can buy right now." : "Buying opens soon: payments are being switched on.")) + '<button class="mk-btn p block" id="obuy" style="margin-top:10px"' + (M.me.can_buy ? '' : ' disabled') + '>Pay ' + rs(PICK.price) + '</button>'
+          + '<p style="font-size:12px;color:var(--soft);margin:8px 0 0">Secure payment by Safepay. <a href="/refund-policy">Refund policy</a></p></div><div id="omsg"></div>' + requestForm(g.seller.username, g.id))
         + '</div></div><p style="font-size:12.5px;color:var(--soft);text-align:center;margin-top:10px">&#128274; Money held by XpertCreation until you accept</p></div></div></div>';
       box.innerHTML = h;
       var show = function(i){ cur = (i + pics.length) % pics.length; $("galimg").src = pics[cur]; [].forEach.call(document.querySelectorAll(".mk-thumbs img"), function(t, k){ t.className = k === cur ? "on" : ""; }); };
       if ($("gp")){ $("gp").onclick = function(){ show(cur - 1); }; $("gn").onclick = function(){ show(cur + 1); }; }
       box.onclick = function(e){ var t = e.target.closest(".mk-thumbs img"); if (t) show(+t.getAttribute("data-i")); };
       var c = $("ocont"); if (c) c.onclick = function(){ c.hidden = true; $("oform").hidden = false; $("oreq").focus(); };
+      if (PB) PB.wire(function(p){ PICK = p; if ($("ocont")) $("ocont").textContent = "Continue (" + rs(p.price) + ")"; if ($("obuy")) $("obuy").textContent = "Pay " + rs(p.price); });
+      wireRequest();
       var b = $("obuy"); if (b) b.onclick = function(){
         b.disabled = true; $("omsg").innerHTML = msg("Starting the payment…");
-        api("orders/", {gig: g.id, requirements: $("oreq").value}).then(function(x){ b.disabled = false; afterPay(x, $("omsg")); });
+        api("orders/", {gig: g.id, package: PICK.tier || "", requirements: $("oreq").value}).then(function(x){ b.disabled = false; afterPay(x, $("omsg")); });
       };
     });
   }
@@ -496,8 +554,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       box.innerHTML = '<div class="mk-crumb"><a href="#gigs">Explore</a> &rsaquo; Seller</div><div class="mk-box"><div class="mk-scard">' + av(d.seller) + '<div><b style="font-size:22px">' + esc(d.seller.name) + '</b> <small style="color:var(--soft)">@' + esc(d.seller.username) + '</small><br>'
         + (d.kyc ? '<span class="mk-badge">&#10003; ID verified</span> ' : '') + '<small style="color:var(--soft)">' + esc(s.level) + '</small></div></div>'
         + '<div class="mk-kvs"><div>Rating<b>' + (s.rating ? '&#9733; ' + s.rating + ' (' + s.ratings + ')' : 'New') + '</b></div><div>Orders done<b>' + s.done + '</b></div><div>Member since<b>' + new Date(d.since).toLocaleDateString("en-GB", {month: "short", year: "numeric"}) + '</b></div><div>Profile<b><a href="/feed?user=' + d.seller.id + '">XpertConnect</a></b></div></div></div>'
+        + '<p style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0">' + (d.cv ? '<a class="mk-btn" href="#cv-' + esc(d.seller.username) + '">&#128196; View CV</a>' : '') + '</p>'
+        + (!(M.me && M.me.id === d.seller.id) && d.kyc ? '<div style="max-width:420px">' + requestForm(d.seller.username, "") + '</div>' : '')
         + '<div class="mk-sec"><h2>Services</h2></div><div class="mk-grid">' + (d.gigs.length ? d.gigs.map(gigCard).join("") : '<div class="mk-empty"><b>No services right now</b></div>') + '</div>'
         + (d.reviews.length ? '<div class="mk-sec"><h2>Reviews</h2></div><div class="mk-box">' + d.reviews.map(function(x){ return '<div class="mk-rv"><b>' + esc(x.by) + '</b> <span class="st">' + "&#9733;".repeat(x.rating) + '</span> <small style="color:var(--soft)">' + esc(x.gig) + ' &middot; ' + day(x.when) + '</small><div style="font-size:14px;margin-top:4px">' + esc(x.text) + '</div></div>'; }).join("") + '</div>' : '');
+      wireRequest();
     });
   }
 
@@ -516,7 +577,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (!M.me){ box.innerHTML = signin(); return; }
     box.innerHTML = '<div class="mk-band" style="margin-top:6px"><div style="flex:1;min-width:240px"><h2>Your selling dashboard</h2><p>Post services, answer orders and get paid. You keep ' + (100 - M.fee_pct) + '% of every order.</p></div>'
       + (M.me.kyc ? '<a class="mk-btn w" href="#editgig-new">+ New service</a>' : '<a class="mk-btn w" href="/get-verified">Get ID verified</a>') + '</div>'
-      + (M.me.kyc ? '' : kycNote()) + '<div class="mk-sec"><h2>Your services</h2><a class="mk-btn" href="#projects">Find projects to bid on</a></div><div id="mg" class="mk-grid"></div>';
+      + (M.me.kyc ? '' : kycNote()) + (M.me.kyc ? '<div class="mk-trust" style="margin-top:12px"><div><span>&#9993;&#65039;</span><div><b><a href="#offers">Custom requests and offers</a></b>' + (M.me.requests_in ? M.me.requests_in + ' request' + (M.me.requests_in === 1 ? '' : 's') + ' waiting' : 'Send buyers your own price, with milestones') + '</div></div><div><span>&#128196;</span><div><b><a href="#cv">Your CV</a></b>Build it once, show it on your seller page</div></div><div><span>&#128230;</span><div><b>Packages</b>Edit a service to offer Basic, Standard and Premium</div></div></div>' : '') + '<div class="mk-sec"><h2>Your services</h2><a class="mk-btn" href="#projects">Find projects to bid on</a></div><div id="mg" class="mk-grid"></div>';
     api("gigs/?mine=1").then(function(r){
       var g = r.d.gigs || [];
       $("mg").innerHTML = g.length ? g.map(function(x){ return '<div>' + gigCard(x) + '<div style="display:flex;gap:6px;margin-top:8px"><a class="mk-btn" style="flex:1;padding:8px" href="#editgig-' + x.id + '">Edit</a><span class="mk-st ' + (x.active ? 'completed' : '') + '" style="align-self:center">' + (x.active ? 'Live' : 'Paused') + '</span></div></div>'; }).join("")
@@ -532,14 +593,19 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<label for="gt">Title (start with &ldquo;I will&rdquo;)</label><input id="gt" maxlength="100" placeholder="I will design a modern logo for your business" value="' + esc(g.title) + '">'
         + '<label for="gcat">Category</label><select id="gcat">' + cats(g.category) + '</select>'
         + '<label for="gd">What the buyer gets</label><textarea id="gd" maxlength="4000" style="min-height:180px" placeholder="What is included, what you need from the buyer, file types...">' + esc(g.description || "") + '</textarea>'
-        + '<div class="row"><div><label for="gp">Price (Rs)</label><input id="gp" type="number" min="' + M.min_price + '" value="' + esc(g.price) + '"></div><div><label for="gdays">Delivery (days)</label><input id="gdays" type="number" min="1" max="60" value="' + esc(g.days) + '"></div><div><label for="grev">Revisions</label><input id="grev" type="number" min="0" max="10" value="' + esc(g.revisions) + '"></div></div>'
+        + '<label style="display:flex;gap:8px;align-items:center;text-transform:none;font-size:14px;color:var(--ink);margin-top:14px"><input type="checkbox" id="gpk" style="width:auto"' + ((g.packages || []).length ? " checked" : "") + '> Offer 3 packages (Basic, Standard, Premium)</label>'
+        + '<div class="row" id="gone"' + ((g.packages || []).length ? ' hidden' : '') + '><div><label for="gp">Price (Rs)</label><input id="gp" type="number" min="' + M.min_price + '" value="' + esc(g.price) + '"></div><div><label for="gdays">Delivery (days)</label><input id="gdays" type="number" min="1" max="60" value="' + esc(g.days) + '"></div><div><label for="grev">Revisions</label><input id="grev" type="number" min="0" max="10" value="' + esc(g.revisions) + '"></div></div>'
+        + '<div class="mk-pkg" id="gpks"' + ((g.packages || []).length ? '' : ' hidden') + '>' + M.tiers.map(function(t){ var p = (g.packages || []).filter(function(x){ return x.tier === t[0]; })[0] || {name: t[1], desc: "", price: "", days: "", revisions: ""};
+            return '<div data-tier="' + t[0] + '"><h4>' + t[1] + '</h4><input class="pn" placeholder="Name" value="' + esc(p.name) + '"><textarea class="pd" placeholder="What is included" style="min-height:70px;margin-top:6px">' + esc(p.desc) + '</textarea>'
+              + '<input class="pp" type="number" placeholder="Price (Rs)" style="margin-top:6px" value="' + esc(p.price) + '"><div class="row" style="grid-template-columns:1fr 1fr;margin-top:6px"><input class="pdays" type="number" placeholder="Days" value="' + esc(p.days) + '"><input class="prev" type="number" placeholder="Revisions" value="' + esc(p.revisions) + '"></div></div>'; }).join("") + '</div>'
         + '<label style="display:flex;gap:8px;align-items:center;text-transform:none;font-size:14px;color:var(--ink)"><input type="checkbox" id="gact" style="width:auto"' + (g.active !== false ? " checked" : "") + '> Live (buyers can order)</label>'
         + (g.id ? '<label>Pictures (up to 3, shown 3:2)</label><div class="mk-pics" id="gpics"></div><input type="file" id="gfile" accept="image/*" hidden>' : '<p style="font-size:12.5px;color:var(--soft)">After saving you can add up to 3 pictures. Without pictures, a colourful cover is made for you.</p>')
         + '<p style="font-size:12.5px;color:var(--soft)">You get ' + (100 - M.fee_pct) + '% of the price. Never ask buyers to pay outside XpertCreation.</p>'
         + '<button class="mk-btn p" id="gsave">' + (g.id ? "Save changes" : "Create service") + '</button> <a class="mk-btn" href="#sell">Back</a><div id="gmsg"></div></div>'
         + '<div><div class="mk-stick"><p style="font-size:12px;font-weight:800;color:var(--soft);text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px">Live preview</p><div id="gprev" style="max-width:300px"></div></div></div></div>';
       var prev = function(){
-        var p = {id: g.id || 0, title: $("gt").value || "I will ...", category: $("gcat").value, price: +$("gp").value || 0, days: +$("gdays").value || 1, images: g.images || [], seller: {name: M.me.name, avatar: (g.seller && g.seller.avatar) || ""}, level: "New seller"};
+        var bp = $("gpk") && $("gpk").checked ? +($("gpks").querySelector(".pp").value) : 0;
+        var p = {id: g.id || 0, title: $("gt").value || "I will ...", category: $("gcat").value, price: bp || +$("gp").value || 0, days: +$("gdays").value || 1, images: g.images || [], seller: {name: M.me.name, avatar: (g.seller && g.seller.avatar) || ""}, level: "New seller"};
         $("gprev").innerHTML = gigCard(p).replace('href="#gig-0"', 'href="javascript:void 0"');
       };
       ["gt", "gcat", "gp", "gdays"].forEach(function(i){ $(i).addEventListener("input", prev); $(i).addEventListener("change", prev); }); prev();
@@ -563,8 +629,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
           api("gigs/" + g.id + "/image/", fd).then(function(x){ gf.value = ""; if (x.ok){ g.images = x.d.images; pics(); $("gmsg").innerHTML = ""; } else $("gmsg").innerHTML = msg(esc(x.d.detail || "Could not upload."), "bad"); });
         };
       }
+      $("gpk").onchange = function(){ $("gone").hidden = this.checked; $("gpks").hidden = !this.checked; prev(); };
       $("gsave").onclick = function(){
-        api("gigs/" + (g.id ? g.id + "/" : ""), {title: $("gt").value, category: $("gcat").value, description: $("gd").value, price: $("gp").value, days: $("gdays").value, revisions: $("grev").value, active: $("gact").checked})
+        var pks = !$("gpk").checked ? [] : [].map.call($("gpks").children, function(c){ return {tier: c.getAttribute("data-tier"), name: c.querySelector(".pn").value, desc: c.querySelector(".pd").value, price: c.querySelector(".pp").value, days: c.querySelector(".pdays").value, revisions: c.querySelector(".prev").value}; })
+          .filter(function(p){ return p.price || p.desc; });
+        if ($("gpk").checked && pks.length < 2){ $("gmsg").innerHTML = msg("Fill in at least two packages, or untick the packages box.", "bad"); return; }
+        api("gigs/" + (g.id ? g.id + "/" : ""), {title: $("gt").value, category: $("gcat").value, description: $("gd").value, price: $("gp").value, days: $("gdays").value, revisions: $("grev").value, active: $("gact").checked, packages: pks})
           .then(function(r){ if (!r.ok){ $("gmsg").innerHTML = msg(esc(r.d.detail || "Could not save."), "bad"); return; }
             if (!g.id){ location.hash = "#editgig-" + r.d.id; flash("Service created. Now add a picture or two.", "ok"); } else { location.hash = "#gig-" + r.d.id; flash("Saved.", "ok"); } });
       };
@@ -654,43 +724,47 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         var l = o.filter(function(x){ return x.role === role; });
         return '<div class="mk-box"><h2>' + title + '</h2>' + (l.length ? l.map(function(x){
           var w = role === "buyer" ? x.seller : x.buyer;
-          return '<a class="mk-row" href="#order-' + x.id + '">' + av(w) + '<div class="t"><b>' + esc(x.title) + '</b><small>' + x.no + ' &middot; ' + (role === "buyer" ? "Seller " : "Buyer ") + esc(w.name) + ' &middot; ' + day(x.created) + '</small></div><b style="font-size:14.5px">' + rs(x.amount) + '</b> ' + stl(x.status) + '</a>';
+          return '<a class="mk-row" href="#order-' + x.id + '">' + av(w) + '<div class="t"><b>' + esc(x.title) + (x.unread ? ' <span class="mk-bdg">' + x.unread + '</span>' : '') + '</b><small>' + x.no + ' &middot; ' + (role === "buyer" ? "Seller " : "Buyer ") + esc(w.name) + ' &middot; ' + day(x.created) + '</small></div><b style="font-size:14.5px">' + rs(x.amount) + '</b> ' + stl(x.status) + '</a>';
         }).join("") : '<div class="mk-empty" style="padding:16px">' + empty + '</div>') + '</div>';
       };
-      box.innerHTML = '<div class="mk-sec" style="margin-top:6px"><h2>My orders</h2></div>' + part("buyer", "Bought", '<b>Nothing bought yet</b><a href="#gigs">Explore services</a>') + part("seller", "Selling", '<b>No orders to work on</b><a href="#sell">Post a service</a> or <a href="#projects">bid on projects</a>');
+      box.innerHTML = '<div class="mk-sec" style="margin-top:6px"><h2>My orders</h2><form id="trk" style="margin-left:auto;display:flex;gap:6px"><input id="trkn" placeholder="Track XM-000123" style="padding:8px 10px;border:1.5px solid var(--ln);border-radius:10px;font:inherit;font-size:13px;width:150px"><button class="mk-btn" style="padding:8px 12px">Track</button></form></div>' + part("buyer", "Bought", '<b>Nothing bought yet</b><a href="#gigs">Explore services</a>') + part("seller", "Selling", '<b>No orders to work on</b><a href="#sell">Post a service</a> or <a href="#projects">bid on projects</a>');
+      $("trk").onsubmit = function(e){ e.preventDefault(); var n = $("trkn").value.trim(); if (n) location.hash = "#track-" + encodeURIComponent(n); };
     });
   }
   function vOrder(id){
     if (!M.me){ box.innerHTML = signin(); return; }
     api("orders/" + id + "/").then(function(r){
       if (!r.ok){ box.innerHTML = msg(esc(r.d.detail || "Not found."), "bad"); return; }
-      var o = r.d, B = o.role === "buyer", S = o.role === "seller", h = "";
+      var o = r.d, B = o.role === "buyer", S = o.role === "seller", h = "", MS = o.milestones && o.milestones.length;
       var step = {pending: 0, active: 1, delivered: 2, completed: 3}[o.status];
       h += '<div class="mk-crumb"><a href="#orders">My orders</a> &rsaquo; ' + o.no + '</div><div class="mk-two"><div>';
       h += '<div class="mk-box"><h1 class="mk-gtitle" style="font-size:24px">' + esc(o.title) + '</h1><div>' + stl(o.status) + (o.test ? ' <span class="mk-st delivered">Test payment</span>' : '') + '</div>'
         + (step !== undefined ? '<div class="mk-steps">' + ["Paid", "In progress", "Delivered", "Completed"].map(function(t, i){ return '<div class="' + (i <= step && !(i === 0 && o.status === "pending") ? "on" : "") + '">' + t + '</div>'; }).join("") + '</div>' : '');
       if (o.status === "pending" && B) h += msg("Not paid yet. The seller starts after you pay.") + '<button class="mk-btn p" id="opay">Pay ' + rs(o.amount) + '</button> <button class="mk-btn r" data-a="cancel">Cancel</button>';
-      if (o.status === "delivered" && B) h += msg("Delivered! Check the work below. If it is right, accept it. It completes by itself on " + day(o.auto_done) + ".", "ok")
+      if (o.status === "delivered" && B && !MS) h += msg("Delivered! Check the work below. If it is right, accept it. It completes by itself on " + day(o.auto_done) + ".", "ok")
         + '<button class="mk-btn g" data-a="accept">Accept and complete</button> ' + (o.revisions_left ? '<button class="mk-btn" data-a="revision">Ask for a revision</button> ' : '') + '<button class="mk-btn r" data-a="dispute">Report a problem</button>';
-      if (o.status === "active" && S) h += '<div class="mk-f"><label for="odel">Deliver the work (what you did and a link to the files)</label><textarea id="odel"></textarea></div><p><button class="mk-btn g" data-a="deliver">Deliver now</button> <button class="mk-btn r" data-a="cancel">Cancel and refund</button> <button class="mk-btn r" data-a="dispute">Report a problem</button></p>';
+      if (o.status === "active" && S) h += (MS ? msg("This order is paid in milestones: start and deliver each one below.") + '<p>' : '<div class="mk-f"><label for="odel">Deliver the work (what you did and a link to the files, or upload them under Files)</label><textarea id="odel"></textarea></div><p><button class="mk-btn g" data-a="deliver">Deliver now</button> ') + '<button class="mk-btn r" data-a="cancel">Decline and refund</button> <button class="mk-btn r" data-a="dispute">Report a problem</button></p>';
       if (o.status === "active" && B) h += msg("The seller is working on it. Due " + day(o.due_at) + ".") + '<button class="mk-btn r" data-a="dispute">Report a problem</button>';
       if (o.status === "delivered" && S) h += msg("Waiting for the buyer. It completes by itself on " + day(o.auto_done) + ".");
       if (o.status === "disputed") h += msg(esc(o.note) + "<br>Our team will decide within 7 working days.", "bad");
-      if (o.status === "refund_due") h += msg("A full refund to the buyer is being sent (7 to 14 working days).", "bad");
+      if (o.status === "refund_due") h += msg(esc(o.note || "Cancelled.") + "<br>Refund to the buyer: <b>" + rs(o.refund_amount || o.amount) + "</b>, sent to the original payment method within 7 to 14 working days.", "bad");
+      if (o.status === "refunded") h += msg("Refunded to the buyer: " + rs(o.refund_amount || o.amount) + ".");
       if (o.status === "completed" && B && !o.review) h += '<div class="mk-f"><label>How was it? Rate the seller</label><div class="mk-stars" id="ostars">' + [1, 2, 3, 4, 5].map(function(n){ return '<button type="button" data-n="' + n + '">&#9733;</button>'; }).join("") + '</div><input id="orev" maxlength="500" placeholder="A few words for other buyers (optional)"></div><p><button class="mk-btn p" data-a="review">Send review</button></p>';
       if (o.review) h += '<p>Your review: <span style="color:#F59E0B">' + "&#9733;".repeat(o.review.rating) + '</span> ' + esc(o.review.text) + '</p>';
-      h += '<div id="oamsg"></div></div>';
+      h += '<div id="oamsg"></div></div>' + orderExtras(o);
       h += '<div class="mk-box"><h2>What the buyer asked for</h2><div class="mk-desc">' + esc(o.requirements) + '</div>' + (o.delivery ? '<h2 style="margin-top:16px">Delivery</h2><div class="mk-desc" style="background:#F0FDF4;border-radius:12px;padding:12px">' + esc(o.delivery).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener nofollow">$1</a>') + '</div>' : '') + '</div>';
       h += '<div class="mk-box"><h2>Messages</h2><div class="mk-thread" id="oth">' + o.messages.map(function(m){
         return '<div class="mk-m ' + (m.from === "me" ? "me" : m.from === "system" ? "sys" : "") + '">' + (m.from !== "me" && m.from !== "system" ? '<small>' + esc(m.from) + '</small>' : '') + esc(m.text) + '<small>' + when(m.when) + '</small></div>';
       }).join("") + '</div>' + (o.status !== "pending" && o.role !== "team" ? '<div class="mk-f" style="display:flex;gap:8px;margin-top:8px"><input id="omsgt" placeholder="Write a message" style="flex:1"><button class="mk-btn p" data-a="msg">Send</button></div>' : '')
         + '<p style="font-size:12px;color:var(--soft)">Keep all talk and payment on XpertCreation. Our team reads this thread if a problem is reported.</p></div></div>';
       h += '<div><div class="mk-stick"><div class="mk-pricebox"><div class="pbt"><div class="pr"><span style="font-weight:800">' + o.no + '</span><b>' + rs(o.amount) + '</b></div><ul style="list-style:none">'
-        + '<li>Buyer: ' + esc(o.buyer.name) + '</li><li>Seller: ' + esc(o.seller.name) + '</li>' + (S || o.role === "team" ? '<li>Seller gets ' + rs(o.seller_gets) + '</li>' : '')
+        + (o.package ? '<li>Package: ' + esc(o.package === "custom" ? "Custom offer" : o.package.charAt(0).toUpperCase() + o.package.slice(1)) + '</li>' : '') + '<li>Buyer: ' + esc(o.buyer.name) + '</li><li>Seller: ' + esc(o.seller.name) + '</li>' + (S || o.role === "team" ? '<li>Seller gets ' + rs(o.seller_gets) + '</li>' : '')
         + (o.due_at ? '<li>Due ' + day(o.due_at) + '</li>' : '<li>' + o.days + ' days delivery</li>') + '<li>' + o.revisions_left + ' revision' + (o.revisions_left === 1 ? '' : 's') + ' left</li></ul></div>'
         + (o.gig ? '<div class="pbb"><a class="mk-btn block" href="#gig-' + o.gig + '">View the service</a></div>' : '') + '</div></div></div></div>';
       box.innerHTML = h;
       var th = $("oth"); if (th) th.scrollTop = th.scrollHeight;
+      wireOrderExtras(o, function(){ vOrder(id); });
+      if (M.me){ api("meta/").then(function(x){ if (x.ok){ M.me = x.d.me; badges(); } }); }
       var rating = 0;
       var pb = $("opay"); if (pb) pb.onclick = function(){ pb.disabled = true; api("orders/" + id + "/pay/", {}).then(function(x){ pb.disabled = false; x.d.id = id; afterPay(x, $("oamsg")); }); };
       var mt = $("omsgt"); if (mt) mt.onkeydown = function(e){ if (e.key === "Enter") box.querySelector("[data-a=msg]").click(); };
@@ -703,13 +777,267 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         if (a === "msg"){ body.text = $("omsgt").value; if (!body.text.trim()) return; }
         if (a === "revision"){ body.text = prompt("What should the seller change?"); if (!body.text) return; }
         if (a === "dispute"){ body.text = prompt("What is the problem? Our team will read the whole order."); if (!body.text) return; }
-        if (a === "cancel" && !confirm(B ? "Cancel this unpaid order?" : "Cancel this order? The buyer gets a full refund.")) return;
+        if (a === "cancel"){ if (B){ if (!confirm("Cancel this unpaid order?")) return; } else { body.text = prompt("Why are you declining? The buyer gets a full refund and sees this."); if (!body.text) return; } }
         if (a === "accept" && !confirm("Accept the work? The seller gets paid and this cannot be undone.")) return;
         if (a === "review"){ body.rating = rating; body.text = $("orev").value; }
         b.disabled = true;
         api("orders/" + id + "/" + a + "/", body).then(function(x){ b.disabled = false; if (x.ok) vOrder(id); else $("oamsg").innerHTML = msg(esc(x.d.detail || "Could not do that."), "bad"); });
       };
     });
+  }
+
+  // ================= v5: packages, custom offers, milestones, files, cancel rules, CV =================
+  function pkgBox(g, mine){
+    var P = g.packages || [], sel = 0;
+    var row = function(p){ return '<div class="pr"><span style="font-weight:800">' + esc(p.name) + '</span><b>' + rs(p.price) + '</b></div><div class="mk-pkd">' + esc(p.desc) + '</div>'
+      + '<ul><li>' + p.days + ' day' + (p.days === 1 ? '' : 's') + ' delivery</li><li>' + p.revisions + ' revision' + (p.revisions === 1 ? '' : 's') + '</li><li>Pay safely, seller paid when you accept</li></ul>'; };
+    if (!P.length) return null;
+    return {html: '<div class="mk-pkt" id="pkt">' + P.map(function(p, i){ return '<button type="button" data-pk="' + i + '" class="' + (i === sel ? 'on' : '') + '">' + esc(({basic: "Basic", standard: "Standard", premium: "Premium"})[p.tier] || p.name) + '</button>'; }).join("") + '</div><div class="pbt" id="pkb">' + row(P[0]) + '</div>',
+            wire: function(onPick){ var t = $("pkt"); if (!t) return; t.onclick = function(e){ var b = e.target.closest("[data-pk]"); if (!b) return; sel = +b.getAttribute("data-pk");
+              [].forEach.call(t.children, function(x, i){ x.className = i === sel ? "on" : ""; }); $("pkb").innerHTML = row(P[sel]); onPick(P[sel]); }; },
+            first: P[0]};
+  }
+  function requestForm(seller, gigId){
+    if (!M.me) return '<a class="mk-btn block" href="/login?next=' + encodeURIComponent(location.pathname + location.hash) + '">Sign in to ask for a custom offer</a>';
+    return '<button class="mk-cust" id="crq">&#9993; Need something different? Ask for a custom offer</button><div id="crf" hidden class="mk-f"><label for="crb">Describe the work</label><textarea id="crb" placeholder="What you need, sizes, pages, deadline..."></textarea>'
+      + '<div class="row" style="grid-template-columns:1fr 1fr"><div><label for="crm">Budget (Rs, optional)</label><input id="crm" type="number" min="0"></div><div><label for="crd">Needed in (days)</label><input id="crd" type="number" min="0"></div></div>'
+      + '<button class="mk-btn p block" id="crs" style="margin-top:10px" data-seller="' + esc(seller) + '" data-gig="' + (gigId || "") + '">Send request</button><div id="crmsg"></div></div>';
+  }
+  function wireRequest(){
+    var a = $("crq"); if (!a) return;
+    a.onclick = function(){ a.hidden = true; $("crf").hidden = false; $("crb").focus(); };
+    $("crs").onclick = function(){ var b = this; b.disabled = true;
+      api("requests/", {seller: b.getAttribute("data-seller"), gig: b.getAttribute("data-gig"), brief: $("crb").value, budget: $("crm").value, days: $("crd").value}).then(function(x){
+        b.disabled = false;
+        if (!x.ok){ $("crmsg").innerHTML = msg(esc(x.d.detail || "Could not send."), "bad"); return; }
+        $("crf").innerHTML = msg("Request sent. The seller will reply with an offer; you will get a notification. See it under <a href='#offers'><b>Offers</b></a>.", "ok"); }); };
+  }
+
+  // ---------------- offers and requests
+  function offerCard(x, me){
+    var B = !x.mine, live = x.live;
+    return '<div class="mk-oc"><div class="top">' + av(B ? x.seller : x.buyer) + '<div class="t"><b>' + esc(x.title) + '</b><small>' + (B ? 'From ' + esc(x.seller.name) : 'To ' + esc(x.buyer.name)) + ' &middot; ' + day(x.when) + '</small></div><span class="pr">' + rs(x.price) + '</span></div>'
+      + '<div class="ds">' + esc(x.description) + '</div><div class="meta"><span>' + x.days + ' days</span><span>' + x.revisions + ' revision' + (x.revisions === 1 ? '' : 's') + '</span>'
+      + (x.milestones.length ? '<span>' + x.milestones.length + ' milestones</span>' : '') + (x.gig_title ? '<span>' + esc(x.gig_title) + '</span>' : '')
+      + '<span>' + (x.status === "pending" ? 'Valid until ' + day(x.expires) : esc(x.status)) + '</span></div>'
+      + (x.milestones.length ? '<div style="margin-top:8px">' + x.milestones.map(function(m, i){ return '<div class="mk-row" style="padding:6px 0"><div class="t"><b>' + (i + 1) + '. ' + esc(m.title) + '</b><small>' + m.days + ' days</small></div><b>' + rs(m.amount) + '</b></div>'; }).join("") + '</div>' : '')
+      + '<div class="bt" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">'
+      + (B && live ? '<button class="mk-btn p" data-of="' + x.id + '" data-oa="accept">Accept and pay ' + rs(x.price) + '</button><button class="mk-btn r" data-of="' + x.id + '" data-oa="decline">Decline</button>' : '')
+      + (B && x.status === "accepted" && x.order ? '<a class="mk-btn" href="#order-' + x.order + '">Open the order</a>' : '')
+      + (!B && live ? '<button class="mk-btn r" data-of="' + x.id + '" data-oa="withdraw">Withdraw</button>' : '')
+      + (!B && x.order ? '<a class="mk-btn" href="#order-' + x.order + '">Open the order</a>' : '') + '</div></div>';
+  }
+  function offerForm(req, buyerName){
+    return '<div class="mk-f" id="off-' + (req || "x") + '"><label>Title</label><input class="oft" maxlength="120" placeholder="Brand identity for your cafe">'
+      + (req ? '' : '<label>Buyer username</label><input class="ofu" placeholder="their XpertCreation username" value="' + esc(buyerName || "") + '">')
+      + '<label>What the buyer gets</label><textarea class="ofd" placeholder="What is included, what you need from the buyer..."></textarea>'
+      + '<div class="row"><div><label>Price (Rs)</label><input class="ofp" type="number" min="' + M.min_price + '"></div><div><label>Days</label><input class="ofdays" type="number" min="1" value="3"></div><div><label>Revisions</label><input class="ofr" type="number" min="0" max="10" value="1"></div></div>'
+      + '<label style="display:flex;gap:8px;align-items:center;text-transform:none;font-size:14px;color:var(--ink)"><input type="checkbox" class="ofms" style="width:auto"> Split into milestones (paid one by one)</label>'
+      + '<div class="ofmsb" hidden><div class="mk-mrow" style="font-size:11px;font-weight:800;color:var(--soft)"><span>Milestone</span><span>Amount (Rs)</span><span>Days</span><span></span></div><div class="ofrows"></div>'
+      + '<button type="button" class="mk-btn ofadd" style="margin-top:6px;padding:7px 12px">+ Add milestone</button><p class="ofsum" style="font-size:12.5px;color:var(--soft);margin:6px 0 0"></p></div>'
+      + '<button class="mk-btn p ofsend" style="margin-top:12px" data-req="' + (req || "") + '">Send offer</button><div class="ofmsg"></div></div>';
+  }
+  function wireOfferForms(root, done){
+    [].forEach.call(root.querySelectorAll(".mk-f[id^=off-]"), function(f){
+      var q = function(c){ return f.querySelector(c); };
+      var row = function(){ var d = document.createElement("div"); d.className = "mk-mrow"; d.innerHTML = '<input placeholder="e.g. First draft"><input type="number" min="100" placeholder="Rs"><input type="number" min="1" value="3"><button type="button">&times;</button>'; q(".ofrows").appendChild(d); sum(); };
+      var sum = function(){ var t = 0; [].forEach.call(q(".ofrows").children, function(r){ t += +r.children[1].value || 0; }); var p = +q(".ofp").value || 0;
+        q(".ofsum").innerHTML = "Milestones add up to <b>" + rs(t) + "</b>" + (p ? (t === p ? " &#10003; matches the price" : " &middot; the price is " + rs(p)) : ""); };
+      q(".ofms").onchange = function(){ q(".ofmsb").hidden = !this.checked; if (this.checked && !q(".ofrows").children.length){ row(); row(); } };
+      q(".ofadd").onclick = row;
+      f.addEventListener("input", sum);
+      q(".ofrows").onclick = function(e){ if (e.target.tagName === "BUTTON"){ e.target.parentNode.remove(); sum(); } };
+      q(".ofsend").onclick = function(){
+        var b = this, ms = [];
+        if (q(".ofms").checked) [].forEach.call(q(".ofrows").children, function(r){ ms.push({title: r.children[0].value, amount: r.children[1].value, days: r.children[2].value}); });
+        var body = {title: q(".oft").value, description: q(".ofd").value, price: q(".ofp").value, days: q(".ofdays").value, revisions: q(".ofr").value, milestones: ms};
+        if (b.getAttribute("data-req")) body.request = b.getAttribute("data-req"); else body.buyer = q(".ofu").value;
+        b.disabled = true;
+        api("offers/", body).then(function(x){ b.disabled = false; if (!x.ok){ q(".ofmsg").innerHTML = msg(esc(x.d.detail || "Could not send."), "bad"); return; } flash("Offer sent. The buyer has " + M.offer_days + " days to accept it.", "ok"); done(); });
+      };
+    });
+  }
+  function vOffers(){
+    if (!M.me){ box.innerHTML = signin(); return; }
+    api("requests/").then(function(r){
+      var d = r.d, h = '<div class="mk-sec" style="margin-top:6px"><h2>Custom offers</h2></div>';
+      var oin = d.offers_in.filter(function(x){ return x.live; }), oold = d.offers_in.filter(function(x){ return !x.live; });
+      h += '<div class="mk-box"><h2>Offers for you' + (oin.length ? ' <span class="mk-bdg">' + oin.length + '</span>' : '') + '</h2>' + (oin.length ? oin.map(offerCard).join("") : '<div class="mk-empty" style="padding:14px">No open offers. On any service, tap <b>Ask for a custom offer</b>.</div>')
+        + (oold.length ? '<details style="margin-top:8px"><summary style="cursor:pointer;font-weight:700;color:var(--soft)">Older offers (' + oold.length + ')</summary>' + oold.map(offerCard).join("") + '</details>' : '') + '<div id="ofmsg0"></div></div>';
+      var rin = d.requests_in.filter(function(x){ return x.status === "open"; });
+      if (M.me.kyc || d.requests_in.length || d.offers_out.length){
+        h += '<div class="mk-box"><h2>Requests to you' + (rin.length ? ' <span class="mk-bdg">' + rin.length + '</span>' : '') + '</h2>' + (d.requests_in.length ? d.requests_in.map(function(q){
+          return '<div class="mk-oc"><div class="top">' + av(q.buyer) + '<div class="t"><b>' + esc(q.buyer.name) + '</b><small>' + day(q.when) + (q.gig_title ? ' &middot; ' + esc(q.gig_title) : '') + '</small></div>' + bd(q.status, q.status === "open" ? "active" : q.status === "accepted" ? "completed" : "") + '</div>'
+            + '<div class="ds">' + esc(q.brief) + '</div><div class="meta">' + (q.budget ? '<span>Budget ' + rs(q.budget) + '</span>' : '') + (q.days ? '<span>Needed in ' + q.days + ' days</span>' : '') + '</div>'
+            + (q.status === "open" ? '<div style="display:flex;gap:6px;margin-top:10px"><button class="mk-btn p" data-mk="' + q.id + '">Send an offer</button><button class="mk-btn r" data-rc="' + q.id + '">Can&rsquo;t take it</button></div><div id="rq-' + q.id + '" hidden>' + offerForm(q.id) + '</div>' : '')
+            + (q.offers.length ? q.offers.map(function(o){ return '<div style="font-size:13px;color:var(--soft);margin-top:6px">Your offer: <b>' + esc(o.title) + '</b> ' + rs(o.price) + ' &middot; ' + esc(o.status) + '</div>'; }).join("") : '') + '</div>';
+        }).join("") : '<div class="mk-empty" style="padding:14px">No requests yet. Buyers can ask you for a custom offer from your services.</div>') + '</div>';
+        h += '<div class="mk-box"><h2>Offers you sent</h2>' + (d.offers_out.length ? d.offers_out.map(offerCard).join("") : '<div class="mk-empty" style="padding:14px">None yet.</div>')
+          + (M.me.kyc ? '<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:800;color:var(--b)">+ Send an offer to a buyer you know</summary>' + offerForm(null) + '</details>' : '') + '</div>';
+      }
+      if (d.requests_out.length) h += '<div class="mk-box"><h2>Your requests</h2>' + d.requests_out.map(function(q){ return '<div class="mk-row"><div class="t"><b>To ' + esc(q.seller.name) + '</b><small>' + esc(q.brief.slice(0, 120)) + '</small></div>' + bd(q.status, q.status === "accepted" ? "completed" : q.status === "offered" ? "active" : "") + (q.status === "open" ? ' <button class="mk-btn r" data-rc="' + q.id + '" style="padding:6px 10px">Close</button>' : '') + '</div>'; }).join("") + '</div>';
+      box.innerHTML = h;
+      wireOfferForms(box, vOffers);
+      box.onclick = function(e){
+        var a = e.target.closest("[data-of]"), m = e.target.closest("[data-mk]"), c = e.target.closest("[data-rc]");
+        if (m){ var el = $("rq-" + m.getAttribute("data-mk")); el.hidden = !el.hidden; return; }
+        if (c){ if (confirm("Close this request?")) api("requests/" + c.getAttribute("data-rc") + "/close/", {}).then(vOffers); return; }
+        if (!a) return;
+        var act = a.getAttribute("data-oa"), id = a.getAttribute("data-of");
+        if (act === "accept" && !confirm("Accept this offer? Next you pay; the money is held until you accept the work.")) return;
+        if (act !== "accept" && !confirm(act === "decline" ? "Decline this offer?" : "Withdraw your offer?")) return;
+        a.disabled = true;
+        api("offers/" + id + "/" + act + "/", {}).then(function(x){ a.disabled = false;
+          if (!x.ok){ $("ofmsg0").innerHTML = msg(esc(x.d.detail || "Could not do that."), "bad"); return; }
+          if (act === "accept") afterPay(x, $("ofmsg0")); else vOffers(); });
+      };
+    });
+  }
+
+  // ---------------- order extras: milestones, files, cancel
+  var MST = {waiting: "Not started", working: "In progress", delivered: "Delivered", revision: "Changes asked", accepted: "Paid to seller", cancelled: "Cancelled"};
+  function orderExtras(o){
+    var B = o.role === "buyer", S = o.role === "seller", h = "";
+    if (o.milestones && o.milestones.length){
+      var tot = o.amount, rel = o.released || 0;
+      h += '<div class="mk-box"><h2>Milestones</h2><div class="mk-bar2"><i style="width:' + Math.round(rel / tot * 100) + '%"></i></div><p style="font-size:13px;color:var(--soft);margin:0">' + rs(rel) + ' of ' + rs(tot) + ' released to the seller. Each part is paid when the buyer accepts it.</p>'
+        + o.milestones.map(function(m){
+          var bt = "";
+          if (o.status === "active"){
+            if (S && m.status === "waiting") bt += '<button class="mk-btn" data-m="' + m.id + '" data-ma="start">Start</button>';
+            if (S && ["waiting", "working", "revision"].indexOf(m.status) >= 0) bt += '<button class="mk-btn g" data-m="' + m.id + '" data-ma="deliver">Deliver</button>';
+            if (B && m.status === "delivered") bt += '<button class="mk-btn g" data-m="' + m.id + '" data-ma="accept">Accept and pay ' + rs(m.amount) + '</button><button class="mk-btn" data-m="' + m.id + '" data-ma="revision">Ask for changes</button>';
+          }
+          return '<div class="mk-ms ' + m.status + '"><div class="hd"><span class="n">' + m.number + '</span><b>' + esc(m.title) + '</b><span class="amt">' + rs(m.amount) + '</span>' + bd(MST[m.status] || m.status, m.status === "accepted" ? "completed" : m.status === "delivered" ? "delivered" : m.status === "cancelled" ? "cancelled" : "active") + '</div>'
+            + '<small style="color:' + (m.late ? '#B91C1C' : 'var(--soft)') + '">' + m.days + ' days' + (m.due_at && m.status !== "accepted" ? ' &middot; due ' + day(m.due_at) + (m.late ? ' (late)' : '') : '') + (m.auto_at ? ' &middot; accepted by itself on ' + day(m.auto_at) : '') + '</small>'
+            + (m.delivery ? '<div class="dl">' + esc(m.delivery).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener nofollow">$1</a>') + '</div>' : '')
+            + (m.revision_note && m.status === "revision" ? '<div class="dl" style="background:#FFFBEB">Changes asked: ' + esc(m.revision_note) + '</div>' : '')
+            + (bt ? '<div class="bt">' + bt + '</div>' : '') + '</div>';
+        }).join("") + '</div>';
+    }
+    if (o.status !== "pending" && o.status !== "cancelled"){
+      var IC2 = {pdf: "&#128196;", zip: "&#128230;", rar: "&#128230;", "7z": "&#128230;", mp4: "&#127916;", mov: "&#127916;", mp3: "&#127925;", jpg: "&#128444;", jpeg: "&#128444;", png: "&#128444;", webp: "&#128444;", gif: "&#128444;"};
+      h += '<div class="mk-box"><h2>Files</h2>' + (o.files.length ? o.files.map(function(f){ var ext = (f.name.split(".").pop() || "").toLowerCase();
+          return '<div class="mk-file"><span class="ic">' + (IC2[ext] || "&#128206;") + '</span><div class="t"><b>' + esc(f.name) + '</b><small>' + esc(f.kind_label) + ' &middot; ' + esc(f.by) + ' &middot; ' + Math.max(1, Math.round(f.size / 1024)) + ' KB &middot; ' + day(f.when) + (f.note ? ' &middot; ' + esc(f.note) : '') + '</small></div>'
+            + '<a class="mk-btn" style="padding:7px 11px" href="/api/market/files/' + f.id + '/">Download</a>' + (f.mine && ["completed", "refunded"].indexOf(o.status) < 0 ? ' <button class="mk-btn r" style="padding:7px 10px" data-fdel="' + f.id + '">&times;</button>' : '') + '</div>'; }).join("") : '<p style="font-size:13.5px;color:var(--soft);margin:0">No files yet.</p>')
+        + (["active", "delivered", "disputed"].indexOf(o.status) >= 0 && o.role !== "team" ? '<div class="mk-up"><select id="fkind">' + (S ? '<option value="delivery">Delivery</option><option value="file">Other file</option>' : '<option value="brief">Brief / sample</option><option value="revision">For a revision</option><option value="file">Other file</option>') + '</select>'
+          + '<label class="mk-btn p" style="margin:0">&#11014; Upload a file<input type="file" id="ffile" hidden></label></div><p style="font-size:12px;color:var(--soft);margin:6px 0 0">Up to ' + M.max_file_mb + ' MB: pictures, PDF, Office, ZIP, audio, video. Only the two of you (and our team if a problem is reported) can open them.</p>' : '')
+        + '<div id="fmsg"></div></div>';
+    }
+    var cr = o.cancel_request;
+    if (cr) h += '<div class="mk-warn"><b>' + (cr.mine ? 'You asked to cancel' : esc(cr.by) + ' asked to cancel') + ':</b> ' + esc(cr.reason)
+      + '<br><small>' + (cr.mine ? 'Waiting for the other side. ' : '') + 'If there is no reply, it is agreed on ' + day(cr.auto_at) + '.</small><div class="bt">'
+      + (cr.mine ? '<button class="mk-btn" data-cr="withdraw">Withdraw my request</button>' : '<button class="mk-btn g" data-cr="accept">Agree to cancel</button><button class="mk-btn r" data-cr="decline">Decline</button>') + '</div></div>';
+    if (o.hours_late > 0 && o.status === "active") h += '<div class="mk-warn" style="border-color:#FECACA;background:#FEF2F2"><b>This order is ' + Math.floor(o.hours_late) + ' hours late.</b>'
+      + (B ? (o.can_cancel_late ? ' You can cancel it now for a full refund.<div class="bt"><button class="mk-btn r" data-a2="cancel_late">Cancel and get a refund</button></div>' : ' If it is not delivered within ' + M.late_hours + ' hours of the due time, you can cancel it for a full refund.') : ' Please deliver as soon as you can.') + '</div>';
+    if (o.can_request_cancel && !cr) h += '<p style="margin-top:10px"><button class="mk-btn" data-a2="cancel_request" style="padding:8px 12px;font-size:13px">Ask to cancel this order</button></p>';
+    return h;
+  }
+  function wireOrderExtras(o, again){
+    if (box._x5) box.removeEventListener("click", box._x5);
+    box._x5 = function(e){
+      var m = e.target.closest("[data-m]"), c = e.target.closest("[data-cr]"), a = e.target.closest("[data-a2]"), fd = e.target.closest("[data-fdel]");
+      if (m){ var act = m.getAttribute("data-ma"), body = {};
+        if (act === "deliver"){ body.text = prompt("What did you deliver? Add a link to the files, or upload them under Files."); if (!body.text) return; }
+        if (act === "revision"){ body.text = prompt("What should change in this milestone?"); if (!body.text) return; }
+        if (act === "accept" && !confirm("Accept this milestone? Its money goes to the seller and this cannot be undone.")) return;
+        m.disabled = true; api("milestones/" + m.getAttribute("data-m") + "/" + act + "/", body).then(function(x){ if (x.ok) again(); else { m.disabled = false; alert(x.d.detail || "Could not do that."); } }); }
+      if (c){ var ans = c.getAttribute("data-cr"), t = "";
+        if (ans === "accept" && !confirm("Agree to cancel? The buyer is refunded what was not yet paid to the seller.")) return;
+        if (ans === "decline"){ t = prompt("Why not? (optional)") || ""; }
+        api("orders/" + o.id + "/cancel_reply/", {answer: ans, text: t}).then(function(x){ if (x.ok) again(); else alert(x.d.detail || "Could not do that."); }); }
+      if (a){ var ac = a.getAttribute("data-a2"), b2 = {};
+        if (ac === "cancel_request"){ b2.text = prompt("Why do you want to cancel? The other side can agree or decline; with no reply in " + M.cancel_days + " days it is agreed."); if (!b2.text) return; }
+        if (ac === "cancel_late" && !confirm("Cancel this late order? You get a full refund to your original payment method.")) return;
+        api("orders/" + o.id + "/" + ac + "/", b2).then(function(x){ if (x.ok) again(); else alert(x.d.detail || "Could not do that."); }); }
+      if (fd){ if (confirm("Remove this file?")) api("files/" + fd.getAttribute("data-fdel") + "/", {}).then(function(x){ if (x.ok) again(); }); }
+    };
+    box.addEventListener("click", box._x5);
+    var ff = $("ffile"); if (ff) ff.onchange = function(){
+      if (!ff.files[0]) return; var fdt = new FormData(); fdt.append("file", ff.files[0]); fdt.append("kind", $("fkind").value);
+      $("fmsg").innerHTML = msg("Uploading " + esc(ff.files[0].name) + "…");
+      api("orders/" + o.id + "/files/", fdt).then(function(x){ ff.value = ""; if (x.ok) again(); else $("fmsg").innerHTML = msg(esc(x.d.detail || "Could not upload."), "bad"); });
+    };
+  }
+
+  // ---------------- tracking
+  function vTrack(no){
+    api("track/" + encodeURIComponent(no) + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = '<div class="mk-box">' + msg(esc(r.d.detail || "Not found."), "bad") + '</div>'; return; }
+      var t = r.d, steps = [["Ordered", t.created], ["Paid", t.paid], ["Delivered", t.delivered], ["Completed", t.done]];
+      box.innerHTML = '<div class="mk-box" style="max-width:640px;margin:10px auto"><small style="color:var(--soft)">Order tracking</small><h1 class="mk-gtitle" style="font-size:24px">' + esc(t.no) + '</h1><p style="margin:0 0 6px">' + esc(t.title) + ' &middot; seller ' + esc(t.seller) + '</p>' + stl(t.status)
+        + '<div class="mk-steps">' + steps.map(function(s){ return '<div class="' + (s[1] ? "on" : "") + '">' + s[0] + (s[1] ? '<br><small>' + day(s[1]) + '</small>' : '') + '</div>'; }).join("") + '</div>'
+        + (t.due && !t.delivered ? '<p style="font-size:13.5px">Due ' + day(t.due) + '</p>' : '')
+        + (t.milestones.length ? t.milestones.map(function(m){ return '<div class="mk-row"><div class="t"><b>' + m.number + '. ' + esc(m.title) + '</b></div>' + bd(MST[m.status] || m.status, m.status === "accepted" ? "completed" : "active") + '</div>'; }).join("") : '') + '</div>';
+    });
+  }
+
+  // ---------------- CV builder
+  var CVD = null;
+  function cvHtml(c, avatar){
+    var d = c.data || {}, sk = (d.skills || "").split(/[,\n]/).map(function(x){ return x.trim(); }).filter(Boolean);
+    var sec = function(title, rows){ return rows && rows.length ? '<h3>' + title + '</h3>' + rows.map(function(r){ return '<div class="it"><b>' + esc(r.title) + '</b>' + (r.org ? ' &middot; ' + esc(r.org) : '') + (r.start || r.end ? '<div class="w">' + esc(r.start) + (r.end ? ' &ndash; ' + esc(r.end) : '') + '</div>' : '') + (r.detail ? '<p>' + esc(r.detail) + '</p>' : '') + '</div>'; }).join("") : ''; };
+    var contact = [d.email, d.phone, [d.city, d.country].filter(Boolean).join(", "), d.website].filter(Boolean).map(function(x){ return '<span>' + esc(x) + '</span>'; }).join("");
+    var skills = sk.length ? '<h3>Skills</h3><div class="sk">' + sk.map(function(s){ return '<span>' + esc(s) + '</span>'; }).join("") + '</div>' : '';
+    var langs = d.languages ? '<h3>Languages</h3><p style="margin:0">' + esc(d.languages) + '</p>' : '';
+    var main = (d.summary ? '<h3>Profile</h3><p style="margin:0;white-space:pre-wrap">' + esc(d.summary) + '</p>' : '') + sec("Experience", d.experience) + sec("Projects", d.projects) + sec("Education", d.education) + sec("Certifications", d.certifications);
+    if (c.template === "modern") return '<div class="cv modern"><div class="side">' + (avatar ? '<img class="av" src="' + esc(avatar) + '" alt="">' : '') + '<h1>' + esc(d.name || "Your name") + '</h1><div class="hl">' + esc(d.headline || "") + '</div><h3>Contact</h3><div class="ct">' + contact + '</div>' + skills + langs + '</div><div class="main">' + main + '</div></div>';
+    return '<div class="cv ' + (c.template || "classic") + '"><h1>' + esc(d.name || "Your name") + '</h1><div class="hl">' + esc(d.headline || "") + '</div><div class="ct">' + contact + '</div>' + main + skills + langs + '</div>';
+  }
+  function vCV(){
+    if (!M.me){ box.innerHTML = signin(); return; }
+    api("cv/").then(function(r){
+      CVD = r.d; var d = CVD.data;
+      ["experience", "education", "certifications", "projects"].forEach(function(k){ d[k] = d[k] || []; });
+      var f = function(k, l, ph, ta){ return '<label for="cv_' + k + '">' + l + '</label>' + (ta ? '<textarea id="cv_' + k + '" data-k="' + k + '" placeholder="' + (ph || "") + '" style="min-height:90px">' + esc(d[k] || "") + '</textarea>' : '<input id="cv_' + k + '" data-k="' + k + '" placeholder="' + (ph || "") + '" value="' + esc(d[k] || "") + '">'); };
+      var rows = function(k, l, add){ return '<label>' + l + '</label><div id="cvl_' + k + '">' + d[k].map(function(x, i){ return cvRow(k, x, i); }).join("") + '</div><button type="button" class="mk-btn" data-add="' + k + '" style="margin-top:6px;padding:7px 12px">+ ' + add + '</button>'; };
+      box.innerHTML = '<div class="mk-sec" style="margin-top:6px"><h2>Your CV</h2><span style="margin-left:auto;font-size:13px;color:var(--soft)">' + (CVD.updated ? 'Saved ' + day(CVD.updated) : 'Not saved yet') + '</span></div>'
+        + '<div class="mk-cvw"><div class="mk-box mk-f" id="cvf"><b style="font-size:16px">Template</b><div class="mk-tpl" id="cvtpl">' + [["classic", "Classic"], ["modern", "Modern"], ["minimal", "Minimal"]].map(function(t){ return '<button type="button" data-tp="' + t[0] + '" class="' + (CVD.template === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join("") + '</div>'
+        + '<div class="row" style="grid-template-columns:1fr 1fr">' + '<div>' + f("name", "Full name") + '</div><div>' + f("headline", "Headline", "Graphic designer &middot; 5 years") + '</div></div>'
+        + '<div class="row" style="grid-template-columns:1fr 1fr"><div>' + f("email", "Email") + '</div><div>' + f("phone", "Phone (hidden on the public CV)") + '</div></div>'
+        + '<div class="row"><div>' + f("city", "City") + '</div><div>' + f("country", "Country") + '</div><div>' + f("website", "Website / portfolio") + '</div></div>'
+        + f("summary", "About you", "Two or three lines about your work and what you are good at", true) + f("skills", "Skills (comma separated)", "Logo design, Photoshop, Branding")
+        + rows("experience", "Experience", "Add a job") + rows("projects", "Projects", "Add a project") + rows("education", "Education", "Add education") + rows("certifications", "Certifications", "Add a certificate") + f("languages", "Languages", "Urdu, English")
+        + '<label style="display:flex;gap:8px;align-items:center;text-transform:none;font-size:14px;color:var(--ink);margin-top:14px"><input type="checkbox" id="cvpub" style="width:auto"' + (CVD.public ? " checked" : "") + '> Show my CV on my seller page (phone stays hidden)</label>'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="mk-btn p" id="cvsave">Save CV</button><button class="mk-btn" id="cvpr">&#128424; Print / save as PDF</button>' + (CVD.public ? '<a class="mk-btn" href="#cv-' + esc(CVD.username) + '">Public view</a>' : '') + '</div><div id="cvmsg"></div></div>'
+        + '<div><div class="mk-stick" id="cvprint"></div></div></div>';
+      var read = function(){
+        [].forEach.call(box.querySelectorAll("[data-k]"), function(i){ d[i.getAttribute("data-k")] = i.value; });
+        ["experience", "education", "certifications", "projects"].forEach(function(k){ d[k] = [].map.call(box.querySelectorAll("#cvl_" + k + " .mk-cvrow"), function(r){ var o = {}; [].forEach.call(r.querySelectorAll("[data-f]"), function(i){ o[i.getAttribute("data-f")] = i.value; }); return o; }); });
+      };
+      var prev = function(){ read(); $("cvprint").innerHTML = cvHtml(CVD); };
+      prev();
+      if (box._cvin) box.removeEventListener("input", box._cvin);
+      box._cvin = prev; box.addEventListener("input", prev);
+      box.onclick = function(e){
+        var t = e.target.closest("[data-tp]"), a = e.target.closest("[data-add]"), x = e.target.closest(".mk-cvrow .x");
+        if (t){ CVD.template = t.getAttribute("data-tp"); [].forEach.call($("cvtpl").children, function(b){ b.className = b === t ? "on" : ""; }); prev(); }
+        if (a){ read(); var k = a.getAttribute("data-add"); d[k].push({title: "", org: "", start: "", end: "", detail: ""}); $("cvl_" + k).insertAdjacentHTML("beforeend", cvRow(k, {}, d[k].length - 1)); }
+        if (x){ x.parentNode.remove(); prev(); }
+      };
+      $("cvpr").onclick = function(){ prev(); window.print(); };
+      $("cvsave").onclick = function(){ read(); var b = this; b.disabled = true;
+        api("cv/", {data: d, template: CVD.template, public: $("cvpub").checked}).then(function(x){ b.disabled = false; if (x.ok){ CVD = x.d; $("cvmsg").innerHTML = msg("Saved." + (x.d.public ? " Buyers can see it on your seller page." : ""), "ok"); } else $("cvmsg").innerHTML = msg(esc(x.d.detail || "Could not save."), "bad"); }); };
+    });
+  }
+  function cvRow(k, x, i){
+    var L = {experience: ["Job title", "Company"], education: ["Degree / course", "School / university"], certifications: ["Certificate", "Issued by"], projects: ["Project", "Client / link"]}[k];
+    return '<div class="mk-cvrow"><button type="button" class="x" title="Remove">&times;</button><div class="r2"><input data-f="title" placeholder="' + L[0] + '" value="' + esc(x.title || "") + '"><input data-f="org" placeholder="' + L[1] + '" value="' + esc(x.org || "") + '"></div>'
+      + '<div class="r2" style="margin-top:6px"><input data-f="start" placeholder="From (e.g. 2021)" value="' + esc(x.start || "") + '"><input data-f="end" placeholder="To (e.g. Now)" value="' + esc(x.end || "") + '"></div>'
+      + '<textarea data-f="detail" placeholder="What you did (optional)" style="min-height:60px;margin-top:6px">' + esc(x.detail || "") + '</textarea></div>';
+  }
+  function vCVPublic(un){
+    api("cv/" + encodeURIComponent(un) + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = '<div class="mk-box">' + msg(esc(r.d.detail || "Not found."), "bad") + '</div>'; return; }
+      box.innerHTML = '<div class="mk-crumb"><a href="#seller-' + esc(un) + '">Seller</a> &rsaquo; CV</div><div style="max-width:820px;margin:0 auto" id="cvprint">' + cvHtml(r.d, r.d.avatar) + '</div>'
+        + '<p style="text-align:center"><button class="mk-btn" onclick="window.print()">&#128424; Print / save as PDF</button> <a class="mk-btn p" href="#seller-' + esc(un) + '">See services</a></p>';
+    });
+  }
+  function badges(){
+    if (!M.me) return;
+    var u = $("mkbu"), o = $("mkbo"), n1 = M.me.unread || 0, n2 = (M.me.offers_in || 0) + (M.me.requests_in || 0);
+    if (u){ u.hidden = !n1; u.textContent = n1 > 99 ? "99+" : n1; }
+    if (o){ o.hidden = !n2; o.textContent = n2; }
   }
 
   // ---------------- earnings
@@ -929,7 +1257,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function route(){
     var h = location.hash.replace("#", "") || "gigs", m;
     box.onclick = null;
-    var tab = /^(gig-|cat-|seller-)/.test(h) ? "gigs" : /^(prop-|editprop-)/.test(h) || h === "myprops" ? "property" : /project/.test(h) || h === "newproject" ? "projects" : h.indexOf("order") === 0 ? "orders" : h.indexOf("editgig") === 0 ? "sell" : h;
+    if (box._x5){ box.removeEventListener("click", box._x5); box._x5 = null; }
+    if (box._cvin){ box.removeEventListener("input", box._cvin); box._cvin = null; }
+    var tab = /^(gig-|cat-|seller-)/.test(h) ? "gigs" : /^(prop-|editprop-)/.test(h) || h === "myprops" ? "property" : /project/.test(h) || h === "newproject" ? "projects" : h.indexOf("order") === 0 || h.indexOf("track-") === 0 ? "orders" : h.indexOf("editgig") === 0 ? "sell" : h.indexOf("cv-") === 0 ? "gigs" : h;
     [].forEach.call($("mktabs").querySelectorAll("a[data-t]"), function(a){ a.className = a.getAttribute("data-t") === tab ? "on" : ""; });
     window.scrollTo(0, 0);
     if ((m = h.match(/^gig-(\d+)$/))) return vGig(m[1]);
@@ -938,13 +1268,16 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if ((m = h.match(/^editgig-(\w+)$/))) return vEditGig(m[1]);
     if ((m = h.match(/^project-(\d+)$/))) return vProject(m[1]);
     if ((m = h.match(/^order-(\d+)$/))) return vOrder(m[1]);
+    if ((m = h.match(/^track-(.+)$/))) return vTrack(decodeURIComponent(m[1]));
+    if ((m = h.match(/^cv-(.+)$/))) return vCVPublic(decodeURIComponent(m[1]));
     if ((m = h.match(/^prop-(\d+)$/))) return vProp(m[1]);
     if ((m = h.match(/^editprop-(\w+)$/))) return vEditProp(m[1]);
     if (h === "gigs"){ GQ.q = ""; GQ.cat = ""; }
-    ({property: function(){ vProperty(false); }, myprops: function(){ vProperty(true); }, projects: function(){ vProjects(false); }, myprojects: function(){ vProjects(true); }, newproject: vNewProject, orders: vOrders, saved: vSaved, sell: vSell, wallet: vWallet, admin: vAdmin}[h] || vGigs)();
+    ({property: function(){ vProperty(false); }, myprops: function(){ vProperty(true); }, projects: function(){ vProjects(false); }, myprojects: function(){ vProjects(true); }, newproject: vNewProject, orders: vOrders, saved: vSaved, sell: vSell, wallet: vWallet, admin: vAdmin, offers: vOffers, cv: vCV}[h] || vGigs)();
   }
   api("meta/").then(function(r){
     M = r.d; if (M.me && M.me.staff) $("mkadmintab").hidden = false;
+    badges();
     var q = new URLSearchParams(location.search);
     if (q.get("paid")) flash("Payment received. The seller has been told and the work has started.", "ok");
     if (q.get("failed")) flash("We could not confirm that payment. If money was taken, it is checked again automatically; or contact us from the Ownership &amp; complaints page.", "bad");
