@@ -216,7 +216,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     C = null;
     api("mine/").then(function(r){
       cards = (r.data && r.data.cards) || [];
-      box.innerHTML = '<div class="xceh"><h1>\uD83E\uDEAA My business cards</h1>' + (cards.length < (r.data.max || 3) ? '<button class="xcbtn pri" data-new>+ New card</button>' : '') + '</div>'
+      box.innerHTML = '<div class="xceh"><h1>\uD83D\uDCC7 My business cards</h1>' + (cards.length < (r.data.max || 3) ? '<button class="xcbtn pri" data-new>+ New card</button>' : '') + '</div>'
         + '<p style="color:var(--ink-soft);margin-top:-4px">A digital business card with its own page and QR code. Change it any time &mdash; the QR keeps working.</p>'
         + '<div id="xcnew"></div><div class="xclist">' + (cards.length ? cards.map(function(c){
           return '<div class="xcit"><div class="sp"><b>' + esc((c.data.profile || {}).name || c.slug) + '</b><small>xpertcreation.com/c/' + esc(c.slug) + (c.active ? '' : ' \u00b7 switched off') + '</small><small>' + c.views + ' views \u00b7 ' + c.scans + ' QR scans \u00b7 ' + c.saves + ' saved the contact</small></div>'
@@ -395,7 +395,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   window.addEventListener("beforeunload", function(e){ if (dirty){ e.preventDefault(); e.returnValue = ""; } });
   fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
     me = u;
-    if (!u){ box.innerHTML = '<div class="xceh"><h1>\uD83E\uDEAA Digital business cards</h1></div><div class="xcbox" style="padding:24px"><p>Make a free digital business card: your photo, logo, contact buttons, social links, gallery, hours and more, on its own page with a QR code you can print. Change it any time and the QR keeps working.</p><a class="xcbtn pri" href="/login">Sign in to make yours</a></div>'; return; }
+    if (!u){ box.innerHTML = '<div class="xceh"><h1>\uD83D\uDCC7 Digital business cards</h1></div><div class="xcbox" style="padding:24px"><p>Make a free digital business card: your photo, logo, contact buttons, social links, gallery, hours and more, on its own page with a QR code you can print. Change it any time and the QR keeps working.</p><a class="xcbtn pri" href="/login">Sign in to make yours</a></div>'; return; }
     list();
   });
 })();
