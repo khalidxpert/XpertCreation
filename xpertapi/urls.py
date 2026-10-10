@@ -32,6 +32,7 @@ urlpatterns = [
     path("api/clips/", include("clips.urls")),
     path("api/money/", include("money.urls")),
     path("api/market/", include("market.urls")),
+    path("api/property/", include("realestate.urls")),
     path("api/steps/", include("steps.urls")),
     path("api/carrom/", include("carromonline.urls")),
     path("api/share/", include("sharewall.urls")),
