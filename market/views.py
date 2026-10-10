@@ -32,7 +32,10 @@ def _kyc(u):
             return True
     except Exception:
         pass
-    try:   # a blue tick given by the team (profile "verified") counts as a passed ID check too
+    # the same rule as the blue tick on XpertConnect: a verified profile, or staff / admin / moderator
+    if u.is_staff or u.is_superuser or getattr(u, "is_moderator", False):
+        return True
+    try:
         from network.models import ProProfile
         return ProProfile.objects.filter(user=u, verified=True).exists()
     except Exception:
