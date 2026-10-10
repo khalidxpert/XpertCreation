@@ -345,3 +345,120 @@
     if (Notification.permission === "default" && !later()) setTimeout(card, 6000);
   }).catch(function(){});
 })();
+
+/* xcPins: pin up to 3 pages (any tool or section). Pins show first in the menu and at the top of the home page.
+   Saved on this device, and on the account when signed in, so they follow the member everywhere. */
+(function(){
+  if (window.XCPINS) return; window.XCPINS = 1;
+  var MAX = 3, KEY = "xc_pins", path = location.pathname.replace(/\/+$/, "") || "/", signed = false;
+  var NOPIN = /^\/($|login|register|account|logout|me\/preferences|offline|system-log|broadcast|moderate)/;
+  var PIN_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4z"/><path d="M12 13v8"/></svg>';
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function local(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]").slice(0, MAX); } catch (e){ return []; } }
+  var P = local();
+  function save(push){
+    try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e){}
+    if (push && signed) fetch("/api/pins/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: JSON.stringify({items: P})}).catch(function(){});
+    draw();
+  }
+  function label(){
+    var n = document.querySelector(".tnav a[href='" + path + "'], .tnav a[href='" + path + "/']");
+    if (n && n.textContent.trim()) return n.textContent.trim().slice(0, 24);
+    var h = document.querySelector("main h1, .wrap h1, h1"), t = (document.title || "").split(/\s+[\u2014|\-]\s+/)[0].trim();
+    var s = (h && h.textContent.trim()) || (t && !/^XpertCreation$/i.test(t) ? t : path.slice(1));
+    s = s.replace(/^[^\w\u0600-\u06FF]+/, "").replace(/\s+/g, " ");
+    return (s.length > 24 ? s.slice(0, 23).replace(/\s+\S*$/, "") + "\u2026" : s) || path;
+  }
+  function pinned(p){ return P.some(function(x){ return x.path === p; }); }
+  function icon(p){
+    var a = document.querySelector(".tnav a[href='" + p + "'] svg, .tnav a[href='" + p + "/'] svg");
+    return a ? a.outerHTML : '<svg class="tic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l-1 6 4 4H6l4-4z"/><path d="M12 13v8"/></svg>';
+  }
+  var st = document.createElement("style");
+  st.textContent = ".tpin{flex:0 0 auto;width:36px;height:36px;margin-left:6px;border-radius:11px;display:inline-grid;place-items:center;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);color:var(--ink-soft,#5A657C);cursor:pointer;padding:0}"
+    + ".tpin svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}"
+    + ".tpin.on{background:#FEF3C7;border-color:#FCD34D;color:#B45309}.tpin.on svg{fill:#FCD34D}"
+    + "@media(max-width:600px){.tpin{width:34px;height:34px;margin-left:4px}}"
+    + ".tnav a.tpinned,.tdrop a.tpinned{background:#FFFBEB;color:#92400E!important;box-shadow:inset 0 0 0 1px #FCD34D}"
+    + ".xcpinpop{position:fixed;z-index:9001;right:12px;top:62px;width:290px;background:#fff;border:1px solid #E4E8F2;border-radius:16px;box-shadow:0 18px 44px rgba(13,20,36,.25);padding:12px;font-family:inherit;color:#0D1424}"
+    + ".xcpinpop b{display:block;font-size:14px;margin-bottom:4px}.xcpinpop p{margin:0 0 8px;font-size:12.5px;color:#5A657C}"
+    + ".xcpinpop button{display:flex;width:100%;align-items:center;gap:8px;text-align:left;border:1px solid #E4E8F2;background:#F8FAFC;border-radius:10px;padding:9px 10px;margin-top:6px;font:inherit;font-size:13.5px;cursor:pointer}"
+    + ".xcpinpop button:hover{border-color:#DC2626;background:#FEF2F2}.xcpinpop button i{margin-left:auto;font-style:normal;color:#DC2626;font-weight:800}"
+    + ".xcpins{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 14px}"
+    + ".xcpins a{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 12px;border-radius:16px;text-decoration:none;color:#0D1424;background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1px solid #FDE68A;font-weight:800;font-size:13.5px;line-height:1.25;min-height:78px}"
+    + ".xcpins a svg{width:24px;height:24px;fill:none;stroke:#B45309;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin:0}"
+    + ".xcpins a .x{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.06);color:#92400E;font-weight:900;cursor:pointer;line-height:22px;padding:0}"
+    + ".xcpins .hd{grid-column:1/-1;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:#92400E;margin-bottom:-2px}"
+    + ".xcpins .hd small{margin-left:auto;font-weight:600;color:#A16207}"
+    + ".xcpins .add{background:#fff;border:1.5px dashed #FCD34D;color:#A16207;font-weight:700;justify-content:center;align-items:center;text-align:center;font-size:12.5px}";
+  document.head.appendChild(st);
+  var btn = null;
+  function draw(){
+    var head = document.querySelector("header.top") || document.querySelector("header.topbar");
+    if (head && !NOPIN.test(path)){
+      if (!btn){
+        btn = document.createElement("button"); btn.type = "button"; btn.className = "tpin"; btn.innerHTML = PIN_SVG;
+        var before = head.querySelector(".tcart") || head.querySelector(".tacct") || head.querySelector(".tdrop");
+        if (before) head.insertBefore(btn, before); else head.appendChild(btn);
+        btn.onclick = toggle;
+      }
+      var on = pinned(path); btn.classList.toggle("on", on);
+      btn.title = on ? "Unpin this page" : "Pin this page (up to " + MAX + ")"; btn.setAttribute("aria-label", btn.title);
+    }
+    [".tnav", ".tdrop"].forEach(function(sel){
+      var n = document.querySelector(sel); if (!n) return;
+      [].forEach.call(n.querySelectorAll("a.tpinned"), function(a){ a.remove(); });
+      P.slice().reverse().forEach(function(x){
+        var a = document.createElement("a"); a.href = x.path; a.className = "tpinned"; a.title = "Pinned";
+        a.innerHTML = icon(x.path).replace("<svg", '<svg class="tic"') + esc(x.label);
+        n.insertBefore(a, n.firstChild);
+      });
+    });
+    if (path === "/") home();
+  }
+  function home(){
+    var old = document.getElementById("xcpins"); if (old) old.remove();
+    var anchor = document.getElementById("xcshow") || document.querySelector("a.xcgold");
+    if (!anchor) return;
+    var w = document.createElement("div"); w.id = "xcpins"; w.className = "xcpins";
+    var h = '<div class="hd">📌 Your pins<small>' + (P.length ? "Tap the pin on any page to change" : "Pin up to " + MAX + " pages you use most") + '</small></div>';
+    h += P.map(function(x, i){ return '<a href="' + esc(x.path) + '">' + icon(x.path) + esc(x.label) + '<button class="x" data-unpin="' + i + '" aria-label="Unpin">&times;</button></a>'; }).join("");
+    for (var k = P.length; k < MAX; k++) h += '<a class="add" href="/tools">+ Pin a tool or section<br><small style="font-weight:600">open it, tap 📌 at the top</small></a>';
+    w.innerHTML = h;
+    anchor.parentNode.insertBefore(w, anchor);
+    w.onclick = function(e){ var x = e.target.closest("[data-unpin]"); if (!x) return; e.preventDefault(); e.stopPropagation(); P.splice(+x.getAttribute("data-unpin"), 1); save(true); };
+  }
+  function toggle(e){
+    e.stopPropagation();
+    var old = document.querySelector(".xcpinpop"); if (old){ old.remove(); return; }
+    if (pinned(path)){ P = P.filter(function(x){ return x.path !== path; }); save(true); return; }
+    var item = {path: path, label: label()};
+    if (P.length < MAX){ P.push(item); save(true); flashPin(); return; }
+    var pop = document.createElement("div"); pop.className = "xcpinpop";
+    pop.innerHTML = '<b>You can pin ' + MAX + ' pages</b><p>Tap one to replace it with &ldquo;' + esc(item.label) + '&rdquo;.</p>'
+      + P.map(function(x, i){ return '<button type="button" data-rep="' + i + '">' + esc(x.label) + '<i>Replace</i></button>'; }).join("");
+    document.body.appendChild(pop);
+    pop.onclick = function(ev){ var b = ev.target.closest("[data-rep]"); if (!b) return; P[+b.getAttribute("data-rep")] = item; pop.remove(); save(true); flashPin(); };
+    setTimeout(function(){ document.addEventListener("click", function c(ev){ if (!pop.contains(ev.target)){ pop.remove(); document.removeEventListener("click", c); } }); }, 0);
+  }
+  function flashPin(){
+    var t = document.createElement("div");
+    t.style.cssText = "position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#0D1424;color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;font-size:13.5px;z-index:9002;box-shadow:0 10px 30px rgba(0,0,0,.3)";
+    t.textContent = "📌 Pinned. It shows first in the menu and on the home page.";
+    document.body.appendChild(t); setTimeout(function(){ t.remove(); }, 2600);
+  }
+  function start(){
+    draw();
+    fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
+      if (!u || !(u.email || u.username || u.id)) return;
+      signed = true;
+      return fetch("/api/pins/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+        if (!d) return;
+        if ((d.items || []).length){ P = d.items.slice(0, MAX); save(false); }
+        else if (P.length) save(true);              // first time signed in: keep the pins made on this device
+      });
+    }).catch(function(){});
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(start, 50); }); else setTimeout(start, 50);
+})();
