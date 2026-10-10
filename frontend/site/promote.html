@@ -161,7 +161,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=54" defer></script>
+<script src="/js/topnav-1.js?v=55" defer></script>
 
 <div class="wrap pm" style="max-width:1080px"><div id="pmapp"><p style="padding:40px 0;text-align:center;color:#5A657C">Loading…</p></div></div>
 <style>
@@ -328,6 +328,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (o.status === "paid") return (!o.ends || new Date(o.ends) > new Date()) ? ["live", "Active"] : ["ended", "Ended"];
     if (o.status === "pending") return ["pending", "Waiting for payment"];
     if (o.status === "refunded") return ["refunded", "Refunded"];
+    if (o.status === "demo") return ["off", "Demo done (nothing charged)"];
     return ["off", o.status];
   }
   function orderRow(o){
@@ -341,7 +342,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + ((a || dl !== null) ? '<div class="pm-chips">' + (dl !== null ? '<span>⏳ ' + dl + (dl === 1 ? ' day' : ' days') + ' left</span>' : '') + (a ? '<span>👁 ' + Number(a.views).toLocaleString() + ' views</span><span>👆 ' + Number(a.clicks).toLocaleString() + ' clicks</span>' : '') + '</div>' : '')
       + '</div><div class="or"><b>' + rs(o.amount) + '</b><span class="pm-st ' + s[0] + '">' + esc(s[1]) + '</span><div class="pm-act">'
       + ((o.status === "paid" || o.status === "refunded") ? '<a href="/receipt?order=' + o.id + '">Receipt</a>' : '')
-      + (o.status === "pending" ? (D.mode === "test" ? '<button class="pr" data-sim="' + o.id + '">Simulate payment</button>' : '') + '<button data-cancel="' + o.id + '">Cancel</button>' : '')
+      + (o.status === "pending" ? (D.mode === "test" || D.mode === "demo" ? '<button class="pr" data-sim="' + o.id + '">' + (D.mode === "demo" ? "Pay now (demo)" : "Simulate payment") + '</button>' : '') + '<button data-cancel="' + o.id + '">Cancel</button>' : '')
       + '</div></div></div>';
   }
   function draw(){
@@ -357,6 +358,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + (ords.length ? '<div class="pm-stats"><div><b>' + live.length + '</b><small>Active now</small></div><div><b>' + vw.toLocaleString() + '</b><small>Ad views</small></div><div><b>' + cl.toLocaleString() + '</b><small>Ad clicks</small></div></div>' : '')
       + '</section>';
     if (!D.can_buy) h += '<div class="pm-note warn">🕒 <span>These are our paid items and prices (Pakistani rupees, one payment per order). Online card and wallet payment opens very soon' + (guest() ? '; <a href="/login?next=/promote">sign in</a> to buy when it does' : '') + '.</span></div>';
+    if (D.mode === "demo") h += '<div class="pm-note warn">\uD83E\uDDEA <span><b>DEMO:</b> try buying to see how it works. The payment is pretend: no money is taken and the item is <b>not</b> switched on. Real card and wallet payment opens very soon.</span></div>';
     if (D.mode === "test" && D.can_buy) h += '<div class="pm-note warn">🧪 TEST MODE: only staff can see this. Payments are simulated; no money is taken.</div>';
     h += '<div class="pm-steps"><div><i>1</i><span><b>Pick an item</b><small>Choose what to boost and for how long</small></span></div><div><i>2</i><span><b>Pay securely</b><small>Card or wallet, one payment</small></span></div><div><i>3</i><span><b>Goes live at once</b><small>Track views and clicks here</small></span></div></div>';
     var cnt = {all: D.catalog.length};

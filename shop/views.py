@@ -176,7 +176,7 @@ def _out(o):
 @permission_classes([AllowAny])
 def shop(request):
     s = setting(); u = request.user
-    out = {"mode": s.mode, "catalog": _catalog(s), "staff": _staff(u), "can_buy": s.mode == "live" or (s.mode == "test" and _staff(u))}
+    out = {"mode": s.mode, "catalog": _catalog(s), "staff": _staff(u), "can_buy": s.mode in ("live", "demo") or (s.mode == "test" and _staff(u))}
     if u.is_authenticated:
         out["orders"] = [_out(o) for o in Order.objects.filter(user=u).order_by("-id")[:50]]
     return Response(out)
@@ -213,11 +213,15 @@ def order(request):
 def simulate(request, pk):
     """Test mode only: pretend the payment succeeded, so the whole flow can be tried."""
     s = setting()
-    if s.mode != "test" or not _staff(request.user):
+    if not (s.mode == "demo" or (s.mode == "test" and _staff(request.user))):
         return Response({"detail": "Only staff, in test mode."}, status=403)
     o = Order.objects.filter(pk=pk, user=request.user, status="pending").first()
     if not o:
         return Response({"detail": "Order not found."}, status=404)
+    if s.mode == "demo" or o.provider == "demo":
+        # demo for everyone: show the flow, take no money, switch nothing on
+        o.status, o.provider_ref = "demo", "DEMO-%d" % o.id; o.save(update_fields=["status", "provider_ref"])
+        return Response({"order": _out(o), "demo": True})
     o.provider_ref = "TEST-%d" % o.id; _activate(o)
     return Response({"order": _out(o)})
 
@@ -238,7 +242,7 @@ def admin(request):
         return Response({"detail": "Staff only."}, status=403)
     s = setting()
     if request.method == "POST":
-        if request.data.get("mode") in ("off", "test", "live"):
+        if request.data.get("mode") in ("off", "test", "demo", "live"):
             if request.data["mode"] == "live" and not (sp_ready() and _sp()["env"] == "production"):
                 return Response({"detail": "Live needs Safepay production keys first (sandbox keys are for TEST mode)."}, status=400)
             s.mode = request.data["mode"]
@@ -390,7 +394,7 @@ def sp3_settle(o, wait=0):
 @_perm3([_IsAuth3])
 def order(request):
     s = setting(); u = request.user; d = request.data
-    if not (s.mode == "live" or (s.mode == "test" and _staff(u))):
+    if not (s.mode in ("live", "demo") or (s.mode == "test" and _staff(u))):
         return _Resp3({"detail": "Paid items are not available yet."}, status=403)
     p, plan = d.get("product"), d.get("plan")
     if p not in CATALOG or plan not in CATALOG[p]["plans"]:
@@ -401,8 +405,8 @@ def order(request):
     if tid is None:
         return _Resp3({"detail": label}, status=400)
     o = Order.objects.create(user=u, product=p, plan=plan, target_id=tid, target_label=label[:160], amount=price(p, plan, s),
-                             provider="test" if s.mode == "test" else "")
-    if sp_ready():
+                             provider="test" if s.mode == "test" else ("demo" if s.mode == "demo" else ""))
+    if sp_ready() and s.mode != "demo":
         try:
             tracker, url = sp3_start(o)
         except Exception as ex:
@@ -411,7 +415,7 @@ def order(request):
         o.provider, o.provider_ref = "safepay-" + _sp3()["env"], tracker
         o.save(update_fields=["provider", "provider_ref"])
         return _Resp3({"order": _out(o), "next": "gateway", "checkout": url}, status=201)
-    return _Resp3({"order": _out(o), "next": "simulate" if s.mode == "test" else "gateway"}, status=201)
+    return _Resp3({"order": _out(o), "next": "simulate" if s.mode in ("test", "demo") else "gateway"}, status=201)
 
 
 @_csrf_exempt3
