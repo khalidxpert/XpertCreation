@@ -199,3 +199,106 @@ def shop(request, slug):
                                "c1": d.get("c1", "#1B4DFF"), "c2": d.get("c2", "#7C3AED")},
                      "owner": {"name": _name(m.user), "username": getattr(m.user, "username", "") or "", "slug": _slug(m.user)},
                      "gigs": w["gigs"], "properties": w["properties"]})
+
+
+# ---------------------------------------------------------------- profile action buttons
+from .models import ProfileButton  # noqa: E402
+
+KINDS = {"whatsapp": "WhatsApp", "call": "Call now", "email": "Send email", "website": "Visit website", "shop": "Shop now",
+         "hire": "Hire me", "book": "Book now", "signup": "Sign up", "order": "Order now", "learn": "Learn more"}
+URL_KINDS = ("website", "book", "signup", "order", "learn")
+
+
+def _digits(v):
+    d = re.sub(r"\D", "", str(v or ""))
+    if d.startswith("00"):
+        d = d[2:]
+    if d.startswith("0") and len(d) == 11:
+        d = "92" + d[1:]
+    return d if 10 <= len(d) <= 15 else ""
+
+
+def _href(u, it):
+    k, v = it.get("kind"), it.get("value") or ""
+    if k == "whatsapp":
+        d = _digits(v)
+        return ("https://wa.me/%s?text=%s" % (d, "Hi%2C%20I%20found%20you%20on%20XpertCreation")) if d else ""
+    if k == "call":
+        d = _digits(v)
+        return ("tel:+" + d) if d else ""
+    if k == "email":
+        return ("mailto:" + v) if re.match(r"^[^@\s]{1,64}@[^@\s]{1,190}\.[a-z]{2,24}$", v, re.I) else ""
+    if k in URL_KINDS:
+        return v if re.match(r"^https?://[^\s<>\"']{3,300}$", v) else ""
+    if k == "shop":
+        m = _merchant(u)
+        return ("/shop/" + m.slug) if m and m.status == "approved" else ""
+    if k == "hire":
+        un = getattr(u, "username", "") or ""
+        return ("/market#seller-" + un) if un else "/market"
+    return ""
+
+
+def _buttons_out(u, pb, mine):
+    out = []
+    for it in (pb.items if pb else []):
+        h = _href(u, it)
+        if h:
+            out.append({"kind": it["kind"], "label": it.get("label") or KINDS.get(it["kind"], ""), "href": h})
+    d = {"buttons": out, "kinds": KINDS}
+    if mine:
+        today = timezone.localdate()
+        days = pb.daily if pb else {}
+        month = sum(n for k, n in days.items() if k >= (today - __import__("datetime").timedelta(days=30)).isoformat()) if days else 0
+        d.update({"items": pb.items if pb else [], "clicks": pb.clicks if pb else 0, "month": month,
+                  "has_shop": bool(_merchant(u) and _merchant(u).status == "approved")})
+    return d
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def buttons(request, uid):
+    u = User.objects.filter(pk=uid, is_active=True).first()
+    if not u or getattr(u, "is_blocked", False):
+        return _err("Not found.", 404)
+    pb = ProfileButton.objects.filter(user=u).first()
+    return Response(_buttons_out(u, pb, request.user.is_authenticated and request.user.pk == u.pk))
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def buttons_save(request):
+    u, items = request.user, request.data.get("items")
+    clean = []
+    for it in (items if isinstance(items, list) else [])[:2]:
+        if not isinstance(it, dict) or it.get("kind") not in KINDS:
+            continue
+        c = {"kind": it["kind"], "label": _txt(it.get("label"), 24) or KINDS[it["kind"]], "value": _txt(it.get("value"), 300)}
+        if not _href(u, c):
+            what = {"whatsapp": "a WhatsApp number", "call": "a phone number", "email": "an email address", "shop": "an approved shop"}.get(c["kind"], "a full link starting with https://")
+            return _err("%s: add %s." % (c["label"], what))
+        clean.append(c)
+    pb, _ = ProfileButton.objects.get_or_create(user=u)
+    pb.items = clean
+    pb.save()
+    return Response(_buttons_out(u, pb, True))
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def button_click(request, uid):
+    from django.core.cache import cache
+    ip = (request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get("REMOTE_ADDR") or "").split(",")[0].strip()
+    key = "pbclick:%d:%s" % (uid, ip)
+    if request.user.is_authenticated and request.user.pk == uid or cache.get(key):
+        return Response({"ok": True})
+    cache.set(key, 1, 600)
+    pb = ProfileButton.objects.filter(user_id=uid).first()
+    if pb:
+        day = timezone.localdate().isoformat()
+        d = dict(pb.daily or {}); d[day] = d.get(day, 0) + 1
+        if len(d) > 60:
+            d = dict(sorted(d.items())[-60:])
+        pb.daily = d; pb.clicks += 1
+        pb.save(update_fields=["daily", "clicks"])
+    return Response({"ok": True})

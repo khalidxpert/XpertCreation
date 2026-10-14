@@ -21,3 +21,13 @@ class PromoPost(models.Model):
 
     class Meta:
         unique_together = [("kind", "ref")]
+
+
+class ProfileButton(models.Model):
+    """Up to two action buttons on a member's XpertConnect profile, like a Facebook Page button:
+    WhatsApp, Call, Email, Website, Shop now, Hire me, Book now, Sign up, Order now, Learn more."""
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile_buttons")
+    items = models.JSONField(default=list, blank=True)      # [{"kind", "label", "value"}]
+    clicks = models.PositiveIntegerField(default=0)
+    daily = models.JSONField(default=dict, blank=True)      # {"2026-10-15": 4} - last 60 days
+    updated_at = models.DateTimeField(auto_now=True)

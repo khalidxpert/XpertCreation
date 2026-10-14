@@ -274,6 +274,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       P = r.data;
       draw();
       if (window.XCWORK) window.XCWORK(P.user_id, P.name);
+      if (window.XCBTNS) window.XCBTNS(P.user_id, P.is_me);
     });
   }
 
@@ -561,6 +562,6 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 })();
 </script>
 <script src="/js/xcbar-1.js" defer></script>
-<script src="/js/work-1.js"></script>
+<script src="/js/work-1.js?v=2"></script>
 </body>
 </html>
