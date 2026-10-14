@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     "realestate",
     "store",
     "companybook",
+    "brandkit",
     "roots",
     "pins",
     "rides",

@@ -111,7 +111,7 @@
     if (xn){ head.insertBefore(nav, xn); xn.remove(); } else if (g) head.insertBefore(nav, g); else head.appendChild(nav);
     if (g) head.insertBefore(btn, g); else head.appendChild(btn);
   }
-  else if (sp){ head.insertBefore(nav, sp); head.insertBefore(btn, sp); } else { head.appendChild(nav); head.appendChild(btn); }
+  else if (sp){ sp.parentNode.insertBefore(nav, sp); sp.parentNode.insertBefore(btn, sp); } else { head.appendChild(nav); head.appendChild(btn); }
   head.appendChild(drop);
   btn.onclick = function(e){ e.stopPropagation(); drop.classList.toggle("open"); };
   // Account icon - the same on every page. Signed out: a sign-in icon. Signed in: your photo; tap it for
@@ -393,6 +393,19 @@
     + ".xcpins a .x{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.06);color:#92400E;font-weight:900;cursor:pointer;line-height:22px;padding:0}"
     + ".xcpins .hd{grid-column:1/-1;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;color:#92400E;margin-bottom:-2px}"
     + ".xcpins .hd small{margin-left:auto;font-weight:600;color:#A16207}"
+    + "header.top:has(> .in){display:flex;align-items:center;justify-content:flex-end;gap:4px;flex-wrap:wrap}header.top:has(> .in) > .in{flex:1 1 auto;min-width:0}"
+    + "@media(max-width:600px){header.top:has(> .in) > .in{flex-basis:100%}header.top:has(> .in){padding-bottom:6px}}"
+    + ".xcpinpick{position:fixed;inset:0;z-index:9003;background:rgba(13,20,36,.5);display:flex;align-items:flex-end;justify-content:center}"
+    + "@media(min-width:700px){.xcpinpick{align-items:center}}"
+    + ".xcpinpick .in{background:#fff;width:100%;max-width:520px;max-height:86vh;display:flex;flex-direction:column;border-radius:20px 20px 0 0;padding:14px 14px 10px;font-family:inherit;color:#0D1424}"
+    + "@media(min-width:700px){.xcpinpick .in{border-radius:20px}}"
+    + ".xcpinpick .hd{display:flex;align-items:center;margin-bottom:10px}.xcpinpick .hd b{font-size:17px}.xcpinpick .x{margin-left:auto;border:0;background:#F1F5F9;width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer}"
+    + ".xcpinpick input{width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1.5px solid #E4E8F2;font:inherit;font-size:15px;background:#F8FAFC;margin-bottom:8px}"
+    + ".xcpinpick .ls{overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:6px;padding-bottom:6px}"
+    + ".xcpinpick .ls button{display:flex;align-items:center;gap:8px;border:1.5px solid #E4E8F2;background:#fff;border-radius:12px;padding:10px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer;text-align:left;color:#0D1424}"
+    + ".xcpinpick .ls button svg{width:18px;height:18px;fill:none;stroke:#1B4DFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 18px;margin:0}"
+    + ".xcpinpick .ls button span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xcpinpick .ls button i{font-style:normal;font-size:11.5px;color:#1B4DFF}"
+    + ".xcpinpick .ls button.on{background:#FFFBEB;border-color:#FCD34D}.xcpinpick .ls button.on i{color:#B45309}"
     + ".xcpins .add{background:#fff;border:1.5px dashed #FCD34D;color:#A16207;font-weight:700;justify-content:center;align-items:center;text-align:center;font-size:12.5px}";
   document.head.appendChild(st);
   var btn = null;
@@ -402,7 +415,7 @@
       if (!btn){
         btn = document.createElement("button"); btn.type = "button"; btn.className = "tpin"; btn.innerHTML = PIN_SVG;
         var before = head.querySelector(".tcart") || head.querySelector(".tacct") || head.querySelector(".tdrop");
-        if (before) head.insertBefore(btn, before); else head.appendChild(btn);
+        if (before) before.parentNode.insertBefore(btn, before); else (head.querySelector(".in") || head).appendChild(btn);
         btn.onclick = toggle;
       }
       var on = pinned(path); btn.classList.toggle("on", on);
@@ -426,10 +439,10 @@
     var w = document.createElement("div"); w.id = "xcpins"; w.className = "xcpins";
     var h = '<div class="hd">📌 Your pins<small>' + (P.length ? "Tap the pin on any page to change" : "Pin up to " + MAX + " pages you use most") + '</small></div>';
     h += P.map(function(x, i){ return '<a href="' + esc(x.path) + '">' + icon(x.path) + esc(x.label) + '<button class="x" data-unpin="' + i + '" aria-label="Unpin">&times;</button></a>'; }).join("");
-    for (var k = P.length; k < MAX; k++) h += '<a class="add" href="/tools">+ Pin a tool or section<br><small style="font-weight:600">open it, tap 📌 at the top</small></a>';
+    for (var k = P.length; k < MAX; k++) h += '<a class="add" href="#" data-pickpin>+ Pin a tool or section<br><small style="font-weight:600">tap to choose</small></a>';
     w.innerHTML = h;
     anchor.parentNode.insertBefore(w, anchor);
-    w.onclick = function(e){ var x = e.target.closest("[data-unpin]"); if (!x) return; e.preventDefault(); e.stopPropagation(); P.splice(+x.getAttribute("data-unpin"), 1); save(true); };
+    w.onclick = function(e){ if (e.target.closest("[data-pickpin]")){ e.preventDefault(); picker(); return; } var x = e.target.closest("[data-unpin]"); if (!x) return; e.preventDefault(); e.stopPropagation(); P.splice(+x.getAttribute("data-unpin"), 1); save(true); };
   }
   function toggle(e){
     e.stopPropagation();
@@ -443,6 +456,46 @@
     document.body.appendChild(pop);
     pop.onclick = function(ev){ var b = ev.target.closest("[data-rep]"); if (!b) return; P[+b.getAttribute("data-rep")] = item; pop.remove(); save(true); flashPin(); };
     setTimeout(function(){ document.addEventListener("click", function c(ev){ if (!pop.contains(ev.target)){ pop.remove(); document.removeEventListener("click", c); } }); }, 0);
+  }
+  var EXTRA = [["XpertConnect", "/feed"], ["Money", "/money"], ["Freelance", "/market"], ["Property", "/market#property"], ["Store", "/store"], ["Jobs", "/jobs"],
+    ["Rides", "/rides"], ["Roots of Love", "/roots"], ["Brand kit", "/brand"], ["Business cards", "/cards"], ["My CV", "/market#cv"], ["Step counter", "/steps"],
+    ["Weather", "/weather"], ["Rates", "/rates"], ["Translate", "/translate"], ["Quran", "/quran"], ["Islamic", "/islamic"], ["Typing tutor", "/typing"],
+    ["Games", "/games"], ["Blood bank", "/blood"], ["Donate", "/donate"], ["Pets", "/pets"], ["News", "/news"], ["Birthdays", "/birthdays"], ["Chat", "/chat"],
+    ["Rewards", "/rewards"], ["Help", "/help"], ["Tools", "/tools"], ["Academy", "/academy/"], ["Vocabulary", "/vocabulary"], ["MCQs", "/mcq"], ["Clips", "/clips"]];
+  function choices(){
+    var seen = {}, out = [];
+    function add(label, href){
+      if (!href || href.charAt(0) !== "/" || href === "/" || NOPIN.test(href.split("#")[0])) return;
+      var p = href.replace(/\/+(#|$)/, "$1") || href; if (p === "/academy") p = "/academy/";
+      if (seen[p]) return; seen[p] = 1; out.push({path: p, label: String(label || "").trim().slice(0, 24) || p});
+    }
+    [].forEach.call(document.querySelectorAll(".tnav a:not(.tpinned), .tdrop a:not(.tpinned)"), function(a){ add(a.textContent, a.getAttribute("href")); });
+    EXTRA.forEach(function(x){ add(x[0], x[1]); });
+    return out.sort(function(a, b){ return a.label.localeCompare(b.label); });
+  }
+  function picker(){
+    var old = document.querySelector(".xcpinpick"); if (old) old.remove();
+    var list = choices(), pop = document.createElement("div"); pop.className = "xcpinpick";
+    pop.innerHTML = '<div class="in"><div class="hd"><b>📌 Pin a page</b><button type="button" class="x" aria-label="Close">×</button></div>'
+      + '<input type="search" placeholder="Search: money, freelance, weather…" autocomplete="off"><div class="ls"></div></div>';
+    document.body.appendChild(pop);
+    var q = pop.querySelector("input"), ls = pop.querySelector(".ls");
+    function draw2(){
+      var t = q.value.trim().toLowerCase();
+      ls.innerHTML = list.filter(function(x){ return !t || x.label.toLowerCase().indexOf(t) >= 0 || x.path.indexOf(t) >= 0; }).map(function(x){
+        var on = pinned(x.path);
+        return '<button type="button" data-path="' + esc(x.path) + '" data-label="' + esc(x.label) + '"' + (on ? ' class="on"' : '') + '>' + icon(x.path) + '<span>' + esc(x.label) + '</span><i>' + (on ? "Pinned" : "Pin") + '</i></button>'; }).join("") || '<p>Nothing found.</p>';
+    }
+    draw2(); q.oninput = draw2; setTimeout(function(){ q.focus(); }, 50);
+    pop.onclick = function(e){
+      if (e.target === pop || e.target.closest(".x")){ pop.remove(); return; }
+      var b = e.target.closest("[data-path]"); if (!b) return;
+      var p = b.getAttribute("data-path");
+      if (pinned(p)){ P = P.filter(function(x){ return x.path !== p; }); save(true); draw2(); return; }
+      if (P.length >= MAX){ alert("You can pin " + MAX + " pages. Unpin one first (tap × on its card)."); return; }
+      P.push({path: p, label: b.getAttribute("data-label")}); save(true); flashPin();
+      if (P.length >= MAX) pop.remove(); else draw2();
+    };
   }
   function flashPin(){
     var t = document.createElement("div");
