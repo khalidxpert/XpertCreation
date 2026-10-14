@@ -140,6 +140,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
 .bt button{flex:1;padding:13px;border-radius:13px;font-weight:800;font-size:14.5px;
   cursor:pointer;font-family:inherit;border:1.5px solid var(--line);background:var(--card)}
 .bt .go{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mfile{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;margin-bottom:6px;background:var(--card)}
+.mfile .mfi{font-size:20px}.mfile .mft{flex:1;min-width:0}.mfile .mft b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mfile .mft small{font-size:11.5px;color:var(--ink-soft)}
+.mfile a{font-size:12.5px;font-weight:800;color:#1B4DFF;text-decoration:none;padding:4px 6px}.mfile button{border:0;background:#FEE2E2;color:#B91C1C;border-radius:8px;width:28px;height:28px;cursor:pointer;font-weight:900}
+.mfadd{display:block;text-align:center;padding:10px;border:1.5px dashed var(--line);border-radius:12px;font-weight:800;font-size:13.5px;cursor:pointer;color:var(--ink-soft)}
+.mfnote{font-size:12px;color:var(--ink-soft);margin-top:4px}
 .note{background:var(--card);border:1px dashed var(--line);border-radius:16px;
   padding:14px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
 .back{display:inline-block;margin-bottom:10px;font-size:13.5px;font-weight:700;
@@ -927,7 +932,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
     shown.forEach(function(x){
       var t = x.t, A = accById(t.acc), B = accById(t.to), HD = t.head ? headById(t.head) : null;
       if (t.date !== lastDay){ lastDay = t.date; body += '<div style="padding:7px 14px 3px;font-size:11.5px;font-weight:800;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line)">' + niceDate(t.date) + '</div>'; }
-      var title = t.kind === "move" ? (A ? A.name : "?") + " → " + (B ? B.name : "?") : (t.note || (HD ? HD.name : (t.kind === "in" ? "Received" : "Paid")));
+      var title = (t.kind === "move" ? (A ? A.name : "?") + " → " + (B ? B.name : "?") : (t.note || (HD ? HD.name : (t.kind === "in" ? "Received" : "Paid")))) + (t.files && t.files.length ? " \uD83D\uDCCE" : "");
       var sub = t.kind === "move" ? (t.note || "Move") : (A ? A.name : "") + (HD && t.note ? " · " + HD.name : "");
       body += '<div class="tx" data-edittx="' + esc(t.id) + '" style="cursor:pointer"><span class="dot ' + (x.v > 0 ? "in" : "out") + '">' + (x.v > 0 ? "+" : "−") + '</span>'
         + '<span class="md"><b>' + esc(title) + '</b><small>' + esc(sub) + '</small></span>'
@@ -1314,7 +1319,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
         sign = forAcc ? (t.to === forAcc ? "+" : "\u2212") : "";
       } else {
         var HD = t.head ? headById(t.head) : null;
-        title = t.note || (HD ? HD.name : (t.kind === "in" ? "Received" : "Paid"));
+        title = (t.note || (HD ? HD.name : (t.kind === "in" ? "Received" : "Paid"))) + (t.files && t.files.length ? " \uD83D\uDCCE" : "");
         sign = t.kind === "in" ? "+" : "\u2212";
       }
       var sub = niceDate(t.date)
@@ -1411,6 +1416,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       + '<div class="f"><label>Note</label><input id="eNote" type="text" maxlength="120" '
       + 'placeholder="' + (kind === "in" ? "Salary, client payment\u2026" : kind === "out"
           ? "Groceries, rent, bill\u2026" : "Cash withdrawal\u2026") + '"></div>'
+      + '<div class="f"><label>Receipt / payment proof (optional)</label><div id="eFiles"></div></div>'
       + '<div class="msg" id="eMsg"></div>'
       + '<div class="bt"><button type="button" data-close>Cancel</button>'
       + '<button type="button" class="go" data-saveentry>Save</button></div>');
@@ -1430,6 +1436,33 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       document.getElementById("eDate").value = ET.date;
       document.getElementById("eNote").value = ET.note || "";
     }
+    filesUI(ET);
+  }
+
+  var EF = [], EFX = [];
+  function fileBox(){
+    var el = document.getElementById("eFiles"); if (!el) return;
+    var h = EF.map(function(f, i){ var u = "/api/money/files/" + encodeURIComponent(f.id) + "/";
+      return '<div class="mfile"><span class="mfi">' + (f.type === "application/pdf" ? "📄" : "🖼️") + '</span><span class="mft"><b>' + esc(f.name) + '</b><small>' + Math.max(1, Math.round(f.size / 1024)) + ' KB</small></span>'
+        + '<a href="' + u + '" target="_blank" rel="noopener">View</a><a href="' + u + '?dl=1">Download</a><button type="button" data-rmf="' + i + '" aria-label="Remove">✕</button></div>'; }).join("");
+    if (!SYNC.on) h += '<div class="mfnote">Sign in to attach receipts. They are saved, encrypted, in your account.</div>';
+    else if (EF.length < 5) h += '<label class="mfadd">📎 Add a picture or PDF<input type="file" id="eFileIn" accept="image/*,application/pdf" hidden></label><div class="mfnote" id="eFileMsg"></div>';
+    el.innerHTML = h;
+    var inp = document.getElementById("eFileIn");
+    if (inp) inp.onchange = function(){
+      var f = this.files[0]; if (!f) return; var m = document.getElementById("eFileMsg"); m.textContent = "Uploading…";
+      var fd = new FormData(); fd.append("file", f);
+      fetch("/api/money/files/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}, body: fd})
+        .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); })
+        .then(function(r){ if (!r.ok){ m.textContent = r.d.detail || "Could not upload."; return; } EF.push(r.d); fileBox(); })
+        .catch(function(){ m.textContent = "Network problem. Try again."; });
+    };
+    el.onclick = function(e){ var b = e.target.closest("[data-rmf]"); if (!b) return; var x = EF.splice(+b.getAttribute("data-rmf"), 1)[0]; if (x) EFX.push(x.id); fileBox(); };
+  }
+  function filesUI(t){ EF = (t && t.files ? t.files.slice() : []); EFX = []; fileBox(); }
+  function dropFiles(){
+    EFX.forEach(function(id){ fetch("/api/money/files/" + encodeURIComponent(id) + "/", {method: "DELETE", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}}).catch(function(){}); });
+    EFX = [];
   }
 
   function saveEntry(){
@@ -1442,6 +1475,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       to: sheetKind === "move" ? document.getElementById("eTo").value : null,
       date: document.getElementById("eDate").value,
       note: document.getElementById("eNote").value.trim().slice(0, 120),
+      files: EF.length ? EF.slice(0, 5) : undefined,
       created: Date.now()
     };
     var err = validEntry(st, e);
@@ -1451,7 +1485,7 @@ body{background:var(--paper);color:var(--ink);font-family:var(--display);
       if (old){ e.created = old.created; e.upd = Date.now(); if (old.due) e.due = old.due; if (old.dueOrigin) e.dueOrigin = old.dueOrigin; st.tx[st.tx.indexOf(old)] = e; } else st.tx.push(e);
     } else st.tx.push(e);
     editingTx = null;
-    if (save()){ closeSheet(); render(); }
+    if (save()){ dropFiles(); closeSheet(); render(); }
   }
 
   var editingAcc = null;

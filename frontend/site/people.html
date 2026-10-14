@@ -179,14 +179,17 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .ffr a{padding:8px 12px;border-radius:10px;background:var(--brand,#1B4DFF);color:#fff;text-decoration:none;font-weight:700;font-size:13px}
 .ffc label{display:flex;gap:8px;align-items:center;font-size:13.5px;margin:4px 0}
 </style>
+<div id="pymk"></div>
 <div class="ffc" id="ffc">
   <h3>&#128199; Find people you know</h3>
-  <p>See which of your contacts are already on XpertCreation. Your contacts are checked once and then forgotten: we never save them and never message them.</p>
+  <p>See which of your contacts are already on XpertCreation. We never message your contacts.</p>
+  <label style="margin-top:8px"><input type="checkbox" id="ffkeep"> Remember my contacts, so you can tell me when one of them joins. They are kept scrambled (nobody can read them) and you can delete them any time under My privacy.</label>
   <div class="acts"><button class="pri" id="ffpick" hidden>Pick from my phone contacts</button><button id="fftype">Type emails or numbers</button><button id="ffpriv">My privacy</button></div>
   <div id="ffin" hidden><textarea id="fftext" placeholder="ali@gmail.com, 0300 1234567 &#10;one per line or separated by commas"></textarea><div class="acts"><button class="pri" id="ffgo">Check</button></div></div>
   <div id="ffpv" hidden>
     <label><input type="checkbox" id="ffe"> Let people who have my email address find me</label>
     <label><input type="checkbox" id="ffp"> Let people who have my phone or WhatsApp number (from my profile) find me</label>
+    <div class="acts"><button id="fffor">Delete my saved contacts</button><span id="ffkept" style="font-size:13px;color:var(--ink-soft,#5A657C);align-self:center"></span></div>
   </div>
   <div id="ffout"></div>
 </div>
@@ -208,9 +211,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     o.innerHTML = '<p><b>' + f.length + '</b> of ' + r.data.checked + ' checked ' + (f.length === 1 ? 'is' : 'are') + ' on XpertCreation.' + (r.data.checks_left != null ? ' (' + r.data.checks_left + ' checks left today)' : '') + '</p>'
       + f.map(function(x){ return '<div class="ffr">' + (x.avatar ? '<img src="' + esc(x.avatar) + '" alt="">' : '<span class="l">' + esc(x.name.charAt(0)) + '</span>')
         + '<span><b>' + esc(x.name) + '</b><small>' + esc(x.headline || "") + '</small></span>' + (x.slug ? '<a href="/in/' + encodeURIComponent(x.slug) + '">View</a>' : '') + '</div>'; }).join("")
-      + (f.length ? '' : '<p>None of them yet. Invite them: share <b>xpertcreation.com</b> with them.</p>');
+      + (f.length ? '' : '<p>None of them yet. Invite them: share <b>xpertcreation.com</b> with them.</p>')
+      + (r.data.kept != null ? '<p>\uD83D\uDD12 ' + r.data.kept + ' contacts remembered. We will tell you when one of them joins.</p>' : '');
   }
-  function check(emails, phones){ $("ffout").innerHTML = "<p>Checking\u2026</p>"; call("contacts/", {emails: emails, phones: phones}).then(show); }
+  function check(emails, phones){ $("ffout").innerHTML = "<p>Checking\u2026</p>"; call("contacts/", {emails: emails, phones: phones, keep: !!($("ffkeep") && $("ffkeep").checked)}).then(show); }
   if ("contacts" in navigator && "ContactsManager" in window) $("ffpick").hidden = false;
   $("ffpick").onclick = function(){
     navigator.contacts.select(["email", "tel"], {multiple: true}).then(function(list){
@@ -541,5 +545,16 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
 <script src="/js/share-1.js?v=22" defer></script>
 <script src="/js/geo-attach-1.js" data-geo='[{"input":"city","go":"go"}]' defer></script>
+<script>
+(function(){
+  var b = document.getElementById("fffor"), k = document.getElementById("ffkept"); if (!b) return;
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  fetch("/api/find/settings/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ if (d) k.textContent = d.kept ? d.kept + " saved" : "None saved"; }).catch(function(){});
+  b.onclick = function(){ if (!confirm("Delete all your saved contacts?")) return;
+    fetch("/api/find/forget/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: "{}"})
+      .then(function(r){ return r.json(); }).then(function(){ k.textContent = "None saved"; }).catch(function(){}); };
+})();
+</script>
+<script src="/js/pymk-1.js" defer></script>
 </body>
 </html>

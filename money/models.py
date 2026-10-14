@@ -16,3 +16,13 @@ class MoneySnapshot(models.Model):
     blob = models.TextField()
     rev = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+
+class MoneyFile(models.Model):
+    """A receipt or payment proof attached to a Money entry. The file is stored encrypted, outside the website."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="money_files")
+    fid = models.CharField(max_length=24, unique=True)
+    name = models.CharField(max_length=120)
+    ctype = models.CharField(max_length=40)
+    size = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
