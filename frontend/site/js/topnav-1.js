@@ -143,7 +143,7 @@
       acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
       acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';
       menu.innerHTML = '<b>' + nm.replace(/</g, "&lt;") + (u.username ? ' <small>@' + String(u.username).replace(/</g, "") + '</small>' : '') + '</b>'
-        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><a href="/company/manage">\uD83C\uDFE2 My company</a><a href="/get-verified">\u2714\uFE0F Blue tick</a><a href="/me/preferences">\u2699\uFE0F Interests &amp; privacy</a><a href="/whats-new">\u2728 What\u2019s new</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
+        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><a href="/company/manage">\uD83C\uDFE2 My company</a><a href="/get-verified">\u2714\uFE0F Blue tick</a><a href="/settings">\u2699\uFE0F Settings &amp; privacy</a><a href="/me/preferences">\uD83C\uDFAF Interests</a><a href="/saved">\uD83D\uDD16 Saved posts</a><a href="/whats-new">\u2728 What\u2019s new</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
       acct.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove("open"); menu.classList.toggle("open"); });
       menu.querySelector(".tout").onclick = function(){
         fetch("/api/auth/logout/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}})
@@ -153,7 +153,7 @@
     document.addEventListener("click", function(e){ if (!menu.contains(e.target)) menu.classList.remove("open"); });
     // Phones: Settings and the language box move into the menu so the header fits.
     var extra = document.createElement("div"); extra.className = "tmore";
-    extra.innerHTML = '<a href="/account">\u2699\uFE0F Settings</a>';
+    extra.innerHTML = '<a href="/settings">\u2699\uFE0F Settings</a>';
     var lang = head.querySelector("#langSel");
     drop.appendChild(extra);
     var mq = window.matchMedia ? window.matchMedia("(max-width:600px)") : null;

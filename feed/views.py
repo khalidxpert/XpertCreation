@@ -162,7 +162,12 @@ def posts(request):
                 return Response({"posts": [], "more": False})
             from network.models import Follow
             ids = set(Follow.objects.filter(follower=u).values_list("following_id", flat=True)) | _connected_ids(u) | {u.pk}
-            qs = qs.filter(author_id__in=ids)
+            try:
+                from social.views import tag_q            # posts with hashtags you follow
+                _tq = tag_q(u)
+            except Exception:
+                _tq = None
+            qs = qs.filter(Q(author_id__in=ids) | _tq) if _tq is not None else qs.filter(author_id__in=ids)
         elif scope.startswith("user:"):
             from network.models import ProProfile
             key = scope[5:]

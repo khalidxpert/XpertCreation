@@ -35,6 +35,7 @@ urlpatterns = [
     path("api/property/", include("realestate.urls")),
     path("api/store/", include("store.urls")),
     path("api/companybook/", include("companybook.urls")),
+    path("api/social/", include("social.urls")),
     path("api/brand/", include("brandkit.urls")),
     path("api/roots/", include("roots.urls")),
     path("api/pins/", include("pins.urls")),
