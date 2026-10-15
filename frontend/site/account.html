@@ -519,6 +519,12 @@ body.rtl .wafab{right:auto;left:16px}
         + '<div class="rows"><button data-a="resend">Send again</button>'
         + '<button data-a="go-login">Cancel</button></div>';
 
+    } else if (screen === "twostep"){
+      h = '<h1>Two-step sign in</h1><p class="sub">Your account has two-step sign in. Enter the 6-digit code we just emailed you. It works for 10 minutes.</p>' + m
+        + fld("code2","Code","text","","","code")
+        + '<button class="btn" data-a="twostep"' + (busy?" disabled":"") + '>' + (busy ? "Working\u2026" : "Sign in") + '</button>'
+        + '<div class="rows"><button data-a="twostep-resend">Send a new code</button><button data-a="go-login">Cancel</button></div>';
+
     } else if (screen === "forgot"){
       h = '<h1>Reset password</h1><p class="sub">We will email you a 6-digit code.</p>' + m
         + fld("email","Email or username","text",email)
@@ -788,9 +794,21 @@ body.rtl .wafab{right:auto;left:16px}
       return api("/auth/login/", {method:"POST", body:{email:email, password:val("pass")}})
         .then(function(r){
           if (r.ok){ me = r.data.user; birthdayToday = !!r.data.birthday_today; try{ if(birthdayToday) sessionStorage.setItem("xc_wish","1"); }catch(e){} return next(); }
+          if (r.data.two_step){ screen = "twostep"; window.XTICK = r.data.ticket; msg = "We sent a 6-digit code to your email."; msgType = "ok"; busy = false; return draw(); }
           if (r.data.needs_verification){ screen = "verify"; msg = r.data.detail; if (r.data.email) email = r.data.email; }
           fail(r);
         });
+    }
+
+    if (a === "twostep"){
+      busy = true; draw();
+      return api("/xsocial/twostep/login/", {method:"POST", body:{ticket: window.XTICK, code: val("code2")}})
+        .then(function(r){ if (r.ok){ me = r.data.user; return next(); } fail(r); });
+    }
+    if (a === "twostep-resend"){
+      busy = true; draw();
+      return api("/xsocial/twostep/resend/", {method:"POST", body:{ticket: window.XTICK}})
+        .then(function(r){ msg = r.data.detail || ""; msgType = r.ok ? "ok" : "err"; busy = false; draw(); });
     }
 
     if (a === "acct-ind" || a === "acct-co"){

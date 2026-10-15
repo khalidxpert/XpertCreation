@@ -726,3 +726,19 @@ def my_people(request, which):
 
 
 SOCIAL_KEYS = {'pinterest', 'skype', 'stackoverflow', 'reddit', 'facebook', 'twitch', 'linkedin', 'vk', 'telegram', 'threads', 'upwork', 'soundcloud', 'snapchat', 'github', 'wechat', 'spotify', 'weibo', 'signal', 'line', 'instagram', 'leetcode', 'youtube', 'whatsapp', 'xing', 'dribbble', 'flickr', 'tumblr', 'vimeo', 'discord', 'behance', 'medium', 'bluesky', 'kakaotalk', 'x', 'kaggle', 'quora', 'devto', 'mastodon', 'fiverr', 'tiktok'}
+
+
+# ---- privacy (setup_social_v3): a blocked person's profile is not found, both ways ----
+_xs_find0 = _find
+
+
+def _find(slug, viewer, *a, **k):
+    p = _xs_find0(slug, viewer, *a, **k)
+    try:
+        if p and viewer is not None and viewer.is_authenticated and p.user_id != viewer.pk:
+            from xsocial.privacy import blocked_between
+            if blocked_between(viewer.pk, p.user_id):
+                return None
+    except Exception:
+        pass
+    return p

@@ -180,6 +180,56 @@
     }
   });
 
+
+  // ---------- step 2: close friends audience, profile and post menus (block / mute / restrict / close friends)
+  function audience(){
+    var sel = document.getElementById("pvis");
+    if (sel && !sel.querySelector('option[value="close"]')){ var o = document.createElement("option"); o.value = "close"; o.textContent = "⭐ Close friends"; sel.appendChild(o); }
+  }
+  function relSheet(slug, name){
+    api("rel/?slug=" + encodeURIComponent(slug)).then(function(r){
+      if (!r.ok || r.d.me) return;
+      var d = r.d, first = esc((name || "this person").split(" ")[0]);
+      var row = function(act, on, label, sub){ return '<label class="r" style="justify-content:space-between"><span><b>' + label + '</b><br><span class="x2-pf">' + sub + '</span></span><input type="checkbox" data-rel="' + act + '"' + (on ? " checked" : "") + '></label>'; };
+      var s = sheet('<h3>' + esc(name || "") + '</h3>'
+        + row("close", d.close, "⭐ Close friend", "Sees your posts shared with Close friends")
+        + row("mute", d.mute, "🔇 Mute", "Hide " + first + "'s posts from your feed. They are not told.")
+        + row("restrict", d.restrict, "🔒 Restrict", first + "'s new comments on your posts are seen only by them and you")
+        + row("block", d.block, "🚫 Block", "You can't see each other's profile or posts, or message. Your connection ends.")
+        + '<div class="msg" id="x2rm"></div><div class="bt"><button class="no" type="button">Close</button></div>');
+      s.addEventListener("change", function(e){
+        var c = e.target.closest("[data-rel]"); if (!c) return;
+        var act = c.getAttribute("data-rel");
+        if (act === "block" && c.checked && !confirm("Block " + (name || "this person") + "?")){ c.checked = false; return; }
+        api("people/" + act + "/", {slug: slug, on: c.checked}).then(function(x){
+          if (!x.ok){ c.checked = !c.checked; s.querySelector("#x2rm").textContent = x.d.detail || "Could not save."; return; }
+          toast({close: c.checked ? "Added to Close friends" : "Removed from Close friends", mute: c.checked ? "Muted" : "Unmuted", restrict: c.checked ? "Restricted" : "Not restricted", block: c.checked ? "Blocked" : "Unblocked"}[act]);
+          if (act === "block" && c.checked){ setTimeout(function(){ location.href = "/feed"; }, 900); }
+        });
+      });
+    });
+  }
+  function profileMenu(){
+    var m = location.pathname.match(/^\/in\/([a-z0-9-]+)/i), acts = document.querySelector(".acts");
+    if (!m || !acts || !ME || acts.querySelector(".x2-more") || (ME.slug && ME.slug.toLowerCase() === m[1].toLowerCase())) return;
+    var b = document.createElement("button"); b.className = "btn x2-more"; b.type = "button"; b.textContent = "⋯ More";
+    b.onclick = function(){ relSheet(m[1], ((document.querySelector("h1") || {}).textContent || "").replace(/\s*Verified\s*$/, "")); }; acts.appendChild(b);
+  }
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("[data-menu]");
+    if (t && ME){
+      setTimeout(function(){
+        var id = t.getAttribute("data-menu"), mb = document.getElementById("menu-" + id), card = document.getElementById("post-" + id);
+        if (!mb || !mb.innerHTML || mb.querySelector("[data-x2rel]") || !mb.querySelector("[data-preport]")) return;
+        var a = card && card.querySelector(".fwho a[href^='/in/']"); if (!a) return;
+        var slug = decodeURIComponent(a.getAttribute("href").slice(4)).replace(/\/$/, ""), nm = a.textContent.trim();
+        mb.insertAdjacentHTML("beforeend", '<button type="button" data-x2rel="' + esc(slug) + '" data-n="' + esc(nm) + '">🔇 Mute / 🚫 Block…</button>');
+      }, 30);
+      return;
+    }
+    var r = e.target.closest("[data-x2rel]"); if (r) relSheet(r.getAttribute("data-x2rel"), r.getAttribute("data-n"));
+  });
+
   // ---------- run
   var seen = {};
   function tick(){
@@ -189,7 +239,7 @@
       if (!seen[id]){ seen[id] = 1; ids.push(id); }
       else if (POLLS[id] && !c.querySelector(".x2-poll")) paintPoll(id);     // the card was redrawn
     });
-    loadPolls(ids.slice(0, 60)); loadFrames(); composer(); feedBox();
+    loadPolls(ids.slice(0, 60)); loadFrames(); composer(); feedBox(); audience(); profileMenu();
   }
   fetch("/api/xsocial/frame/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ ME = d; }).catch(function(){}).then(function(){
     tick();

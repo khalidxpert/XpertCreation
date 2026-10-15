@@ -55,3 +55,51 @@ class Ambassador(models.Model):
 
     class Meta:
         ordering = ["order", "added_at"]
+
+
+# ---------------------------------------------------------------- step 2: privacy and safety
+class Mute(models.Model):
+    """You stop seeing their posts in your feed. They are not told."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_mutes")
+    target = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("user", "target")]
+
+
+class Restrict(models.Model):
+    """Their new comments on your posts are seen only by them and you. They are not told."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_restricts")
+    target = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("user", "target")]
+
+
+class CloseFriend(models.Model):
+    """Who sees your posts shared with 'Close friends'."""
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_close")
+    friend = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("owner", "friend")]
+
+
+class TwoStep(models.Model):
+    """Two-step sign in: after the password, a 6-digit code sent by email."""
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_twostep")
+    on = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class LoginTicket(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    token = models.CharField(max_length=48, unique=True)
+    code_hash = models.CharField(max_length=64)
+    expires = models.DateTimeField()
+    tries = models.PositiveSmallIntegerField(default=0)
+    sent_at = models.DateTimeField()
+    used = models.BooleanField(default=False)

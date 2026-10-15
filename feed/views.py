@@ -153,6 +153,8 @@ def posts(request):
     if request.method == "GET":
         qs = _visible_qs(u)
         scope = request.GET.get("scope") or "all"
+        if scope in ("all", "following") and u.is_authenticated:
+            qs = _xs_mute(qs, u)                       # people you muted
         if scope == "mine":
             if not u.is_authenticated:
                 return Response({"posts": [], "more": False})
@@ -340,6 +342,7 @@ def comments(request, pk):
         qs = post.comments.select_related("author")
         if not _mod(u):
             qs = qs.filter(hidden=False)
+        qs = _xs_comments(qs, post, u)                 # restricted people's comments
         authors = {}
         return Response({"comments": [_comment_out(c, u, authors) for c in qs[:300]]})
     if not u.is_authenticated:
@@ -407,3 +410,55 @@ def report(request, pk):
     from notifications.views import notify_admins
     notify_admins("report", "A post was reported (%s)." % reason, "/admin/feed/postreport/")
     return Response({"ok": True})
+
+
+# ---- privacy (setup_social_v3): blocked people never see each other's posts; Close friends audience ----
+Post.VISIBILITY = list(Post.VISIBILITY) + [("close", "Close friends")]
+_xs_visible_qs0, _xs_can_see0 = _visible_qs, _can_see
+
+
+def _visible_qs(u):
+    qs = _xs_visible_qs0(u)
+    if not u.is_authenticated:
+        return qs
+    try:
+        from xsocial.privacy import blocked_ids, close_authors
+        cl = close_authors(u)
+        if cl:
+            qs = qs | Post.objects.select_related("author").filter(visibility="close", author_id__in=cl, hidden=False)
+        b = blocked_ids(u)
+        return qs.exclude(author_id__in=b) if b else qs
+    except Exception:
+        return qs
+
+
+def _can_see(post, u):
+    try:
+        from xsocial.privacy import blocked_between, in_close
+        if u.is_authenticated and u.pk != post.author_id:
+            if blocked_between(u.pk, post.author_id):
+                return False
+            if post.visibility == "close":
+                return (not post.hidden or _mod(u)) and in_close(post.author_id, u.pk)
+        elif post.visibility == "close" and not u.is_authenticated:
+            return False
+    except Exception:
+        pass
+    return _xs_can_see0(post, u)
+
+
+def _xs_mute(qs, u):
+    try:
+        from xsocial.privacy import muted_ids
+        m = muted_ids(u)
+        return qs.exclude(author_id__in=m) if m else qs
+    except Exception:
+        return qs
+
+
+def _xs_comments(qs, post, u):
+    try:
+        from xsocial.privacy import comment_filter
+        return comment_filter(qs, post, u)
+    except Exception:
+        return qs

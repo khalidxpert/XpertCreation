@@ -189,6 +189,15 @@ def login_view(request):
             "email": user.email,
         }, status=status.HTTP_403_FORBIDDEN)
 
+    try:                                           # two-step sign in (xsocial)
+        from xsocial.views2 import need_code, _hint
+        _tk = need_code(user, request)
+    except Exception:
+        _tk = None
+    if _tk:
+        return Response({"detail": "Two-step sign in is on. We sent a 6-digit code to %s. On learn.xpertcreation.com, sign in on xpertcreation.com/login." % _hint(user.email),
+                         "two_step": True, "ticket": _tk}, status=status.HTTP_403_FORBIDDEN)
+
     login(request, user)
     request.session.cycle_key()
     user.last_login_ip = client_ip(request)
