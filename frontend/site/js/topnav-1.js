@@ -517,3 +517,47 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(start, 50); }); else setTimeout(start, 50);
 })();
+
+/* setup_navback_v1: back button, logo goes home, menu never squeezed to nothing */
+(function(){
+  "use strict";
+  function run(){
+    var head = document.querySelector("header.top");
+    if (!head || head.getAttribute("data-xcnb")) return;
+    head.setAttribute("data-xcnb", "1");
+    var row = head.querySelector(".in") || head;
+    var st = document.createElement("style");
+    st.textContent = ".xcback{flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);color:var(--ink,#0D1424);font-size:19px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-right:6px;padding:0}"
+      + ".xcback:hover{background:#EEF2FF;border-color:#C7D2FE}"
+      + "header.top a.xchome{border:0!important;background:none!important;padding:0!important;box-shadow:none!important;height:auto!important;min-height:0!important}a.xchome{display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;flex:0 0 auto}a.xchome:hover b{color:#1B4DFF}"
+      + "header.top.xcnarrow .tnav,header.top.xcnarrow .xcna{display:none!important}header.top.xcnarrow .tmenu{display:inline-grid!important;place-items:center}"
+      + "@media(max-width:600px){header.top > .in{flex-wrap:wrap;row-gap:6px}}";
+    document.head.appendChild(st);
+    /* logo + page name -> home */
+    var img = row.querySelector(":scope > img");
+    if (img && !img.closest("a")) {
+      var a = document.createElement("a"); a.href = "/"; a.className = "xchome"; a.title = "Home";
+      var name = img.nextElementSibling && img.nextElementSibling.tagName === "B" ? img.nextElementSibling : null;
+      row.insertBefore(a, img); a.appendChild(img); if (name) a.appendChild(name);
+    }
+    /* back button */
+    if ((location.pathname.replace(/\/+$/, "") || "/") !== "/" && !row.querySelector(".xcback")) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "xcback"; b.textContent = "←";
+      b.title = "Back"; b.setAttribute("aria-label", "Back");
+      b.onclick = function(){
+        var same = document.referrer && document.referrer.indexOf(location.origin) === 0;
+        if (same && history.length > 1) history.back(); else location.href = "/";
+      };
+      row.insertBefore(b, row.firstChild);
+    }
+    /* when the page's own buttons leave no room, use the menu button instead of a squeezed menu */
+    function fit(){
+      var n = head.querySelector(".tnav"); if (!n) return;
+      head.classList.remove("xcnarrow");
+      if (window.innerWidth > 820 && n.clientWidth < 170) head.classList.add("xcnarrow");
+    }
+    [300, 1200, 2500].forEach(function(t){ setTimeout(fit, t); });
+    window.addEventListener("resize", function(){ clearTimeout(fit.t); fit.t = setTimeout(fit, 150); });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(run, 120); }); else setTimeout(run, 120);
+})();
