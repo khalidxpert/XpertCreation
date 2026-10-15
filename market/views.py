@@ -1341,6 +1341,7 @@ def _cv_clean(d):
                 if row["title"]:
                     rows.append(row)
         out[k] = rows
+    out["photo"] = d.get("photo") is not False and str(d.get("photo")).lower() not in ("false", "0")
     return out
 
 
@@ -1360,9 +1361,10 @@ def cv(request):
         d = {"name": _name(u), "email": u.email or "", "phone": getattr(u, "whatsapp", "") or getattr(u, "phone", "") or "",
              "certifications": [], "projects": [], "languages": ""}
         d.update(prof)
-        return Response({"exists": False, "template": "classic", "public": False, "username": u.username, "data": d, "profile": prof})
+        d["photo"] = bool(_avatar(u))
+        return Response({"exists": False, "template": "classic", "public": False, "username": u.username, "data": d, "profile": prof, "avatar": _avatar(u)})
     return Response({"exists": True, "template": c.template, "public": c.public, "data": c.data, "username": u.username, "updated": c.updated_at.isoformat(),
-                     "profile": prof})
+                     "profile": prof, "avatar": _avatar(u)})
 
 
 _MON = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -1421,7 +1423,7 @@ def cv_public(request, username):
     d = dict(c.data)
     if not (request.user.is_authenticated and request.user.pk == owner.pk):
         d.pop("phone", None)                          # contact stays private on the public view
-    return Response({"template": c.template, "data": d, "username": owner.username, "avatar": _avatar(owner), "kyc": _kyc(owner)})
+    return Response({"template": c.template, "data": d, "username": owner.username, "avatar": _avatar(owner) if c.data.get("photo", True) is not False else "", "kyc": _kyc(owner)})
 
 
 # ---------------- the clock: run every 30 minutes (cron) - deadlines, auto-accept, expiries

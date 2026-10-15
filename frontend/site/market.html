@@ -368,6 +368,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .cv .it{margin-bottom:10px}.cv .it b{font-size:13.5px}.cv .it .w{color:#64748B;font-size:12px}.cv .it p{margin:3px 0 0;white-space:pre-wrap}
 .cv .sk{display:flex;flex-wrap:wrap;gap:5px}.cv .sk span{background:#EEF2FF;color:#1E3A8A;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600}
 .cv.modern{padding:0;display:grid;grid-template-columns:34% 66%;overflow:hidden}
+.cv .av2{float:right;width:96px;height:96px;border-radius:50%;object-fit:cover;margin:0 0 10px 18px;border:3px solid #EEF2FF}.cv.minimal .av2{border-radius:8px;border:0}
+.mk-cvph{display:flex;gap:14px;align-items:center;margin-bottom:6px}.mk-cvph img,.mk-cvph .ph{width:72px;height:72px;border-radius:50%;object-fit:cover;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:28px;flex:none}
+.mk-cvph small{display:block;color:var(--soft);font-size:12px;margin-top:4px}
 .cv.modern .side{background:#0F172A;color:#E2E8F0;padding:30px 20px}.cv.modern .side h1{color:#fff;font-size:22px}.cv.modern .side .hl{color:#93C5FD}
 .cv.modern .side h3{color:#93C5FD;border-color:#334155}.cv.modern .side .ct{display:block;color:#CBD5E1}.cv.modern .side .ct span{display:block;margin-bottom:4px;word-break:break-word}
 .cv.modern .side .sk span{background:#1E293B;color:#E2E8F0}.cv.modern .main{padding:30px 26px}
@@ -976,6 +979,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   // ---------------- CV builder
   var CVD = null;
   function cvHtml(c, avatar){
+    avatar = avatar || c.avatar || ""; if (c.data && c.data.photo === false) avatar = "";
     var d = c.data || {}, sk = (d.skills || "").split(/[,\n]/).map(function(x){ return x.trim(); }).filter(Boolean);
     var sec = function(title, rows){ return rows && rows.length ? '<h3>' + title + '</h3>' + rows.map(function(r){ return '<div class="it"><b>' + esc(r.title) + '</b>' + (r.org ? ' &middot; ' + esc(r.org) : '') + (r.start || r.end ? '<div class="w">' + esc(r.start) + (r.end ? ' &ndash; ' + esc(r.end) : '') + '</div>' : '') + (r.detail ? '<p>' + esc(r.detail) + '</p>' : '') + '</div>'; }).join("") : ''; };
     var contact = [d.email, d.phone, [d.city, d.country].filter(Boolean).join(", "), d.website].filter(Boolean).map(function(x){ return '<span>' + esc(x) + '</span>'; }).join("");
@@ -983,7 +987,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var langs = d.languages ? '<h3>Languages</h3><p style="margin:0">' + esc(d.languages) + '</p>' : '';
     var main = (d.summary ? '<h3>Profile</h3><p style="margin:0;white-space:pre-wrap">' + esc(d.summary) + '</p>' : '') + sec("Experience", d.experience) + sec("Projects", d.projects) + sec("Education", d.education) + sec("Certifications", d.certifications);
     if (c.template === "modern") return '<div class="cv modern"><div class="side">' + (avatar ? '<img class="av" src="' + esc(avatar) + '" alt="">' : '') + '<h1>' + esc(d.name || "Your name") + '</h1><div class="hl">' + esc(d.headline || "") + '</div><h3>Contact</h3><div class="ct">' + contact + '</div>' + skills + langs + '</div><div class="main">' + main + '</div></div>';
-    return '<div class="cv ' + (c.template || "classic") + '"><h1>' + esc(d.name || "Your name") + '</h1><div class="hl">' + esc(d.headline || "") + '</div><div class="ct">' + contact + '</div>' + main + skills + langs + '</div>';
+    return '<div class="cv ' + (c.template || "classic") + '">' + (avatar ? '<img class="av2" src="' + esc(avatar) + '" alt="">' : '') + '<h1>' + esc(d.name || "Your name") + '</h1><div class="hl">' + esc(d.headline || "") + '</div><div class="ct">' + contact + '</div>' + main + skills + langs + '</div>';
   }
   function vCV(){
     if (!M.me){ box.innerHTML = signin(); return; }
@@ -995,6 +999,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       box.innerHTML = '<div class="mk-sec" style="margin-top:6px"><h2>Your CV</h2><span style="margin-left:auto;font-size:13px;color:var(--soft)">' + (CVD.updated ? 'Saved ' + day(CVD.updated) : 'Not saved yet') + '</span></div>'
         + '<div id="cvfillbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#EEF2FF;border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:13.5px"><span style="flex:1;min-width:200px">Experience and education come from <a href="/me/profile">your profile</a>. Added something there? Copy it here.</span><button type="button" class="mk-btn" id="cvfill" style="padding:7px 12px">&#8635; Copy from my profile</button></div>'
         + '<div class="mk-cvw"><div class="mk-box mk-f" id="cvf"><b style="font-size:16px">Template</b><div class="mk-tpl" id="cvtpl">' + [["classic", "Classic"], ["modern", "Modern"], ["minimal", "Minimal"]].map(function(t){ return '<button type="button" data-tp="' + t[0] + '" class="' + (CVD.template === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join("") + '</div>'
+        + '<label>Photo</label><div class="mk-cvph">' + (CVD.avatar ? '<img id="cvav" src="' + esc(CVD.avatar) + '" alt="">' : '<span class="ph" id="cvav">&#128100;</span>') + '<div>'
+        + '<label style="display:flex;gap:8px;align-items:center;text-transform:none;font-size:14px;color:var(--ink);margin:0"><input type="checkbox" id="cvphoto" style="width:auto"' + (d.photo !== false && CVD.avatar ? " checked" : "") + (CVD.avatar ? "" : " disabled") + '> Show my photo on the CV</label>'
+        + '<button type="button" class="mk-btn" id="cvup" style="padding:7px 12px;margin-top:6px">&#128247; ' + (CVD.avatar ? 'Upload a new photo' : 'Upload a photo') + '</button><input type="file" id="cvfile" accept="image/*" hidden>'
+        + '<small>A new photo also becomes your profile photo. JPG or PNG, up to 2 MB.</small></div></div>'
         + '<div class="row" style="grid-template-columns:1fr 1fr">' + '<div>' + f("name", "Full name") + '</div><div>' + f("headline", "Headline", "Graphic designer &middot; 5 years") + '</div></div>'
         + '<div class="row" style="grid-template-columns:1fr 1fr"><div>' + f("email", "Email") + '</div><div>' + f("phone", "Phone (hidden on the public CV)") + '</div></div>'
         + '<div class="row"><div>' + f("city", "City") + '</div><div>' + f("country", "Country") + '</div><div>' + f("website", "Website / portfolio") + '</div></div>'
@@ -1005,6 +1013,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<div><div class="mk-stick" id="cvprint"></div></div></div>';
       var read = function(){
         [].forEach.call(box.querySelectorAll("[data-k]"), function(i){ d[i.getAttribute("data-k")] = i.value; });
+        if ($("cvphoto")) d.photo = $("cvphoto").checked;
         ["experience", "education", "certifications", "projects"].forEach(function(k){ d[k] = [].map.call(box.querySelectorAll("#cvl_" + k + " .mk-cvrow"), function(r){ var o = {}; [].forEach.call(r.querySelectorAll("[data-f]"), function(i){ o[i.getAttribute("data-f")] = i.value; }); return o; }); });
       };
       var prev = function(){ read(); $("cvprint").innerHTML = cvHtml(CVD); };
@@ -1027,6 +1036,22 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         }
       };
       $("cvpr").onclick = function(){ prev(); window.print(); };
+      $("cvup").onclick = function(){ $("cvfile").click(); };
+      $("cvfile").onchange = function(){
+        var file = this.files && this.files[0]; this.value = ""; if (!file) return;
+        if (file.size > 2 * 1024 * 1024){ $("cvmsg").innerHTML = msg("That picture is larger than 2 MB.", "bad"); return; }
+        var fd = new FormData(); fd.append("file", file); $("cvup").disabled = true; $("cvmsg").innerHTML = msg("Uploading your photo\u2026");
+        fetch("/api/auth/avatar/upload/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}, body: fd})
+          .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return {ok: r.ok, d: j}; }); })
+          .then(function(r){
+            $("cvup").disabled = false;
+            if (!r.ok || !r.d.avatar_url){ $("cvmsg").innerHTML = msg(esc(r.d.detail || "Could not upload the photo."), "bad"); return; }
+            CVD.avatar = r.d.avatar_url + "?v=" + Date.now();
+            $("cvav").outerHTML = '<img id="cvav" src="' + esc(CVD.avatar) + '" alt="">';
+            $("cvphoto").disabled = false; $("cvphoto").checked = true; prev();
+            $("cvmsg").innerHTML = msg("Photo updated. It is now your profile photo too. Tap Save CV to keep the CV.", "ok");
+          }).catch(function(){ $("cvup").disabled = false; $("cvmsg").innerHTML = msg("No internet. Try again.", "bad"); });
+      };
       var P0 = CVD.profile || {};
       if ((!d.experience.length && (P0.experience || []).length) || (!d.education.length && (P0.education || []).length) || (!String(d.skills || "").trim() && P0.skills)) $("cvfill").click();
       $("cvsave").onclick = function(){ read(); var b = this; b.disabled = true;
