@@ -292,6 +292,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .mk-pic .x{right:6px;color:#B91C1C}.mk-pic .f{left:6px}
 .mk-add{width:150px;aspect-ratio:3/2;border-radius:12px;border:2px dashed #CBD5E1;display:grid;place-items:center;color:var(--soft);font-weight:800;font-size:13px;cursor:pointer;background:#fff}
 .mk-empty{text-align:center;padding:40px 16px;color:var(--soft)}.mk-empty b{display:block;font-size:17px;color:var(--ink);margin-bottom:4px}
+.pt-logo{display:block;width:64px;height:64px;border-radius:16px;background:#fff;padding:3px;box-shadow:0 6px 18px rgba(0,0,0,.25);margin:0 0 12px;object-fit:contain}
 .pt-hero{background:radial-gradient(900px 380px at 90% -10%,rgba(52,211,153,.45),transparent 60%),radial-gradient(700px 380px at 0% 120%,rgba(14,165,233,.5),transparent 60%),linear-gradient(135deg,#052e2b,#065f46 55%,#0E7490)}
 .pt-toggle{display:inline-flex;background:rgba(255,255,255,.14);border-radius:12px;padding:4px;margin-bottom:10px}
 .pt-toggle button{border:0;background:transparent;color:inherit;font:inherit;font-weight:800;padding:8px 18px;border-radius:9px;cursor:pointer}
@@ -1154,7 +1155,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function vProperty(mine){
     pmeta().then(function(P){
       var h = '';
-      if (!mine) h += '<section class="mk-hero pt-hero"><h1>Find your next <em>home</em>, plot or shop.</h1><p>Houses, flats, plots and shops for sale or rent, posted by owners and verified agents. Contact them directly on WhatsApp or call.</p>'
+      if (!mine) h += '<section class="mk-hero pt-hero"><img class="pt-logo" src="/brand/property/logo-128.webp" srcset="/brand/property/logo-256.webp 2x" alt="XpertCreation Property" width="64" height="64"><h1>Find your next <em>home</em>, plot or shop.</h1><p>Houses, flats, plots and shops for sale or rent, posted by owners and verified agents. Contact them directly on WhatsApp or call.</p>'
         + '<div class="pt-toggle"><button data-pp="sale" class="' + (PQ2.purpose === "sale" ? "on" : "") + '">Buy</button><button data-pp="rent" class="' + (PQ2.purpose === "rent" ? "on" : "") + '">Rent</button></div>'
         + '<form class="pt-search" id="pts"><select id="pcity"><option value="">All cities</option>' + P.cities.map(function(c){ return '<option' + (PQ2.city === c ? " selected" : "") + '>' + esc(c) + '</option>'; }).join("") + '</select>'
         + '<select id="pkind"><option value="">All types</option>' + P.kinds.map(function(k){ return '<option value="' + k[0] + '"' + (PQ2.kind === k[0] ? " selected" : "") + '>' + esc(k[1]) + '</option>'; }).join("") + '</select>'

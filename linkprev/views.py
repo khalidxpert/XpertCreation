@@ -76,7 +76,15 @@ def _fetch(url):
         if len(data) > MAXB or b"</head>" in data.lower():
             break
     r.close()
-    page = data.decode(r.encoding or "utf-8", "ignore")
+    cs = re.search(r"charset=([\w-]+)", r.headers.get("Content-Type", ""), re.I)          # setup_property_v1: right letters
+    cs = cs.group(1) if cs else None
+    if not cs:
+        m = re.search(rb'<meta[^>]+charset=["\']?([\w-]+)', data[:4096], re.I)
+        cs = m.group(1).decode() if m else "utf-8"
+    try:
+        page = data.decode(cs, "ignore")
+    except LookupError:
+        page = data.decode("utf-8", "ignore")
     t = _meta(page, "og:title", "twitter:title")
     if not t:
         m = re.search(r"<title[^>]*>(.*?)</title>", page, re.I | re.S)
