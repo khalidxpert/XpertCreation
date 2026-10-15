@@ -214,3 +214,52 @@ def sitemap(request):
         xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(rows) + "\n</urlset>\n"
         cache.set("seo:sitemap", xml, 3600)
     return HttpResponse(xml, content_type="application/xml")
+
+
+# ---- setup_ogimage_v1: Facebook and WhatsApp previews need a JPEG picture with its size.
+# Feed pictures are WebP, so make a JPEG copy once (media/og/) and add og:image:width / height / type.
+_page_v1 = _page
+
+
+def _og_jpg(image):
+    try:
+        import hashlib
+        import os
+        from django.conf import settings
+        from PIL import Image
+        m = re.match(re.escape(SITE) + r"/media/(.+\.(?:webp|png|avif|gif))$", image or "", re.I)
+        if not m or ".." in m.group(1):
+            return image, None
+        src = os.path.join(str(settings.MEDIA_ROOT), m.group(1))
+        if not os.path.isfile(src):
+            return image, None
+        rel = "og/%s.jpg" % hashlib.sha1(m.group(1).encode()).hexdigest()[:24]
+        dst = os.path.join(str(settings.MEDIA_ROOT), rel)
+        if not os.path.exists(dst):
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            im = Image.open(src)
+            im.load()
+            if im.mode in ("RGBA", "LA", "P"):
+                im = im.convert("RGBA")
+                bg = Image.new("RGB", im.size, "white")
+                bg.paste(im, mask=im.split()[-1])
+                im = bg
+            else:
+                im = im.convert("RGB")
+            im.thumbnail((1200, 1500))
+            im.save(dst, "JPEG", quality=85, optimize=True)
+        with Image.open(dst) as j:
+            size = j.size
+        return SITE + "/media/" + rel, size
+    except Exception:
+        return image, None
+
+
+def _page(template, title, desc, url, image="", ld=None, noindex=False, status=200):
+    img, size = _og_jpg(image)
+    resp = _page_v1(template, title, desc, url, image=img, ld=ld, noindex=noindex, status=status)
+    if size and b"</head>" in resp.content:
+        extra = ('<meta property="og:image:type" content="image/jpeg">\n<meta property="og:image:width" content="%d">\n'
+                 '<meta property="og:image:height" content="%d">\n' % size)
+        resp.content = resp.content.replace(b"</head>", extra.encode() + b"</head>", 1)
+    return resp
