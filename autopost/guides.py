@@ -14,12 +14,12 @@ GUIDES = [
  {
   "key": "steps-1-walk",
   "module": "Step counter",
-  "text": "🚶 How to use the Xpert Step Counter – Part 1: your first walk\n\n1) Open xpertcreation.com/steps or the Xpert app → Step counter.\n2) Tap Start. Allow location (for the map) and motion (for steps) when your phone asks.\n3) Put the phone in your pocket and walk. Steps, distance and your route appear live, and the map turns with you.\n4) Tap Stop when you finish. Your next walk starts again from zero, and today's total keeps adding up.\n\nIt's free and works on any phone. A 20-minute walk a day is one of the best things you can do for your health.\n\nTry it now: https://xpertcreation.com/steps\n\n#XpertCreation #StepCounter #Walking #HealthyLiving #HowTo"
+  "text": "🚶 How to use the Xpert Step Counter – Part 1: your first walk\n\n1) Open xpertcreation.com/steps or the Xpert app → Step counter.\n2) Tap Start. Allow location (for the map) and motion (for steps) when your phone asks.\n3) Walk with the page open – the screen stays on. Steps, distance and your route appear live, and the map turns with you.\n4) Tap Finish at the end. Your next walk starts again from zero, and today's total keeps adding up.\n\nTip: phones pause GPS and the step sensor when the screen is off or you switch apps, so keep the step counter open while you walk.\n\nIt's free and works on any phone. A 20-minute walk a day is one of the best things you can do for your health.\n\nTry it now: https://xpertcreation.com/steps\n\n#XpertCreation #StepCounter #Walking #HealthyLiving #HowTo"
  },
  {
   "key": "steps-2-run",
   "module": "Step counter",
-  "text": "🏃 How to use the Xpert Step Counter – Part 2: going for a run\n\n1) Open Step counter and tap Start just before you set off.\n2) The map follows you with your direction arrow and draws your route as you go. Tap the compass for north-up, or the target to follow yourself again.\n3) Watch your distance, steps and time while you run.\n4) Tap Stop at the end – the run is added to today's total and your hour-by-hour chart.\n\nTip: start slow, run for 1 minute and walk for 2, and repeat. In a few weeks you can run much longer.\n\nhttps://xpertcreation.com/steps\n\n#XpertCreation #Running #StepCounter #Fitness #HowTo"
+  "text": "🏃 How to use the Xpert Step Counter – Part 2: going for a run\n\n1) Open Step counter, choose 🏃 Run and tap ▶ Start just before you set off.\n2) The map follows you with your direction arrow and draws your route as you go. Tap the compass for north-up, or the target to follow yourself again.\n3) Watch your distance, steps and time while you run.\n4) Tap ■ Finish at the end (❚❚ Pause if you need a break) – the run is added to today's total and your hour-by-hour chart.\n\nTip: start slow, run for 1 minute and walk for 2, and repeat. In a few weeks you can run much longer.\n\nhttps://xpertcreation.com/steps\n\n#XpertCreation #Running #StepCounter #Fitness #HowTo"
  },
  {
   "key": "steps-3-goal",
