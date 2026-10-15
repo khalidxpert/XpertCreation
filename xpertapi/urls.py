@@ -54,6 +54,7 @@ urlpatterns = [
     path("api/kids/", include("kids.urls")),
     path("api/translate/", include("xlate.urls")),
     path("api/shop/", include("shop.urls")),
+    path("api/playbill/", include("playbill.urls")),
     path("api/predict/", include("predict.urls")),
     path("api/corner/", include("corner.urls")),
     path("api/mcq/", include("mcq.urls")),

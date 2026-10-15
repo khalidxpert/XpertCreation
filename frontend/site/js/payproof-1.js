@@ -67,6 +67,7 @@
   }
 
   function paint(){
+    if (APP && (window.XCPB === "wait" || window.XCPB === "on")) return;   // setup_playbill_v1: Google Play handles buying in the app
     if (APP){
       [].forEach.call(document.querySelectorAll(".pm-buy, [data-sim], .pp-btn"), function(b){
         if (b.getAttribute("data-ppapp")) return; b.setAttribute("data-ppapp", "1");
