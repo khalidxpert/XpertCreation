@@ -1,3 +1,11 @@
+# Link previews: Facebook, WhatsApp, X, LinkedIn may read every page
+User-agent: facebookexternalhit
+User-agent: Facebot
+User-agent: WhatsApp
+User-agent: Twitterbot
+User-agent: LinkedInBot
+Allow: /
+
 User-agent: *
 Allow: /
 
@@ -27,7 +35,6 @@ Disallow: /applications/
 Disallow: /moderators/
 Disallow: /role/
 Disallow: /ask/
-Disallow: /post/
 Disallow: /submit/
 Disallow: /start/
 Disallow: /threads/
