@@ -16,7 +16,7 @@ from django.utils import timezone
 
 LAND = "/var/www/xpertcreation-landing/"
 SITE = "https://xpertcreation.com"
-COVER = SITE + "/brand/og-cover.jpg"
+COVER = SITE + "/brand/og/p/index.jpg"
 _rf = RequestFactory()
 
 

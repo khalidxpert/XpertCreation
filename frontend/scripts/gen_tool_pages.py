@@ -150,6 +150,7 @@ def page_for(t):
     p = re.sub(r'(<meta property="og:title" content=")[^"]*(")', lambda m: m.group(1) + e(t["title"]) + m.group(2), p)
     p = re.sub(r'(<meta property="og:description" content=")[^"]*(")', lambda m: m.group(1) + e(t["desc"]) + m.group(2), p)
     p = re.sub(r'(<meta property="og:url" content=")[^"]*(")', lambda m: m.group(1) + url + m.group(2), p)
+    p = re.sub(r'(<meta (?:property="og:image"|name="twitter:image") content=")[^"]*(")', lambda m: m.group(1) + "https://xpertcreation.com/brand/og/p/tool-%s.jpg" % t["slug"] + m.group(2), p)   # setup_ogpages_v1
     p = p.replace(A_WANT, '  var want = new URLSearchParams(location.search).get("t") || "%s";' % t["id"], 1)
     p = p.replace(A_APP, A_APP + seo + STYLE, 1)
     return p
