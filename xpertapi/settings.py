@@ -386,3 +386,13 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
+
+
+# setup_perf_v1: reuse database connections between requests (faster API).
+try:
+    import django as _dj
+    DATABASES["default"]["CONN_MAX_AGE"] = 60
+    if _dj.VERSION >= (4, 1):
+        DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
+except Exception:
+    pass
