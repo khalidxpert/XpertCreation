@@ -6,7 +6,6 @@
     ["/people", "Network", "M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16.5 11a3 3 0 1 0-1-5.8M18 14.6c2 .6 3.2 2.2 3.5 4.9"],
     ["/jobs", "Jobs", "M3 8h18v11H3zM8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"],
     ["/chat", "Messages", "M4 5h16v11H9l-5 4z"],
-    ["#bell", "Alerts", "M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"],
     ["/market#cv", "CV", "M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"],
     ["/cards", "Card", "M3 6h18v12H3zM8 10.5a1.8 1.8 0 1 0 0-.01M5.5 15c.4-1.4 1.3-2.2 2.5-2.2s2.1.8 2.5 2.2M13 10h5M13 13.5h4"],
     ["/me/profile", "Me", "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c.8-4 4-6 8-6s7.2 2 8 6"]
@@ -28,8 +27,6 @@
     var bar = document.createElement("nav"); bar.className = "xcb"; bar.setAttribute("aria-label", "XpertConnect");
     bar.innerHTML = I.map(function(x){ return '<a href="' + (x[0] === "#bell" ? "#" : x[0]) + '" data-k="' + x[1] + '" class="' + (on(x[0]) ? "on" : "") + '"><svg viewBox="0 0 24 24"><path d="' + x[2] + '"/></svg><span class="t">' + x[1] + '</span></a>'; }).join("");
     head.parentNode.insertBefore(bar, head.nextSibling);
-    var bell = bar.querySelector('[data-k="Alerts"]');
-    bell.onclick = function(e){ e.preventDefault(); var b = document.querySelector(".bellbtn"); if (b){ b.click(); window.scrollTo({top: 0, behavior: "smooth"}); } else location.href = "/feed"; };
     function badge(k, n){ var a = bar.querySelector('[data-k="' + k + '"]'); if (!a) return; var x = a.querySelector(".n"); if (!n){ if (x) x.remove(); return; } if (!x){ x = document.createElement("span"); x.className = "n"; a.appendChild(x); } x.textContent = n > 9 ? "9+" : n; }
     function counts(){
       fetch("/api/notify/mine/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ if (d) badge("Alerts", d.unread || 0); }).catch(function(){});

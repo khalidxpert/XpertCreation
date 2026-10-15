@@ -913,6 +913,6 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   fetch("/irc-stats.json?t=" + Date.now(), {cache: "no-store"}).then(function(r){ return r.json(); }).then(function(d){ if (d && d.online > 0) a.textContent = "\uD83D\uDCAC Chat rooms \u00b7 " + d.online + " online"; }).catch(function(){});
 })();
 </script>
-<script src="/js/xcbar-1.js" defer></script>
+<script src="/js/xcbar-1.js?v=2" defer></script>
 </body>
 </html>
