@@ -1,0 +1,506 @@
+{
+ "day-1": {
+  "t": "Step 1 — The project and the plan",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know exactly what you will build",
+     "Understand how the pieces talk to each other",
+     "Install the tools"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes. This course is a real project: by the end you have a working app online and a link to put on your CV."
+   },
+   {
+    "k": "p",
+    "v": "You will build Task Board – a to-do app where each person signs in and manages their own tasks. Press Run to try a preview of the finished app."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\n// A preview of what you will build. Here the \"server\" is pretend; in the project it is your Django API.\nconst fake = { tasks: [{ id: 1, title: \"Finish Django course\", done: true }, { id: 2, title: \"Build the Task Board\", done: false }], next: 3 };\n\nfunction Login({ onLogin }) {\n  const [u, setU] = useState(\"ali\");\n  return (\n    <form onSubmit={e => { e.preventDefault(); onLogin(u); }}>\n      <h3>Sign in</h3>\n      <input value={u} onChange={e => setU(e.target.value)} /> <button>Sign in</button>\n    </form>\n  );\n}\n\nfunction Board({ user, onLogout }) {\n  const [tasks, setTasks] = useState(fake.tasks);\n  const [title, setTitle] = useState(\"\");\n  const [show, setShow] = useState(\"all\");\n  function add(e) {\n    e.preventDefault();\n    if (!title.trim()) return;\n    setTasks([...tasks, { id: fake.next++, title: title.trim(), done: false }]);\n    setTitle(\"\");\n  }\n  const shown = tasks.filter(t => show === \"all\" || (show === \"done\" ? t.done : !t.done));\n  return (\n    <div>\n      <p>Signed in as <b>{user}</b> <button onClick={onLogout}>Sign out</button></p>\n      <form onSubmit={add}><input value={title} onChange={e => setTitle(e.target.value)} placeholder=\"New task\" /> <button>Add</button></form>\n      {[\"all\", \"active\", \"done\"].map(s => <button key={s} onClick={() => setShow(s)} style={{ fontWeight: show === s ? \"bold\" : \"normal\" }}>{s}</button>)}\n      <ul>{shown.map(t => (\n        <li key={t.id}>\n          <input type=\"checkbox\" checked={t.done} onChange={() => setTasks(tasks.map(x => x.id === t.id ? { ...x, done: !x.done } : x))} />\n          <span style={{ textDecoration: t.done ? \"line-through\" : \"none\" }}> {t.title} </span>\n          <button onClick={() => setTasks(tasks.filter(x => x.id !== t.id))}>x</button>\n        </li>))}\n      </ul>\n    </div>\n  );\n}\n\nfunction App() {\n  const [user, setUser] = useState(null);\n  return user ? <Board user={user} onLogout={() => setUser(null)} /> : <Login onLogin={setUser} />;\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "h",
+    "v": "1) How it fits together"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Python = the language of the back end, plus a small import tool you write in Step 9",
+     "Django = the back end: database, users, admin",
+     "Django REST Framework = the API that sends and receives JSON",
+     "React = the front end: everything the user sees and clicks",
+     "JavaScript fetch() = how React talks to the API",
+     "Nginx and Gunicorn = how it runs on a real server"
+    ]
+   },
+   {
+    "k": "steps",
+    "v": "What happens when you add a task.|You type a title in React and press Add.|React sends POST /api/tasks/ with your token.|Django checks the token, saves the task for you only, and returns it as JSON.|React adds it to the list on screen."
+   },
+   {
+    "k": "h",
+    "v": "2) Tools to install"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Python 3.10 or newer",
+     "Node.js LTS",
+     "VS Code",
+     "Git, and a free GitHub account"
+    ]
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\nmkdir taskboard\ncd taskboard\nmkdir backend frontend"
+   },
+   {
+    "k": "tip",
+    "v": "Keep a notebook (or a NOTES.md file) of every command you run. When something breaks later, it tells you what changed."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Step 2 — Back end: the Django project",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Create the Django project and the tasks app",
+     "Install Django REST Framework",
+     "Set safe defaults from the start"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\ncd backend\npython -m venv venv\n# Windows: venv\\Scripts\\activate     Mac/Linux: source venv/bin/activate\npip install django djangorestframework\npip freeze > requirements.txt\n\ndjango-admin startproject config .\npython manage.py startapp tasks"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# config/settings.py\nimport os\n\nSECRET_KEY = os.environ.get(\"DJANGO_SECRET_KEY\", \"dev-only-not-secret\")\nDEBUG = os.environ.get(\"DJANGO_DEBUG\", \"1\") == \"1\"\nALLOWED_HOSTS = os.environ.get(\"DJANGO_HOSTS\", \"127.0.0.1,localhost\").split(\",\")\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"rest_framework\",\n    \"rest_framework.authtoken\",\n    \"tasks\",\n]\n\nREST_FRAMEWORK = {\n    \"DEFAULT_AUTHENTICATION_CLASSES\": [\n        \"rest_framework.authentication.TokenAuthentication\",\n        \"rest_framework.authentication.SessionAuthentication\",\n    ],\n    \"DEFAULT_PERMISSION_CLASSES\": [\"rest_framework.permissions.IsAuthenticated\"],\n}\n\nSTATIC_URL = \"static/\"\nSTATIC_ROOT = BASE_DIR / \"staticfiles\""
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "rest_framework = the API toolkit",
+     "rest_framework.authtoken = sign-in tokens for the React app",
+     "IsAuthenticated by default = every API address needs sign-in unless you say otherwise",
+     "Secrets come from environment variables, with a harmless value for your own computer"
+    ]
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npython manage.py migrate\npython manage.py createsuperuser\npython manage.py runserver"
+   },
+   {
+    "k": "tip",
+    "v": "Make a .gitignore file now with these lines: venv/  db.sqlite3  __pycache__/  .env  node_modules/  dist/"
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Step 3 — The Task model and the admin",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Store tasks in the database",
+     "Link each task to its owner",
+     "Check it in the admin"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# tasks/models.py\nfrom django.conf import settings\nfrom django.db import models\n\nclass Task(models.Model):\n    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name=\"tasks\")\n    title = models.CharField(max_length=200)\n    done = models.BooleanField(default=False)\n    due = models.DateField(null=True, blank=True)\n    created = models.DateTimeField(auto_now_add=True)\n\n    class Meta:\n        ordering = [\"done\", \"due\", \"-created\"]\n\n    def __str__(self):\n        return self.title"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# tasks/admin.py\nfrom django.contrib import admin\nfrom .models import Task\n\n@admin.register(Task)\nclass TaskAdmin(admin.ModelAdmin):\n    list_display = (\"title\", \"owner\", \"done\", \"due\", \"created\")\n    list_filter = (\"done\",)\n    search_fields = (\"title\", \"owner__username\")"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npython manage.py makemigrations tasks\npython manage.py migrate"
+   },
+   {
+    "k": "steps",
+    "v": "Check it.|Open http://127.0.0.1:8000/admin/ and sign in.|Create a second user, for example sara.|Add two tasks for yourself and one for sara.|You will use these to prove that users only see their own tasks."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Step 4 — The API",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Turn tasks into JSON with a serializer",
+     "Build list, create, update and delete in one ViewSet",
+     "Make sure people only see their own tasks"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 35 minutes. This is the heart of the back end."
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# tasks/serializers.py\nfrom rest_framework import serializers\nfrom .models import Task\n\nclass TaskSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Task\n        fields = [\"id\", \"title\", \"done\", \"due\", \"created\"]\n        read_only_fields = [\"id\", \"created\"]\n\n    def validate_title(self, value):\n        value = value.strip()\n        if len(value) < 2:\n            raise serializers.ValidationError(\"Write at least 2 characters.\")\n        return value"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# tasks/views.py\nfrom rest_framework import viewsets\nfrom .models import Task\nfrom .serializers import TaskSerializer\n\nclass TaskViewSet(viewsets.ModelViewSet):\n    serializer_class = TaskSerializer\n\n    def get_queryset(self):\n        qs = Task.objects.filter(owner=self.request.user)      # only my tasks\n        status = self.request.query_params.get(\"status\")\n        if status == \"done\":\n            qs = qs.filter(done=True)\n        elif status == \"active\":\n            qs = qs.filter(done=False)\n        return qs\n\n    def perform_create(self, serializer):\n        serializer.save(owner=self.request.user)               # owner is never taken from the request body"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# config/urls.py\nfrom django.contrib import admin\nfrom django.urls import path, include\nfrom rest_framework.authtoken.views import obtain_auth_token\nfrom rest_framework.routers import DefaultRouter\nfrom tasks.views import TaskViewSet\n\nrouter = DefaultRouter()\nrouter.register(\"tasks\", TaskViewSet, basename=\"task\")\n\nurlpatterns = [\n    path(\"admin/\", admin.site.urls),\n    path(\"api/token/\", obtain_auth_token),\n    path(\"api/\", include(router.urls)),\n]"
+   },
+   {
+    "k": "h",
+    "v": "1) What you get"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "GET /api/tasks/ = my tasks (add ?status=done or ?status=active)",
+     "POST /api/tasks/ = add a task",
+     "PATCH /api/tasks/5/ = change part of task 5, e.g. done",
+     "DELETE /api/tasks/5/ = delete task 5",
+     "POST /api/token/ = send username and password, get a token"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Filtering by owner in get_queryset is what keeps users apart. Without it, anyone signed in could read or delete everyone's tasks by changing the number in the address."
+   },
+   {
+    "k": "tip",
+    "v": "While signed in to the admin, open http://127.0.0.1:8000/api/tasks/ – DRF shows a page where you can try the API."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Step 5 — Sign-in tokens and testing the API",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Get a token for a user",
+     "Call the API the way React will",
+     "Prove one user cannot see another's tasks"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "p",
+    "v": "React cannot use the admin's login cookie, so it signs in once, gets a token and sends it with every request in the Authorization header."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\n# get a token (use your own username and password)\ncurl -X POST http://127.0.0.1:8000/api/token/ -H \"Content-Type: application/json\" -d \"{\\\"username\\\": \\\"ali\\\", \\\"password\\\": \\\"your-password\\\"}\"\n# answer: {\"token\":\"9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b\"}\n\n# list tasks with the token\ncurl http://127.0.0.1:8000/api/tasks/ -H \"Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b\"\n\n# add a task\ncurl -X POST http://127.0.0.1:8000/api/tasks/ -H \"Authorization: Token 9944b0...\" -H \"Content-Type: application/json\" -d \"{\\\"title\\\": \\\"Buy milk\\\"}\"\n\n# no token = refused\ncurl -i http://127.0.0.1:8000/api/tasks/"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "200 = OK",
+     "201 = created",
+     "204 = deleted, no content",
+     "400 = your data was wrong (the answer says which field)",
+     "401 = not signed in / bad token",
+     "404 = not found – also what you get for someone else's task"
+    ]
+   },
+   {
+    "k": "steps",
+    "v": "The safety test – do it now.|Get a token for sara.|With sara's token, ask for one of your task ids: /api/tasks/<your id>/|You must get 404. If you get the task, go back to Step 4 and check get_queryset."
+   },
+   {
+    "k": "warn",
+    "v": "A token is like a password. Never post it in screenshots, on GitHub or in chats."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Step 6 — Front end: React project and the API helper",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Create the React app",
+     "Send /api requests to Django during development",
+     "Write one helper for every API call"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes. Keep the Django server running in one terminal and use a second terminal for React."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\ncd ../frontend\nnpm create vite@latest . -- --template react\nnpm install\nnpm run dev"
+   },
+   {
+    "k": "p",
+    "v": "React runs on port 5173 and Django on 8000. The proxy below makes React's /api requests go to Django, so the browser sees one site and you don't need any CORS settings."
+   },
+   {
+    "k": "code",
+    "v": "@JavaScript\n// frontend/vite.config.js\nimport { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\n\nexport default defineConfig({\n  plugins: [react()],\n  server: { proxy: { \"/api\": \"http://127.0.0.1:8000\" } },\n});"
+   },
+   {
+    "k": "code",
+    "v": "@JavaScript\n// frontend/src/api.js\nexport async function api(path, { method = \"GET\", body, token } = {}) {\n  const headers = { \"Content-Type\": \"application/json\" };\n  if (token) headers.Authorization = \"Token \" + token;\n\n  const res = await fetch(\"/api\" + path, {\n    method,\n    headers,\n    body: body ? JSON.stringify(body) : undefined,\n  });\n\n  if (res.status === 204) return null;                  // deleted\n  const data = await res.json().catch(() => ({}));\n  if (!res.ok) {\n    const first = Object.values(data)[0];\n    const msg = data.detail || (Array.isArray(first) ? first[0] : \"\") || \"Request failed (\" + res.status + \")\";\n    const err = new Error(msg);\n    err.status = res.status;\n    throw err;\n  }\n  return data;\n}"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "One helper = one place for the token, JSON and errors",
+     "err.status lets the app sign the user out when the token stops working (401)",
+     "DRF error messages arrive as {\"title\": [\"Write at least 2 characters.\"]} – the helper shows the first one"
+    ]
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Step 7 — Sign in and show the tasks",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Build the sign-in screen",
+     "Remember the token",
+     "Load and show the user's tasks"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 35 minutes."
+   },
+   {
+    "k": "code",
+    "v": "@JSX\n// frontend/src/Login.jsx\nimport { useState } from \"react\";\nimport { api } from \"./api.js\";\n\nexport default function Login({ onLogin }) {\n  const [username, setUsername] = useState(\"\");\n  const [password, setPassword] = useState(\"\");\n  const [error, setError] = useState(\"\");\n  const [busy, setBusy] = useState(false);\n\n  async function submit(e) {\n    e.preventDefault();\n    setBusy(true); setError(\"\");\n    try {\n      const { token } = await api(\"/token/\", { method: \"POST\", body: { username, password } });\n      onLogin(token);\n    } catch (err) {\n      setError(\"Wrong username or password.\");\n    } finally {\n      setBusy(false);\n    }\n  }\n\n  return (\n    <form onSubmit={submit} className=\"card\">\n      <h2>Task Board</h2>\n      <input value={username} onChange={e => setUsername(e.target.value)} placeholder=\"Username\" autoComplete=\"username\" />\n      <input type=\"password\" value={password} onChange={e => setPassword(e.target.value)} placeholder=\"Password\" autoComplete=\"current-password\" />\n      <button disabled={busy}>{busy ? \"Signing in…\" : \"Sign in\"}</button>\n      {error && <p className=\"error\">{error}</p>}\n    </form>\n  );\n}"
+   },
+   {
+    "k": "code",
+    "v": "@JSX\n// frontend/src/App.jsx\nimport { useState } from \"react\";\nimport Login from \"./Login.jsx\";\nimport Board from \"./Board.jsx\";\n\nexport default function App() {\n  const [token, setToken] = useState(() => localStorage.getItem(\"token\") || \"\");\n\n  function login(t) { localStorage.setItem(\"token\", t); setToken(t); }\n  function logout() { localStorage.removeItem(\"token\"); setToken(\"\"); }\n\n  return token ? <Board token={token} onLogout={logout} /> : <Login onLogin={login} />;\n}"
+   },
+   {
+    "k": "code",
+    "v": "@JSX\n// frontend/src/Board.jsx  (first version: just the list)\nimport { useEffect, useState } from \"react\";\nimport { api } from \"./api.js\";\n\nexport default function Board({ token, onLogout }) {\n  const [tasks, setTasks] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(\"\");\n\n  useEffect(() => {\n    api(\"/tasks/\", { token })\n      .then(setTasks)\n      .catch(err => (err.status === 401 ? onLogout() : setError(err.message)))\n      .finally(() => setLoading(false));\n  }, [token]);\n\n  if (loading) return <p>Loading…</p>;\n  return (\n    <div>\n      <button onClick={onLogout}>Sign out</button>\n      {error && <p className=\"error\">{error}</p>}\n      <ul>{tasks.map(t => <li key={t.id}>{t.title}</li>)}</ul>\n    </div>\n  );\n}"
+   },
+   {
+    "k": "tip",
+    "v": "Sign in as ali, then as sara. Each sees only their own tasks – the safety you built in Step 4, now visible in the app."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Step 8 — Add, finish, delete and filter",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Finish every feature of the board",
+     "Keep the screen and the server in step",
+     "Show friendly errors"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 40 minutes."
+   },
+   {
+    "k": "code",
+    "v": "@JSX\n// frontend/src/Board.jsx  (full version)\nimport { useEffect, useState } from \"react\";\nimport { api } from \"./api.js\";\n\nconst FILTERS = { all: \"\", active: \"?status=active\", done: \"?status=done\" };\n\nexport default function Board({ token, onLogout }) {\n  const [tasks, setTasks] = useState([]);\n  const [show, setShow] = useState(\"all\");\n  const [title, setTitle] = useState(\"\");\n  const [due, setDue] = useState(\"\");\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(\"\");\n\n  function fail(err) {\n    if (err.status === 401) onLogout();\n    else setError(err.message);\n  }\n\n  useEffect(() => {\n    setLoading(true); setError(\"\");\n    api(\"/tasks/\" + FILTERS[show], { token }).then(setTasks).catch(fail).finally(() => setLoading(false));\n  }, [show, token]);\n\n  async function add(e) {\n    e.preventDefault();\n    try {\n      const task = await api(\"/tasks/\", { method: \"POST\", token, body: { title, due: due || null } });\n      if (show !== \"done\") setTasks([task, ...tasks]);\n      setTitle(\"\"); setDue(\"\"); setError(\"\");\n    } catch (err) { fail(err); }\n  }\n\n  async function toggle(task) {\n    try {\n      const saved = await api(\"/tasks/\" + task.id + \"/\", { method: \"PATCH\", token, body: { done: !task.done } });\n      setTasks(show === \"all\" ? tasks.map(t => (t.id === task.id ? saved : t)) : tasks.filter(t => t.id !== task.id));\n    } catch (err) { fail(err); }\n  }\n\n  async function remove(task) {\n    if (!confirm(\"Delete \\\"\" + task.title + \"\\\"?\")) return;\n    try {\n      await api(\"/tasks/\" + task.id + \"/\", { method: \"DELETE\", token });\n      setTasks(tasks.filter(t => t.id !== task.id));\n    } catch (err) { fail(err); }\n  }\n\n  const left = tasks.filter(t => !t.done).length;\n\n  return (\n    <div className=\"board\">\n      <header><h2>My tasks</h2><button onClick={onLogout}>Sign out</button></header>\n      <form onSubmit={add}>\n        <input value={title} onChange={e => setTitle(e.target.value)} placeholder=\"What needs doing?\" />\n        <input type=\"date\" value={due} onChange={e => setDue(e.target.value)} />\n        <button disabled={!title.trim()}>Add</button>\n      </form>\n      <nav>\n        {Object.keys(FILTERS).map(f => (\n          <button key={f} className={show === f ? \"on\" : \"\"} onClick={() => setShow(f)}>{f}</button>\n        ))}\n        {show === \"all\" && <span>{left} left</span>}\n      </nav>\n      {error && <p className=\"error\">{error}</p>}\n      {loading ? <p>Loading…</p> : (\n        <ul>\n          {tasks.map(t => (\n            <li key={t.id} className={t.done ? \"done\" : \"\"}>\n              <input type=\"checkbox\" checked={t.done} onChange={() => toggle(t)} />\n              <span>{t.title}</span>\n              {t.due && <small>{t.due}</small>}\n              <button onClick={() => remove(t)} aria-label=\"Delete\">✕</button>\n            </li>\n          ))}\n          {tasks.length === 0 && <li className=\"empty\">Nothing here yet.</li>}\n        </ul>\n      )}\n    </div>\n  );\n}"
+   },
+   {
+    "k": "code",
+    "v": "@CSS\n/* frontend/src/index.css - a simple clean look */\nbody { font-family: system-ui, sans-serif; background: #f5f7fb; margin: 0; }\n.board, .card { max-width: 560px; margin: 32px auto; background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px #0001; }\nheader { display: flex; justify-content: space-between; align-items: center; }\ninput, button { font: inherit; padding: 8px 12px; border-radius: 10px; border: 1px solid #d0d7e2; margin: 4px; }\nbutton { background: #1b4dff; color: #fff; border: 0; cursor: pointer; }\nnav button { background: #eef2ff; color: #1b4dff; } nav .on { background: #1b4dff; color: #fff; }\nli { list-style: none; display: flex; gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }\nli span { flex: 1; } li.done span { text-decoration: line-through; color: #888; }\n.error { color: #b91c1c; }"
+   },
+   {
+    "k": "tip",
+    "v": "Try to add a task with one letter. The error message comes from validate_title in your Django serializer – the server is the real guard, React just shows the message."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Step 9 — Python power-ups: import tool and tests",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a Django command in Python that imports tasks from a CSV file",
+     "Write automatic tests for the API",
+     "Run the tests before every change"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 35 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Import tasks from a spreadsheet"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# tasks/management/commands/import_tasks.py\n# (create the folders management/ and management/commands/, each with an empty __init__.py)\nimport csv\nfrom datetime import date\nfrom django.contrib.auth import get_user_model\nfrom django.core.management.base import BaseCommand, CommandError\nfrom tasks.models import Task\n\nclass Command(BaseCommand):\n    help = \"Import tasks from a CSV file with columns: title,due (due as YYYY-MM-DD, optional)\"\n\n    def add_arguments(self, parser):\n        parser.add_argument(\"csv_file\")\n        parser.add_argument(\"--user\", required=True)\n\n    def handle(self, csv_file, user, **options):\n        try:\n            owner = get_user_model().objects.get(username=user)\n        except get_user_model().DoesNotExist:\n            raise CommandError(f\"No user called {user}\")\n        made = skipped = 0\n        with open(csv_file, newline=\"\", encoding=\"utf-8\") as f:\n            for row in csv.DictReader(f):\n                title = (row.get(\"title\") or \"\").strip()\n                if len(title) < 2:\n                    skipped += 1\n                    continue\n                due = row.get(\"due\") or None\n                Task.objects.create(owner=owner, title=title, due=date.fromisoformat(due) if due else None)\n                made += 1\n        self.stdout.write(self.style.SUCCESS(f\"Imported {made} tasks, skipped {skipped}.\"))"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\n# tasks.csv\n# title,due\n# Pay electricity bill,2026-10-20\n# Renew CNIC,\npython manage.py import_tasks tasks.csv --user ali"
+   },
+   {
+    "k": "h",
+    "v": "2) Tests that prove the app is safe"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# tasks/tests.py\nfrom django.contrib.auth import get_user_model\nfrom rest_framework.test import APITestCase\nfrom .models import Task\n\nUser = get_user_model()\n\nclass TaskApiTests(APITestCase):\n    def setUp(self):\n        self.ali = User.objects.create_user(\"ali\", password=\"pass-12345\")\n        self.sara = User.objects.create_user(\"sara\", password=\"pass-12345\")\n\n    def test_must_sign_in(self):\n        self.assertEqual(self.client.get(\"/api/tasks/\").status_code, 401)\n\n    def test_create_sets_owner(self):\n        self.client.force_authenticate(self.ali)\n        r = self.client.post(\"/api/tasks/\", {\"title\": \"Buy milk\"}, format=\"json\")\n        self.assertEqual(r.status_code, 201)\n        self.assertEqual(Task.objects.get(id=r.json()[\"id\"]).owner, self.ali)\n\n    def test_cannot_see_other_users_tasks(self):\n        theirs = Task.objects.create(owner=self.sara, title=\"Sara's task\")\n        self.client.force_authenticate(self.ali)\n        self.assertEqual(self.client.get(\"/api/tasks/\").json(), [])\n        self.assertEqual(self.client.get(f\"/api/tasks/{theirs.id}/\").status_code, 404)\n        self.assertEqual(self.client.delete(f\"/api/tasks/{theirs.id}/\").status_code, 404)\n\n    def test_title_too_short(self):\n        self.client.force_authenticate(self.ali)\n        r = self.client.post(\"/api/tasks/\", {\"title\": \"x\"}, format=\"json\")\n        self.assertEqual(r.status_code, 400)"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npython manage.py test"
+   },
+   {
+    "k": "tip",
+    "v": "All four tests must say OK. Run them every time you change the back end – they catch mistakes before your users do."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Step 10 — Launch it and show it off",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Put the app on a real server with HTTPS",
+     "Publish the code on GitHub",
+     "Share your project"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 45 minutes. You need a small Linux server (VPS) and a domain or sub-domain. Free options are listed at the end."
+   },
+   {
+    "k": "h",
+    "v": "1) Build the front end"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\ncd frontend\nnpm run build          # makes frontend/dist"
+   },
+   {
+    "k": "h",
+    "v": "2) Run Django with Gunicorn"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\ncd backend\npip install gunicorn\npython manage.py collectstatic --noinput\npython manage.py check --deploy"
+   },
+   {
+    "k": "code",
+    "v": "@INI\n# /etc/systemd/system/taskboard.service\n[Unit]\nDescription=Task Board API\nAfter=network.target\n\n[Service]\nUser=www-data\nWorkingDirectory=/var/www/taskboard/backend\nEnvironmentFile=/etc/taskboard.env\nExecStart=/var/www/taskboard/backend/venv/bin/gunicorn config.wsgi --bind 127.0.0.1:8000 --workers 3\nRestart=always\n\n[Install]\nWantedBy=multi-user.target"
+   },
+   {
+    "k": "code",
+    "v": "@INI\n# /etc/taskboard.env   (chmod 600 - only root can read it)\nDJANGO_SECRET_KEY=paste-a-long-random-value-here\nDJANGO_DEBUG=0\nDJANGO_HOSTS=tasks.example.com"
+   },
+   {
+    "k": "tip",
+    "v": "Make a strong secret key with: python -c \"import secrets; print(secrets.token_urlsafe(50))\""
+   },
+   {
+    "k": "h",
+    "v": "3) Nginx: one site for both"
+   },
+   {
+    "k": "code",
+    "v": "@Nginx\nserver {\n    server_name tasks.example.com;\n    root /var/www/taskboard/frontend/dist;\n\n    location / { try_files $uri /index.html; }                 # React\n    location /static/ { alias /var/www/taskboard/backend/staticfiles/; }\n    location ~ ^/(api|admin)/ {                                # Django\n        proxy_pass http://127.0.0.1:8000;\n        proxy_set_header Host $host;\n        proxy_set_header X-Forwarded-Proto $scheme;\n    }\n}"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\nsudo systemctl enable --now taskboard\nsudo nginx -t && sudo systemctl reload nginx\nsudo certbot --nginx -d tasks.example.com     # free HTTPS"
+   },
+   {
+    "k": "h",
+    "v": "4) Free ways to try it online"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "PythonAnywhere – free plan for the Django back end",
+     "Netlify or Vercel – free hosting for the React dist folder",
+     "With two different sites you must add the django-cors-headers package so the browser allows the calls"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) Show your work"
+   },
+   {
+    "k": "steps",
+    "v": "Finish strong.|Push backend and frontend to one GitHub repository with a README: what it does, screenshots, how to run it.|Post a short video or screenshots on XpertConnect with #XpertAcademyProject and tag XpertCreation.|Add the project to your XpertConnect profile and your Freelance profile.|Ideas to go further: task categories, due-date reminders, sharing a list with a friend, dark mode, a mobile layout."
+   },
+   {
+    "k": "tip",
+    "v": "Take the quiz below. Pass it and you get your XpertAcademy certificate for the live project."
+   }
+  ]
+ }
+}

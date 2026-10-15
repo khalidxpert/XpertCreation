@@ -1,0 +1,479 @@
+{
+ "day-1": {
+  "t": "Day 1 — What React is and your first component",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what React does",
+     "Write a component",
+     "Run it right here in the lesson"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. Finish the JavaScript course first – React is JavaScript."
+   },
+   {
+    "k": "p",
+    "v": "React is a JavaScript library for building user interfaces. You split the screen into small pieces called components – a button, a card, a whole page – and React keeps the screen in step with your data. Facebook, Instagram and WhatsApp Web are built with it."
+   },
+   {
+    "k": "h",
+    "v": "1) A component is a function that returns what to show"
+   },
+   {
+    "k": "p",
+    "v": "Press Run. Then change the text and press Run again. The lines at the top load React; you only edit the part in the middle."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction App() {\n  return <h1>Hello from React!</h1>;\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "h",
+    "v": "2) Components inside components"
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction Greeting() {\n  return <p>Assalam o Alaikum! Welcome to XpertAcademy.</p>;\n}\n\nfunction App() {\n  return (\n    <div>\n      <h1>My first React page</h1>\n      <Greeting />\n      <Greeting />\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A component name starts with a capital letter (Greeting, not greeting)",
+     "It returns JSX – HTML-like code inside JavaScript",
+     "You use it like a tag: <Greeting />"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "These examples load React from the internet. If Run shows nothing, check your connection and press Run again."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — JSX rules",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write JSX without errors",
+     "Put JavaScript values inside JSX",
+     "Know where JSX differs from HTML"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The five rules"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Return one parent element – wrap siblings in a <div> or in <> </>",
+     "Close every tag, even <img /> and <br />",
+     "Use className instead of class",
+     "Put JavaScript inside { } – values, maths, function calls",
+     "Style is an object: style={{ color: \"red\", fontSize: 20 }}"
+    ]
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction App() {\n  const name = \"Ayesha\";\n  const steps = 7432;\n  const goal = 10000;\n  return (\n    <>\n      <h2 className=\"title\">Hi {name.toUpperCase()}</h2>\n      <p>You walked {steps.toLocaleString()} steps today.</p>\n      <p style={{ color: steps >= goal ? \"green\" : \"orange\" }}>\n        {steps >= goal ? \"Goal reached!\" : (goal - steps) + \" steps to go\"}\n      </p>\n    </>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "warn",
+    "v": "You cannot write if or for directly inside JSX. Use the ternary a ? b : c, or && , or work it out above the return."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Props: passing data to components",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pass values into a component",
+     "Reuse one component with different data",
+     "Pass children"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "p",
+    "v": "Props are the inputs of a component, like the arguments of a function. A parent passes them; the child reads them and never changes them."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction Course({ icon, name, lessons }) {\n  return (\n    <div style={{ border: \"1px solid #ddd\", borderRadius: 12, padding: 10, margin: 6 }}>\n      <b>{icon} {name}</b>\n      <div>{lessons} lessons</div>\n    </div>\n  );\n}\n\nfunction App() {\n  return (\n    <div>\n      <Course icon=\"🐍\" name=\"Python\" lessons={10} />\n      <Course icon=\"⚡\" name=\"JavaScript\" lessons={10} />\n      <Course icon=\"⚛️\" name=\"React\" lessons={10} />\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "h",
+    "v": "1) children"
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction Card({ title, children }) {\n  return (\n    <div style={{ background: \"#eef2ff\", padding: 12, borderRadius: 12, margin: 6 }}>\n      <h3 style={{ margin: 0 }}>{title}</h3>\n      {children}\n    </div>\n  );\n}\n\nfunction App() {\n  return (\n    <Card title=\"Tip of the day\">\n      <p>Whatever you put between the tags arrives as children.</p>\n    </Card>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "tip",
+    "v": "Numbers and true/false go in braces: lessons={10}. Plain text can use quotes: name=\"React\"."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — State with useState",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make a component remember a value",
+     "Update the screen by changing state",
+     "Avoid the common state mistakes"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "p",
+    "v": "State is data a component remembers between renders. When you change it with its setter, React draws the component again with the new value."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction App() {\n  const [count, setCount] = useState(0);\n  return (\n    <div>\n      <h2>Steps: {count}</h2>\n      <button onClick={() => setCount(count + 1)}>+1 step</button>\n      <button onClick={() => setCount(count + 100)}>+100</button>\n      <button onClick={() => setCount(0)}>Reset</button>\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "const [value, setValue] = useState(start) = make a state variable",
+     "Call setValue(newValue) to change it – never value = ...",
+     "Each component on the screen has its own copy of its state"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "1) Objects and arrays: make a new copy"
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction App() {\n  const [user, setUser] = useState({ name: \"Ali\", city: \"Lahore\" });\n  const [tags, setTags] = useState([\"walk\"]);\n  return (\n    <div>\n      <p>{user.name} from {user.city}</p>\n      <button onClick={() => setUser({ ...user, city: \"Karachi\" })}>Move to Karachi</button>\n      <p>Tags: {tags.join(\", \")}</p>\n      <button onClick={() => setTags([...tags, \"run\"])}>Add run</button>\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "warn",
+    "v": "user.city = 'Karachi' changes the object but React does not notice, so the screen does not update. Always pass a new object or array to the setter."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Events and forms",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Handle clicks and typing",
+     "Build a controlled input",
+     "Stop the page reloading on submit"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction App() {\n  const [name, setName] = useState(\"\");\n  const [city, setCity] = useState(\"Lahore\");\n  const [sent, setSent] = useState(null);\n\n  function handleSubmit(e) {\n    e.preventDefault();              // stop the page from reloading\n    if (name.trim().length < 2) return;\n    setSent({ name, city });\n    setName(\"\");\n  }\n\n  return (\n    <form onSubmit={handleSubmit}>\n      <input value={name} onChange={(e) => setName(e.target.value)} placeholder=\"Your name\" />\n      <select value={city} onChange={(e) => setCity(e.target.value)}>\n        <option>Lahore</option><option>Karachi</option><option>Islamabad</option>\n      </select>\n      <button disabled={name.trim().length < 2}>Join</button>\n      {sent && <p>Welcome {sent.name} from {sent.city}!</p>}\n    </form>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "onClick, onChange, onSubmit = event props, written in camelCase",
+     "Pass a function – onClick={save} – not the result of calling it – onClick={save()}",
+     "Controlled input = value comes from state and onChange updates the state",
+     "e.preventDefault() = stops the browser's normal form submit"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Controlled inputs make validation easy: the button above stays disabled until the name is long enough."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Lists, keys and showing things conditionally",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Turn an array into a list on screen",
+     "Use keys correctly",
+     "Filter what is shown"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nconst START = [\n  { id: 1, title: \"Morning walk\", done: true },\n  { id: 2, title: \"Python lesson 4\", done: false },\n  { id: 3, title: \"Call Ammi\", done: false },\n];\n\nfunction App() {\n  const [tasks, setTasks] = useState(START);\n  const [show, setShow] = useState(\"all\");\n\n  function toggle(id) {\n    setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t));\n  }\n\n  const visible = tasks.filter(t =>\n    show === \"all\" ? true : show === \"done\" ? t.done : !t.done);\n\n  return (\n    <div>\n      {[\"all\", \"active\", \"done\"].map(s =>\n        <button key={s} onClick={() => setShow(s)} style={{ fontWeight: show === s ? \"bold\" : \"normal\" }}>{s}</button>)}\n      <ul>\n        {visible.map(t => (\n          <li key={t.id} onClick={() => toggle(t.id)} style={{ cursor: \"pointer\", textDecoration: t.done ? \"line-through\" : \"none\" }}>\n            {t.title}\n          </li>\n        ))}\n      </ul>\n      {visible.length === 0 && <p>Nothing here.</p>}\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "array.map(...) = one element for each item",
+     "key = a stable, unique id so React can track each row",
+     "array.filter(...) = show only some items",
+     "condition && <p>…</p> = show only when the condition is true"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Don't use the array index as the key when items can be added, removed or re-ordered. Use the item's id."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — useEffect and loading data",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Run code after the component appears",
+     "Load data with loading and error states",
+     "Clean up timers"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "p",
+    "v": "useEffect runs code after React has drawn the screen – to load data, start a timer or talk to the browser. The list at the end (the dependency array) says when to run it again."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\n// A pretend server so this works anywhere. In the live project you use real fetch().\nfunction fakeFetchCourses() {\n  return new Promise((resolve, reject) => setTimeout(() => {\n    if (Math.random() < 0.2) reject(new Error(\"Network problem, try again\"));\n    else resolve([{ id: 1, name: \"Python\" }, { id: 2, name: \"Django\" }, { id: 3, name: \"React\" }]);\n  }, 800));\n}\n\nfunction App() {\n  const [courses, setCourses] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(\"\");\n  const [reload, setReload] = useState(0);\n\n  useEffect(() => {\n    setLoading(true); setError(\"\");\n    fakeFetchCourses()\n      .then(setCourses)\n      .catch(e => setError(e.message))\n      .finally(() => setLoading(false));\n  }, [reload]);                         // run again when reload changes\n\n  if (loading) return <p>Loading…</p>;\n  if (error) return <p style={{ color: \"red\" }}>{error} <button onClick={() => setReload(reload + 1)}>Retry</button></p>;\n  return <ul>{courses.map(c => <li key={c.id}>{c.name}</li>)}</ul>;\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "h",
+    "v": "1) Real fetch looks like this"
+   },
+   {
+    "k": "code",
+    "v": "@JavaScript\nuseEffect(() => {\n  fetch(\"/api/posts/\")\n    .then(res => { if (!res.ok) throw new Error(\"Error \" + res.status); return res.json(); })\n    .then(setPosts)\n    .catch(e => setError(e.message));\n}, []);                                   // [] = only once, when the component appears"
+   },
+   {
+    "k": "h",
+    "v": "2) Cleaning up"
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction App() {\n  const [seconds, setSeconds] = useState(0);\n  useEffect(() => {\n    const id = setInterval(() => setSeconds(s => s + 1), 1000);\n    return () => clearInterval(id);       // clean-up: stop the timer when the component goes away\n  }, []);\n  return <h2>Workout time: {seconds}s</h2>;\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "useEffect(fn, []) = run once",
+     "useEffect(fn, [a]) = run when a changes",
+     "No array at all = run after every render (rarely what you want)",
+     "Return a function to clean up timers and listeners"
+    ]
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Sharing state and your own hooks",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Lift state up to a parent",
+     "Pass functions down as props",
+     "Write a custom hook"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "p",
+    "v": "When two components need the same data, keep it in their closest common parent and pass it down. Children change it by calling a function the parent gives them."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction AddStep({ onAdd }) {\n  return <button onClick={() => onAdd(500)}>+500 steps</button>;\n}\n\nfunction Progress({ steps, goal }) {\n  const pct = Math.min(100, Math.round(steps / goal * 100));\n  return (\n    <div>\n      <div style={{ background: \"#eee\", borderRadius: 8, height: 14 }}>\n        <div style={{ width: pct + \"%\", background: \"#16a34a\", height: 14, borderRadius: 8 }} />\n      </div>\n      <p>{steps} / {goal} ({pct}%)</p>\n    </div>\n  );\n}\n\nfunction App() {\n  const [steps, setSteps] = useState(0);              // lives in the parent\n  return (\n    <div>\n      <Progress steps={steps} goal={10000} />\n      <AddStep onAdd={n => setSteps(steps + n)} />\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "h",
+    "v": "1) A custom hook"
+   },
+   {
+    "k": "p",
+    "v": "A custom hook is a function starting with use that bundles state and effects so you can reuse them."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction useToggle(start = false) {\n  const [on, setOn] = useState(start);\n  return [on, () => setOn(v => !v)];\n}\n\nfunction App() {\n  const [dark, toggleDark] = useToggle(false);\n  return (\n    <div style={{ background: dark ? \"#111\" : \"#fff\", color: dark ? \"#fff\" : \"#111\", padding: 16 }}>\n      <p>{dark ? \"Dark mode\" : \"Light mode\"}</p>\n      <button onClick={toggleDark}>Switch</button>\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "warn",
+    "v": "Call hooks only at the top level of a component or another hook – never inside if, loops or ordinary functions."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — A real project on your computer with Vite",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Create a React project on your own computer",
+     "Know the folder structure",
+     "Build it for a live site"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes. You need Node.js (the LTS version from nodejs.org)."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\nnpm create vite@latest my-app -- --template react\ncd my-app\nnpm install\nnpm run dev"
+   },
+   {
+    "k": "p",
+    "v": "Open the address it prints (usually http://localhost:5173). Edit src/App.jsx, save, and the page updates by itself."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "index.html = the one HTML page",
+     "src/main.jsx = starts React and renders <App />",
+     "src/App.jsx = your main component",
+     "package.json = the project's packages and scripts",
+     "node_modules = installed packages – never edit, never upload to GitHub"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "1) Files and imports"
+   },
+   {
+    "k": "code",
+    "v": "@JSX\n// src/components/Course.jsx\nexport default function Course({ name }) {\n  return <li>{name}</li>;\n}\n\n// src/App.jsx\nimport { useState } from \"react\";\nimport Course from \"./components/Course.jsx\";\n\nexport default function App() {\n  const [names] = useState([\"Python\", \"Django\", \"React\"]);\n  return <ul>{names.map(n => <Course key={n} name={n} />)}</ul>;\n}"
+   },
+   {
+    "k": "h",
+    "v": "2) Build for a live site"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\nnpm run build      # makes the dist/ folder - plain HTML, CSS and JS\nnpm run preview    # check the built version"
+   },
+   {
+    "k": "tip",
+    "v": "The dist folder can be served by Nginx, or by free hosts such as Netlify or Vercel. In the live project you serve it next to your Django API."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Mini project: a notes app",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use everything from this course in one small app",
+     "Save data in the browser",
+     "Know what to learn next"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 35 minutes."
+   },
+   {
+    "k": "p",
+    "v": "This notes app uses components, props, state, forms, lists with keys, filtering and useEffect. Run it, then try the challenges below."
+   },
+   {
+    "k": "run",
+    "v": "html\n<div id=\"root\"></div>\n<script src=\"https://unpkg.com/react@18.3.1/umd/react.production.min.js\"></script>\n<script src=\"https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js\"></script>\n<script src=\"https://unpkg.com/@babel/standalone@7.24.7/babel.min.js\"></script>\n<style>body{font-family:system-ui,sans-serif;padding:8px} button{margin:2px;padding:6px 10px} input{padding:6px}</style>\n<script type=\"text/babel\">\nconst { useState, useEffect } = React;\n\nfunction load() {\n  try { return JSON.parse(localStorage.getItem(\"notes\") || \"[]\"); } catch (e) { return []; }\n}\n\nfunction NoteForm({ onAdd }) {\n  const [text, setText] = useState(\"\");\n  return (\n    <form onSubmit={e => { e.preventDefault(); if (text.trim()) { onAdd(text.trim()); setText(\"\"); } }}>\n      <input value={text} onChange={e => setText(e.target.value)} placeholder=\"Write a note\" />\n      <button>Add</button>\n    </form>\n  );\n}\n\nfunction Note({ note, onDelete, onPin }) {\n  return (\n    <li>\n      {note.pinned ? \"📌 \" : \"\"}{note.text}\n      <button onClick={() => onPin(note.id)}>pin</button>\n      <button onClick={() => onDelete(note.id)}>x</button>\n    </li>\n  );\n}\n\nfunction App() {\n  const [notes, setNotes] = useState(load);\n  const [q, setQ] = useState(\"\");\n\n  useEffect(() => {\n    try { localStorage.setItem(\"notes\", JSON.stringify(notes)); } catch (e) {}\n  }, [notes]);\n\n  const add = text => setNotes([{ id: Date.now(), text, pinned: false }, ...notes]);\n  const remove = id => setNotes(notes.filter(n => n.id !== id));\n  const pin = id => setNotes(notes.map(n => n.id === id ? { ...n, pinned: !n.pinned } : n));\n\n  const shown = notes\n    .filter(n => n.text.toLowerCase().includes(q.toLowerCase()))\n    .sort((a, b) => b.pinned - a.pinned);\n\n  return (\n    <div>\n      <h2>My notes ({notes.length})</h2>\n      <NoteForm onAdd={add} />\n      <input value={q} onChange={e => setQ(e.target.value)} placeholder=\"Search\" />\n      <ul>{shown.map(n => <Note key={n.id} note={n} onDelete={remove} onPin={pin} />)}</ul>\n    </div>\n  );\n}\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App />);\n</script>"
+   },
+   {
+    "k": "h",
+    "v": "Challenges"
+   },
+   {
+    "k": "steps",
+    "v": "Try these yourself.|Show the date each note was written.|Add an Edit button that turns a note into an input.|Add a 'Clear all' button that asks for confirmation first.|Count how many notes are pinned and show it in the title."
+   },
+   {
+    "k": "h",
+    "v": "What next"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "The live project: connect this kind of React front end to a Django API with sign-in",
+     "React Router – several pages in one React app",
+     "TypeScript – JavaScript with types, used in most React jobs"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Take the quiz below to get your certificate."
+   }
+  ]
+ }
+}

@@ -1566,6 +1566,18 @@ body.rtl .wafab{right:auto;left:16px}
     { at: 0, t: { en: "How it works" }, key: "s1" },
     { at: 5, t: { en: "Using it safely" }, key: "s2" }
   ];
+  SECTIONS.django = [
+    { at: 0, t: { en: "Getting started" }, key: "s1" },
+    { at: 5, t: { en: "Users, API and going live" }, key: "s2" }
+  ];
+  SECTIONS.react = [
+    { at: 0, t: { en: "The basics" }, key: "s1" },
+    { at: 5, t: { en: "Real apps" }, key: "s2" }
+  ];
+  SECTIONS.fullstack = [
+    { at: 0, t: { en: "Back end" }, key: "s1" },
+    { at: 5, t: { en: "Front end and launch" }, key: "s2" }
+  ];
   SECTIONS.alquran = [
     { at: 0,  t: { en: "Week 1", ur: "\u067e\u06c1\u0644\u0627 \u06c1\u0641\u062a\u06c1" }, key: "wk1" },
     { at: 7,  t: { en: "Week 2", ur: "" }, key: "wk2" },
@@ -3273,6 +3285,40 @@ body.rtl .wafab{right:auto;left:16px}
     "knownMinutes": 25,
     "lessons": []
   }
+  ,
+  {
+    "id": "django",
+    "name": "Django for beginners",
+    "icon": "🏗️",
+    "accent": "#0C4B33",
+    "blurb": "Build websites with Python: projects and apps, URLs and views, templates, models and the database, the admin, forms, logins and a JSON API. You finish with a mini blog.",
+    "remote": "/academy/courses/django.json",
+    "knownLessons": 10,
+    "knownMinutes": 30,
+    "lessons": []
+  },
+  {
+    "id": "react",
+    "name": "React for beginners",
+    "icon": "⚛️",
+    "accent": "#087EA4",
+    "blurb": "Build modern interfaces: components, JSX, props, state, events and forms, lists, loading data with useEffect and a real Vite project. Run every example in the lesson.",
+    "remote": "/academy/courses/react.json",
+    "knownLessons": 10,
+    "knownMinutes": 30,
+    "lessons": []
+  },
+  {
+    "id": "fullstack",
+    "name": "Live project: Task Board (Python + Django + React)",
+    "icon": "🚀",
+    "accent": "#7C3AED",
+    "blurb": "Put it all together: build a real app with a Django REST API, sign-in tokens, a React front end, Python tools and tests, then launch it online with HTTPS and share it.",
+    "remote": "/academy/courses/fullstack.json",
+    "knownLessons": 10,
+    "knownMinutes": 40,
+    "lessons": []
+  }
   /* lang:end */
 ];
 
@@ -3429,7 +3475,7 @@ body.rtl .wafab{right:auto;left:16px}
      never vanish by being forgotten. */
   var COURSE_GROUPS = [
     {t: "Microsoft Office", ids: ["word", "excel", "powerpoint", "vba"]},
-    {t: "Programming",      ids: ["python", "javascript", "blockchain"]},
+    {t: "Programming",      ids: ["python", "javascript", "django", "react", "fullstack", "blockchain"]},
     {t: "Languages",        ids: ["korean", "japanese", "turkish",
                                   "german", "french", "norwegian"]},
     {t: "Exams",            ids: ["ielts"]},
@@ -4628,7 +4674,20 @@ body.rtl .wafab{right:auto;left:16px}
     try { localStorage.setItem(meta.key, ta.value); } catch (err) {}
   });
 
+  function renderCodeLang(label, src){
+    // Code in any language: comments dimmed, nothing else touched. Escape first, always.
+    var out = esc(src).replace(/^(\s*)((?:#|\/\/|&lt;!--).*)$/gm, '$1<span class="cm">$2</span>');
+    var id = "c" + (codeSeq++);
+    return '<div class="code"><div class="bar"><b>' + esc(label) + '</b>'
+      + '<button data-copy="' + id + '">' + esc(t("copy")) + '</button></div>'
+      + '<pre id="' + id + '">' + out + '</pre></div>';
+  }
+
   function renderCode(src){
+    // "@Python", "@Terminal", "@JSX" ... on the first line names the language (setup_devcourses_v1).
+    // Without it the block is VBA, as before.
+    var lm = /^@([^\n]{1,24})\n/.exec(src);
+    if (lm) return renderCodeLang(lm[1], src.slice(lm[0].length));
     // Highlight comments, strings and keywords. Escape first, always.
     var out = esc(src)
       .replace(/^(\s*)('.*)$/gm, '$1<span class="cm">$2</span>')

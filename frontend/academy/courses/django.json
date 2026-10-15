@@ -1,0 +1,612 @@
+{
+ "day-1": {
+  "t": "Day 1 — What Django is and your first project",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what Django does",
+     "Install it in a virtual environment",
+     "See your first page in the browser"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes. Finish the Python course first – Django is written in Python."
+   },
+   {
+    "k": "p",
+    "v": "Django is a free Python framework for building websites and APIs. It gives you the parts almost every site needs – URLs, pages, a database, user logins, an admin panel and security – so you write only what is special about your site. Instagram, Pinterest and XpertCreation itself are built with Django."
+   },
+   {
+    "k": "h",
+    "v": "1) What you need"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Python 3.10 or newer (python.org) – tick 'Add Python to PATH' on Windows",
+     "A code editor – VS Code is free",
+     "A terminal – Command Prompt or PowerShell on Windows, Terminal on Mac and Linux"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Make a project folder and a virtual environment"
+   },
+   {
+    "k": "p",
+    "v": "A virtual environment keeps each project's packages separate, so one project never breaks another."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\nmkdir myblog\ncd myblog\npython -m venv venv\n\n# Windows\nvenv\\Scripts\\activate\n# Mac / Linux\nsource venv/bin/activate\n\npip install django"
+   },
+   {
+    "k": "tip",
+    "v": "When the venv is active you see (venv) at the start of the line. Activate it again every time you open a new terminal."
+   },
+   {
+    "k": "h",
+    "v": "3) Start the project and run it"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\ndjango-admin startproject config .\npython manage.py runserver"
+   },
+   {
+    "k": "p",
+    "v": "Open http://127.0.0.1:8000 in your browser. The rocket page means Django is working. Stop the server with Ctrl+C."
+   },
+   {
+    "k": "h",
+    "v": "4) What was created"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "manage.py = the command tool you use for everything",
+     "config/settings.py = all settings: apps, database, time zone, security",
+     "config/urls.py = the list of web addresses your site answers",
+     "db.sqlite3 = a small database file, created when you first run the project"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Never put your real SECRET_KEY or passwords in code you share on GitHub. You will learn the safe way on Day 10."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Apps, URLs and views",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Create an app",
+     "Write a view",
+     "Connect a URL to it"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "p",
+    "v": "A Django project is made of apps. Each app does one job – blog, accounts, shop. Today you create the blog app."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npython manage.py startapp blog"
+   },
+   {
+    "k": "p",
+    "v": "Tell Django about it: open config/settings.py and add 'blog' to INSTALLED_APPS."
+   },
+   {
+    "k": "code",
+    "v": "@Python\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"blog\",\n]"
+   },
+   {
+    "k": "h",
+    "v": "1) A view is a function that returns a page"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/views.py\nfrom django.http import HttpResponse\n\ndef home(request):\n    return HttpResponse(\"Hello from my blog!\")\n\ndef about(request):\n    return HttpResponse(\"This blog is made with Django.\")"
+   },
+   {
+    "k": "h",
+    "v": "2) Connect the URLs"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/urls.py  (make this new file)\nfrom django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path(\"\", views.home, name=\"home\"),\n    path(\"about/\", views.about, name=\"about\"),\n]"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# config/urls.py\nfrom django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path(\"admin/\", admin.site.urls),\n    path(\"\", include(\"blog.urls\")),\n]"
+   },
+   {
+    "k": "p",
+    "v": "Run the server and open / and /about/. Each address runs its view."
+   },
+   {
+    "k": "h",
+    "v": "3) A URL with a value in it"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/urls.py\npath(\"hello/<str:name>/\", views.hello, name=\"hello\"),\n\n# blog/views.py\ndef hello(request, name):\n    return HttpResponse(f\"Assalam o Alaikum, {name}!\")"
+   },
+   {
+    "k": "tip",
+    "v": "Open /hello/Ayesha/. The part in the address arrives in the view as name."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Templates",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Return real HTML pages",
+     "Show values with {{ }}",
+     "Use one base layout for every page"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "p",
+    "v": "Writing HTML inside Python strings gets messy fast. Templates are HTML files with small placeholders that Django fills in."
+   },
+   {
+    "k": "h",
+    "v": "1) Your first template"
+   },
+   {
+    "k": "p",
+    "v": "Make the folders blog/templates/blog/ and create home.html inside."
+   },
+   {
+    "k": "code",
+    "v": "@HTML\n<!-- blog/templates/blog/home.html -->\n<h1>{{ title }}</h1>\n<p>Welcome, {{ visitor }}!</p>\n\n<ul>\n{% for topic in topics %}\n  <li>{{ topic }}</li>\n{% empty %}\n  <li>No topics yet.</li>\n{% endfor %}\n</ul>"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/views.py\nfrom django.shortcuts import render\n\ndef home(request):\n    return render(request, \"blog/home.html\", {\n        \"title\": \"My Blog\",\n        \"visitor\": \"Khalid\",\n        \"topics\": [\"Python\", \"Django\", \"React\"],\n    })"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "{{ name }} = print a value (Django escapes it, so it is safe from HTML injection)",
+     "{% for %} ... {% endfor %} = repeat for each item",
+     "{% if %} ... {% else %} ... {% endif %} = show something only sometimes",
+     "{{ text|upper }} = a filter changes how a value looks (upper, length, date, truncatewords)"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) One layout for all pages"
+   },
+   {
+    "k": "code",
+    "v": "@HTML\n<!-- blog/templates/blog/base.html -->\n<!doctype html>\n<html>\n<head><meta charset=\"utf-8\"><title>{% block title %}My Blog{% endblock %}</title></head>\n<body>\n  <nav><a href=\"{% url 'home' %}\">Home</a> | <a href=\"{% url 'about' %}\">About</a></nav>\n  <main>{% block content %}{% endblock %}</main>\n</body>\n</html>"
+   },
+   {
+    "k": "code",
+    "v": "@HTML\n<!-- blog/templates/blog/home.html -->\n{% extends \"blog/base.html\" %}\n{% block content %}\n  <h1>{{ title }}</h1>\n{% endblock %}"
+   },
+   {
+    "k": "tip",
+    "v": "{% url 'home' %} builds the link from the name you gave in urls.py. If you change the address later, every link still works."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Models and the database",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Describe your data as a model",
+     "Create the table with migrations",
+     "Know the common field types"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "p",
+    "v": "A model is a Python class that describes one kind of thing you store – a post, a product, a task. Django turns it into a database table for you. You don't write SQL."
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/models.py\nfrom django.db import models\nfrom django.contrib.auth.models import User\n\nclass Post(models.Model):\n    title = models.CharField(max_length=200)\n    body = models.TextField()\n    author = models.ForeignKey(User, on_delete=models.CASCADE)\n    published = models.BooleanField(default=False)\n    created = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return self.title"
+   },
+   {
+    "k": "h",
+    "v": "1) Create the table"
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npython manage.py makemigrations\npython manage.py migrate"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "makemigrations = Django writes a plan of the change (a migration file)",
+     "migrate = Django applies the plan to the database",
+     "Run both every time you change a model"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Common fields"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "CharField = short text, needs max_length",
+     "TextField = long text",
+     "IntegerField / DecimalField = numbers (use DecimalField for money)",
+     "BooleanField = yes / no",
+     "DateField / DateTimeField = dates and times",
+     "ForeignKey = a link to another model (many posts belong to one author)",
+     "ImageField / FileField = uploads (ImageField needs the Pillow package)"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Never delete migration files by hand once you have shared or deployed them. Make a new migration instead."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — The admin panel",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Create an admin user",
+     "Manage posts without writing any pages",
+     "Make the admin list useful"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "p",
+    "v": "Django gives you a full admin panel for free. Many companies run their whole back office on it."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npython manage.py createsuperuser"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/admin.py\nfrom django.contrib import admin\nfrom .models import Post\n\n@admin.register(Post)\nclass PostAdmin(admin.ModelAdmin):\n    list_display = (\"title\", \"author\", \"published\", \"created\")\n    list_filter = (\"published\", \"created\")\n    search_fields = (\"title\", \"body\")"
+   },
+   {
+    "k": "p",
+    "v": "Open /admin/, sign in, and add three posts. Try the search box and the filters on the right."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "list_display = which columns the list shows",
+     "list_filter = filters in the side bar",
+     "search_fields = which fields the search box looks in"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Use the admin for your team, not for your visitors. Visitors get the pages you build yourself."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Reading and saving data (the ORM)",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Fetch, filter and sort records",
+     "Create, update and delete in Python",
+     "Show posts on the home page"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "p",
+    "v": "The ORM lets you talk to the database in Python. Try it in the Django shell."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npython manage.py shell"
+   },
+   {
+    "k": "code",
+    "v": "@Python\nfrom blog.models import Post\nfrom django.contrib.auth.models import User\n\nPost.objects.all()                                  # every post\nPost.objects.filter(published=True)                 # only published\nPost.objects.filter(title__icontains=\"django\")      # title contains 'django'\nPost.objects.order_by(\"-created\")[:5]               # newest five\nPost.objects.count()\n\np = Post.objects.get(id=1)                          # exactly one (error if missing)\np.title = \"A better title\"\np.save()                                            # update\n\nme = User.objects.first()\nPost.objects.create(title=\"New\", body=\"Hi\", author=me)   # insert\nPost.objects.filter(published=False).delete()            # delete"
+   },
+   {
+    "k": "h",
+    "v": "1) Show the posts on the home page"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/views.py\nfrom django.shortcuts import render, get_object_or_404\nfrom .models import Post\n\ndef home(request):\n    posts = Post.objects.filter(published=True).order_by(\"-created\")\n    return render(request, \"blog/home.html\", {\"posts\": posts})\n\ndef post_detail(request, pk):\n    post = get_object_or_404(Post, pk=pk, published=True)\n    return render(request, \"blog/post.html\", {\"post\": post})"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/urls.py\npath(\"post/<int:pk>/\", views.post_detail, name=\"post_detail\"),"
+   },
+   {
+    "k": "code",
+    "v": "@HTML\n{% for post in posts %}\n  <h2><a href=\"{% url 'post_detail' post.pk %}\">{{ post.title }}</a></h2>\n  <small>{{ post.author }} · {{ post.created|date:\"d M Y\" }}</small>\n  <p>{{ post.body|truncatewords:30 }}</p>\n{% endfor %}"
+   },
+   {
+    "k": "tip",
+    "v": "get_object_or_404 shows a proper 'not found' page instead of crashing when the post does not exist."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Forms",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Build a form from a model",
+     "Handle GET and POST",
+     "Validate input safely"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/forms.py\nfrom django import forms\nfrom .models import Post\n\nclass PostForm(forms.ModelForm):\n    class Meta:\n        model = Post\n        fields = [\"title\", \"body\", \"published\"]\n\n    def clean_title(self):\n        title = self.cleaned_data[\"title\"].strip()\n        if len(title) < 5:\n            raise forms.ValidationError(\"Use at least 5 characters.\")\n        return title"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/views.py\nfrom django.shortcuts import redirect\nfrom .forms import PostForm\n\ndef post_new(request):\n    if request.method == \"POST\":\n        form = PostForm(request.POST)\n        if form.is_valid():\n            post = form.save(commit=False)\n            post.author = request.user\n            post.save()\n            return redirect(\"post_detail\", pk=post.pk)\n    else:\n        form = PostForm()\n    return render(request, \"blog/post_form.html\", {\"form\": form})"
+   },
+   {
+    "k": "code",
+    "v": "@HTML\n<!-- blog/templates/blog/post_form.html -->\n{% extends \"blog/base.html\" %}\n{% block content %}\n<h1>New post</h1>\n<form method=\"post\">\n  {% csrf_token %}\n  {{ form.as_p }}\n  <button type=\"submit\">Save</button>\n</form>\n{% endblock %}"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "GET = show the empty form",
+     "POST = the user pressed Save; check it and save it",
+     "form.is_valid() = runs every check; if it fails, the same page shows the errors",
+     "redirect after saving = stops a refresh from saving the post twice"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Always keep {% csrf_token %} inside POST forms. It stops other websites from submitting forms in your users' name."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Users, login and permissions",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Add sign in and sign out",
+     "Protect pages with login_required",
+     "Let people edit only their own posts"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# config/urls.py\nurlpatterns = [\n    path(\"admin/\", admin.site.urls),\n    path(\"accounts/\", include(\"django.contrib.auth.urls\")),   # login, logout, password reset\n    path(\"\", include(\"blog.urls\")),\n]\n\n# config/settings.py\nLOGIN_REDIRECT_URL = \"home\"\nLOGOUT_REDIRECT_URL = \"home\""
+   },
+   {
+    "k": "code",
+    "v": "@HTML\n<!-- templates/registration/login.html  (make the folder 'templates' next to manage.py\n     and add it to TEMPLATES['DIRS'] in settings: BASE_DIR / \"templates\") -->\n<h1>Sign in</h1>\n<form method=\"post\">\n  {% csrf_token %}\n  {{ form.as_p }}\n  <button>Sign in</button>\n</form>"
+   },
+   {
+    "k": "h",
+    "v": "1) Only signed-in users can write"
+   },
+   {
+    "k": "code",
+    "v": "@Python\nfrom django.contrib.auth.decorators import login_required\nfrom django.core.exceptions import PermissionDenied\n\n@login_required\ndef post_new(request):\n    ...\n\n@login_required\ndef post_edit(request, pk):\n    post = get_object_or_404(Post, pk=pk)\n    if post.author != request.user:\n        raise PermissionDenied          # 403 - not your post\n    form = PostForm(request.POST or None, instance=post)\n    if request.method == \"POST\" and form.is_valid():\n        form.save()\n        return redirect(\"post_detail\", pk=post.pk)\n    return render(request, \"blog/post_form.html\", {\"form\": form})"
+   },
+   {
+    "k": "code",
+    "v": "@HTML\n{% if user.is_authenticated %}\n  Hi {{ user.username }} · <a href=\"{% url 'post_new' %}\">Write</a>\n  <form method=\"post\" action=\"{% url 'logout' %}\" style=\"display:inline\">{% csrf_token %}<button>Sign out</button></form>\n{% else %}\n  <a href=\"{% url 'login' %}\">Sign in</a>\n{% endif %}"
+   },
+   {
+    "k": "warn",
+    "v": "Hiding a button is not security. Always check ownership in the view, like post_edit does above."
+   },
+   {
+    "k": "tip",
+    "v": "In Django 5 and newer, sign out must be a POST form, as shown. A plain link to /accounts/logout/ no longer works."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — A JSON API with Django REST Framework",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what an API is",
+     "Turn your posts into JSON",
+     "Get ready to connect a React front end"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 35 minutes. This lesson is the bridge to the React course and the live project."
+   },
+   {
+    "k": "p",
+    "v": "So far Django has made the HTML. In modern apps, Django often only sends data (JSON), and a separate front end – a React website or a mobile app – draws the screen. The part that sends data is called an API."
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npip install djangorestframework"
+   },
+   {
+    "k": "p",
+    "v": "Add 'rest_framework' to INSTALLED_APPS."
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/serializers.py\nfrom rest_framework import serializers\nfrom .models import Post\n\nclass PostSerializer(serializers.ModelSerializer):\n    author = serializers.StringRelatedField()\n\n    class Meta:\n        model = Post\n        fields = [\"id\", \"title\", \"body\", \"author\", \"created\"]"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/api.py\nfrom rest_framework import generics\nfrom .models import Post\nfrom .serializers import PostSerializer\n\nclass PostList(generics.ListAPIView):\n    queryset = Post.objects.filter(published=True).order_by(\"-created\")\n    serializer_class = PostSerializer\n\nclass PostDetail(generics.RetrieveAPIView):\n    queryset = Post.objects.filter(published=True)\n    serializer_class = PostSerializer"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# blog/urls.py\nfrom . import api\nurlpatterns += [\n    path(\"api/posts/\", api.PostList.as_view()),\n    path(\"api/posts/<int:pk>/\", api.PostDetail.as_view()),\n]"
+   },
+   {
+    "k": "p",
+    "v": "Open /api/posts/. You see your posts as JSON, in a page DRF draws so you can explore it."
+   },
+   {
+    "k": "code",
+    "v": "@JSON\n[\n  {\"id\": 2, \"title\": \"Learning Django\", \"body\": \"...\", \"author\": \"khalid\", \"created\": \"2026-10-16T09:30:00Z\"},\n  {\"id\": 1, \"title\": \"Hello world\", \"body\": \"...\", \"author\": \"khalid\", \"created\": \"2026-10-15T18:00:00Z\"}\n]"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Serializer = turns model objects into JSON and checks incoming JSON",
+     "Generic views = ready-made API views for list, detail, create, update, delete",
+     "ViewSets and routers = even shorter; you will use them in the live project"
+    ]
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Going live safely, and your mini blog",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know the settings that must change before going live",
+     "Know how Django runs on a real server",
+     "Check your finished mini blog"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Settings for production"
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# config/settings.py\nimport os\nSECRET_KEY = os.environ[\"DJANGO_SECRET_KEY\"]          # never in code\nDEBUG = os.environ.get(\"DJANGO_DEBUG\") == \"1\"         # off in production\nALLOWED_HOSTS = [\"myblog.example.com\"]\nCSRF_TRUSTED_ORIGINS = [\"https://myblog.example.com\"]\nSTATIC_ROOT = BASE_DIR / \"staticfiles\""
+   },
+   {
+    "k": "warn",
+    "v": "DEBUG = True on a live site shows your code and settings to anyone who causes an error. Always switch it off."
+   },
+   {
+    "k": "h",
+    "v": "2) How it runs on a server"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Gunicorn = runs your Django app (python manage.py runserver is only for your own computer)",
+     "Nginx = the web server in front: handles HTTPS and serves static files",
+     "PostgreSQL = the usual database for live sites (SQLite is fine for learning)",
+     "collectstatic = copies CSS, JS and images into STATIC_ROOT for Nginx"
+    ]
+   },
+   {
+    "k": "code",
+    "v": "@Terminal\npip install gunicorn\npython manage.py collectstatic\npython manage.py check --deploy\ngunicorn config.wsgi --bind 127.0.0.1:8000"
+   },
+   {
+    "k": "tip",
+    "v": "python manage.py check --deploy lists the security settings you still need to fix. Run it before every launch."
+   },
+   {
+    "k": "h",
+    "v": "3) Your mini blog – checklist"
+   },
+   {
+    "k": "steps",
+    "v": "You should now have all of this working.|A home page listing published posts, newest first|A page for each post|Sign in and sign out|A 'Write' page that only signed-in users can open|Editing allowed only for the author|The admin with search and filters|A JSON API at /api/posts/"
+   },
+   {
+    "k": "tip",
+    "v": "Next: the React course, then the live project, where you join Django and React into one real app. Take the quiz below to get your certificate."
+   }
+  ]
+ }
+}
