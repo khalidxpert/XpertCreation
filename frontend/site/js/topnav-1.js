@@ -467,11 +467,11 @@
     function add(label, href){
       if (!href || href.charAt(0) !== "/" || href === "/" || NOPIN.test(href.split("#")[0])) return;
       var p = href.replace(/\/+(#|$)/, "$1") || href; if (p === "/academy") p = "/academy/";
-      if (seen[p]) return; seen[p] = 1; out.push({path: p, label: String(label || "").trim().slice(0, 24) || p});
+      if (seen[p]) return; seen[p] = 1; out.push({path: p, label: String(label || "").replace(/^[^A-Za-z0-9]+/, "").trim().slice(0, 24) || p});
     }
     [].forEach.call(document.querySelectorAll(".tnav a:not(.tpinned), .tdrop a:not(.tpinned)"), function(a){ add(a.textContent, a.getAttribute("href")); });
     EXTRA.forEach(function(x){ add(x[0], x[1]); });
-    return out.sort(function(a, b){ return a.label.localeCompare(b.label); });
+    return out.sort(function(a, b){ return a.label.localeCompare(b.label, "en", {sensitivity: "base"}); });
   }
   function picker(){
     var old = document.querySelector(".xcpinpick"); if (old) old.remove();

@@ -5,7 +5,7 @@ from django.core.mail import EmailMultiAlternatives
 
 log = logging.getLogger(__name__)
 
-BRAND = "XpertAcademy"
+BRAND = "XpertCreation"
 
 _WRAP = """<!DOCTYPE html>
 <html><body style="margin:0;padding:24px;background:#F6F7FB;

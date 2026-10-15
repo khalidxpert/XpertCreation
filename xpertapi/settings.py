@@ -361,7 +361,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER", "no_reply@xpertcreation.com")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", "")
 # Login address and From address must match, or many SMTP servers reject the
 # message and the rest score it as spam.
-DEFAULT_FROM_EMAIL = "XpertAcademy <%s>" % EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = "XpertCreation <%s>" % EMAIL_HOST_USER
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
