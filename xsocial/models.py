@@ -103,3 +103,99 @@ class LoginTicket(models.Model):
     tries = models.PositiveSmallIntegerField(default=0)
     sent_at = models.DateTimeField()
     used = models.BooleanField(default=False)
+
+
+# ---------------------------------------------------------------- step 3: recommendations, featured, reviews, events, articles
+class Recommendation(models.Model):
+    """A written recommendation, shown on the receiver's profile after they accept it."""
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_recs")
+    relation = models.CharField(max_length=120, blank=True, default="")      # e.g. "Worked together at ABC"
+    body = models.TextField(max_length=1500)
+    status = models.CharField(max_length=8, default="pending", db_index=True)  # pending | shown | hidden
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("author", "to")]
+
+
+class Featured(models.Model):
+    """Pinned at the top of a profile: own posts or links (up to 6)."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_featured")
+    post = models.ForeignKey("feed.Post", on_delete=models.CASCADE, null=True, blank=True, related_name="+")
+    title = models.CharField(max_length=120, blank=True, default="")
+    url = models.URLField(max_length=400, blank=True, default="")
+    note = models.CharField(max_length=200, blank=True, default="")
+    order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["order", "-id"]
+
+
+class CompanyReview(models.Model):
+    company = models.ForeignKey("companies.Company", on_delete=models.CASCADE, related_name="xs_reviews")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    stars = models.PositiveSmallIntegerField()
+    body = models.TextField(max_length=1500, blank=True, default="")
+    reply = models.TextField(max_length=1000, blank=True, default="")
+    hidden = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = [("company", "user")]
+        ordering = ["-id"]
+
+
+class Event(models.Model):
+    host = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_events")
+    title = models.CharField(max_length=120)
+    about = models.TextField(max_length=3000, blank=True, default="")
+    starts_at = models.DateTimeField(db_index=True)
+    ends_at = models.DateTimeField(null=True, blank=True)
+    online = models.BooleanField(default=False)
+    place = models.CharField(max_length=200, blank=True, default="")         # address, or the online link
+    city = models.CharField(max_length=60, blank=True, default="")
+    cover = models.CharField(max_length=200, blank=True, default="")         # under MEDIA_ROOT
+    cancelled = models.BooleanField(default=False)
+    reminded_day = models.BooleanField(default=False)
+    reminded_hour = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["starts_at"]
+
+
+class EventRsvp(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="rsvps")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    status = models.CharField(max_length=10)          # going | interested
+    created_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = [("event", "user")]
+
+
+class Article(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_articles")
+    title = models.CharField(max_length=160)
+    body = models.TextField(max_length=40000)
+    cover = models.CharField(max_length=200, blank=True, default="")
+    views = models.PositiveIntegerField(default=0)
+    hidden = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+
+class Subscription(models.Model):
+    """Newsletter: get a notification when this writer publishes an article."""
+    reader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_subs")
+    writer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="xs_subscribers")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [("reader", "writer")]
