@@ -1554,6 +1554,14 @@ body.rtl .wafab{right:auto;left:16px}
     { at: 0, t: { en: "Getting started" }, key: "s1" },
     { at: 5, t: { en: "Using it" }, key: "s2" }
   ];
+  SECTIONS.norwegian = [
+    { at: 0, t: { en: "Getting started" }, key: "s1" },
+    { at: 5, t: { en: "Using it" }, key: "s2" }
+  ];
+  SECTIONS.ielts = [
+    { at: 0, t: { en: "Listening and Reading" }, key: "s1" },
+    { at: 5, t: { en: "Writing, Speaking and test day" }, key: "s2" }
+  ];
   SECTIONS.alquran = [
     { at: 0,  t: { en: "Week 1", ur: "\u067e\u06c1\u0644\u0627 \u06c1\u0641\u062a\u06c1" }, key: "wk1" },
     { at: 7,  t: { en: "Week 2", ur: "" }, key: "wk2" },
@@ -3226,6 +3234,29 @@ body.rtl .wafab{right:auto;left:16px}
     "knownMinutes": 25,
     "lessons": []
   }
+  ,
+  {
+    "id": "norwegian",
+    "name": "Norwegian for beginners",
+    "icon": "🇳🇴",
+    "accent": "#BA0C2F",
+    "blurb": "Bokmål from the first sound: æ ø å, greetings, en/ei/et, numbers and kroner, verbs, food, directions, time and weather. Ten short lessons.",
+    "remote": "/academy/courses/norwegian.json",
+    "knownLessons": 10,
+    "knownMinutes": 25,
+    "lessons": []
+  },
+  {
+    "id": "ielts",
+    "name": "IELTS preparation",
+    "icon": "🎓",
+    "accent": "#C8102E",
+    "blurb": "Listening, Reading, Writing and Speaking: how each part is marked, the traps that cost marks, band scores and a four-week plan. Ten lessons.",
+    "remote": "/academy/courses/ielts.json",
+    "knownLessons": 10,
+    "knownMinutes": 30,
+    "lessons": []
+  }
   /* lang:end */
 ];
 
@@ -3384,7 +3415,8 @@ body.rtl .wafab{right:auto;left:16px}
     {t: "Microsoft Office", ids: ["word", "excel", "powerpoint", "vba"]},
     {t: "Programming",      ids: ["python", "javascript"]},
     {t: "Languages",        ids: ["korean", "japanese", "turkish",
-                                  "german", "french"]},
+                                  "german", "french", "norwegian"]},
+    {t: "Exams",            ids: ["ielts"]},
     {t: "Quran",            ids: ["alquran"]}
   ];
 

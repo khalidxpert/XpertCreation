@@ -1,0 +1,886 @@
+{
+ "day-1": {
+  "t": "Day 1 — Sounds and the alphabet",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Read Norwegian out loud without guessing",
+     "Handle æ, ø and å",
+     "Say your first ten words"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "p",
+    "v": "Norway has two written standards. This course teaches Bokmål, which about nine out of ten Norwegians write. Spoken Norwegian has many dialects, but everyone understands the kind you will learn here."
+   },
+   {
+    "k": "h",
+    "v": "1) The three extra letters"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "æ = like the a in cat (være = to be)",
+     "ø = like the u in burn, with rounded lips (øl = beer)",
+     "å = like the aw in law (år = year)"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "They come at the very end of the alphabet: … x, y, z, æ, ø, å. Dictionaries and phone contacts sort them there too."
+   },
+   {
+    "k": "h",
+    "v": "2) Letters that sound different from English"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "j = y as in yes (ja = yes, jeg = I, said 'yai')",
+     "y = a tight ee with rounded lips, like German ü (by = town)",
+     "u = between oo and ee (du = you)",
+     "kj = a soft hiss, close to the h in huge (kjøkken = kitchen)",
+     "sk before i, y, ei, øy = sh (ski = 'shee')",
+     "skj = sh (skjorte = shirt)",
+     "rs = sh in most of eastern Norway (norsk = 'nosh-k')"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Do not say jeg as 'jeg' with a hard j. It is 'yai'. It is the word you will say most often."
+   },
+   {
+    "k": "h",
+    "v": "3) Silent letters"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "d is often silent at the end: god (good) = 'goo'",
+     "g is silent in -ig: hyggelig (nice) = 'hyg-ge-li'",
+     "h is silent before v and j: hva (what) = 'va', hjem (home) = 'yem'",
+     "t is silent in det (it) = 'deh' and in the -et ending"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Your first ten words"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "ja = yes",
+     "nei = no",
+     "hei = hi",
+     "takk = thank you",
+     "unnskyld = excuse me / sorry",
+     "vann = water",
+     "kaffe = coffee",
+     "hus = house",
+     "bok = book",
+     "venn = friend"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Read these aloud, slowly, then faster.|ja – nei – hei – takk|jeg – hva – hjem – god|ski – kjøkken – norsk|være – øl – år"
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Greetings and politeness",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Greet at any time of day",
+     "Thank people the Norwegian way",
+     "Say goodbye correctly"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Hello"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hei = hi (works with everyone, everywhere)",
+     "Hallo = hello (also on the phone)",
+     "God morgen = good morning",
+     "God dag = good day (formal, less common now)",
+     "God kveld = good evening",
+     "God natt = good night (only when going to bed)"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) One 'you' for everybody"
+   },
+   {
+    "k": "p",
+    "v": "Norwegian has a formal 'you' (De), but almost nobody uses it any more. You say du to your boss, a shopkeeper and the prime minister. This is normal, not rude."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hvordan har du det? = how are you?",
+     "Bra, takk. Og du? = fine, thanks. And you?",
+     "Det går bra = it's going well",
+     "Ikke så verst = not too bad"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Thank you – Norwegians say it a lot"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Takk = thanks",
+     "Tusen takk = thanks a lot (literally 'a thousand thanks')",
+     "Takk for sist = thanks for last time (said when you meet someone again)",
+     "Takk for maten = thanks for the food (say it after every meal you are served)",
+     "Vær så god = here you are / please help yourself / you're welcome",
+     "Ingen årsak = no problem"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "There is no everyday word for 'please'. Politeness comes from the way you ask: Kan jeg få …? = can I have …?"
+   },
+   {
+    "k": "h",
+    "v": "4) Goodbye"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ha det = bye",
+     "Ha det bra = goodbye (take care)",
+     "Vi ses = see you",
+     "Vi snakkes = talk soon",
+     "Ha en fin dag = have a nice day"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Say this conversation out loud twice.|Hei! Hvordan har du det?|Bra, takk. Og du?|Det går bra. Takk for sist!|Ha det bra!|Ha det!"
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Introducing yourself",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Say your name, where you are from and where you live",
+     "Ask the same of someone else",
+     "Meet the verb å være (to be)"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Your name"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Jeg heter Khalid = my name is Khalid (literally 'I am called')",
+     "Hva heter du? = what is your name?",
+     "Hyggelig å treffe deg = nice to meet you",
+     "I like måte = likewise"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Where you are from"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Jeg kommer fra Pakistan = I come from Pakistan",
+     "Hvor kommer du fra? = where do you come from?",
+     "Jeg er pakistansk = I am Pakistani",
+     "Jeg bor i Oslo = I live in Oslo",
+     "Hvor bor du? = where do you live?"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Nationalities and languages are written with a small letter: norsk, engelsk, urdu, pakistansk."
+   },
+   {
+    "k": "h",
+    "v": "3) å være – the easiest 'to be' in Europe"
+   },
+   {
+    "k": "p",
+    "v": "Norwegian verbs do not change for the person. 'Am, is, are' are all er."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "jeg er = I am",
+     "du er = you are",
+     "han / hun er = he / she is",
+     "vi er = we are",
+     "dere er = you (all) are",
+     "de er = they are"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Languages and work"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Jeg snakker urdu og engelsk = I speak Urdu and English",
+     "Jeg snakker litt norsk = I speak a little Norwegian",
+     "Snakker du engelsk? = do you speak English?",
+     "Jeg er lærer / ingeniør / student = I am a teacher / engineer / student"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "No 'a' before a job: Jeg er lærer, not Jeg er en lærer."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Introduce yourself out loud.|Hei! Jeg heter …|Jeg kommer fra …, men jeg bor i …|Jeg snakker … og litt norsk.|Hva heter du?"
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Nouns: en, ei, et",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know the three genders",
+     "Say 'the' the Norwegian way – as an ending",
+     "Make simple plurals"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Three little words for 'a'"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "en = masculine: en bil (a car), en venn (a friend)",
+     "ei = feminine: ei bok (a book), ei jente (a girl)",
+     "et = neuter: et hus (a house), et eple (an apple)"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "In Bokmål every ei-word may also take en: en bok is correct too. So in practice you learn two groups: en-words and et-words."
+   },
+   {
+    "k": "h",
+    "v": "2) 'The' is glued to the end"
+   },
+   {
+    "k": "p",
+    "v": "Norwegian does not put a separate word for 'the' in front. It adds an ending."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "en bil → bilen = the car",
+     "en venn → vennen = the friend",
+     "ei bok → boka (or boken) = the book",
+     "et hus → huset = the house",
+     "et eple → eplet = the apple"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Plurals"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "en bil → biler (cars) → bilene (the cars)",
+     "en venn → venner → vennene",
+     "et eple → epler → eplene",
+     "short et-words often do not change: et hus → hus (houses) → husene (the houses)"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Learn the word with its gender"
+   },
+   {
+    "k": "p",
+    "v": "Always learn a new noun as a pair: en stol (chair), et bord (table), en dør (door), et vindu (window). The gender decides the ending, so it is worth the effort."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Say 'the …' for each word.|en kopp → koppen|et glass → glasset|en telefon → telefonen|et rom → rommet"
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Numbers and money",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Count to a hundred",
+     "Say prices in kroner",
+     "Give your phone number"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) 0 to 12"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "null, en (ett), to, tre, fire, fem",
+     "seks, sju (or syv), åtte, ni, ti",
+     "elleve, tolv"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) 13 to 20"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "tretten, fjorten, femten, seksten",
+     "sytten, atten, nitten, tjue"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Tens and the rest"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "tjue (20), tretti (30), førti (40), femti (50)",
+     "seksti (60), sytti (70), åtti (80), nitti (90), hundre (100)",
+     "21 = tjueen, 35 = trettifem, 99 = nittini",
+     "200 = to hundre, 1 000 = tusen"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Unlike German, Norwegian counts the tens first, like English: 45 = førtifem (forty-five)."
+   },
+   {
+    "k": "h",
+    "v": "4) Money"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "The money is the krone (kr). 1 krone = 100 øre, but øre coins are gone.",
+     "Hva koster det? = what does it cost?",
+     "Det koster nittini kroner = it costs 99 kroner",
+     "Det blir to hundre kroner = that comes to 200 kroner",
+     "Norwegians pay by card or with the Vipps app almost everywhere."
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) Phone numbers"
+   },
+   {
+    "k": "p",
+    "v": "Norwegian mobile numbers have eight digits and are usually read in pairs: 41 23 45 67 = førtien tjuetre førtifem sekstisju."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Read these aloud.|17 – 70 – 18 – 80|kr 49 – kr 120 – kr 999|Telefonnummeret mitt er …"
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Verbs and simple sentences",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use any verb in the present",
+     "Ask yes/no questions",
+     "Say 'not' in the right place"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) One form for everyone"
+   },
+   {
+    "k": "p",
+    "v": "Most present-tense verbs end in -r, and that form is the same for every person. This is the best news in the whole course."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "å snakke → jeg snakker, du snakker, vi snakker (speak)",
+     "å spise → spiser (eat)",
+     "å drikke → drikker (drink)",
+     "å bo → bor (live)",
+     "å jobbe → jobber (work)",
+     "å forstå → forstår (understand)",
+     "å ha → har (have)",
+     "å gå → går (go/walk)",
+     "å komme → kommer (come)",
+     "å like → liker (like)"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Questions: swap the first two"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Du snakker norsk. → Snakker du norsk? = do you speak Norwegian?",
+     "Han bor i Bergen. → Bor han i Bergen?",
+     "Question words come first: Hva spiser du? Hvor bor du? Når kommer du?"
+    ]
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "hva = what",
+     "hvor = where",
+     "når = when",
+     "hvem = who",
+     "hvorfor = why",
+     "hvordan = how"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) ikke = not"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Jeg forstår ikke = I don't understand",
+     "Jeg snakker ikke tysk = I don't speak German",
+     "Liker du ikke kaffe? = don't you like coffee?"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "The verb always stays in second place. If a sentence starts with a time word, the subject moves after the verb: I dag jobber jeg (today I work) – not I dag jeg jobber."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Make each sentence a question, then a 'not' sentence.|Du liker te. → Liker du te? → Du liker ikke te.|Hun jobber i dag.|Vi forstår norsk."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Food, ordering and shopping",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Order in a café",
+     "Name everyday food",
+     "Pay and ask for the bill"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Asking politely"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Kan jeg få en kaffe? = can I have a coffee?",
+     "Jeg vil gjerne ha … = I would like …",
+     "En kopp te, takk = a cup of tea, please",
+     "Har dere …? = do you have …?",
+     "Hva anbefaler du? = what do you recommend?"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Food words"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "brød = bread, smør = butter, ost = cheese, egg = egg",
+     "melk = milk, vann = water, juice = juice, te = tea",
+     "kylling = chicken, fisk = fish, laks = salmon, ris = rice",
+     "grønnsaker = vegetables, frukt = fruit, eple = apple",
+     "Er dette halal? = is this halal?  Uten svinekjøtt = without pork"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Paying"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Kan jeg betale? = can I pay?",
+     "Regningen, takk = the bill, please",
+     "Kan jeg betale med kort? = can I pay by card?",
+     "Kvittering = receipt",
+     "Det var godt! = that was good!"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Tipping is not expected in Norway. Rounding up for good service is enough."
+   },
+   {
+    "k": "h",
+    "v": "4) In the shop"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hvor finner jeg …? = where do I find …?",
+     "Det er for dyrt = it is too expensive",
+     "Har du en pose? = do you have a bag?",
+     "Ja, takk / Nei, takk"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Order a meal out loud.|Hei! Kan jeg få en kylling med ris?|Og et glass vann, takk.|… Det var godt! Kan jeg betale med kort?|Takk for maten!"
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Getting around",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ask the way and understand the answer",
+     "Use bus, tram and train words",
+     "Buy a ticket"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Asking the way"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Unnskyld, hvor er …? = excuse me, where is …?",
+     "… togstasjonen = the train station",
+     "… bussholdeplassen = the bus stop",
+     "… sykehuset = the hospital",
+     "… toalettet = the toilet",
+     "Er det langt? = is it far?"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Understanding the answer"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "til høyre = to the right",
+     "til venstre = to the left",
+     "rett fram = straight ahead",
+     "ved siden av = next to",
+     "over gata = across the street",
+     "Det er fem minutter å gå = it is a five-minute walk"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Transport"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "buss = bus, trikk = tram, T-bane = metro (Oslo), tog = train",
+     "fly = plane, ferje = ferry, taxi = taxi",
+     "billett = ticket",
+     "Når går neste buss til sentrum? = when does the next bus to the centre leave?"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "In most cities you buy tickets in an app (for example Ruter in Oslo). Riding without a valid ticket gives a large fine."
+   },
+   {
+    "k": "h",
+    "v": "4) Buying a ticket"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "En billett til Bergen, takk = one ticket to Bergen, please",
+     "Enkeltbillett = single ticket",
+     "Tur-retur = return",
+     "Hvilket spor? = which platform?"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Ask the way to the station out loud.|Unnskyld, hvor er togstasjonen?|Gå rett fram, så til venstre.|Er det langt?|Nei, det er ti minutter å gå.|Tusen takk!"
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Days, time and the weather",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Say the days and months",
+     "Tell the time – including the tricky 'half'",
+     "Talk about the weather"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Days and months (no capital letters)"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "mandag, tirsdag, onsdag, torsdag, fredag, lørdag, søndag",
+     "januar, februar, mars, april, mai, juni, juli, august, september, oktober, november, desember",
+     "i dag = today, i morgen = tomorrow, i går = yesterday",
+     "helg = weekend"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Telling the time"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hva er klokka? = what time is it?",
+     "Klokka er tre = it is three o'clock",
+     "kvart over tre = quarter past three (3:15)",
+     "kvart på tre = quarter to three (2:45)",
+     "ti over tre = 3:10",
+     "fem på tre = 2:55"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "halv tre means 2:30, not 3:30. Norwegians say 'half to three'. This catches almost every learner."
+   },
+   {
+    "k": "tip",
+    "v": "Timetables and shops use the 24-hour clock: 14.30 = halv tre in the afternoon."
+   },
+   {
+    "k": "h",
+    "v": "3) The weather – Norway's favourite topic"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hvordan er været? = how is the weather?",
+     "Det er sol = it is sunny",
+     "Det regner = it is raining",
+     "Det snør = it is snowing",
+     "Det er kaldt / varmt = it is cold / warm",
+     "Det blåser = it is windy",
+     "Det er minus ti grader = it is minus ten degrees"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Norwegians say: Det finnes ikke dårlig vær, bare dårlige klær – there is no bad weather, only bad clothes."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Answer out loud.|Hva er klokka nå?|Hvilken dag er det i dag?|Hvordan er været i dag?"
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Putting it together",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hold a short conversation",
+     "Review the whole course",
+     "Know what comes next"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) A full conversation"
+   },
+   {
+    "k": "steps",
+    "v": "Read both parts aloud, then cover one side and answer.|A: Hei! Jeg heter Sara. Hva heter du?|B: Hei, jeg heter Ali. Hyggelig å treffe deg!|A: I like måte. Hvor kommer du fra?|B: Jeg kommer fra Pakistan, men jeg bor i Oslo nå.|A: Snakker du norsk?|B: Litt. Jeg lærer norsk hver dag.|A: Så bra! Vil du ha en kaffe?|B: Ja, gjerne. Tusen takk!"
+   },
+   {
+    "k": "h",
+    "v": "2) The ten things to remember"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "jeg is said 'yai'",
+     "du is fine for everyone",
+     "Kan jeg få …? instead of 'please'",
+     "Takk for maten after a meal",
+     "en / ei / et, and 'the' goes on the end: bilen, huset",
+     "verbs end in -r and never change: jeg / du / vi snakker",
+     "questions swap verb and subject: Snakker du …?",
+     "ikke comes after the verb",
+     "the verb is always in second place",
+     "halv tre = 2:30"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) What next"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use the Vocabulary page on XpertCreation – it has a Norwegian word list with flashcards",
+     "Listen to NRK (Norway's public broadcaster) news for learners",
+     "Change your phone language to Norwegian for a week",
+     "Aim for level A1, then A2 – the levels used for work and residence in Norway"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Take the quiz below. Pass it and you get your XpertAcademy certificate."
+   }
+  ]
+ }
+}

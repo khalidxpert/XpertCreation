@@ -1,0 +1,873 @@
+{
+ "day-1": {
+  "t": "Day 1 — How IELTS works",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know the four parts and how long each takes",
+     "Choose Academic or General Training",
+     "Understand band scores and how the overall band is worked out"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Academic or General Training?"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Academic – for university study and many professional registrations (doctors, nurses, engineers)",
+     "General Training – for work, training and most immigration routes (for example Canada, Australia, the UK work visa)",
+     "Listening and Speaking are the same in both. Reading and Writing are different."
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Check the exact test and band your university, employer or visa asks for before you book. Booking the wrong one is the most expensive mistake in IELTS."
+   },
+   {
+    "k": "h",
+    "v": "2) The four parts"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Listening – about 30 minutes, 4 recordings, 40 questions",
+     "Reading – 60 minutes, 3 sections, 40 questions",
+     "Writing – 60 minutes, 2 tasks",
+     "Speaking – 11 to 14 minutes, face to face with an examiner, 3 parts"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Listening, Reading and Writing are taken together on one day. Speaking may be the same day or up to a week before or after."
+   },
+   {
+    "k": "h",
+    "v": "3) Band scores"
+   },
+   {
+    "k": "p",
+    "v": "Each part gets a band from 0 to 9, in half bands (5.0, 5.5, 6.0 …). The overall band is the average of the four, rounded to the nearest half band."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "6.0 + 6.5 + 5.5 + 6.0 = 24 ÷ 4 = 6.0 → overall 6.0",
+     "an average of 6.25 rounds up to 6.5",
+     "an average of 6.75 rounds up to 7.0",
+     "an average of 6.125 rounds down to 6.0"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) What the bands mean"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "5 – modest user: copes with overall meaning, makes many mistakes",
+     "6 – competent user: effective, with some inaccuracies",
+     "7 – good user: handles complex language well, occasional errors",
+     "8 – very good user: only rare, unsystematic errors"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Many universities ask for 6.5 overall with no part below 6.0. Plan for the lowest part, not the average."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Listening: format and core skills",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what each of the four recordings is like",
+     "Read ahead and predict answers",
+     "Avoid the traps that cost easy marks"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The four recordings"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Part 1 – a conversation in an everyday situation (booking, registering, enquiring)",
+     "Part 2 – one person speaking about an everyday topic (a tour, a local facility)",
+     "Part 3 – a conversation in a study setting (students and a tutor)",
+     "Part 4 – a short lecture on an academic subject"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "You hear each recording once only. There is no replay."
+   },
+   {
+    "k": "h",
+    "v": "2) Before each part: read ahead"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Underline the key word in each question",
+     "Predict the kind of answer: a number, a name, a date, a noun, an adjective?",
+     "Check the word limit: 'NO MORE THAN TWO WORDS AND/OR A NUMBER'",
+     "Notice the order – answers come in the same order as the questions"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) The common traps"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Distractors: the speaker gives one answer, then corrects it ('Tuesday – oh no, sorry, Thursday')",
+     "Spelling: a misspelt answer is wrong. Names are often spelt out – practise the alphabet",
+     "Numbers: 13 and 30, 15 and 50 sound close – listen for the stress",
+     "Plurals: 'book' when the answer is 'books' can lose the mark",
+     "Word limit: three words when the limit is two is marked wrong"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Raw score to band (roughly)"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "about 16/40 → band 5.5",
+     "about 23/40 → band 6.0",
+     "about 30/40 → band 7.0",
+     "about 35/40 → band 8.0"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "The exact table changes slightly from test to test, but these are a good guide for practice."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Listen to any English news clip for 3 minutes and write down every number and name you hear.|Check your spelling against the transcript or subtitles.|Repeat daily for a week – your accuracy will climb quickly."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Listening: question types",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Handle form, note and table completion",
+     "Answer multiple choice without falling for paraphrase traps",
+     "Follow a map or plan"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Form, note and table completion"
+   },
+   {
+    "k": "p",
+    "v": "These are the most common questions, especially in Part 1. You fill gaps with words you hear."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write exactly what you hear – do not change the word form",
+     "Dates can be written 12 March or March 12",
+     "Use capital letters for the whole answer on the computer test if you are unsure about capitals – capitals are always accepted"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Multiple choice"
+   },
+   {
+    "k": "p",
+    "v": "The recording rarely uses the same words as the options. It paraphrases. Often all three options are mentioned, but only one answers the question."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Question: 'Why did the student choose the course?'",
+     "A. It was cheap  B. A friend recommended it  C. It fitted her timetable",
+     "Recording: 'Honestly, the fee wasn't the issue, and my friend actually took a different one. It just happened to be the only one that didn't clash with my lectures.'",
+     "Answer: C – 'didn't clash with my lectures' = 'fitted her timetable'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Maps and plans"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Find the starting point before the recording begins",
+     "Learn direction language: opposite, next to, at the far end, on your left as you enter, just past, in the corner",
+     "Turn the map in your mind as the speaker moves"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Matching"
+   },
+   {
+    "k": "p",
+    "v": "You match items (people, places, opinions) to a list of options. Some options are not used. Read the options carefully before the part starts."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Make your own paraphrase list.|expensive → costly, not cheap, a lot of money|start → begin, launch, open|problem → issue, difficulty, challenge|Add five new pairs every day."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Reading: skimming, scanning and timing",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Read fast enough to finish",
+     "Find answers without reading every word",
+     "Manage 60 minutes for 40 questions"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) What the Reading test looks like"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Academic – three long passages from books, journals and magazines",
+     "General Training – shorter everyday texts (adverts, notices), then workplace texts, then one longer passage",
+     "40 questions, 60 minutes, and no extra time to copy answers"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "On the paper test there is no transfer time for Reading. Write answers straight onto the answer sheet."
+   },
+   {
+    "k": "h",
+    "v": "2) Skimming – for the main idea"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Read the title and any subheadings",
+     "Read the first and last sentence of each paragraph",
+     "Write a 3-word summary next to each paragraph",
+     "Spend 2–3 minutes on this, not 10"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Scanning – for a detail"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pick a word from the question that is easy to spot: a name, a number, a date, a capital letter",
+     "Move your eyes quickly down the text looking only for that",
+     "Then read the sentences around it carefully"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Timing plan"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Section 1: 17 minutes",
+     "Section 2: 20 minutes",
+     "Section 3: 23 minutes (it is the hardest)",
+     "If one question takes more than 2 minutes, guess, mark it and move on",
+     "Never leave a blank – there is no penalty for a wrong answer"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) Raw score to band (Academic, roughly)"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "about 23/40 → band 6.0",
+     "about 27/40 → band 6.5",
+     "about 30/40 → band 7.0",
+     "about 35/40 → band 8.0"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "General Training needs more correct answers for the same band, because its texts are easier."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Reading: True / False / Not Given and headings",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Tell False from Not Given",
+     "Match headings to paragraphs",
+     "Practise on a real-style passage"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The three answers"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "TRUE – the text says the same thing",
+     "FALSE – the text says the opposite",
+     "NOT GIVEN – the text does not say, either way"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "For opinion passages the answers are YES / NO / NOT GIVEN. The logic is exactly the same."
+   },
+   {
+    "k": "warn",
+    "v": "Do not use your own knowledge. If the text does not say it, the answer is NOT GIVEN – even if it is true in real life."
+   },
+   {
+    "k": "h",
+    "v": "2) Try it"
+   },
+   {
+    "k": "p",
+    "v": "Passage: The city's first public library opened in 1902 with fewer than 2,000 books. It was funded by a local merchant, who also paid the librarian's salary for the first ten years. Today the library holds over half a million items, and its reading rooms are among the busiest in the country."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "1. The library opened in the early twentieth century. → TRUE (1902)",
+     "2. The library was paid for by the city council. → FALSE (a local merchant paid)",
+     "3. The first librarian was a woman. → NOT GIVEN (the text does not say)",
+     "4. The library's reading rooms are the busiest in the country. → NOT GIVEN (it says 'among the busiest', not 'the busiest')"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Matching headings"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Read the paragraph first, then the headings – not the other way round",
+     "A heading matches the main idea of the whole paragraph, not one detail",
+     "Watch for headings that repeat a word from the paragraph – that is often a trap",
+     "There are always more headings than paragraphs"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Other question types you will meet"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "sentence and summary completion – check the word limit",
+     "matching information – which paragraph contains a detail",
+     "multiple choice – eliminate the wrong options first",
+     "diagram and flow-chart completion"
+    ]
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Writing Task 1",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a clear report on a chart (Academic) or a letter (General)",
+     "Always include an overview",
+     "Use the language of change and comparison"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 35 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The rules"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "At least 150 words – fewer loses marks",
+     "Spend about 20 minutes on it",
+     "Task 1 is worth half as much as Task 2"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Academic: describing a chart"
+   },
+   {
+    "k": "p",
+    "v": "You get a line graph, bar chart, pie chart, table, map or process. Describe the main features – do not give opinions or reasons."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Paragraph 1 – paraphrase the question in one sentence",
+     "Paragraph 2 – the overview: the two or three biggest trends (this is the paragraph most people forget)",
+     "Paragraphs 3–4 – details with numbers, grouped logically"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "No overview = no band 7 for Task Achievement, however good the rest is."
+   },
+   {
+    "k": "h",
+    "v": "3) Useful language"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "rose / increased / climbed – fell / decreased / dropped",
+     "sharply, steadily, slightly, dramatically",
+     "peaked at, reached a low of, remained stable at, fluctuated",
+     "twice as many as, a quarter of, the highest proportion, just over / just under"
+    ]
+   },
+   {
+    "k": "p",
+    "v": "Example: 'Overall, car use rose steadily over the period, while bus travel fell by almost half.'"
+   },
+   {
+    "k": "h",
+    "v": "4) General Training: the letter"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Three bullet points in the question – cover all three",
+     "Formal (Dear Sir or Madam … Yours faithfully), semi-formal (Dear Mr Khan … Yours sincerely) or informal (Dear Ali … Best wishes)",
+     "Say why you are writing in the first sentence"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Find any bar or line chart in a newspaper.|Write one sentence that paraphrases its title.|Write a two-sentence overview of the biggest trends.|Add four sentences of detail with numbers. Count your words."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Writing Task 2: the essay",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Recognise the five essay types",
+     "Plan in five minutes",
+     "Write a four-paragraph essay that answers the question"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 40 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The rules"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "At least 250 words",
+     "Spend about 40 minutes",
+     "It counts double – do it first if you run short of time"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) The five question types"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Opinion – 'To what extent do you agree or disagree?'",
+     "Discussion – 'Discuss both views and give your own opinion'",
+     "Advantages and disadvantages",
+     "Problem and solution (or cause and solution)",
+     "Two-part question – answer both parts"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) A simple plan that works"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Introduction – paraphrase the topic and give your answer or position clearly",
+     "Body 1 – one main idea, explained, with an example",
+     "Body 2 – a second main idea, explained, with an example",
+     "Conclusion – sum up your position in two sentences, no new ideas"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) How it is marked"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Task Response – did you answer every part of the question, with a clear position?",
+     "Coherence and Cohesion – logical paragraphs and linking",
+     "Lexical Resource – range and accuracy of vocabulary",
+     "Grammatical Range and Accuracy – a mix of simple and complex sentences, few errors"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Memorised phrases like 'In this modern era of globalisation' do not raise your band. Examiners recognise them. Clear, accurate English does."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Question: 'Some people think children should start school at a very young age. Others think they should start later. Discuss both views and give your opinion.'|Write your position in one sentence.|Note one reason for each view, with an example.|Write the essay in 40 minutes, then count the words."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Speaking: the three parts",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what happens in each part",
+     "Plan a two-minute talk in one minute",
+     "Sound fluent without memorising"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Part 1 – introduction and interview (4–5 minutes)"
+   },
+   {
+    "k": "p",
+    "v": "Simple questions about you: home, work or study, hobbies, daily life. Give two or three sentences, not one word, not a speech."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Q: Do you like cooking?",
+     "Weak: 'Yes.'",
+     "Good: 'Yes, quite a lot. I usually cook on weekends – mostly Pakistani dishes like daal and rice, because they remind me of home.'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Part 2 – the long turn (3–4 minutes)"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "You get a card with a topic and three or four points",
+     "1 minute to prepare – write key words, not sentences",
+     "Speak for 1 to 2 minutes – keep going until the examiner stops you",
+     "Follow the points on the card in order – it gives you a structure"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Part 3 – discussion (4–5 minutes)"
+   },
+   {
+    "k": "p",
+    "v": "Deeper, more general questions linked to the Part 2 topic. Give an opinion, a reason and an example. It is fine to think aloud: 'That's an interesting question …'"
+   },
+   {
+    "k": "h",
+    "v": "4) How it is marked"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Fluency and Coherence – speaking at length without long pauses",
+     "Lexical Resource – the range of words you use",
+     "Grammatical Range and Accuracy",
+     "Pronunciation – being easy to understand (an accent is fine)"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "If you do not understand a question, ask: 'Sorry, could you repeat the question?' This costs nothing."
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Cue card: Describe a place you like to visit. You should say: where it is – how often you go – what you do there – and explain why you like it.|Set a timer for 1 minute and write key words.|Record yourself speaking for 2 minutes on your phone.|Listen back: count long pauses and repeated words."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Vocabulary, grammar and common mistakes",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Fix the mistakes that hold Pakistani and Indian candidates at band 6",
+     "Use linking words correctly",
+     "Learn collocations, not single words"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 30 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Common mistakes to fix"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "'discuss about the issue' → 'discuss the issue'",
+     "'return back' → 'return'",
+     "'cope up with' → 'cope with'",
+     "'do a mistake' → 'make a mistake'",
+     "'people is' → 'people are'",
+     "'I am having a car' → 'I have a car'",
+     "'Myself Khalid' → 'My name is Khalid'",
+     "'He is more better' → 'He is better'",
+     "missing articles: 'I went to university to study medicine' is right; 'I am student' → 'I am a student'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Linking words – use them, do not overuse them"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "adding: moreover, in addition, furthermore",
+     "contrast: however, on the other hand, whereas, although",
+     "result: as a result, therefore, consequently",
+     "example: for example, for instance, such as"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Starting every sentence with a linking word lowers your Coherence score. Two or three per paragraph is plenty."
+   },
+   {
+    "k": "h",
+    "v": "3) Collocations – words that go together"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "make a decision, take responsibility, pay attention",
+     "a heavy burden, a growing concern, a significant impact",
+     "raise awareness, tackle a problem, meet a demand",
+     "strongly agree, highly unlikely, widely accepted"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Grammar range for band 7"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "conditionals: If governments invested more, fewer people would …",
+     "relative clauses: Students who work part-time often …",
+     "passive voice: The data was collected in 2020 …",
+     "but accuracy matters more than complexity – a correct simple sentence beats a broken long one"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Write five sentences about your city.|Use one conditional, one relative clause and one passive.|Check each against the mistake list above."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Test day and your study plan",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Book the right test",
+     "Know what to bring and expect",
+     "Follow a four-week plan to your target band"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Booking"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Book through an official IELTS provider – the British Council or IDP",
+     "Choose computer-delivered or paper-based – the questions and difficulty are the same",
+     "Computer results usually arrive within a few days, paper results in about two weeks",
+     "Book four to six weeks ahead, especially before university intakes"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Buy the test only from the official providers. Anyone offering a guaranteed band or a certificate without the test is a fraud."
+   },
+   {
+    "k": "h",
+    "v": "2) On the day"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Bring the same passport or ID you used to book – no ID, no test",
+     "Arrive early; phones and watches are collected",
+     "Paper test: write in pencil for Listening and Reading",
+     "Use the last minutes to check spelling and word limits"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) A four-week plan"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Week 1 – one full practice test to find your weakest part; daily Listening (30 min)",
+     "Week 2 – Reading every day with a timer; one Task 1 and one Task 2 essay",
+     "Week 3 – Writing every other day; Speaking recordings daily; review your mistake list",
+     "Week 4 – two more full timed tests; rest the day before the exam"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Practise with the official Cambridge IELTS practice books or the free sample tests on the official IELTS website – they match the real test most closely."
+   },
+   {
+    "k": "h",
+    "v": "4) The five habits of high scorers"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "They answer the exact question asked",
+     "They check spelling and word limits",
+     "They always write an overview in Task 1",
+     "They speak in full answers with reasons and examples",
+     "They practise under real time limits"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Take the quiz below. Pass it and you get your XpertAcademy certificate."
+   }
+  ]
+ }
+}

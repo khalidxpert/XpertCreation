@@ -903,7 +903,7 @@ def course_review(request):
 
 # ------------------------------------------------------------------ badges
 
-LANG_SLUGS = ("korean", "japanese", "turkish", "german", "french", "alquran")
+LANG_SLUGS = ("korean", "japanese", "turkish", "german", "french", "norwegian", "alquran")
 
 
 def _badge_stats(user):
