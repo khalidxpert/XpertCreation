@@ -367,7 +367,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     h += '<div class="pm-sh"><h2>Choose a boost</h2><span>Prices in Pakistani rupees</span></div><div class="pm-tabs" role="tablist">'
       + GROUPS.filter(function(g){ return cnt[g[0]]; }).map(function(g){ return '<button type="button" role="tab" data-tab="' + g[0] + '" class="' + (TAB === g[0] ? 'on' : '') + '">' + g[2] + ' ' + esc(g[1]) + ' <em>' + cnt[g[0]] + '</em></button>'; }).join("") + '</div>';
     h += '<div class="pm-grid">' + D.catalog.map(card).join("") + '</div>';
-    if (ords.length) h += '<div class="pm-sh" id="pmorders"><h2>Your orders</h2><span>' + ords.length + (ords.length === 1 ? ' order' : ' orders') + '</span></div><div class="pm-olist">' + ords.map(orderRow).join("") + '</div>';
+    if (ords.length) h += '<div class="pm-sh" id="pmorders"><h2>Your orders</h2><a href="/orders" style="font-weight:800;font-size:13px;color:#1B4DFF;text-decoration:none;margin-left:auto;margin-right:10px">All orders &amp; payments \u2192</a><span>' + ords.length + (ords.length === 1 ? ' order' : ' orders') + '</span></div><div class="pm-olist">' + ords.map(orderRow).join("") + '</div>';
     h += '<div class="pm-sh"><h2>Questions</h2></div><div class="pm-faq">'
       + '<details><summary>Does it renew by itself?</summary><p>No. Every order is a single payment for the time you choose. When it ends, it simply stops; buy again only if you want more.</p></details>'
       + '<details><summary>When does my boost start?</summary><p>Right after your payment is confirmed. If the same item already has a boost running, the new one starts when the current one ends, so you never lose days.</p></details>'

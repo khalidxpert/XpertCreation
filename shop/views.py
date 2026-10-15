@@ -658,3 +658,18 @@ def _target(u, kind, tid):
         P = apps.get_model("store", "Product"); p = P.objects.filter(pk=tid, merchant__user=u, active=True, hidden=False).first()
         return (p.pk, p.title[:150]) if p else (None, "That product is not yours, or it is not live.")
     return _target_v5(u, kind, tid)
+
+
+# ---- setup_orders_v1: receipts show the real payment method for JazzCash and Google Play.
+_receipt_data_v5 = _receipt_data
+
+
+def _receipt_data(o):
+    d = _receipt_data_v5(o)
+    if o.provider == "jazzcash":
+        d["method"], d["test"] = "JazzCash / Raast (checked by our team)", False
+    elif o.provider == "googleplay":
+        d["method"], d["test"], d["reference"] = "Google Play", False, o.provider_ref
+    elif o.provider == "googleplay-test":
+        d["method"], d["test"] = "Google Play test purchase (no money taken)", True
+    return d

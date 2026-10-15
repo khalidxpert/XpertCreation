@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from .models import Entry
 
 REAL = "safepay-production"
+REALS = ("safepay-production", "jazzcash", "googleplay")   # setup_orders_v1
 GROUP = {"profile_boost": "Ads & boosts", "post_boost": "Ads & boosts", "featured_job": "Ads & boosts", "gig_boost": "Ads & boosts",
          "property_boost": "Ads & boosts", "product_boost": "Ads & boosts", "company_pro": "Company Pro", "blue_tick": "Blue tick checks",
          "merchant_gold": "Merchant plans", "merchant_platinum": "Merchant plans"}
@@ -55,10 +56,13 @@ def sync():
         except Exception:
             CATALOG = {}
         for o in SO.objects.filter(status__in=("paid", "refunded")).exclude(provider="").only("id", "product", "plan", "amount", "paid_at", "ends_at", "status", "provider", "user_id"):
-            t = o.provider != REAL
+            t = o.provider not in REALS
             name = CATALOG.get(o.product, {}).get("name", o.product)
             _put("shop:%d" % o.id, day=_d(o.paid_at), kind="income", source="shop", category=GROUP.get(o.product, "Other income"), amount=o.amount,
                  note="%s (%s), order %d" % (name, o.plan, o.id), test=t)
+            if o.provider == "googleplay":
+                _put("gpfee:%d" % o.id, day=_d(o.paid_at), kind="expense", source="shop", category="Payment gateway fees",
+                     amount=int(round(o.amount * 0.15)), note="Google Play fee (15 percent), order %d" % o.id, test=False)
             if o.status == "refunded":
                 _put("shop-refund:%d" % o.id, day=_d(o.ends_at), kind="expense", source="shop", category="Refunds", amount=o.amount, note="Refund of order %d" % o.id, test=t)
     MO = _model("market.Order")

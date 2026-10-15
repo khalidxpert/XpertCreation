@@ -145,7 +145,8 @@ def verify(request):
             log.warning("playbill: purchase %s for %s has no matching order", data.get("orderId"), sku)
             return Response({"detail": "We could not match this payment to an order. Contact support with Google order %s." % data.get("orderId", "")}, status=409)
         o.provider_ref = (data.get("orderId") or "")[:120]
-        o.save(update_fields=["provider_ref"])
+        o.provider = "googleplay-test" if str(data.get("purchaseType", "")) == "0" else "googleplay"   # setup_orders_v1: 0 = licence test
+        o.save(update_fields=["provider_ref", "provider"])
         _sv()._activate(o)
         pp.order, pp.gp_order, pp.state, pp.sku = o, (data.get("orderId") or "")[:80], "paid", sku
         pp.save()
