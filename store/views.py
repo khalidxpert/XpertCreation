@@ -819,7 +819,7 @@ def team(request):
     u = request.user
     if not _staff(u):
         return _err("Team only.", 403)
-    apps = [dict(_m(m, True), status=m.status, phone=m.phone, address=m.address, user=m.user.username, kyc=_kyc(m.user), note=m.note)
+    apps = [dict(_m(m, True), status=m.status, phone=m.phone, address=m.address, user=m.user.username, kyc=_kyc(m.user), biz=_biz(m.user), note=m.note)
             for m in Merchant.objects.filter(status__in=("pending",)).select_related("user")[:100]]
     shops = [dict(_m(m), status=m.status, user=m.user.username, live=m.products.filter(active=True).count())
              for m in Merchant.objects.exclude(status="pending").select_related("user").order_by("-id")[:200]]
@@ -843,6 +843,8 @@ def team_act(request, kind, pk):
             return _err("Not found.", 404)
         if act == "approve" and not _kyc(m.user):
             return _err("This member's ID is not verified yet.")
+        if act == "approve" and not _biz(m.user)["ok"]:
+            return _err("This member's business is not verified yet (company page approved + website file check).")
         m.status = {"approve": "approved", "reject": "rejected", "suspend": "suspended"}[act]; m.note = note; m.save(update_fields=["status", "note"])
         _notify(m.user, {"approved": "Your shop %s is approved. Add your products now!", "rejected": "Your shop application (%s) was not approved: " + note,
                          "suspended": "Your shop %s was suspended: " + note}[m.status].replace("%s", m.name, 1), "/store#seller")
@@ -877,7 +879,25 @@ def _profile_check(u):
             {"key": "email", "label": "a verified email", "ok": bool(getattr(u, "is_email_verified", True)), "link": "/account"},
             {"key": "phone", "label": "a phone or WhatsApp number", "ok": bool(getattr(u, "whatsapp", "") or getattr(u, "phone", "")), "link": "/account"},
             {"key": "photo", "label": "a profile picture", "ok": bool(getattr(u, "avatar", "")), "link": "/account"},
-            {"key": "kyc", "label": "an approved ID check (KYC)", "ok": _kyc(u), "link": "/get-verified"}]
+            {"key": "kyc", "label": "an approved ID check (KYC)", "ok": _kyc(u), "link": "/get-verified"},
+            {"key": "business", "label": "a verified business: company page approved by our team and its website checked with the verification file",
+             "ok": _biz(u)["ok"], "link": "/company/manage"}]
+
+
+def _biz(u):
+    """The member's best company page: documents approved by the team + website verified with the file."""
+    out = {"ok": False, "name": "", "approved": False, "website": False, "domain": ""}
+    try:
+        from companies.models import Company
+        cs = list(Company.objects.filter(owner=u, hidden=False))
+    except Exception:
+        return out
+    if not cs:
+        return out
+    c = sorted(cs, key=lambda c: (c.status == "approved" and bool(c.domain_verified_at), c.status == "approved", bool(c.domain_verified_at), c.id))[-1]
+    out.update(name=c.name, approved=c.status == "approved", website=bool(c.domain_verified_at), domain=c.domain or "")
+    out["ok"] = out["approved"] and out["website"]
+    return out
 
 
 # ---------------------------------------------------------------- inventory: stock, reorder level, purchases and sales, profit
