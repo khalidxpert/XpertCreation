@@ -176,7 +176,7 @@ def _out(o):
 @permission_classes([AllowAny])
 def shop(request):
     s = setting(); u = request.user
-    out = {"mode": s.mode, "catalog": _catalog(s), "staff": _staff(u), "can_buy": s.mode in ("live", "demo") or (s.mode == "test" and _staff(u))}
+    out = {"mode": s.mode, "catalog": _catalog(s), "staff": _staff(u), "can_buy": s.mode in ("live", "demo", "manual") or (s.mode == "test" and _staff(u))}
     if u.is_authenticated:
         out["orders"] = [_out(o) for o in Order.objects.filter(user=u).order_by("-id")[:50]]
     return Response(out)
@@ -242,7 +242,7 @@ def admin(request):
         return Response({"detail": "Staff only."}, status=403)
     s = setting()
     if request.method == "POST":
-        if request.data.get("mode") in ("off", "test", "demo", "live"):
+        if request.data.get("mode") in ("off", "test", "demo", "manual", "live"):
             if request.data["mode"] == "live" and not (sp_ready() and _sp()["env"] == "production"):
                 return Response({"detail": "Live needs Safepay production keys first (sandbox keys are for TEST mode)."}, status=400)
             s.mode = request.data["mode"]
@@ -394,7 +394,7 @@ def sp3_settle(o, wait=0):
 @_perm3([_IsAuth3])
 def order(request):
     s = setting(); u = request.user; d = request.data
-    if not (s.mode in ("live", "demo") or (s.mode == "test" and _staff(u))):
+    if not (s.mode in ("live", "demo", "manual") or (s.mode == "test" and _staff(u))):
         return _Resp3({"detail": "Paid items are not available yet."}, status=403)
     p, plan = d.get("product"), d.get("plan")
     if p not in CATALOG or plan not in CATALOG[p]["plans"]:
@@ -405,8 +405,8 @@ def order(request):
     if tid is None:
         return _Resp3({"detail": label}, status=400)
     o = Order.objects.create(user=u, product=p, plan=plan, target_id=tid, target_label=label[:160], amount=price(p, plan, s),
-                             provider="test" if s.mode == "test" else ("demo" if s.mode == "demo" else ""))
-    if sp_ready() and s.mode != "demo":
+                             provider="test" if s.mode == "test" else ("demo" if s.mode == "demo" else ("jazzcash" if s.mode == "manual" else "")))
+    if sp_ready() and s.mode not in ("demo", "manual"):
         try:
             tracker, url = sp3_start(o)
         except Exception as ex:
@@ -415,7 +415,7 @@ def order(request):
         o.provider, o.provider_ref = "safepay-" + _sp3()["env"], tracker
         o.save(update_fields=["provider", "provider_ref"])
         return _Resp3({"order": _out(o), "next": "gateway", "checkout": url}, status=201)
-    return _Resp3({"order": _out(o), "next": "simulate" if s.mode in ("test", "demo") else "gateway"}, status=201)
+    return _Resp3({"order": _out(o), "next": "simulate" if s.mode in ("test", "demo") else ("manual" if s.mode == "manual" else "gateway")}, status=201)
 
 
 @_csrf_exempt3
