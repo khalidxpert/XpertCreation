@@ -447,3 +447,29 @@ def start_thread(request):
 
     t = open_thread(context, ref_id, request.user, other)
     return Response({"id": t.id})
+
+
+# ---- edit / delete messages (setup_chatedit_v1): hidden-for-me messages leave the list, edits and deletes show ----
+_xs_msg0, _xs_visible0 = _msg, _visible
+
+
+def _visible(t, user):
+    qs = _xs_visible0(t, user)
+    try:
+        return qs.exclude(xs_hides__user=user).select_related("xs_state")
+    except Exception:
+        return qs
+
+
+def _msg(m, me):
+    d = _xs_msg0(m, me)
+    try:
+        st = m.xs_state
+    except Exception:
+        st = None
+    if st is not None:
+        if st.deleted_at:
+            d.update({"body": "", "image": "", "voice": None, "file": None, "pinned": False, "deleted": True})
+        elif st.edited_at:
+            d["edited"] = True
+    return d

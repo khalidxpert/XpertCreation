@@ -307,6 +307,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   function bubble(m){
     MSG3[m.id] = m;
     if (m.system) return '<div class="sys3">\u23F1 ' + esc(m.body) + '</div>';
+    if (m.deleted) return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + '" data-mid="' + m.id + '" data-xdel="1" style="opacity:.7"><div class="cb"><i>🚫 ' + (m.mine ? "You deleted this message" : "This message was deleted") + '</i></div><small>' + esc(m.when) + '</small></div>';
     var tick = m.mine ? ' <span class="tick3' + (m.id <= seenUpto ? ' seen' : '') + '" data-tick="' + m.id + '">'
       + (m.id <= seenUpto ? "\u2713\u2713" : "\u2713") + '</span>' : "";
     return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + (stk(m.body) ? " stkmsg" : "") + '" data-mid="' + m.id + '">'
@@ -315,7 +316,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
       + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="cimg" src="' + esc(m.image) + '" alt="Photo" loading="lazy"></a>' : '')
       + (stk(m.body) ? '<img class="stk3" src="/stickers/' + stk(m.body) + '.svg" alt="Sticker">'
                      : (m.body ? '<div class="cb">' + linkify(m.body) + '</div>' : ''))
-      + '<small>' + esc(m.when) + tick + '</small></div>';
+      + '<small>' + (m.edited ? '<span class="xed">edited \u00b7 </span>' : '') + esc(m.when) + tick + '</small></div>';
   }
   // ---- stickers and emoji ----
   var STICKERS = "salam jazakallah shukriya mubarak inshaallah mashaallah alhamdulillah ameen eid ramadan ok thanks congrats welcome goodnight haha".split(" ");
@@ -691,7 +692,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     if (bb3 && current && !e.target.closest("a") && !document.body.classList.contains("selmode") && !$("panel3")){
       var id3 = +bb3.getAttribute("data-mid"), isP = PINS3.some(function(p){ return p.id === id3; }), m3 = MSG3[id3] || {};
       panel("Message", '<div class="ct3" style="padding:0"><button class="pbt3" data-pin3="' + id3 + '">' + (isP ? "Unpin" : "\uD83D\uDCCC Pin") + '</button>'
-        + (m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-copy="' + esc(m3.body) + '">Copy text</button>' : '') + '<button class="pbt3 ghost" data-pclose>Cancel</button></div>');
+        + (m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-copy="' + esc(m3.body) + '">Copy text</button>' : '') + (m3.mine && !m3.deleted && m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-xedit="' + id3 + '">\u270F\uFE0F Edit</button>' : '') + (m3.deleted ? '' : '<button class="pbt3 ghost" data-xdelme="' + id3 + '">\uD83D\uDDD1 Delete for me</button>') + (m3.mine && !m3.deleted ? '<button class="pbt3 ghost" data-xdelall="' + id3 + '" style="color:#B91C1C">\uD83D\uDDD1 Delete for everyone</button>' : '') + '<button class="pbt3 ghost" data-pclose>Cancel</button></div>');
       return;
     }
     var pn3 = e.target.closest("[data-pin3]");
@@ -914,5 +915,6 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 })();
 </script>
 <script src="/js/xcbar-1.js?v=2" defer></script>
+<script src="/js/xchat-1.js" defer></script>
 </body>
 </html>

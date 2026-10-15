@@ -173,6 +173,13 @@ def view(request, uid):
     day = timezone.localdate()
     try:
         obj, made = ProfileView.objects.get_or_create(owner_id=uid, vkey=vkey, day=day, defaults={"viewer": viewer})
+        if made and viewer is not None:                  # bell notification (setup_chatedit_v1)
+            try:
+                from notifications.views import notify
+                _nm = (getattr(viewer, "full_name", "") or getattr(viewer, "username", "") or "Someone").strip()
+                notify(User.objects.get(pk=uid), "social", "\U0001F440 %s viewed your profile. See everyone who visited." % _nm, "/me/stats")
+            except Exception:
+                pass
         if not made:
             ProfileView.objects.filter(pk=obj.pk).update(n=obj.n + 1, last=timezone.now())
     except IntegrityError:

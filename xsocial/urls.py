@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, views2, views3
+from . import views, views2, views3, views4
 
 urlpatterns = [
     path("frames/", views.frames), path("frame/", views.frame),
@@ -14,5 +14,6 @@ urlpatterns = [
     path("events/", views3.events), path("events/<int:eid>/", views3.event), path("events/<int:eid>/<str:act>/", views3.event_act),
     path("articles/", views3.articles), path("articles/<int:aid>/", views3.article), path("articles/<int:aid>/<str:act>/", views3.article_act),
     path("subscribe/", views3.subscribe),
+    path("msg/states/", views4.msg_states), path("msg/<int:mid>/edit/", views4.msg_edit), path("msg/<int:mid>/delete/", views4.msg_delete),
     path("memories/", views.memories), path("celebrate/", views.celebrate), path("wish/", views.wish),
 ]

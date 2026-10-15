@@ -199,3 +199,20 @@ class Subscription(models.Model):
 
     class Meta:
         unique_together = [("reader", "writer")]
+
+
+# ---------------------------------------------------------------- chat: edit and delete messages
+class MsgState(models.Model):
+    """Edited / deleted-for-everyone mark on a one-to-one chat message."""
+    message = models.OneToOneField("notifications.ChatMessage", on_delete=models.CASCADE, related_name="xs_state")
+    edited_at = models.DateTimeField(null=True, blank=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+
+class MsgHide(models.Model):
+    """Deleted for me: hidden only for this person."""
+    message = models.ForeignKey("notifications.ChatMessage", on_delete=models.CASCADE, related_name="xs_hides")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+
+    class Meta:
+        unique_together = [("message", "user")]
