@@ -19,7 +19,10 @@ class PayAccount(models.Model):
 
 class PayProof(models.Model):
     PENDING, APPROVED, REJECTED = "pending", "approved", "rejected"
-    order = models.ForeignKey("shop.Order", on_delete=models.CASCADE, related_name="proofs")
+    KINDS = [("promote", "Promote"), ("freelance", "Freelance"), ("store", "Store")]
+    kind = models.CharField(max_length=10, choices=KINDS, default="promote", db_index=True)
+    ref = models.CharField(max_length=40, blank=True, default="", db_index=True)   # Promote/Freelance: order id; Store: the cart group
+    order = models.ForeignKey("shop.Order", on_delete=models.CASCADE, related_name="proofs", null=True, blank=True)   # Promote only
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
     amount = models.PositiveIntegerField()
     txn = models.CharField(max_length=40)

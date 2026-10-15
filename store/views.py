@@ -102,7 +102,7 @@ def _mode():
 
 def _can_pay_online(u):
     m = _mode()
-    return m == "live" or (m == "test" and _staff(u))
+    return m in ("live", "manual") or (m == "test" and _staff(u))
 
 
 # ---------------------------------------------------------------- tiers
@@ -564,6 +564,9 @@ def _start_pay(os_, u):
     sv = _shop()
     if not _can_pay_online(u):
         return None, "Online payment is not switched on yet. Choose cash on delivery."
+    if _mode() == "manual":                       # JazzCash / Raast for the whole cart
+        Order.objects.filter(pk__in=[x.pk for x in os_]).update(provider="jazzcash")
+        return {"manual": True, "kind": "store", "ref": o.group, "amount": total}, None
     if sv.sp_ready():
         c = sv._sp3()
         try:

@@ -26,12 +26,12 @@
       if (!d){ box.innerHTML = ""; return; }
       var a = d.account;
       box.innerHTML = '<h2>💳 JazzCash / Raast payments' + (d.waiting ? ' <span class="tag">' + d.waiting + ' to check</span>' : '') + '</h2>'
-        + '<p class="s">Set the payments mode to <b>MANUAL</b> above so everyone can buy and pay by JazzCash. Check each payment in the JazzCash Business app (amount and TID), then approve. Approving switches the item on and emails the receipt.</p>'
+        + '<p class="s">Set the payments mode to <b>MANUAL</b> above so everyone can pay by JazzCash for Promote, Freelance and Store orders. Check each payment in the JazzCash Business app (amount and TID), then approve. Approving switches the item on and emails the receipt.</p>'
         + '<div class="tabs">' + [["pending", "To check"], ["approved", "Approved"], ["rejected", "Rejected"]].map(function(t){ return '<button data-t="' + t[0] + '" class="' + (TAB === t[0] ? "on" : "") + '">' + t[1] + '</button>'; }).join("") + '</div>'
         + (d.proofs.length ? d.proofs.map(function(p){
           return '<div class="c">' + (p.has_file ? '<a href="/api/payproof/file/' + p.id + '/" target="_blank"><img src="/api/payproof/file/' + p.id + '/" alt="screenshot" onerror="this.style.display=\'none\'"></a>' : '<div></div>')
             + '<div><b class="a">' + rs(p.amount) + '</b> <span class="tag ' + p.status + '">' + p.status + '</span>' + (p.amount !== p.order_amount ? ' <span class="tag rejected">order is ' + rs(p.order_amount) + '</span>' : '')
-            + '<small><b>TID ' + esc(p.txn) + '</b>' + (p.sender ? ' · from ' + esc(p.sender) : '') + '</small><small>Order ' + p.order + ' · ' + esc(p.item) + (p["for"] ? ' · for ' + esc(p["for"]) : '') + '</small>'
+            + '<small><b>TID ' + esc(p.txn) + '</b>' + (p.sender ? ' · from ' + esc(p.sender) : '') + '</small><small>' + (p.kind === "promote" || !p.kind ? 'Promote order ' : '') + esc(p.order) + ' · ' + esc(p.item) + (p["for"] ? ' · for ' + esc(p["for"]) : '') + '</small>'
             + '<small>' + esc(p.user) + ' · ' + esc(p.email) + ' · ' + new Date(p.when).toLocaleString("en-PK") + '</small>' + (p.reason ? '<small>Reason: ' + esc(p.reason) + '</small>' : '')
             + (p.status === "pending" ? '<div class="bt"><button class="ok" data-ok="' + p.id + '">✓ Approve</button><button class="no" data-no="' + p.id + '">Reject</button></div>' : '') + '</div></div>'; }).join("")
           : '<p class="s">Nothing here.</p>')

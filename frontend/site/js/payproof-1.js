@@ -105,7 +105,7 @@
       if (MODE !== "manual" || APP) { paint(); return; }
       return Promise.all([fetch("/api/payproof/info/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }),
                           fetch("/api/payproof/mine/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; })]).then(function(x){
-        ACCT = x[0]; ((x[1] && x[1].proofs) || []).forEach(function(p){ if (!PROOFS[p.order] || PROOFS[p.order].id < p.id) PROOFS[p.order] = p; });
+        ACCT = x[0]; ((x[1] && x[1].proofs) || []).forEach(function(p){ if (p.kind && p.kind !== "promote") return; if (!PROOFS[p.order] || PROOFS[p.order].id < p.id) PROOFS[p.order] = p; });
         paint();
       });
     }).catch(function(){});

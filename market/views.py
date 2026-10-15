@@ -125,7 +125,7 @@ def _mode():
 
 def _can_buy(u):
     m = _mode()
-    return m == "live" or (m == "test" and _staff(u))
+    return m in ("live", "manual") or (m == "test" and _staff(u))
 
 
 def _balance(u):
@@ -529,6 +529,9 @@ def _start_pay(o, u):
     sv = _shop()
     if not _can_buy(u):
         return None, "Payments are not switched on yet."
+    if _mode() == "manual":                       # JazzCash / Raast: the buyer pays, sends the TID, the team approves
+        o.provider = "jazzcash"; o.save(update_fields=["provider"])
+        return {"manual": True, "kind": "freelance", "ref": str(o.id), "amount": o.amount}, None
     if sv.sp_ready():
         c = sv._sp3()
         try:
@@ -1448,6 +1451,13 @@ def tick():
     for o in Order.objects.filter(status="pending", created_at__lt=now - timedelta(hours=PENDING_HOURS))[:200]:
         if o.provider.startswith("safepay-") and _settle(o):
             continue
+        if o.provider == "jazzcash":
+            try:
+                from payproof.models import PayProof
+                if PayProof.objects.filter(kind="freelance", ref=str(o.id), status="pending").exists():
+                    continue                     # the team is checking the payment
+            except Exception:
+                pass
         Order.objects.filter(pk=o.pk, status="pending").update(status="cancelled"); n["unpaid"] += 1
         CustomOffer.objects.filter(order=o, status="accepted").update(status="expired")
     return n

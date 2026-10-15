@@ -442,7 +442,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (!M.me) h += '<a class="st-btn o block" style="margin-top:12px" href="/login?next=' + encodeURIComponent("/store#cart") + '">Sign in to check out</a>';
       else h += '<label for="cn">Full name</label><input id="cn" value="' + esc(M.me.name) + '"><label for="cp">Phone</label><input id="cp" value="' + esc(M.me.phone) + '" inputmode="tel"><label for="ca">Full address</label><input id="ca" placeholder="House, street, area"><label for="cc">City</label><input id="cc"><label for="cnote">Note for the shop (optional)</label><input id="cnote">'
         + '<label>Payment</label><div class="st-pay"><label class="' + (allCod ? (pay === "cod" ? "on" : "") : "off") + '"><input type="radio" name="pay" value="cod"' + (pay === "cod" ? " checked" : "") + (allCod ? "" : " disabled") + '>&#128181;<span>Cash on delivery<small>' + (allCod ? 'Pay the rider when it arrives' : 'Not available for every item in your cart') + '</small></span></label>'
-        + '<label class="' + (allOn && M.me.can_pay_online ? (pay === "online" ? "on" : "") : "off") + '"><input type="radio" name="pay" value="online"' + (pay === "online" ? " checked" : "") + (allOn && M.me.can_pay_online ? "" : " disabled") + '>&#128179;<span>Card or wallet (Safepay)<small>' + (!allOn ? 'Not available for every item in your cart' : M.me.can_pay_online ? 'One payment for the whole cart, held until you receive it' : 'Opening soon') + '</small></span></label></div>'
+        + '<label class="' + (allOn && M.me.can_pay_online ? (pay === "online" ? "on" : "") : "off") + '"><input type="radio" name="pay" value="online"' + (pay === "online" ? " checked" : "") + (allOn && M.me.can_pay_online ? "" : " disabled") + '>&#128179;<span>' + (M.mode === "manual" ? "JazzCash, EasyPaisa or any bank app" : "Card or wallet (Safepay)") + '<small>' + (!allOn ? 'Not available for every item in your cart' : M.me.can_pay_online ? 'One payment for the whole cart, held until you receive it' : 'Opening soon') + '</small></span></label></div>'
         + '<button class="st-btn o block" id="cgo" style="margin-top:12px"' + (allCod || (allOn && M.me.can_pay_online) ? '' : ' disabled') + '>Place order &middot; ' + rs(sub + del) + '</button><div id="cmsg"></div>';
       h += '<p style="font-size:12px;color:var(--soft)">One order is made per shop. <a href="/refund-policy">Refunds</a> &middot; <a href="/terms-of-sale">Terms</a></p></div></div></div>';
       box.innerHTML = h;
@@ -460,6 +460,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
           if (!r.ok){ $("cmsg").innerHTML = msg(esc(r.d.detail || "Could not place the order."), "bad"); return; }
           CART = []; saveCart();
           if (r.d.checkout){ location.href = r.d.checkout; return; }
+          if (r.d.manual && window.XCJazz){ location.hash = "#orders"; XCJazz.open("store", r.d.ref || r.d.group, function(){ try { window.dispatchEvent(new HashChangeEvent("hashchange")); } catch (e){ location.reload(); } }); return; }
           if (r.d.simulate){ api("orders/" + r.d.orders[0].id + "/simulate/", {}).then(function(){ location.hash = "#orders"; flash("Test payment done. Your order is placed.", "ok"); }); return; }
           location.hash = "#orders"; flash("&#10004; Order placed! The shop will confirm it soon.", "ok");
         });
@@ -519,7 +520,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (a === "received" && !confirm("Did you receive everything in good condition?")) return;
       b.disabled = true;
       api("orders/" + id + "/" + a + "/", body).then(function(x){ b.disabled = false;
-        if (a === "pay" && x.ok){ if (x.d.checkout) location.href = x.d.checkout; else if (x.d.simulate) api("orders/" + id + "/simulate/", {}).then(again); return; }
+        if (a === "pay" && x.ok){ if (x.d.manual && window.XCJazz) XCJazz.open("store", x.d.ref, again); else if (x.d.checkout) location.href = x.d.checkout; else if (x.d.simulate) api("orders/" + id + "/simulate/", {}).then(again); return; }
         if (x.ok) again(); else $("oam").innerHTML = msg(esc(x.d.detail || "Could not do that."), "bad"); });
     };
   }
@@ -863,5 +864,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 </footer>
 
 <script src="/js/share-1.js?v=22" defer></script>
+<script src="/js/qrgen-1.js"></script>
+<script src="/js/jcpay-1.js" defer></script>
 </body>
 </html>
