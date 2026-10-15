@@ -138,3 +138,55 @@ def on_user_delete(sender, instance, using=None, **kw):
                 pass
         log.warning("Account %s deleted: %d files and %d folders removed", user.pk, n, len(dirs))
     transaction.on_commit(remove, using=using or "default")
+
+
+# ---- keep the other side's order history (setup_secure_v1) ----
+def placeholder(tag=""):
+    """A locked 'Deleted member' account that keeps finished orders for the other side (no email, no password, can't sign in)."""
+    from django.contrib.auth import get_user_model
+    U = get_user_model()
+    email = "deleted-member%s@xpertcreation.invalid" % (("-" + tag) if tag else "")
+    u = U.objects.filter(email=email).first()
+    if u:
+        return u
+    fields = {f.name for f in U._meta.get_fields()}
+    kw = {}
+    if "full_name" in fields:
+        kw["full_name"] = "Deleted member"
+    if "username" in fields:
+        kw["username"] = ("deleted-" + (tag or "member"))[:20]
+    u = U(email=email, **kw) if "email" in fields else U(**kw)
+    u.set_unusable_password()
+    u.is_active = False
+    u.save()
+    return u
+
+
+def handover(user):
+    """Before an account is deleted: finished Freelance and Store orders stay for the seller / buyer, under 'Deleted member'.
+    The deleted person's name, phone and address are wiped from those orders."""
+    ph = None
+    try:
+        from market.models import Order as MO
+        q1 = MO.objects.filter(buyer=user).exclude(status="pending")
+        q2 = MO.objects.filter(seller=user).exclude(status="pending")
+        if q1.exists() or q2.exists():
+            ph = ph or placeholder()
+            q1.update(buyer=ph)
+            q2.update(seller=ph)
+    except Exception:
+        log.exception("handover freelance")
+    try:
+        from store.models import Order as SO, Review as SR, Merchant, Product
+        q = SO.objects.filter(buyer=user).exclude(status="pending")
+        if q.exists():
+            ph = ph or placeholder()
+            q.update(buyer=ph, name="Deleted member", phone="", address="", note="")
+            SR.objects.filter(buyer=user).update(buyer=ph)
+        m = Merchant.objects.filter(user=user).first()
+        if m and SO.objects.filter(merchant=m).exclude(status="pending").exists():
+            Product.objects.filter(merchant=m).update(active=False)            # the shop closes, its orders stay for the buyers
+            Merchant.objects.filter(pk=m.pk).update(user=placeholder("shop-%d" % m.pk), status="suspended", phone="", address="",
+                                                    note="Owner deleted their account")
+    except Exception:
+        log.exception("handover store")

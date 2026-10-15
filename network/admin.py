@@ -35,6 +35,12 @@ class FollowAdmin(admin.ModelAdmin):
 def approve(modeladmin, request, queryset):
     now = timezone.now()
     for r in queryset.filter(state=VerificationRequest.PENDING).select_related("profile", "profile__user"):
+        try:                                       # the blue tick is paid (setup_secure_v1)
+            from kyctick.logic import tick_paid
+            if not tick_paid(r.profile.user):
+                continue
+        except Exception:
+            pass
         r.state, r.decided_at, r.decided_by = VerificationRequest.APPROVED, now, request.user
         r.save(update_fields=["state", "decided_at", "decided_by"])
         p = r.profile

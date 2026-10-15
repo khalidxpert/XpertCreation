@@ -224,7 +224,7 @@ def _full(p, viewer):
     if is_me:
         pending = VerificationRequest.objects.filter(profile=p, state=VerificationRequest.PENDING).exists()
         out["tick"] = {"needed": TICK_FOLLOWERS, "pending": pending,
-                       "can_apply": (not _ticked(p)) and (not pending) and followers >= TICK_FOLLOWERS}
+                       "can_apply": False}
         out["requests"] = Connection.objects.filter(to_user=u, state=Connection.PENDING).count()
     return out
 
@@ -457,6 +457,7 @@ def request_respond(request, pk, action):
 @throttle_classes([EditThrottle])
 def tick_apply(request):
     p = _get_or_make(request.user)
+    return _err("The blue tick is a paid badge: get it on xpertcreation.com/promote (your ID must be verified too).", 403)
     if _ticked(p):
         return _err("You already have the blue tick.")
     if VerificationRequest.objects.filter(profile=p, state=VerificationRequest.PENDING).exists():

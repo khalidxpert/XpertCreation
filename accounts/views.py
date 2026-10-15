@@ -324,6 +324,11 @@ def delete_account(request):
         why = []
     if why:
         return _err("Please finish these first: " + " ".join(why), first=why)
+    try:                                           # finished orders stay for the other side (setup_secure_v1)
+        from datakeep.cleanup import handover
+        handover(request.user)
+    except Exception:
+        log.exception("order handover")
 
     email = request.user.email
     log.warning("Account deleted: %s from %s", email, client_ip(request))

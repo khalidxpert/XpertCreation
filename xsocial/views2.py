@@ -120,7 +120,7 @@ def _send_code(user, code):
 def need_code(user, request):
     """Called by the sign-in view after the password is right. Returns a ticket when a code is needed, else None."""
     t = TwoStep.objects.filter(user=user, on=True).first()
-    if not t:
+    if not t and not (user.is_staff or user.is_superuser or getattr(user, "is_moderator", False)):   # the team: always
         return None
     code = "%06d" % secrets.randbelow(1000000)
     tk = LoginTicket.objects.create(user=user, token=secrets.token_urlsafe(24), code_hash=_hash(code),

@@ -376,3 +376,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 # login, when it calls back to confirm a link.
 DISCORD_BOT_SECRET = env("XC_DISCORD_BOT_SECRET", "")
 TELEGRAM_BOT_SECRET = env("XC_TELEGRAM_BOT_SECRET", "")
+
+
+# ---- security hardening (setup_secure_v1) ----
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True

@@ -7,6 +7,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path("admin/login/", __import__("django.views.generic", fromlist=["RedirectView"]).RedirectView.as_view(url="/login?next=/admin/")),   # sign in with the code first
     path("admin/", admin.site.urls),
     path("api/auth/", include("accounts.urls")),
     path("api/academy/", include("academy.urls")),
