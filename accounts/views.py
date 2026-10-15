@@ -308,6 +308,13 @@ def delete_account(request):
 
     if request.data.get("confirm") != "DELETE":
         return _err("Type DELETE to confirm.")
+    try:
+        from datakeep.checks import blockers
+        why = blockers(request.user)
+    except Exception:
+        why = []
+    if why:
+        return _err("Please finish these first: " + " ".join(why), first=why)
 
     email = request.user.email
     log.warning("Account deleted: %s from %s", email, client_ip(request))
