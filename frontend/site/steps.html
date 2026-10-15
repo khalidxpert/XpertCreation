@@ -164,7 +164,16 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
 
 <div class="wrap" style="max-width:720px">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<style>
+.sc-me{width:40px;height:40px;position:relative}
+.sc-me b{position:absolute;left:12px;top:12px;width:16px;height:16px;border-radius:50%;background:#1B4DFF;border:3px solid #fff;box-shadow:0 0 0 6px rgba(27,77,255,.18),0 2px 6px rgba(0,0,0,.3)}
+.sc-me i{position:absolute;left:8px;top:-8px;width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:28px solid rgba(27,77,255,.38);opacity:0;transition:opacity .3s}
+.sc-mbtns{position:absolute;right:10px;bottom:30px;z-index:2;display:flex;flex-direction:column;gap:8px}
+.sc-mbtns button{width:42px;height:42px;border-radius:50%;border:0;background:#fff;color:#0D1424;box-shadow:0 2px 8px rgba(0,0,0,.25);font-size:19px;cursor:pointer;line-height:1}
+.sc-mbtns button.off{opacity:.45}
+#scmap{height:380px}
+</style>
 <style>
 .sc-h{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .sc-h h1{flex:1;min-width:200px}
@@ -215,6 +224,30 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .sc-signin{font-size:13px;padding:10px 12px;border-radius:12px;background:#FEF3C7;color:#78350F;margin-bottom:12px}
 [hidden]{display:none!important}
 </style>
+<style>
+.sc-dhd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.sc-streak{background:#FFF7ED;color:#C2410C;font-weight:800;font-size:13px;padding:5px 10px;border-radius:99px;white-space:nowrap}
+.sc-streak small{font-weight:600;margin-left:6px;color:#9A3412}
+.sc-hours{display:flex;align-items:flex-end;gap:2px;height:70px;border-bottom:1px solid var(--line)}
+.sc-hours div{flex:1;height:100%;display:flex;align-items:flex-end;border-radius:3px}
+.sc-hours i{display:block;width:100%;background:#1B4DFF;border-radius:3px 3px 0 0}
+.sc-hours .now{background:rgba(27,77,255,.07)}
+.sc-hl{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-soft);margin:3px 0 8px}
+.sc-tl div{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}
+.sc-tl .tm{width:64px;font-size:12px;font-weight:800;color:var(--ink);flex:0 0 auto}.sc-tl .tm small{display:block;font-weight:500;color:var(--ink-soft)}
+.sc-tl .ic{width:32px;height:32px;border-radius:10px;background:var(--paper);display:grid;place-items:center;flex:0 0 auto}
+.sc-tl .t{font-size:12px;color:var(--ink-soft)}.sc-tl .t b{display:block;color:var(--ink);font-size:14px}
+.sc-tl .live .tm{color:#16A34A}
+.sc-goalrow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;font-size:13px;color:var(--ink-soft)}
+.sc-goalrow b{color:var(--ink)}.sc-goalrow button{padding:8px 12px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:13px;white-space:nowrap}
+.sc-gshare{margin-top:10px;padding:12px;border-radius:14px;background:#F0FDF4;border:1.5px solid #86EFAC;display:flex;flex-wrap:wrap;gap:6px}
+.sc-gshare .hd{width:100%;font-weight:800;color:#166534;margin-bottom:2px}
+.sc-gshare a,.sc-gshare button{padding:8px 12px;border-radius:10px;font-weight:700;font-size:13px;color:#fff;border:0;text-decoration:none;cursor:pointer}
+.sc-gshare .xc{background:#1B4DFF}.sc-gshare .wa{background:#25D366}.sc-gshare .fb{background:#1877F2}.sc-gshare .xx{background:#0D1424}
+.sc-gshare #scsharemore{background:#64748B}.sc-gshare button:disabled{opacity:.6}.sc-gshare .sc-msg{width:100%}
+.sc-days div{display:grid;grid-template-columns:1fr auto;gap:0 10px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:13px}
+.sc-days b{text-align:right;font-size:15px}.sc-days small{grid-column:1/-1;color:var(--ink-soft);font-size:11.5px}.sc-days .met b{color:#16A34A}
+</style>
 
 <div class="sc-h"><h1>Step counter</h1></div>
 <p class="lead" style="margin:-6px 0 14px">Counts your steps with the phone's motion sensor and draws your walk live on the map: distance, time, pace and calories. Your walks are saved to your account.</p>
@@ -229,6 +262,15 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     <div>Today<b id="sctdist">0 km</b></div><div>Calories<b id="sctkcal">0</b></div>
     <div>Active time<b id="sctmin">0 min</b></div><div>This week<b id="scwk">0</b></div>
   </div>
+</div>
+
+<div class="sc-card sc-day">
+  <div class="sc-dhd"><b>Today, hour by hour</b><span class="sc-streak" id="scstreak">&#128293; 0-day streak</span></div>
+  <div class="sc-hours" id="schours"></div>
+  <div class="sc-hl"><span>12 am</span><span>6 am</span><span>12 pm</span><span>6 pm</span><span>12 am</span></div>
+  <div class="sc-tl" id="sctl"></div>
+  <div class="sc-goalrow"><span id="scgoalmsg"></span><button type="button" id="scgoalset">&#127919; Set goal</button></div>
+  <div class="sc-gshare" id="scgoalshare" hidden></div>
 </div>
 
 <div class="sc-card">
@@ -246,9 +288,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
 <div id="scdone" class="sc-card sc-done" hidden></div>
 
-<div class="sc-tabs" id="sctabs"><button data-t="week" class="on">This week</button><button data-t="list">My walks</button><button data-t="set">Settings</button></div>
+<div class="sc-tabs" id="sctabs"><button data-t="week" class="on">This week</button><button data-t="list">My walks</button><button data-t="days">Daily totals</button><button data-t="set">Settings</button></div>
 <div class="sc-card" id="tweek"><b style="font-size:14px">Steps per day</b><div class="sc-week" id="scweek"></div><p class="sc-note" id="scweeknote"></p></div>
 <div class="sc-card sc-list" id="tlist" hidden><div id="sclist"></div></div>
+<div class="sc-card sc-days" id="tdays" hidden><div id="scdays"></div></div>
 <div class="sc-card sc-set" id="tset" hidden>
   <label for="sggoal">Daily goal (steps)</label><input id="sggoal" type="number" inputmode="numeric" min="500" max="100000" step="500">
   <div class="row3"><div><label for="sgh">Height (cm)</label><input id="sgh" type="number" inputmode="numeric" min="90" max="230"></div>
@@ -259,7 +302,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <div id="sgmsg" class="sc-msg" hidden></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="/js/share-result-1.js?v=2" defer></script>
 <script>
 (function(){
@@ -296,23 +339,84 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       d.steps += w.steps; d.dist_m += w.dist_m; d.kcal += w.kcal; d.secs += w.secs; });
   }
 
-  // ---------- map
-  var map = null, line = null, dot = null, viewLine = null;
+  // ---------- map (MapLibre: modern street map that turns with you, like Google Maps / Uber)
+  var STYLE = "https://tiles.openfreemap.org/styles/liberty";
+  var map = null, dot = null, mapReady = false, pendingView = null;
+  var follow = true, headUp = true, heading = null;
+  function geo(path){ return {type: "Feature", properties: {}, geometry: {type: "LineString", coordinates: (path || []).map(function(p){ return [p[1], p[0]]; })}}; }
+  function setLine(id, path){ if (id === "view" && !mapReady) pendingView = path; if (!map || !mapReady || !map.getSource(id)) return; map.getSource(id).setData(geo(path)); }
+  function bearing(a, b){ var r = Math.PI / 180, y = Math.sin((b[1] - a[1]) * r) * Math.cos(b[0] * r),
+    x = Math.cos(a[0] * r) * Math.sin(b[0] * r) - Math.sin(a[0] * r) * Math.cos(b[0] * r) * Math.cos((b[1] - a[1]) * r);
+    return (Math.atan2(y, x) / r + 360) % 360; }
+  function setHeading(h){
+    if (h == null || isNaN(h)) return;
+    if (heading == null) heading = h; else { var d = ((h - heading + 540) % 360) - 180; heading = (heading + d * 0.35 + 360) % 360; }
+    if (dot) dot.setRotation(heading);
+    var cone = document.getElementById("sccone"); if (cone) cone.style.opacity = 1;
+  }
+  function cam(ll, z){
+    if (!map || !follow) return;
+    var o = {center: [ll[1], ll[0]], duration: 900};
+    if (z) o.zoom = z;
+    if (headUp && heading != null && run) o.bearing = heading;
+    map.easeTo(o);
+  }
+  function mapBtns(){
+    var w = document.createElement("div"); w.className = "sc-mbtns";
+    w.innerHTML = '<button type="button" id="scfollow" title="Back to my position">&#9678;</button><button type="button" id="schead" title="Map turns with me / north up">&#129517;</button>';
+    $("scmap").appendChild(w);
+    $("scfollow").onclick = function(){ follow = true; if (dot){ var p = dot.getLngLat(); cam([p.lat, p.lng], Math.max(map.getZoom(), 16)); } };
+    $("schead").onclick = function(){ headUp = !headUp; this.classList.toggle("off", !headUp); if (!headUp) map.easeTo({bearing: 0, duration: 600}); else if (dot){ var p = dot.getLngLat(); cam([p.lat, p.lng]); } };
+  }
   function initMap(){
-    if (!window.L){ $("scnomap").textContent = "The map could not load. Steps, distance and time still work."; return; }
-    $("scnomap").remove();
-    map = L.map("scmap", {zoomControl: true, attributionControl: true}).setView([30.3753, 69.3451], 5);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, subdomains: "abc",
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
-    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
-    line = L.polyline([], {color: "#1B4DFF", weight: 5, opacity: .9}).addTo(map);
+    if (!window.maplibregl){ $("scnomap").textContent = "The map could not load. Steps, distance and time still work."; return; }
+    try {
+      map = new maplibregl.Map({container: "scmap", style: STYLE, center: [69.3451, 30.3753], zoom: 4.6, attributionControl: {compact: true}, dragRotate: true, pitchWithRotate: false});
+    } catch (e){ map = null; $("scnomap").textContent = "The map could not load on this phone. Steps, distance and time still work."; return; }
+    var nm = $("scnomap"); if (nm) nm.remove();
+    map.addControl(new maplibregl.NavigationControl({showCompass: true, visualizePitch: false}), "top-left");
+    map.on("load", function(){
+      var lay = {"line-cap": "round", "line-join": "round"};
+      map.addSource("walk", {type: "geojson", data: geo([])});
+      map.addLayer({id: "walk-casing", type: "line", source: "walk", layout: lay, paint: {"line-color": "#ffffff", "line-width": 9}});
+      map.addLayer({id: "walk", type: "line", source: "walk", layout: lay, paint: {"line-color": "#1B4DFF", "line-width": 6}});
+      map.addSource("view", {type: "geojson", data: geo([])});
+      map.addLayer({id: "view", type: "line", source: "view", layout: lay, paint: {"line-color": "#16A34A", "line-width": 6}});
+      mapReady = true;
+      if (run && run.path && run.path.length) setLine("walk", run.path);
+      if (pendingView){ setLine("view", pendingView); pendingView = null; }
+    });
+    map.on("dragstart", function(){ follow = false; });
+    mapBtns();
     if (navigator.geolocation) navigator.geolocation.getCurrentPosition(function(p){
-      if (!run) map.setView([p.coords.latitude, p.coords.longitude], 16); }, function(){}, {enableHighAccuracy: true, timeout: 10000, maximumAge: 60000});
+      showDot([p.coords.latitude, p.coords.longitude]);
+      if (!run) map.jumpTo({center: [p.coords.longitude, p.coords.latitude], zoom: 16}); }, function(){}, {enableHighAccuracy: true, timeout: 10000, maximumAge: 60000});
   }
   function showDot(ll, acc){
     if (!map) return;
-    if (!dot){ dot = L.circleMarker(ll, {radius: 8, color: "#fff", weight: 3, fillColor: "#1B4DFF", fillOpacity: 1}).addTo(map); }
-    else dot.setLatLng(ll);
+    if (!dot){
+      var el = document.createElement("div"); el.className = "sc-me";
+      el.innerHTML = '<i id="sccone"></i><b></b>';
+      dot = new maplibregl.Marker({element: el, rotationAlignment: "map", pitchAlignment: "map"}).setLngLat([ll[1], ll[0]]).addTo(map);
+      if (heading != null) dot.setRotation(heading);
+    } else dot.setLngLat([ll[1], ll[0]]);
+  }
+  // compass: points the cone (and turns the map) the way the phone faces while standing still
+  var compassOn = false;
+  var lastC = 0;
+  function onCompass(e){
+    var nowC = Date.now(); if (nowC - lastC < 250) return; lastC = nowC;
+    var h = e.webkitCompassHeading != null ? e.webkitCompassHeading : (e.absolute && e.alpha != null ? 360 - e.alpha : null);
+    if (h == null) return;
+    var moving = run && run.lastFix && (Date.now() - run.lastFix) < 4000;
+    if (!moving){ setHeading(h); if (run && !run.paused && follow && headUp && map && dot){ var p = dot.getLngLat(); map.easeTo({bearing: heading, center: [p.lng, p.lat], duration: 300}); } }
+  }
+  function compass(){
+    if (compassOn) return; compassOn = true;
+    var add = function(){ window.addEventListener("deviceorientationabsolute", onCompass); window.addEventListener("deviceorientation", onCompass); };
+    if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === "function")
+      DeviceOrientationEvent.requestPermission().then(function(s){ if (s === "granted") add(); }).catch(function(){});
+    else add();
   }
 
   // ---------- the running walk
@@ -357,12 +461,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (c.accuracy > 35){ say("Waiting for a clearer GPS signal (±" + Math.round(c.accuracy) + " m)…"); return; }
     say("");
     var last = run.path[run.path.length - 1], t = p.timestamp || Date.now();
-    if (!last){ run.path.push(ll); run.lastFix = t; if (map) { line.setLatLngs(run.path); map.setView(ll, 17); } save(); return; }
+    if (!last){ run.path.push(ll); run.lastFix = t; setLine("walk", run.path); cam(ll, 17); save(); return; }
     var d = hav(last, ll), dt = Math.max(1, (t - (run.lastFix || t)) / 1000), maxV = run.kind === "cycle" ? 25 : run.kind === "run" ? 9 : 4;
     if (d < Math.max(4, c.accuracy * 0.5)) return;          // standing still: GPS wobble, not movement
     if (d / dt > maxV * 1.6) return;                         // a jump no walker could make: bad fix
+    setHeading(c.speed > 0.6 && c.heading != null && !isNaN(c.heading) ? c.heading : bearing(last, ll));
     run.dist_m += d; run.path.push(ll); run.lastFix = t;
-    if (map){ line.addLatLng(ll); map.panTo(ll, {animate: true}); }
+    setLine("walk", run.path); cam(ll);
   }
   var note = "";   // a lasting note (no motion sensor) shown whenever there is no newer message
   function say(t, bad){ t = t || note; var m = $("sclivemsg"); m.hidden = !t; m.textContent = t; m.className = "sc-msg" + (bad ? " bad" : ""); }
@@ -389,7 +494,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         note = run.kind !== "cycle" && !run.sensor ? "No motion sensor found, so steps are worked out from the distance you cover." : ""; say("");
       }, 3000);
     });
-    if (map && run.path.length) line.setLatLngs(run.path);
+    if (resume) setLine("walk", run.path); else { setLine("walk", []); setLine("view", []); }
+    follow = true; heading = null; held = 0; lastStep = 0; above = false; mag = 9.8; avg = 9.8; compass();
     watchId = navigator.geolocation.watchPosition(onPos, function(e){
       say(e.code === 1 ? "Location is blocked. Allow location for this site in your browser settings, then tap Start again." : "Looking for GPS…", e.code === 1);
     }, {enableHighAccuracy: true, maximumAge: 0, timeout: 20000});
@@ -420,7 +526,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var w = {kind: run.kind, started_at: run.started_at, day: run.day, secs: Math.round(run.secs), steps: steps(),
       steps_est: !run.sensor && run.kind !== "cycle", dist_m: Math.round(run.dist_m), path: run.path};
     w.kcal = kcalFor(w.kind, w.dist_m);
-    run = null; note = ""; ls("xc_steps_live", null);
+    run = null; note = ""; ls("xc_steps_live", null); if (map) map.easeTo({bearing: 0, duration: 600});
     $("scidle").hidden = false; $("scrun").hidden = true; say("");
     if (w.secs < 20 && w.dist_m < 20 && w.steps < 20){ say("That was too short to save."); draw(); return; }
     keep(w); done(w); draw();
@@ -477,19 +583,101 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + " · " + clock(w.secs) + (w.pending ? " · not sent yet" : "") + '</span><span class="del" data-del="' + i + '">Delete</span></a>';
     }).join("");
     $("sclist").innerHTML = L2 || '<p class="sc-note">No walks yet. Tap Start and go for a walk.</p>';
+    dayExtras(st);
   }
   function showWalk(w){
     var put = function(path){
       if (!map || !path || !path.length) return;
-      if (viewLine) viewLine.remove();
-      viewLine = L.polyline(path, {color: "#16A34A", weight: 5}).addTo(map);
-      map.fitBounds(viewLine.getBounds(), {padding: [24, 24]});
+      setLine("view", path); setLine("walk", []);
+      var lo = [180, 90], hi = [-180, -90];
+      path.forEach(function(p){ lo[0] = Math.min(lo[0], p[1]); lo[1] = Math.min(lo[1], p[0]); hi[0] = Math.max(hi[0], p[1]); hi[1] = Math.max(hi[1], p[0]); });
+      follow = false; map.fitBounds([lo, hi], {padding: 30, bearing: 0, maxZoom: 17});
       $("scmap").scrollIntoView({behavior: "smooth", block: "center"});
     };
     if (w.path && w.path.length) put(w.path);
     else if (w.id) api("GET", "walks/" + w.id + "/").then(function(r){ if (r.s === 200){ w.path = r.d.path; put(w.path); } });
     done(w);
   }
+
+  // ---------- today hour by hour, streak, goal and sharing
+  function hourSteps(dk){
+    var h = []; for (var i = 0; i < 24; i++) h.push(0);
+    walks.forEach(function(w){
+      if (w.day !== dk || w.kind === "cycle" || !w.steps) return;
+      var s = new Date(w.started_at).getTime(), len = Math.max(60, w.secs || 60) * 1000, e = s + len;
+      for (var t = s; t < e; ){
+        var d = new Date(t), hr = d.getHours(), nx = new Date(d.getFullYear(), d.getMonth(), d.getDate(), hr + 1).getTime();
+        var part = Math.min(e, nx) - t; h[hr] += w.steps * part / len; t = nx;
+      }
+    });
+    return h;
+  }
+  function streaks(){
+    var met = function(k){ return ((days[k] || {}).steps || 0) >= prefs.goal; };
+    var d = new Date(), cur = 0, best = 0, run1 = 0;
+    if (!met(dayStr(d))) d.setDate(d.getDate() - 1);
+    while (met(dayStr(d))){ cur++; d.setDate(d.getDate() - 1); }
+    Object.keys(days).sort().forEach(function(k, i, arr){
+      if (!met(k)){ run1 = 0; return; }
+      var prev = i ? new Date(arr[i - 1] + "T12:00:00") : null, me = new Date(k + "T12:00:00");
+      run1 = (prev && met(arr[i - 1]) && Math.round((me - prev) / 864e5) === 1) ? run1 + 1 : 1;
+      best = Math.max(best, run1);
+    });
+    return {cur: cur, best: Math.max(best, cur)};
+  }
+  function goalText(st, sk){
+    return "🎯 I reached my daily goal today: " + n0(st) + " steps (goal " + n0(prefs.goal) + ")"
+      + (sk.cur > 1 ? " – 🔥 " + sk.cur + "-day streak!" : "!") + " Counted with the free XpertCreation step counter. #XpertSteps";
+  }
+  function dayExtras(st){
+    var dk = dayStr(), h = hourSteps(dk), mx = Math.max.apply(null, h.concat([1])), nowH = new Date().getHours(), html = "";
+    for (var i = 0; i < 24; i++) html += '<div class="' + (i === nowH ? "now" : "") + '" title="' + (i % 12 || 12) + (i < 12 ? " am" : " pm") + ": " + n0(h[i]) + ' steps"><i style="height:' + (h[i] ? Math.max(6, Math.round(h[i] / mx * 100)) : 0) + '%"></i></div>';
+    $("schours").innerHTML = html;
+    var mine = walks.filter(function(w){ return w.day === dk; }).sort(function(a, b){ return a.started_at < b.started_at ? -1 : 1; });
+    var tl = mine.map(function(w){
+      var a = new Date(w.started_at), b = new Date(a.getTime() + (w.secs || 0) * 1000), f = function(d){ return d.toLocaleTimeString("en-US", {hour: "numeric", minute: "2-digit"}); };
+      return '<div><span class="tm">' + f(a) + '<small>' + f(b) + '</small></span><span class="ic">' + ICON[w.kind] + '</span><span class="t"><b>'
+        + (w.kind === "cycle" ? km(w.dist_m) + " km ride" : n0(w.steps) + " steps") + '</b>' + km(w.dist_m) + " km · " + clock(w.secs) + '</span></div>';
+    });
+    if (run) tl.push('<div class="live"><span class="tm">Now</span><span class="ic">' + ICON[run.kind] + '</span><span class="t"><b>' + n0(steps()) + ' steps</b>walking now…</span></div>');
+    $("sctl").innerHTML = tl.join("") || '<p class="sc-note" style="margin:0">No activity yet today. Every walk you save adds to today’s total – nothing resets until midnight.</p>';
+    var sk = streaks();
+    $("scstreak").innerHTML = "🔥 " + sk.cur + "-day streak" + (sk.best > sk.cur ? '<small>best ' + sk.best + '</small>' : "");
+    var left = prefs.goal - st;
+    $("scgoalmsg").innerHTML = left > 0 ? "<b>" + n0(left) + "</b> steps to your goal of " + n0(prefs.goal) : "✅ Goal of " + n0(prefs.goal) + " reached today!";
+    var box = $("scgoalshare"), key = "xc_steps_shared_" + dk;
+    if (left > 0){ box.hidden = true; return; }
+    if (box.getAttribute("data-day") === dk) { box.hidden = false; return; }
+    box.setAttribute("data-day", dk); box.hidden = false;
+    var txt = goalText(st, sk), url = "https://xpertcreation.com/steps", enc = encodeURIComponent(txt + " " + url);
+    box.innerHTML = '<div class="hd">🎉 Well done! Share it</div>'
+      + (member ? '<button type="button" id="scpostxc" class="xc">Post on XpertConnect</button>' : '<a class="xc" href="/login?next=/steps">Sign in to post on XpertConnect</a>')
+      + '<a class="wa" data-xcsh="1" target="_blank" rel="noopener" href="https://wa.me/?text=' + enc + '">WhatsApp</a>'
+      + '<a class="fb" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(txt) + '">Facebook</a>'
+      + '<a class="xx" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=' + enc + '">X</a>'
+      + (navigator.share ? '<button type="button" id="scsharemore">More…</button>' : '') + '<div class="sc-msg" id="scpostmsg" hidden></div>';
+    var pm = $("scpostmsg");
+    if (ls(key)){ pm.hidden = false; pm.innerHTML = '✓ Posted on XpertConnect. <a href="/feed">See it</a>'; var pb = $("scpostxc"); if (pb) pb.disabled = true; }
+    var pb2 = $("scpostxc");
+    if (pb2) pb2.onclick = function(){
+      pb2.disabled = true; pm.hidden = false; pm.textContent = "Posting…";
+      fetch("/api/feed/posts/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")},
+        body: JSON.stringify({body: goalText(st, streaks()) + "\n" + url, visibility: "public"})})
+        .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); })
+        .then(function(r){ if (r.ok){ ls(key, 1); pm.innerHTML = '✓ Posted on XpertConnect. <a href="/feed">See it</a>'; } else { pb2.disabled = false; pm.textContent = r.d.detail || "Could not post. Try again."; } })
+        .catch(function(){ pb2.disabled = false; pm.textContent = "Network problem. Try again."; });
+    };
+    var sm = $("scsharemore"); if (sm) sm.onclick = function(){ navigator.share({title: "Step goal reached", text: txt, url: url}).catch(function(){}); };
+  }
+  function daysList(){
+    var ks = Object.keys(days).sort().reverse().slice(0, 60);
+    $("scdays").innerHTML = ks.length ? ks.map(function(k){
+      var d = days[k], ok = d.steps >= prefs.goal, dt = new Date(k + "T12:00:00");
+      return '<div class="' + (ok ? "met" : "") + '"><span>' + dt.toLocaleDateString("en-GB", {weekday: "short", day: "numeric", month: "short"}) + '</span><b>' + n0(d.steps) + '</b><small>' + km(d.dist_m) + " km · " + Math.round(d.secs / 60) + " min" + (ok ? " · ✅" : "") + '</small></div>';
+    }).join("") : '<p class="sc-note">No days yet.</p>';
+  }
+  $("scgoalset").onclick = function(){ var b = document.querySelector('#sctabs [data-t="set"]'); if (b) b.click(); var g = $("sggoal"); g.scrollIntoView({behavior: "smooth", block: "center"}); setTimeout(function(){ g.focus(); g.select(); }, 400); };
+  setInterval(function(){ if (run && !run.paused) dayExtras(days[dayStr()] ? days[dayStr()].steps + steps() : steps()); }, 15000);
 
   // ---------- events
   $("scstart").onclick = function(){ start(false); };
@@ -499,7 +687,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function setMode(){ [].forEach.call($("scmodes").children, function(b){ b.className = b.getAttribute("data-k") === kind ? "on" : ""; }); }
   $("sctabs").onclick = function(e){ var b = e.target.closest("button"); if (!b) return; var t = b.getAttribute("data-t");
     [].forEach.call($("sctabs").children, function(x){ x.className = x === b ? "on" : ""; });
-    $("tweek").hidden = t !== "week"; $("tlist").hidden = t !== "list"; $("tset").hidden = t !== "set"; };
+    $("tweek").hidden = t !== "week"; $("tlist").hidden = t !== "list"; $("tset").hidden = t !== "set"; $("tdays").hidden = t !== "days"; if (t === "days") daysList(); };
   $("sclist").onclick = function(e){
     var a = e.target.closest("a"); if (!a) return; e.preventDefault();
     var di = e.target.getAttribute("data-del");
