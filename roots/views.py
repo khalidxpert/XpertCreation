@@ -642,7 +642,7 @@ def invite(request, fid):
     if not i:
         i = Invite.objects.create(family_id=fid, person=p, by=u, token=secrets.token_urlsafe(12)[:16], expires=timezone.now() + timedelta(days=INVITE_DAYS))
     return Response({"token": i.token, "link": "https://xpertcreation.com/roots#invite=" + i.token, "expires": i.expires.isoformat(),
-                     "family": m.family.name, "person": p.name if p else ""})
+                     "family": m.family.name, "person": p.name if p else "", "phone": p.phone if p else ""})
 
 
 @api_view(["GET", "POST"])

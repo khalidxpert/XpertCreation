@@ -6,7 +6,7 @@
  * honest "you are offline", and blood requests in particular must never be
  * answered from a cache.
  */
-const VERSION = "xc-v263";
+const VERSION = "xc-v264";
 const SHELL = VERSION + "-shell";
 
 // Pages worth having offline. Each is small and self-contained.
@@ -109,7 +109,7 @@ self.addEventListener("push", function(event){
   var d = {};
   try { d = event.data ? event.data.json() : {}; } catch (e) { d = {body: event.data ? event.data.text() : ""}; }
   event.waitUntil(self.registration.showNotification(d.title || "XpertCreation", {
-    body: d.body || "", icon: "/brand/icon-512.png", badge: "/brand/logo-64.png",
+    body: d.body || "", icon: "/brand/icon-512.png", badge: "/brand/badge-96.png",
     tag: d.tag || "xc", renotify: true, data: {url: d.url || "/"}
   }));
 });
