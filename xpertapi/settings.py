@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     "kids",
     "xlate",
     "shop",
+    "meetup",
     "playbill",
     "predict",
     "corner",

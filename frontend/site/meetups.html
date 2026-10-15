@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Meetups — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Meetup groups in your city: tech, business, careers, sports, languages and more. Join a group and go to its next meetup.">
+<link rel="canonical" href="https://xpertcreation.com/meetups">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Meetups — XpertCreation">
+<meta property="og:description" content="Meetup groups in your city: tech, business, careers, sports, languages and more. Join a group and go to its next meetup.">
+<meta property="og:url" content="https://xpertcreation.com/meetups">
+<meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Meetups — XpertCreation">
+<meta name="twitter:description" content="Meetup groups in your city: tech, business, careers, sports, languages and more. Join a group and go to its next meetup.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"The team","url":"https://xpertcreation.com/team","description":"Who builds and looks after XpertCreation.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --go:#00B37E;--bad:#DC2626;--line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:9px}
+
+.member{display:flex;align-items:center;gap:14px;padding:15px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;margin-bottom:10px}
+.member .av3{width:54px;height:54px;border-radius:17px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.member .ph3{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;font-size:21px;flex:0 0 auto}
+.member .t{flex:1;min-width:0}
+.member .t b{display:block;font-size:15px;font-weight:700}
+.member .t small{display:block;font-size:12.5px;color:var(--brand);font-weight:600;margin-top:2px}
+.member .soc{display:flex;gap:7px}
+.member .soc a{width:34px;height:34px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:15px}
+
+.apply2{background:var(--card);border:1px dashed var(--line);border-radius:18px;
+  padding:18px;text-align:center;margin-top:22px}
+.apply2 b{display:block;font-size:14.5px;font-weight:700}
+.apply2 p{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+.apply2 button{margin-top:13px;padding:12px 24px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:13.5px}
+
+#appform{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:18px;margin-top:14px}
+#appform.on{display:block}
+#appform label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:12px 0 5px}
+#appform label:first-of-type{margin-top:0}
+#appform textarea,#appform input{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:14.5px;font-family:inherit;outline:none}
+#appform textarea{min-height:90px;resize:vertical}
+#appform textarea:focus,#appform input:focus{border-color:var(--brand);background:#fff}
+#appform .hint3{font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+#appform .go6{width:100%;margin-top:14px;padding:13px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:14px}
+.appstate{padding:13px 15px;border-radius:14px;font-size:13.5px;margin-top:14px;line-height:1.55}
+.appstate.pending{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.appstate.accepted{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.3);color:#00734F}
+.appstate.declined{background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Meetups</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js?v=64" defer></script>
+
+<div class="wrap" style="max-width:860px">
+<style>
+.mu h1{font-size:27px;margin:4px 0 4px}.mu p.s{color:var(--ink-soft,#5A657C);margin:0 0 12px;font-size:14.5px}
+.mu-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.mu-tabs a{padding:8px 14px;border-radius:99px;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);font-weight:800;font-size:13.5px;text-decoration:none;color:var(--ink,#0D1424)}
+.mu-tabs .on{background:#0D1424;color:#fff;border-color:#0D1424}.mu-tabs .new{background:#1B4DFF;color:#fff;border-color:#1B4DFF;margin-left:auto}
+.mu-f{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.mu-f input{flex:1;min-width:130px;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit;font-size:14px;background:var(--card,#fff);color:inherit}
+.mu-ch{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;scrollbar-width:none}.mu-ch button{flex:0 0 auto;padding:6px 12px;border-radius:99px;border:1px solid var(--line,#E4E8F2);background:var(--card,#fff);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;color:inherit}
+.mu-ch button.on{background:#EEF2FF;border-color:#1B4DFF;color:#1B4DFF}
+.mu-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.mu-c{display:block;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:16px;overflow:hidden;text-decoration:none;color:var(--ink,#0D1424)}
+.mu-c .cv{height:118px;background:linear-gradient(135deg,#0EA5E9,#7C3AED);background-size:cover;background-position:center;position:relative}
+.mu-c .dt{position:absolute;left:10px;top:10px;background:#fff;border-radius:10px;padding:4px 9px;text-align:center;font-weight:900;color:#0D1424;line-height:1.1}.mu-c .dt small{display:block;font-size:10px;color:#DC2626;letter-spacing:.06em;margin:0}
+.mu-c .tg{position:absolute;right:10px;top:10px;background:rgba(13,20,36,.75);color:#fff;border-radius:99px;padding:3px 9px;font-size:11px;font-weight:800}
+.mu-c .in{padding:10px 12px}.mu-c b{display:block;font-size:15px}.mu-c small{display:block;color:var(--ink-soft,#5A657C);font-size:12.5px;margin-top:3px}
+.mu-b{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:18px;padding:16px;margin-bottom:12px}
+.mu-b label{display:block;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--ink-soft,#5A657C);margin:10px 0 4px}
+.mu-b input,.mu-b textarea,.mu-b select{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit;font-size:14.5px;background:var(--card,#fff);color:inherit}
+.mu-r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media(max-width:560px){.mu-r2{grid-template-columns:1fr}}
+.mu-btn{display:inline-block;padding:11px 18px;border-radius:12px;border:0;background:#1B4DFF;color:#fff;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;margin:4px 4px 0 0;font-size:14px}
+.mu-btn.g{background:var(--paper,#F1F5F9);color:#0D1424}.mu-btn.on{background:#16A34A;color:#fff}.mu-btn.w{background:#F59E0B;color:#fff}.mu-btn.r{background:var(--paper,#F1F5F9);color:#B91C1C}
+.mu-hero{height:190px;border-radius:16px;background:linear-gradient(135deg,#0EA5E9,#7C3AED);background-size:cover;background-position:center;margin-bottom:12px}
+.mu-hero.n{height:64px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.mu-meta{font-size:14.5px;line-height:1.85}.mu-meta a{font-weight:700}
+.mu-pp{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.mu-pp a{display:flex;gap:6px;align-items:center;padding:4px 10px 4px 4px;border-radius:99px;background:var(--paper,#F1F5F9);text-decoration:none;color:inherit;font-size:13px;font-weight:700}
+.mu-pp img,.mu-pp span.l{width:24px;height:24px;border-radius:50%;object-fit:cover;background:#E0E7FF;display:grid;place-items:center;font-size:11px}
+.mu-e{background:var(--card,#fff);border:1px dashed var(--line,#E4E8F2);border-radius:16px;padding:26px;text-align:center;color:var(--ink-soft,#5A657C);line-height:1.6}
+.mu-m{font-size:13px;font-weight:700;margin-top:8px;color:#B91C1C}.mu-m.ok{color:#15803D}
+.mu-h{display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px}.mu-h h3{margin:0;font-size:16px}
+.mu-map{height:230px;border-radius:14px;overflow:hidden;margin-top:10px;background:#E5E7EB}
+.mu-pill{display:inline-block;font-size:11.5px;font-weight:800;padding:3px 9px;border-radius:99px;background:#EEF2FF;color:#1B4DFF;margin-right:4px}
+.mu-pill.k{background:#DCFCE7;color:#166534}.mu-pill.x{background:#FEE2E2;color:#991B1B}.mu-pill.w{background:#FEF3C7;color:#92400E}
+.mu-rv{border-top:1px solid var(--line,#E4E8F2);padding:10px 0;font-size:14px}.mu-rv:first-child{border-top:0}
+.mu-st button{background:none;border:0;font-size:26px;cursor:pointer;padding:0 2px;color:#CBD5E1}.mu-st button.on{color:#F59E0B}
+.mu-kyc{background:#FFFBEB;border:1px solid #FDE68A;border-radius:16px;padding:16px;line-height:1.6;font-size:14.5px}
+</style>
+<div class="mu"><h1>&#128101; Meetups</h1><p class="s">Groups for people in your city who share an interest. Join a group, see its meetups, tap Going and we remind you a day before. Only members with a verified ID can start groups and organise meetups.</p>
+<div class="mu-tabs"><a href="#" data-t="m">Meetups</a><a href="#groups" data-t="g">Groups</a><a href="#mine" data-t="mine">Mine</a><a href="#new-group" class="new">+ Start a group</a></div>
+<div id="mub"><div class="mu-e">Loading…</div></div></div>
+<script>
+(function(){
+  "use strict";
+  var CFG = {signed_in: false, verified: false, categories: []}, CAT = {}, F = {q: "", city: "", cat: ""}, LASTG = null, MAPJS = null;
+  var box = document.getElementById("mub");
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function ck(n){ var x = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return x ? x.pop() : ""; }
+  function api(p, b){ var o = {credentials: "same-origin", headers: {}};
+    if (b instanceof FormData){ o.method = "POST"; o.headers["X-CSRFToken"] = ck("xc_csrf"); o.body = b; }
+    else if (b !== undefined){ o.method = "POST"; o.headers["Content-Type"] = "application/json"; o.headers["X-CSRFToken"] = ck("xc_csrf"); o.body = JSON.stringify(b); }
+    return fetch("/api/meetup/" + p, o).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, s: r.status, d: d || {}}; }); }).catch(function(){ return {ok: false, s: 0, d: {detail: "Network problem. Please try again."}}; }); }
+  function when(t){ var d = new Date(t); return d.toLocaleDateString("en-GB", {weekday: "short", day: "numeric", month: "short", year: "numeric"}) + ", " + d.toLocaleTimeString("en-GB", {hour: "numeric", minute: "2-digit", hour12: true}); }
+  function dur(m){ return m >= 60 ? (Math.floor(m / 60) + " h" + (m % 60 ? " " + (m % 60) + " min" : "")) : m + " min"; }
+  function signin(h){ return '<a href="/login?next=' + encodeURIComponent("/meetups" + (h || location.hash)) + '" style="font-weight:800">Sign in</a>'; }
+  function person(p){ return '<a href="' + (p.slug ? '/in/' + esc(p.slug) : '#') + '">' + (p.avatar ? '<img src="' + esc(p.avatar) + '" alt="">' : '<span class="l">' + esc((p.name || "?").charAt(0)) + '</span>') + esc(p.name) + (p.verified ? ' ✔️' : '') + '</a>'; }
+  function tabs(t){ [].forEach.call(document.querySelectorAll(".mu-tabs [data-t]"), function(a){ a.classList.toggle("on", a.getAttribute("data-t") === t); }); }
+  function msg(id, t, ok){ var e = document.getElementById(id); if (e){ e.className = "mu-m" + (ok ? " ok" : ""); e.innerHTML = t; } }
+  function mcard(m){ var d = new Date(m.starts), left = m.past || m.cancelled ? "" : m.seats ?(m.seats_left ? m.seats_left + " seats left" : "Full · waitlist open") : "";
+    return '<a class="mu-c" href="#m/' + esc(m.slug) + '"><div class="cv"' + (m.cover ? ' style="background-image:url(\'' + esc(m.cover) + '\')"' : '') + '><span class="dt"><small>' + d.toLocaleDateString("en-GB", {month: "short"}).toUpperCase() + '</small>' + d.getDate() + '</span>' + (m.online ? '<span class="tg">Online</span>' : '') + '</div>'
+      + '<div class="in"><b>' + (m.cancelled ? "❌ " : "") + esc(m.title) + '</b><small>👥 ' + esc(m.group.name) + '</small><small>🕒 ' + when(m.starts) + '</small><small>' + (m.online ? "💻 Online" : "📍 " + esc(m.place ? m.place + (m.city ? ", " + m.city : "") : m.city)) + '</small><small>✅ ' + m.going + ' going' + (left ? ' · ' + left : '') + (m.my_rsvp === "waitlist" ? ' · you are on the waitlist' : m.my_rsvp === "going" ? ' · you are going' : '') + '</small></div></a>'; }
+  function gcard(g){
+    return '<a class="mu-c" href="#g/' + esc(g.slug) + '"><div class="cv"' + (g.cover ? ' style="background-image:url(\'' + esc(g.cover) + '\')"' : '') + '><span class="tg">' + esc(g.category_label) + '</span></div>'
+      + '<div class="in"><b>' + esc(g.name) + '</b><small>📍 ' + esc(g.city) + '</small><small>👥 ' + g.members + (g.members === 1 ? ' member' : ' members') + ' · 📅 ' + g.upcoming + ' upcoming</small><small>Organiser: ' + esc(g.organizer.name) + (g.organizer.verified ? ' ✔️' : '') + '</small></div></a>'; }
+  function filters(kind){
+    var h = '<div class="mu-f"><input id="fq" placeholder="Search ' + (kind === "g" ? "groups" : "meetups") + '" value="' + esc(F.q) + '"><input id="fcity" placeholder="City (e.g. Lahore)" value="' + esc(F.city) + '"></div><div class="mu-ch"><button data-c=""' + (F.cat ? '' : ' class="on"') + '>All</button>'
+      + CFG.categories.map(function(c){ return '<button data-c="' + c.key + '"' + (F.cat === c.key ? ' class="on"' : '') + '>' + esc(c.label) + '</button>'; }).join("") + '</div><div id="mul"><div class="mu-e">Loading…</div></div>';
+    box.innerHTML = h;
+    var tm = null;
+    ["fq", "fcity"].forEach(function(id){ document.getElementById(id).oninput = function(){ F[id === "fq" ? "q" : "city"] = this.value.trim(); clearTimeout(tm); tm = setTimeout(function(){ load(kind); }, 350); }; });
+    [].forEach.call(box.querySelectorAll(".mu-ch button"), function(b){ b.onclick = function(){ F.cat = b.getAttribute("data-c"); [].forEach.call(box.querySelectorAll(".mu-ch button"), function(x){ x.classList.toggle("on", x === b); }); load(kind); }; });
+    load(kind);
+  }
+  function load(kind){
+    var el = document.getElementById("mul"); if (!el) return;
+    var qs = "?q=" + encodeURIComponent(F.q) + "&city=" + encodeURIComponent(F.city) + "&cat=" + encodeURIComponent(F.cat);
+    api((kind === "g" ? "groups/" : "meetups/") + qs).then(function(r){
+      if (!document.getElementById("mul")) return;
+      var a = (kind === "g" ? r.d.groups : r.d.meetups) || [];
+      el.innerHTML = a.length ? '<div class="mu-g">' + a.map(kind === "g" ? gcard : mcard).join("") + '</div>'
+        : '<div class="mu-e">' + (kind === "g" ? "No groups found" : "No upcoming meetups found") + (F.q || F.city || F.cat ? " for this search." : " yet.") + '<br>' + (kind === "g" ? 'Start the first one: <a href="#new-group" style="font-weight:800">+ Start a group</a>' : 'Browse <a href="#groups" style="font-weight:800">groups</a> and join one to hear about its next meetup.') + '</div>';
+    });
+  }
+  function mine(){
+    tabs("mine");
+    if (!CFG.signed_in){ box.innerHTML = '<div class="mu-e">' + signin("#mine") + ' to see your groups and meetups.</div>'; return; }
+    box.innerHTML = '<div class="mu-e">Loading…</div>';
+    api("mine/").then(function(r){
+      var g = r.d.groups || [], m = r.d.meetups || [];
+      box.innerHTML = '<div class="mu-h"><h3>📅 My upcoming meetups</h3></div>' + (m.length ? '<div class="mu-g">' + m.map(mcard).join("") + '</div>' : '<div class="mu-e">You are not going to any meetups yet. <a href="#" style="font-weight:800">Find one</a></div>')
+        + '<div class="mu-h"><h3>👥 My groups</h3><a href="#new-group" style="font-weight:800;font-size:13px;color:#1B4DFF;text-decoration:none">+ Start a group</a></div>' + (g.length ? '<div class="mu-g">' + g.map(gcard).join("") + '</div>' : '<div class="mu-e">You have not joined any groups yet. <a href="#groups" style="font-weight:800">Browse groups</a></div>');
+    });
+  }
+  function group(slug){
+    tabs(""); box.innerHTML = '<div class="mu-e">Loading…</div>';
+    api("groups/" + encodeURIComponent(slug) + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = '<div class="mu-e">' + esc(r.d.detail || "Group not found.") + ' <a href="#groups">All groups</a></div>'; return; }
+      var g = r.d; LASTG = g;
+      var act = g.is_organizer ? '<a class="mu-btn" href="#new/' + g.id + '">📅 Schedule a meetup</a><a class="mu-btn g" href="#edit/' + g.id + '">✏️ Edit group</a>'
+        : (g.is_member ? '<button class="mu-btn on" id="gj" data-a="leave">✓ Member</button>' : '<button class="mu-btn" id="gj" data-a="join">+ Join group</button>');
+      box.innerHTML = (g.cover ? '<div class="mu-hero" style="background-image:url(\'' + esc(g.cover) + '\')"></div>' : '<div class="mu-hero n">&#128101;</div>') + '<div class="mu-b"><span class="mu-pill">' + esc(g.category_label) + '</span><h2 style="margin:8px 0 4px;font-size:23px">' + esc(g.name) + '</h2>'
+        + '<div class="mu-meta">📍 ' + esc(g.city) + ' · 👥 <span id="gmc">' + g.members + '</span>' + (g.members === 1 ? ' member' : ' members') + '<br>👤 Organised by ' + (g.organizer.slug ? '<a href="/in/' + esc(g.organizer.slug) + '">' + esc(g.organizer.name) + '</a>' : esc(g.organizer.name)) + ' <span class="mu-pill k">ID verified</span></div>'
+        + '<div style="margin-top:10px">' + act + '<button class="mu-btn g" id="gsh">↗ Share</button></div><div class="mu-m" id="gm"></div>'
+        + (g.about ? '<p style="white-space:pre-wrap;line-height:1.6;margin-top:14px">' + esc(g.about) + '</p>' : '')
+        + (g.recent_members && g.recent_members.length ? '<div class="mu-h"><h3>Members</h3>' + (CFG.signed_in ? '<a href="#" id="gall" style="font-weight:800;font-size:13px;color:#1B4DFF;text-decoration:none">See all</a>' : '') + '</div><div class="mu-pp" id="gpp">' + g.recent_members.map(person).join("") + '</div>' : '') + '</div>'
+        + '<div class="mu-h"><h3>📅 Upcoming meetups</h3></div>' + (g.meetups.length ? '<div class="mu-g">' + g.meetups.map(mcard).join("") + '</div>' : '<div class="mu-e">No meetups scheduled yet.' + (g.is_organizer ? ' <a href="#new/' + g.id + '" style="font-weight:800">Schedule the first one</a>' : ' Join the group and you get a notification when one is posted.') + '</div>')
+        + (g.past.length ? '<div class="mu-h"><h3>Past meetups</h3></div><div class="mu-g">' + g.past.map(mcard).join("") + '</div>' : '');
+      var j = document.getElementById("gj");
+      if (j) j.onclick = function(){
+        if (!CFG.signed_in){ msg("gm", signin() + " to join this group."); return; }
+        var a = j.getAttribute("data-a");
+        if (a === "leave" && !confirm("Leave " + g.name + "? You will stop getting its meetup notifications.")) return;
+        api("groups/" + g.id + "/" + a + "/", {}).then(function(x){ if (x.ok) group(slug); else msg("gm", esc(x.d.detail || "Could not save.")); });
+      };
+      document.getElementById("gsh").onclick = function(){ share(g.name + " – meetup group in " + g.city, location.origin + "/meetups#g/" + g.slug, this); };
+      var all = document.getElementById("gall");
+      if (all) all.onclick = function(e){ e.preventDefault(); api("groups/" + g.id + "/members/").then(function(x){ if (x.ok){ document.getElementById("gpp").innerHTML = (x.d.members || []).map(person).join(""); all.remove(); } }); };
+    });
+  }
+  function share(title, url, btn){
+    if (navigator.share){ navigator.share({title: title, text: title, url: url}).catch(function(){}); return; }
+    try { navigator.clipboard.writeText(url); } catch (er){}
+    btn.textContent = "Link copied ✓";
+  }
+  function loadMap(cb){
+    if (window.maplibregl){ cb(); return; }
+    if (MAPJS){ MAPJS.push(cb); return; }
+    MAPJS = [cb];
+    var l = document.createElement("link"); l.rel = "stylesheet"; l.href = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css"; document.head.appendChild(l);
+    var s = document.createElement("script"); s.src = "https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js";
+    s.onload = function(){ var q = MAPJS; MAPJS = null; q.forEach(function(f){ f(); }); };
+    document.head.appendChild(s);
+  }
+  function meetup(slug){
+    tabs(""); box.innerHTML = '<div class="mu-e">Loading…</div>';
+    api("meetups/" + encodeURIComponent(slug) + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = '<div class="mu-e">' + esc(r.d.detail || "Meetup not found.") + ' <a href="#">All meetups</a></div>'; return; }
+      var m = r.d, full = m.seats && !m.seats_left, dir = "";
+      if (!m.online) dir = "https://www.google.com/maps/dir/?api=1&destination=" + (m.lat != null ? m.lat + "," + m.lng : encodeURIComponent(m.place + " " + m.city));
+      var where = m.online ? (m.online_link ? '💻 Online · <a href="' + esc(m.online_link) + '" target="_blank" rel="noopener">Join link</a>' : "💻 Online (the link shows here after you tap Going)")
+        : '📍 ' + esc(m.place) + (m.city ? ", " + esc(m.city) : "") + ' · <a href="' + dir + '" target="_blank" rel="noopener">Directions</a>';
+      var seats = m.seats ? (m.going + " going of " + m.seats + " seats" + (full ? ' · <span class="mu-pill w">Full – waitlist ' + m.waitlist + '</span>' : ' · ' + m.seats_left + ' left')) : m.going + " going · no seat limit";
+      if (m.past || m.cancelled) seats = m.going + (m.past ? " went" : " had a place");
+      var btns = "";
+      if (m.cancelled) btns = '<span class="mu-pill x">This meetup was cancelled</span>';
+      else if (m.past) btns = '<span class="mu-pill">This meetup has taken place</span>';
+      else if (m.my_rsvp === "going") btns = '<button class="mu-btn on" disabled>✓ You are going</button>' + (m.is_organizer ? '' : '<button class="mu-btn g" data-go="0">Can\'t go</button>');
+      else if (m.my_rsvp === "waitlist") btns = '<button class="mu-btn w" disabled>⏳ On the waitlist</button><button class="mu-btn g" data-go="0">Leave waitlist</button>';
+      else btns = '<button class="mu-btn" data-go="1">' + (full ? "⏳ Join the waitlist" : "✅ I'm going") + '</button>';
+      if (!m.cancelled && !m.past) btns += '<button class="mu-btn g" id="msh">↗ Share</button>' + (m.is_organizer ? '<button class="mu-btn r" id="mcx">Cancel meetup</button>' : '');
+      var h = (m.cover ? '<div class="mu-hero" style="background-image:url(\'' + esc(m.cover) + '\')"></div>' : '<div class="mu-hero n">&#128197;</div>') + '<div class="mu-b"><a class="mu-pill" href="#g/' + esc(m.group.slug) + '" style="text-decoration:none">👥 ' + esc(m.group.name) + '</a>'
+        + '<h2 style="margin:8px 0 6px;font-size:23px">' + (m.cancelled ? "❌ " : "") + esc(m.title) + '</h2>'
+        + '<div class="mu-meta">🕒 ' + when(m.starts) + ' · ' + dur(m.minutes) + '<br>' + where + '<br>✅ ' + seats + '<br>👤 Organised by ' + (m.organizer.slug ? '<a href="/in/' + esc(m.organizer.slug) + '">' + esc(m.organizer.name) + '</a>' : esc(m.organizer.name)) + ' <span class="mu-pill k">ID verified</span>'
+        + (m.rating ? '<br>⭐ ' + m.rating + ' from ' + m.reviews.length + (m.reviews.length === 1 ? ' review' : ' reviews') : '') + '</div>'
+        + '<div style="margin-top:10px">' + btns + '</div><div class="mu-m" id="mm"></div>'
+        + (m.lat != null && !m.online ? '<div class="mu-map" id="mmap"></div>' : '')
+        + (m.about ? '<p style="white-space:pre-wrap;line-height:1.6;margin-top:14px">' + esc(m.about) + '</p>' : '')
+        + '<div class="mu-h"><h3>Going (' + m.going + ')</h3></div>' + (m.attendees.length ? '<div class="mu-pp">' + m.attendees.map(person).join("") + '</div>' : '<div style="color:var(--ink-soft,#5A657C);font-size:14px">' + (CFG.signed_in ? "Nobody yet – be the first." : signin() + " to see who is going.") + '</div>') + '</div>';
+      if (m.reviews.length || m.can_review){
+        h += '<div class="mu-b"><h3 style="margin:0 0 6px;font-size:16px">Reviews</h3>';
+        if (m.can_review) h += '<div style="margin-bottom:10px"><div class="mu-st" id="rst">' + [1, 2, 3, 4, 5].map(function(i){ return '<button data-v="' + i + '" class="on">★</button>'; }).join("") + '</div><textarea id="rtx" rows="2" maxlength="500" placeholder="How was it? (optional)" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1.5px solid var(--line,#E4E8F2);font:inherit;background:var(--card,#fff);color:inherit"></textarea><button class="mu-btn" id="rgo">Post review</button><div class="mu-m" id="rm"></div></div>';
+        h += m.reviews.map(function(v){ return '<div class="mu-rv"><b>' + esc(v.by.name) + '</b> <span style="color:#F59E0B">' + "★★★★★".slice(0, v.rating) + '</span><span style="color:#CBD5E1">' + "★★★★★".slice(v.rating) + '</span>' + (v.comment ? '<div style="margin-top:3px">' + esc(v.comment) + '</div>' : '') + '</div>'; }).join("") + '</div>';
+      }
+      box.innerHTML = h;
+      [].forEach.call(box.querySelectorAll("[data-go]"), function(b){ b.onclick = function(){
+        if (!CFG.signed_in){ msg("mm", signin() + " first."); return; }
+        var go = b.getAttribute("data-go") === "1";
+        if (!go && !confirm("Cancel your place? If there is a waitlist, the next person gets your seat.")) return;
+        b.disabled = true;
+        api("meetups/" + m.id + "/rsvp/", {going: go}).then(function(x){ if (x.ok) meetup(slug); else { b.disabled = false; msg("mm", esc(x.d.detail || "Could not save.")); } });
+      }; });
+      var sh = document.getElementById("msh"); if (sh) sh.onclick = function(){ share(m.title + " – " + when(m.starts), location.origin + "/meetups#m/" + m.slug, this); };
+      var cx = document.getElementById("mcx"); if (cx) cx.onclick = function(){ if (confirm("Cancel this meetup? Everyone going or on the waitlist gets a notification.")) api("meetups/" + m.id + "/cancel/", {}).then(function(){ meetup(slug); }); };
+      if (m.can_review){
+        var rating = 5;
+        [].forEach.call(document.querySelectorAll("#rst button"), function(b){ b.onclick = function(){ rating = +b.getAttribute("data-v"); [].forEach.call(document.querySelectorAll("#rst button"), function(x){ x.classList.toggle("on", +x.getAttribute("data-v") <= rating); }); }; });
+        document.getElementById("rgo").onclick = function(){ api("meetups/" + m.id + "/review/", {rating: rating, comment: document.getElementById("rtx").value}).then(function(x){ if (x.ok) meetup(slug); else msg("rm", esc(x.d.detail || "Could not save.")); }); };
+      }
+      if (m.lat != null && !m.online) loadMap(function(){
+        var el = document.getElementById("mmap"); if (!el || !window.maplibregl) return;
+        try {
+          var map = new maplibregl.Map({container: el, style: "https://tiles.openfreemap.org/styles/liberty", center: [m.lng, m.lat], zoom: 14, attributionControl: {compact: true}, cooperativeGestures: true});
+          new maplibregl.Marker({color: "#1B4DFF"}).setLngLat([m.lng, m.lat]).addTo(map);
+          map.addControl(new maplibregl.NavigationControl({showCompass: false}), "top-right");
+        } catch (er){ el.remove(); }
+      });
+    });
+  }
+  function gate(what){
+    if (!CFG.signed_in){ box.innerHTML = '<div class="mu-e">' + signin() + ' to ' + what + '.</div>'; return false; }
+    if (!CFG.verified){ box.innerHTML = '<div class="mu-kyc"><b>🪪 Verify your ID first</b><br>People meet organisers in person, so only members with an approved ID check can ' + what + '. It takes a few minutes and our team reviews it.<br><a class="mu-btn" href="/get-verified" style="margin-top:10px">Verify my ID</a> <a class="mu-btn g" href="#groups">Browse groups</a></div>'; return false; }
+    return true;
+  }
+  function cats(sel){ return CFG.categories.map(function(c){ return '<option value="' + c.key + '"' + (sel === c.key ? " selected" : "") + '>' + esc(c.label) + '</option>'; }).join(""); }
+  function groupForm(gid){
+    tabs("");
+    if (!gate(gid ? "edit a group" : "start a meetup group")) return;
+    var g = gid && LASTG && LASTG.id === gid ? LASTG : null;
+    if (gid && !g){ location.hash = "#mine"; return; }
+    box.innerHTML = '<div class="mu-b"><h2 style="margin:0">' + (g ? "Edit group" : "Start a meetup group") + '</h2>'
+      + '<label>Group name</label><input id="gn" maxlength="120" placeholder="e.g. Lahore Freelancers" value="' + esc(g ? g.name : "") + '">'
+      + '<div class="mu-r2"><div><label>Topic</label><select id="gc">' + cats(g ? g.category : "") + '</select></div><div><label>City</label><input id="gcy" maxlength="60" placeholder="Lahore" value="' + esc(g ? g.city : "") + '"></div></div>'
+      + '<label>About the group</label><textarea id="ga" rows="5" maxlength="3000" placeholder="Who is it for, what you do at meetups, how often you meet">' + esc(g ? g.about : "") + '</textarea>'
+      + '<label>Cover picture (optional)</label><input type="file" id="gcv" accept="image/*">'
+      + '<button class="mu-btn" id="ggo" style="margin-top:12px">' + (g ? "Save" : "Create group") + '</button>' + (g ? '<button class="mu-btn r" id="gdel" style="margin-top:12px">Delete group</button>' : '') + '<div class="mu-m" id="gfm"></div></div>';
+    document.getElementById("ggo").onclick = function(){
+      var b = this, fd = new FormData();
+      fd.append("name", document.getElementById("gn").value); fd.append("category", document.getElementById("gc").value);
+      fd.append("city", document.getElementById("gcy").value); fd.append("about", document.getElementById("ga").value);
+      var f = document.getElementById("gcv").files[0]; if (f) fd.append("cover", f);
+      b.disabled = true; msg("gfm", "Saving…", true);
+      api(g ? "groups/" + g.id + "/edit/" : "groups/", fd).then(function(x){ b.disabled = false; if (x.ok) location.hash = "#g/" + x.d.slug; else msg("gfm", esc(x.d.detail || "Could not save.")); });
+    };
+    var del = document.getElementById("gdel");
+    if (del) del.onclick = function(){ if (confirm("Delete " + g.name + "? Its meetups disappear from the list.")) api("groups/" + g.id + "/edit/", {"delete": true}).then(function(x){ if (x.ok) location.hash = "#mine"; else msg("gfm", esc(x.d.detail || "Could not delete.")); }); };
+  }
+  function meetupForm(gid){
+    tabs("");
+    if (!gate("organise meetups")) return;
+    var g = LASTG && LASTG.id === gid ? LASTG : null;
+    var d = new Date(Date.now() + 3 * 864e5); d.setHours(18, 0, 0, 0);
+    var local = new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 16);
+    var pin = null;
+    box.innerHTML = '<div class="mu-b"><h2 style="margin:0">Schedule a meetup</h2>' + (g ? '<div style="color:var(--ink-soft,#5A657C);font-size:14px;margin-top:4px">in ' + esc(g.name) + '</div>' : '')
+      + '<label>Title</label><input id="mt" maxlength="140" placeholder="e.g. Monthly freelancers coffee">'
+      + '<div class="mu-r2"><div><label>Date and time</label><input type="datetime-local" id="ms" value="' + local + '"></div><div><label>How long</label><select id="mmin"><option value="60">1 hour</option><option value="90">1.5 hours</option><option value="120" selected>2 hours</option><option value="180">3 hours</option><option value="240">4 hours</option><option value="480">All day</option></select></div></div>'
+      + '<label>Where</label><select id="mo"><option value="0">In person</option><option value="1">Online</option></select>'
+      + '<div id="mwin"><div class="mu-r2"><div><label>Venue and address</label><input id="mp" maxlength="200" placeholder="Café name, street, area"></div><div><label>City</label><input id="mcy" maxlength="60" value="' + esc(g ? g.city : "") + '"></div></div>'
+      + '<button class="mu-btn g" id="mloc" type="button">📍 Pin my current location on the map</button><span id="mlocs" style="font-size:13px;color:var(--ink-soft,#5A657C)"></span></div>'
+      + '<div id="mwon" style="display:none"><label>Meeting link (Zoom, Google Meet…)</label><input id="ml" maxlength="300" placeholder="https://meet.google.com/…"><div style="font-size:12.5px;color:var(--ink-soft,#5A657C);margin-top:4px">Only people who tap Going see the link.</div></div>'
+      + '<div class="mu-r2"><div><label>Seats (0 = no limit)</label><input type="number" id="mse" min="0" max="5000" value="30"></div><div><label>Cover picture (optional)</label><input type="file" id="mcv" accept="image/*"></div></div>'
+      + '<label>About</label><textarea id="ma" rows="5" maxlength="4000" placeholder="What happens, who it is for, what to bring"></textarea>'
+      + '<button class="mu-btn" id="mgo" style="margin-top:12px">Schedule meetup</button><div class="mu-m" id="mfm"></div><div style="font-size:12.5px;color:var(--ink-soft,#5A657C);margin-top:8px">All group members get a notification. When seats are full, new people go on a waitlist and move up by themselves if someone cancels.</div></div>';
+    document.getElementById("mo").onchange = function(){ var on = this.value === "1"; document.getElementById("mwin").style.display = on ? "none" : ""; document.getElementById("mwon").style.display = on ? "" : "none"; };
+    document.getElementById("mloc").onclick = function(){
+      var s = document.getElementById("mlocs");
+      if (pin){ pin = null; this.textContent = "📍 Pin my current location on the map"; s.textContent = ""; return; }
+      if (!navigator.geolocation){ s.textContent = " Location is not available on this device."; return; }
+      s.textContent = " Finding you…"; var b = this;
+      navigator.geolocation.getCurrentPosition(function(p){ pin = [p.coords.latitude, p.coords.longitude]; s.textContent = " ✓ Pinned (" + pin[0].toFixed(4) + ", " + pin[1].toFixed(4) + ")"; b.textContent = "Remove pin"; },
+        function(){ s.textContent = " Could not get your location. You can still add the address."; }, {enableHighAccuracy: true, timeout: 15000});
+    };
+    document.getElementById("mgo").onclick = function(){
+      var b = this, fd = new FormData(), v = document.getElementById("ms").value;
+      if (!v){ msg("mfm", "Choose a date and time."); return; }
+      fd.append("title", document.getElementById("mt").value); fd.append("about", document.getElementById("ma").value);
+      fd.append("starts", new Date(v).toISOString()); fd.append("minutes", document.getElementById("mmin").value);
+      fd.append("online", document.getElementById("mo").value); fd.append("place", document.getElementById("mp").value);
+      fd.append("city", document.getElementById("mcy").value); fd.append("online_link", document.getElementById("ml").value.trim());
+      fd.append("seats", document.getElementById("mse").value || "0");
+      if (pin){ fd.append("lat", pin[0]); fd.append("lng", pin[1]); }
+      var f = document.getElementById("mcv").files[0]; if (f) fd.append("cover", f);
+      b.disabled = true; msg("mfm", "Saving…", true);
+      api("groups/" + gid + "/meetups/", fd).then(function(x){ b.disabled = false; if (x.ok) location.hash = "#m/" + x.d.slug; else msg("mfm", esc(x.d.detail || "Could not save.")); });
+    };
+  }
+  function route(){
+    var h = decodeURIComponent(location.hash.replace(/^#/, "")), m;
+    window.scrollTo(0, 0);
+    if ((m = h.match(/^g\/(.+)$/))) return group(m[1]);
+    if ((m = h.match(/^m\/(.+)$/))) return meetup(m[1]);
+    if ((m = h.match(/^new\/(\d+)$/))) return meetupForm(+m[1]);
+    if ((m = h.match(/^edit\/(\d+)$/))) return groupForm(+m[1]);
+    if (h === "new-group") return groupForm(0);
+    if (h === "mine") return mine();
+    if (h === "groups"){ tabs("g"); return filters("g"); }
+    tabs("m"); filters("m");
+  }
+  api("config/").then(function(r){
+    if (r.ok) CFG = r.d;
+    CFG.categories = CFG.categories || [];
+    CFG.categories.forEach(function(c){ CAT[c.key] = c.label; });
+    window.addEventListener("hashchange", route);
+    route();
+  });
+})();
+</script>
+</div>
+
+<script>
+/* Bell: notifications for anyone signed in. One widget, shared by every
+   page - reads /api/notify/mine/ and polls it, so a page open in one tab
+   picks up something that happened in another. */
+(function(){
+  function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function cookie(n){ var m=document.cookie.match("(^|;)\\s*"+n+"\\s*=\\s*([^;]+)"); return m?m.pop():""; }
+
+  // The home gear button exists on nearly every page (added widely across
+  // the site earlier), which makes it a far more reliable anchor than any
+  // one page's account-button markup.
+  var anchor = document.querySelector('[aria-label="Home"]') || document.querySelector(".gear");
+  if (!anchor) return;
+
+  fetch("/api/auth/me/", {credentials:"same-origin"})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(u){
+      if (!u) return;   // signed out: nothing to show a bell for
+
+      var bell = document.createElement("button");
+      bell.className = "bellbtn";
+      bell.setAttribute("aria-label", "Notifications");
+      bell.innerHTML = '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>'
+        + '<path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot4"></span>';
+      anchor.parentNode.insertBefore(bell, anchor);
+      wireBell(bell);
+    })
+    .catch(function(){});
+
+  function wireBell(bell){
+
+  var drop = document.createElement("div");
+  drop.className = "belldrop";
+  document.body.appendChild(drop);
+
+  function load(){
+    fetch("/api/notify/mine/", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if (!d) return;
+        bell.classList.toggle("has", d.unread > 0);
+        bell.querySelector(".dot4").textContent = d.unread > 9 ? "9+" : d.unread;
+
+        var h = '<div class="hd5"><b>Notifications</b>'
+          + (d.unread ? '<button id="markall">Mark all read</button>' : '') + '</div>';
+        if (!d.notifications.length){
+          h += '<div class="nempty">Nothing yet.</div>';
+        } else {
+          h += d.notifications.map(function(n){
+            return '<a class="nitem3' + (n.read ? "" : " unread") + '" href="'
+              + esc(n.link || "#") + '" data-nid="' + n.id + '">'
+              + '<p>' + esc(n.text) + '</p><small>' + esc(n.when) + '</small></a>';
+          }).join("");
+        }
+        drop.innerHTML = h;
+      })
+      .catch(function(){});
+  }
+
+  bell.addEventListener("click", function(e){
+    e.stopPropagation();
+    drop.classList.toggle("on");
+    if (drop.classList.contains("on")) load();
+  });
+  document.addEventListener("click", function(e){
+    if (!drop.contains(e.target) && e.target !== bell) drop.classList.remove("on");
+  });
+  drop.addEventListener("click", function(e){
+    var mark = e.target.closest("#markall");
+    if (mark){
+      e.preventDefault();
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:"{}"}).then(load);
+      return;
+    }
+    var item = e.target.closest("[data-nid]");
+    if (item){
+      fetch("/api/notify/read/", {method:"POST", credentials:"same-origin",
+        headers:{"Content-Type":"application/json","X-CSRFToken":cookie("xc_csrf")},
+        body:JSON.stringify({id: item.getAttribute("data-nid")})});
+    }
+  });
+
+  load();
+  setInterval(load, 45000);
+  }
+})();
+</script>
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="/feed">XpertConnect</a></li>
+        <li><a href="/market">Freelance</a></li>
+        <li><a href="/market#property">Property</a></li>
+        <li><a href="/store">Store</a></li>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li><li><a href="https://www.trustpilot.com/review/xpertcreation.com" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.6-5 4.5 1.5 6.6L12 17l-6 3.4 1.5-6.6-5-4.5 6.6-.6z"/></svg>Review us on Trustpilot</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/groups/1202505063279206" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook group</a></li>
+        <li><a href="https://github.com/khalidxpert/XpertCreation" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/terms-of-sale">Terms of sale</a></li>
+        <li><a href="/refund-policy">Refund policy</a></li>
+        <li><a href="/ownership">Ownership &amp; complaints</a></li>
+        <li><a href="/promote">Prices &amp; paid items</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=4" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+<script src="/js/share-1.js?v=22" defer></script>
+</body>
+</html>
