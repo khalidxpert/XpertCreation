@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     "realestate",
     "store",
     "companybook",
+    "xsocial",
     "kyctick",
     "datakeep",
     "payproof",
