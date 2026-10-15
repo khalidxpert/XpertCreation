@@ -1,0 +1,693 @@
+{
+ "day-1": {
+  "t": "Day 1 — What a blockchain is",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Explain a blockchain in one sentence",
+     "Know the problem it solves",
+     "Know what this course does and does not cover"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "p",
+    "v": "A blockchain is a shared record book. Thousands of computers keep the same copy, new pages are added in order, and old pages cannot be quietly changed."
+   },
+   {
+    "k": "h",
+    "v": "1) The problem it solves"
+   },
+   {
+    "k": "p",
+    "v": "Normally, when two people who don't know each other exchange something of value, they trust a middle-man: a bank, a land office, a marketplace. The middle-man keeps the record. A blockchain lets many computers keep the record together, so no single person or company can change it alone."
+   },
+   {
+    "k": "h",
+    "v": "2) Three words you will meet every day"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ledger – a list of records, like a bank statement or a shop's khata",
+     "Distributed – many copies on many computers, not one central copy",
+     "Immutable – once written and confirmed, it is practically impossible to change"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) A simple picture"
+   },
+   {
+    "k": "p",
+    "v": "Imagine a village khata that every family keeps a copy of. When Ali pays Sara, everyone writes it in their own copy. If one person later rubs out a line in their copy, the others will not match – and everyone can see who changed it. That is the core idea."
+   },
+   {
+    "k": "h",
+    "v": "4) What a blockchain is NOT"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "It is not the same as one coin. Coins are only one use of the technology",
+     "It is not automatically safe – people, apps and passwords around it can still be attacked",
+     "It is not a way to get rich. Anyone promising that is selling something"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "This course teaches how the technology works and how to protect yourself. It does not give investment or trading advice, and XpertCreation does not sell or promote any coin."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Hashes: the digital fingerprint",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what a hash is",
+     "See why a tiny change makes a totally different hash",
+     "Understand why hashes protect records"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) What a hash is"
+   },
+   {
+    "k": "p",
+    "v": "A hash function takes any data – a word, a photo, a whole book – and turns it into a short code of fixed length. The same input always gives the same code. That code is called a hash, and it works like a fingerprint for the data."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "SHA-256 is a common hash function – its result is 64 characters long",
+     "You cannot turn a hash back into the original data",
+     "Two different inputs giving the same hash is, in practice, impossible to find"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) The avalanche effect"
+   },
+   {
+    "k": "p",
+    "v": "Change a single letter and the whole hash changes. 'Pakistan' and 'pakistan' give two hashes that look completely unrelated. So if anyone edits a record, even by one comma, its fingerprint no longer matches."
+   },
+   {
+    "k": "h",
+    "v": "3) Where you already meet hashes"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Websites store a hash of your password, not the password itself",
+     "Software downloads publish a hash so you can check the file was not changed",
+     "Every block in a blockchain is identified by its hash"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Practice"
+   },
+   {
+    "k": "steps",
+    "v": "Think about it, no tools needed.|If a hash is like a fingerprint, what happens to it when the data changes?|Answer: it becomes a completely different fingerprint – so the change is easy to spot."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Blocks and the chain",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what is inside a block",
+     "See how blocks link into a chain",
+     "Understand why changing old data is so hard"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Inside a block"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A list of records (for example, transactions)",
+     "The time it was made",
+     "The hash of the previous block",
+     "Its own hash, worked out from everything above"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Why it is called a chain"
+   },
+   {
+    "k": "p",
+    "v": "Each block stores the hash of the block before it. Block 101 contains the fingerprint of block 100, which contains the fingerprint of block 99, and so on back to the first block, called the genesis block."
+   },
+   {
+    "k": "h",
+    "v": "3) Why the past is locked"
+   },
+   {
+    "k": "p",
+    "v": "Suppose someone edits a record in block 100. Block 100's hash changes. Now block 101 points to a hash that no longer exists, so 101 must be redone, then 102, then every block after it – and they would also have to do it on most of the computers in the network at the same time. On a large network that is practically impossible."
+   },
+   {
+    "k": "h",
+    "v": "4) Public and private blockchains"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Public – anyone can read it and join (for example Bitcoin, Ethereum)",
+     "Private or permissioned – only approved members can write (used by companies, banks and governments)",
+     "Both use blocks and hashes; they differ in who is allowed to take part"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "A blockchain protects records after they are written. It cannot check that a record was true when it was entered. Wrong data in means wrong data stored forever."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — How the network agrees (consensus)",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know why a network needs consensus",
+     "Understand Proof of Work and Proof of Stake",
+     "Know the trade-offs"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The question every blockchain must answer"
+   },
+   {
+    "k": "p",
+    "v": "Thousands of computers (nodes) hold copies. Who gets to add the next block, and how do all the others agree it is valid? The rules for this are called the consensus mechanism."
+   },
+   {
+    "k": "h",
+    "v": "2) Proof of Work"
+   },
+   {
+    "k": "p",
+    "v": "Computers compete to solve a hard maths puzzle. The first one to solve it adds the block and the others check the answer, which is quick. Cheating would need more computing power than the rest of the network together."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Used by Bitcoin",
+     "Very secure and tested for many years",
+     "Uses a lot of electricity"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Proof of Stake"
+   },
+   {
+    "k": "p",
+    "v": "Instead of solving puzzles, participants lock up (stake) some of the network's tokens as a deposit. One is chosen to propose the next block; if they cheat, they can lose their deposit."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Used by Ethereum since 2022",
+     "Uses far less energy",
+     "Critics say it can favour those who hold more"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Other approaches"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Proof of Authority – a known list of approved validators, common in company blockchains",
+     "Other variants exist, but they all answer the same question: who adds the next block and why others trust it"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) The 51% problem"
+   },
+   {
+    "k": "warn",
+    "v": "If one group controls more than half of the mining power or stake, it can rewrite recent history. Large networks make this very expensive; small, new networks are much easier to attack."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Wallets and keys",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what a wallet really holds",
+     "Understand public and private keys",
+     "Know why the recovery phrase is everything"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. This is the most important lesson for your safety."
+   },
+   {
+    "k": "h",
+    "v": "1) A wallet does not hold coins"
+   },
+   {
+    "k": "p",
+    "v": "The records live on the blockchain. A wallet holds keys – the secret that proves you are allowed to move what belongs to your address."
+   },
+   {
+    "k": "h",
+    "v": "2) Two keys"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Public address – like your account number. Safe to share so people can send to you",
+     "Private key – like your signature and PIN together. Whoever has it controls everything",
+     "Recovery phrase (seed phrase) – usually 12 or 24 words that can rebuild all your private keys"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Anyone who sees your recovery phrase can empty your wallet in seconds, from anywhere in the world, and nobody can reverse it. Real support staff, exchanges and apps NEVER ask for it."
+   },
+   {
+    "k": "h",
+    "v": "3) Kinds of wallet"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hot wallet – an app on your phone or browser. Convenient, but online",
+     "Hardware wallet – a small device that keeps keys offline. Safer for larger amounts",
+     "Paper backup – the recovery phrase written down and stored safely",
+     "Custodial – an exchange holds the keys for you. Easy, but you depend on that company"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Storing your recovery phrase"
+   },
+   {
+    "k": "steps",
+    "v": "Do this, in order.|Write it on paper by hand – never a screenshot, photo, note app, email or cloud drive.|Check every word and its order.|Keep it somewhere private and dry; some people keep two copies in two places.|Never type it into any website or form, and never tell it to anyone who messages you."
+   },
+   {
+    "k": "tip",
+    "v": "'Not your keys, not your coins': if a company holds your keys, your access depends on that company staying honest and open."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Transactions and fees",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Follow a transaction from sending to confirmed",
+     "Know what fees and confirmations are",
+     "Understand why mistakes can't be undone"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The journey of a transaction"
+   },
+   {
+    "k": "steps",
+    "v": "What happens when you send.|You enter the receiver's address and the amount in your wallet.|The wallet signs it with your private key – this proves it is yours without revealing the key.|It is sent to the network and waits in a queue (the mempool).|A miner or validator puts it in a block.|More blocks are added on top – each one is a confirmation."
+   },
+   {
+    "k": "h",
+    "v": "2) Fees"
+   },
+   {
+    "k": "p",
+    "v": "You pay a small fee to the network to have your transaction included. When the network is busy, fees go up. The fee goes to the miners or validators, not to the wallet app (though some apps add their own charge)."
+   },
+   {
+    "k": "h",
+    "v": "3) No undo button"
+   },
+   {
+    "k": "warn",
+    "v": "A confirmed transaction cannot be cancelled or reversed. There is no bank to call. Send to a wrong address and it is almost always gone for good."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Copy and paste addresses, never type them",
+     "Check the first and last 4–6 characters after pasting – some malware swaps copied addresses",
+     "Send a small test amount first when using a new address",
+     "Make sure you are on the same network as the receiver; sending on the wrong network can lose the funds"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Public does not mean anonymous"
+   },
+   {
+    "k": "p",
+    "v": "Anyone can see every transaction on a public blockchain. Addresses don't show names, but once an address is linked to a person – for example through an exchange that checked their ID – their history can be traced."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Smart contracts",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what a smart contract is",
+     "See a simple example",
+     "Know the risks"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Code that runs on the blockchain"
+   },
+   {
+    "k": "p",
+    "v": "A smart contract is a small program stored on a blockchain. It runs exactly as written when its conditions are met, and nobody can stop or change it once it is deployed (unless the code itself allows changes)."
+   },
+   {
+    "k": "h",
+    "v": "2) The vending-machine example"
+   },
+   {
+    "k": "p",
+    "v": "A vending machine is a simple contract: put in the right money, choose an item, and the machine gives it to you – no shopkeeper needed. A smart contract does the same with digital records."
+   },
+   {
+    "k": "h",
+    "v": "3) An escrow example in plain words"
+   },
+   {
+    "k": "steps",
+    "v": "A freelance payment held by a contract.|Client puts the payment into the contract.|The contract holds it – neither side can take it alone.|When the client confirms delivery, the contract releases payment to the freelancer.|If nothing happens by the deadline, the contract returns it to the client."
+   },
+   {
+    "k": "h",
+    "v": "4) Where they are used"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ethereum is the best-known platform; the main language is Solidity",
+     "Tokens and digital collectibles are smart contracts",
+     "Voting, ticketing, insurance pay-outs and supply-chain tracking are being tried"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "5) The risks"
+   },
+   {
+    "k": "warn",
+    "v": "A bug in a smart contract can't simply be patched, and losses from hacked contracts have run into billions. Before trusting any contract, check that it has been audited by a known security firm – and remember that even audited code can fail."
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Code is only as good as the person who wrote it",
+     "A contract that 'promises' fixed high returns is a red flag, not a feature",
+     "Connecting your wallet to an unknown site can let it move your tokens – only approve what you understand"
+    ]
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Real-world uses beyond coins",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "See where blockchains are used outside money",
+     "Judge when a blockchain is the right tool",
+     "Know when it is not"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Uses being tried around the world"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Supply chains – tracking food, medicine or cotton from farm to shop",
+     "Certificates – universities issuing diplomas anyone can verify",
+     "Land and property records – a tamper-proof history of who owned what",
+     "Cross-border payments between banks",
+     "Digital identity – people controlling their own verified documents",
+     "Charity tracking – showing donors where their money went"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Does this problem need a blockchain?"
+   },
+   {
+    "k": "steps",
+    "v": "Ask these questions.|Do several parties who don't fully trust each other need to share the same record?|Is there no single trusted organisation that could just keep a normal database?|Is it important that history can never be changed?|If the answer to all three is yes, a blockchain may help. If not, a normal database is usually cheaper, faster and simpler."
+   },
+   {
+    "k": "h",
+    "v": "3) Honest limits"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Slower and more expensive than a normal database for most jobs",
+     "Garbage in, garbage out – it cannot check that real-world data is true",
+     "Mistakes are hard to fix because data can't be edited",
+     "Many projects announced with excitement were later quietly dropped"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "When someone says 'we put it on the blockchain', ask what problem it solved that a normal database could not. A good project has a clear answer."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Scams and how to stay safe",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Recognise the most common scams",
+     "Know the warning signs",
+     "Know what to do if you are targeted"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes. Please share this lesson with your family."
+   },
+   {
+    "k": "p",
+    "v": "Most people who lose money around blockchain are not hacked by clever code. They are tricked by a person. These are the scams seen most often, worldwide and in Pakistan."
+   },
+   {
+    "k": "h",
+    "v": "1) The common scams"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Guaranteed profit schemes – 'double your money', 'fixed 2% daily'. Real investments never guarantee returns",
+     "Ponzi and pyramid schemes – early members are paid with new members' money; you earn by recruiting. It always collapses",
+     "Romance and 'friendship' scams – a friendly stranger online slowly convinces you to 'invest' on a site they recommend",
+     "Fake apps and websites – copies of real wallets or exchanges that steal your keys",
+     "Fake support – someone 'from the exchange' messages you and asks for your recovery phrase or screen share",
+     "Recovery scams – after a loss, someone offers to get your money back for a fee. This is a second scam",
+     "Fake giveaways – 'send 1, get 2 back' using a famous person's photo",
+     "Pump and dump – a group hypes an unknown token, then the organisers sell and the price crashes"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Warning signs"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pressure to act now",
+     "Guaranteed or very high returns",
+     "Payment only in crypto or gift cards",
+     "Requests for your recovery phrase, private key, OTP or screen share",
+     "You must recruit others to earn",
+     "The person refuses a video call or meeting in public"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "No real company, exchange, government office or XpertCreation team member will ever ask for your recovery phrase, private key or one-time code."
+   },
+   {
+    "k": "h",
+    "v": "3) If you are targeted"
+   },
+   {
+    "k": "steps",
+    "v": "Do this.|Stop. Don't send more money, even if they say it is a 'release fee' or 'tax'.|Save screenshots, addresses, phone numbers and links.|Report it to the platform, and in Pakistan to the National Cyber Crime Investigation Agency (NCCIA, formerly the FIA Cybercrime Wing), or the cybercrime unit in your country.|Warn your contacts, and report the profile on XpertCreation using Report."
+   },
+   {
+    "k": "h",
+    "v": "4) The law"
+   },
+   {
+    "k": "p",
+    "v": "Rules on crypto and digital assets are different in every country and change often. Before using any service, check what your central bank and financial regulator say right now – for Pakistan, the State Bank of Pakistan and the official regulator announcements."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Careers and next steps",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know the jobs that use blockchain skills",
+     "Have a learning path",
+     "Review the course before the quiz"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Jobs that use these skills"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Smart contract developer – writes and tests contracts (Solidity, Rust)",
+     "Security auditor – finds bugs in contracts before they go live",
+     "Back-end developer – connects apps and websites to blockchains",
+     "Product manager and business analyst – decides when a blockchain makes sense",
+     "Compliance and fraud analyst – helps companies follow the law and spot scams",
+     "Writer, trainer and community manager – explains the technology clearly"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) A learning path for developers"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step.|Learn programming basics first – JavaScript or Python.|Learn how the web and APIs work.|Learn Solidity from the official documentation and practise in Remix, a free browser editor.|Deploy only on a test network (testnet), which uses free test tokens with no real value.|Study common security mistakes before writing anything that handles real value.|Build small projects and show them on your XpertConnect profile and in Freelance."
+   },
+   {
+    "k": "tip",
+    "v": "You never need to buy any coin to learn blockchain development. Testnets give you free test tokens."
+   },
+   {
+    "k": "h",
+    "v": "3) Course summary"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A blockchain is a shared, append-only record kept by many computers",
+     "Hashes are fingerprints; blocks link by storing the previous block's hash",
+     "Consensus (Proof of Work, Proof of Stake) decides who adds the next block",
+     "A wallet holds keys; the recovery phrase is everything – never share it",
+     "Transactions can't be reversed, so check every address",
+     "Smart contracts are code that runs as written – bugs and scams included",
+     "Guaranteed profits, pressure and requests for your keys mean scam"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Take the quiz below. Pass it and you get your XpertAcademy certificate."
+   }
+  ]
+ }
+}

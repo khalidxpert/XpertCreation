@@ -1562,6 +1562,10 @@ body.rtl .wafab{right:auto;left:16px}
     { at: 0, t: { en: "Listening and Reading" }, key: "s1" },
     { at: 5, t: { en: "Writing, Speaking and test day" }, key: "s2" }
   ];
+  SECTIONS.blockchain = [
+    { at: 0, t: { en: "How it works" }, key: "s1" },
+    { at: 5, t: { en: "Using it safely" }, key: "s2" }
+  ];
   SECTIONS.alquran = [
     { at: 0,  t: { en: "Week 1", ur: "\u067e\u06c1\u0644\u0627 \u06c1\u0641\u062a\u06c1" }, key: "wk1" },
     { at: 7,  t: { en: "Week 2", ur: "" }, key: "wk2" },
@@ -3257,6 +3261,18 @@ body.rtl .wafab{right:auto;left:16px}
     "knownMinutes": 30,
     "lessons": []
   }
+  ,
+  {
+    "id": "blockchain",
+    "name": "Blockchain basics",
+    "icon": "🔗",
+    "accent": "#0F766E",
+    "blurb": "How blockchains work: hashes, blocks, consensus, wallets and keys, transactions, smart contracts, real uses and staying safe from scams. Ten lessons.",
+    "remote": "/academy/courses/blockchain.json",
+    "knownLessons": 10,
+    "knownMinutes": 25,
+    "lessons": []
+  }
   /* lang:end */
 ];
 
@@ -3413,7 +3429,7 @@ body.rtl .wafab{right:auto;left:16px}
      never vanish by being forgotten. */
   var COURSE_GROUPS = [
     {t: "Microsoft Office", ids: ["word", "excel", "powerpoint", "vba"]},
-    {t: "Programming",      ids: ["python", "javascript"]},
+    {t: "Programming",      ids: ["python", "javascript", "blockchain"]},
     {t: "Languages",        ids: ["korean", "japanese", "turkish",
                                   "german", "french", "norwegian"]},
     {t: "Exams",            ids: ["ielts"]},
@@ -3520,7 +3536,7 @@ body.rtl .wafab{right:auto;left:16px}
     if (!raw.length) raw = [{ at: 0, t: { en: "" } }];
     return raw.map(function(sec, i){
       var next = raw[i+1] ? raw[i+1].at : c.lessons.length;
-      return { title: sec.key ? t(sec.key) : (sec.t[lang] || sec.t.en),
+      return { title: (sec.key && T[sec.key]) ? t(sec.key) : (sec.t[lang] || sec.t.en),
                from: sec.at, to: Math.min(next, c.lessons.length) };
     });
   }
