@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Get the blue tick — XpertConnect</title>
+<title>Get verified — XpertConnect</title>
 <!-- seo:start -->
 <meta name="description" content="Meet the team behind XpertCreation: the people who build and run free learning, tools and community from Lahore, Pakistan.">
 <link rel="canonical" href="https://xpertcreation.com/get-verified">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="XpertCreation">
-<meta property="og:title" content="Get the blue tick — XpertConnect">
+<meta property="og:title" content="Get verified — XpertConnect">
 <meta property="og:description" content="Meet the team behind XpertCreation: the people who build and run free learning, tools and community from Lahore, Pakistan.">
 <meta property="og:url" content="https://xpertcreation.com/get-verified">
 <meta property="og:image" content="https://xpertcreation.com/brand/og-cover.jpg">
@@ -18,7 +18,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Get the blue tick — XpertConnect">
+<meta name="twitter:title" content="Get verified — XpertConnect">
 <meta name="twitter:description" content="Meet the team behind XpertCreation: the people who build and run free learning, tools and community from Lahore, Pakistan.">
 <meta name="twitter:image" content="https://xpertcreation.com/brand/og-cover.jpg">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"The team","url":"https://xpertcreation.com/team","description":"Who builds and looks after XpertCreation.","inLanguage":"en","publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com","logo":"https://xpertcreation.com/brand/icon-512.png"}}</script>
@@ -183,8 +183,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function msg(t, k){ var m = document.getElementById("gvm"); if (m){ m.className = "gvmsg " + (k || ""); m.textContent = t; } }
   function draw(){
     var lock = K.status === "pending" || K.ticked;
-    var st = K.ticked ? "\u2714 You have the blue tick." : {draft: "Not requested yet.", pending: "\u23F3 Your documents are with our team. We may contact you on WhatsApp.", approved: "\u2714 Blue tick given.", rejected: "Not approved: " + (K.review_note || "")}[K.status];
-    var h = '<h1 style="font-size:23px">\u2714 Get the blue tick</h1><div class="gvst ' + (K.ticked ? "approved" : K.status) + '">' + esc(st) + '</div>';
+    var st = K.ticked ? "\u2714 You have the blue tick." : {draft: "Not requested yet.", pending: "\u23F3 Your documents are with our team. We may contact you on WhatsApp.", approved: "\u2714 ID verified.", rejected: "Not approved: " + (K.review_note || "")}[K.status];
+    var h = '<h1 style="font-size:23px">\u2714 Get verified</h1><p class=\"sub\" style=\"margin:0 0 12px\">An approved ID makes you <b>ID verified</b>: needed to open a shop, sell on Freelance, list property or drive. The <b>blue tick</b> is a paid badge: <a href=\"/promote?product=blue_tick\">get it on Promote</a>. It switches on once your ID is verified.</p><div class="gvst ' + (K.ticked ? "approved" : K.status) + '">' + esc(st) + '</div>';
     if (!K.has_profile) h += '<div class="gvb"><h2>First: your XpertConnect profile</h2><p class="sub">The blue tick shows on your profile, so create it first.</p><a class="gvbtn" href="/me/profile">Create my profile</a></div>';
     h += '<div class="gvb"><h2>What we need</h2><p class="sub">Your <b>CNIC (front and back)</b> or <b>passport</b>, an <b>address proof</b> (a utility bill or bank statement), and your <b>WhatsApp</b> number so our team can contact you. Documents are private: only you and our moderators can open them, and they are deleted 30 days after the decision.</p>'
       + '<label>WhatsApp number</label><input id="gvwa" value="' + esc(K.whatsapp) + '" placeholder="+923001234567"' + (lock ? " disabled" : "") + '>'

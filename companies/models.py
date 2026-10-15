@@ -55,7 +55,7 @@ class PersonKyc(models.Model):
     """A member's request for the blue tick: WhatsApp + ID proof + address proof, reviewed by moderators.
     Approval switches on the profile's 'verified' (the same field the admin uses)."""
     DRAFT, PENDING, APPROVED, REJECTED = "draft", "pending", "approved", "rejected"
-    STATES = [(DRAFT, "Draft"), (PENDING, "Waiting for review"), (APPROVED, "Blue tick given"), (REJECTED, "Not approved")]
+    STATES = [(DRAFT, "Draft"), (PENDING, "Waiting for review"), (APPROVED, "ID verified"), (REJECTED, "Not approved")]
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="person_kyc")
     whatsapp = models.CharField(max_length=24, blank=True, default="")
     status = models.CharField(max_length=10, choices=STATES, default=DRAFT, db_index=True)

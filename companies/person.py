@@ -153,18 +153,13 @@ def review(request, pk):
         return _err("Write the reason, so the member knows what to fix.")
     p = _profile(k.user)
     if act == "approve":
-        if not p:
-            return _err("This member has no XpertConnect profile yet.")
-        upd = {"verified": True}
-        if "verified_at" in {f.name for f in p._meta.get_fields()}:
-            upd["verified_at"] = timezone.now()
-        type(p).objects.filter(pk=p.pk).update(**upd)          # the same field the admin switches on
+        pass                                   # ID verified only. The blue tick is paid: the kyctick app switches it on.
     k.status = PersonKyc.APPROVED if act == "approve" else PersonKyc.REJECTED
     k.review_note, k.reviewed_by, k.reviewed_at = note, request.user, timezone.now()
     k.save(update_fields=["status", "review_note", "reviewed_by", "reviewed_at", "updated_at"])
     try:
         from notifications.views import notify
-        notify(k.user, "kyc", "\u2714 You now have the blue tick on XpertConnect." if act == "approve" else "Blue tick not approved: %s" % note, "/get-verified")
+        notify(k.user, "kyc", "\u2714 Your ID is verified (KYC approved). The blue tick is a separate paid badge on Promote." if act == "approve" else "ID check not approved: %s" % note, "/get-verified")
     except Exception:
         pass
     return Response(_out(k))

@@ -209,17 +209,17 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
           + '<div class="rvr"><b>WhatsApp</b><span>' + esc(k.whatsapp || "\u2014") + '</span></div>'
           + '<div class="rvr"><b>Documents</b><span>' + (k.docs.length ? k.docs.map(function(x){ return '<a href="/api/companies/kyc/docs/' + x.id + '/" target="_blank" rel="noopener">\uD83D\uDCC4 ' + esc(x.kind_label) + '</a>'; }).join("<br>") : "none") + '</span></div>'
           + (pending ? '<a class="rvb wa" href="https://wa.me/' + esc(String(k.whatsapp).replace(/\D/g, "")) + '" target="_blank" rel="noopener">WhatsApp them</a>'
-            + '<textarea id="pnote-' + k.id + '" placeholder="Note (required to reject - the member sees it)"></textarea><button class="rvb ok" data-pv="approve" data-id="' + k.id + '">\u2714 Give blue tick</button><button class="rvb no" data-pv="reject" data-id="' + k.id + '">Reject</button>'
+            + '<textarea id="pnote-' + k.id + '" placeholder="Note (required to reject - the member sees it)"></textarea><button class="rvb ok" data-pv="approve" data-id="' + k.id + '">\u2714 Approve ID</button><button class="rvb no" data-pv="reject" data-id="' + k.id + '">Reject</button>'
             : (k.review_note ? '<p class="sub">Note: ' + esc(k.review_note) + '</p>' : '')) + '</div>';
       };
-      pb.innerHTML = '<h2 style="margin-top:26px">\u2714 People asking for the blue tick (' + d.pending.length + ')</h2>' + (d.pending.length ? d.pending.map(function(k){ return one(k, true); }).join("") : '<p class="fnote">Nothing waiting.</p>')
+      pb.innerHTML = '<h2 style="margin-top:26px">\u2714 People asking for ID verification (KYC) (' + d.pending.length + ')</h2>' + (d.pending.length ? d.pending.map(function(k){ return one(k, true); }).join("") : '<p class="fnote">Nothing waiting.</p>')
         + '<h3 style="margin-top:20px">Recently decided</h3>' + (d.recent.length ? d.recent.map(function(k){ return one(k, false); }).join("") : '<p class="fnote">None yet.</p>');
     });
   }
   document.addEventListener("click", function(e){
     var b = e.target.closest("[data-pv]"); if (!b) return;
     var id = b.getAttribute("data-id"), act = b.getAttribute("data-pv"), note = (document.getElementById("pnote-" + id) || {}).value || "";
-    if (act === "approve" && !confirm("Give this member the blue tick?")) return;
+    if (act === "approve" && !confirm("Approve this ID? (This is not the blue tick - the tick is paid on Promote.)")) return;
     fetch("/api/companies/kyc/" + id + "/review/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: JSON.stringify({action: act, note: note})})
       .then(function(r){ return r.json().then(function(d){ if (!r.ok) alert(d.detail || "Could not save."); loadP(); }); });
   });
