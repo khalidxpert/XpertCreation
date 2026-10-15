@@ -993,6 +993,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       var f = function(k, l, ph, ta){ return '<label for="cv_' + k + '">' + l + '</label>' + (ta ? '<textarea id="cv_' + k + '" data-k="' + k + '" placeholder="' + (ph || "") + '" style="min-height:90px">' + esc(d[k] || "") + '</textarea>' : '<input id="cv_' + k + '" data-k="' + k + '" placeholder="' + (ph || "") + '" value="' + esc(d[k] || "") + '">'); };
       var rows = function(k, l, add){ return '<label>' + l + '</label><div id="cvl_' + k + '">' + d[k].map(function(x, i){ return cvRow(k, x, i); }).join("") + '</div><button type="button" class="mk-btn" data-add="' + k + '" style="margin-top:6px;padding:7px 12px">+ ' + add + '</button>'; };
       box.innerHTML = '<div class="mk-sec" style="margin-top:6px"><h2>Your CV</h2><span style="margin-left:auto;font-size:13px;color:var(--soft)">' + (CVD.updated ? 'Saved ' + day(CVD.updated) : 'Not saved yet') + '</span></div>'
+        + '<div id="cvfillbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#EEF2FF;border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:13.5px"><span style="flex:1;min-width:200px">Experience and education come from <a href="/me/profile">your profile</a>. Added something there? Copy it here.</span><button type="button" class="mk-btn" id="cvfill" style="padding:7px 12px">&#8635; Copy from my profile</button></div>'
         + '<div class="mk-cvw"><div class="mk-box mk-f" id="cvf"><b style="font-size:16px">Template</b><div class="mk-tpl" id="cvtpl">' + [["classic", "Classic"], ["modern", "Modern"], ["minimal", "Minimal"]].map(function(t){ return '<button type="button" data-tp="' + t[0] + '" class="' + (CVD.template === t[0] ? 'on' : '') + '">' + t[1] + '</button>'; }).join("") + '</div>'
         + '<div class="row" style="grid-template-columns:1fr 1fr">' + '<div>' + f("name", "Full name") + '</div><div>' + f("headline", "Headline", "Graphic designer &middot; 5 years") + '</div></div>'
         + '<div class="row" style="grid-template-columns:1fr 1fr"><div>' + f("email", "Email") + '</div><div>' + f("phone", "Phone (hidden on the public CV)") + '</div></div>'
@@ -1015,6 +1016,15 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         if (t){ CVD.template = t.getAttribute("data-tp"); [].forEach.call($("cvtpl").children, function(b){ b.className = b === t ? "on" : ""; }); prev(); }
         if (a){ read(); var k = a.getAttribute("data-add"); d[k].push({title: "", org: "", start: "", end: "", detail: ""}); $("cvl_" + k).insertAdjacentHTML("beforeend", cvRow(k, {}, d[k].length - 1)); }
         if (x){ x.parentNode.remove(); prev(); }
+        if (e.target.closest("#cvfill")){
+          read(); var P = CVD.profile || {}, n = 0, key = function(r){ return ((r.title || "") + "|" + (r.org || "")).toLowerCase().replace(/\s+/g, " ").trim(); };
+          ["headline", "summary", "city", "country", "website"].forEach(function(k){ if (P[k] && !String(d[k] || "").trim()){ d[k] = P[k]; var i = $("cv_" + k); if (i) i.value = P[k]; n++; } });
+          if (P.skills){ var have = String(d.skills || "").split(/[,\n]/).map(function(s){ return s.trim().toLowerCase(); }).filter(Boolean), add = P.skills.split(",").map(function(s){ return s.trim(); }).filter(function(s){ return s && have.indexOf(s.toLowerCase()) < 0; });
+            if (add.length){ d.skills = (String(d.skills || "").trim() ? String(d.skills).trim().replace(/,\s*$/, "") + ", " : "") + add.join(", "); $("cv_skills").value = d.skills; n += add.length; } }
+          ["experience", "education"].forEach(function(k){ var got = d[k].map(key); (P[k] || []).forEach(function(r){ if (got.indexOf(key(r)) < 0){ d[k].push(r); n++; } });
+            $("cvl_" + k).innerHTML = d[k].map(function(r, i){ return cvRow(k, r, i); }).join(""); });
+          prev(); $("cvmsg").innerHTML = msg(n ? "Copied from your profile. Check it, then tap Save CV." : ((P.experience || []).length || (P.education || []).length ? "Your CV already has everything from your profile." : "Your profile has no experience or education yet. Add them on your profile first."), n ? "ok" : "bad");
+        }
       };
       $("cvpr").onclick = function(){ prev(); window.print(); };
       $("cvsave").onclick = function(){ read(); var b = this; b.disabled = true;

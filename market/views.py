@@ -1355,17 +1355,47 @@ def cv(request):
         c.template = request.data.get("template") if request.data.get("template") in ("classic", "modern", "minimal") else "classic"
         c.public = bool(request.data.get("public"))
         c.save()
+    prof = _cv_from_profile(u)
     if not c:
-        try:
-            from network.models import ProProfile
-            p = ProProfile.objects.filter(user=u).first()
-        except Exception:
-            p = None
-        return Response({"exists": False, "template": "classic", "public": False, "username": u.username,
-                         "data": {"name": _name(u), "email": u.email or "", "phone": getattr(u, "whatsapp", "") or getattr(u, "phone", "") or "",
-                                  "headline": getattr(p, "headline", "") if p else "", "summary": getattr(p, "about", "") if p else "",
-                                  "experience": [], "education": [], "certifications": [], "projects": []}})
-    return Response({"exists": True, "template": c.template, "public": c.public, "data": c.data, "username": u.username, "updated": c.updated_at.isoformat()})
+        d = {"name": _name(u), "email": u.email or "", "phone": getattr(u, "whatsapp", "") or getattr(u, "phone", "") or "",
+             "certifications": [], "projects": [], "languages": ""}
+        d.update(prof)
+        return Response({"exists": False, "template": "classic", "public": False, "username": u.username, "data": d, "profile": prof})
+    return Response({"exists": True, "template": c.template, "public": c.public, "data": c.data, "username": u.username, "updated": c.updated_at.isoformat(),
+                     "profile": prof})
+
+
+_MON = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+_CTRY = {"PK": "Pakistan", "AE": "UAE", "SA": "Saudi Arabia", "GB": "United Kingdom", "US": "USA", "CA": "Canada", "QA": "Qatar", "OM": "Oman",
+         "KW": "Kuwait", "BH": "Bahrain", "IN": "India", "BD": "Bangladesh", "AU": "Australia", "DE": "Germany", "MY": "Malaysia", "TR": "Turkey", "CN": "China"}
+
+
+def _cv_when(m, y):
+    return ("%s %s" % (_MON[m], y) if m and 0 < m < 13 else str(y)) if y else ""
+
+
+def _cv_from_profile(u):
+    """Experience, education, skills and contact from the member's profile (network app), in CV form."""
+    out = {"headline": "", "summary": "", "city": "", "country": "", "website": "", "skills": "", "experience": [], "education": []}
+    try:
+        from network.models import ProProfile
+        p = ProProfile.objects.filter(user=u).first()
+    except Exception:
+        p = None
+    if not p:
+        return out
+    out.update({"headline": p.headline or "", "summary": p.about or "", "city": p.city or "",
+                "country": _CTRY.get((p.country or "").upper(), p.country or ""), "website": p.website or ""})
+    try:
+        out["skills"] = ", ".join(s.name for s in p.skills.all())[:600]
+        exp = sorted(p.experience.all(), key=lambda x: (x.end_year is not None, -(x.start_year or 0), -(x.start_month or 0)))
+        out["experience"] = [{"title": x.title, "org": ", ".join(v for v in (x.company, x.city) if v), "start": _cv_when(x.start_month, x.start_year),
+                              "end": "Now" if x.end_year is None else _cv_when(x.end_month, x.end_year), "detail": x.description or ""} for x in exp][:15]
+        out["education"] = [{"title": ", ".join(v for v in (x.degree, x.field) if v) or x.school, "org": x.school if (x.degree or x.field) else "",
+                             "start": str(x.start_year or ""), "end": str(x.end_year or ""), "detail": ""} for x in p.education.all()][:15]
+    except Exception:
+        pass
+    return out
 
 
 @api_view(["GET"])
