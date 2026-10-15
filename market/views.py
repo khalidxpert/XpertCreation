@@ -1386,15 +1386,28 @@ def _cv_from_profile(u):
         return out
     out.update({"headline": p.headline or "", "summary": p.about or "", "city": p.city or "",
                 "country": _CTRY.get((p.country or "").upper(), p.country or ""), "website": p.website or ""})
+    import logging
+    log = logging.getLogger("market.cv")
+    try:                                    # skills: most endorsed first (same order as on the profile)
+        from django.db.models import Count as _C
+        out["skills"] = ", ".join(s.name for s in p.skills.annotate(n=_C("endorsements")).order_by("-n", "order", "id"))[:600]
+    except Exception:
+        log.exception("cv skills")
+        try:
+            out["skills"] = ", ".join(s.name for s in p.skills.all())[:600]
+        except Exception:
+            pass
     try:
-        out["skills"] = ", ".join(s.name for s in p.skills.all())[:600]
         exp = sorted(p.experience.all(), key=lambda x: (x.end_year is not None, -(x.start_year or 0), -(x.start_month or 0)))
-        out["experience"] = [{"title": x.title, "org": ", ".join(v for v in (x.company, x.city) if v), "start": _cv_when(x.start_month, x.start_year),
+        out["experience"] = [{"title": x.title or "", "org": ", ".join(v for v in (x.company, x.city) if v), "start": _cv_when(x.start_month, x.start_year),
                               "end": "Now" if x.end_year is None else _cv_when(x.end_month, x.end_year), "detail": x.description or ""} for x in exp][:15]
+    except Exception:
+        log.exception("cv experience")
+    try:
         out["education"] = [{"title": ", ".join(v for v in (x.degree, x.field) if v) or x.school, "org": x.school if (x.degree or x.field) else "",
                              "start": str(x.start_year or ""), "end": str(x.end_year or ""), "detail": ""} for x in p.education.all()][:15]
     except Exception:
-        pass
+        log.exception("cv education")
     return out
 
 

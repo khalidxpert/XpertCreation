@@ -1027,6 +1027,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         }
       };
       $("cvpr").onclick = function(){ prev(); window.print(); };
+      var P0 = CVD.profile || {};
+      if ((!d.experience.length && (P0.experience || []).length) || (!d.education.length && (P0.education || []).length) || (!String(d.skills || "").trim() && P0.skills)) $("cvfill").click();
       $("cvsave").onclick = function(){ read(); var b = this; b.disabled = true;
         api("cv/", {data: d, template: CVD.template, public: $("cvpub").checked}).then(function(x){ b.disabled = false; if (x.ok){ CVD = x.d; $("cvmsg").innerHTML = msg("Saved." + (x.d.public ? " Buyers can see it on your seller page." : ""), "ok"); } else $("cvmsg").innerHTML = msg(esc(x.d.detail || "Could not save."), "bad"); }); };
     });
