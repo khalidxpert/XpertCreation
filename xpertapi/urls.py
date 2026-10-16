@@ -56,6 +56,7 @@ urlpatterns = [
     path("api/shop/", include("shop.urls")),
     path("api/meetup/", include("meetup.urls")),
     path("api/linkpreview/", include("linkprev.urls")),
+    path("api/nearby/", include("nearbypro.urls")),
     path("api/playbill/", include("playbill.urls")),
     path("api/predict/", include("predict.urls")),
     path("api/corner/", include("corner.urls")),

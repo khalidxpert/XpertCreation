@@ -69,30 +69,76 @@ ol.steps{padding-left:20px;margin:6px 0 0;line-height:1.7;font-size:14.5px}
 `}return e%2&&a>0?I.substring(0,I.length-e-1)+Array(e+1).join("\u2580"):I.substring(0,I.length-1)};return v.createASCII=function(a,f){if(a=a||1,a<2)return ar(f);a-=1,f=typeof f>"u"?a*2:f;var e=v.getModuleCount()*a+f*2,u=f,o=e-f,d,c,p,b,C=Array(a+1).join("\u2588\u2588"),A=Array(a+1).join("  "),R="",I="";for(d=0;d<e;d+=1){for(p=Math.floor((d-u)/a),I="",c=0;c<e;c+=1)b=1,u<=c&&c<o&&u<=d&&d<o&&v.isDark(p,Math.floor((c-u)/a))&&(b=0),I+=b?C:A;for(p=0;p<a;p+=1)R+=I+`
 `}return R.substring(0,R.length-1)},v.renderTo2dContext=function(a,f){f=f||2;for(var e=v.getModuleCount(),u=0;u<e;u++)for(var o=0;o<e;o++)a.fillStyle=v.isDark(u,o)?"black":"white",a.fillRect(u*f,o*f,f,f)},v};P.stringToBytesFuncs={default:function(x){for(var w=[],g=0;g<x.length;g+=1){var l=x.charCodeAt(g);w.push(l&255)}return w}},P.stringToBytes=P.stringToBytesFuncs.default,P.createStringToBytes=function(x,w){var g=function(){for(var n=rr(x),s=function(){var T=n.read();if(T==-1)throw"eof";return T},t=0,r={};;){var h=n.read();if(h==-1)break;var i=s(),v=s(),_=s(),B=String.fromCharCode(h<<8|i),y=v<<8|_;r[B]=y,t+=1}if(t!=w)throw t+" != "+w;return r}(),l=63;return function(n){for(var s=[],t=0;t<n.length;t+=1){var r=n.charCodeAt(t);if(r<128)s.push(r);else{var h=g[n.charAt(t)];typeof h=="number"?(h&255)==h?s.push(h):(s.push(h>>>8),s.push(h&255)):s.push(l)}}return s}};var D={MODE_NUMBER:1,MODE_ALPHA_NUM:2,MODE_8BIT_BYTE:4,MODE_KANJI:8},O={L:1,M:0,Q:3,H:2},L={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7},k=function(){var x=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],w=1335,g=7973,l=21522,n={},s=function(t){for(var r=0;t!=0;)r+=1,t>>>=1;return r};return n.getBCHTypeInfo=function(t){for(var r=t<<10;s(r)-s(w)>=0;)r^=w<<s(r)-s(w);return(t<<10|r)^l},n.getBCHTypeNumber=function(t){for(var r=t<<12;s(r)-s(g)>=0;)r^=g<<s(r)-s(g);return t<<12|r},n.getPatternPosition=function(t){return x[t-1]},n.getMaskFunction=function(t){switch(t){case L.PATTERN000:return function(r,h){return(r+h)%2==0};case L.PATTERN001:return function(r,h){return r%2==0};case L.PATTERN010:return function(r,h){return h%3==0};case L.PATTERN011:return function(r,h){return(r+h)%3==0};case L.PATTERN100:return function(r,h){return(Math.floor(r/2)+Math.floor(h/3))%2==0};case L.PATTERN101:return function(r,h){return r*h%2+r*h%3==0};case L.PATTERN110:return function(r,h){return(r*h%2+r*h%3)%2==0};case L.PATTERN111:return function(r,h){return(r*h%3+(r+h)%2)%2==0};default:throw"bad maskPattern:"+t}},n.getErrorCorrectPolynomial=function(t){for(var r=K([1],0),h=0;h<t;h+=1)r=r.multiply(K([1,M.gexp(h)],0));return r},n.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case D.MODE_NUMBER:return 10;case D.MODE_ALPHA_NUM:return 9;case D.MODE_8BIT_BYTE:return 8;case D.MODE_KANJI:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case D.MODE_NUMBER:return 12;case D.MODE_ALPHA_NUM:return 11;case D.MODE_8BIT_BYTE:return 16;case D.MODE_KANJI:return 10;default:throw"mode:"+t}else if(r<41)switch(t){case D.MODE_NUMBER:return 14;case D.MODE_ALPHA_NUM:return 13;case D.MODE_8BIT_BYTE:return 16;case D.MODE_KANJI:return 12;default:throw"mode:"+t}else throw"type:"+r},n.getLostPoint=function(t){for(var r=t.getModuleCount(),h=0,i=0;i<r;i+=1)for(var v=0;v<r;v+=1){for(var _=0,B=t.isDark(i,v),y=-1;y<=1;y+=1)if(!(i+y<0||r<=i+y))for(var T=-1;T<=1;T+=1)v+T<0||r<=v+T||y==0&&T==0||B==t.isDark(i+y,v+T)&&(_+=1);_>5&&(h+=3+_-5)}for(var i=0;i<r-1;i+=1)for(var v=0;v<r-1;v+=1){var E=0;t.isDark(i,v)&&(E+=1),t.isDark(i+1,v)&&(E+=1),t.isDark(i,v+1)&&(E+=1),t.isDark(i+1,v+1)&&(E+=1),(E==0||E==4)&&(h+=3)}for(var i=0;i<r;i+=1)for(var v=0;v<r-6;v+=1)t.isDark(i,v)&&!t.isDark(i,v+1)&&t.isDark(i,v+2)&&t.isDark(i,v+3)&&t.isDark(i,v+4)&&!t.isDark(i,v+5)&&t.isDark(i,v+6)&&(h+=40);for(var v=0;v<r;v+=1)for(var i=0;i<r-6;i+=1)t.isDark(i,v)&&!t.isDark(i+1,v)&&t.isDark(i+2,v)&&t.isDark(i+3,v)&&t.isDark(i+4,v)&&!t.isDark(i+5,v)&&t.isDark(i+6,v)&&(h+=40);for(var N=0,v=0;v<r;v+=1)for(var i=0;i<r;i+=1)t.isDark(i,v)&&(N+=1);var m=Math.abs(100*N/r/r-50)/5;return h+=m*10,h},n}(),M=function(){for(var x=new Array(256),w=new Array(256),g=0;g<8;g+=1)x[g]=1<<g;for(var g=8;g<256;g+=1)x[g]=x[g-4]^x[g-5]^x[g-6]^x[g-8];for(var g=0;g<255;g+=1)w[x[g]]=g;var l={};return l.glog=function(n){if(n<1)throw"glog("+n+")";return w[n]},l.gexp=function(n){for(;n<0;)n+=255;for(;n>=256;)n-=255;return x[n]},l}();function K(x,w){if(typeof x.length>"u")throw x.length+"/"+w;var g=function(){for(var n=0;n<x.length&&x[n]==0;)n+=1;for(var s=new Array(x.length-n+w),t=0;t<x.length-n;t+=1)s[t]=x[t+n];return s}(),l={};return l.getAt=function(n){return g[n]},l.getLength=function(){return g.length},l.multiply=function(n){for(var s=new Array(l.getLength()+n.getLength()-1),t=0;t<l.getLength();t+=1)for(var r=0;r<n.getLength();r+=1)s[t+r]^=M.gexp(M.glog(l.getAt(t))+M.glog(n.getAt(r)));return K(s,0)},l.mod=function(n){if(l.getLength()-n.getLength()<0)return l;for(var s=M.glog(l.getAt(0))-M.glog(n.getAt(0)),t=new Array(l.getLength()),r=0;r<l.getLength();r+=1)t[r]=l.getAt(r);for(var r=0;r<n.getLength();r+=1)t[r]^=M.gexp(M.glog(n.getAt(r))+s);return K(t,0).mod(n)},l}var Y=function(){var x=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],w=function(n,s){var t={};return t.totalCount=n,t.dataCount=s,t},g={},l=function(n,s){switch(s){case O.L:return x[(n-1)*4+0];case O.M:return x[(n-1)*4+1];case O.Q:return x[(n-1)*4+2];case O.H:return x[(n-1)*4+3];default:return}};return g.getRSBlocks=function(n,s){var t=l(n,s);if(typeof t>"u")throw"bad rs block @ typeNumber:"+n+"/errorCorrectionLevel:"+s;for(var r=t.length/3,h=[],i=0;i<r;i+=1)for(var v=t[i*3+0],_=t[i*3+1],B=t[i*3+2],y=0;y<v;y+=1)h.push(w(_,B));return h},g}(),G=function(){var x=[],w=0,g={};return g.getBuffer=function(){return x},g.getAt=function(l){var n=Math.floor(l/8);return(x[n]>>>7-l%8&1)==1},g.put=function(l,n){for(var s=0;s<n;s+=1)g.putBit((l>>>n-s-1&1)==1)},g.getLengthInBits=function(){return w},g.putBit=function(l){var n=Math.floor(w/8);x.length<=n&&x.push(0),l&&(x[n]|=128>>>w%8),w+=1},g},$=function(x){var w=D.MODE_NUMBER,g=x,l={};l.getMode=function(){return w},l.getLength=function(t){return g.length},l.write=function(t){for(var r=g,h=0;h+2<r.length;)t.put(n(r.substring(h,h+3)),10),h+=3;h<r.length&&(r.length-h==1?t.put(n(r.substring(h,h+1)),4):r.length-h==2&&t.put(n(r.substring(h,h+2)),7))};var n=function(t){for(var r=0,h=0;h<t.length;h+=1)r=r*10+s(t.charAt(h));return r},s=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-48;throw"illegal char :"+t};return l},W=function(x){var w=D.MODE_ALPHA_NUM,g=x,l={};l.getMode=function(){return w},l.getLength=function(s){return g.length},l.write=function(s){for(var t=g,r=0;r+1<t.length;)s.put(n(t.charAt(r))*45+n(t.charAt(r+1)),11),r+=2;r<t.length&&s.put(n(t.charAt(r)),6)};var n=function(s){if("0"<=s&&s<="9")return s.charCodeAt(0)-48;if("A"<=s&&s<="Z")return s.charCodeAt(0)-65+10;switch(s){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+s}};return l},V=function(x){var w=D.MODE_8BIT_BYTE,g=x,l=P.stringToBytes(x),n={};return n.getMode=function(){return w},n.getLength=function(s){return l.length},n.write=function(s){for(var t=0;t<l.length;t+=1)s.put(l[t],8)},n},q=function(x){var w=D.MODE_KANJI,g=x,l=P.stringToBytesFuncs.SJIS;if(!l)throw"sjis not supported.";(function(t,r){var h=l(t);if(h.length!=2||(h[0]<<8|h[1])!=r)throw"sjis not supported."})("\u53CB",38726);var n=l(x),s={};return s.getMode=function(){return w},s.getLength=function(t){return~~(n.length/2)},s.write=function(t){for(var r=n,h=0;h+1<r.length;){var i=(255&r[h])<<8|255&r[h+1];if(33088<=i&&i<=40956)i-=33088;else if(57408<=i&&i<=60351)i-=49472;else throw"illegal char at "+(h+1)+"/"+i;i=(i>>>8&255)*192+(i&255),t.put(i,13),h+=2}if(h<r.length)throw"illegal char at "+(h+1)},s},j=function(){var x=[],w={};return w.writeByte=function(g){x.push(g&255)},w.writeShort=function(g){w.writeByte(g),w.writeByte(g>>>8)},w.writeBytes=function(g,l,n){l=l||0,n=n||g.length;for(var s=0;s<n;s+=1)w.writeByte(g[s+l])},w.writeString=function(g){for(var l=0;l<g.length;l+=1)w.writeByte(g.charCodeAt(l))},w.toByteArray=function(){return x},w.toString=function(){var g="";g+="[";for(var l=0;l<x.length;l+=1)l>0&&(g+=","),g+=x[l];return g+="]",g},w},z=function(){var x=0,w=0,g=0,l="",n={},s=function(r){l+=String.fromCharCode(t(r&63))},t=function(r){if(!(r<0)){if(r<26)return 65+r;if(r<52)return 97+(r-26);if(r<62)return 48+(r-52);if(r==62)return 43;if(r==63)return 47}throw"n:"+r};return n.writeByte=function(r){for(x=x<<8|r&255,w+=8,g+=1;w>=6;)s(x>>>w-6),w-=6},n.flush=function(){if(w>0&&(s(x<<6-w),x=0,w=0),g%3!=0)for(var r=3-g%3,h=0;h<r;h+=1)l+="="},n.toString=function(){return l},n},rr=function(x){var w=x,g=0,l=0,n=0,s={};s.read=function(){for(;n<8;){if(g>=w.length){if(n==0)return-1;throw"unexpected end of file./"+n}var r=w.charAt(g);if(g+=1,r=="=")return n=0,-1;if(r.match(/^\s$/))continue;l=l<<6|t(r.charCodeAt(0)),n+=6}var h=l>>>n-8&255;return n-=8,h};var t=function(r){if(65<=r&&r<=90)return r-65;if(97<=r&&r<=122)return r-97+26;if(48<=r&&r<=57)return r-48+52;if(r==43)return 62;if(r==47)return 63;throw"c:"+r};return s},tr=function(x,w){var g=x,l=w,n=new Array(x*w),s={};s.setPixel=function(i,v,_){n[v*g+i]=_},s.write=function(i){i.writeString("GIF87a"),i.writeShort(g),i.writeShort(l),i.writeByte(128),i.writeByte(0),i.writeByte(0),i.writeByte(0),i.writeByte(0),i.writeByte(0),i.writeByte(255),i.writeByte(255),i.writeByte(255),i.writeString(","),i.writeShort(0),i.writeShort(0),i.writeShort(g),i.writeShort(l),i.writeByte(0);var v=2,_=r(v);i.writeByte(v);for(var B=0;_.length-B>255;)i.writeByte(255),i.writeBytes(_,B,255),B+=255;i.writeByte(_.length-B),i.writeBytes(_,B,_.length-B),i.writeByte(0),i.writeString(";")};var t=function(i){var v=i,_=0,B=0,y={};return y.write=function(T,E){if(T>>>E)throw"length over";for(;_+E>=8;)v.writeByte(255&(T<<_|B)),E-=8-_,T>>>=8-_,B=0,_=0;B=T<<_|B,_=_+E},y.flush=function(){_>0&&v.writeByte(B)},y},r=function(i){for(var v=1<<i,_=(1<<i)+1,B=i+1,y=h(),T=0;T<v;T+=1)y.add(String.fromCharCode(T));y.add(String.fromCharCode(v)),y.add(String.fromCharCode(_));var E=j(),N=t(E);N.write(v,B);var m=0,U=String.fromCharCode(n[m]);for(m+=1;m<n.length;){var H=String.fromCharCode(n[m]);m+=1,y.contains(U+H)?U=U+H:(N.write(y.indexOf(U),B),y.size()<4095&&(y.size()==1<<B&&(B+=1),y.add(U+H)),U=H)}return N.write(y.indexOf(U),B),N.write(_,B),N.flush(),E.toByteArray()},h=function(){var i={},v=0,_={};return _.add=function(B){if(_.contains(B))throw"dup key:"+B;i[B]=v,v+=1},_.size=function(){return v},_.indexOf=function(B){return i[B]},_.contains=function(B){return typeof i[B]<"u"},_};return s},er=function(x,w,g){for(var l=tr(x,w),n=0;n<w;n+=1)for(var s=0;s<x;s+=1)l.setPixel(s,n,g(s,n));var t=j();l.write(t);for(var r=z(),h=t.toByteArray(),i=0;i<h.length;i+=1)r.writeByte(h[i]);return r.flush(),"data:image/gif;base64,"+r};return P}();(function(){qrcode.stringToBytesFuncs["UTF-8"]=function(P){function D(O){for(var L=[],k=0;k<O.length;k++){var M=O.charCodeAt(k);M<128?L.push(M):M<2048?L.push(192|M>>6,128|M&63):M<55296||M>=57344?L.push(224|M>>12,128|M>>6&63,128|M&63):(k++,M=65536+((M&1023)<<10|O.charCodeAt(k)&1023),L.push(240|M>>18,128|M>>12&63,128|M>>6&63,128|M&63))}return L}return D(P)}})(),function(P){typeof define=="function"&&define.amd?define([],P):typeof exports=="object"&&(module.exports=P())}(function(){return qrcode});
 </script>
+<style>
+.bub .who{display:block;font-size:12px;font-weight:800;color:#7C3AED;margin-bottom:2px}
+.pro{display:inline-block;background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:99px;vertical-align:middle;letter-spacing:.04em}
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(13,20,36,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet .in{background:#fff;width:100%;max-width:560px;border-radius:22px 22px 0 0;padding:18px 18px max(18px,env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+.sheet ul{padding-left:20px;line-height:1.7;font-size:14.5px;margin:6px 0 12px}
+.price{display:flex;gap:8px;margin:8px 0 12px}.price div{flex:1;border:1.5px solid var(--line);border-radius:14px;padding:10px;text-align:center;font-size:13px;color:var(--soft)}.price b{display:block;font-size:19px;color:var(--ink)}
+.links{display:flex;gap:6px;flex-wrap:wrap;padding:6px 12px;background:#fff;border-bottom:1px solid var(--line);font-size:12px}
+.links span{background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:3px 9px;font-weight:700}
+</style>
 <script>
 (function(){
 "use strict";
+var SIGNER_SPKI = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoht8Kq_tXErG_FwUwN4au9wygF0-bUNm2Kid6QjYpoV47BCcknZwDr4sYbd1JDOFHt8WPJfDVu2FRv_WN0zLVg";            // XpertCreation signature check for Nearby Pro (works offline)
+var MAXLINKS = 9;                      // 10 phones in a group
 var $ = function(id){ return document.getElementById(id); };
 var app = $("app");
 function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 function rid(){ var a = new Uint8Array(9); crypto.getRandomValues(a); return Array.prototype.map.call(a, function(x){ return ("0" + x.toString(16)).slice(-2); }).join(""); }
-function hm(t){ var d = new Date(t); return d.toLocaleTimeString([], {hour: "numeric", minute: "2-digit"}); }
+function hm(t){ return new Date(t).toLocaleTimeString([], {hour: "numeric", minute: "2-digit"}); }
 function size(n){ return n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
 function initials(n){ return (n || "?").trim().split(/\s+/).map(function(w){ return w[0]; }).join("").slice(0, 2).toUpperCase(); }
+function b64u(buf){ var s = "", a = new Uint8Array(buf); for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+function unb64u(s){ s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
 
 /* ---------- who am I ---------- */
 var ME = {i: ls("xcn_id") || rid(), n: ls("xcn_name") || "", u: ls("xcn_user") || ""};
 ls("xcn_id", ME.i);
 function online(){ var on = navigator.onLine; $("net").className = "net" + (on ? " on" : ""); $("nett").textContent = on ? "Internet on (not needed)" : "No internet - works anyway"; }
-online(); addEventListener("online", online); addEventListener("offline", online);
+online(); addEventListener("online", function(){ online(); refreshPass(); }); addEventListener("offline", online);
 if (navigator.onLine) fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
   if (!d) return;
   ME.u = d.username || ""; ls("xcn_user", ME.u);
   if (!ME.n && (d.full_name || d.username)){ ME.n = (d.full_name || d.username).slice(0, 40); ls("xcn_name", ME.n); if (view === "home") home(); }
 }).catch(function(){});
 
-/* ---------- storage (IndexedDB, on this phone only) ---------- */
+/* ---------- Nearby Pro pass: signed by XpertCreation, checked on the phone, works offline ---------- */
+var PRO = null;   // {until: ms, n: name}
+function checkPass(tok){
+  try {
+    var parts = String(tok || "").split("."); if (parts.length !== 2 || !crypto.subtle) return Promise.resolve(null);
+    var body = unb64u(parts[0]), sig = unb64u(parts[1]);
+    return crypto.subtle.importKey("spki", unb64u(SIGNER_SPKI), {name: "ECDSA", namedCurve: "P-256"}, false, ["verify"])
+      .then(function(k){ return crypto.subtle.verify({name: "ECDSA", hash: "SHA-256"}, k, sig, body); })
+      .then(function(ok){ if (!ok) return null; var p = JSON.parse(new TextDecoder().decode(body)); return p.exp * 1000 > Date.now() && p.d === ME.i ? {until: p.exp * 1000, n: p.n} : null; })
+      .catch(function(){ return null; });
+  } catch (e) { return Promise.resolve(null); }
+}
+function refreshPass(){
+  if (!navigator.onLine) return Promise.resolve();
+  return fetch("/api/nearby/pass/?d=" + encodeURIComponent(ME.i), {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (d && d.pass){ ls("xcn_pass", d.pass); return checkPass(d.pass).then(function(p){ PRO = p; if (view === "home") home(); }); }
+    if (d && d.pro === false){ ls("xcn_pass", ""); PRO = null; }
+  }).catch(function(){});
+}
+checkPass(ls("xcn_pass")).then(function(p){ PRO = p; if (view === "home") home(); refreshPass(); });
+function proSheet(why){
+  var d = document.createElement("div"); d.className = "sheet";
+  d.innerHTML = '<div class="in"><h2>Nearby <span class="pro">PRO</span></h2><p class="s">' + esc(why || "Add more people to this chat.") + '</p>'
+    + '<ul><li><b>Group chat</b> with up to 10 phones on one hotspot or Wi-Fi</li><li><b>Relay:</b> your phone passes messages along, so people further away can join through you</li><li>Photos and files to the whole group</li><li><b>Only you need it</b> — everyone you add joins free</li></ul>'
+    + '<div class="price"><div><b>Rs 299</b>1 month</div><div><b>Rs 2,499</b>1 year</div></div><p class="s" style="font-size:12.5px">One payment, no auto-renew. Works offline after you buy it (open this page once with internet).</p>'
+    + '<div class="row"><a class="btn" id="buy" href="/promote?product=nearby_pro">Get Nearby Pro</a><button class="btn g" id="cls">Not now</button></div><div class="msg" id="bm"></div></div>';
+  document.body.appendChild(d);
+  d.onclick = function(e){ if (e.target === d) d.remove(); };
+  d.querySelector("#cls").onclick = function(){ d.remove(); };
+  d.querySelector("#buy").onclick = function(e){ if (!navigator.onLine){ e.preventDefault(); d.querySelector("#bm").className = "msg bad"; d.querySelector("#bm").textContent = "Connect to the internet to buy. You can come back here straight after."; } };
+}
+
+/* ---------- storage (IndexedDB, this phone only) ---------- */
 var dbp = new Promise(function(res){
   try {
     var r = indexedDB.open("xcnearby", 1);
@@ -108,8 +154,6 @@ function putMsg(m){ return tx("msgs", "readwrite", function(s){ return s.put(m);
 function msgsOf(i){ return tx("msgs", "readonly", function(s){ return s.index("peer").getAll(i); }).then(function(a){ return a || []; }); }
 
 /* ---------- pairing codes ---------- */
-function b64u(buf){ var s = "", a = new Uint8Array(buf); for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
-function unb64u(s){ s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
 function slim(sdp){ return sdp.split(/\r?\n/).filter(function(l){ return l && !/^a=(extmap-allow-mixed|msid-semantic)/.test(l) && !/^a=candidate:.* tcp /i.test(l); }).join("\r\n") + "\r\n"; }
 function pack(o){
   var raw = new TextEncoder().encode(JSON.stringify(o));
@@ -160,81 +204,121 @@ function scan(box, onText, onErr){
 }
 function stopScan(){ if (scanStop) scanStop(); }
 
-/* ---------- connection ---------- */
-var pc = null, dc = null, peer = null, incoming = null, sendQ = Promise.resolve(), pending = {};
-function closeConn(){ try { if (dc) dc.close(); } catch (e) {} try { if (pc) pc.close(); } catch (e) {} pc = dc = null; }
-function newPc(){
-  closeConn();
-  pc = new RTCPeerConnection({iceServers: []});
-  pc.onconnectionstatechange = function(){ if (pc && /failed|disconnected|closed/.test(pc.connectionState)) lost(); };
-  return pc;
+/* ---------- links: one WebRTC connection per phone we paired with ---------- */
+var links = [];          // {pc, dc, peer, inFile}
+var seen = {};           // message ids already handled (no loops in a group)
+var GID = null;          // group id when this phone is in a group of 3+
+var pending = {};        // my text messages waiting for a delivered tick (one-to-one only)
+var outQ = Promise.resolve();
+function openLinks(){ return links.filter(function(l){ return l.dc && l.dc.readyState === "open" && l.peer; }); }
+function conv(){ var o = openLinks(); return GID ? GID : (o[0] ? o[0].peer.i : null); }
+function newLink(){
+  var l = {pc: new RTCPeerConnection({iceServers: []}), dc: null, peer: null, inFile: {}};
+  l.pc.onconnectionstatechange = function(){ if (/failed|closed/.test(l.pc.connectionState)) drop(l); };
+  links.push(l); return l;
 }
-function wire(ch){
-  dc = ch; dc.binaryType = "arraybuffer"; dc.bufferedAmountLowThreshold = 1 << 20;
-  dc.onopen = function(){ dc.send(JSON.stringify({t: "hello", me: ME})); };
-  dc.onclose = lost;
-  dc.onmessage = function(e){
-    if (typeof e.data !== "string"){ if (incoming){ incoming.parts.push(e.data); incoming.got += e.data.byteLength; prog(incoming.id, incoming.got / incoming.size); } return; }
+function drop(l){
+  var i = links.indexOf(l); if (i < 0) return; links.splice(i, 1);
+  try { l.dc && l.dc.close(); } catch (e) {} try { l.pc.close(); } catch (e) {}
+  if (l.peer) sys((l.peer.n || "Someone") + " left");
+  if (!openLinks().length){ GID = null; var b = $("cban"); if (b) b.classList.remove("hide"); var t = $("ctext"); if (t) t.disabled = true; }
+  headInfo();
+}
+function closeAll(){ links.slice().forEach(function(l){ try { l.dc && l.dc.close(); } catch (e) {} try { l.pc.close(); } catch (e) {} }); links = []; GID = null; }
+function sendTo(l, obj){ try { if (l.dc && l.dc.readyState === "open") l.dc.send(typeof obj === "string" || obj instanceof ArrayBuffer ? obj : JSON.stringify(obj)); } catch (e) {} }
+function others(l){ return openLinks().filter(function(x){ return x !== l; }); }
+function relayOn(){ return !!PRO && openLinks().length > 1; }      // only a Pro phone passes messages along
+
+/* frames for file chunks: [1 byte id length][id][data] - so a relay can pass them on */
+function frame(id, buf){ var idb = new TextEncoder().encode(id), out = new Uint8Array(1 + idb.length + buf.byteLength); out[0] = idb.length; out.set(idb, 1); out.set(new Uint8Array(buf), 1 + idb.length); return out.buffer; }
+function unframe(ab){ var a = new Uint8Array(ab), n = a[0]; return {id: new TextDecoder().decode(a.subarray(1, 1 + n)), data: ab.slice(1 + n)}; }
+
+function wire(l, ch){
+  l.dc = ch; ch.binaryType = "arraybuffer"; ch.bufferedAmountLowThreshold = 1 << 20;
+  ch.onopen = function(){ sendTo(l, {t: "hello", me: ME, gid: GID, pro: !!PRO}); };
+  ch.onclose = function(){ drop(l); };
+  ch.onmessage = function(e){
+    if (typeof e.data !== "string"){
+      var fr = unframe(e.data), f = l.inFile[fr.id];
+      if (f && relayOn()) others(l).forEach(function(x){ sendTo(x, e.data); });   // only files we saw start here: no loops
+      if (f){ f.parts.push(fr.data); f.got += fr.data.byteLength; prog(fr.id, f.got / f.size); }
+      return;
+    }
     var m; try { m = JSON.parse(e.data); } catch (x) { return; }
-    if (m.t === "hello"){ meet(m.me); }
-    else if (m.t === "msg"){ var it = {peer: peer.i, dir: "in", kind: "text", text: String(m.text).slice(0, 5000), ts: Date.now(), id: m.id}; addMsg(it).then(function(){ bubble(it); }); dc.send(JSON.stringify({t: "ack", id: m.id})); touch(m.text); buzz(); }
-    else if (m.t === "ack"){ var p = pending[m.id]; if (p){ p.ack = 1; if (p.k) putMsg(p); var el = document.querySelector('[data-id="' + m.id + '"] small'); if (el) el.textContent = hm(p.ts) + " ✓✓"; } }
-    else if (m.t === "file"){ incoming = {id: m.id, name: String(m.name).slice(0, 120), mime: String(m.mime || ""), size: +m.size || 0, parts: [], got: 0}; bubble({dir: "in", kind: "file", name: incoming.name, size: incoming.size, id: m.id, ts: Date.now(), loading: 1}); }
-    else if (m.t === "fileend" && incoming && incoming.id === m.id){
-      var f = incoming; incoming = null; var blob = new Blob(f.parts, {type: f.mime});
-      var it2 = {peer: peer.i, dir: "in", kind: "file", name: f.name, mime: f.mime, size: f.size, ts: Date.now(), id: f.id, blob: blob.size <= 8 * 1048576 ? blob : null};
-      addMsg(it2); fillFile(f.id, blob, f); dc.send(JSON.stringify({t: "ack", id: f.id})); touch("📎 " + f.name); buzz();
+    if (m.t === "hello") return meet(l, m);
+    if (m.t === "group"){ if (m.gid && GID !== m.gid){ GID = m.gid; ensureGroup(m.name).then(function(){ chat(GID, true); }); if (relayOn()) others(l).forEach(function(x){ sendTo(x, m); }); } return; }
+    if (m.t === "ack"){ var p = pending[m.id]; if (p){ p.ack = 1; if (p.k) putMsg(p); var el = document.querySelector('[data-id="' + m.id + '"] small'); if (el) el.textContent = hm(p.ts) + " ✓✓"; } return; }
+    if (!m.id || seen[m.id]) return;
+    seen[m.id] = 1;
+    if (relayOn() && (m.ttl || 0) > 0){ var fw = JSON.parse(e.data); fw.ttl = m.ttl - 1; others(l).forEach(function(x){ sendTo(x, fw); }); }
+    var from = m.from || l.peer || {n: "Someone"}, room = m.gid || conv() || (l.peer && l.peer.i);
+    if (m.t === "msg"){
+      var it = {peer: room, dir: "in", kind: "text", text: String(m.text).slice(0, 5000), ts: Date.now(), id: m.id, who: m.gid ? String(from.n || "").slice(0, 40) : ""};
+      addMsg(it).then(function(){ if (view === "chat" && chatPeer === room) bubble(it); });
+      if (!m.gid) sendTo(l, {t: "ack", id: m.id});
+      touch(room, (it.who ? it.who + ": " : "") + m.text); buzz();
+    } else if (m.t === "file"){
+      l.inFile[m.id] = {id: m.id, name: String(m.name).slice(0, 120), mime: String(m.mime || ""), size: +m.size || 0, parts: [], got: 0, room: room, who: m.gid ? String(from.n || "").slice(0, 40) : ""};
+      if (view === "chat" && chatPeer === room) bubble({dir: "in", kind: "file", name: m.name, size: m.size, id: m.id, ts: Date.now(), loading: 1, who: l.inFile[m.id].who});
+    } else if (m.t === "fileend"){
+      var f = l.inFile[m.fid]; if (!f) return; delete l.inFile[m.fid];
+      var blob = new Blob(f.parts, {type: f.mime});
+      var it2 = {peer: f.room, dir: "in", kind: "file", name: f.name, mime: f.mime, size: f.size, ts: Date.now(), id: f.id, who: f.who, blob: blob.size <= 8 * 1048576 ? blob : null};
+      addMsg(it2); fillFile(f.id, blob, f); if (!m.gid) sendTo(l, {t: "ack", id: f.id}); touch(f.room, "📎 " + f.name); buzz();
     }
   };
 }
-function meet(p){
-  if (!p || !p.i) return;
-  peer = {i: String(p.i).slice(0, 40), n: String(p.n || "Someone").slice(0, 40), u: String(p.u || "").slice(0, 30), last: Date.now()};
-  allPeers().then(function(a){ var old = a.filter(function(x){ return x.i === peer.i; })[0]; if (old) peer.prev = old.prev; savePeer(peer).then(function(){ chat(peer.i, true); }); });
+function meet(l, m){
+  var p = m.me || {}; if (!p.i) return;
+  l.peer = {i: String(p.i).slice(0, 40), n: String(p.n || "Someone").slice(0, 40), u: String(p.u || "").slice(0, 30)};
+  if (m.gid && !GID) GID = m.gid;                                   // joining someone's group
+  if (openLinks().length > 1 && PRO && !GID){ GID = "g:" + ME.i + ":" + Date.now().toString(36); }   // I just added a 2nd person: make a group
+  if (GID && openLinks().length > 1) openLinks().forEach(function(x){ sendTo(x, {t: "group", gid: GID, name: groupName()}); });
+  var save = GID ? ensureGroup(groupName()) : allPeers().then(function(a){ var old = a.filter(function(x){ return x.i === l.peer.i; })[0]; var rec = {i: l.peer.i, n: l.peer.n, u: l.peer.u, last: Date.now(), prev: old ? old.prev : ""}; return savePeer(rec); });
+  save.then(function(){ chat(conv(), true); sys((GID ? l.peer.n + " joined the group" : "Connected to " + l.peer.n + " — phone to phone, private")); });
 }
-function touch(t){ if (!peer) return; peer.last = Date.now(); peer.prev = String(t).slice(0, 80); savePeer(peer); }
+function groupName(){ var names = openLinks().map(function(x){ return x.peer.n; }); return "Group: " + [ME.n].concat(names).slice(0, 4).join(", ") + (names.length > 3 ? "…" : ""); }
+function ensureGroup(name){ return allPeers().then(function(a){ var old = a.filter(function(x){ return x.i === GID; })[0]; return savePeer({i: GID, n: name || (old && old.n) || "Group", g: 1, last: Date.now(), prev: old ? old.prev : ""}); }); }
+function touch(room, t){ allPeers().then(function(a){ var p = a.filter(function(x){ return x.i === room; })[0]; if (p){ p.last = Date.now(); p.prev = String(t).slice(0, 80); savePeer(p); } }); }
 function buzz(){ try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} }
-function lost(){
-  if (!dc && !pc) return;
-  closeConn();
-  var b = $("cban"); if (b){ b.classList.remove("hide"); }
-  var i = $("ctext"); if (i) i.disabled = true;
-}
 
-/* host: make a code, then read the answer */
-function startHost(){
+/* ---------- pairing screens ---------- */
+function startHost(adding){
+  if (adding && openLinks().length >= 1 && !PRO) return proSheet("Adding a third person or passing messages on to someone further away needs Nearby Pro on your phone.");
+  if (openLinks().length >= MAXLINKS) return alert("A group can have up to 10 phones.");
   view = "host";
-  app.innerHTML = '<main><div class="card"><h2><span class="stepno">1</span>Let them scan this code</h2><p class="s">The other person opens Nearby chat, taps <b>Join a chat</b> and scans this code. Both phones must be on the same hotspot or Wi-Fi.</p><div class="qr" id="qr"><p class="s">Making your code…</p></div></div>'
+  app.innerHTML = '<main><div class="card"><h2><span class="stepno">1</span>Let them scan this code</h2><p class="s">' + (adding ? "The new person" : "The other person") + ' opens Nearby chat, taps <b>Join a chat</b> and scans this code. ' + (adding ? "They can be on your hotspot, or on a hotspot your phone is joined to (relay)." : "Both phones must be on the same hotspot or Wi-Fi.") + '</p><div class="qr" id="qr"><p class="s">Making your code…</p></div></div>'
     + '<div class="card"><h2><span class="stepno">2</span>Now scan their code</h2><p class="s">When their phone shows a code, tap the button and point your camera at it.</p><div id="cam"></div><div class="row" style="margin-top:10px"><button class="btn" id="scanb">📷 Scan their code</button><button class="btn g" id="pasteb">Paste a code</button></div><div class="msg" id="hm"></div></div>'
     + '<button class="btn g" id="back" style="width:100%">Cancel</button></main>';
-  $("back").onclick = function(){ closeConn(); stopScan(); home(); };
-  var p = newPc(); wire(p.createDataChannel("xc", {ordered: true}));
-  p.createOffer().then(function(o){ return p.setLocalDescription(o); }).then(function(){ return waitIce(p); }).then(function(){
-    return pack({v: 1, t: "o", sdp: slim(p.localDescription.sdp), me: ME});
+  var l = newLink(); wire(l, l.pc.createDataChannel("xc", {ordered: true}));
+  $("back").onclick = function(){ stopScan(); if (!l.peer) drop(l); if (openLinks().length) chat(conv(), true); else home(); };
+  l.pc.createOffer().then(function(o){ return l.pc.setLocalDescription(o); }).then(function(){ return waitIce(l.pc); }).then(function(){
+    return pack({v: 2, t: "o", sdp: slim(l.pc.localDescription.sdp), me: ME});
   }).then(function(code){ qrInto($("qr"), code); window._xcnCode = code; }).catch(function(e){ $("qr").innerHTML = '<p class="msg bad">Could not make a code: ' + esc(e.message) + '</p>'; });
   function useAnswer(t){
     $("hm").className = "msg"; $("hm").textContent = "Connecting…";
-    unpack(t).then(function(a){ if (a.t !== "a") throw new Error("Scan the code from their screen (it appears after they scan yours)."); return p.setRemoteDescription({type: "answer", sdp: a.sdp}); })
-      .then(function(){ setTimeout(function(){ if (view === "host"){ $("hm").className = "msg bad"; $("hm").textContent = "Not connected yet. Check that both phones are on the same hotspot or Wi-Fi, then try again."; } }, 12000); })
+    unpack(t).then(function(a){ if (a.t !== "a") throw new Error("Scan the code from their screen (it appears after they scan yours)."); return l.pc.setRemoteDescription({type: "answer", sdp: a.sdp}); })
+      .then(function(){ setTimeout(function(){ if (view === "host" && !l.peer){ $("hm").className = "msg bad"; $("hm").textContent = "Not connected yet. Check that both phones are on the same hotspot or Wi-Fi, then try again."; } }, 12000); })
       .catch(function(e){ $("hm").className = "msg bad"; $("hm").textContent = e.message; });
   }
   $("scanb").onclick = function(){ scan($("cam"), useAnswer, function(m){ $("hm").className = "msg bad"; $("hm").textContent = m; }); };
   $("pasteb").onclick = function(){ var t = prompt("Paste the code from the other phone:"); if (t) useAnswer(t); };
   window._xcnAnswer = useAnswer;
 }
-/* guest: read their code, show ours */
 function startJoin(){
+  if (openLinks().length >= 1 && !PRO) return proSheet("Your phone is already in a chat. Joining a second one (and passing messages between them) needs Nearby Pro.");
   view = "join";
   app.innerHTML = '<main><div class="card"><h2><span class="stepno">1</span>Scan their code</h2><p class="s">Point your camera at the code on the other phone. Both phones must be on the same hotspot or Wi-Fi.</p><div id="cam"></div><div class="row" style="margin-top:10px"><button class="btn" id="scanb">📷 Start camera</button><button class="btn g" id="pasteb">Paste a code</button></div><div class="msg" id="jm"></div></div>'
     + '<div class="card hide" id="step2"><h2><span class="stepno">2</span>Let them scan this code</h2><p class="s">Show this to the other phone. You are connected as soon as they scan it.</p><div class="qr" id="qr"></div></div>'
     + '<button class="btn g" id="back" style="width:100%">Cancel</button></main>';
-  $("back").onclick = function(){ closeConn(); stopScan(); home(); };
+  var l = null;
+  $("back").onclick = function(){ stopScan(); if (l && !l.peer) drop(l); if (openLinks().length) chat(conv(), true); else home(); };
   function useOffer(t){
     $("jm").className = "msg"; $("jm").textContent = "Reading…";
-    var p = newPc(); p.ondatachannel = function(e){ wire(e.channel); };
-    unpack(t).then(function(o){ if (o.t !== "o") throw new Error("That is a reply code. Scan the code from the person who tapped Start a chat."); return p.setRemoteDescription({type: "offer", sdp: o.sdp}); })
-      .then(function(){ return p.createAnswer(); }).then(function(a){ return p.setLocalDescription(a); }).then(function(){ return waitIce(p); })
-      .then(function(){ return pack({v: 1, t: "a", sdp: slim(p.localDescription.sdp), me: ME}); })
+    l = newLink(); l.pc.ondatachannel = function(e){ wire(l, e.channel); };
+    unpack(t).then(function(o){ if (o.t !== "o") throw new Error("That is a reply code. Scan the code from the person who tapped Start a chat."); return l.pc.setRemoteDescription({type: "offer", sdp: o.sdp}); })
+      .then(function(){ return l.pc.createAnswer(); }).then(function(a){ return l.pc.setLocalDescription(a); }).then(function(){ return waitIce(l.pc); })
+      .then(function(){ return pack({v: 2, t: "a", sdp: slim(l.pc.localDescription.sdp), me: ME}); })
       .then(function(code){ $("jm").className = "msg ok"; $("jm").textContent = "✓ Code read."; $("step2").classList.remove("hide"); qrInto($("qr"), code); window._xcnCode = code; $("step2").scrollIntoView({behavior: "smooth"}); })
       .catch(function(e){ $("jm").className = "msg bad"; $("jm").textContent = e.message; });
   }
@@ -245,30 +329,41 @@ function startJoin(){
 
 /* ---------- chat screen ---------- */
 var view = "home", chatPeer = null;
+function headInfo(){
+  var st = $("cst"), lk = $("lks"); if (!st) return;
+  var o = openLinks(), live = o.length && conv() === chatPeer;
+  st.textContent = live ? (GID ? "🟢 Group chat, no internet needed" + (relayOn() ? " · " + (o.length + 1) + " phones through you" : "") : "🟢 Connected, no internet needed") : "Not connected";
+  if (lk) lk.innerHTML = live && GID && relayOn() ? o.map(function(x){ return "<span>" + esc(x.peer.n) + "</span>"; }).join("") : "";
+}
 function chat(id, live){
+  if (!id) return home();
   stopScan(); view = "chat"; chatPeer = id;
   allPeers().then(function(a){
-    var p = a.filter(function(x){ return x.i === id; })[0] || peer || {i: id, n: "Someone"};
-    var connected = live || (peer && peer.i === id && dc && dc.readyState === "open");
-    app.innerHTML = '<div class="chat"><div class="chead"><button class="btn g" id="cb" style="padding:8px 12px">←</button><div class="av">' + esc(initials(p.n)) + '</div><div><b>' + esc(p.n) + '</b><small id="cst">' + (connected ? "🟢 Connected, no internet needed" : "Not connected") + '</small></div><span class="sp"></span>'
-      + (p.u ? '<a class="btn g" style="padding:8px 10px;font-size:12.5px" href="/u/' + encodeURIComponent(p.u) + '">Profile</a>' : '') + '</div>'
-      + '<div class="banner' + (connected ? " hide" : "") + '" id="cban">Not connected. <a href="#" id="recon">Connect again</a> (both scan codes again)</div>'
+    var p = a.filter(function(x){ return x.i === id; })[0] || {i: id, n: "Chat"};
+    var connected = openLinks().length && conv() === id;
+    var one = !p.g && openLinks()[0] && openLinks()[0].peer;
+    app.innerHTML = '<div class="chat"><div class="chead"><button class="btn g" id="cb" style="padding:8px 12px">←</button><div class="av">' + (p.g ? "👥" : esc(initials(p.n))) + '</div><div style="min-width:0"><b style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:44vw">' + esc(p.n) + '</b><small id="cst"></small></div><span class="sp"></span>'
+      + (connected ? '<button class="btn g" id="addp" style="padding:8px 10px;font-size:12.5px;white-space:nowrap">➕ Add' + (PRO ? "" : ' <span class="pro">PRO</span>') + '</button>' : "")
+      + (one && one.u ? '<a class="btn g" style="padding:8px 10px;font-size:12.5px" href="/u/' + encodeURIComponent(one.u) + '">Profile</a>' : '') + '</div><div class="links" id="lks"></div>'
+      + '<div class="banner' + (connected ? " hide" : "") + '" id="cban">Not connected. <a href="#" id="recon">Connect again</a> (scan codes again)</div>'
       + '<div class="msgs" id="msgs"></div><div class="cin"><button id="att" title="Send a photo or file">📎</button><input type="file" id="file" class="hide" multiple><textarea id="ctext" rows="1" placeholder="Message" ' + (connected ? "" : "disabled") + '></textarea><button class="s" id="send">➤</button></div></div>';
+    headInfo();
     $("cb").onclick = home; $("recon").onclick = function(e){ e.preventDefault(); home(); };
+    if ($("addp")) $("addp").onclick = function(){ startHost(true); };
     $("send").onclick = sendText;
     $("ctext").onkeydown = function(e){ if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); sendText(); } };
-    $("att").onclick = function(){ if (dc && dc.readyState === "open") $("file").click(); };
+    $("att").onclick = function(){ if (openLinks().length) $("file").click(); };
     $("file").onchange = function(){ [].forEach.call(this.files, sendFile); this.value = ""; };
-    msgsOf(id).then(function(ms){ ms.sort(function(x, y){ return x.ts - y.ts; }).forEach(bubble); if (live) sys("Connected to " + p.n + " — phone to phone, private"); });
+    msgsOf(id).then(function(ms){ ms.sort(function(x, y){ return x.ts - y.ts; }).forEach(bubble); });
   });
 }
 function sys(t){ var b = $("msgs"); if (!b) return; var d = document.createElement("div"); d.className = "sys"; d.textContent = t; b.appendChild(d); b.scrollTop = b.scrollHeight; }
 function bubble(m){
   var b = $("msgs"); if (!b || view !== "chat") return;
   var d = document.createElement("div"); d.className = "bub" + (m.dir === "out" ? " me" : ""); if (m.id) d.setAttribute("data-id", m.id);
-  var tick = m.dir === "out" ? (m.ack ? " ✓✓" : " ✓") : "";
-  if (m.kind === "text") d.innerHTML = esc(m.text) + "<small>" + hm(m.ts) + tick + "</small>";
-  else d.innerHTML = '<div class="f">📎 <span>' + esc(m.name) + '</span></div><div style="font-size:12px;color:var(--soft)">' + size(m.size) + '</div>' + (m.loading ? '<div class="bar"><i></i></div>' : "") + "<small>" + hm(m.ts) + tick + "</small>";
+  var tick = m.dir === "out" ? (m.ack ? " ✓✓" : " ✓") : "", who = m.who && m.dir === "in" ? '<span class="who">' + esc(m.who) + "</span>" : "";
+  if (m.kind === "text") d.innerHTML = who + esc(m.text) + "<small>" + hm(m.ts) + tick + "</small>";
+  else d.innerHTML = who + '<div class="f">📎 <span>' + esc(m.name) + '</span></div><div style="font-size:12px;color:var(--soft)">' + size(m.size) + '</div>' + (m.loading ? '<div class="bar"><i></i></div>' : "") + "<small>" + hm(m.ts) + tick + "</small>";
   b.appendChild(d); b.scrollTop = b.scrollHeight;
   if (m.kind === "file" && m.blob) fillFile(m.id, m.blob, m);
   else if (m.kind === "file" && !m.loading && !m.blob && m.dir === "in") d.querySelector(".f").insertAdjacentHTML("afterend", '<div style="font-size:12px;color:var(--soft)">Large file, saved only while it was open.</div>');
@@ -278,37 +373,39 @@ function fillFile(id, blob, info){
   var el = document.querySelector('[data-id="' + id + '"]'); if (!el) return;
   var bar = el.querySelector(".bar"); if (bar) bar.remove();
   var url = URL.createObjectURL(blob), isImg = /^image\//.test(info.mime || blob.type);
-  if (isImg && !el.querySelector("img")) el.insertAdjacentHTML("afterbegin", '<a href="' + url + '" target="_blank"><img src="' + url + '" alt=""></a>');
+  if (isImg && !el.querySelector("img")) el.querySelector(".f").insertAdjacentHTML("beforebegin", '<a href="' + url + '" target="_blank"><img src="' + url + '" alt=""></a>');
   if (!el.querySelector("a[download]")) el.querySelector(".f").insertAdjacentHTML("beforeend", ' <a download="' + esc(info.name) + '" href="' + url + '" style="margin-left:auto;font-size:13px">Save</a>');
 }
+function broadcast(obj){ openLinks().forEach(function(x){ sendTo(x, obj); }); }
 function sendText(){
-  var t = $("ctext"), v = t.value.trim(); if (!v || !dc || dc.readyState !== "open") return;
-  var m = {peer: peer.i, dir: "out", kind: "text", text: v.slice(0, 5000), ts: Date.now(), id: rid()};
-  pending[m.id] = m;
-  dc.send(JSON.stringify({t: "msg", id: m.id, text: m.text})); t.value = "";
-  addMsg(m).then(function(k){ m.k = k; if (m.ack) putMsg(m); }); bubble(m); touch(v);
+  var t = $("ctext"), v = t.value.trim(), room = conv(); if (!v || !room || room !== chatPeer) return;
+  var id = rid(), m = {peer: room, dir: "out", kind: "text", text: v.slice(0, 5000), ts: Date.now(), id: id};
+  seen[id] = 1; if (!GID) pending[id] = m;
+  broadcast({t: "msg", id: id, text: m.text, gid: GID, from: {i: ME.i, n: ME.n}, ttl: 4}); t.value = "";
+  addMsg(m).then(function(k){ m.k = k; if (m.ack) putMsg(m); }); bubble(m); touch(room, v);
 }
 function sendFile(f){
-  if (!dc || dc.readyState !== "open") return;
+  var room = conv(); if (!room) return;
   if (f.size > 200 * 1048576){ sys("Files up to 200 MB."); return; }
-  var id = rid(), m = {peer: peer.i, dir: "out", kind: "file", name: f.name, mime: f.type, size: f.size, ts: Date.now(), id: id, loading: 1};
-  bubble(m);
-  sendQ = sendQ.then(function(){
-    dc.send(JSON.stringify({t: "file", id: id, name: f.name, mime: f.type, size: f.size}));
-    var off = 0, CH = 16384;
+  var id = rid(), gid = GID, m = {peer: room, dir: "out", kind: "file", name: f.name, mime: f.type, size: f.size, ts: Date.now(), id: id, loading: 1};
+  seen[id] = 1; bubble(m);
+  outQ = outQ.then(function(){
+    broadcast({t: "file", id: id, name: f.name, mime: f.type, size: f.size, gid: gid, from: {i: ME.i, n: ME.n}, ttl: 4});
+    var off = 0, CH = 16000;
     return new Promise(function(res, rej){
+      function full(){ return openLinks().some(function(x){ return x.dc.bufferedAmount > 4 * 1048576; }); }
       function pump(){
-        if (!dc || dc.readyState !== "open") return rej(new Error("closed"));
-        if (dc.bufferedAmount > 4 * 1048576){ dc.onbufferedamountlow = function(){ dc.onbufferedamountlow = null; pump(); }; return; }
-        if (off >= f.size){ pending[id] = {id: id, ts: m.ts, dir: "out"}; dc.send(JSON.stringify({t: "fileend", id: id})); return res(); }
-        f.slice(off, off + CH).arrayBuffer().then(function(b){ dc.send(b); off += b.byteLength; prog(id, off / f.size); pump(); }).catch(rej);
+        if (!openLinks().length) return rej(new Error("closed"));
+        if (full()) return setTimeout(pump, 60);
+        if (off >= f.size){ if (!gid) pending[id] = {id: id, ts: m.ts, dir: "out"}; broadcast({t: "fileend", id: rid(), fid: id, gid: gid, ttl: 4}); return res(); }
+        f.slice(off, off + CH).arrayBuffer().then(function(b){ var fr = frame(id, b); openLinks().forEach(function(x){ sendTo(x, fr); }); off += b.byteLength; prog(id, off / f.size); pump(); }).catch(rej);
       }
       pump();
     });
   }).then(function(){
-    var saved = {peer: peer.i, dir: "out", kind: "file", name: f.name, mime: f.type, size: f.size, ts: m.ts, id: id, blob: f.size <= 8 * 1048576 ? f : null};
-    var pr = pending[id]; if (pr && pr.ack) saved.ack = 1; else pending[id] = saved;
-    addMsg(saved).then(function(k){ saved.k = k; if (saved.ack) putMsg(saved); }); fillFile(id, f, saved); touch("📎 " + f.name);
+    var saved = {peer: room, dir: "out", kind: "file", name: f.name, mime: f.type, size: f.size, ts: m.ts, id: id, blob: f.size <= 8 * 1048576 ? f : null};
+    var pr = pending[id]; if (pr && pr.ack) saved.ack = 1; else if (!gid) pending[id] = saved;
+    addMsg(saved).then(function(k){ saved.k = k; if (saved.ack) putMsg(saved); }); fillFile(id, f, saved); touch(room, "📎 " + f.name);
   }).catch(function(){ sys("Sending stopped: the connection closed."); });
 }
 
@@ -316,23 +413,29 @@ function sendFile(f){
 function home(){
   stopScan(); view = "home";
   allPeers().then(function(ps){
-    app.innerHTML = '<main><h1>Chat without internet</h1><p class="s">Talk and share photos and files with someone near you — phone to phone, with no internet and no mobile data. Private: messages go straight between the two phones and stay on them.</p>'
+    var live = conv();
+    app.innerHTML = '<main><h1>Chat without internet</h1><p class="s">Talk and share photos and files with people near you — phone to phone, with no internet and no mobile data. Private: messages go straight between the phones and stay on them.</p>'
+      + (live ? '<div class="card" style="border-color:#86EFAC;background:#F0FDF4"><h2>🟢 You are connected</h2><button class="btn ok" id="back2" style="width:100%">Open the chat</button></div>' : "")
       + '<div class="card"><h2>Your name</h2><input class="t" id="nm" maxlength="40" placeholder="Your name" value="' + esc(ME.n) + '"></div>'
       + '<div class="card"><h2>How it works</h2><ol class="steps"><li>One person turns on their phone’s <b>hotspot</b> (mobile data can be off). The other joins it in Wi-Fi. Or both use the same Wi-Fi.</li><li>One taps <b>Start a chat</b>, the other taps <b>Join a chat</b> and scans the code.</li><li>The first person scans the code that appears on the other phone. Done!</li></ol>'
       + '<div class="tip">📶 Range: about 10–30 m indoors and up to 50 m outside on a phone hotspot; a whole building on a Wi-Fi router.</div>'
       + '<div class="row" style="margin-top:12px"><button class="btn" id="hb">➕ Start a chat</button><button class="btn ok" id="jb">📷 Join a chat</button></div></div>'
-      + (ps.length ? '<div class="card"><h2>Your chats</h2><div class="list">' + ps.map(function(p){ return '<a href="#" data-p="' + esc(p.i) + '"><div class="av">' + esc(initials(p.n)) + '</div><div><b>' + esc(p.n) + (peer && peer.i === p.i && dc && dc.readyState === "open" ? ' <span style="color:var(--ok);font-size:12px">● connected</span>' : "") + '</b><small>' + esc(p.prev || "") + '</small></div></a>'; }).join("") + '</div><p class="s" style="margin:8px 0 0;font-size:12.5px">Saved on this phone only. To talk again, scan codes again.</p></div>' : "")
+      + '<div class="card"><h2>Nearby <span class="pro">PRO</span></h2>' + (PRO ? '<p class="s" style="margin:0">✅ Active until <b>' + new Date(PRO.until).toLocaleDateString([], {day: "numeric", month: "short", year: "numeric"}) + '</b>. In a chat, tap <b>➕ Add</b> to bring more people in or relay to someone further away.</p>'
+        : '<p class="s">Group chat with up to 10 phones, and relay through your phone to reach people further away. Only the person who adds others needs it — they join free.</p><button class="btn g" id="pro">See Nearby Pro — from Rs 299</button>') + '</div>'
+      + (ps.length ? '<div class="card"><h2>Your chats</h2><div class="list">' + ps.map(function(p){ return '<a href="#" data-p="' + esc(p.i) + '"><div class="av">' + (p.g ? "👥" : esc(initials(p.n))) + '</div><div><b>' + esc(p.n) + (live === p.i ? ' <span style="color:var(--ok);font-size:12px">● connected</span>' : "") + '</b><small>' + esc(p.prev || "") + '</small></div></a>'; }).join("") + '</div><p class="s" style="margin:8px 0 0;font-size:12.5px">Saved on this phone only. To talk again, scan codes again.</p></div>' : "")
       + '</main>';
     $("nm").onchange = function(){ ME.n = this.value.trim().slice(0, 40); ls("xcn_name", ME.n); };
     function needName(){ ME.n = $("nm").value.trim().slice(0, 40); ls("xcn_name", ME.n); if (!ME.n){ $("nm").focus(); $("nm").style.borderColor = "#DC2626"; return false; } return true; }
-    $("hb").onclick = function(){ if (needName()) startHost(); };
+    $("hb").onclick = function(){ if (needName()) startHost(!!live); };
     $("jb").onclick = function(){ if (needName()) startJoin(); };
+    if ($("back2")) $("back2").onclick = function(){ chat(live, true); };
+    if ($("pro")) $("pro").onclick = function(){ proSheet("Bring more people into one chat, or reach people further away through your phone."); };
     [].forEach.call(app.querySelectorAll("[data-p]"), function(a){ a.onclick = function(e){ e.preventDefault(); chat(a.getAttribute("data-p"), false); }; });
   });
 }
 if (!window.RTCPeerConnection){ app.innerHTML = '<main><div class="card"><h2>This browser cannot do Nearby chat</h2><p class="s">Open xpertcreation.com/nearby in Chrome or the Xpert app.</p></div></main>'; }
 else home();
-window.XCN = {pack: pack, unpack: unpack};
+window.XCN = {pack: pack, unpack: unpack, setPro: function(p){ PRO = p; }};
 })();
 </script>
 </body>

@@ -673,3 +673,8 @@ def _receipt_data(o):
     elif o.provider == "googleplay-test":
         d["method"], d["test"] = "Google Play test purchase (no money taken)", True
     return d
+
+
+# ---- setup_nearbypro_v1: Nearby Pro - group chat and relay in Nearby chat. Moderators and staff get it free (nearbypro/views.py).
+CATALOG["nearby_pro"] = {"name": "Nearby Pro", "what": "Group chat with up to 10 phones and relay through your phone in Nearby chat, with no internet. Only you need it - everyone you add joins free.", "target": "self",
+                         "plans": {"month": ("1 month", 299, 30), "year": ("1 year", 2499, 365)}}
