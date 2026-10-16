@@ -91,10 +91,24 @@
     "/docs": '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>'
   };
   function icon(href){ return '<svg class="tic" viewBox="0 0 24 24" aria-hidden="true">' + (IC[href] || '<circle cx="12" cy="12" r="3"/>') + '</svg>'; }
-  var links = LINKS.map(function(l){
-    var cl = ((l[1] === "/feed" ? "thi " : "") + (here(l[1]) ? "on" : "")).trim();
+  css.textContent += ".tdrop.open{display:block!important;max-height:78vh;overflow:auto}" +
+    ".tfind{display:block;width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line,#E4E8F2);border-radius:10px;font:inherit;font-size:15px;margin:2px 0 6px;background:var(--paper,#F6F7FB);color:var(--ink,#0D1424)}" +
+    ".tgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2px 12px}" +
+    ".tg b{display:block;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft,#5A657C);padding:12px 12px 4px}" +
+    ".tdrop .tg a{display:flex;align-items:center;padding:8px 12px;font-size:14.5px}.tdrop .tg a:hover{background:var(--paper,#F6F7FB)}" +
+    ".tdrop>a{display:inline-flex;align-items:center;padding:9px 12px}.tnone{display:none;padding:12px;color:var(--ink-soft,#5A657C)}" +
+    "@media(min-width:821px){.tmenu{display:inline-grid;place-items:center;margin-left:4px}.tdrop{left:auto;width:min(1000px,calc(100vw - 20px))}.tgs{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}";
+  // Menu (setup_menu_v1): a short row on wide screens; the ☰ menu has every page, in groups, A to Z, with a search box.
+  var TOP = [["Home", "/"], ["XpertConnect", "/feed"], ["Chat", "/chat"], ["Jobs", "/jobs"], ["Freelance", "/market"], ["Store", "/store"], ["Academy", "/academy/"], ["Tools", "/tools"], ["Games", "/games"], ["Nearby chat", "/nearby"]];
+  var GROUPS = [["Connect & chat", [["XpertConnect", "/feed"], ["Find people", "/people"], ["Chat", "/chat"], ["Groups & channels", "/groups"], ["Chat rooms", "/chat-rooms"], ["IRC", "/irc"], ["Meetups", "/meetups"], ["Nearby chat", "/nearby"], ["Clips", "/clips"], ["Events", "/events"], ["Articles", "/articles"], ["Saved posts", "/saved"], ["Brand ambassadors", "/ambassadors"]]], ["Work & business", [["Jobs", "/jobs"], ["Gov jobs & results", "/board"], ["Freelance", "/market"], ["Property", "/market#property"], ["My CV", "/market#cv"], ["Store", "/store"], ["Company register", "/company-register"], ["Business (staff & stock)", "/business"], ["Digital business card", "/cards"], ["Brand kit", "/brand"], ["Promote", "/promote"], ["Get verified", "/get-verified"]]], ["Money", [["Money", "/money"], ["Bills", "/bills"], ["Currency rates", "/rates"], ["Rewards", "/rewards"], ["My orders", "/orders"]]], ["Learn", [["Academy", "/academy/"], ["Courses", "/courses"], ["MCQs", "/mcq"], ["Vocabulary", "/vocabulary"], ["Learn Norwegian", "/norwegian"], ["Typing tutor", "/typing"], ["Library", "/library"], ["Check a certificate", "/verify"], ["Guide", "/docs"]]], ["Faith & culture", [["Quran", "/quran"], ["Islamic", "/islamic"], ["Poetry", "/poetry"], ["Afsanay", "/afsanay"], ["Recipes", "/recipes"], ["Star signs", "/zodiac"]]], ["Fun & entertainment", [["Shows", "/shows"], ["Kids", "/kids"], ["News", "/news"], ["Sports", "/sports"], ["Cricket predict", "/predict"], ["Games", "/games"], ["What's your vibe?", "/vibe"], ["Avatar builder", "/avatar-builder"]]], ["Everyday tools", [["Tools", "/tools"], ["AI Assistant", "/assistant"], ["Translate", "/translate"], ["Weather", "/weather"], ["Step counter", "/steps"], ["Rides", "/rides"], ["Travel", "/travel"], ["Airports & airlines", "/air"], ["Bus terminals", "/bus"], ["Birthdays", "/birthdays"]]], ["Help others", [["Blood bank", "/blood"], ["Donate", "/donate"], ["My pets", "/pets"], ["Adopt a pet", "/adopt"], ["Lost & found pets", "/lost"], ["Vets", "/vets"], ["Roots of Love", "/roots"]]], ["My account", [["Settings", "/settings"], ["Help", "/help"], ["What's new", "/whats-new"]]], ["About", [["The team", "/team"], ["Ownership", "/ownership"], ["Safety", "/safety"], ["Privacy policy", "/privacy"], ["Terms of service", "/terms"], ["Terms of sale", "/terms-of-sale"], ["Refund policy", "/refund-policy"], ["Delete account", "/delete-account"]]]];
+  function one(l, plain){
+    var cl = ((l[1] === "/feed" && !plain ? "thi " : "") + (here(l[1]) ? "on" : "")).trim();
     return "<a href='" + l[1] + "'" + (cl ? " class='" + cl + "'" : "") + (here(l[1]) ? " aria-current='page'" : "") + ">" + icon(l[1]) + l[0].replace(/^[^A-Za-z]+/, "") + "</a>";
-  }).join("");
+  }
+  var links = TOP.map(one).join("");
+  var dropHtml = '<input class="tfind" type="search" placeholder="Find a page…" aria-label="Find a page"><div class="tgs">' + GROUPS.map(function(g){
+    return '<div class="tg"><b>' + g[0] + '</b>' + g[1].slice().sort(function(a, b){ return a[0].localeCompare(b[0]); }).map(function(l){ return one(l, true); }).join("") + '</div>';
+  }).join("") + '</div><p class="tnone">No page found.</p>';
   var nav = document.createElement("nav");
   nav.className = "tnav";
   nav.setAttribute("aria-label", "Main");
@@ -106,7 +120,20 @@
   btn.innerHTML = "&#9776;";
   var drop = document.createElement("div");
   drop.className = "tdrop";
-  drop.innerHTML = links;
+  drop.innerHTML = dropHtml;
+  (function(){
+    var f = drop.querySelector(".tfind"), none = drop.querySelector(".tnone"); if (!f) return;
+    f.addEventListener("click", function(e){ e.stopPropagation(); });
+    f.addEventListener("input", function(){
+      var q = f.value.trim().toLowerCase(), any = false;
+      [].forEach.call(drop.querySelectorAll(".tg"), function(g){
+        var n = 0;
+        [].forEach.call(g.querySelectorAll("a"), function(a){ var ok = !q || a.textContent.toLowerCase().indexOf(q) >= 0; a.style.display = ok ? "" : "none"; if (ok) n++; });
+        g.style.display = n ? "" : "none"; if (n) any = true;
+      });
+      none.style.display = any ? "none" : "block";
+    });
+  })();
   var sp = head.querySelector(".sp");
   if (isHome){
     // The home page now shows the same menu as every other page: its own short link row is replaced.
@@ -170,6 +197,8 @@
   function addAdmin(){
     var link = '<a href="/system-log"' + (path === "/system-log" ? ' class="on"' : '') + '>\uD83D\uDEE1 System log</a>';
     link += '<a href="/broadcast"' + (path === "/broadcast" ? ' class="on"' : '') + '>\uD83D\uDCE2 Broadcast</a>';
+    link += '<a href="/payments-admin"' + (path === "/payments-admin" ? ' class="on"' : '') + '>\uD83D\uDCB3 Payments</a>';
+    link += '<a href="/rewards-admin"' + (path === "/rewards-admin" ? ' class="on"' : '') + '>\uD83C\uDF81 Rewards payouts</a>';
     [head.querySelector(".tnav"), head.querySelector(".xnav"), drop].forEach(function(el){
       if (el && !el.querySelector('a[href="/system-log"]')) el.insertAdjacentHTML("beforeend", link);
     });
