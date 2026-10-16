@@ -209,6 +209,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .pm-card[hidden]{display:none}
 .pm-card:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(13,20,36,.12)}
 .pm-card.hl{box-shadow:0 0 0 3px #FBBF24,0 18px 40px rgba(13,20,36,.14)}
+.pm-card.pm-focus{grid-column:1/-1;box-shadow:0 0 0 4px #F59E0B,0 22px 50px rgba(245,158,11,.30);animation:pmPulse 1.6s ease 2}
+.pm-pick{background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#78350F;font-weight:800;font-size:14px;padding:10px 14px;border-radius:14px 14px 0 0;text-align:center}
+.pm-card.pm-focus .pm-buy:focus{outline:3px solid #F59E0B;outline-offset:3px}
+@keyframes pmPulse{50%{box-shadow:0 0 0 8px rgba(245,158,11,.35),0 22px 50px rgba(245,158,11,.30)}}
 .pm-band{position:relative;height:96px;padding:16px;display:flex;align-items:flex-start;justify-content:space-between;color:#fff;overflow:hidden}
 .pm-band:after{content:"";position:absolute;right:-30px;bottom:-50px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.12)}
 .pm-ic{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;font-size:28px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(6px)}
@@ -389,7 +393,18 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var pq_ = qp.get("product"), pt_ = qp.get("target"), pc_ = pq_ && document.getElementById("pc_" + pq_);
     if (pc_){
       var ps_ = document.getElementById("tg_" + pq_); if (ps_ && pt_) ps_.value = pt_;
-      pc_.classList.add("hl"); setTimeout(function(){ pc_.scrollIntoView({block: "center", behavior: "smooth"}); }, 60);
+      if (!window.__pmFoc){ window.__pmFoc = 1; var g_ = pc_.getAttribute("data-g"); if (g_){ tab(g_); } }   // open on that item's group once
+      pc_.parentNode.insertBefore(pc_, pc_.parentNode.firstChild);
+      pc_.classList.add("hl", "pm-focus");
+      if (!pc_.querySelector(".pm-pick")){
+        var lab_ = ps_ && ps_.selectedIndex >= 0 && ps_.options[ps_.selectedIndex] ? ps_.options[ps_.selectedIndex].text : "";
+        pc_.insertAdjacentHTML("afterbegin", '<div class="pm-pick">\uD83D\uDC49 You picked this' + (lab_ ? ' for <b>' + esc(lab_) + '</b>' : '') + ' \u2014 choose a plan and tap Buy</div>');
+      }
+      setTimeout(function(){
+        var y = pc_.getBoundingClientRect().top + window.pageYOffset - 80; window.scrollTo({top: Math.max(0, y), behavior: "smooth"});
+        var bb = pc_.querySelector(".pm-buy:not([disabled])") || pc_.querySelector(".pm-sel") || pc_.querySelector("[data-pick]");
+        if (bb) try { bb.focus({preventScroll: true}); } catch (e) { bb.focus(); }
+      }, 80);
     }
   }
   function tab(t){
