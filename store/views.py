@@ -1031,3 +1031,52 @@ def showcase(request):
                     "image": ("/media/" + p.images[0]) if p.images else "", "link": "/store#p-%d" % p.id})
     random.shuffle(out)
     return Response({"items": out[:30]})
+
+
+# ---- setup_storeshare_v1: a shared product link (xpertcreation.com/store?p=ID) shows that product on
+#      Facebook / WhatsApp. nginx sends /store?p=ID here; the page itself then opens the product.
+import html as _h6
+import re as _re6
+from django.http import HttpResponse as _HR6
+
+_STORE_PAGE = "/var/www/xpertcreation-landing/store.html"
+
+
+def og(request, pk):
+    try:
+        page = open(_STORE_PAGE, encoding="utf-8").read()
+    except Exception:
+        return _HR6("Not found", status=404)
+    p = Product.objects.filter(pk=pk, active=True, hidden=False, merchant__status="approved").select_related("merchant").first()
+    if p:
+        price = "Rs " + "{:,}".format(p.price)
+        title = "%s \u2014 %s" % (p.title[:90], price)
+        bits = []
+        if p.rating_n:
+            bits.append("\u2605 %.1f (%d review%s)" % (p.rating_sum / p.rating_n, p.rating_n, "" if p.rating_n == 1 else "s"))
+        if p.sold:
+            bits.append("%d sold" % p.sold)
+        bits.append("by %s, %s" % (p.merchant.name, p.merchant.city))
+        if p.cod:
+            bits.append("Cash on delivery")
+        d = _re6.sub(r"\s+", " ", p.description or "").strip()
+        desc = " \u00b7 ".join(bits) + (". " + d[:160] if d else "")
+        url = "%s/store?p=%d" % (SITE, p.id)
+        img = (SITE + "/media/" + p.images[0]) if p.images else SITE + "/brand/og/store.jpg"
+
+        def setm(page, attr, key, val):
+            pat = _re6.compile(r'(<meta %s="%s" content=")[^"]*(")' % (attr, _re6.escape(key)))
+            return pat.sub(lambda m: m.group(1) + _h6.escape(val, quote=True) + m.group(2), page, count=1)
+        for attr, key, val in (("property", "og:title", title), ("name", "twitter:title", title), ("property", "og:description", desc),
+                               ("name", "twitter:description", desc), ("name", "description", desc), ("property", "og:url", url),
+                               ("property", "og:image", img), ("name", "twitter:image", img), ("property", "og:type", "product")):
+            page = setm(page, attr, key, val)
+        page = _re6.sub(r"<title>[^<]*</title>", lambda m: "<title>%s</title>" % _h6.escape(title), page, count=1)
+        page = _re6.sub(r'(<link rel="canonical" href=")[^"]*(")', lambda m: m.group(1) + url + m.group(2), page, count=1)
+        if p.images:
+            page = _re6.sub(r'<meta property="og:image:(?:width|height)" content="[^"]*">\n?', "", page)
+        tags = '<meta property="product:price:amount" content="%d">\n<meta property="product:price:currency" content="PKR">\n' % p.price
+        page = page.replace('<meta property="og:locale"', tags + '<meta property="og:locale"', 1)
+    r = _HR6(page)
+    r["Cache-Control"] = "public, max-age=300"
+    return r

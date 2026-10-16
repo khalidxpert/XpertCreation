@@ -376,6 +376,61 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     go();
   }
 
+  // ---- setup_storeshare_v1: share bar + write a review on the product page
+  function xcPUrl(id){ return "https://xpertcreation.com/store?p=" + id; }
+  function xcShareBar(p){
+    var u = xcPUrl(p.id), t = p.title + " — " + rs(p.price) + " on XpertCreation Store", e = encodeURIComponent, w = 'style="color:#fff;text-decoration:none;';
+    return '<div class="st-box" id="pshare" style="margin-top:12px;padding:12px 14px"><b style="display:block;font-size:13.5px;margin-bottom:8px">Share this product</b><div style="display:flex;gap:8px;flex-wrap:wrap">'
+      + (navigator.share ? '<button type="button" class="st-btn sm" data-sh="nat">&#128228; Share</button>' : '')
+      + '<a class="st-btn sm" ' + w + 'background:#25D366" target="_blank" rel="noopener" href="https://wa.me/?text=' + e(t + "\n" + u) + '">WhatsApp</a>'
+      + '<a class="st-btn sm" ' + w + 'background:#1877F2" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + e(u) + '">Facebook</a>'
+      + '<a class="st-btn sm" ' + w + 'background:#111" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=' + e(t) + '&amp;url=' + e(u) + '">X</a>'
+      + '<button type="button" class="st-btn sm" data-sh="copy">&#128279; Copy link</button></div></div>';
+  }
+  function xcAfterProduct(p){
+    try { history.replaceState(null, "", "/store?p=" + p.id + "#p-" + p.id); document.title = p.title + " — XpertCreation Store"; } catch (e){}
+    var sb = $("pshare");
+    if (sb) sb.addEventListener("click", function(ev){
+      var b = ev.target.closest("[data-sh]"); if (!b) return;
+      ev.stopPropagation(); var u = xcPUrl(p.id);
+      if (b.getAttribute("data-sh") === "nat"){ navigator.share({title: p.title, text: p.title + " — " + rs(p.price), url: u}).catch(function(){}); return; }
+      var ok = function(){ b.innerHTML = "&#10004; Copied"; setTimeout(function(){ b.innerHTML = "&#128279; Copy link"; }, 1800); };
+      if (navigator.clipboard) navigator.clipboard.writeText(u).then(ok, function(){ prompt("Copy this link:", u); }); else prompt("Copy this link:", u);
+    });
+    var slot = $("pmyrv"), note = function(t, c){ slot.innerHTML = '<p style="margin:10px 0 0;font-size:13.5px' + (c ? ';color:' + c : '') + '">' + t + '</p>'; };
+    if (!slot || p.mine) return;
+    if (!M.me){ note('<a href="/login?next=' + encodeURIComponent("/store?p=" + p.id + "#p-" + p.id) + '" style="color:var(--o);font-weight:800">Sign in</a> to review a product you bought.'); return; }
+    api("orders/").then(function(r){
+      var mine = (r.d.orders || []).filter(function(o){ return o.role === "buyer" && (o.items || []).some(function(i){ return +i.id === +p.id; }); });
+      if (!mine.length) return;
+      var done = mine.filter(function(o){ return o.status === "completed"; });
+      if (!done.length){ note("&#128230; You ordered this. You can review it once your order is completed."); return; }
+      var i = 0, next = function(){
+        if (i >= done.length){ note("&#10004; You reviewed this product. Thank you!", "#166534"); return; }
+        var o = done[i++];
+        api("orders/" + o.id + "/").then(function(x){ if (!x.ok || (x.d.reviewed || []).indexOf(+p.id) >= 0) next(); else form(o.id); });
+      };
+      var form = function(oid){
+        var n = 0;
+        slot.innerHTML = '<div class="st-f" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line,#E4E8F2)"><b>Write your review</b> <small style="color:var(--soft)">verified purchase</small>'
+          + '<div id="xrs" style="font-size:28px;color:#CBD5E1;cursor:pointer;margin:4px 0">' + [1, 2, 3, 4, 5].map(function(k){ return '<span data-n="' + k + '">&#9733;</span>'; }).join("") + '</div>'
+          + '<input id="xrt" maxlength="800" placeholder="How was it? (optional)"><p style="margin:8px 0 0"><button type="button" class="st-btn o" id="xrp">Post review</button></p><div id="xrm"></div></div>';
+        slot.onclick = function(ev){
+          ev.stopPropagation();
+          var s = ev.target.closest("[data-n]");
+          if (s){ n = +s.getAttribute("data-n"); [].forEach.call($("xrs").children, function(c){ c.style.color = +c.getAttribute("data-n") <= n ? "#F59E0B" : "#CBD5E1"; }); return; }
+          if (ev.target.id !== "xrp") return;
+          if (!n){ $("xrm").innerHTML = msg("Tap the stars first.", "bad"); return; }
+          ev.target.disabled = true;
+          api("orders/" + oid + "/review/", {product: p.id, rating: n, text: $("xrt").value}).then(function(x){
+            if (x.ok) vProduct(p.id); else { ev.target.disabled = false; $("xrm").innerHTML = msg(esc(x.d.detail || "Could not post."), "bad"); }
+          });
+        };
+      };
+      next();
+    });
+  }
+
   // ---------- product
   function vProduct(id){
     api("products/" + id + "/").then(function(r){
@@ -391,7 +446,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + (p.mine ? msg('This is your product. <a href="#editp-' + p.id + '"><b>Edit</b></a> &middot; <a href="/promote?product=product_boost&amp;target=' + p.id + '"><b>&#128640; Boost it</b></a>') :
           p.stock > 0 ? '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0"><span style="font-weight:700">Quantity</span><span class="st-qty"><button data-q="-1">&minus;</button><input id="pq" value="' + (p.wholesale ? 1 : 1) + '" inputmode="numeric"><button data-q="1">+</button></span><small style="color:var(--soft)">' + p.stock + ' in stock</small></div>'
           + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button class="st-btn y" id="pbuy">Buy now</button><button class="st-btn o" id="padd">Add to cart</button></div>' : msg("Out of stock.", "bad"))
-        + '<div id="pmsg"></div><div id="qbox" hidden class="st-box st-f" style="margin-top:12px"><b>Request a wholesale quote</b><div class="row2"><div><label for="qq">Quantity</label><input id="qq" type="number" min="1" value="' + (p.moq || 10) + '"></div><div><label for="qph">Your phone</label><input id="qph" value="' + esc(M.me ? M.me.phone : "") + '"></div></div><label for="qco">Company (optional)</label><input id="qco"><label for="qm">Message</label><input id="qm" placeholder="Delivery city, deadline, packing..."><p><button class="st-btn d" id="qsend">Send request</button></p></div>'
+        + xcShareBar(p) + '<div id="pmsg"></div><div id="qbox" hidden class="st-box st-f" style="margin-top:12px"><b>Request a wholesale quote</b><div class="row2"><div><label for="qq">Quantity</label><input id="qq" type="number" min="1" value="' + (p.moq || 10) + '"></div><div><label for="qph">Your phone</label><input id="qph" value="' + esc(M.me ? M.me.phone : "") + '"></div></div><label for="qco">Company (optional)</label><input id="qco"><label for="qm">Message</label><input id="qm" placeholder="Delivery city, deadline, packing..."><p><button class="st-btn d" id="qsend">Send request</button></p></div>'
         + '<div class="st-two" style="grid-template-columns:1fr;margin-top:12px"><div class="st-side"><div class="st-box"><div class="st-li"><i>&#128666;</i><div><b>Delivery in ' + p.delivery_days + ' day' + (p.delivery_days === 1 ? '' : 's') + '</b><br><small>' + (p.delivery_fee ? 'Delivery fee ' + rs(p.delivery_fee) : 'Free delivery') + ' &middot; ships from ' + esc(s.city) + '</small></div></div>'
         + '<div class="st-li"><i>&#128181;</i><div><b>' + (p.cod && p.online ? 'Cash on delivery or card' : p.cod ? 'Cash on delivery' : 'Pay by card or wallet') + '</b><br><small>' + (p.online ? 'Online payments are held by XpertCreation until you receive your order.' : 'Pay the rider when it arrives.') + '</small></div></div>'
         + '<div class="st-li"><i>' + (s.logo ? '<img src="' + esc(s.logo) + '" style="width:34px;height:34px;border-radius:10px;object-fit:cover">' : '&#127978;') + '</i><div style="flex:1"><b>' + esc(s.name) + '</b> ' + tierB(s.tier) + (s.verified ? ' <span class="st-tag">&#10003; ID verified</span>' : '') + '<br><small>' + esc(s.city) + ' &middot; ' + (s.rating ? '&#9733; ' + s.rating + ' (' + s.ratings + ')' : 'New shop') + ' &middot; ' + s.products + ' products</small></div><a class="st-btn sm" href="#shop-' + esc(s.slug) + '">Visit</a></div></div></div></div>'
@@ -400,10 +455,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       h += '<div class="st-box"><h2>Ratings &amp; reviews</h2>' + (tot ? '<div style="display:flex;gap:24px;flex-wrap:wrap;margin-bottom:10px"><div><div style="font-size:42px;font-weight:900">' + p.rating + '</div><div style="color:#F59E0B">' + stars(p.rating) + '</div><small style="color:var(--soft)">' + tot + ' reviews</small></div><div class="st-hist" style="flex:1;min-width:220px">'
         + [5, 4, 3, 2, 1].map(function(n){ return '<div>' + n + ' &#9733;<span><i style="width:' + Math.round((p.stars[n] || 0) * 100 / tot) + '%"></i></span>' + (p.stars[n] || 0) + '</div>'; }).join("") + '</div></div>' : '')
         + (p.reviews.length ? p.reviews.map(function(x){ return '<div class="st-rv"><span class="s">' + stars(x.rating) + '</span> <b>' + esc(x.by) + '</b> <small style="color:var(--soft)">' + day(x.when) + ' &middot; verified purchase</small><div style="font-size:14px;margin-top:4px">' + esc(x.text) + '</div>'
-          + (x.reply ? '<div class="rp"><b>Shop reply:</b> ' + esc(x.reply) + '</div>' : (p.mine ? '<button class="st-btn sm" data-reply="' + x.id + '" style="margin-top:6px">Reply</button>' : '')) + '</div>'; }).join("") : '<div class="st-empty" style="padding:14px"><b>No reviews yet</b>Buyers can review after their order is completed.</div>') + '</div>';
+          + (x.reply ? '<div class="rp"><b>Shop reply:</b> ' + esc(x.reply) + '</div>' : (p.mine ? '<button class="st-btn sm" data-reply="' + x.id + '" style="margin-top:6px">Reply</button>' : '')) + '</div>'; }).join("") : '<div class="st-empty" style="padding:14px"><b>No reviews yet</b>Buyers can review after their order is completed.</div>') + '<div id="pmyrv"></div></div>';
       if (p.more.length) h += '<div class="st-sec"><h2>More from ' + esc(s.name) + '</h2></div><div class="st-row">' + p.more.map(pcard).join("") + '</div>';
       if (p.similar.length) h += '<div class="st-sec"><h2>You may also like</h2></div><div class="st-row">' + p.similar.map(pcard).join("") + '</div>';
       box.innerHTML = h;
+      xcAfterProduct(p);
       var show = function(i){ cur = i; $("pg").src = pics[i]; [].forEach.call(box.querySelectorAll(".st-th img"), function(t, k){ t.className = k === i ? "on" : ""; }); };
       var qty = function(){ return Math.max(1, Math.min(p.stock, parseInt($("pq").value, 10) || 1)); };
       box.onclick = function(e){
@@ -701,6 +757,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function route(){
     var h = location.hash.replace("#", "") || "home", m;
     box.onclick = null; box.onchange = null;
+    if (!/^p-\d+$/.test(location.hash.replace("#", "")) && /[?&]p=/.test(location.search)){ try { var xsp = new URLSearchParams(location.search); xsp.delete("p"); history.replaceState(null, "", location.pathname + (xsp.toString() ? "?" + xsp : "") + location.hash); document.title = "Store — XpertCreation"; } catch (e){} }
     var tab = /^(p-|cat-|shop-|all|search)/.test(h) ? "home" : /^(sorder-|editp-|seller|inventory)/.test(h) ? "seller" : /^order-/.test(h) ? "orders" : h;
     [].forEach.call($("sttabs").querySelectorAll("a[data-t]"), function(a){ a.className = (a.getAttribute("data-t") === tab ? "on" : "") + (a.classList.contains("sell") ? " sell" : ""); });
     window.scrollTo(0, 0);
@@ -725,6 +782,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (q.get("paid")) flash("&#10004; Payment received. Your order is placed.", "ok");
     if (q.get("failed")) flash("We could not confirm that payment. If money was taken it is checked again automatically, or contact us.", "bad");
     if (q.get("cancel")) flash("Payment cancelled. Nothing was charged.");
+    if (/^\d+$/.test(q.get("p") || "") && !/^#p-\d+$/.test(location.hash)) history.replaceState(null, "", location.pathname + location.search + "#p-" + q.get("p"));
     window.addEventListener("hashchange", route); route();
   });
 })();
