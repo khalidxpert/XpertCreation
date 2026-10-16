@@ -594,3 +594,39 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(run, 120); }); else setTimeout(run, 120);
 })();
+
+/* beta-welcome-v1: a first-time visitor sees one welcome card inviting them to join beta testing (once per browser). */
+(function(){
+  try { if (localStorage.getItem("xc_beta_seen")) return; } catch (e) { return; }
+  if (/^\/(login|register|account|offline)/.test(location.pathname)) return;
+  var WA = "https://wa.me/923009462916?text=" + encodeURIComponent("Assalam o Alaikum! I want to join XpertCreation beta testing.");
+  var inApp = false;
+  try { inApp = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || /[?&]src=app/.test(location.search) || /; wv\)/.test(navigator.userAgent); } catch (e) {}
+  function show(){
+    try { if (localStorage.getItem("xc_beta_seen")) return; localStorage.setItem("xc_beta_seen", String(Date.now())); } catch (e) { return; }
+    var css = document.createElement("style");
+    css.textContent = ".xcb{position:fixed;inset:0;z-index:9999;background:rgba(13,20,36,.55);display:flex;align-items:flex-end;justify-content:center;animation:xcbF .25s ease}" +
+      ".xcb .in{background:#fff;color:#0D1424;width:100%;max-width:440px;border-radius:22px 22px 0 0;padding:22px 20px max(20px,env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.25);font-family:inherit;text-align:center;animation:xcbU .3s ease}" +
+      "@media(min-width:560px){.xcb{align-items:center}.xcb .in{border-radius:22px}}" +
+      ".xcb .bd{display:inline-block;background:linear-gradient(135deg,#F59E0B,#EA580C);color:#fff;font-weight:900;font-size:12px;letter-spacing:.06em;padding:4px 12px;border-radius:99px}" +
+      ".xcb h3{margin:12px 0 6px;font-size:22px;line-height:1.25}.xcb p{margin:0 0 6px;color:#5A657C;line-height:1.55;font-size:15px}.xcb .ur{direction:rtl;font-size:16px;color:#0D1424;margin:8px 0 14px}" +
+      ".xcb a.wa{display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:#fff;font-weight:800;text-decoration:none;border-radius:14px;padding:13px;font-size:16px}" +
+      ".xcb a.gp{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;background:#0D1424;color:#fff;font-weight:800;text-decoration:none;border-radius:14px;padding:12px;font-size:15px}" +
+      ".xcb button{margin-top:8px;width:100%;background:none;border:0;color:#5A657C;font:inherit;font-weight:700;padding:10px;cursor:pointer}" +
+      "@keyframes xcbF{from{opacity:0}}@keyframes xcbU{from{transform:translateY(30px);opacity:0}}";
+    document.head.appendChild(css);
+    var d = document.createElement("div"); d.className = "xcb"; d.setAttribute("role", "dialog"); d.setAttribute("aria-label", "Beta testing");
+    d.innerHTML = '<div class="in"><span class="bd">BETA</span><h3>Welcome to XpertCreation! 👋</h3>'
+      + '<p>We are in beta. Would you like to be a beta tester, try new features first and help us improve?</p>'
+      + '<p class="ur">کیا آپ بیٹا ٹیسٹنگ میں حصہ لینا چاہتے ہیں؟ ہمارے CEO سے واٹس ایپ پر رابطہ کریں</p>'
+      + '<a class="wa" href="' + WA + '" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg>WhatsApp CEO: 0300 9462916</a>'
+      + (inApp ? '' : '<a class="gp" href="https://play.google.com/store/apps/details?id=com.xpertcreation.app" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#34D399" d="M4 3l10 9-10 9z"/><path fill="#FBBF24" d="M14 12l3-3 3.5 2c.8.5.8 1.5 0 2L17 15z"/><path fill="#60A5FA" d="M4 3l10 9 3-3L5.5 2.2C5 2 4.4 2.3 4 3z"/><path fill="#F87171" d="M4 21l10-9 3 3-11.5 6.8c-.5.3-1.1 0-1.5-.8z"/></svg>Get the free Android app on Google Play</a>')
+      + '<button type="button" id="xcbx">Maybe later</button></div>';
+    document.body.appendChild(d);
+    function close(){ d.remove(); }
+    d.addEventListener("click", function(e){ if (e.target === d) close(); });
+    d.querySelector("#xcbx").onclick = close;
+    d.querySelector("a.wa").addEventListener("click", function(){ setTimeout(close, 300); });
+  }
+  setTimeout(show, 4000);
+})();
