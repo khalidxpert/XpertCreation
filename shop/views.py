@@ -678,3 +678,40 @@ def _receipt_data(o):
 # ---- setup_nearbypro_v1: Nearby Pro - group chat and relay in Nearby chat. Moderators and staff get it free (nearbypro/views.py).
 CATALOG["nearby_pro"] = {"name": "Nearby Pro", "what": "Group chat with up to 10 phones and relay through your phone in Nearby chat, with no internet. Only you need it - everyone you add joins free.", "target": "self",
                          "plans": {"month": ("1 month", 299, 30), "year": ("1 year", 2499, 365)}}
+
+
+# ---- setup_ownerfree_v1: the platform owner (superuser) gets every paid item free, with no limit.
+_order_v10 = order
+_shop_v10 = shop
+
+
+def _owner(u):
+    return bool(u and u.is_authenticated and u.is_superuser)
+
+
+@_api_view3(["POST"])
+@_perm3([_IsAuth3])
+def order(request):
+    u = request.user
+    if not _owner(u):
+        return _order_v10(request._request)
+    d = request.data
+    p, plan = d.get("product"), d.get("plan")
+    if p not in CATALOG or plan not in CATALOG[p]["plans"]:
+        return _Resp3({"detail": "Choose an item and a plan."}, status=400)
+    tid, label = _target(u, CATALOG[p]["target"], d.get("target"))
+    if tid is None:
+        return _Resp3({"detail": label}, status=400)
+    o = Order.objects.create(user=u, product=p, plan=plan, target_id=tid, target_label=label[:160], amount=0, provider="owner", provider_ref="free")
+    _activate_v3(o)                      # live at once; no receipt email for a free owner order
+    return _Resp3({"order": _out(o), "next": "done"}, status=201)
+
+
+@_api_view3(["GET"])
+@_perm3([_AllowAny3])
+def shop(request):
+    r = _shop_v10(request._request)
+    if _owner(request.user) and isinstance(getattr(r, "data", None), dict):
+        r.data["owner"] = True
+        r.data["can_buy"] = True
+    return r

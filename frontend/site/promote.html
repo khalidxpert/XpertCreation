@@ -310,6 +310,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (!D.can_buy) return '<button class="pm-buy" disabled title="Opening soon">Opening soon</button>';
     if (guest()) return '<a class="pm-buy gh" href="/login?next=' + encodeURIComponent("/promote?product=" + c.key) + '">Sign in to buy</a>';
     if (c.target !== "self" && !(T[c.target] || []).length) return '<button class="pm-buy" disabled>Add one first</button>';
+    if (D.owner) return '<button class="pm-buy" data-own="' + c.key + '" data-plan="' + p.key + '" style="background:linear-gradient(135deg,#16A34A,#0D9488)">Activate free (owner) \u2192</button>';
     return '<button class="pm-buy" data-buy="' + c.key + '" data-plan="' + p.key + '">Buy ' + esc(p.label) + ' · ' + rs(p.price) + ' →</button>';
   }
   function picker(c){
@@ -418,6 +419,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (pk){ var k0 = pk.getAttribute("data-pick"), cd = document.getElementById("pc_" + k0); SEL[k0] = pk.getAttribute("data-plan");
       [].forEach.call(cd.querySelectorAll("[data-pick]"), function(x){ x.classList.toggle("on", x === pk); });
       var c0 = D.catalog.filter(function(c){ return c.key === k0; })[0]; cd.querySelector(".pm-bw").innerHTML = buyBtn(c0); return; }
+    var ow = e.target.closest("[data-own]");
+    if (ow){ var k1 = ow.getAttribute("data-own"), s1 = document.getElementById("tg_" + k1); ow.disabled = true; ow.innerHTML = "Activating\u2026";
+      post("/api/shop/orders/", {product: k1, plan: ow.getAttribute("data-plan"), target: s1 ? s1.value : null}).then(function(r){
+        if (!r.ok){ ow.disabled = false; ow.innerHTML = "Activate free (owner) \u2192"; alert(r.d.detail || "Could not activate."); return; }
+        load(); setTimeout(function(){ var o = document.getElementById("pmorders"); if (o) o.scrollIntoView({behavior: "smooth"}); }, 400);
+      }).catch(function(){ ow.disabled = false; ow.innerHTML = "Activate free (owner) \u2192"; alert("Network problem. Please try again."); }); return; }
     var t = e.target.closest("[data-buy],[data-sim],[data-cancel]"); if (!t) return;
     if (t.hasAttribute("data-buy")){ var k = t.getAttribute("data-buy"), sel = document.getElementById("tg_" + k), was = t.innerHTML;
       t.disabled = true; t.innerHTML = "Opening checkout…";
