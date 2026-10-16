@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class StorechatConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "storechat"
+    verbose_name = "Store chat"
