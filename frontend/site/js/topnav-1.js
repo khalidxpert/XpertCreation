@@ -4,7 +4,7 @@
   var head = document.querySelector("header.top") || document.querySelector("header.topbar");
   if (!head || head.querySelector(".tmenu")) return;
   var isHome = head.classList.contains("topbar");      // the home page has its own links; add only the menu button
-  var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Clips", "/clips"], ["Chat rooms", "/chat-rooms"], ["Meetups", "/meetups"], ["Nearby chat", "/nearby"], ["Academy", "/academy/"], ["Vocabulary", "/vocabulary"], ["MCQs", "/mcq"], ["Islamic", "/islamic"], ["Tools", "/tools"], ["Translate", "/translate"], ["Jobs", "/jobs"], ["Freelance", "/market"], ["Store", "/store"], ["Rides", "/rides"], ["Roots of Love", "/roots"], ["Gov jobs", "/board"], ["Pets", "/pets"], ["Help", "/help"],
+  var LINKS = [["Home", "/"], ["XpertConnect", "/feed"], ["Clips", "/clips"], ["Chat rooms", "/chat-rooms"], ["Meetups", "/meetups"], ["Nearby chat", "/nearby"], ["Academy", "/academy/"], ["Vocabulary", "/vocabulary"], ["MCQs", "/mcq"], ["Islamic", "/islamic"], ["Tools", "/tools"], ["Translate", "/translate"], ["Jobs", "/jobs"], ["Freelance", "/market"], ["Store", "/store"], ["Promote", "/promote"], ["Rides", "/rides"], ["Roots of Love", "/roots"], ["Gov jobs", "/board"], ["Pets", "/pets"], ["Help", "/help"],
                ["Shows", "/shows"], ["Kids", "/kids"], ["News", "/news"], ["Sports", "/sports"], ["Predict", "/predict"], ["Rates", "/rates"], ["Recipes", "/recipes"], ["Poetry", "/poetry"], ["Afsanay", "/afsanay"], ["Library", "/library"], ["Bills", "/bills"], ["Travel", "/travel"], ["Games", "/games"], ["Chat", "/chat"], ["Groups", "/groups"], ["\uD83E\uDD16 Assistant", "/assistant"], ["Guide", "/docs"]];
   var path = location.pathname.replace(/\/+$/, "") || "/";
   try { if (/[?&]guest=1/.test(location.search)) sessionStorage.setItem("xc_guest", "1"); } catch (e) {}
@@ -79,6 +79,7 @@
     "/roots": '<path d="M12 21v-7"/><path d="M12 14l-3-3M12 14l3-2.5"/><circle cx="12" cy="7.5" r="4.5"/><path d="M7 21h10"/>',
     "/rides": '<path d="M5 16h14l-1.5-5.2A2 2 0 0 0 15.6 9H8.4a2 2 0 0 0-1.9 1.8L5 16z"/><circle cx="8" cy="17.5" r="1.6"/><circle cx="16" cy="17.5" r="1.6"/><path d="M12 3.5a2 2 0 1 1 0 .01"/>',
     "/store": '<path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/>',
+    "/promote": '<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6"/><path d="M18 6.5a8 8 0 0 1 0 11"/>',
     "/market": '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
     "/jobs": '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 12h18"/>',
     "/help": '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><path d="M12 17h.01"/>',
@@ -459,7 +460,7 @@
     pop.onclick = function(ev){ var b = ev.target.closest("[data-rep]"); if (!b) return; P[+b.getAttribute("data-rep")] = item; pop.remove(); save(true); flashPin(); };
     setTimeout(function(){ document.addEventListener("click", function c(ev){ if (!pop.contains(ev.target)){ pop.remove(); document.removeEventListener("click", c); } }); }, 0);
   }
-  var EXTRA = [["XpertConnect", "/feed"], ["Money", "/money"], ["Freelance", "/market"], ["Property", "/market#property"], ["Store", "/store"], ["Jobs", "/jobs"],
+  var EXTRA = [["XpertConnect", "/feed"], ["Money", "/money"], ["Freelance", "/market"], ["Property", "/market#property"], ["Store", "/store"], ["Promote", "/promote"], ["Jobs", "/jobs"],
     ["Rides", "/rides"], ["Roots of Love", "/roots"], ["Brand kit", "/brand"], ["Business cards", "/cards"], ["My CV", "/market#cv"], ["Step counter", "/steps"],
     ["Weather", "/weather"], ["Rates", "/rates"], ["Translate", "/translate"], ["Quran", "/quran"], ["Islamic", "/islamic"], ["Typing tutor", "/typing"],
     ["Games", "/games"], ["Blood bank", "/blood"], ["Donate", "/donate"], ["Pets", "/pets"], ["News", "/news"], ["Birthdays", "/birthdays"], ["Chat", "/chat"],
