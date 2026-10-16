@@ -207,7 +207,7 @@ body.clipsmode{background:#000}body.clipsmode .wrap,body.clipsmode footer,body.c
   function top(title){ return '<div class="clt"><b>\uD83C\uDFAC ' + title + '</b><span><a href="/clips?mine=1">My clips</a> <button class="up" data-up>+ Post</button></span></div>'; }
   function slide(c){
     return '<div class="cli" data-id="' + c.id + '"><video src="' + esc(c.video) + '" poster="' + esc(c.thumb) + '" playsinline loop muted preload="metadata"></video>'
-      + '<div class="clr"><a href="/clips?user=' + c.user_id + '" aria-label="' + esc(c.user) + '">' + (c.avatar ? '<img class="av" src="' + esc(c.avatar) + '" alt="">' : '<span class="av">\uD83D\uDC64</span>') + '</a>'
+      + '<div class="clr"><a href="/clips?user=' + c.user_id + '" aria-label="' + esc(c.user) + '">' + (c.avatar ? '<img class="av" src="' + esc(c.avatar) + '" alt="" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'av\',textContent:\'\\uD83D\\uDC64\'}))">' : '<span class="av">\uD83D\uDC64</span>') + '</a>'
       + '<button data-like class="' + (c.liked ? "on" : "") + '" aria-label="Like"><span class="ic">\u2764\uFE0E</span><span data-n data-v="' + c.likes + '">' + fmt(c.likes) + '</span></button>'
       + '<button data-com aria-label="Comments"><span class="ic">\uD83D\uDCAC</span><span data-c data-v="' + c.comments + '">' + fmt(c.comments) + '</span></button>'
       + '<button data-share aria-label="Share"><span class="ic">\u2197\uFE0F</span><span>Share</span></button>'

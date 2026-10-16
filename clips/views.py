@@ -29,11 +29,11 @@ def _name(u):
 
 
 def _avatar(u):
-    for f in ("avatar_url", "photo_url", "avatar", "photo"):
-        v = getattr(u, f, None)
-        if v:
-            return v if isinstance(v, str) else getattr(v, "url", "")
-    return ""
+    try:
+        from accounts.views import avatar_url
+        return avatar_url(getattr(u, "avatar", "")) or ""
+    except Exception:
+        return ""
 
 
 def notify(user, text, link):
