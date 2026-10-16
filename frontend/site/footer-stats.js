@@ -22,6 +22,9 @@
     ".xcstats .xs-track{display:inline-flex;white-space:nowrap;animation:xsRoll 45s linear infinite;will-change:transform}" +
     ".xcstats .xs-tick:hover .xs-track{animation-play-state:paused}" +
     ".xcstats .xs-item{margin-right:30px}" +
+    ".xcstats.adm .xs-row,.xcstats.adm .xs-flags{display:flex!important}.xcstats.adm .xs-tick{display:block!important}" +
+    ".xcstats.adm{border-top:1px solid rgba(127,127,127,.25)!important;margin:18px 0 6px!important;padding-top:14px!important}" +
+    ".xcstats.adm:before{content:'Visible to admins only';display:block;font-size:11px;opacity:.6;margin-bottom:6px}" +
     ".xcstats .xs-tick{display:none}.xcstats{border-top:0;margin:0;padding:0}" +
     ".xcstats .xs-row{display:none}.xcstats .xs-flags{display:none}" +
     ".xcstats .xs-flags{display:none}" +
@@ -74,6 +77,15 @@
       .then(draw)
       .catch(function(){});
   }
-  load();
-  setInterval(function(){ if (!document.hidden) load(); }, 60000);
+  var ADM = null;
+  function isAdm(){
+    if (ADM !== null) return Promise.resolve(ADM);
+    try { if (sessionStorage.getItem("xc_statsadm") === "1") return Promise.resolve(ADM = true); } catch (e) {}
+    return fetch("/api/auth/online/", {credentials: "same-origin"}).then(function(r){
+      ADM = r.ok; try { if (ADM) sessionStorage.setItem("xc_statsadm", "1"); } catch (e) {} return ADM;
+    }).catch(function(){ return ADM = false; });
+  }
+  box.style.display = "none";
+  isAdm().then(function(a){ if (!a){ box.innerHTML = ""; return; } box.style.display = ""; box.classList.add("adm"); load(); });
+  setInterval(function(){ if (!document.hidden && ADM) load(); }, 60000);
 })();
