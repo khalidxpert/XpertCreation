@@ -705,3 +705,27 @@
     out.insertAdjacentHTML("beforebegin", '<a href="/moderate#approvals" class="tmod">🛡️ Moderation</a>');
   };
 })();
+
+/* setup_headfit_v1: on small phones the header had too many icons and pushed your picture / Sign in off the
+   right edge. If the account icon does not fit, the name next to the logo is hidden (logo stays), then gaps shrink. */
+(function(){
+  var st = document.createElement("style");
+  st.textContent = ".xcfit .logo,.xcfit .brand{font-size:0!important;gap:0!important}.xcfit .logo img,.xcfit .brand img{margin-right:0!important}"
+    + ".xcfit > a:not([class]) > b,.xcfit > .in > a:not([class]) > b{display:none!important}"
+    + ".xcfit2,.xcfit2 > .in{gap:3px!important;column-gap:3px!important;padding-left:8px!important;padding-right:8px!important}"
+    + ".xcfit2 .gear,.xcfit2 .tcart,.xcfit2 .bellbtn,.xcfit2 .tpin,.xcfit2 .tmenu,.xcfit2 .tacct{margin-left:2px!important;margin-right:0!important}"
+    + ".xcfit3 .gear,.xcfit3 .tcart,.xcfit3 .bellbtn,.xcfit3 .tpin{width:30px!important;height:30px!important}";
+  document.head.appendChild(st);
+  var busy = false;
+  function fit(){
+    var h = document.querySelector("header.topbar") || document.querySelector("header.top"); if (!h || busy) return;
+    var a = h.querySelector(".tacct"); if (!a) return;
+    busy = true; h.classList.remove("xcfit", "xcfit2", "xcfit3");
+    var over = function(){ var r = a.getBoundingClientRect(); return r.width && r.right > document.documentElement.clientWidth - 4; };
+    ["xcfit", "xcfit2", "xcfit3"].forEach(function(c){ if (over()) h.classList.add(c); });
+    busy = false;
+  }
+  function go(){ fit(); setTimeout(fit, 400); setTimeout(fit, 1500); setTimeout(fit, 4000); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", go); else go();
+  window.addEventListener("load", fit); window.addEventListener("resize", fit);
+})();
