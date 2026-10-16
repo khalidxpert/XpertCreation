@@ -22,6 +22,7 @@
     ".xcstats .xs-track{display:inline-flex;white-space:nowrap;animation:xsRoll 45s linear infinite;will-change:transform}" +
     ".xcstats .xs-tick:hover .xs-track{animation-play-state:paused}" +
     ".xcstats .xs-item{margin-right:30px}" +
+    ".xcstats .xs-flags{display:none}" +
     "@keyframes xsRoll{from{transform:translateX(0)}to{transform:translateX(-50%)}}" +
     "@keyframes xsPulse{0%,100%{opacity:1}50%{opacity:.35}}" +
     "@media (prefers-reduced-motion:reduce){.xcstats .xs-track{animation:none;white-space:normal;flex-wrap:wrap}.xcstats .xs-dup{display:none}" +
@@ -59,7 +60,7 @@
         return "<span class='xs-item'>" + esc(r.name) + " " + fimg(r.code) + " joined " + esc(r.ago) + "</span>";
       }).join("");
       // Two copies side by side, moved by half their width: the loop never shows a gap.
-      h += "<div class='xs-tick'><div class='xs-track'>" + items
+      h += "<div class='xs-tick'><div class='xs-track' style='animation-duration:" + Math.max(45, d.recent.length * 4) + "s'>" + items
         + "<span class='xs-dup' aria-hidden='true'>" + items + "</span></div></div>";
     }
     box.innerHTML = h;

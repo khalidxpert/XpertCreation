@@ -88,8 +88,15 @@ def footer_stats(request):
         [{"code": c, "flag": flag(c), "name": NAMES.get(c, c), "members": v[0], "online": v[1]}
          for c, v in per.items()],
         key=lambda x: (-x["members"], x["name"]))
+    _seen_c, _pick = {}, []
+    for u in users:                                   # newest first: up to 4 from every country
+        _c = (u.signup_country or "").upper()
+        if _seen_c.get(_c, 0) < 4:
+            _seen_c[_c] = _seen_c.get(_c, 0) + 1; _pick.append(u)
+        if len(_pick) >= 120:
+            break
     recent = [{"name": public_name(u), "code": (u.signup_country or "").upper(), "flag": flag((u.signup_country or "").upper()),
-               "ago": ago(u.date_joined, now)} for u in users[:10]]
+               "ago": ago(u.date_joined, now)} for u in _pick]
 
     data = {"members": len(users), "online": int(online), "country_count": len(countries),
             "countries": countries, "recent": recent}
