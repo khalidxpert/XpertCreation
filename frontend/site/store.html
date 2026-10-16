@@ -167,7 +167,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=71" defer></script>
+<script src="/js/topnav-1.js?v=72" defer></script>
 
 <div class="wrap stw" style="max-width:1240px">
 <style>
@@ -878,5 +878,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 <script src="/js/share-1.js?v=22" defer></script>
 <script src="/js/qrgen-1.js"></script>
 <script src="/js/jcpay-1.js" defer></script>
+<script>
+/* myshop-v1: shop owners see "My shop" instead of "Sell on XpertCreation" */
+fetch("/api/store/merchant/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+  if (!d || !d.merchant) return;
+  [].forEach.call(document.querySelectorAll('a.sell[href="#seller"]'), function(a){ a.textContent = "\uD83C\uDFEA My shop"; });
+  try { localStorage.setItem("xc_myshop", "1"); } catch (e) {}
+}).catch(function(){});
+</script>
 </body>
 </html>
