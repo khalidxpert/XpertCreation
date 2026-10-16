@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "xlate",
     "shop",
     "meetup",
+    "rishta",
     "linkprev",
     "playbill",
     "predict",

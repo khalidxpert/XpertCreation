@@ -715,3 +715,8 @@ def shop(request):
         r.data["owner"] = True
         r.data["can_buy"] = True
     return r
+
+
+# ---- setup_rishta_v1: Rishta boost - a Halal Rishta profile shown first, with a Featured mark.
+CATALOG["rishta_boost"] = {"name": "Rishta boost", "what": "Your Halal Rishta profile shown first, with a Featured mark. Make your rishta profile first on /rishta.", "target": "self",
+                           "plans": {"7d": ("7 days", 499, 7), "30d": ("30 days", 1499, 30)}}
