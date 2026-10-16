@@ -179,8 +179,81 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(24px,6vw,32px);
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=70" defer></script>
+<script src="/js/topnav-1.js?v=71" defer></script>
 
+<div class="wrap" id="approvals" style="padding-bottom:0;display:none"></div>
+<style>
+#approvals h2{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 4px}
+#approvals .lead2{color:var(--ink-soft);font-size:13.5px;margin:0 0 12px}
+#approvals .sec{font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin:16px 0 8px}
+#approvals .chk{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;margin-right:6px}
+#approvals .chk.ok{background:#DCFCE7;color:#166534}#approvals .chk.no{background:#FEE2E2;color:#991B1B}
+#approvals .links{display:flex;flex-wrap:wrap;gap:8px}
+#approvals .links a{padding:9px 13px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:13.5px;text-decoration:none;color:var(--ink)}
+#approvals .thumb{width:70px;height:110px;object-fit:cover;border-radius:10px;background:#000;float:right;margin-left:10px}
+#approvals .em{font-size:13px;color:var(--bad);margin-top:6px}
+</style>
+<script>
+/* Approvals waiting (setup_modhub_v1): new shops and clips to check, plus links to every other review page. */
+(function(){
+  "use strict";
+  var box = document.getElementById("approvals"); if (!box) return;
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function ck(n){ var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return m ? m.pop() : ""; }
+  function get(u){ return fetch(u, {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); }
+  function post(u, b){ return fetch(u, {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf") || ck("csrftoken")}, body: JSON.stringify(b || {})})
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); }); }
+  function load(){
+    Promise.all([get("/api/store/team/"), get("/api/clips/review/"), get("/api/auth/role/")]).then(function(a){
+      var st = a[0], cl = a[1], role = a[2] || {};
+      if (!st && !cl && !role.moderator) return;
+      var shops = (st && st.applications) || [], clips = (cl && cl.pending) || [], rep = (cl && cl.reported) || [];
+      var n = shops.length + clips.length;
+      var h = '<h2>Approvals waiting' + (n ? ' <span style="background:#DC2626;color:#fff;border-radius:99px;padding:1px 9px;font-size:14px">' + n + '</span>' : '') + '</h2>'
+        + '<p class="lead2">New shops and clips that need a yes or no. Everything else has its own review page below.</p>';
+      if (st){
+        h += '<div class="sec">🏪 Shops waiting (' + shops.length + ')</div>';
+        h += shops.length ? shops.map(function(m){
+          return '<div class="item" data-shop="' + m.id + '"><div class="hd2"><b>' + esc(m.name) + '</b><small>' + esc(m.city || "") + ' · @' + esc(m.user) + (m.phone ? ' · ' + esc(m.phone) : '') + '</small></div>'
+            + '<p>' + esc((m.about || "").slice(0, 200)) + '</p>'
+            + '<div><span class="chk ' + (m.kyc ? "ok" : "no") + '">' + (m.kyc ? "✔ ID verified" : "✖ ID not verified") + '</span><span class="chk ' + (m.biz && m.biz.ok ? "ok" : "no") + '">' + (m.biz && m.biz.ok ? "✔ Business verified" : "✖ Business not verified") + '</span></div>'
+            + '<div class="acts3"><button class="yes2" data-sa="approve">Approve</button><button class="no3" data-sa="reject">Reject</button></div><div class="em"></div></div>';
+        }).join("") : '<div class="empty4" style="padding:14px">No shops waiting.</div>';
+      }
+      if (cl){
+        h += '<div class="sec">🎬 Clips waiting (' + clips.length + ')' + (rep.length ? ' · hidden by reports: ' + rep.length : '') + '</div>';
+        h += clips.length ? clips.map(function(c){
+          return '<div class="item" data-clip="' + c.id + '">' + (c.thumb ? '<img class="thumb" src="' + esc(c.thumb) + '" alt="">' : '')
+            + '<div class="hd2"><b>@' + esc(c.username || c.user) + '</b><small>' + esc(new Date(c.created).toLocaleString()) + '</small></div><p>' + esc(c.caption || "(no caption)") + '</p>'
+            + (c.video ? '<a href="' + esc(c.video) + '" target="_blank" rel="noopener">▶ Watch</a>' : '')
+            + '<div class="acts3" style="clear:both"><button class="yes2" data-ca="approve">Publish</button><button class="no3" data-ca="reject">Reject</button></div><div class="em"></div></div>';
+        }).join("") : '<div class="empty4" style="padding:14px">No clips waiting.</div>';
+      }
+      h += '<div class="sec">Other review pages</div><div class="links">'
+        + '<a href="/company-review">🏢 Company & ID checks</a><a href="/payments-admin">💳 Payments</a><a href="/rewards-admin">🎁 Rewards payouts</a>'
+        + '<a href="/rishta#matchmaker">💍 Rishta matchmaker</a><a href="/store#team">🛒 Store orders & disputes</a><a href="/tickets">🎫 Support tickets</a></div>';
+      box.innerHTML = h; box.style.display = "";
+      if (location.hash === "#approvals") setTimeout(function(){ box.scrollIntoView({behavior: "smooth"}); }, 100);
+      [].forEach.call(box.querySelectorAll("[data-sa]"), function(b){ b.onclick = function(){
+        var it = b.closest("[data-shop]"), id = it.getAttribute("data-shop"), act = b.getAttribute("data-sa"), note = "";
+        if (act === "reject"){ note = prompt("Why is this shop not approved? (the owner sees this)"); if (!note) return; }
+        var force = b.getAttribute("data-force") === "1";
+        post("/api/store/team/merchant/" + id + "/", {action: act, note: note, force: force}).then(function(r){
+          if (r.ok) return load();
+          var em = it.querySelector(".em"); em.textContent = (r.d && r.d.detail) || "Could not do that.";
+          if (act === "approve" && !force && st && st.is_super !== false){ b.textContent = "Approve anyway (owner)"; b.setAttribute("data-force", "1"); }
+        });
+      }; });
+      [].forEach.call(box.querySelectorAll("[data-ca]"), function(b){ b.onclick = function(){
+        var it = b.closest("[data-clip]"), id = it.getAttribute("data-clip"), act = b.getAttribute("data-ca"), reason = "";
+        if (act === "reject"){ reason = prompt("Why is this clip not published? (the creator sees this)"); if (!reason) return; }
+        post("/api/clips/review/", {id: +id, action: act, reason: reason}).then(function(r){ if (r.ok) load(); else it.querySelector(".em").textContent = (r.d && r.d.detail) || "Could not do that."; });
+      }; });
+    });
+  }
+  load();
+})();
+</script>
 <div class="wrap"><div id="app"><div class="empty4">Checking&hellip;</div></div></div>
 
 <script>

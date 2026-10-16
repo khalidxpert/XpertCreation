@@ -446,7 +446,9 @@ def merchant_me(request):
             m.status, m.note = "pending", ""
         m.save()
         if new or m.status == "pending":
-            _admins("New merchant application: %s (%s)" % (m.name, m.city))
+            _admins("New merchant application: %s (%s)" % (m.name, m.city), "/moderate#approvals")
+        if new:
+            _notify(u, "We received your shop application for %s. Our team checks new shops within 2 working days - we will tell you here." % m.name, "/store#seller")
     if not m:
         return Response({"merchant": None, "kyc": _kyc(u), "checklist": _profile_check(u)})
     paused = enforce(m) if m.status == "approved" else 0
@@ -844,9 +846,9 @@ def team_act(request, kind, pk):
         m = Merchant.objects.filter(pk=pk).select_related("user").first()
         if not m or act not in ("approve", "reject", "suspend"):
             return _err("Not found.", 404)
-        if act == "approve" and not _kyc(m.user):
+        if act == "approve" and not _kyc(m.user) and not (u.is_superuser and d.get("force")):
             return _err("This member's ID is not verified yet.")
-        if act == "approve" and not _biz(m.user)["ok"]:
+        if act == "approve" and not _biz(m.user)["ok"] and not (u.is_superuser and d.get("force")):
             return _err("This member's business is not verified yet (company page approved + website file check).")
         m.status = {"approve": "approved", "reject": "rejected", "suspend": "suspended"}[act]; m.note = note; m.save(update_fields=["status", "note"])
         _notify(m.user, {"approved": "Your shop %s is approved. Add your products now!", "rejected": "Your shop application (%s) was not approved: " + note,

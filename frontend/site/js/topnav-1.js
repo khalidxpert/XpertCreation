@@ -174,7 +174,7 @@
       acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
       acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';
       menu.innerHTML = '<b>' + nm.replace(/</g, "&lt;") + (u.username ? ' <small>@' + String(u.username).replace(/</g, "") + '</small>' : '') + '</b>'
-        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><a href="/company/manage">\uD83C\uDFE2 My company</a><a href="/get-verified">\u2714\uFE0F Blue tick</a><a href="/settings">\u2699\uFE0F Settings &amp; privacy</a><a href="/me/preferences">\uD83C\uDFAF Interests</a><a href="/saved">\uD83D\uDD16 Saved posts</a><a href="/whats-new">\u2728 What\u2019s new</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
+        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><a href="/company/manage">\uD83C\uDFE2 My company</a><a href="/get-verified">\u2714\uFE0F Blue tick</a><a href="/settings">\u2699\uFE0F Settings &amp; privacy</a><a href="/me/preferences">\uD83C\uDFAF Interests</a><a href="/saved">\uD83D\uDD16 Saved posts</a>' + (window.__xcModLink ? window.__xcModLink(u) : '') + '<a href="/whats-new">\u2728 What\u2019s new</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
       acct.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove("open"); menu.classList.toggle("open"); });
       menu.querySelector(".tout").onclick = function(){
         fetch("/api/auth/logout/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}})
@@ -195,7 +195,7 @@
   })();
 
   // "System log" - only for the super admin. The server decides; the answer is remembered for this visit.
-  function addAdmin(){
+  function addAdmin(){ if (window.__xcModAdd) setTimeout(window.__xcModAdd, 0);
     var link = '<a href="/system-log"' + (path === "/system-log" ? ' class="on"' : '') + '>\uD83D\uDEE1 System log</a>';
     link += '<a href="/broadcast"' + (path === "/broadcast" ? ' class="on"' : '') + '>\uD83D\uDCE2 Broadcast</a>';
     link += '<a href="/payments-admin"' + (path === "/payments-admin" ? ' class="on"' : '') + '>\uD83D\uDCB3 Payments</a>';
@@ -205,7 +205,7 @@
     });
   }
   // "Moderation" in the menu - only for moderators (the same role check the home page used).
-  function addMod(){
+  function addMod(){ if (window.__xcModAdd) setTimeout(window.__xcModAdd, 0);
     var link = '<a href="/moderate"' + (path === "/moderate" ? ' class="on"' : '') + '>\uD83D\uDEE1\uFE0F Moderation</a>'
       + '<a href="/company-review"' + (path === "/company-review" ? ' class="on"' : '') + '>\uD83C\uDFE2 Company KYC</a>';
     [head.querySelector(".tnav"), drop].forEach(function(el){ if (el && !el.querySelector('a[href="/moderate"]')) el.insertAdjacentHTML("beforeend", link); });
@@ -692,4 +692,16 @@
   }
   window.confirm = ask("confirm", nConfirm);
   window.prompt = ask("prompt", nPrompt);
+})();
+
+/* modhub-v1: "Moderation" in the account menu (tap your picture) for moderators and admins. */
+(function(){
+  function ss(k){ try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  window.__xcModOk = function(u){ return !!((u && u.is_moderator) || ss("xc_mod") === "1" || ss("xc_super") === "1"); };
+  window.__xcModLink = function(u){ return window.__xcModOk(u) ? '<a href="/moderate#approvals" class="tmod">🛡️ Moderation</a>' : ""; };
+  window.__xcModAdd = function(){
+    var m = document.querySelector(".tamenu"); if (!m || m.querySelector(".tmod")) return;
+    var out = m.querySelector(".tout"); if (!out) return;
+    out.insertAdjacentHTML("beforebegin", '<a href="/moderate#approvals" class="tmod">🛡️ Moderation</a>');
+  };
 })();
