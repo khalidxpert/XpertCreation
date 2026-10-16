@@ -22,6 +22,7 @@
     ".xcstats .xs-track{display:inline-flex;white-space:nowrap;animation:xsRoll 45s linear infinite;will-change:transform}" +
     ".xcstats .xs-tick:hover .xs-track{animation-play-state:paused}" +
     ".xcstats .xs-item{margin-right:30px}" +
+    ".xcstats .xs-tick{display:none}.xcstats{border-top:0;margin:0;padding:0}" +
     ".xcstats .xs-row{display:none}.xcstats .xs-flags{display:none}" +
     ".xcstats .xs-flags{display:none}" +
     "@keyframes xsRoll{from{transform:translateX(0)}to{transform:translateX(-50%)}}" +
