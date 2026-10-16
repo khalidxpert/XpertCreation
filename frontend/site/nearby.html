@@ -82,7 +82,7 @@ ol.steps{padding-left:20px;margin:6px 0 0;line-height:1.7;font-size:14.5px}
 <script>
 (function(){
 "use strict";
-var SIGNER_SPKI = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoht8Kq_tXErG_FwUwN4au9wygF0-bUNm2Kid6QjYpoV47BCcknZwDr4sYbd1JDOFHt8WPJfDVu2FRv_WN0zLVg";            // XpertCreation signature check for Nearby Pro (works offline)
+var SIGNER_SPKI = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoht8Kq_tXErG_FwUwN4au9wygF0-bUNm2Kid6QjYpoV47BCcknZwDr4sYbd1JDOFHt8WPJfDVu2FRv_WN0zLVg";       // XpertCreation signature check for Nearby Pro (works offline)
 var MAXLINKS = 9;                      // 10 phones in a group
 var $ = function(id){ return document.getElementById(id); };
 var app = $("app");
@@ -182,13 +182,13 @@ function qrInto(el, text){
 /* ---------- camera scanner ---------- */
 var scanStop = null;
 function loadJsQR(){ return window.jsQR ? Promise.resolve() : new Promise(function(res, rej){ var s = document.createElement("script"); s.src = "/js/jsqr-1.js"; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
-function scan(box, onText, onErr){
+function scan(box, onText, onErr, front){
   stopScan();
   box.innerHTML = '<div class="cam"><video playsinline muted></video></div>';
   var v = box.querySelector("video"), stream = null, alive = true, det = null, cv = document.createElement("canvas"), cx = cv.getContext("2d", {willReadFrequently: true});
   scanStop = function(){ alive = false; if (stream) stream.getTracks().forEach(function(t){ t.stop(); }); scanStop = null; };
   var ready = ("BarcodeDetector" in window) ? BarcodeDetector.getSupportedFormats().then(function(f){ if (f.indexOf("qr_code") >= 0) det = new BarcodeDetector({formats: ["qr_code"]}); else return loadJsQR(); }).catch(loadJsQR) : loadJsQR();
-  navigator.mediaDevices.getUserMedia({video: {facingMode: "environment", width: {ideal: 1280}}, audio: false}).then(function(s){
+  navigator.mediaDevices.getUserMedia({video: {facingMode: front ? "user" : "environment", width: {ideal: 1280}}, audio: false}).then(function(s){
     stream = s; if (!alive) return scanStop && scanStop(); v.srcObject = s; return v.play();
   }).then(function(){ return ready; }).then(function(){
     (function tick(){
@@ -213,7 +213,7 @@ var outQ = Promise.resolve();
 function openLinks(){ return links.filter(function(l){ return l.dc && l.dc.readyState === "open" && l.peer; }); }
 function conv(){ var o = openLinks(); return GID ? GID : (o[0] ? o[0].peer.i : null); }
 function newLink(){
-  var l = {pc: new RTCPeerConnection({iceServers: []}), dc: null, peer: null, inFile: {}};
+  var l = {pc: new RTCPeerConnection({iceServers: navigator.onLine ? [{urls: "stun:stun.l.google.com:19302"}] : []}), dc: null, peer: null, inFile: {}};
   l.pc.onconnectionstatechange = function(){ if (/failed|closed/.test(l.pc.connectionState)) drop(l); };
   links.push(l); return l;
 }
@@ -275,7 +275,7 @@ function meet(l, m){
   if (openLinks().length > 1 && PRO && !GID){ GID = "g:" + ME.i + ":" + Date.now().toString(36); }   // I just added a 2nd person: make a group
   if (GID && openLinks().length > 1) openLinks().forEach(function(x){ sendTo(x, {t: "group", gid: GID, name: groupName()}); });
   var save = GID ? ensureGroup(groupName()) : allPeers().then(function(a){ var old = a.filter(function(x){ return x.i === l.peer.i; })[0]; var rec = {i: l.peer.i, n: l.peer.n, u: l.peer.u, last: Date.now(), prev: old ? old.prev : ""}; return savePeer(rec); });
-  save.then(function(){ chat(conv(), true); sys((GID ? l.peer.n + " joined the group" : "Connected to " + l.peer.n + " — phone to phone, private")); });
+  save.then(function(){ chat(conv(), true); sys((GID ? l.peer.n + " joined the group" : "Connected to " + l.peer.n + " — phone to phone, private")); if (!GID) sys("Want to bring someone else in? Tap \u2795 Add people \u2014 your phone links them in."); });
 }
 function groupName(){ var names = openLinks().map(function(x){ return x.peer.n; }); return "Group: " + [ME.n].concat(names).slice(0, 4).join(", ") + (names.length > 3 ? "…" : ""); }
 function ensureGroup(name){ return allPeers().then(function(a){ var old = a.filter(function(x){ return x.i === GID; })[0]; return savePeer({i: GID, n: name || (old && old.n) || "Group", g: 1, last: Date.now(), prev: old ? old.prev : ""}); }); }
@@ -283,43 +283,76 @@ function touch(room, t){ allPeers().then(function(a){ var p = a.filter(function(
 function buzz(){ try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} }
 
 /* ---------- pairing screens ---------- */
+/* Pairing needs both phones' details. With internet on either side, our server passes the reply back, so ONE scan is enough.
+   With no internet at all, the second phone shows its reply code and the first phone's front camera reads it by itself
+   (phones held screen to screen) - nobody taps anything. */
+function sigUrl(r){ return "/api/nearby/sig/" + encodeURIComponent(r) + "/"; }
 function startHost(adding){
-  if (adding && openLinks().length >= 1 && !PRO) return proSheet("Adding a third person or passing messages on to someone further away needs Nearby Pro on your phone.");
+  if (adding && openLinks().length >= 1 && !PRO) return proSheet("Adding another person, so your phone serves as the bridge for them, needs Nearby Pro on your phone.");
   if (openLinks().length >= MAXLINKS) return alert("A group can have up to 10 phones.");
   view = "host";
-  app.innerHTML = '<main><div class="card"><h2><span class="stepno">1</span>Let them scan this code</h2><p class="s">' + (adding ? "The new person" : "The other person") + ' opens Nearby chat, taps <b>Join a chat</b> and scans this code. ' + (adding ? "They can be on your hotspot, or on a hotspot your phone is joined to (relay)." : "Both phones must be on the same hotspot or Wi-Fi.") + '</p><div class="qr" id="qr"><p class="s">Making your code…</p></div></div>'
-    + '<div class="card"><h2><span class="stepno">2</span>Now scan their code</h2><p class="s">When their phone shows a code, tap the button and point your camera at it.</p><div id="cam"></div><div class="row" style="margin-top:10px"><button class="btn" id="scanb">📷 Scan their code</button><button class="btn g" id="pasteb">Paste a code</button></div><div class="msg" id="hm"></div></div>'
+  app.innerHTML = '<main><div class="card"><h2>' + (adding ? "Add a person" : "Your code") + '</h2><p class="s">The other person opens Nearby chat, taps <b>Scan a code</b> and scans this. ' + (adding ? "They can be on your hotspot, or on the Wi-Fi your phone is on - your phone links them in." : "Both phones must be on the same hotspot or Wi-Fi.") + '</p><div class="qr" id="qr"><p class="s">Making your code…</p></div><div class="msg" id="hm"></div></div>'
+    + '<div class="card"><h2 style="font-size:16px">No internet on both phones?</h2><p class="s" id="fronttip">After they scan, their phone shows a code. Keep your screen facing theirs — your front camera reads it by itself.</p><div id="cam" style="max-width:220px;margin:0 auto"></div><div class="row" style="margin-top:10px"><button class="btn g" id="scanb">📷 Use back camera</button><button class="btn g" id="pasteb">Paste a code</button></div></div>'
     + '<button class="btn g" id="back" style="width:100%">Cancel</button></main>';
-  var l = newLink(); wire(l, l.pc.createDataChannel("xc", {ordered: true}));
-  $("back").onclick = function(){ stopScan(); if (!l.peer) drop(l); if (openLinks().length) chat(conv(), true); else home(); };
+  var l = newLink(), room = rid() + rid(), done = false; wire(l, l.pc.createDataChannel("xc", {ordered: true}));
+  function stopAll(){ done = true; stopScan(); }
+  $("back").onclick = function(){ stopAll(); if (!l.peer) drop(l); if (openLinks().length) chat(conv(), true); else home(); };
   l.pc.createOffer().then(function(o){ return l.pc.setLocalDescription(o); }).then(function(){ return waitIce(l.pc); }).then(function(){
-    return pack({v: 2, t: "o", sdp: slim(l.pc.localDescription.sdp), me: ME});
-  }).then(function(code){ qrInto($("qr"), code); window._xcnCode = code; }).catch(function(e){ $("qr").innerHTML = '<p class="msg bad">Could not make a code: ' + esc(e.message) + '</p>'; });
+    return pack({v: 2, t: "o", sdp: slim(l.pc.localDescription.sdp), me: ME, r: room});
+  }).then(function(code){
+    qrInto($("qr"), code); window._xcnCode = code;
+    poll(); front();
+  }).catch(function(e){ $("qr").innerHTML = '<p class="msg bad">Could not make a code: ' + esc(e.message) + '</p>'; });
+  function poll(){                                   // internet path: the reply comes through our server
+    if (done || l.peer || view !== "host") return;
+    if (!navigator.onLine) return setTimeout(poll, 3000);
+    fetch(sigUrl(room), {credentials: "same-origin", cache: "no-store"}).then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){ if (d && d.code && !done) useAnswer(d.code); else setTimeout(poll, 1500); }).catch(function(){ setTimeout(poll, 3000); });
+  }
+  function front(){                                  // no-internet path: front camera reads their reply
+    if (done || view !== "host") return;
+    scan($("cam"), useAnswer, function(){ $("fronttip").textContent = "Camera is off. Tap Use back camera to scan their code when it appears."; }, true);
+  }
   function useAnswer(t){
+    if (done) return; stopAll();
     $("hm").className = "msg"; $("hm").textContent = "Connecting…";
-    unpack(t).then(function(a){ if (a.t !== "a") throw new Error("Scan the code from their screen (it appears after they scan yours)."); return l.pc.setRemoteDescription({type: "answer", sdp: a.sdp}); })
-      .then(function(){ setTimeout(function(){ if (view === "host" && !l.peer){ $("hm").className = "msg bad"; $("hm").textContent = "Not connected yet. Check that both phones are on the same hotspot or Wi-Fi, then try again."; } }, 12000); })
-      .catch(function(e){ $("hm").className = "msg bad"; $("hm").textContent = e.message; });
+    unpack(t).then(function(a){ if (a.t !== "a") throw new Error("That is the first code. Scan the code their phone shows after they scan yours."); return l.pc.setRemoteDescription({type: "answer", sdp: a.sdp}); })
+      .then(function(){ setTimeout(function(){ if (view === "host" && !l.peer){ $("hm").className = "msg bad"; $("hm").textContent = "Not connected yet. Check both phones are on the same hotspot or Wi-Fi. Some Wi-Fi (guest or office Wi-Fi) blocks phones from talking to each other - then turn on a phone hotspot and try again."; } }, 12000); })
+      .catch(function(e){ done = false; $("hm").className = "msg bad"; $("hm").textContent = e.message; front(); });
   }
   $("scanb").onclick = function(){ scan($("cam"), useAnswer, function(m){ $("hm").className = "msg bad"; $("hm").textContent = m; }); };
   $("pasteb").onclick = function(){ var t = prompt("Paste the code from the other phone:"); if (t) useAnswer(t); };
   window._xcnAnswer = useAnswer;
 }
 function startJoin(){
-  if (openLinks().length >= 1 && !PRO) return proSheet("Your phone is already in a chat. Joining a second one (and passing messages between them) needs Nearby Pro.");
+  if (openLinks().length >= 1 && !PRO) return proSheet("Your phone is already in a chat. Joining a second one, so your phone links both, needs Nearby Pro.");
   view = "join";
-  app.innerHTML = '<main><div class="card"><h2><span class="stepno">1</span>Scan their code</h2><p class="s">Point your camera at the code on the other phone. Both phones must be on the same hotspot or Wi-Fi.</p><div id="cam"></div><div class="row" style="margin-top:10px"><button class="btn" id="scanb">📷 Start camera</button><button class="btn g" id="pasteb">Paste a code</button></div><div class="msg" id="jm"></div></div>'
-    + '<div class="card hide" id="step2"><h2><span class="stepno">2</span>Let them scan this code</h2><p class="s">Show this to the other phone. You are connected as soon as they scan it.</p><div class="qr" id="qr"></div></div>'
+  app.innerHTML = '<main><div class="card" id="step1"><h2>Scan their code</h2><p class="s">Point your camera at the code on the other phone. Both phones must be on the same hotspot or Wi-Fi.</p><div id="cam"></div><div class="row" style="margin-top:10px"><button class="btn" id="scanb">📷 Start camera</button><button class="btn g" id="pasteb">Paste a code</button></div><div class="msg" id="jm"></div></div>'
+    + '<div class="card hide" id="step2"><h2 id="s2h">Connecting…</h2><p class="s" id="s2p"></p><div class="qr" id="qr"></div></div>'
     + '<button class="btn g" id="back" style="width:100%">Cancel</button></main>';
   var l = null;
   $("back").onclick = function(){ stopScan(); if (l && !l.peer) drop(l); if (openLinks().length) chat(conv(), true); else home(); };
   function useOffer(t){
     $("jm").className = "msg"; $("jm").textContent = "Reading…";
+    var host = "them", room = "";
     l = newLink(); l.pc.ondatachannel = function(e){ wire(l, e.channel); };
-    unpack(t).then(function(o){ if (o.t !== "o") throw new Error("That is a reply code. Scan the code from the person who tapped Start a chat."); return l.pc.setRemoteDescription({type: "offer", sdp: o.sdp}); })
+    unpack(t).then(function(o){ if (o.t !== "o") throw new Error("That is a reply code. Scan the code from the phone that showed its code first."); host = (o.me && o.me.n) || "them"; room = o.r || ""; return l.pc.setRemoteDescription({type: "offer", sdp: o.sdp}); })
       .then(function(){ return l.pc.createAnswer(); }).then(function(a){ return l.pc.setLocalDescription(a); }).then(function(){ return waitIce(l.pc); })
       .then(function(){ return pack({v: 2, t: "a", sdp: slim(l.pc.localDescription.sdp), me: ME}); })
-      .then(function(code){ $("jm").className = "msg ok"; $("jm").textContent = "✓ Code read."; $("step2").classList.remove("hide"); qrInto($("qr"), code); window._xcnCode = code; $("step2").scrollIntoView({behavior: "smooth"}); })
+      .then(function(code){
+        window._xcnCode = code;
+        $("step1").classList.add("hide"); $("step2").classList.remove("hide");
+        $("s2p").textContent = "Connecting to " + host + "…";
+        var sent = room && navigator.onLine ? fetch(sigUrl(room), {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json"}, body: JSON.stringify({code: code})}).then(function(r){ return r.ok; }).catch(function(){ return false; }) : Promise.resolve(false);
+        sent.then(function(ok){
+          setTimeout(function(){              // still not connected (no internet): show the reply for their front camera
+            if (view !== "join" || l.peer) return;
+            $("s2h").textContent = "Almost done";
+            $("s2p").innerHTML = "No internet, so turn your screen to face <b>" + esc(host) + "</b>’s phone for a moment. Their front camera reads this code and you are connected.";
+            qrInto($("qr"), code);
+          }, ok ? 4000 : 300);
+        });
+      })
       .catch(function(e){ $("jm").className = "msg bad"; $("jm").textContent = e.message; });
   }
   $("scanb").onclick = function(){ scan($("cam"), useOffer, function(m){ $("jm").className = "msg bad"; $("jm").textContent = m; }); };
@@ -343,7 +376,7 @@ function chat(id, live){
     var connected = openLinks().length && conv() === id;
     var one = !p.g && openLinks()[0] && openLinks()[0].peer;
     app.innerHTML = '<div class="chat"><div class="chead"><button class="btn g" id="cb" style="padding:8px 12px">←</button><div class="av">' + (p.g ? "👥" : esc(initials(p.n))) + '</div><div style="min-width:0"><b style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:44vw">' + esc(p.n) + '</b><small id="cst"></small></div><span class="sp"></span>'
-      + (connected ? '<button class="btn g" id="addp" style="padding:8px 10px;font-size:12.5px;white-space:nowrap">➕ Add' + (PRO ? "" : ' <span class="pro">PRO</span>') + '</button>' : "")
+      + (connected ? '<button class="btn g" id="addp" style="padding:8px 10px;font-size:12.5px;white-space:nowrap">➕ Add people' + (PRO ? "" : ' <span class="pro">PRO</span>') + '</button>' : "")
       + (one && one.u ? '<a class="btn g" style="padding:8px 10px;font-size:12.5px" href="/u/' + encodeURIComponent(one.u) + '">Profile</a>' : '') + '</div><div class="links" id="lks"></div>'
       + '<div class="banner' + (connected ? " hide" : "") + '" id="cban">Not connected. <a href="#" id="recon">Connect again</a> (scan codes again)</div>'
       + '<div class="msgs" id="msgs"></div><div class="cin"><button id="att" title="Send a photo or file">📎</button><input type="file" id="file" class="hide" multiple><textarea id="ctext" rows="1" placeholder="Message" ' + (connected ? "" : "disabled") + '></textarea><button class="s" id="send">➤</button></div></div>';
@@ -417,10 +450,10 @@ function home(){
     app.innerHTML = '<main><h1>Chat without internet</h1><p class="s">Talk and share photos and files with people near you — phone to phone, with no internet and no mobile data. Private: messages go straight between the phones and stay on them.</p>'
       + (live ? '<div class="card" style="border-color:#86EFAC;background:#F0FDF4"><h2>🟢 You are connected</h2><button class="btn ok" id="back2" style="width:100%">Open the chat</button></div>' : "")
       + '<div class="card"><h2>Your name</h2><input class="t" id="nm" maxlength="40" placeholder="Your name" value="' + esc(ME.n) + '"></div>'
-      + '<div class="card"><h2>How it works</h2><ol class="steps"><li>One person turns on their phone’s <b>hotspot</b> (mobile data can be off). The other joins it in Wi-Fi. Or both use the same Wi-Fi.</li><li>One taps <b>Start a chat</b>, the other taps <b>Join a chat</b> and scans the code.</li><li>The first person scans the code that appears on the other phone. Done!</li></ol>'
+      + '<div class="card"><h2>How it works</h2><ol class="steps"><li>One person turns on their phone’s <b>hotspot</b> (mobile data can be off). The other joins it in Wi-Fi. Or both use the same Wi-Fi.</li><li>One taps <b>Show my code</b>, the other taps <b>Scan a code</b> and scans it. Connected!</li><li>No internet on either phone? After scanning, hold the two screens facing each other for a second.</li></ol>'
       + '<div class="tip">📶 Range: about 10–30 m indoors and up to 50 m outside on a phone hotspot; a whole building on a Wi-Fi router.</div>'
-      + '<div class="row" style="margin-top:12px"><button class="btn" id="hb">➕ Start a chat</button><button class="btn ok" id="jb">📷 Join a chat</button></div></div>'
-      + '<div class="card"><h2>Nearby <span class="pro">PRO</span></h2>' + (PRO ? '<p class="s" style="margin:0">✅ Active until <b>' + new Date(PRO.until).toLocaleDateString([], {day: "numeric", month: "short", year: "numeric"}) + '</b>. In a chat, tap <b>➕ Add</b> to bring more people in or relay to someone further away.</p>'
+      + '<div class="row" style="margin-top:12px"><button class="btn" id="hb">\uD83D\uDCF2 Show my code</button><button class="btn ok" id="jb">\uD83D\uDCF7 Scan a code</button></div></div>'
+      + '<div class="card"><h2>Nearby <span class="pro">PRO</span></h2>' + (PRO ? '<p class="s" style="margin:0">✅ Active until <b>' + new Date(PRO.until).toLocaleDateString([], {day: "numeric", month: "short", year: "numeric"}) + '</b>. In a chat, tap <b>➕ Add people</b> to bring more people in or relay to someone further away.</p>'
         : '<p class="s">Group chat with up to 10 phones, and relay through your phone to reach people further away. Only the person who adds others needs it — they join free.</p><button class="btn g" id="pro">See Nearby Pro — from Rs 299</button>') + '</div>'
       + (ps.length ? '<div class="card"><h2>Your chats</h2><div class="list">' + ps.map(function(p){ return '<a href="#" data-p="' + esc(p.i) + '"><div class="av">' + (p.g ? "👥" : esc(initials(p.n))) + '</div><div><b>' + esc(p.n) + (live === p.i ? ' <span style="color:var(--ok);font-size:12px">● connected</span>' : "") + '</b><small>' + esc(p.prev || "") + '</small></div></a>'; }).join("") + '</div><p class="s" style="margin:8px 0 0;font-size:12.5px">Saved on this phone only. To talk again, scan codes again.</p></div>' : "")
       + '</main>';

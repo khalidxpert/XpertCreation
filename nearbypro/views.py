@@ -69,3 +69,38 @@ def nearby_pass(request):
         return Response({"detail": "Nearby Pro is not set up on the server yet."}, status=503)
     return Response({"pro": True, "free": free, "pass": _b64u(body) + "." + _b64u(sig),
                      "until": datetime.fromtimestamp(exp, tz=dtz.utc).isoformat()})
+
+
+# ---- one-scan pairing: the second phone's reply is passed back through here when it has internet.
+# Kept 3 minutes in the cache, read once. Only pairing codes (no messages) ever pass through.
+import json as _json
+from django.core.cache import cache
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+_ROOM = re.compile(r"[0-9a-f]{16,48}")
+
+
+@csrf_exempt
+def sig(request, room):
+    if not _ROOM.fullmatch(room or ""):
+        return JsonResponse({"detail": "Bad room."}, status=400)
+    k = "xcn:sig:" + room
+    if request.method == "POST":
+        try:
+            code = str(_json.loads(request.body or b"{}").get("code", ""))
+        except Exception:
+            code = ""
+        if not code.startswith(("XCN0.", "XCN1.")) or len(code) > 6000:
+            return JsonResponse({"detail": "Not a Nearby code."}, status=400)
+        if cache.get(k + ":n", 0) >= 5:
+            return JsonResponse({"detail": "Too many tries."}, status=429)
+        cache.set(k + ":n", cache.get(k + ":n", 0) + 1, 180)
+        cache.set(k, code, 180)
+        return JsonResponse({"ok": True})
+    code = cache.get(k)
+    if code:
+        cache.delete(k)
+    r = JsonResponse({"code": code})
+    r["Cache-Control"] = "no-store"
+    return r
