@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "xlate",
     "shop",
     "meetup",
+    "storeplus",
     "storechat",
     "rishta",
     "linkprev",

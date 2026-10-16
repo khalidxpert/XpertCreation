@@ -281,7 +281,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <a href="#cart" class="st-ic" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><b id="stcc" hidden>0</b></a>
 </div>
 <nav class="st-nav" id="sttabs"><a href="#home" data-t="home">Home</a><a href="#deals" data-t="deals">&#9889; Deals</a><a href="#b2b" data-t="b2b">&#127981; Wholesale (B2B)</a><a href="#shops" data-t="shops">&#127978; All shops</a>
-  <a href="#orders" data-t="orders">My orders</a><a href="#quotes" data-t="quotes">Quotes</a><a href="#chats" data-t="chats">&#128172; Chats</a><a href="#team" data-t="team" id="stteam" hidden>Team</a><a href="#seller" data-t="seller" class="sell">Sell on XpertCreation</a></nav>
+  <a href="#orders" data-t="orders">My orders</a><a href="#quotes" data-t="quotes">Quotes</a><a href="#chats" data-t="chats">&#128172; Chats</a><a href="#team" data-t="team" id="stteam" hidden>Team</a><a href="#country" data-t="country" id="stcc">&#127757; Country</a><a href="#seller" data-t="seller" class="sell">Sell on XpertCreation</a></nav>
 <div id="stflash"></div>
 <div id="st"><p style="color:var(--soft)">Loading…</p></div>
 <script>
@@ -294,7 +294,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function $(i){ return document.getElementById(i); }
   function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   function ck(n){ var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)"); return m ? m.pop() : ""; }
-  function rs(n){ return "Rs " + Number(n || 0).toLocaleString("en-US"); }
+  function rs(n){ return (window.XCCUR || "Rs") + " " + Number(n || 0).toLocaleString("en-US"); }
   function day(t){ return t ? new Date(t).toLocaleDateString("en-GB", {day: "numeric", month: "short", year: "numeric"}) : ""; }
   function api(u, body){
     var o = {credentials: "same-origin", headers: {}};
@@ -615,10 +615,164 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     go();
   }
 
+  // ---- setup_storeplus_v1: countries, digital shop card, social links, opening hours, dropshipping
+  function spApi(u, body){
+    var o = {credentials: "same-origin", headers: {}};
+    if (body !== undefined){ o.method = "POST"; o.headers = {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}; o.body = JSON.stringify(body); }
+    return fetch("/api/storeplus/" + u, o).then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); })
+      .catch(function(){ return {ok: false, d: {detail: "No internet. Try again."}}; });
+  }
+  (function(){
+    var c = document.createElement("style");
+    c.textContent = ".spcc{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}.spcc button{display:flex;gap:10px;align-items:center;padding:12px;border:1.5px solid #E8EBF2;border-radius:14px;background:#fff;font:inherit;font-weight:700;cursor:pointer;text-align:left}"
+      + ".spcc button.on{border-color:#F85606;background:#FFF4ED}.spcc button span{font-size:24px}.spcc small{display:block;font-weight:500;color:#5A657C}"
+      + ".spx{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:-4px 0 14px}.spx a,.spx span.st{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:99px;border:1px solid #E8EBF2;background:#fff;color:#0D1424;font-size:13px;font-weight:700;text-decoration:none}"
+      + ".spx span.st.on{background:#DCFCE7;border-color:#86EFAC;color:#166534}.spx span.st.off{background:#FEF2F2;border-color:#FECACA;color:#991B1B}"
+      + ".spcard{max-width:420px;margin:6px auto 14px;border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 18px 50px rgba(13,20,36,.16);border:1px solid #E8EBF2}"
+      + ".spcard .tp{background:linear-gradient(135deg,#F85606,#FF8A00);color:#fff;padding:22px;text-align:center}.spcard .tp img,.spcard .tp .lg{width:84px;height:84px;border-radius:22px;object-fit:cover;background:#fff;color:#F85606;display:inline-grid;place-items:center;font-size:36px;font-weight:900;border:3px solid rgba(255,255,255,.7)}"
+      + ".spcard .tp h2{margin:10px 0 2px;font-size:24px}.spcard .tp p{margin:0;opacity:.92}.spcard .bd{padding:16px 18px}.spcard .li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:14px}.spcard .li i{font-style:normal;width:22px;text-align:center}"
+      + ".spcard .qr{display:flex;gap:14px;align-items:center;border-top:1px dashed #E8EBF2;margin-top:8px;padding-top:12px}.spcard .qr div:first-child{width:112px;height:112px;flex:none}.spcard .qr svg,.spcard .qr img{width:112px;height:112px}"
+      + ".sphr{display:grid;grid-template-columns:70px auto 1fr 1fr;gap:6px 8px;align-items:center}.sphr input[type=time]{margin:0}.sptbl td,.sptbl th{padding:8px 6px;border-bottom:1px solid #F1F2F6;font-size:13.5px;text-align:left;vertical-align:middle}.sptbl img{width:44px;height:44px;border-radius:10px;object-fit:cover;background:#F8FAFC}"
+      + ".sptbl input{width:96px;margin:0}@media print{body *{visibility:hidden}.spcard,.spcard *{visibility:visible}.spcard{position:absolute;left:0;top:0;box-shadow:none}.spnp{display:none}}";
+    document.head.appendChild(c);
+  })();
+  var SPDAY = [["mon", "Mon"], ["tue", "Tue"], ["wed", "Wed"], ["thu", "Thu"], ["fri", "Fri"], ["sat", "Sat"], ["sun", "Sun"]];
+  var SPSOC = [["facebook", "Facebook", "&#128216;"], ["instagram", "Instagram", "&#128247;"], ["tiktok", "TikTok", "&#127925;"], ["youtube", "YouTube", "&#9654;&#65039;"], ["x", "X", "&#120143;"], ["whatsapp", "WhatsApp", "&#128172;"], ["website", "Website", "&#127760;"]];
+  function spInit(){
+    var t = $("stcc"); if (t && M.country) t.innerHTML = M.country.flag + " " + esc(M.country.name);
+  }
+  function spCountryOptions(sel){ return (M.countries || [{code: "PK", name: "Pakistan", flag: "", sym: "Rs"}]).map(function(c){ return '<option value="' + c.code + '"' + (c.code === sel ? " selected" : "") + '>' + c.flag + ' ' + esc(c.name) + ' (' + esc(c.sym) + ')</option>'; }).join(""); }
+  function spSetCountry(code){
+    var cart = []; try { cart = JSON.parse(localStorage.getItem("xc_store_cart") || "[]") || []; } catch (e){}
+    if (code !== M.cc && cart.length){ if (!confirm("Your cart has items from " + (M.country ? M.country.name : "another country") + ". Changing the country empties the cart. Continue?")) return; try { localStorage.removeItem("xc_store_cart"); } catch (e){} }
+    document.cookie = "xc_cc=" + code + "; path=/; max-age=31536000; SameSite=Lax";
+    location.hash = "#home"; location.reload();
+  }
+  function spCountry(){
+    box.innerHTML = '<div class="st-sec" style="margin-top:4px"><h2>&#127757; Where are you shopping?</h2></div><p style="color:var(--soft);margin:-4px 0 12px;font-size:14px">You see shops, prices and delivery for the country you choose. Online payment works for Pakistan; in other countries you pay on delivery.</p><div class="spcc">'
+      + (M.countries || []).map(function(c){ return '<button type="button" data-cc="' + c.code + '" class="' + (c.code === M.cc ? "on" : "") + '"><span>' + c.flag + '</span><div>' + esc(c.name) + '<small>' + esc(c.currency) + ' &middot; ' + esc(c.sym) + '</small></div></button>'; }).join("") + '</div>';
+    box.onclick = function(e){ var b = e.target.closest("[data-cc]"); if (b) spSetCountry(b.getAttribute("data-cc")); };
+  }
+  function spAfterProduct(p){
+    if (!p.country || !M.cc || p.country === M.cc) return;
+    var c = (M.countries || []).filter(function(x){ return x.code === p.country; })[0]; if (!c) return;
+    box.insertAdjacentHTML("afterbegin", '<div class="st-box" style="background:#FFFBEB;border-color:#FCD34D;padding:12px 14px">' + c.flag + ' This shop sells in <b>' + esc(c.name) + '</b> (prices in ' + esc(c.sym) + '). You are shopping in ' + esc(M.country.name) + '. <a href="javascript:void 0" data-spcc="' + c.code + '" style="color:var(--o);font-weight:800">Shop in ' + esc(c.name) + '</a></div>');
+    var a = box.querySelector("[data-spcc]"); if (a) a.addEventListener("click", function(e){ e.stopPropagation(); spSetCountry(c.code); });
+  }
+  function spOpenTxt(o){
+    if (!o) return "";
+    var t = function(h){ var x = h.split(":"), n = +x[0]; return (n % 12 || 12) + (x[1] !== "00" ? ":" + x[1] : "") + (n < 12 ? " am" : " pm"); };
+    return o.open ? '<span class="st on">&#128994; Open now' + (o.until ? ' &middot; closes ' + t(o.until) : '') + '</span>'
+      : '<span class="st off">&#128308; Closed' + (o.opens ? ' &middot; opens ' + (o.day ? o.day.charAt(0).toUpperCase() + o.day.slice(1) + ' ' : '') + t(o.opens) : '') + '</span>';
+  }
+  function spSocial(s){ return SPSOC.filter(function(k){ return s && s[k[0]]; }).map(function(k){ var v = s[k[0]]; var href = k[0] === "whatsapp" ? "https://wa.me/" + v.replace(/\D/g, "").replace(/^0/, "92") : v; return '<a href="' + esc(href) + '" target="_blank" rel="noopener">' + k[2] + ' ' + k[1] + '</a>'; }).join(""); }
+  function spShopExtras(slug){
+    var n = 0, go = function(){
+      var el = $("spx"); if (!el){ if (++n < 25) setTimeout(go, 200); return; }
+      spApi("shop/" + encodeURIComponent(slug) + "/").then(function(r){
+        if (!r.ok || !$("spx")) return; var d = r.d;
+        $("spx").className = "spx";
+        $("spx").innerHTML = spOpenTxt(d.open) + spSocial(d.social) + '<a href="#card-' + esc(d.slug) + '">&#129706; Digital card</a><a href="/api/storeplus/vcf/' + esc(d.slug) + '/">&#128100; Save contact</a>' + (d.country && d.country.code !== "PK" ? '<span class="st">' + d.country.flag + ' ' + esc(d.country.name) + '</span>' : '');
+      });
+    };
+    go();
+  }
+  function spCard(slug){
+    box.innerHTML = '<p style="color:var(--soft)">Loading…</p>';
+    spApi("shop/" + encodeURIComponent(slug) + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = msg(esc(r.d.detail || "Shop not found."), "bad"); return; }
+      var d = r.d, url = "https://xpertcreation.com/store#shop-" + d.slug, h = d.hours || {};
+      var hrs = SPDAY.filter(function(x){ return h[x[0]]; }).length ? SPDAY.map(function(x){ var v = h[x[0]]; return '<span style="display:inline-block;min-width:92px">' + x[1] + ' ' + (v ? v[0] + '&ndash;' + v[1] : 'closed') + '</span>'; }).join(" ") : "";
+      box.innerHTML = '<div class="spcard"><div class="tp">' + (d.logo ? '<img src="' + esc(d.logo) + '" alt="">' : '<span class="lg">' + esc(d.name.charAt(0)) + '</span>') + '<h2>' + esc(d.name) + '</h2><p>' + esc(d.city) + ', ' + esc(d.country.name) + ' ' + d.country.flag + (d.rating ? ' &middot; &#9733; ' + d.rating : '') + '</p></div><div class="bd">'
+        + (d.about ? '<p style="margin:0 0 8px;color:#5A657C;font-size:14px;line-height:1.5">' + esc(d.about) + '</p>' : '')
+        + (d.open ? '<div class="spx" style="margin:0 0 6px">' + spOpenTxt(d.open) + '</div>' : '')
+        + (d.phone ? '<div class="li"><i>&#128222;</i><a href="tel:' + esc(d.phone) + '" style="color:inherit;font-weight:700">' + esc(d.phone) + '</a></div>' : '')
+        + (d.social && d.social.whatsapp ? '<div class="li"><i>&#128172;</i><a href="https://wa.me/' + esc(d.social.whatsapp.replace(/\D/g, "").replace(/^0/, "92")) + '" target="_blank" rel="noopener" style="color:inherit;font-weight:700">WhatsApp ' + esc(d.social.whatsapp) + '</a></div>' : '')
+        + (d.address ? '<div class="li"><i>&#128205;</i><span>' + esc(d.address) + ', ' + esc(d.city) + '</span></div>' : '')
+        + (hrs ? '<div class="li"><i>&#128339;</i><span style="font-size:13px">' + hrs + '</span></div>' : '')
+        + '<div class="spx" style="margin:8px 0 0">' + spSocial(d.social) + '</div>'
+        + '<div class="qr"><div id="spqr"></div><div><b>Scan to visit our shop</b><br><small style="color:#5A657C">' + d.products + ' products on XpertCreation Store</small></div></div></div></div>'
+        + '<div class="spnp" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><a class="st-btn o" href="/api/storeplus/vcf/' + esc(d.slug) + '/">&#128100; Save contact</a><button type="button" class="st-btn" id="spsh">&#128228; Share card</button>'
+        + '<a class="st-btn" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(d.name + " - " + location.origin + "/store#card-" + d.slug) + '">WhatsApp</a><button type="button" class="st-btn" id="sppr">&#128424; Print</button><a class="st-btn" href="#shop-' + esc(d.slug) + '">Visit shop</a></div>';
+      try { var q = qrcode(0, "M"); q.addData(url); q.make(); $("spqr").innerHTML = q.createSvgTag(4, 0); } catch (e){ $("spqr").style.display = "none"; }
+      $("sppr").onclick = function(){ window.print(); };
+      $("spsh").onclick = function(){ var u = location.origin + "/store#card-" + d.slug; if (navigator.share) navigator.share({title: d.name, text: d.name + " on XpertCreation", url: u}).catch(function(){}); else if (navigator.clipboard) navigator.clipboard.writeText(u).then(function(){ $("spsh").innerHTML = "&#10004; Link copied"; }); else prompt("Copy this link:", u); };
+    });
+  }
+  function spMore(){
+    var sc = $("sc"); if (!sc) return;
+    spApi("me/").then(function(r){
+      if (!r.ok){ sc.innerHTML = msg(esc(r.d.detail || "Could not load."), "bad"); return; }
+      var d = r.d, so = d.social || {}, h = d.hours || {};
+      sc.innerHTML = '<div class="st-box st-f"><h2>&#127757; Country</h2><select id="spc"' + (d.locked ? ' disabled' : '') + '>' + spCountryOptions(d.country) + '</select>'
+        + '<p style="font-size:13px;color:var(--soft);margin:6px 0 0">' + (d.locked ? 'Your shop has orders, so the country is fixed. Contact us if you moved.' : 'Your prices are in this country\'s money and only buyers shopping there see your shop. Outside Pakistan buyers pay on delivery.') + '</p></div>'
+        + '<div class="st-box st-f"><h2>&#128279; Social links</h2><p style="font-size:13px;color:var(--soft);margin:-4px 0 6px">Your page name or full link. They show on your shop page and digital card.</p>'
+        + SPSOC.map(function(k){ return '<label for="sps-' + k[0] + '">' + k[2] + ' ' + k[1] + '</label><input id="sps-' + k[0] + '" value="' + esc(so[k[0]] || "") + '" placeholder="' + (k[0] === "whatsapp" ? "03001234567" : k[0] === "website" ? "www.myshop.pk" : "your page name") + '">'; }).join("") + '</div>'
+        + '<div class="st-box st-f"><h2>&#128339; Opening hours</h2><p style="font-size:13px;color:var(--soft);margin:-4px 0 8px">Buyers see <b>Open now</b> or <b>Closed</b> on your shop. Leave all days off to hide it.</p><div class="sphr">'
+        + SPDAY.map(function(x){ var v = h[x[0]]; return '<b>' + x[1] + '</b><label style="display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" data-dy="' + x[0] + '"' + (v ? ' checked' : '') + ' style="width:auto;margin:0"> Open</label><input type="time" data-fr="' + x[0] + '" value="' + (v ? v[0] : "10:00") + '"><input type="time" data-to="' + x[0] + '" value="' + (v ? v[1] : "20:00") + '">'; }).join("") + '</div>'
+        + '<p style="margin:10px 0 0"><button type="button" class="st-btn sm" id="spall">Copy Monday to all days</button></p></div>'
+        + '<div class="st-box st-f"><h2>&#129706; Digital card</h2><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="spph"' + (d.show_phone ? ' checked' : '') + ' style="width:auto;margin:0"> Show my shop phone on the card</label>'
+        + '<p style="margin:10px 0 0"><a class="st-btn" href="#card-' + esc(d.slug) + '">See my digital card</a></p></div>'
+        + '<p><button type="button" class="st-btn o" id="spsave">Save</button></p><div id="spm"></div>';
+      $("spall").onclick = function(){ var f = sc.querySelector('[data-fr="mon"]').value, t = sc.querySelector('[data-to="mon"]').value, on = sc.querySelector('[data-dy="mon"]').checked;
+        SPDAY.forEach(function(x){ sc.querySelector('[data-fr="' + x[0] + '"]').value = f; sc.querySelector('[data-to="' + x[0] + '"]').value = t; sc.querySelector('[data-dy="' + x[0] + '"]').checked = on; }); };
+      $("spsave").onclick = function(){
+        var soc = {}, hr = {}; SPSOC.forEach(function(k){ soc[k[0]] = $("sps-" + k[0]).value; });
+        SPDAY.forEach(function(x){ hr[x[0]] = sc.querySelector('[data-dy="' + x[0] + '"]').checked ? [sc.querySelector('[data-fr="' + x[0] + '"]').value, sc.querySelector('[data-to="' + x[0] + '"]').value] : null; });
+        var body = {social: soc, hours: hr, show_phone: $("spph").checked}; if (!d.locked) body.country = $("spc").value;
+        if (!d.locked && body.country !== d.country && !confirm("Change your shop country? Your prices will be shown in that country's money.")) return;
+        this.disabled = true; var b = this;
+        spApi("me/", body).then(function(x){ b.disabled = false; $("spm").innerHTML = x.ok ? msg("&#10004; Saved.", "ok") : msg(esc(x.d.detail || "Could not save."), "bad"); if (x.ok && body.country && body.country !== d.country) setTimeout(function(){ location.reload(); }, 800); });
+      };
+    });
+  }
+  function spDrop(){
+    var sc = $("sc"); if (!sc) return;
+    var view = "catalog";
+    var top = function(){ return '<div class="st-tab" style="margin:0 0 10px">' + [["catalog", "Find products to sell"], ["mine", "My dropship products"], ["supply", "Let others sell mine"]].map(function(t){ return '<a href="javascript:void 0" data-dv="' + t[0] + '" class="' + (t[0] === view ? "on" : "") + '">' + t[1] + '</a>'; }).join("") + '</div>'
+      + '<div class="st-box" style="padding:12px 14px;font-size:13.5px;line-height:1.5;background:#F0F9FF;border-color:#BAE6FD"><b>&#128230; How dropshipping works:</b> add a supplier\'s product to your shop at your own price. When a customer orders, the supplier ships it straight to them. '
+      + 'Cash on delivery: the supplier collects the cash and your profit is moved to your balance. Online: you get your price minus the supplier price. Shops in Pakistan only.</div>'; };
+    var load = function(){
+      if (view === "catalog") spApi("drop/catalog/").then(function(r){
+        if (!r.ok){ sc.innerHTML = top() + msg(esc(r.d.detail || "Could not load."), "bad"); return; }
+        var o = r.d.offers || [];
+        sc.innerHTML = top() + '<div class="st-box" style="overflow-x:auto">' + (o.length ? '<table class="sptbl" style="width:100%;border-collapse:collapse"><tr><th></th><th>Product</th><th>You pay</th><th>Your price</th><th></th></tr>' + o.map(function(x){
+          return '<tr><td>' + (x.image ? '<img src="' + esc(x.image) + '" alt="">' : '') + '</td><td><b>' + esc(x.title) + '</b><br><small style="color:var(--soft)">' + esc(x.supplier) + ', ' + esc(x.city) + ' &middot; ' + x.stock + ' in stock &middot; shop price ' + rs(x.retail) + (x.delivery_fee ? ' &middot; delivery ' + rs(x.delivery_fee) : '') + '</small></td><td><b>' + rs(x.cost) + '</b></td>'
+            + '<td>' + (x.added ? '' : '<input type="number" min="' + x.cost + '" value="' + x.retail + '" data-pr="' + x.id + '">') + '</td><td>' + (x.added ? '<small style="color:#166534">&#10004; In your shop</small>' : '<button type="button" class="st-btn sm o" data-add="' + x.id + '">Add to my shop</button>') + '</td></tr>'; }).join("") + '</table>'
+          : '<div class="st-empty"><b>No products open for dropshipping yet</b>When suppliers allow it, their products show here.</div>') + '</div><div id="spdm"></div>';
+      });
+      if (view === "mine") spApi("drop/mine/").then(function(r){
+        if (!r.ok){ sc.innerHTML = top() + msg(esc(r.d.detail || "Could not load."), "bad"); return; }
+        var o = r.d.products || [];
+        sc.innerHTML = top() + '<div class="st-box" style="overflow-x:auto">' + (o.length ? '<table class="sptbl" style="width:100%;border-collapse:collapse"><tr><th></th><th>Product</th><th>Your price</th><th>You pay</th><th>Profit</th><th></th></tr>' + o.map(function(x){
+          return '<tr><td>' + (x.image ? '<img src="' + esc(x.image) + '" alt="">' : '') + '</td><td><b>' + esc(x.title) + '</b><br><small style="color:var(--soft)">from ' + esc(x.supplier) + ' &middot; ' + x.stock + ' in stock &middot; ' + x.sold + ' sold' + (x.active ? '' : ' &middot; <b style="color:#B91C1C">paused</b>') + (x.available ? '' : ' &middot; supplier stopped it') + '</small></td>'
+            + '<td>' + rs(x.price) + '</td><td>' + rs(x.cost) + '</td><td><b style="color:' + (x.profit > 0 ? "#166534" : "#B91C1C") + '">' + rs(x.profit) + '</b></td><td><a class="st-btn sm" href="#editp-' + x.id + '">Edit price</a></td></tr>'; }).join("") + '</table>'
+          : '<div class="st-empty"><b>No dropship products yet</b>Open <b>Find products to sell</b>.</div>') + '</div>';
+      });
+      if (view === "supply") spApi("drop/offers/").then(function(r){
+        if (!r.ok){ sc.innerHTML = top() + msg(esc(r.d.detail || "Could not load."), "bad"); return; }
+        var o = r.d.products || [];
+        sc.innerHTML = top() + '<p style="font-size:13px;color:var(--soft);margin:0 0 8px">Turn on a product and set the price resellers pay you. They sell it at their own price; you ship to their customer and are paid your price.</p><div class="st-box" style="overflow-x:auto">' + (o.length ? '<table class="sptbl" style="width:100%;border-collapse:collapse"><tr><th></th><th>Product</th><th>Allow</th><th>Reseller pays</th><th></th></tr>' + o.map(function(x){
+          return '<tr><td>' + (x.image ? '<img src="' + esc(x.image) + '" alt="">' : '') + '</td><td><b>' + esc(x.title) + '</b><br><small style="color:var(--soft)">your price ' + rs(x.price) + ' &middot; ' + x.stock + ' in stock' + (x.resellers ? ' &middot; ' + x.resellers + ' reseller' + (x.resellers === 1 ? '' : 's') : '') + '</small></td>'
+            + '<td><input type="checkbox" data-on="' + x.id + '"' + (x.on ? ' checked' : '') + ' style="width:auto"></td><td><input type="number" min="1" max="' + x.price + '" value="' + (x.cost || Math.round(x.price * 0.8)) + '" data-cp="' + x.id + '"></td><td><button type="button" class="st-btn sm o" data-sv="' + x.id + '">Save</button></td></tr>'; }).join("") + '</table>'
+          : '<div class="st-empty"><b>No products yet</b>Add products first.</div>') + '</div><div id="spdm"></div>';
+      });
+    };
+    sc.onclick = function(e){
+      var v = e.target.closest("[data-dv]"); if (v){ view = v.getAttribute("data-dv"); load(); return; }
+      var a = e.target.closest("[data-add]"); if (a){ var id = a.getAttribute("data-add"), pr = sc.querySelector('[data-pr="' + id + '"]'); a.disabled = true;
+        spApi("drop/add/", {product: +id, price: pr ? +pr.value : 0}).then(function(r){ if (r.ok){ flash("&#10004; Added to your shop. Customers can order it now.", "ok"); load(); } else { a.disabled = false; $("spdm").innerHTML = msg(esc(r.d.detail || "Could not add."), "bad"); } }); return; }
+      var s = e.target.closest("[data-sv]"); if (s){ var i = s.getAttribute("data-sv"); s.disabled = true;
+        spApi("drop/offers/", {product: +i, on: sc.querySelector('[data-on="' + i + '"]').checked, price: +sc.querySelector('[data-cp="' + i + '"]').value}).then(function(r){ s.disabled = false; $("spdm").innerHTML = r.ok ? msg("&#10004; Saved.", "ok") : msg(esc(r.d.detail || "Could not save."), "bad"); }); }
+    };
+    load();
+  }
+
   // ---------- product
   function vProduct(id){
     api("products/" + id + "/").then(function(r){
       if (!r.ok){ box.innerHTML = msg(esc(r.d.detail || "Not found."), "bad"); return; }
+      if (r.d.cur) window.XCCUR = r.d.cur;
       var p = r.d, pics = p.images, cur = 0, s = p.shop, tot = 0, c = CI[p.category] || CI.other;
       Object.keys(p.stars || {}).forEach(function(k){ tot += p.stars[k]; });
       var h = '<div style="font-size:13px;color:var(--soft);margin:4px 0 10px"><a href="#home">Store</a> &rsaquo; <a href="#cat-' + p.category + '">' + esc(p.cat) + '</a></div><div class="st-pd"><div>'
@@ -644,6 +798,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (p.similar.length) h += '<div class="st-sec"><h2>You may also like</h2></div><div class="st-row">' + p.similar.map(pcard).join("") + '</div>';
       box.innerHTML = h;
       xcAfterProduct(p);
+      spAfterProduct(p);
       var show = function(i){ cur = i; $("pg").src = pics[i]; [].forEach.call(box.querySelectorAll(".st-th img"), function(t, k){ t.className = k === i ? "on" : ""; }); };
       var qty = function(){ return Math.max(1, Math.min(p.stock, parseInt($("pq").value, 10) || 1)); };
       box.onclick = function(e){
@@ -665,7 +820,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       var s = r.d.shop;
       box.innerHTML = '<div class="st-shop" style="width:auto;flex:none;padding:24px;border-radius:22px;margin-bottom:14px">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="" style="width:76px;height:76px">' : '<span class="lg" style="width:76px;height:76px">' + esc(s.name.charAt(0)) + '</span>')
         + '<div><b style="font-size:24px">' + esc(s.name) + '</b> ' + tierB(s.tier) + '<br><small>' + esc(s.city) + ' &middot; ' + (s.rating ? '&#9733; ' + s.rating + ' (' + s.ratings + ')' : 'New shop') + ' &middot; ' + s.products + ' products &middot; ' + s.sold + ' sold &middot; since ' + new Date(s.since).getFullYear() + (s.verified ? ' &middot; &#10003; ID verified' : '') + '</small>'
-        + (s.about ? '<p style="margin:8px 0 0;font-size:14px;opacity:.9">' + esc(s.about) + '</p>' : '') + xcShopChatBtn(s) + '</div></div><div class="st-grid">' + (r.d.products.length ? r.d.products.map(pcard).join("") : '<div class="st-empty" style="grid-column:1/-1"><b>No products yet</b></div>') + '</div>';
+        + (s.about ? '<p style="margin:8px 0 0;font-size:14px;opacity:.9">' + esc(s.about) + '</p>' : '') + xcShopChatBtn(s) + '</div></div><div id="spx"></div><div class="st-grid">' + (r.d.products.length ? r.d.products.map(pcard).join("") : '<div class="st-empty" style="grid-column:1/-1"><b>No products yet</b></div>') + '</div>';
     });
   }
 
@@ -800,12 +955,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (!m || m.status === "rejected") return applyForm(m);
       if (m.status === "pending"){ box.innerHTML = '<div class="st-box st-empty"><div class="e">&#9203;</div><b>Your shop &ldquo;' + esc(m.name) + '&rdquo; is waiting for approval</b>Our team checks new shops within 2 working days. You will get a notification.</div>'; return; }
       if (m.status === "suspended"){ box.innerHTML = '<div class="st-box">' + msg("Your shop is suspended: " + esc(m.note) + ". Contact us from the Ownership &amp; complaints page.", "bad") + '</div>'; return; }
-      var tabs = [["seller", "Dashboard"], ["seller-products", "Products"], ["seller-orders", "Orders" + (SC.orders_new ? " (" + SC.orders_new + ")" : "")], ["inventory", "Inventory" + (SC.low_stock ? " &#9888;" : "")], ["quotes", "Quotes" + (SC.quotes_open ? " (" + SC.quotes_open + ")" : "")], ["seller-shop", "Shop profile"], ["seller-chats", "&#128172; Chats"]];
+      var tabs = [["seller", "Dashboard"], ["seller-products", "Products"], ["seller-orders", "Orders" + (SC.orders_new ? " (" + SC.orders_new + ")" : "")], ["inventory", "Inventory" + (SC.low_stock ? " &#9888;" : "")], ["quotes", "Quotes" + (SC.quotes_open ? " (" + SC.quotes_open + ")" : "")], ["seller-shop", "Shop profile"], ["seller-more", "&#10024; Social, hours &amp; card"], ["seller-drop", "&#128230; Dropship"], ["seller-chats", "&#128172; Chats"]];
       var head = '<div class="st-shop" style="width:auto;flex:none;padding:18px;border-radius:20px;margin-bottom:10px">' + '<label title="Change logo" style="position:relative;cursor:pointer;flex:none;display:block">' + (m.logo ? '<img src="' + esc(m.logo) + '" alt="">' : '<span class="lg">' + esc(m.name.charAt(0)) + '</span>') + '<span style="position:absolute;right:-6px;bottom:-6px;width:28px;height:28px;border-radius:50%;background:#F85606;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)">\uD83D\uDCF7</span><input type="file" id="hlf" accept="image/*" hidden></label>' + '<div style="flex:1"><b style="font-size:20px">' + esc(m.name) + '</b> ' + tierB(SC.tier) + '<br><small>Seller center &middot; <a href="#shop-' + esc(m.slug) + '" style="color:#fff;text-decoration:underline">view your shop</a></small></div></div>'
         + '<div class="st-tab">' + tabs.map(function(t){ return '<a href="#' + t[0] + '" class="' + (t[0] === tab ? "on" : "") + '">' + t[1] + '</a>'; }).join("") + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px"><a class="st-btn sm" href="/shop/' + esc(m.slug) + '" target="_blank" rel="noopener">&#127760; My shop page</a><a class="st-btn sm" href="/brand">&#127912; Brand kit</a><a class="st-btn sm" href="#seller-chats">&#128172; Chats</a></div><div id="sc"></div>';
       box.innerHTML = head + (m.logo ? '' : '<div class="st-box" style="padding:10px 14px;margin-bottom:10px;font-weight:700">\uD83D\uDCF7 Add your shop logo \u2014 tap the camera on the picture above.</div>');
       $("hlf").onchange = function(){ if (!this.files[0]) return; var fd = new FormData(); fd.append("file", this.files[0]); api("merchant/logo/", fd).then(function(x){ if (x.ok) vSeller(tab); else alert((x.d && x.d.detail) || "Could not upload the logo."); }); };
-      ({"seller": scDash, "seller-products": scProducts, "seller-orders": scOrders, "seller-shop": scShop, "seller-chats": scChats}[tab] || scDash)(); scBadge();
+      ({"seller": scDash, "seller-products": scProducts, "seller-orders": scOrders, "seller-shop": scShop, "seller-more": spMore, "seller-drop": spDrop, "seller-chats": scChats}[tab] || scDash)(); scBadge();
     });
   }
   function applyForm(m){
@@ -814,13 +969,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<p style="font-size:14px;color:var(--soft)">Sell to members across Pakistan: retail (B2C), wholesale (B2B) or both. Bronze is free with 10 products.</p>'
       + '<b>Before you apply</b><ul class="st-check">' + SC.checklist.map(function(c){ return '<li>' + (c.ok ? '&#9989;' : '&#11036;') + ' ' + esc(c.label.charAt(0).toUpperCase() + c.label.slice(1)) + (c.ok ? '' : ' &middot; <a href="' + (c.key === "phone" ? "/account?back=store#phone" : c.link) + '" style="color:var(--o);font-weight:800">do it now</a>') + '</li>'; }).join("") + '</ul>';
     if (ok) h += '<label for="an">Shop name</label><input id="an" maxlength="80" value="' + esc(m ? m.name : "") + '"><div class="row2"><div><label for="ac">City</label><input id="ac" value="' + esc(m ? m.city : "") + '"></div><div><label for="aph">Phone / WhatsApp</label><input id="aph" value="' + esc(m ? m.phone : (M.me.phone || "")) + '"></div></div>'
-      + '<label for="ak">You sell</label><select id="ak"><option value="b2c">Retail to customers (B2C)</option><option value="b2b">Wholesale to businesses (B2B)</option><option value="both">Both</option></select>'
+      + '<label for="acc">Country</label><select id="acc">' + spCountryOptions((m && m.country) || M.cc || "PK") + '</select><label for="ak">You sell</label><select id="ak"><option value="b2c">Retail to customers (B2C)</option><option value="b2b">Wholesale to businesses (B2B)</option><option value="both">Both</option></select>'
       + '<label for="aad">Shop / warehouse address</label><input id="aad" value="' + esc(m ? m.address : "") + '"><label for="aab">About your shop</label><textarea id="aab">' + esc(m ? m.about : "") + '</textarea>'
       + '<p><button class="st-btn o" id="ago">Apply for a shop</button></p><div id="amsg"></div>';
     else h += msg("Complete the steps above, then come back to apply.");
     h += '</div><div>' + plansBox("bronze") + '</div></div>';
     box.innerHTML = h;
-    var g = $("ago"); if (g) g.onclick = function(){ api("merchant/", {name: $("an").value, city: $("ac").value, phone: $("aph").value, kind: $("ak").value, address: $("aad").value, about: $("aab").value}).then(function(x){ if (x.ok){ flash("Application sent! Our team will check it soon.", "ok"); vSeller("seller"); } else $("amsg").innerHTML = msg(esc(x.d.detail || "Could not apply."), "bad"); }); };
+    var g = $("ago"); if (g) g.onclick = function(){ api("merchant/", {country: $("acc") ? $("acc").value : "", name: $("an").value, city: $("ac").value, phone: $("aph").value, kind: $("ak").value, address: $("aad").value, about: $("aab").value}).then(function(x){ if (x.ok){ flash("Application sent! Our team will check it soon.", "ok"); vSeller("seller"); } else $("amsg").innerHTML = msg(esc(x.d.detail || "Could not apply."), "bad"); }); };
   }
   function plansBox(cur, mid){
     return '<div class="st-box"><h2>Merchant plans</h2><div class="st-plans" style="grid-template-columns:1fr">' + ["bronze", "gold", "platinum"].map(function(k){ var t = M.tiers[k];
@@ -868,9 +1023,9 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<label for="ft">Product name</label><input id="ft" maxlength="150" value="' + esc(p.title) + '" placeholder="Samsung Galaxy A15, 128GB, Black">'
         + '<div class="row2"><div><label for="fc">Category</label><select id="fc">' + M.cats.map(function(c){ return '<option value="' + c[0] + '"' + (p.category === c[0] ? " selected" : "") + '>' + esc(c[1]) + '</option>'; }).join("") + '</select></div><div><label for="fsku">SKU / your code</label><input id="fsku" value="' + esc(p.sku || "") + '"></div></div>'
         + '<label for="fd">Description</label><textarea id="fd" style="min-height:150px">' + esc(p.description || "") + '</textarea>'
-        + '<div class="row"><div><label for="fp">Price (Rs)</label><input id="fp" type="number" value="' + esc(p.price) + '"></div><div><label for="fo">Old price (crossed out)</label><input id="fo" type="number" value="' + esc(p.old_price || "") + '"></div><div><label for="fcost">Your cost (private)</label><input id="fcost" type="number" value="' + esc(p.cost_price || "") + '"></div></div>'
+        + '<div class="row"><div><label for="fp">Price (' + (window.XCCUR || "Rs") + ')</label><input id="fp" type="number" value="' + esc(p.price) + '"></div><div><label for="fo">Old price (crossed out)</label><input id="fo" type="number" value="' + esc(p.old_price || "") + '"></div><div><label for="fcost">Your cost (private)</label><input id="fcost" type="number" value="' + esc(p.cost_price || "") + '"></div></div>'
         + '<div class="row"><div><label for="fs">Stock</label><input id="fs" type="number" value="' + esc(p.stock) + '"></div><div><label for="frl">Reorder level</label><input id="frl" type="number" value="' + esc(p.reorder_level || "") + '"></div><div></div></div>'
-        + '<div class="row"><div><label for="fdf">Delivery fee (Rs)</label><input id="fdf" type="number" value="' + esc(p.delivery_fee) + '"></div><div><label for="fdd">Delivery days</label><input id="fdd" type="number" value="' + esc(p.delivery_days) + '"></div><div></div></div>'
+        + '<div class="row"><div><label for="fdf">Delivery fee (' + (window.XCCUR || "Rs") + ')</label><input id="fdf" type="number" value="' + esc(p.delivery_fee) + '"></div><div><label for="fdd">Delivery days</label><input id="fdd" type="number" value="' + esc(p.delivery_days) + '"></div><div></div></div>'
         + '<div class="row"><div><label for="fw">Wholesale price (B2B)</label><input id="fw" type="number" value="' + esc(p.wholesale || "") + '"></div><div><label for="fm">Min. quantity</label><input id="fm" type="number" value="' + esc(p.moq || "") + '"></div><div></div></div>'
         + '<label class="chk"><input type="checkbox" id="fcod"' + (p.cod ? " checked" : "") + '> Cash on delivery</label><label class="chk"><input type="checkbox" id="fon"' + (p.online ? " checked" : "") + '> Online payment (card / wallet, ' + M.fee_pct + '% fee)</label><label class="chk"><input type="checkbox" id="fact"' + (p.active !== false ? " checked" : "") + '> Live</label>'
         + (p.id ? '<label>Photos (up to 6, the first is the cover)</label><div class="st-pics" id="fpics"></div><input type="file" id="ffile" accept="image/*" multiple hidden>' : '<p style="font-size:12.5px;color:var(--soft)">Save first, then add photos.</p>')
@@ -940,31 +1095,33 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
   function route(){
     var h = location.hash.replace("#", "") || "home", m;
-    box.onclick = null; box.onchange = null; if (SCT){ clearInterval(SCT); SCT = 0; }
+    box.onclick = null; box.onchange = null; window.XCCUR = (M && (/^(seller|sorder-|editp-|inventory|quotes)/.test(h) ? (M.mycur || M.cur) : M.cur)) || "Rs"; if (SCT){ clearInterval(SCT); SCT = 0; }
     if (!/^p-\d+$/.test(location.hash.replace("#", "")) && /[?&]p=/.test(location.search)){ try { var xsp = new URLSearchParams(location.search); xsp.delete("p"); history.replaceState(null, "", location.pathname + (xsp.toString() ? "?" + xsp : "") + location.hash); document.title = "Store — XpertCreation"; } catch (e){} }
     var tab = /^(p-|cat-|shop-|all|search)/.test(h) ? "home" : /^(sorder-|editp-|seller|inventory)/.test(h) ? "seller" : /^order-/.test(h) ? "orders" : h;
     [].forEach.call($("sttabs").querySelectorAll("a[data-t]"), function(a){ a.className = (a.getAttribute("data-t") === tab ? "on" : "") + (a.classList.contains("sell") ? " sell" : ""); });
     window.scrollTo(0, 0);
     if ((m = h.match(/^p-(\d+)$/))) return vProduct(m[1]);
     if ((m = h.match(/^cat-(\w+)$/))){ LQ = {q: "", cat: m[1], sort: "", min: "", max: "", cod: "", deal: "", b2b: "", shop: ""}; return vList(esc(catName(m[1]))); }
-    if ((m = h.match(/^shop-(.+)$/))) return vShop(decodeURIComponent(m[1]));
+    if ((m = h.match(/^shop-(.+)$/))){ vShop(decodeURIComponent(m[1])); spShopExtras(decodeURIComponent(m[1])); return; }
     if ((m = h.match(/^order-(\d+)$/))) return vOrder(m[1], false);
     if ((m = h.match(/^sorder-(\d+)$/))) return vOrder(m[1], true);
     if ((m = h.match(/^editp-(\w+)$/))) return vEditP(m[1]);
     if (/^search-/.test(h)){ LQ = {q: decodeURIComponent(h.slice(7)), cat: "", sort: "", min: "", max: "", cod: "", deal: "", b2b: "", shop: ""}; return vList("Results for &ldquo;" + esc(LQ.q) + "&rdquo;"); }
+    if (h === "country") return spCountry();
+    if ((m = h.match(/^card-(.+)$/))) return spCard(decodeURIComponent(m[1]));
     if (h === "all"){ LQ = {q: "", cat: "", sort: "new", min: "", max: "", cod: "", deal: "", b2b: "", shop: ""}; return vList("All products"); }
     if (h === "deals"){ LQ = {q: "", cat: "", sort: "", min: "", max: "", cod: "", deal: "1", b2b: "", shop: ""}; return vList("&#9889; Deals"); }
     if (h === "b2b"){ LQ = {q: "", cat: "", sort: "", min: "", max: "", cod: "", deal: "", b2b: "1", shop: ""}; return vList("&#127981; Wholesale (B2B)"); }
     if (h === "shops") return vShops();
     if (h === "chats") return scMine();
     if ((m = h.match(/^chat-(.+)$/))){ vShop(decodeURIComponent(m[1])); xcChatOpen(decodeURIComponent(m[1]), 0); return; }
-    if (/^(seller|seller-products|seller-orders|seller-shop|seller-chats)$/.test(h)) return vSeller(h);
+    if (/^(seller|seller-products|seller-orders|seller-shop|seller-more|seller-drop|seller-chats)$/.test(h)) return vSeller(h);
     ({cart: vCart, orders: vOrders, quotes: vQuotes, inventory: vInventory, team: vTeam}[h] || vHome)();
   }
   $("stsf").onsubmit = function(e){ e.preventDefault(); var q = $("stq").value.trim(); if (q) location.hash = "#search-" + encodeURIComponent(q); };
   saveCart();
   api("meta/").then(function(r){
-    M = r.d; if (M.me && M.me.staff) $("stteam").hidden = false;
+    M = r.d; window.XCCUR = M.cur || "Rs"; spInit(); if (M.me && M.me.staff) $("stteam").hidden = false;
     var q = new URLSearchParams(location.search);
     if (q.get("paid")) flash("&#10004; Payment received. Your order is placed.", "ok");
     if (q.get("failed")) flash("We could not confirm that payment. If money was taken it is checked again automatically, or contact us.", "bad");
