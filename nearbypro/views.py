@@ -61,7 +61,7 @@ def nearby_pass(request):
         return Response({"pro": False})
     exp = int(min(end.timestamp(), time.time() + MAXDAYS * 86400))
     free = bool(getattr(u, "is_moderator", False) or u.is_staff or u.is_superuser)
-    body = json.dumps({"u": u.pk, "n": (u.get_full_name() or u.username)[:40], "d": dev, "exp": exp, "p": "pro"},
+    body = json.dumps({"u": u.pk, "n": ((getattr(u, "full_name", "") or "").strip() or u.username)[:40], "d": dev, "exp": exp, "p": "pro"},
                       separators=(",", ":")).encode()
     try:
         sig = _sign(body)
