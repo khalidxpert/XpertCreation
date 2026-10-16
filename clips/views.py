@@ -191,3 +191,54 @@ def review(request):
         c.status, c.note = "rejected", str(request.data.get("reason") or "It does not follow our community rules.")[:300]; c.save()
         notify(c.user, "Your clip was not published: %s" % c.note, "/clips?mine=1")
     return Response({"ok": True})
+
+
+# ---- setup_clipshare_v1: a shared clip link shows that clip (its picture, caption and playable video)
+#      on Facebook, WhatsApp and XpertConnect. nginx sends /clips?id=N here; everything else is the normal page.
+import html as _h5
+import re as _re5
+from django.http import HttpResponse as _HR5
+
+_CLIPS_PAGE = "/var/www/xpertcreation-landing/clips.html"
+_SITE5 = "https://xpertcreation.com"
+
+
+def _abs5(u):
+    u = str(u or "")
+    return u if u.startswith("http") else (_SITE5 + u if u.startswith("/") else "")
+
+
+def og(request, pk):
+    try:
+        page = open(_CLIPS_PAGE, encoding="utf-8").read()
+    except Exception:
+        return _HR5("Not found", status=404)
+    c = Clip.objects.filter(pk=pk, status="published", hidden=False).select_related("user").first()
+    if c:
+        who = _name(c.user)
+        cap = _re5.sub(r"\s+", " ", c.caption or "").strip()
+        title = (cap[:90] if cap else "A clip by %s" % who) + " — XpertClips"
+        desc = "Watch %s's clip on XpertClips · %d likes · %d views. Short videos on XpertCreation." % (who, c.likes, c.views)
+        url = "%s/clips?id=%d" % (_SITE5, c.id)
+        img = _abs5(c.thumb_url) or _SITE5 + "/brand/og/p/clips.jpg"
+        vid = _abs5(c.video_url)
+
+        def setm(page, attr, key, val):
+            pat = _re5.compile(r'(<meta %s="%s" content=")[^"]*(")' % (attr, _re5.escape(key)))
+            return pat.sub(lambda m: m.group(1) + _h5.escape(val, quote=True) + m.group(2), page, count=1)
+        for attr, key, val in (("property", "og:title", title), ("name", "twitter:title", title), ("property", "og:description", desc),
+                               ("name", "twitter:description", desc), ("name", "description", desc), ("property", "og:url", url),
+                               ("property", "og:image", img), ("name", "twitter:image", img), ("property", "og:type", "video.other" if vid else "website")):
+            page = setm(page, attr, key, val)
+        page = _re5.sub(r"<title>[^<]*</title>", "<title>%s</title>" % _h5.escape(title), page, count=1)
+        page = _re5.sub(r'(<link rel="canonical" href=")[^"]*(")', lambda m: m.group(1) + url + m.group(2), page, count=1)
+        page = _re5.sub(r'<meta property="og:image:(?:width|height)" content="[^"]*">\n?', "", page)
+        if vid:
+            vt = "application/x-mpegURL" if ".m3u8" in vid else "video/mp4"
+            tags = ('<meta property="og:video" content="%s">\n<meta property="og:video:secure_url" content="%s">\n'
+                    '<meta property="og:video:type" content="%s">\n<meta property="og:video:width" content="720">\n'
+                    '<meta property="og:video:height" content="1280">\n') % (_h5.escape(vid, quote=True), _h5.escape(vid, quote=True), vt)
+            page = page.replace('<meta property="og:locale"', tags + '<meta property="og:locale"', 1)
+    r = _HR5(page)
+    r["Cache-Control"] = "public, max-age=300"
+    return r

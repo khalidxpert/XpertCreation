@@ -630,3 +630,66 @@
   }
   setTimeout(show, 4000);
 })();
+
+/* xc-dialog-v1: XpertCreation's own pop-ups instead of the plain browser boxes ("xpertcreation.com says").
+   alert() shows a branded card. confirm() and prompt() opened by a tap show a branded card too; when you answer,
+   the same button is pressed again with your answer, so every page keeps working without changes. */
+(function(){
+  if (window.__xcDlg) return; window.__xcDlg = 1;
+  var nAlert = window.alert, nConfirm = window.confirm, nPrompt = window.prompt;
+  var lastEl = null, lastAt = 0, answer = null;
+  document.addEventListener("click", function(e){ lastEl = e.target; lastAt = Date.now(); }, true);
+  var css = document.createElement("style");
+  css.textContent = ".xcd{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,16,32,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);animation:xcdF .15s ease}" +
+    ".xcd .bx{width:100%;max-width:400px;background:#fff;color:#0D1424;border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden;font-family:inherit;animation:xcdU .2s ease}" +
+    ".xcd .hd{display:flex;align-items:center;gap:10px;padding:16px 18px 0}.xcd .hd img{width:34px;height:34px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.2)}.xcd .hd b{font-size:15px;letter-spacing:-.01em}" +
+    ".xcd .hd span{margin-left:auto;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}" +
+    ".xcd .ms{padding:12px 18px 4px;font-size:15.5px;line-height:1.55;white-space:pre-line;word-wrap:break-word;max-height:55vh;overflow:auto}" +
+    ".xcd input{display:block;width:calc(100% - 36px);margin:8px 18px 0;padding:12px;border:1.5px solid #E4E8F2;border-radius:12px;font:inherit;font-size:15px;box-sizing:border-box;width:calc(100% - 36px)}" +
+    ".xcd input:focus{outline:none;border-color:#1B4DFF;box-shadow:0 0 0 3px rgba(27,77,255,.15)}" +
+    ".xcd .bt{display:flex;gap:8px;justify-content:flex-end;padding:16px 18px 18px}.xcd button{border:0;border-radius:12px;padding:11px 18px;font:inherit;font-weight:800;font-size:14.5px;cursor:pointer}" +
+    ".xcd .no{background:#F1F5F9;color:#0D1424}.xcd .ok{background:linear-gradient(135deg,#1B4DFF,#7C3AED);color:#fff;min-width:96px}.xcd .ok.red{background:linear-gradient(135deg,#DC2626,#E11D48)}" +
+    "@media(prefers-color-scheme:dark){.xcd .bx{background:#111827;color:#F1F5F9}.xcd .no{background:#1F2937;color:#F1F5F9}.xcd input{background:#0B1220;color:#F1F5F9;border-color:#334155}}" +
+    "@keyframes xcdF{from{opacity:0}}@keyframes xcdU{from{transform:translateY(12px) scale(.97);opacity:0}}";
+  (document.head || document.documentElement).appendChild(css);
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  var RED = /\b(delete|remove|cancel|block|leave|log ?out|sign ?out|discard|reset|take down|clear)\b/i;
+  function open(kind, msg, def, done){
+    var d = document.createElement("div"); d.className = "xcd"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "true");
+    var icon = kind === "alert" ? "\u2139\uFE0F" : kind === "prompt" ? "\u270F\uFE0F" : (RED.test(msg) ? "\u26A0\uFE0F" : "\u2753");
+    var red = kind === "confirm" && RED.test(msg);
+    d.innerHTML = '<div class="bx"><div class="hd"><img src="/brand/logo-64.png" alt="" onerror="this.remove()"><b>XpertCreation</b><span>' + icon + '</span></div>'
+      + '<div class="ms">' + esc(msg) + '</div>' + (kind === "prompt" ? '<input type="text">' : '')
+      + '<div class="bt">' + (kind === "alert" ? '' : '<button class="no" type="button">Cancel</button>')
+      + '<button class="ok' + (red ? ' red' : '') + '" type="button">' + (kind === "alert" ? "OK" : red ? "Yes" : "OK") + '</button></div></div>';
+    document.body.appendChild(d);
+    var inp = d.querySelector("input"), ok = d.querySelector(".ok"), no = d.querySelector(".no");
+    if (inp){ inp.value = def == null ? "" : String(def); setTimeout(function(){ inp.focus(); inp.select(); }, 30); } else setTimeout(function(){ ok.focus(); }, 30);
+    function close(v){ d.remove(); document.removeEventListener("keydown", key, true); done(v); }
+    function key(e){ if (e.key === "Escape"){ e.preventDefault(); close(null); } else if (e.key === "Enter"){ e.preventDefault(); close(inp ? inp.value : true); } }
+    document.addEventListener("keydown", key, true);
+    ok.onclick = function(){ close(inp ? inp.value : true); };
+    if (no) no.onclick = function(){ close(null); };
+    d.addEventListener("click", function(e){ if (e.target === d && kind !== "alert") close(null); });
+  }
+  function fromTap(){ return lastEl && Date.now() - lastAt < 1500 && document.body && document.body.contains(lastEl); }
+  window.alert = function(msg){
+    if (!document.body) return nAlert.call(window, msg);
+    open("alert", msg, null, function(){});
+  };
+  function ask(kind, nat){
+    return function(msg, def){
+      if (answer && answer.kind === kind && answer.msg === String(msg)){ var a = answer.v; answer = null; return a; }
+      if (!fromTap() || !document.body) return nat.call(window, msg, def);
+      var el = lastEl;
+      open(kind, msg, def, function(v){
+        if (v === null) return;                      // Cancel: nothing happens, like before
+        answer = {kind: kind, msg: String(msg), v: kind === "confirm" ? true : v};
+        try { el.click(); } finally { setTimeout(function(){ answer = null; }, 0); }
+      });
+      return kind === "confirm" ? false : null;
+    };
+  }
+  window.confirm = ask("confirm", nConfirm);
+  window.prompt = ask("prompt", nPrompt);
+})();
