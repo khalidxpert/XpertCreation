@@ -219,6 +219,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <div id="fdflash"></div>
   <div id="fdb"><p style="color:var(--soft)">Loading…</p></div>
   <div id="fdbar"></div>
+<script src="/js/qrgen-1.js"></script>
 </div>
 <script>
 (function(){
@@ -314,7 +315,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (pop.length) h += '<div class="box" id="pop"><h2>&#128293; Popular</h2>' + pop.map(item).join("") + '</div>';
       secs.forEach(function(s){ if (byS[s.id]) h += '<div class="box" id="s' + s.id + '"><h2>' + esc(s.name) + '</h2>' + byS[s.id].map(item).join("") + '</div>'; });
       if (!r.items.length) h += '<div class="box empty"><b>No menu yet</b>' + (r.mine ? '<a href="#partner-menu" style="color:var(--r);font-weight:800">Add your menu</a>' : 'Check back soon.') + '</div>';
-      h += '<div class="box"><h2>About</h2><p style="margin:0 0 6px;color:var(--soft)">' + esc(r.about) + '</p><p style="margin:0;font-size:14px">&#128205; ' + esc(r.address) + ', ' + esc(r.city) + ' &middot; <a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.name + ", " + r.address + ", " + r.city) + '" target="_blank" rel="noopener" style="color:var(--r);font-weight:800">Map</a></p>'
+      h += '<div class="box"><h2>About</h2><p style="margin:0 0 6px;color:var(--soft)">' + esc(r.about) + '</p><p style="margin:0;font-size:14px">&#128205; ' + esc(r.address) + ', ' + esc(r.city) + ' &middot; <a href="' + esc(mapUrl(r)) + '" target="_blank" rel="noopener" style="color:var(--r);font-weight:800">Map</a></p>'
         + (DAYS.some(function(d){ return r.hours[d[0]]; }) ? '<p style="font-size:13.5px;color:var(--soft);margin:8px 0 0">&#128339; ' + DAYS.map(function(d){ var v = r.hours[d[0]]; return d[1] + ' ' + (v ? t12(v[0]) + '&ndash;' + t12(v[1]) : 'closed'); }).join(" &middot; ") + '</p>' : '')
         + (r.areas ? '<p style="font-size:13.5px;color:var(--soft);margin:8px 0 0">&#128757; Delivers to: ' + esc(r.areas) + '</p>' : '') + '</div>';
       if (r.reviews.length) h += '<div class="box"><h2>Reviews</h2>' + r.reviews.map(function(v){ return '<div style="padding:8px 0;border-top:1px solid var(--ln)"><span style="color:#F59E0B">' + "&#9733;".repeat(v.rating) + '</span> <b>' + esc(v.by) + '</b> <small style="color:var(--soft)">' + when(v.when) + '</small><div>' + esc(v.text) + '</div>' + (v.reply ? '<div style="background:var(--pp);border-radius:10px;padding:6px 10px;margin-top:4px;font-size:14px"><b>Reply:</b> ' + esc(v.reply) + '</div>' : '') + '</div>'; }).join("") + '</div>';
@@ -362,7 +363,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
           + '<div class="box f"><h2>How do you want it?</h2><div style="display:flex;gap:8px">' + (r.delivers ? '<button class="btn' + (mode === "delivery" ? ' r' : '') + '" data-m="delivery">&#128757; Delivery</button>' : '') + (r.pickup ? '<button class="btn' + (mode === "pickup" ? ' r' : '') + '" data-m="pickup">&#128694; Pickup</button>' : '') + '</div>'
           + '<div class="row2"><div><label for="cn">Name</label><input id="cn" value="' + esc(last.name || me.name || "") + '"></div><div><label for="cp">Phone</label><input id="cp" inputmode="tel" value="' + esc(last.phone || me.phone || "") + '"></div></div>'
           + (mode === "delivery" ? '<label for="ca">Area</label><input id="ca" value="' + esc(last.area || L.area || "") + '" placeholder="e.g. Johar Town"><label for="cd">Full address</label><input id="cd" value="' + esc(last.address || "") + '" placeholder="House, street, block, nearby landmark">' : '<p class="msg">Pick up from: <b>' + esc(r.address) + ', ' + esc(r.city) + '</b></p>')
-          + '<label for="cnote">Note for the restaurant (optional)</label><input id="cnote" placeholder="Less spicy, no onions, ring the bell…"></div>'
+          + (mode === "delivery" ? '<p style="margin:10px 0 0"><button type="button" class="btn sm" id="cgeo">&#128205; Share my exact location with the rider</button> <small id="cgeom" style="color:var(--g);font-weight:700">' + (GEOU ? '&#10004; Location added' : '') + '</small></p>' : '') + '<label for="cnote">Note for the restaurant (optional)</label><input id="cnote" placeholder="Less spicy, no onions, ring the bell…"></div>'
           + '<div class="box"><div style="display:flex;justify-content:space-between"><span>Food</span><b>' + rs(sub) + '</b></div>' + (mode === "delivery" ? '<div style="display:flex;justify-content:space-between;margin-top:4px"><span>Delivery</span><b>' + (dl ? rs(dl) : 'Free') + '</b></div>' : '')
           + '<div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><b>Total</b><b>' + rs(sub + dl) + '</b></div><p style="color:var(--soft);font-size:13.5px">&#128181; ' + (mode === "delivery" ? 'Pay cash to the rider.' : 'Pay at the counter.') + '</p>'
           + (mode === "delivery" && r.min_order && sub < r.min_order ? msg("Minimum order for delivery is " + rs(r.min_order) + ". Add " + rs(r.min_order - sub) + " more.", "bad") : '')
@@ -373,9 +374,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       box.onclick = function(e){
         var q = e.target.closest("[data-cq]"); if (q){ var i = +q.getAttribute("data-cq"); c.items[i].qty += +q.getAttribute("data-d"); if (c.items[i].qty < 1) c.items.splice(i, 1); saveCart(c); if (!c.items.length){ vCart(); return; } draw(); return; }
         var m = e.target.closest("[data-m]"); if (m){ mode = m.getAttribute("data-m"); draw(); return; }
+        if (e.target.id === "cgeo"){ geo(function(u){ GEOU = u; $("cgeom").innerHTML = "&#10004; Location added"; }); return; }
         if (e.target.id !== "cgo") return;
         if (!M.me){ location.href = "/login?next=" + encodeURIComponent("/food#cart"); return; }
-        var body = {restaurant: r.slug, mode: mode, name: $("cn").value, phone: $("cp").value, note: $("cnote").value, area: $("ca") ? $("ca").value : "", address: $("cd") ? $("cd").value : "",
+        var body = {restaurant: r.slug, mode: mode, name: $("cn").value, phone: $("cp").value, note: (GEOU && mode === "delivery" ? GEOU + " " : "") + $("cnote").value, area: $("ca") ? $("ca").value : "", address: $("cd") ? $("cd").value : "",
                     items: c.items.map(function(x){ return {id: x.id, qty: x.qty, opts: x.sel}; })};
         ls("xc_food_addr", {name: body.name, phone: body.phone, area: body.area || last.area, address: body.address || last.address});
         e.target.disabled = true;
@@ -425,7 +427,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     draw();
   }
   // ---------- restaurant owner
-  function ptabs(t, R){ return '<nav class="tabs">' + [["partner", "&#128276; Orders" + (R && R.new ? " <b>" + R.new + "</b>" : "")], ["partner-menu", "&#128203; Menu"], ["partner-settings", "&#9881;&#65039; Restaurant"], ["partner-reviews", "&#11088; Reviews"]].map(function(x){ return '<a href="#' + x[0] + '" class="' + (x[0] === t ? "on" : "") + '">' + x[1] + '</a>'; }).join("") + (R ? '<a href="#r-' + esc(R.slug) + '">&#128065; View page</a>' : '') + '</nav>'; }
+  function ptabs(t, R){ return '<nav class="tabs">' + [["partner", "&#128276; Orders" + (R && R.new ? " <b>" + R.new + "</b>" : "")], ["partner-menu", "&#128203; Menu"], ["partner-settings", "&#9881;&#65039; Restaurant"], ["partner-reviews", "&#11088; Reviews"]].map(function(x){ return '<a href="#' + x[0] + '" class="' + (x[0] === t ? "on" : "") + '">' + x[1] + '</a>'; }).join("") + (R ? '<a href="#r-' + esc(R.slug) + '">&#128065; View page</a><a href="#qr-' + esc(R.slug) + '">&#9638; QR code</a>' : '') + '</nav>'; }
   function vPartner(tab){
     if (!M.me){ box.innerHTML = signin(); return; }
     api("mine/").then(function(x){
@@ -459,7 +461,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         else if (o.status === "on_way" || o.status === "ready") b = '<button class="btn sm g" data-a="delivered" data-o="' + o.id + '">&#9989; ' + (o.mode === "pickup" ? 'Picked up' : 'Delivered') + '</button>';
         return '<div class="oc' + (o.status === "placed" ? ' new' : '') + '"><div class="hd"><b>' + o.no + '</b><span class="tag ' + (o.status === "placed" ? 'c' : /delivered/.test(o.status) ? 'o' : 'f') + '">' + ST[o.status] + '</span><span class="tag n">' + (o.mode === "pickup" ? '&#128694; Pickup' : '&#128757; Delivery') + '</span><small style="color:var(--soft)">' + hhmm(o.created) + '</small><b style="margin-left:auto">' + rs(o.total) + '</b></div>'
           + '<ul>' + o.items.map(function(i){ return '<li><b>' + i.qty + ' &times;</b> ' + esc(i.name) + (i.opts ? ' <small style="color:var(--soft)">(' + esc(i.opts) + ')</small>' : '') + '</li>'; }).join("") + '</ul>'
-          + '<div style="font-size:14px">&#128100; ' + esc(o.name) + ' &middot; <a href="tel:' + esc(o.phone) + '" style="font-weight:800;color:var(--r)">' + esc(o.phone) + '</a>' + (o.mode === "delivery" ? '<br>&#128205; ' + esc(o.address) + ', ' + esc(o.area) + ' &middot; <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(o.address + ", " + o.area + ", " + o.city) + '" style="font-weight:800;color:var(--r)">Map</a>' : '') + (o.note ? '<br>&#128221; <b>' + esc(o.note) + '</b>' : '') + (o.rider ? '<br>&#128757; ' + esc(o.rider) : '') + (o.reason ? '<br><small>' + esc(o.reason) + '</small>' : '') + '</div>'
+          + '<div style="font-size:14px">&#128100; ' + esc(o.name) + ' &middot; <a href="tel:' + esc(o.phone) + '" style="font-weight:800;color:var(--r)">' + esc(o.phone) + '</a>' + (o.mode === "delivery" ? '<br>&#128205; ' + esc(o.address) + ', ' + esc(o.area) + ' &middot; <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(o.address + ", " + o.area + ", " + o.city) + '" style="font-weight:800;color:var(--r)">Map</a>' : '') + (o.note ? '<br>&#128221; <b>' + linkify(esc(o.note)) + '</b>' : '') + (o.rider ? '<br>&#128757; ' + esc(o.rider) : '') + (o.reason ? '<br><small>' + esc(o.reason) + '</small>' : '') + '</div>'
           + '<div class="act">' + b + '<button class="btn sm" data-slip="' + o.id + '">&#128424; Slip</button></div></div>'; };
       el.innerHTML = '<div class="kp"><div><small>Today delivered</small><b>' + d.today.orders + '</b></div><div><small>Today sales</small><b>' + rs(d.today.sales) + '</b></div><div><small>New orders</small><b style="color:var(--r)">' + d.new + '</b></div></div>'
         + '<div class="box" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn sm' + (AC ? ' g' : '') + '" id="snd">' + (AC ? '&#128276; Sound on' : '&#128263; Tap to turn on order sound') + '</button><button class="btn sm' + (d.paused ? ' r' : '') + '" id="pz">' + (d.paused ? '&#9208;&#65039; Paused - tap to take orders' : '&#9208;&#65039; Busy? Pause new orders') + '</button><small style="color:var(--soft)">Keep this page open to get orders. It refreshes by itself.</small></div>'
@@ -495,7 +497,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<div class="row2"><div><label for="sk">Type</label><select id="sk">' + M.kinds.map(function(k){ return '<option value="' + k[0] + '"' + (k[0] === r.kind ? ' selected' : '') + '>' + esc(k[1]) + '</option>'; }).join("") + '</select></div><div><label for="scu">Food you make</label><input id="scu" value="' + esc(r.cuisines) + '" placeholder="Burgers, Fries, Shakes"></div></div>'
       + '<div class="row2"><div><label for="sc">City</label><input id="sc" value="' + esc(r.city) + '" placeholder="Lahore"></div><div><label for="sa">Area</label><input id="sa" value="' + esc(r.area) + '" placeholder="Johar Town"></div></div>'
       + '<label for="sad">Full address</label><input id="sad" value="' + esc(r.address) + '"><label for="sph">Phone / WhatsApp for orders</label><input id="sph" value="' + esc(r.phone || (M.me && M.me.phone) || "") + '">'
-      + '<label for="sab">About (optional)</label><textarea id="sab" rows="2">' + esc(r.about) + '</textarea></div>'
+      + '<label for="smap">&#128205; Exact location pin</label><div style="display:flex;gap:6px"><input id="smap" value="' + esc(r.maplink || "") + '" placeholder="Paste a Google Maps link, or tap the button"><button type="button" class="btn sm" id="sgeo" style="flex:none">&#128205; Use my location</button></div><small style="color:var(--soft)">Stand inside your restaurant and tap the button. Customers and riders use it to reach you, and it goes on your QR code.</small>' + '<label for="sab">About (optional)</label><textarea id="sab" rows="2">' + esc(r.about) + '</textarea></div>'
       + '<div class="box f"><h2>Delivery</h2><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="sdl"' + (r.delivers ? ' checked' : '') + ' style="width:auto"> We deliver (own rider)</label><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="spu"' + (r.pickup ? ' checked' : '') + ' style="width:auto"> Customers can pick up</label>'
       + '<label for="sar">Areas you deliver to (comma separated, empty = whole city)</label><textarea id="sar" rows="2" placeholder="Johar Town, Model Town, Faisal Town">' + esc(r.areas) + '</textarea>'
       + '<div class="row3"><div><label for="smo">Minimum order (Rs)</label><input id="smo" type="number" value="' + (r.min_order || 0) + '"></div><div><label for="sdf">Delivery fee (Rs)</label><input id="sdf" type="number" value="' + (r.delivery_fee || 0) + '"></div><div><label for="sfo">Free delivery over (Rs, 0 = never)</label><input id="sfo" type="number" value="' + (r.free_over || 0) + '"></div></div>'
@@ -504,11 +506,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + DAYS.map(function(x){ var v = h[x[0]]; return '<b>' + x[1] + '</b><label style="display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" data-dy="' + x[0] + '"' + (v ? ' checked' : '') + ' style="width:auto;margin:0"> Open</label><input type="time" data-fr="' + x[0] + '" value="' + (v ? v[0] : "12:00") + '"><input type="time" data-to="' + x[0] + '" value="' + (v ? v[1] : "23:00") + '">'; }).join("") + '</div><p><button class="btn sm" id="sall">Copy Monday to all days</button></p></div>'
       + (!apply ? '<div class="box f"><h2>Pictures</h2><div class="row2"><div><label>Logo</label>' + (r.logo ? '<img src="' + esc(r.logo) + '" style="width:70px;height:70px;border-radius:16px;object-fit:cover;display:block;margin-bottom:6px">' : '') + '<input type="file" accept="image/*" data-pic="logo"></div><div><label>Cover photo (wide)</label>' + (r.cover ? '<img src="' + esc(r.cover) + '" style="width:100%;max-height:80px;border-radius:12px;object-fit:cover;display:block;margin-bottom:6px">' : '') + '<input type="file" accept="image/*" data-pic="cover"></div></div></div>' : '')
       + '<div id="sm"></div><p><button class="btn r" id="ssv" style="padding:13px 20px">' + (apply ? 'Open my restaurant' : 'Save') + '</button></p>';
+    $("sgeo").onclick = function(){ geo(function(u){ $("smap").value = u; }); };
     $("sall").onclick = function(){ var f = el.querySelector('[data-fr="mon"]').value, t = el.querySelector('[data-to="mon"]').value, on = el.querySelector('[data-dy="mon"]').checked; DAYS.forEach(function(x){ el.querySelector('[data-fr="' + x[0] + '"]').value = f; el.querySelector('[data-to="' + x[0] + '"]').value = t; el.querySelector('[data-dy="' + x[0] + '"]').checked = on; }); };
     [].forEach.call(el.querySelectorAll("[data-pic]"), function(inp){ inp.onchange = function(){ if (!this.files[0]) return; var fd = new FormData(); fd.append("file", this.files[0]); fd.append("kind", this.getAttribute("data-pic")); $("sm").innerHTML = msg("Uploading…"); api("mine/image/", fd).then(function(x){ $("sm").innerHTML = x.ok ? msg("&#10004; Picture saved.", "ok") : msg(esc(x.d.detail || "Could not upload."), "bad"); if (x.ok) setTimeout(function(){ vPartner("partner-settings"); }, 600); }); }; });
     $("ssv").onclick = function(){
       var hr = {}; DAYS.forEach(function(x){ hr[x[0]] = el.querySelector('[data-dy="' + x[0] + '"]').checked ? [el.querySelector('[data-fr="' + x[0] + '"]').value, el.querySelector('[data-to="' + x[0] + '"]').value] : null; });
-      var body = {name: $("sn").value, kind: $("sk").value, cuisines: $("scu").value, city: $("sc").value, area: $("sa").value, address: $("sad").value, phone: $("sph").value, about: $("sab").value,
+      var body = {name: $("sn").value, kind: $("sk").value, cuisines: $("scu").value, city: $("sc").value, area: $("sa").value, address: $("sad").value, phone: $("sph").value, about: $("sab").value, maplink: $("smap").value,
                   delivers: $("sdl").checked, pickup: $("spu").checked, areas: $("sar").value, min_order: $("smo").value, delivery_fee: $("sdf").value, free_over: $("sfo").value, eta_min: $("se1").value, eta_max: $("se2").value, hours: hr};
       this.disabled = true; var b = this;
       api("mine/", body).then(function(x){ b.disabled = false; if (!x.ok){ $("sm").innerHTML = msg(esc(x.d.detail || "Could not save."), "bad"); return; }
@@ -585,6 +588,38 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         api("team/" + b.getAttribute("data-r") + "/" + k + "/", {note: note}).then(vTeam); };
     });
   }
+  // ---- setup_qr_v1: location pin + QR code poster
+  var GEOU = "";
+  function geo(cb){
+    if (!navigator.geolocation){ alert("This phone cannot share its location. Paste a Google Maps link instead."); return; }
+    navigator.geolocation.getCurrentPosition(function(p){ cb("https://www.google.com/maps?q=" + p.coords.latitude.toFixed(6) + "," + p.coords.longitude.toFixed(6)); },
+      function(){ alert("Location is blocked. Allow location for this site in your browser settings, or paste a Google Maps link."); }, {enableHighAccuracy: true, timeout: 15000, maximumAge: 0});
+  }
+  function linkify(t){ return t.replace(/https:\/\/www\.google\.com\/maps\?q=[-0-9.,]+/g, function(u){ return '<a href="' + u + '" target="_blank" rel="noopener" style="color:var(--r)">Open location on map</a>'; }); }
+  function mapUrl(r){ return r.maplink || ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(r.name + ", " + r.address + ", " + r.city)); }
+  function qrSvg(text, cell){ try { var q = qrcode(0, "M"); q.addData(text); q.make(); return q.createSvgTag(cell || 6, 0); } catch (e){ return ""; } }
+  function qrPng(text){ try { var q = qrcode(0, "M"); q.addData(text); q.make(); return q.createDataURL(12, 4); } catch (e){ return ""; } }
+  function vQr(slug){
+    api("r/" + encodeURIComponent(slug) + "/").then(function(x){
+      if (!x.ok){ box.innerHTML = msg(esc(x.d.detail || "Not found."), "bad"); return; }
+      var r = x.d, url = "https://xpertcreation.com/food#r-" + r.slug, mu = mapUrl(r);
+      box.innerHTML = '<style>.qrp{max-width:520px;margin:0 auto 14px;background:#fff;border-radius:26px;overflow:hidden;border:1px solid var(--ln);box-shadow:0 18px 50px rgba(13,20,36,.14);text-align:center;color:#0D1424}'
+        + '.qrp .t{background:linear-gradient(135deg,#E23744,#F97316);color:#fff;padding:22px 18px}.qrp .t img,.qrp .t .lg{width:78px;height:78px;border-radius:20px;background:#fff;object-fit:cover;display:inline-grid;place-items:center;font-size:34px;font-weight:900;color:#E23744;border:3px solid rgba(255,255,255,.7)}'
+        + '.qrp h2{margin:10px 0 2px;font-size:26px}.qrp .t p{margin:0;opacity:.95}.qrp .big{padding:20px}.qrp .big b{display:block;font-size:24px;margin-bottom:10px}.qrp .big svg{width:250px;height:250px}'
+        + '.qrp .ad{padding:0 20px 18px;font-size:15px;line-height:1.5}.qrp .two{display:flex;gap:14px;align-items:center;justify-content:center;border-top:1px dashed var(--ln);padding:14px}.qrp .two svg{width:96px;height:96px}.qrp .two div{text-align:left;font-size:14px}'
+        + '.qrp .ft{background:#0D1424;color:#fff;padding:10px;font-weight:800;font-size:14px}@media print{body *{visibility:hidden}.qrp,.qrp *{visibility:visible}.qrp{position:absolute;left:0;top:0;box-shadow:none;border:0;width:100%;max-width:none}.qrnp{display:none}}</style>'
+        + '<div class="qrp"><div class="t">' + (r.logo ? '<img src="' + esc(r.logo) + '" alt="">' : '<span class="lg">' + esc(r.name.charAt(0)) + '</span>') + '<h2>' + esc(r.name) + '</h2><p>' + esc(r.cuisines || r.kind_name) + '</p></div>'
+        + '<div class="big"><b>&#128241; Scan to see our menu &amp; order</b>' + qrSvg(url, 6) + '</div>'
+        + '<div class="ad">&#128205; ' + esc(r.address) + (r.area ? ', ' + esc(r.area) : '') + ', ' + esc(r.city) + '<br>&#128222; ' + esc(r.phone) + (r.delivers ? ' &middot; &#128757; Home delivery' : '') + (r.pickup ? ' &middot; &#128694; Pickup' : '') + '</div>'
+        + '<div class="two">' + qrSvg(mu, 3) + '<div><b>&#128205; Find us on the map</b><br>Scan to get directions' + (r.maplink ? '' : '<br><small style="color:#B45309">Exact pin not set yet</small>') + '</div></div><div class="ft">xpertcreation.com/food</div></div>'
+        + '<div class="qrnp" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="btn r" id="qpr">&#128424; Print poster</button><a class="btn" download="' + esc(r.slug) + '-menu-qr.gif" href="' + qrPng(url) + '">&#11015;&#65039; Download menu QR</a>'
+        + '<a class="btn" download="' + esc(r.slug) + '-map-qr.gif" href="' + qrPng(mu) + '">&#11015;&#65039; Download map QR</a><a class="btn" href="' + esc(mu) + '" target="_blank" rel="noopener">&#128205; Open map</a>'
+        + (r.mine ? '<a class="btn" href="#partner-settings">&#9881;&#65039; Set location pin</a>' : '') + '<a class="btn" href="#r-' + esc(r.slug) + '">Menu</a></div>'
+        + '<p class="qrnp" style="text-align:center;color:var(--soft);font-size:13.5px;margin-top:10px">Print it and put it on your counter, tables, menu card, parcels and flyers.</p>';
+      $("qpr").onclick = function(){ window.print(); };
+    });
+  }
+
   // ---------- router
   function route(){
     var h = location.hash.replace("#", "") || "home", m;
@@ -595,6 +630,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     window.scrollTo(0, 0); drawBar();
     if ((m = h.match(/^r-(.+)$/))) return vRest(decodeURIComponent(m[1]));
     if ((m = h.match(/^o-(\d+)$/))) return vOrder(m[1]);
+    if ((m = h.match(/^qr-(.+)$/))) return vQr(decodeURIComponent(m[1]));
     if (/^partner/.test(h)) return vPartner(h);
     ({cart: vCart, orders: vOrders, team: vTeam}[h] || vHome)();
   }

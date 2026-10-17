@@ -159,7 +159,7 @@ def _r(r, full=False, area=""):
          "rating": round(r.rating_sum / r.rating_n, 1) if r.rating_n else None, "ratings": r.rating_n, "orders": r.orders_done,
          "here": _area_ok(r, area) if area else None}
     if full:
-        d.update({"about": r.about, "address": r.address, "areas": r.areas, "hours": r.hours or {k: None for k in DAYS}, "phone": r.phone})
+        d.update({"maplink": r.maplink, "about": r.about, "address": r.address, "areas": r.areas, "hours": r.hours or {k: None for k in DAYS}, "phone": r.phone})
     return d
 
 
@@ -447,6 +447,8 @@ def mine(request):
         r.name, r.city, r.phone, r.address = name, city, phone, addr
         r.kind = d.get("kind") if d.get("kind") in KD else "restaurant"
         r.cuisines, r.area, r.about = _txt(d.get("cuisines"), 160), _txt(d.get("area"), 80), _txt(d.get("about"), 1000)
+        if "maplink" in d:
+            r.maplink = maplink(d.get("maplink"))
         r.areas = ", ".join(z.strip() for z in _txt(d.get("areas"), 2000).replace("\n", ",").split(",") if z.strip())[:2000]
         r.delivers, r.pickup = bool(d.get("delivers", True)), bool(d.get("pickup", True))
         if not r.delivers and not r.pickup:
@@ -639,3 +641,15 @@ def team_act(request, pk, act):
         return _err("Unknown action.")
     r.save(update_fields=["status", "note"])
     return Response({"ok": True, "status": r.status})
+
+
+# ---- setup_qr_v1: an exact location pin (Google Maps link or "lat,lng" from "Use my location")
+def maplink(v):
+    import re as _re9
+    v = str(v or "").strip()[:300]
+    m = _re9.match(r"^\s*(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)\s*$", v)
+    if m and abs(float(m.group(1))) <= 90 and abs(float(m.group(2))) <= 180:
+        return "https://www.google.com/maps?q=%s,%s" % (m.group(1), m.group(2))
+    if _re9.match(r"^https://(www\.)?(google\.[a-z.]+/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl|goo\.gl/maps)[^\s\"'<>]*$", v, _re9.I):
+        return v
+    return ""

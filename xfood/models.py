@@ -21,6 +21,7 @@ class Restaurant(models.Model):
     about = models.TextField(max_length=1000, blank=True, default="")
     logo = models.CharField(max_length=200, blank=True, default="")
     cover = models.CharField(max_length=200, blank=True, default="")
+    maplink = models.CharField(max_length=300, blank=True, default="")       # exact pin (Google Maps)
     delivers = models.BooleanField(default=True)
     pickup = models.BooleanField(default=True)
     areas = models.TextField(max_length=2000, blank=True, default="")         # areas it delivers to, comma separated; empty = whole city

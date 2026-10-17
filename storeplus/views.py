@@ -23,7 +23,7 @@ from .patch import COUNTRIES, buyer_cc, cc_q, cinfo, shop_cc, valid_cc
 
 DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 SOCIAL = {"facebook": "https://www.facebook.com/{}", "instagram": "https://www.instagram.com/{}", "tiktok": "https://www.tiktok.com/@{}",
-          "youtube": "https://www.youtube.com/@{}", "x": "https://x.com/{}", "website": "https://{}", "whatsapp": ""}
+          "youtube": "https://www.youtube.com/@{}", "x": "https://x.com/{}", "website": "https://{}", "whatsapp": "", "map": ""}
 HHMM = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")
 
 
@@ -51,6 +51,11 @@ def _clean_social(d):
     for k, pat in SOCIAL.items():
         v = str((d or {}).get(k) or "").strip()[:200]
         if not v:
+            continue
+        if k == "map":
+            mp = maplink(v)
+            if mp:
+                out[k] = mp
             continue
         if k == "whatsapp":
             n = re.sub(r"[^\d+]", "", v)
@@ -287,3 +292,15 @@ def drop_mine(request):
                     "available": bool(off and off.on and lk.source and lk.source.active), "supplier": lk.supplier.name, "sold": p.sold,
                     "image": ("/media/" + p.images[0]) if p.images else ""})
     return Response({"products": out})
+
+
+# ---- setup_qr_v1: an exact location pin (Google Maps link or "lat,lng" from "Use my location")
+def maplink(v):
+    import re as _re9
+    v = str(v or "").strip()[:300]
+    m = _re9.match(r"^\s*(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)\s*$", v)
+    if m and abs(float(m.group(1))) <= 90 and abs(float(m.group(2))) <= 180:
+        return "https://www.google.com/maps?q=%s,%s" % (m.group(1), m.group(2))
+    if _re9.match(r"^https://(www\.)?(google\.[a-z.]+/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl|goo\.gl/maps)[^\s\"'<>]*$", v, _re9.I):
+        return v
+    return ""

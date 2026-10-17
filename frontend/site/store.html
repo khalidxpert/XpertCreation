@@ -672,7 +672,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       spApi("shop/" + encodeURIComponent(slug) + "/").then(function(r){
         if (!r.ok || !$("spx")) return; var d = r.d;
         $("spx").className = "spx";
-        $("spx").innerHTML = spOpenTxt(d.open) + spSocial(d.social) + '<a href="#card-' + esc(d.slug) + '">&#129706; Digital card</a><a href="/api/storeplus/vcf/' + esc(d.slug) + '/">&#128100; Save contact</a>' + (d.country && d.country.code !== "PK" ? '<span class="st">' + d.country.flag + ' ' + esc(d.country.name) + '</span>' : '');
+        $("spx").innerHTML = spOpenTxt(d.open) + spSocial(d.social) + '<a href="#card-' + esc(d.slug) + '">&#129706; Digital card</a><a href="#qr-' + esc(d.slug) + '">&#9638; QR code</a><a href="' + esc(spMap(d)) + '" target="_blank" rel="noopener">&#128205; Map</a><a href="/api/storeplus/vcf/' + esc(d.slug) + '/">&#128100; Save contact</a>' + (d.country && d.country.code !== "PK" ? '<span class="st">' + d.country.flag + ' ' + esc(d.country.name) + '</span>' : '');
       });
     };
     go();
@@ -688,7 +688,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + (d.open ? '<div class="spx" style="margin:0 0 6px">' + spOpenTxt(d.open) + '</div>' : '')
         + (d.phone ? '<div class="li"><i>&#128222;</i><a href="tel:' + esc(d.phone) + '" style="color:inherit;font-weight:700">' + esc(d.phone) + '</a></div>' : '')
         + (d.social && d.social.whatsapp ? '<div class="li"><i>&#128172;</i><a href="https://wa.me/' + esc(d.social.whatsapp.replace(/\D/g, "").replace(/^0/, "92")) + '" target="_blank" rel="noopener" style="color:inherit;font-weight:700">WhatsApp ' + esc(d.social.whatsapp) + '</a></div>' : '')
-        + (d.address ? '<div class="li"><i>&#128205;</i><span>' + esc(d.address) + ', ' + esc(d.city) + '</span></div>' : '')
+        + '<div class="li"><i>&#128205;</i><a href="' + esc(spMap(d)) + '" target="_blank" rel="noopener" style="color:inherit">' + esc(d.address ? d.address + ', ' + d.city : d.city) + ' &middot; <b>Map</b></a></div>'
         + (hrs ? '<div class="li"><i>&#128339;</i><span style="font-size:13px">' + hrs + '</span></div>' : '')
         + '<div class="spx" style="margin:8px 0 0">' + spSocial(d.social) + '</div>'
         + '<div class="qr"><div id="spqr"></div><div><b>Scan to visit our shop</b><br><small style="color:#5A657C">' + d.products + ' products on XpertCreation Store</small></div></div></div></div>'
@@ -697,6 +697,36 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       try { var q = qrcode(0, "M"); q.addData(url); q.make(); $("spqr").innerHTML = q.createSvgTag(4, 0); } catch (e){ $("spqr").style.display = "none"; }
       $("sppr").onclick = function(){ window.print(); };
       $("spsh").onclick = function(){ var u = location.origin + "/store#card-" + d.slug; if (navigator.share) navigator.share({title: d.name, text: d.name + " on XpertCreation", url: u}).catch(function(){}); else if (navigator.clipboard) navigator.clipboard.writeText(u).then(function(){ $("spsh").innerHTML = "&#10004; Link copied"; }); else prompt("Copy this link:", u); };
+    });
+  }
+  // ---- setup_qr_v1: location pin + QR code poster for shops
+  function spGeo(cb){
+    if (!navigator.geolocation){ alert("This phone cannot share its location. Paste a Google Maps link instead."); return; }
+    navigator.geolocation.getCurrentPosition(function(p){ cb("https://www.google.com/maps?q=" + p.coords.latitude.toFixed(6) + "," + p.coords.longitude.toFixed(6)); },
+      function(){ alert("Location is blocked. Allow location for this site in your browser settings, or paste a Google Maps link."); }, {enableHighAccuracy: true, timeout: 15000, maximumAge: 0});
+  }
+  function spMap(d){ return (d.social && d.social.map) || ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(d.name + ", " + (d.address ? d.address + ", " : "") + d.city)); }
+  function spQrSvg(t, c){ try { var q = qrcode(0, "M"); q.addData(t); q.make(); return q.createSvgTag(c || 6, 0); } catch (e){ return ""; } }
+  function spQrPng(t){ try { var q = qrcode(0, "M"); q.addData(t); q.make(); return q.createDataURL(12, 4); } catch (e){ return ""; } }
+  function spQr(slug){
+    box.innerHTML = '<p style="color:var(--soft)">Loading…</p>';
+    spApi("shop/" + encodeURIComponent(slug) + "/").then(function(r){
+      if (!r.ok){ box.innerHTML = msg(esc(r.d.detail || "Shop not found."), "bad"); return; }
+      var d = r.d, url = "https://xpertcreation.com/store#shop-" + d.slug, mu = spMap(d), mine = M.me && M.me.merchant && M.me.merchant.slug === d.slug;
+      box.innerHTML = '<style>.qrp{max-width:520px;margin:6px auto 14px;background:#fff;border-radius:26px;overflow:hidden;border:1px solid #E8EBF2;box-shadow:0 18px 50px rgba(13,20,36,.14);text-align:center;color:#0D1424}'
+        + '.qrp .t{background:linear-gradient(135deg,#F85606,#FF8A00);color:#fff;padding:22px 18px}.qrp .t img,.qrp .t .lg{width:78px;height:78px;border-radius:20px;background:#fff;object-fit:cover;display:inline-grid;place-items:center;font-size:34px;font-weight:900;color:#F85606;border:3px solid rgba(255,255,255,.7)}'
+        + '.qrp h2{margin:10px 0 2px;font-size:26px}.qrp .t p{margin:0;opacity:.95}.qrp .big{padding:20px}.qrp .big b{display:block;font-size:22px;margin-bottom:10px}.qrp .big svg{width:250px;height:250px}'
+        + '.qrp .ad{padding:0 20px 18px;font-size:15px;line-height:1.5}.qrp .two{display:flex;gap:14px;align-items:center;justify-content:center;border-top:1px dashed #E8EBF2;padding:14px}.qrp .two svg{width:96px;height:96px}.qrp .two div{text-align:left;font-size:14px}'
+        + '.qrp .ft{background:#0D1424;color:#fff;padding:10px;font-weight:800;font-size:14px}@media print{body *{visibility:hidden}.qrp,.qrp *{visibility:visible}.qrp{position:absolute;left:0;top:0;box-shadow:none;border:0;width:100%;max-width:none}.qrnp{display:none}}</style>'
+        + '<div class="qrp"><div class="t">' + (d.logo ? '<img src="' + esc(d.logo) + '" alt="">' : '<span class="lg">' + esc(d.name.charAt(0)) + '</span>') + '<h2>' + esc(d.name) + '</h2><p>' + esc(d.city) + ', ' + esc(d.country.name) + '</p></div>'
+        + '<div class="big"><b>&#128241; Scan to visit our shop online</b>' + spQrSvg(url, 6) + '</div>'
+        + '<div class="ad">' + (d.address ? '&#128205; ' + esc(d.address) + ', ' + esc(d.city) + '<br>' : '') + (d.phone ? '&#128222; ' + esc(d.phone) + ' &middot; ' : '') + (d.social && d.social.whatsapp ? '&#128172; ' + esc(d.social.whatsapp) : '') + '</div>'
+        + '<div class="two">' + spQrSvg(mu, 3) + '<div><b>&#128205; Find us on the map</b><br>Scan to get directions' + (d.social && d.social.map ? '' : '<br><small style="color:#B45309">Exact pin not set yet</small>') + '</div></div><div class="ft">xpertcreation.com/store</div></div>'
+        + '<div class="qrnp" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button type="button" class="st-btn o" id="qpr">&#128424; Print poster</button><a class="st-btn" download="' + esc(d.slug) + '-shop-qr.gif" href="' + spQrPng(url) + '">&#11015;&#65039; Download shop QR</a>'
+        + '<a class="st-btn" download="' + esc(d.slug) + '-map-qr.gif" href="' + spQrPng(mu) + '">&#11015;&#65039; Download map QR</a><a class="st-btn" href="' + esc(mu) + '" target="_blank" rel="noopener">&#128205; Open map</a>'
+        + (mine ? '<a class="st-btn" href="#seller-more">&#9881;&#65039; Set location pin</a>' : '') + '<a class="st-btn" href="#shop-' + esc(d.slug) + '">Visit shop</a></div>'
+        + '<p class="qrnp" style="text-align:center;color:var(--soft);font-size:13.5px;margin-top:10px">Print it for your counter, shop door, parcels, visiting cards and flyers.</p>';
+      $("qpr").onclick = function(){ window.print(); };
     });
   }
   function spMore(){
@@ -708,16 +738,17 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         + '<p style="font-size:13px;color:var(--soft);margin:6px 0 0">' + (d.locked ? 'Your shop has orders, so the country is fixed. Contact us if you moved.' : 'Your prices are in this country\'s money and only buyers shopping there see your shop. Outside Pakistan buyers pay on delivery.') + '</p></div>'
         + '<div class="st-box st-f"><h2>&#128279; Social links</h2><p style="font-size:13px;color:var(--soft);margin:-4px 0 6px">Your page name or full link. They show on your shop page and digital card.</p>'
         + SPSOC.map(function(k){ return '<label for="sps-' + k[0] + '">' + k[2] + ' ' + k[1] + '</label><input id="sps-' + k[0] + '" value="' + esc(so[k[0]] || "") + '" placeholder="' + (k[0] === "whatsapp" ? "03001234567" : k[0] === "website" ? "www.myshop.pk" : "your page name") + '">'; }).join("") + '</div>'
-        + '<div class="st-box st-f"><h2>&#128339; Opening hours</h2><p style="font-size:13px;color:var(--soft);margin:-4px 0 8px">Buyers see <b>Open now</b> or <b>Closed</b> on your shop. Leave all days off to hide it.</p><div class="sphr">'
+        + '<div class="st-box st-f"><h2>&#128205; Location pin</h2><p style="font-size:13px;color:var(--soft);margin:-4px 0 6px">Customers scan your QR code or tap Map to reach your shop.</p><div style="display:flex;gap:6px;align-items:center"><input id="spmap" value="' + esc(so.map || "") + '" placeholder="Paste a Google Maps link" style="margin:0"><button type="button" class="st-btn sm" id="spgeo" style="flex:none">&#128205; Use my location</button></div><small style="color:var(--soft)">Stand inside your shop and tap the button.</small></div>' + '<div class="st-box st-f"><h2>&#128339; Opening hours</h2><p style="font-size:13px;color:var(--soft);margin:-4px 0 8px">Buyers see <b>Open now</b> or <b>Closed</b> on your shop. Leave all days off to hide it.</p><div class="sphr">'
         + SPDAY.map(function(x){ var v = h[x[0]]; return '<b>' + x[1] + '</b><label style="display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" data-dy="' + x[0] + '"' + (v ? ' checked' : '') + ' style="width:auto;margin:0"> Open</label><input type="time" data-fr="' + x[0] + '" value="' + (v ? v[0] : "10:00") + '"><input type="time" data-to="' + x[0] + '" value="' + (v ? v[1] : "20:00") + '">'; }).join("") + '</div>'
         + '<p style="margin:10px 0 0"><button type="button" class="st-btn sm" id="spall">Copy Monday to all days</button></p></div>'
         + '<div class="st-box st-f"><h2>&#129706; Digital card</h2><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="spph"' + (d.show_phone ? ' checked' : '') + ' style="width:auto;margin:0"> Show my shop phone on the card</label>'
-        + '<p style="margin:10px 0 0"><a class="st-btn" href="#card-' + esc(d.slug) + '">See my digital card</a></p></div>'
+        + '<p style="margin:10px 0 0"><a class="st-btn" href="#card-' + esc(d.slug) + '">See my digital card</a> <a class="st-btn" href="#qr-' + esc(d.slug) + '">&#9638; My QR code poster</a></p></div>'
         + '<p><button type="button" class="st-btn o" id="spsave">Save</button></p><div id="spm"></div>';
+      $("spgeo").onclick = function(){ spGeo(function(u){ $("spmap").value = u; }); };
       $("spall").onclick = function(){ var f = sc.querySelector('[data-fr="mon"]').value, t = sc.querySelector('[data-to="mon"]').value, on = sc.querySelector('[data-dy="mon"]').checked;
         SPDAY.forEach(function(x){ sc.querySelector('[data-fr="' + x[0] + '"]').value = f; sc.querySelector('[data-to="' + x[0] + '"]').value = t; sc.querySelector('[data-dy="' + x[0] + '"]').checked = on; }); };
       $("spsave").onclick = function(){
-        var soc = {}, hr = {}; SPSOC.forEach(function(k){ soc[k[0]] = $("sps-" + k[0]).value; });
+        var soc = {}, hr = {}; SPSOC.forEach(function(k){ soc[k[0]] = $("sps-" + k[0]).value; }); soc.map = $("spmap").value;
         SPDAY.forEach(function(x){ hr[x[0]] = sc.querySelector('[data-dy="' + x[0] + '"]').checked ? [sc.querySelector('[data-fr="' + x[0] + '"]').value, sc.querySelector('[data-to="' + x[0] + '"]').value] : null; });
         var body = {social: soc, hours: hr, show_phone: $("spph").checked}; if (!d.locked) body.country = $("spc").value;
         if (!d.locked && body.country !== d.country && !confirm("Change your shop country? Your prices will be shown in that country's money.")) return;
@@ -1108,6 +1139,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if ((m = h.match(/^editp-(\w+)$/))) return vEditP(m[1]);
     if (/^search-/.test(h)){ LQ = {q: decodeURIComponent(h.slice(7)), cat: "", sort: "", min: "", max: "", cod: "", deal: "", b2b: "", shop: ""}; return vList("Results for &ldquo;" + esc(LQ.q) + "&rdquo;"); }
     if (h === "country") return spCountry();
+    if ((m = h.match(/^qr-(.+)$/))) return spQr(decodeURIComponent(m[1]));
     if ((m = h.match(/^card-(.+)$/))) return spCard(decodeURIComponent(m[1]));
     if (h === "all"){ LQ = {q: "", cat: "", sort: "new", min: "", max: "", cod: "", deal: "", b2b: "", shop: ""}; return vList("All products"); }
     if (h === "deals"){ LQ = {q: "", cat: "", sort: "", min: "", max: "", cod: "", deal: "1", b2b: "", shop: ""}; return vList("&#9889; Deals"); }
