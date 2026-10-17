@@ -733,3 +733,18 @@ def _target(u, kind, tid):
         R = apps.get_model("xfood", "Restaurant"); r = R.objects.filter(user=u, status="approved").first()
         return (r.pk, r.name) if r else (None, "Open your restaurant in Food delivery first (it must be approved).")
     return _target_food(u, kind, tid)
+
+
+# ---- setup_wheels_v1: Wheels boost - a car / bike ad shown first in XpertWheels, with a Featured badge.
+CATALOG["wheels_boost"] = {"name": "Wheels boost", "what": "Your car or bike ad shown first in XpertWheels searches, with a Featured badge. Post your ad first on /wheels.", "target": "wheels",
+                           "plans": {"7d": ("7 days", 499, 7), "30d": ("30 days", 1499, 30)}}
+_target_wheels = _target
+
+
+def _target(u, kind, tid):
+    if kind == "wheels":
+        if not tid:
+            return None, "Choose which ad to boost (open My ads on /wheels and tap Boost)."
+        A = apps.get_model("wheels", "Ad"); a = A.objects.filter(pk=tid, user=u, status="active").first()
+        return (a.pk, ("%s %s %s" % (a.make, a.model, a.year))[:150]) if a else (None, "That ad is not yours, or it is not live.")
+    return _target_wheels(u, kind, tid)

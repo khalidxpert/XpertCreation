@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "xlate",
     "shop",
     "meetup",
+    "wheels",
     "xfood",
     "storeplus",
     "storechat",
