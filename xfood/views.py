@@ -159,7 +159,7 @@ def _r(r, full=False, area=""):
          "rating": round(r.rating_sum / r.rating_n, 1) if r.rating_n else None, "ratings": r.rating_n, "orders": r.orders_done,
          "here": _area_ok(r, area) if area else None}
     if full:
-        d.update({"maplink": r.maplink, "about": r.about, "address": r.address, "areas": r.areas, "hours": r.hours or {k: None for k in DAYS}, "phone": r.phone})
+        d.update({"direct": _sp_direct(r.user_id), "maplink": r.maplink, "about": r.about, "address": r.address, "areas": r.areas, "hours": r.hours or {k: None for k in DAYS}, "phone": r.phone})
     return d
 
 
@@ -336,7 +336,7 @@ def orders(request):
     deliv = 0 if mode == "pickup" or (r.free_over and sub >= r.free_over) else r.delivery_fee
     total = sub + deliv
     o = FoodOrder.objects.create(restaurant=r, buyer=u, items=lines, subtotal=sub, delivery=deliv, total=total,
-                                 fee=int(round(total * COMMISSION_PCT / 100.0)), payment="cod", mode=mode, status="placed",
+                                 fee=int(round(total * COMMISSION_PCT / 100.0)), payment=("direct" if d.get("payment") == "direct" and _sp_direct(r.user_id) else "cod"), mode=mode, status="placed",
                                  name=name, phone=phone, address=addr if mode == "delivery" else "", area=area, city=r.city, note=_txt(d.get("note"), 300))
     _notify(r.user, "\U0001F514 New order %s: Rs %s (%s)" % (_no(o.id), "{:,}".format(total), "delivery" if mode == "delivery" else "pickup"), "/food#partner")
     return Response(_o(o, u), status=201)
@@ -653,3 +653,20 @@ def maplink(v):
     if _re9.match(r"^https://(www\.)?(google\.[a-z.]+/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl|goo\.gl/maps)[^\s\"'<>]*$", v, _re9.I):
         return v
     return ""
+
+
+# ---- setup_sellerpay_v1: pay the seller directly (JazzCash / EasyPaisa / bank) - see sellerpay/views.py
+def _sp_direct(uid):
+    try:
+        from sellerpay.views import direct_ok
+        return direct_ok(uid)
+    except Exception:
+        return False
+
+
+def _sp_drop(pid):
+    try:
+        from storeplus.models import DropLink
+        return DropLink.objects.filter(product_id=pid).exists()
+    except Exception:
+        return False

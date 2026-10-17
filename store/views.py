@@ -599,7 +599,7 @@ def orders(request):
         name, phone, addr, city = _txt(d.get("name"), 80), _phone(d.get("phone")), _txt(d.get("address"), 300), _txt(d.get("city"), 60)
         if len(name) < 3 or not phone or len(addr) < 8 or not city:
             return _err("Give your name, phone number, full address and city.")
-        pay = "online" if d.get("payment") == "online" else "cod"
+        pay = "online" if d.get("payment") == "online" else ("direct" if d.get("payment") == "direct" else "cod")
         raw = d.get("items") if isinstance(d.get("items"), list) else []
         if not raw:
             return _err("Your cart is empty.")
@@ -621,6 +621,10 @@ def orders(request):
                     return _err("\"%s\" cannot be paid cash on delivery. Choose online payment, or remove it." % p.title[:60])
                 if pay == "online" and not p.online:
                     return _err("\"%s\" is cash on delivery only. Choose cash on delivery, or remove it." % p.title[:60])
+                if pay == "direct" and not _sp_direct(p.merchant.user_id):
+                    return _err("%s does not take JazzCash / bank payments. Choose another way to pay." % p.merchant.name[:60])
+                if pay == "direct" and _sp_drop(p.id):
+                    return _err("\"%s\" is sent by another seller, so it cannot be paid to the shop directly. Choose cash on delivery." % p.title[:60])
                 ws = bool(p.wholesale_price and p.moq and qty >= p.moq)
                 unit = p.wholesale_price if ws else p.price
                 byshop.setdefault(p.merchant, []).append({"id": p.id, "title": p.title[:150], "price": unit, "qty": qty,
@@ -634,11 +638,11 @@ def orders(request):
                                          status="pending" if pay == "online" else "placed", name=name, phone=phone, address=addr, city=city,
                                          note=_txt(d.get("note"), 300))
                 made.append(o)
-                if pay == "cod":
+                if pay in ("cod", "direct"):
                     _stock(items, -1, o)
-        if pay == "cod":
+        if pay in ("cod", "direct"):
             for o in made:
-                _notify(o.merchant.user, "New cash-on-delivery order %s: Rs %s" % ("XS-%06d" % o.id, "{:,}".format(o.total)), "/store#sorder-%d" % o.id)
+                _notify(o.merchant.user, "New %s order %s: Rs %s" % ("JazzCash / bank" if pay == "direct" else "cash-on-delivery", "XS-%06d" % o.id, "{:,}".format(o.total)), "/store#sorder-%d" % o.id)
             return Response({"orders": [_o(o, u, True) for o in made], "group": grp}, status=201)
         res, err = _start_pay(made, u)
         if err:
@@ -1080,3 +1084,20 @@ def og(request, pk):
     r = _HR6(page)
     r["Cache-Control"] = "public, max-age=300"
     return r
+
+
+# ---- setup_sellerpay_v1: pay the seller directly (JazzCash / EasyPaisa / bank) - see sellerpay/views.py
+def _sp_direct(uid):
+    try:
+        from sellerpay.views import direct_ok
+        return direct_ok(uid)
+    except Exception:
+        return False
+
+
+def _sp_drop(pid):
+    try:
+        from storeplus.models import DropLink
+        return DropLink.objects.filter(product_id=pid).exists()
+    except Exception:
+        return False

@@ -220,6 +220,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <div id="fdb"><p style="color:var(--soft)">Loading…</p></div>
   <div id="fdbar"></div>
 <script src="/js/qrgen-1.js"></script>
+<script src="/js/sellerpay-1.js?v=1"></script>
 </div>
 <script>
 (function(){
@@ -365,7 +366,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
           + (mode === "delivery" ? '<label for="ca">Area</label><input id="ca" value="' + esc(last.area || L.area || "") + '" placeholder="e.g. Johar Town"><label for="cd">Full address</label><input id="cd" value="' + esc(last.address || "") + '" placeholder="House, street, block, nearby landmark">' : '<p class="msg">Pick up from: <b>' + esc(r.address) + ', ' + esc(r.city) + '</b></p>')
           + (mode === "delivery" ? '<p style="margin:10px 0 0"><button type="button" class="btn sm" id="cgeo">&#128205; Share my exact location with the rider</button> <small id="cgeom" style="color:var(--g);font-weight:700">' + (GEOU ? '&#10004; Location added' : '') + '</small></p>' : '') + '<label for="cnote">Note for the restaurant (optional)</label><input id="cnote" placeholder="Less spicy, no onions, ring the bell…"></div>'
           + '<div class="box"><div style="display:flex;justify-content:space-between"><span>Food</span><b>' + rs(sub) + '</b></div>' + (mode === "delivery" ? '<div style="display:flex;justify-content:space-between;margin-top:4px"><span>Delivery</span><b>' + (dl ? rs(dl) : 'Free') + '</b></div>' : '')
-          + '<div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><b>Total</b><b>' + rs(sub + dl) + '</b></div><p style="color:var(--soft);font-size:13.5px">&#128181; ' + (mode === "delivery" ? 'Pay cash to the rider.' : 'Pay at the counter.') + '</p>'
+          + '<div style="display:flex;justify-content:space-between;margin-top:8px;font-size:18px"><b>Total</b><b>' + rs(sub + dl) + '</b></div>' + payUi(r, mode)
           + (mode === "delivery" && r.min_order && sub < r.min_order ? msg("Minimum order for delivery is " + rs(r.min_order) + ". Add " + rs(r.min_order - sub) + " more.", "bad") : '')
           + (!canOrder(r) ? msg(r.paused ? "The restaurant is busy right now." : "The restaurant is closed now.", "bad") : '') + '<div id="cm"></div>'
           + '<button class="btn r" id="cgo" style="width:100%;padding:14px"' + (!canOrder(r) ? ' disabled' : '') + '>Place order &middot; ' + rs(sub + dl) + '</button></div>';
@@ -373,11 +374,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       draw();
       box.onclick = function(e){
         var q = e.target.closest("[data-cq]"); if (q){ var i = +q.getAttribute("data-cq"); c.items[i].qty += +q.getAttribute("data-d"); if (c.items[i].qty < 1) c.items.splice(i, 1); saveCart(c); if (!c.items.length){ vCart(); return; } draw(); return; }
+        var pm = e.target.closest("[data-pm]"); if (pm){ PAYM = pm.getAttribute("data-pm"); draw(); return; }
         var m = e.target.closest("[data-m]"); if (m){ mode = m.getAttribute("data-m"); draw(); return; }
         if (e.target.id === "cgeo"){ geo(function(u){ GEOU = u; $("cgeom").innerHTML = "&#10004; Location added"; }); return; }
         if (e.target.id !== "cgo") return;
         if (!M.me){ location.href = "/login?next=" + encodeURIComponent("/food#cart"); return; }
-        var body = {restaurant: r.slug, mode: mode, name: $("cn").value, phone: $("cp").value, note: (GEOU && mode === "delivery" ? GEOU + " " : "") + $("cnote").value, area: $("ca") ? $("ca").value : "", address: $("cd") ? $("cd").value : "",
+        var body = {restaurant: r.slug, mode: mode, name: $("cn").value, phone: $("cp").value, note: (GEOU && mode === "delivery" ? GEOU + " " : "") + $("cnote").value, payment: r.direct ? PAYM : "cod", area: $("ca") ? $("ca").value : "", address: $("cd") ? $("cd").value : "",
                     items: c.items.map(function(x){ return {id: x.id, qty: x.qty, opts: x.sel}; })};
         ls("xc_food_addr", {name: body.name, phone: body.phone, area: body.area || last.area, address: body.address || last.address});
         e.target.disabled = true;
@@ -407,15 +409,16 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       var o = x.d, R = o.restaurant, steps = [["placed", "&#128221;", "Order placed"], ["accepted", "&#128104;&#8205;&#127859;", "Accepted, being prepared"], [o.mode === "pickup" ? "ready" : "on_way", o.mode === "pickup" ? "&#128230;" : "&#128757;", o.mode === "pickup" ? "Ready for pickup" : "On the way"], ["delivered", "&#9989;", o.mode === "pickup" ? "Picked up" : "Delivered"]];
       var at = {placed: 0, accepted: 1, on_way: 2, ready: 2, delivered: 3}[o.status], bad = /rejected|cancelled/.test(o.status);
       var eta = o.times.accepted_at && o.prep_min ? new Date(new Date(o.times.accepted_at).getTime() + o.prep_min * 60000) : null;
-      if (document.activeElement && document.activeElement.id === "rvt") return;
+      if ((document.activeElement && document.activeElement.id === "rvt") || document.querySelector("[data-spbusy]")){ if (TM) clearTimeout(TM); TM = setTimeout(draw, 8000); return; }
       box.innerHTML = '<div class="box"><div style="display:flex;gap:10px;align-items:center">' + (R.logo ? '<img src="' + esc(R.logo) + '" style="width:48px;height:48px;border-radius:14px;object-fit:cover">' : '') + '<div style="flex:1"><h2 style="margin:0">' + esc(R.name) + '</h2><small style="color:var(--soft)">Order ' + o.no + ' &middot; ' + when(o.created) + '</small></div><a class="btn sm" href="tel:' + esc(R.phone) + '">&#128222; Call</a></div>'
         + (bad ? msg(esc(ST[o.status]) + (o.reason ? ": " + esc(o.reason) : ""), "bad") : '<div class="tl">' + steps.map(function(s, i){ return '<div class="' + (i <= at ? "on" : "") + (i === at ? " now" : "") + '"><i>' + s[1] + '</i>' + s[2] + (i === 1 && eta && at < 3 ? ' &middot; ready about ' + hhmm(eta.toISOString()) : '') + (i === 2 && o.rider ? ' &middot; rider: ' + esc(o.rider) : '') + '</div>'; }).join("") + '</div>')
-        + (o.status === "placed" ? '<p style="color:var(--soft);font-size:13.5px">The restaurant usually accepts within a few minutes.</p><button class="btn sm" id="ocx">Cancel order</button>' : '') + '</div>'
+        + (o.status === "placed" ? '<p style="color:var(--soft);font-size:13.5px">The restaurant usually accepts within a few minutes.</p><button class="btn sm" id="ocx">Cancel order</button>' : '') + '</div>' + (o.payment === "direct" ? '<div id="fspay"></div>' : '')
         + '<div class="box"><h2>Your order</h2>' + o.items.map(function(i){ return '<div style="display:flex;justify-content:space-between;padding:4px 0"><span>' + i.qty + ' &times; ' + esc(i.name) + (i.opts ? ' <small style="color:var(--soft)">(' + esc(i.opts) + ')</small>' : '') + '</span><b>' + rs(i.price * i.qty) + '</b></div>'; }).join("")
         + (o.delivery ? '<div style="display:flex;justify-content:space-between;padding:4px 0"><span>Delivery</span><b>' + rs(o.delivery) + '</b></div>' : '') + '<div style="display:flex;justify-content:space-between;padding:8px 0 0;font-size:18px"><b>Total</b><b>' + rs(o.total) + '</b></div>'
-        + '<p style="color:var(--soft);font-size:13.5px;margin:6px 0 0">' + (o.mode === "pickup" ? '&#128694; Pickup at ' + esc(R.address) + ' &middot; pay at the counter' : '&#128205; ' + esc(o.address) + ', ' + esc(o.area) + ' &middot; pay cash to the rider') + '</p></div>'
+        + '<p style="color:var(--soft);font-size:13.5px;margin:6px 0 0">' + (o.mode === "pickup" ? '&#128694; Pickup at ' + esc(R.address) + (o.payment === "direct" ? ' &middot; JazzCash / bank to the restaurant' : ' &middot; pay at the counter') : '&#128205; ' + esc(o.address) + ', ' + esc(o.area) + (o.payment === "direct" ? ' &middot; JazzCash / bank to the restaurant' : ' &middot; pay cash to the rider')) + '</p></div>'
         + (o.status === "delivered" ? (o.rating ? '<div class="box"><b>Your rating:</b> <span style="color:#F59E0B">' + "&#9733;".repeat(o.rating) + '</span> ' + esc(o.review) + (o.reply ? '<p style="margin:6px 0 0"><b>Reply:</b> ' + esc(o.reply) + '</p>' : '') + '</div>'
           : '<div class="box f"><h2>How was it?</h2><div class="stars">' + [1, 2, 3, 4, 5].map(function(n){ return '<span data-st="' + n + '" class="' + (n <= star ? "on" : "") + '">&#9733;</span>'; }).join("") + '</div><input id="rvt" placeholder="Tell others about the food (optional)"><div id="rvm"></div><p><button class="btn r" id="rvs">Post review</button></p></div>') : '');
+      if (o.payment === "direct" && window.XCSellerPay) XCSellerPay.box("food", id, $("fspay"));
       if (TM) clearTimeout(TM);
       if (/placed|accepted|on_way|ready/.test(o.status) && location.hash === "#o-" + id) TM = setTimeout(draw, 8000);
     }); };
@@ -427,7 +430,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     draw();
   }
   // ---------- restaurant owner
-  function ptabs(t, R){ return '<nav class="tabs">' + [["partner", "&#128276; Orders" + (R && R.new ? " <b>" + R.new + "</b>" : "")], ["partner-menu", "&#128203; Menu"], ["partner-settings", "&#9881;&#65039; Restaurant"], ["partner-reviews", "&#11088; Reviews"]].map(function(x){ return '<a href="#' + x[0] + '" class="' + (x[0] === t ? "on" : "") + '">' + x[1] + '</a>'; }).join("") + (R ? '<a href="#r-' + esc(R.slug) + '">&#128065; View page</a><a href="#qr-' + esc(R.slug) + '">&#9638; QR code</a>' : '') + '</nav>'; }
+  function ptabs(t, R){ return '<nav class="tabs">' + [["partner", "&#128276; Orders" + (R && R.new ? " <b>" + R.new + "</b>" : "")], ["partner-menu", "&#128203; Menu"], ["partner-settings", "&#9881;&#65039; Restaurant"], ["partner-reviews", "&#11088; Reviews"], ["partner-pay", "&#128179; Payments"]].map(function(x){ return '<a href="#' + x[0] + '" class="' + (x[0] === t ? "on" : "") + '">' + x[1] + '</a>'; }).join("") + (R ? '<a href="#r-' + esc(R.slug) + '">&#128065; View page</a><a href="#qr-' + esc(R.slug) + '">&#9638; QR code</a>' : '') + '</nav>'; }
   function vPartner(tab){
     if (!M.me){ box.innerHTML = signin(); return; }
     api("mine/").then(function(x){
@@ -437,7 +440,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (R.status === "suspended"){ box.innerHTML = msg("Your restaurant is suspended: " + esc(R.note), "bad"); return; }
       box.innerHTML = ptabs(tab, R) + '<div id="pm"></div>';
       var el = $("pm");
-      if (tab === "partner-menu") pMenu(R, el); else if (tab === "partner-settings") settingsForm(R, true, false, el); else if (tab === "partner-reviews") pReviews(el); else pOrders(R, el);
+      if (tab === "partner-pay"){ if (window.XCSellerPay) XCSellerPay.settings(el); } else if (tab === "partner-menu") pMenu(R, el); else if (tab === "partner-settings") settingsForm(R, true, false, el); else if (tab === "partner-reviews") pReviews(el); else pOrders(R, el);
     });
   }
   function beep(){ try { if (!AC) return; var o = AC.createOscillator(), g = AC.createGain(); o.connect(g); g.connect(AC.destination); o.frequency.value = 880; g.gain.setValueAtTime(.001, AC.currentTime); g.gain.exponentialRampToValueAtTime(.4, AC.currentTime + .02);
@@ -462,10 +465,11 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
         return '<div class="oc' + (o.status === "placed" ? ' new' : '') + '"><div class="hd"><b>' + o.no + '</b><span class="tag ' + (o.status === "placed" ? 'c' : /delivered/.test(o.status) ? 'o' : 'f') + '">' + ST[o.status] + '</span><span class="tag n">' + (o.mode === "pickup" ? '&#128694; Pickup' : '&#128757; Delivery') + '</span><small style="color:var(--soft)">' + hhmm(o.created) + '</small><b style="margin-left:auto">' + rs(o.total) + '</b></div>'
           + '<ul>' + o.items.map(function(i){ return '<li><b>' + i.qty + ' &times;</b> ' + esc(i.name) + (i.opts ? ' <small style="color:var(--soft)">(' + esc(i.opts) + ')</small>' : '') + '</li>'; }).join("") + '</ul>'
           + '<div style="font-size:14px">&#128100; ' + esc(o.name) + ' &middot; <a href="tel:' + esc(o.phone) + '" style="font-weight:800;color:var(--r)">' + esc(o.phone) + '</a>' + (o.mode === "delivery" ? '<br>&#128205; ' + esc(o.address) + ', ' + esc(o.area) + ' &middot; <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(o.address + ", " + o.area + ", " + o.city) + '" style="font-weight:800;color:var(--r)">Map</a>' : '') + (o.note ? '<br>&#128221; <b>' + linkify(esc(o.note)) + '</b>' : '') + (o.rider ? '<br>&#128757; ' + esc(o.rider) : '') + (o.reason ? '<br><small>' + esc(o.reason) + '</small>' : '') + '</div>'
-          + '<div class="act">' + b + '<button class="btn sm" data-slip="' + o.id + '">&#128424; Slip</button></div></div>'; };
+          + (o.payment === "direct" ? '<div data-spo="' + o.id + '"></div>' : '') + '<div class="act">' + b + '<button class="btn sm" data-slip="' + o.id + '">&#128424; Slip</button></div></div>'; };
       el.innerHTML = '<div class="kp"><div><small>Today delivered</small><b>' + d.today.orders + '</b></div><div><small>Today sales</small><b>' + rs(d.today.sales) + '</b></div><div><small>New orders</small><b style="color:var(--r)">' + d.new + '</b></div></div>'
         + '<div class="box" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn sm' + (AC ? ' g' : '') + '" id="snd">' + (AC ? '&#128276; Sound on' : '&#128263; Tap to turn on order sound') + '</button><button class="btn sm' + (d.paused ? ' r' : '') + '" id="pz">' + (d.paused ? '&#9208;&#65039; Paused - tap to take orders' : '&#9208;&#65039; Busy? Pause new orders') + '</button><small style="color:var(--soft)">Keep this page open to get orders. It refreshes by itself.</small></div>'
         + (act.length ? act.map(oc).join("") : '<div class="box empty"><div class="e">&#128276;</div><b>No orders right now</b>New orders show here with a sound.</div>') + (done.length ? '<h2 style="margin-top:16px">Earlier</h2>' + done.slice(0, 30).map(oc).join("") : '');
+      if (window.XCSellerPay) [].forEach.call(el.querySelectorAll("[data-spo]"), function(x){ XCSellerPay.box("food", +x.getAttribute("data-spo"), x, function(){}); });
       el.onclick = function(e){
         if (e.target.id === "snd"){ try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); AC.resume(); beep(); } catch (er){} draw(); return; }
         if (e.target.id === "pz"){ api("mine/").then(function(m){ var r = m.d.restaurant; api("mine/", Object.assign(pick(r), {paused: !d.paused})).then(draw); }); return; }
@@ -620,6 +624,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     });
   }
 
+  var PAYM = "cod";
+  function payUi(r, mode){
+    var cash = mode === "delivery" ? "Cash to the rider" : "Pay at the counter";
+    if (!r.direct) return '<p style="color:var(--soft);font-size:13.5px">&#128181; ' + cash + '.</p>';
+    return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="btn' + (PAYM === "cod" ? ' r' : '') + '" data-pm="cod">&#128181; ' + cash + '</button><button class="btn' + (PAYM === "direct" ? ' r' : '') + '" data-pm="direct">&#128242; JazzCash / bank</button></div>'
+      + (PAYM === "direct" ? '<p style="color:var(--soft);font-size:13.5px">You pay the restaurant directly and upload the screenshot after you place the order.</p>' : '');
+  }
   // ---------- router
   function route(){
     var h = location.hash.replace("#", "") || "home", m;

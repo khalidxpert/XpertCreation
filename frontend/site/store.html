@@ -855,13 +855,16 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     });
   }
 
+  var SPK = "", SPAV = false;
   // ---------- cart and checkout
   function vCart(){
     CART = CART.filter(function(x){ return x.qty > 0; }); saveCart();
     if (!CART.length){ box.innerHTML = '<div class="st-box st-empty"><div class="e">&#128722;</div><b>Your cart is empty</b>Find something you love.<p><a class="st-btn o" href="#home">Start shopping</a></p></div>'; return; }
     var shops = {}; CART.forEach(function(x){ (shops[x.shop] = shops[x.shop] || {name: x.shop_name, items: []}).items.push(x); });
     var allCod = CART.every(function(x){ return x.cod; }), allOn = CART.every(function(x){ return x.online; });
-    var pay = allCod ? "cod" : "online";
+    var spk = Object.keys(shops).sort().join(",");
+    if (spk !== SPK){ SPK = spk; SPAV = false; if (window.XCSellerPay) XCSellerPay.avail("store", Object.keys(shops), function(r){ SPAV = Object.keys(shops).every(function(k){ return r[k]; }); if (SPAV && location.hash === "#cart") vCart(); }); }
+    var pay = allCod ? "cod" : (allOn || !SPAV) ? "online" : "direct";
     var unit = function(x){ return x.wholesale && x.qty >= x.moq ? x.wholesale : x.price; };
     var draw = function(){
       var sub = 0, del = 0, h = '<div class="st-sec" style="margin-top:4px"><h2>&#128722; Cart (' + CART.length + ')</h2></div><div class="st-two"><div>';
@@ -874,8 +877,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (!M.me) h += '<a class="st-btn o block" style="margin-top:12px" href="/login?next=' + encodeURIComponent("/store#cart") + '">Sign in to check out</a>';
       else h += '<label for="cn">Full name</label><input id="cn" value="' + esc(M.me.name) + '"><label for="cp">Phone</label><input id="cp" value="' + esc(M.me.phone) + '" inputmode="tel"><label for="ca">Full address</label><input id="ca" placeholder="House, street, area"><label for="cc">City</label><input id="cc"><label for="cnote">Note for the shop (optional)</label><input id="cnote">'
         + '<label>Payment</label><div class="st-pay"><label class="' + (allCod ? (pay === "cod" ? "on" : "") : "off") + '"><input type="radio" name="pay" value="cod"' + (pay === "cod" ? " checked" : "") + (allCod ? "" : " disabled") + '>&#128181;<span>Cash on delivery<small>' + (allCod ? 'Pay the rider when it arrives' : 'Not available for every item in your cart') + '</small></span></label>'
-        + '<label class="' + (allOn && M.me.can_pay_online ? (pay === "online" ? "on" : "") : "off") + '"><input type="radio" name="pay" value="online"' + (pay === "online" ? " checked" : "") + (allOn && M.me.can_pay_online ? "" : " disabled") + '>&#128179;<span>' + (M.mode === "manual" ? "JazzCash, EasyPaisa or any bank app" : "Card or wallet (Safepay)") + '<small>' + (!allOn ? 'Not available for every item in your cart' : M.me.can_pay_online ? 'One payment for the whole cart, held until you receive it' : 'Opening soon') + '</small></span></label></div>'
-        + '<button class="st-btn o block" id="cgo" style="margin-top:12px"' + (allCod || (allOn && M.me.can_pay_online) ? '' : ' disabled') + '>Place order &middot; ' + rs(sub + del) + '</button><div id="cmsg"></div>';
+        + '<label class="' + (allOn && M.me.can_pay_online ? (pay === "online" ? "on" : "") : "off") + '"><input type="radio" name="pay" value="online"' + (pay === "online" ? " checked" : "") + (allOn && M.me.can_pay_online ? "" : " disabled") + '>&#128179;<span>' + (M.mode === "manual" ? "JazzCash, EasyPaisa or any bank app" : "Card or wallet (Safepay)") + '<small>' + (!allOn ? 'Not available for every item in your cart' : M.me.can_pay_online ? 'One payment for the whole cart, held until you receive it' : 'Opening soon') + '</small></span></label>' + (SPAV ? '<label class="' + (pay === "direct" ? "on" : "") + '"><input type="radio" name="pay" value="direct"' + (pay === "direct" ? " checked" : "") + '>&#128242;<span>JazzCash / EasyPaisa / bank to the shop<small>Pay the shop directly, then upload the screenshot</small></span></label>' : '') + '</div>'
+        + '<button class="st-btn o block" id="cgo" style="margin-top:12px"' + (allCod || SPAV || (allOn && M.me.can_pay_online) ? '' : ' disabled') + '>Place order &middot; ' + rs(sub + del) + '</button><div id="cmsg"></div>';
       h += '<p style="font-size:12px;color:var(--soft)">One order is made per shop. <a href="/refund-policy">Refunds</a> &middot; <a href="/terms-of-sale">Terms</a></p></div></div></div>';
       box.innerHTML = h;
     };
@@ -894,6 +897,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
           if (r.d.checkout){ location.href = r.d.checkout; return; }
           if (r.d.manual && window.XCJazz){ location.hash = "#orders"; XCJazz.open("store", r.d.ref || r.d.group, function(){ try { window.dispatchEvent(new HashChangeEvent("hashchange")); } catch (e){ location.reload(); } }); return; }
           if (r.d.simulate){ api("orders/" + r.d.orders[0].id + "/simulate/", {}).then(function(){ location.hash = "#orders"; flash("Test payment done. Your order is placed.", "ok"); }); return; }
+          if (pay === "direct"){ location.hash = r.d.orders.length === 1 ? "#order-" + r.d.orders[0].id : "#orders"; flash("&#10004; Order placed! Now pay the shop and upload the screenshot" + (r.d.orders.length > 1 ? " on each order." : "."), "ok"); return; }
           location.hash = "#orders"; flash("&#10004; Order placed! The shop will confirm it soon.", "ok");
         });
       }
@@ -921,7 +925,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + o.items.map(function(x){ var rv = !seller && o.status === "completed" && (o.reviewed || []).indexOf(x.id) < 0;
         return '<div class="st-ci" style="padding:10px 0">' + (x.image ? '<img src="' + esc(x.image) + '" alt="">' : '<span class="ph">&#128230;</span>') + '<div class="t"><a href="#p-' + x.id + '"><b>' + esc(x.title) + '</b></a><small>' + x.qty + ' &times; ' + rs(x.price) + (x.wholesale ? ' (wholesale)' : '') + '</small>'
           + (rv ? '<div class="st-f" style="margin-top:6px"><span class="rvs" data-p="' + x.id + '" style="font-size:22px;color:#CBD5E1;cursor:pointer">' + [1, 2, 3, 4, 5].map(function(n){ return '<span data-n="' + n + '">&#9733;</span>'; }).join("") + '</span><input data-rt="' + x.id + '" placeholder="How was it? (optional)" style="margin-top:4px"><button class="st-btn sm o" data-rv="' + x.id + '" style="margin-top:4px">Post review</button></div>' : (!seller && (o.reviewed || []).indexOf(x.id) >= 0 ? '<small style="color:#166534">&#10004; Reviewed</small>' : '')) + '</div><b>' + rs(x.price * x.qty) + '</b></div>'; }).join("")
-      + '<div class="st-sum" style="border-top:1px solid var(--ln);margin-top:6px;padding-top:6px"><div><span>Items</span><b>' + rs(o.subtotal) + '</b></div><div><span>Delivery</span><b>' + rs(o.delivery) + '</b></div><div class="tot"><span>Total (' + (o.payment === "cod" ? "cash on delivery" : "paid online") + ')</span><span>' + rs(o.total) + '</span></div>' + (seller && o.fee ? '<div><span>XpertCreation fee (' + M.fee_pct + '%)</span><b>&minus;' + rs(o.fee) + '</b></div>' : '') + '</div>';
+      + '<div class="st-sum" style="border-top:1px solid var(--ln);margin-top:6px;padding-top:6px"><div><span>Items</span><b>' + rs(o.subtotal) + '</b></div><div><span>Delivery</span><b>' + rs(o.delivery) + '</b></div><div class="tot"><span>Total (' + (o.payment === "cod" ? "cash on delivery" : o.payment === "direct" ? "JazzCash / bank to the shop" : "paid online") + ')</span><span>' + rs(o.total) + '</span></div>' + (seller && o.fee ? '<div><span>XpertCreation fee (' + M.fee_pct + '%)</span><b>&minus;' + rs(o.fee) + '</b></div>' : '') + '</div>';
     if (!seller){
       if (o.status === "pending") h += '<button class="st-btn o" data-a="pay">Pay ' + rs(o.total) + '</button> <button class="st-btn r" data-a="cancel">Cancel</button>';
       if (o.status === "placed" || o.status === "confirmed") h += '<button class="st-btn r" data-a="cancel">Cancel order</button> ';
@@ -933,7 +937,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (o.status === "shipped") h += '<button class="st-btn g" data-a="delivered">Mark delivered</button> ';
       if (["placed", "confirmed", "shipped", "delivered"].indexOf(o.status) >= 0) h += '<button class="st-btn r" data-a="dispute">Report a problem</button>';
     }
-    h += '<div id="oam"></div></div></div><div><div class="st-box"><h2>' + (seller ? "Deliver to" : "Delivery address") + '</h2><p style="font-size:14px;line-height:1.6;margin:0"><b>' + esc(o.name) + '</b><br>' + esc(o.phone) + '<br>' + esc(o.address) + '<br>' + esc(o.city) + (o.note ? '<br><i>' + esc(o.note) + '</i>' : '') + '</p>'
+    h += (o.payment === "direct" ? '<div id="spay"></div>' : '') + '<div id="oam"></div></div></div><div><div class="st-box"><h2>' + (seller ? "Deliver to" : "Delivery address") + '</h2><p style="font-size:14px;line-height:1.6;margin:0"><b>' + esc(o.name) + '</b><br>' + esc(o.phone) + '<br>' + esc(o.address) + '<br>' + esc(o.city) + (o.note ? '<br><i>' + esc(o.note) + '</i>' : '') + '</p>'
       + (!seller && o.shop_phone ? '<p style="margin:12px 0 0"><a class="st-btn g block" target="_blank" rel="noopener" href="https://wa.me/' + o.shop_phone.replace(/^\+/, "").replace(/^0/, "92") + '?text=' + encodeURIComponent("About my order " + o.no + " on XpertCreation Store") + '">&#128172; WhatsApp the shop</a></p>' : '') + '</div></div></div>';
     return h;
   }
@@ -962,6 +966,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (!r.ok){ box.innerHTML = msg(esc(r.d.detail || "Not found."), "bad"); return; }
       box.innerHTML = '<div style="font-size:13px;color:var(--soft);margin:4px 0 10px"><a href="' + (seller ? "#seller-orders" : "#orders") + '">&larr; ' + (seller ? "Shop orders" : "My orders") + '</a></div>' + orderView(r.d, seller);
       bindOrder(id, seller, function(){ vOrder(id, seller); });
+      if (r.d.payment === "direct" && window.XCSellerPay) XCSellerPay.box("store", id, $("spay"));
     });
   }
 
@@ -986,12 +991,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       if (!m || m.status === "rejected") return applyForm(m);
       if (m.status === "pending"){ box.innerHTML = '<div class="st-box st-empty"><div class="e">&#9203;</div><b>Your shop &ldquo;' + esc(m.name) + '&rdquo; is waiting for approval</b>Our team checks new shops within 2 working days. You will get a notification.</div>'; return; }
       if (m.status === "suspended"){ box.innerHTML = '<div class="st-box">' + msg("Your shop is suspended: " + esc(m.note) + ". Contact us from the Ownership &amp; complaints page.", "bad") + '</div>'; return; }
-      var tabs = [["seller", "Dashboard"], ["seller-products", "Products"], ["seller-orders", "Orders" + (SC.orders_new ? " (" + SC.orders_new + ")" : "")], ["inventory", "Inventory" + (SC.low_stock ? " &#9888;" : "")], ["quotes", "Quotes" + (SC.quotes_open ? " (" + SC.quotes_open + ")" : "")], ["seller-shop", "Shop profile"], ["seller-more", "&#10024; Social, hours &amp; card"], ["seller-drop", "&#128230; Dropship"], ["seller-chats", "&#128172; Chats"]];
+      var tabs = [["seller", "Dashboard"], ["seller-products", "Products"], ["seller-orders", "Orders" + (SC.orders_new ? " (" + SC.orders_new + ")" : "")], ["inventory", "Inventory" + (SC.low_stock ? " &#9888;" : "")], ["quotes", "Quotes" + (SC.quotes_open ? " (" + SC.quotes_open + ")" : "")], ["seller-shop", "Shop profile"], ["seller-pay", "&#128179; Payments"], ["seller-more", "&#10024; Social, hours &amp; card"], ["seller-drop", "&#128230; Dropship"], ["seller-chats", "&#128172; Chats"]];
       var head = '<div class="st-shop" style="width:auto;flex:none;padding:18px;border-radius:20px;margin-bottom:10px">' + '<label title="Change logo" style="position:relative;cursor:pointer;flex:none;display:block">' + (m.logo ? '<img src="' + esc(m.logo) + '" alt="">' : '<span class="lg">' + esc(m.name.charAt(0)) + '</span>') + '<span style="position:absolute;right:-6px;bottom:-6px;width:28px;height:28px;border-radius:50%;background:#F85606;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)">\uD83D\uDCF7</span><input type="file" id="hlf" accept="image/*" hidden></label>' + '<div style="flex:1"><b style="font-size:20px">' + esc(m.name) + '</b> ' + tierB(SC.tier) + '<br><small>Seller center &middot; <a href="#shop-' + esc(m.slug) + '" style="color:#fff;text-decoration:underline">view your shop</a></small></div></div>'
         + '<div class="st-tab">' + tabs.map(function(t){ return '<a href="#' + t[0] + '" class="' + (t[0] === tab ? "on" : "") + '">' + t[1] + '</a>'; }).join("") + '</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px"><a class="st-btn sm" href="/shop/' + esc(m.slug) + '" target="_blank" rel="noopener">&#127760; My shop page</a><a class="st-btn sm" href="/brand">&#127912; Brand kit</a><a class="st-btn sm" href="#seller-chats">&#128172; Chats</a></div><div id="sc"></div>';
       box.innerHTML = head + (m.logo ? '' : '<div class="st-box" style="padding:10px 14px;margin-bottom:10px;font-weight:700">\uD83D\uDCF7 Add your shop logo \u2014 tap the camera on the picture above.</div>');
       $("hlf").onchange = function(){ if (!this.files[0]) return; var fd = new FormData(); fd.append("file", this.files[0]); api("merchant/logo/", fd).then(function(x){ if (x.ok) vSeller(tab); else alert((x.d && x.d.detail) || "Could not upload the logo."); }); };
-      ({"seller": scDash, "seller-products": scProducts, "seller-orders": scOrders, "seller-shop": scShop, "seller-more": spMore, "seller-drop": spDrop, "seller-chats": scChats}[tab] || scDash)(); scBadge();
+      ({"seller": scDash, "seller-products": scProducts, "seller-orders": scOrders, "seller-shop": scShop, "seller-pay": function(){ if (window.XCSellerPay) XCSellerPay.settings($("sc")); }, "seller-more": spMore, "seller-drop": spDrop, "seller-chats": scChats}[tab] || scDash)(); scBadge();
     });
   }
   function applyForm(m){
@@ -1147,7 +1152,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (h === "shops") return vShops();
     if (h === "chats") return scMine();
     if ((m = h.match(/^chat-(.+)$/))){ vShop(decodeURIComponent(m[1])); xcChatOpen(decodeURIComponent(m[1]), 0); return; }
-    if (/^(seller|seller-products|seller-orders|seller-shop|seller-more|seller-drop|seller-chats)$/.test(h)) return vSeller(h);
+    if (/^(seller|seller-products|seller-orders|seller-shop|seller-pay|seller-more|seller-drop|seller-chats)$/.test(h)) return vSeller(h);
     ({cart: vCart, orders: vOrders, quotes: vQuotes, inventory: vInventory, team: vTeam}[h] || vHome)();
   }
   $("stsf").onsubmit = function(e){ e.preventDefault(); var q = $("stq").value.trim(); if (q) location.hash = "#search-" + encodeURIComponent(q); };
@@ -1311,6 +1316,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 
 <script src="/js/share-1.js?v=22" defer></script>
 <script src="/js/qrgen-1.js"></script>
+<script src="/js/sellerpay-1.js?v=1"></script>
 <script src="/js/jcpay-1.js" defer></script>
 <script>
 /* myshop-v1: shop owners see "My shop" instead of "Sell on XpertCreation" */
