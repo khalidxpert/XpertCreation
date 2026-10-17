@@ -720,3 +720,16 @@ def shop(request):
 # ---- setup_rishta_v1: Rishta boost - a Halal Rishta profile shown first, with a Featured mark.
 CATALOG["rishta_boost"] = {"name": "Rishta boost", "what": "Your Halal Rishta profile shown first, with a Featured mark. Make your rishta profile first on /rishta.", "target": "self",
                            "plans": {"7d": ("7 days", 499, 7), "30d": ("30 days", 1499, 30)}}
+
+
+# ---- setup_food_v1: Restaurant boost - a restaurant shown first in Food delivery, with a Featured mark.
+CATALOG["food_boost"] = {"name": "Restaurant boost", "what": "Your restaurant shown first in Food delivery in your city, with a Featured badge. Open your restaurant first on /food.", "target": "restaurant",
+                         "plans": {"7d": ("7 days", 699, 7), "30d": ("30 days", 1999, 30)}}
+_target_food = _target
+
+
+def _target(u, kind, tid):
+    if kind == "restaurant":
+        R = apps.get_model("xfood", "Restaurant"); r = R.objects.filter(user=u, status="approved").first()
+        return (r.pk, r.name) if r else (None, "Open your restaurant in Food delivery first (it must be approved).")
+    return _target_food(u, kind, tid)
