@@ -1,0 +1,177 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Legal Document Generator (Pakistan) — Rent Agreement, Affidavit, NDC | XpertCreation</title>
+<meta name="description" content="Generate Pakistani legal documents free: rent agreement, affidavit, property sale agreement, power of attorney and society NDC. Fill the blanks, print ready-to-sign.">
+<style>
+  :root{--g:#059669;--g2:#047857;--n:#111827;--m:#6b7280;--b:#e5e7eb;--bg:#f9fafb}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--n);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:16px 16px 48px}
+  h1{font-size:22px;margin:8px 0 4px}
+  .sub{color:var(--m);font-size:13px;margin:0 0 18px}
+  .card{background:#fff;border:1px solid var(--b);border-radius:14px;padding:16px;margin-bottom:14px}
+  .picks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .pick{border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:10px;text-align:left;cursor:pointer}
+  .pick.on{border-color:var(--g);background:#ecfdf5}
+  .pick b{display:block;font-size:12.5px}
+  .pick span{display:block;font-size:11px;color:var(--m);margin-top:2px}
+  label{display:block;font-size:12px;font-weight:600;color:#374151;margin:14px 0 6px}
+  input,textarea{width:100%;padding:11px 12px;font-size:15px;border:1px solid #d1d5db;border-radius:10px;outline:none;font-family:inherit}
+  input:focus,textarea:focus{border-color:var(--g)}
+  textarea{min-height:84px;resize:vertical}
+  .hint{font-size:11px;color:var(--m);margin:4px 0 0}
+  .btn{width:100%;padding:14px;border:0;border-radius:11px;background:var(--g);color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px}
+  .btn:disabled{opacity:.6}
+  .btn.dark{background:#111827}
+  .btn.ghost{background:#fff;color:#374151;border:1px solid #d1d5db;margin-top:8px}
+  pre{white-space:pre-wrap;font-family:"Times New Roman",Georgia,serif;font-size:12.5px;line-height:1.6;background:#fbfbfb;border:1px solid var(--b);border-radius:10px;padding:14px;max-height:420px;overflow:auto}
+  .small{font-size:11px;color:var(--m)}
+  .err{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;padding:10px;font-size:13px;margin-top:12px}
+  .row{display:flex;justify-content:space-between;align-items:center}
+  .hide{display:none}
+  @media print{
+    body{background:#fff}
+    .wrap{max-width:none;padding:0}
+    .card:not(#previewCard),.noprint,h1,.sub{display:none!important}
+    pre{border:0;max-height:none;padding:0;background:#fff;font-size:12pt}
+  }
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Legal Document Generator (Pakistan)","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://xpertcreation.com/legal-documents/","description":"Generate rent agreements, affidavits, sale agreements, power of attorney and society NDC documents online, print-ready and free.","offers":{"@type":"Offer","price":"0","priceCurrency":"PKR"},"publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Which legal documents can I generate?","acceptedAnswer":{"@type":"Answer","text":"Rent agreement, affidavit, sale agreement, power of attorney and society NDC (no demand certificate). Each one is generated in print-ready format."}},
+{"@type":"Question","name":"Is the generated document legally valid in Pakistan?","acceptedAnswer":{"@type":"Answer","text":"The templates follow common Pakistani practice, but a document's validity depends on correct details, signatures, witnesses and stamp paper where required. Have it reviewed before use."}},
+{"@type":"Question","name":"Is my CNIC stored on the server?","acceptedAnswer":{"@type":"Answer","text":"CNIC data is not stored in the saved payload; only a reference number and non-sensitive details are kept so you can re-print the document later."}}
+]}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Legal Document Generator</h1>
+  <p class="sub">Fill the blanks — the legal wording is already written for you.</p>
+
+  <div class="card noprint">
+    <div class="picks" id="picks"></div>
+  </div>
+
+  <form id="f" class="card noprint hide">
+    <div id="fields"></div>
+    <button class="btn" type="submit" id="go">Generate document</button>
+    <div id="err" class="err hide"></div>
+  </form>
+
+  <section id="previewCard" class="card hide">
+    <div class="row noprint" style="margin-bottom:10px">
+      <b style="font-size:14px">Preview</b>
+      <span class="small" id="ref"></span>
+    </div>
+    <pre id="out"></pre>
+    <button class="btn dark noprint" id="print" type="button">Print / Save as PDF</button>
+    <button class="btn ghost noprint" id="copy" type="button">Copy text</button>
+    <p class="small noprint" style="margin-top:12px">
+      Review with a lawyer before signing. Stamp duty and registration requirements vary by province.
+    </p>
+  </section>
+</div>
+
+<script>
+let DOCS=[], current=null;
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+fetch("/api/legal/documents/")
+  .then(r=>r.json())
+  .then(d=>{ DOCS=d.documents||[]; renderPicks(); })
+  .catch(()=>{ document.getElementById("picks").innerHTML='<div class="err">Could not load documents.</div>'; });
+
+function renderPicks(){
+  const box=document.getElementById("picks");
+  box.innerHTML="";
+  DOCS.forEach(d=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="pick";
+    b.innerHTML="<b>"+esc(d.title)+"</b><span>"+esc(d.description)+"</span>";
+    b.onclick=()=>select(d,b);
+    box.appendChild(b);
+  });
+}
+
+function select(d,btn){
+  current=d;
+  document.querySelectorAll(".pick").forEach(x=>x.classList.remove("on"));
+  btn.classList.add("on");
+  const fields=document.getElementById("fields");
+  fields.innerHTML="";
+  document.getElementById("previewCard").classList.add("hide");
+  document.getElementById("err").classList.add("hide");
+
+  d.fields.forEach(f=>{
+    const l=document.createElement("label");
+    l.textContent=f.label + (f.required?"":" (optional)");
+    fields.appendChild(l);
+
+    let el;
+    if(f.kind==="multiline"){ el=document.createElement("textarea"); }
+    else{
+      el=document.createElement("input");
+      el.type = f.kind==="number" ? "number" : "text";
+      if(f.kind==="number") el.inputMode="numeric";
+      if(f.kind==="date") el.placeholder="DD-MM-YYYY";
+    }
+    el.name=f.name;
+    el.dataset.kind=f.kind||"text";
+    el.placeholder = f.kind==="date" ? "DD-MM-YYYY" : (f.hint||"");
+    fields.appendChild(el);
+
+    if(f.hint && f.kind!=="date"){
+      const h=document.createElement("p"); h.className="hint"; h.textContent=f.hint; fields.appendChild(h);
+    }
+  });
+
+  document.getElementById("f").classList.remove("hide");
+}
+
+document.getElementById("f").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const err=document.getElementById("err"); err.classList.add("hide");
+  const data={};
+  current.fields.forEach(f=>{
+    const el=document.querySelector('#fields [name="'+f.name+'"]');
+    if(el) data[f.name]=el.value;
+  });
+
+  const btn=document.getElementById("go"); btn.disabled=true; btn.textContent="Generating…";
+  try{
+    const res=await fetch("/api/legal/render/",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({slug:current.slug,data})});
+    const out=await res.json();
+    if(!res.ok){
+      err.innerHTML="<b>"+esc(out.error||"Could not generate.")+"</b>";
+      if(out.missing&&out.missing.length){
+        const ul=document.createElement("ul");
+        out.missing.forEach(m=>{const li=document.createElement("li");li.textContent=m;ul.appendChild(li);});
+        err.appendChild(ul);
+      }
+      err.classList.remove("hide");
+    }else{
+      document.getElementById("out").textContent=out.text;
+      document.getElementById("ref").textContent="Ref: "+out.reference_no;
+      document.getElementById("previewCard").classList.remove("hide");
+      document.getElementById("previewCard").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+  }catch(_){ err.textContent="Network error. Please try again."; err.classList.remove("hide"); }
+  btn.disabled=false; btn.textContent="Generate document";
+});
+
+document.getElementById("print").onclick=()=>window.print();
+document.getElementById("copy").onclick=()=>{
+  const t=document.getElementById("out").textContent;
+  if(navigator.clipboard) navigator.clipboard.writeText(t);
+};
+</script>
+</body>
+</html>

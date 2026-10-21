@@ -1,0 +1,181 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Islamic Inheritance Calculator (Faraid) — Free Tool | XpertCreation</title>
+<meta name="description" content="Free Islamic inheritance calculator based on Hanafi Faraid rules. Calculate each heir's exact share and amount instantly, including 'Awl and Radd cases.">
+<style>
+  :root{--g:#059669;--g2:#047857;--n:#111827;--m:#6b7280;--b:#e5e7eb;--bg:#f9fafb}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--n);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:680px;margin:0 auto;padding:16px 16px 48px}
+  h1{font-size:22px;margin:8px 0 4px}
+  .sub{color:var(--m);font-size:13px;margin:0 0 18px}
+  .card{background:#fff;border:1px solid var(--b);border-radius:14px;padding:16px;margin-bottom:14px}
+  label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px}
+  input[type=text],input[type=number]{width:100%;padding:11px 12px;font-size:16px;border:1px solid #d1d5db;border-radius:10px;outline:none}
+  input:focus{border-color:var(--g)}
+  .hint{font-size:11px;color:var(--m);margin:6px 0 0}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tog{border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:9px 10px;font-size:12px;text-align:left;color:#4b5563;cursor:pointer}
+  .tog.on{border-color:var(--g);background:#ecfdf5;color:var(--g2);font-weight:600}
+  .row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--b);border-radius:10px;padding:8px 10px;margin-bottom:8px}
+  .row span{font-size:13px}
+  .step{display:flex;align-items:center;gap:8px}
+  .step button{width:30px;height:30px;border:1px solid #d1d5db;background:#fff;border-radius:8px;font-size:15px;cursor:pointer}
+  .step button:disabled{opacity:.35}
+  .step b{min-width:20px;text-align:center}
+  .btn{width:100%;padding:14px;border:0;border-radius:11px;background:var(--g);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.6}
+  .btn.ghost{background:#fff;color:#374151;border:1px solid #d1d5db}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#f3f4f6;text-align:left;padding:8px;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:#6b7280}
+  td{padding:9px 8px;border-top:1px solid #f3f4f6}
+  .r{text-align:right}
+  .small{font-size:11px;color:var(--m)}
+  .note{background:#fffbeb;border:1px solid #fde68a;color:#78350f;border-radius:10px;padding:10px;font-size:12px;margin-top:10px}
+  .warn{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;padding:10px;font-size:12px;margin-top:10px}
+  .err{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;padding:10px;font-size:13px;margin-top:10px}
+  .disc{font-size:11px;color:var(--m);margin-top:12px;line-height:1.5}
+  .hide{display:none}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Islamic Inheritance Calculator (Faraid)","applicationCategory":"FinanceApplication","operatingSystem":"Web","url":"https://xpertcreation.com/tools/faraid-calculator/","description":"Free Hanafi Faraid calculator that computes every heir's exact share and amount, including 'Awl and Radd cases.","offers":{"@type":"Offer","price":"0","priceCurrency":"PKR"},"publisher":{"@type":"Organization","name":"XpertCreation","url":"https://xpertcreation.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What is Faraid in Islam?","acceptedAnswer":{"@type":"Answer","text":"Faraid is the obligatory Islamic law of inheritance that fixes the shares of surviving family members after debts and a valid wasiyyah of up to one-third are settled."}},
+{"@type":"Question","name":"How much does a daughter inherit?","acceptedAnswer":{"@type":"Answer","text":"A single daughter receives one-half of the estate if there are no sons. Two or more daughters share two-thirds. If sons are also alive, the residue is shared with a son receiving twice the share of a daughter."}},
+{"@type":"Question","name":"What is the Awl case in Faraid?","acceptedAnswer":{"@type":"Answer","text":"Awl occurs when the fixed shares add up to more than one whole. The base of the estate is increased proportionally so every heir's share is reduced without changing the ratios. This calculator handles Awl automatically."}},
+{"@type":"Question","name":"Is this inheritance calculator free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The XpertCreation Faraid calculator is free, requires no signup, and follows Hanafi rules. It is a calculation aid; confirm the final distribution with a qualified scholar."}}
+]}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Islamic Inheritance Calculator</h1>
+  <p class="sub">Hanafi Faraid · exact shares · ‘Awl and Radd handled automatically</p>
+
+  <form id="f" class="card">
+    <label for="estate">Net estate value (PKR)</label>
+    <input id="estate" type="text" inputmode="numeric" placeholder="e.g. 5000000" autocomplete="off">
+    <p class="hint">After paying debts and up to one-third wasiyyah.</p>
+
+    <label style="margin-top:16px">Who is alive?</label>
+    <div class="grid" id="toggles"></div>
+
+    <label style="margin-top:16px">Children, grandchildren, siblings</label>
+    <div id="counters"></div>
+
+    <button class="btn" type="submit" id="go">Calculate shares</button>
+    <div id="err" class="err hide"></div>
+  </form>
+
+  <section id="out" class="card hide">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+      <b style="font-size:14px">Distribution</b>
+      <span class="small" id="estateLabel"></span>
+    </div>
+    <table>
+      <thead><tr><th>Heir</th><th class="r">Share</th><th class="r">Amount (PKR)</th></tr></thead>
+      <tbody id="tbody"></tbody>
+      <tfoot><tr><td><b>Total</b></td><td></td><td class="r"><b id="total"></b></td></tr></tfoot>
+    </table>
+    <div id="notes"></div>
+    <p class="disc" id="disc"></p>
+  </section>
+</div>
+
+<script>
+const TOGGLES = [
+  ["husband","Husband alive"],["father","Father alive"],["mother","Mother alive"],
+  ["paternal_grandfather","Paternal grandfather"],["paternal_grandmother","Paternal grandmother"],
+  ["maternal_grandmother","Maternal grandmother"]
+];
+const COUNTERS = [
+  ["wives","Wives",4],["sons","Sons",20],["daughters","Daughters",20],
+  ["grandsons","Grandsons (son's sons)",20],["granddaughters","Granddaughters (son's daughters)",20],
+  ["full_brothers","Full brothers",20],["full_sisters","Full sisters",20],
+  ["paternal_brothers","Paternal half-brothers",20],["paternal_sisters","Paternal half-sisters",20],
+  ["maternal_siblings","Maternal half-siblings",20]
+];
+
+const state = {estate:"", husband:false,father:false,mother:false,
+  paternal_grandfather:false,paternal_grandmother:false,maternal_grandmother:false};
+COUNTERS.forEach(([k])=>state[k]=0);
+
+const money = n => Number(n||0).toLocaleString("en-PK",{maximumFractionDigits:0});
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// toggles
+const tg = document.getElementById("toggles");
+TOGGLES.forEach(([k,label])=>{
+  const b=document.createElement("button");
+  b.type="button"; b.className="tog"; b.textContent=label;
+  b.onclick=()=>{state[k]=!state[k]; b.classList.toggle("on",state[k]);};
+  tg.appendChild(b);
+});
+
+// counters
+const cn = document.getElementById("counters");
+COUNTERS.forEach(([k,label,max])=>{
+  const row=document.createElement("div"); row.className="row";
+  row.innerHTML='<span>'+label+'</span>';
+  const box=document.createElement("div"); box.className="step";
+  const minus=document.createElement("button"); minus.type="button"; minus.textContent="−";
+  const val=document.createElement("b"); val.textContent="0";
+  const plus=document.createElement("button"); plus.type="button"; plus.textContent="+";
+  minus.onclick=()=>{state[k]=Math.max(0,state[k]-1); val.textContent=state[k]; minus.disabled=state[k]===0;};
+  plus.onclick=()=>{state[k]=Math.min(max,state[k]+1); val.textContent=state[k]; minus.disabled=false;};
+  minus.disabled=true;
+  box.append(minus,val,plus); row.appendChild(box); cn.appendChild(row);
+});
+
+const estateEl=document.getElementById("estate");
+estateEl.addEventListener("input",e=>{e.target.value=e.target.value.replace(/[^\d]/g,"");});
+
+document.getElementById("f").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const err=document.getElementById("err");
+  err.classList.add("hide");
+  const estate=Number(estateEl.value||0);
+  if(!estate){ err.textContent="Enter the net estate value in PKR."; err.classList.remove("hide"); return; }
+  const anyHeir=TOGGLES.some(([k])=>state[k]) || COUNTERS.some(([k])=>state[k]>0);
+  if(!anyHeir){ err.textContent="Select at least one heir."; err.classList.remove("hide"); return; }
+
+  const btn=document.getElementById("go"); btn.disabled=true; btn.textContent="Calculating…";
+  try{
+    const payload={estate}; Object.keys(state).forEach(k=>{ if(k!=="estate") payload[k]=state[k]; });
+    const res=await fetch("/api/faraid/",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(!res.ok){ err.textContent=data.error||"Calculation failed."; err.classList.remove("hide"); btn.disabled=false; btn.textContent="Calculate shares"; return; }
+    render(data);
+  }catch(_){ err.textContent="Network error. Please try again."; err.classList.remove("hide"); }
+  btn.disabled=false; btn.textContent="Calculate shares";
+});
+
+function render(d){
+  document.getElementById("out").classList.remove("hide");
+  document.getElementById("estateLabel").textContent="PKR "+money(d.estate);
+  const tb=document.getElementById("tbody"); tb.innerHTML="";
+  d.results.forEach(r=>{
+    const tr=document.createElement("tr");
+    const each = r.count>1 ? '<div class="small">'+money(r.per_person)+" each</div>" : "";
+    tr.innerHTML="<td><b>"+esc(r.heir)+"</b>"+(r.count>1?" × "+r.count:"")+each+"</td>"+
+      '<td class="r">'+esc(r.share)+'<div class="small">'+r.percent+"%</div></td>"+
+      '<td class="r">'+money(r.amount)+"</td>";
+    tb.appendChild(tr);
+  });
+  document.getElementById("total").textContent=money(d.distributed);
+
+  const notes=document.getElementById("notes"); notes.innerHTML="";
+  (d.notes||[]).forEach(n=>{ const p=document.createElement("div"); p.className="note"; p.textContent="• "+n; notes.appendChild(p); });
+  (d.warnings||[]).forEach(n=>{ const p=document.createElement("div"); p.className="warn"; p.textContent="⚠ "+n; notes.appendChild(p); });
+
+  document.getElementById("disc").textContent=(d.disclaimer||"")+" "+(d.wasiyyah_hint||"");
+  document.getElementById("out").scrollIntoView({behavior:"smooth",block:"start"});
+}
+</script>
+</body>
+</html>

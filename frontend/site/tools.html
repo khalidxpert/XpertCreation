@@ -1173,6 +1173,14 @@ var Tools = (function(){
   })();
 
   var TOOLS = [
+  { id:"faraid", g:"money", e:"\uD83D\uDD4C", c:"#059669", href:"/tools/faraid-calculator/",
+    name:"Faraid calculator", blurb:"Islamic inheritance shares, Hanafi rules",
+    keys:"faraid inheritance waris miras islamic estate share mother father wife son daughter urdu" },
+
+  { id:"legaldocs", g:"money", e:"\uD83D\uDCC4", c:"#B45309", href:"/legal-documents/",
+    name:"Legal documents", blurb:"Rent agreement, affidavit, NDC \u2014 print-ready",
+    keys:"legal document rent agreement affidavit sale power of attorney ndc society stamp paper" },
+
   { id:"calc", g:"maths", e:"\uD83D\uDD22", c:"#7C3AED",
     name:"Scientific calculator", blurb:"Powers, roots, trig, log, factorial",
     keys:"calculator maths trig sin cos log power root",
@@ -1467,43 +1475,66 @@ var Tools = (function(){
     }},
 
   { id:"fbrtax", g:"money", e:"\uD83C\uDDF5\uD83C\uDDF0", c:"#01411C",
-    name:"FBR salary tax", blurb:"Income tax on annual salary, current slabs",
-    keys:"fbr tax income salary pakistan withholding slab 2025 2026",
+    name:"Salary tax & take-home", blurb:"FBR tax, EOBI, PF \u2014 net pay",
+    keys:"fbr tax income salary pakistan withholding slab 2025 2026 eobi provident fund take home net pay monthly annual",
     form: function(){
-      return '<div class="f"><label for="fy">Tax year</label>'
+      return '<div class="row"><div class="f"><label for="fa">Salary</label>'
+        + '<input id="fa" type="number" inputmode="decimal" placeholder="e.g. 200000"></div>'
+        + '<div class="f"><label for="fp">Per</label><select id="fp">'
+        + '<option value="month">Month</option>'
+        + '<option value="year">Year</option></select></div></div>'
+        + '<div class="f"><label for="fy">Tax year</label>'
         + '<select id="fy"><option value="2025-26">2025\u201326 (current)</option>'
         + '<option value="2026-27">2026\u201327 (from 1 July 2026)</option></select></div>'
-        + '<div class="f"><label for="fa">Annual taxable salary</label>'
-        + '<input id="fa" type="number" inputmode="decimal" placeholder="e.g. 2400000"></div>'
+        + '<div class="row"><div class="f"><label for="fpf">Provident fund %</label>'
+        + '<input id="fpf" type="number" step="any" inputmode="decimal" placeholder="0"></div>'
+        + '<div class="f"><label for="feobi">EOBI</label><select id="feobi">'
+        + '<option value="400">Yes \u2014 Rs 400 / month</option>'
+        + '<option value="370">Yes \u2014 Rs 370 (Balochistan)</option>'
+        + '<option value="0">Not deducted</option></select></div></div>'
         + '<button class="go5" data-run>Calculate</button>';
     },
     run: function(){
       var a = num("fa");
+      var per = val("fp") || "month";
       var yr = val("fy") || "2026-27";
-      if (a <= 0) throw new Error("Enter your annual salary.");
-      var r = Tools.fbrTax(a, yr);
+      if (a <= 0) throw new Error("Enter your salary.");
+      var annual = per === "month" ? a * 12 : a;
+      var r = Tools.fbrTax(annual, yr);
+
+      var eobi = parseFloat(val("feobi")) || 0;
+      var pfPct = num("fpf");
+      var pfMonth = annual * (pfPct / 100) / 12;
+      var taxMonth = r.tax / 12;
+      var netMonth = annual / 12 - taxMonth - eobi - pfMonth;
+      var netAnnual = annual - r.tax - eobi * 12 - pfMonth * 12;
 
       var rows = [];
       if (r.fixed || r.variable){
         rows.push(["Fixed amount for this slab", money(r.fixed)]);
-        rows.push(["Income above Rs " + r.base.toLocaleString("en-PK"),
-                   money(r.excess)]);
+        rows.push(["Income above Rs " + r.base.toLocaleString("en-PK"), money(r.excess)]);
         rows.push([r.rate + "% of that amount", money(r.variable)]);
-        rows.push(["Fixed + variable", money(r.fixed) + " + " + money(r.variable)
-                   + " = " + money(r.tax)]);
       }
-      rows.push(["Monthly tax", money(Math.round(r.tax / 12))]);
-      rows.push(["Take-home (annual)", money(a - r.tax)]);
-      rows.push(["Slab used", r.slab]);
+      rows.push(["Annual gross salary", money(annual)]);
+      rows.push(["Annual income tax", money(r.tax)]);
+      rows.push(["Tax per month", money(Math.round(taxMonth))]);
+      rows.push(["EOBI per month", money(eobi)]);
+      if (pfMonth > 0){
+        rows.push(["Provident fund per month", money(Math.round(pfMonth))]);
+      }
 
-      big(money(r.tax), "Tax for " + yr, rows,
-        "Based on Section 149, Division I, Part I of the First Schedule. "
-        + "The 2026\u201327 slabs apply from 1 July 2026 under the Finance "
-        + "Act 2026. This does not account for tax credits, other income, or "
-        + "the 9% surcharge that still applies to non-salaried individuals "
-        + "earning above Rs 10 million. Confirm with FBR or your accountant "
-        + "before filing.");
+      big(money(Math.round(netMonth)), "Net take-home / month", rows,
+        "Slab: " + r.slab + ". Effective tax rate: "
+        + (annual ? (r.tax / annual * 100).toFixed(1) : "0") + "%. "
+        + "Net annual: " + money(Math.round(netAnnual)) + ". "
+        + "EOBI is 1% of the notified minimum wage, not of your salary "
+        + "(Rs 400 where the minimum wage is Rs 40,000; Rs 370 in Balochistan). "
+        + "Provident fund is shown as a deduction only \u2014 it is not applied as a tax credit here. "
+        + "Based on Section 149, Division I, Part I of the First Schedule; the 2026\u201327 slabs "
+        + "apply from 1 July 2026. Does not cover tax credits, other income, or the 9% surcharge "
+        + "above Rs 10 million. Confirm with FBR or your accountant before filing.");
     }},
+
   { id:"salary", g:"money", e:"\uD83D\uDCBC", c:"#1B4DFF",
     name:"Salary converter", blurb:"Hourly, daily, monthly, yearly",
     keys:"salary wage pay hourly monthly annual income",

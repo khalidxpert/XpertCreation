@@ -46,6 +46,7 @@ ALLOWED_HOSTS = [h.strip() for h in env("ALLOWED_HOSTS", "learn.xpertcreation.co
 # Application definition
 
 INSTALLED_APPS = [
+    "xpert_legacy",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -314,4 +314,16 @@
   <url><loc>https://xpertcreation.com/rishta</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://xpertcreation.com/food</loc><lastmod>2026-10-17</lastmod></url>
   <url><loc>https://xpertcreation.com/wheels</loc><lastmod>2026-10-17</lastmod></url>
+  <url>
+    <loc>https://xpertcreation.com/tools/faraid-calculator/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xpertcreation.com/legal-documents/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
