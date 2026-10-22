@@ -154,7 +154,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 </style>
 <script src="/js/voice-1.js?v=1"></script>
 <style>/* group roles */.who.rk-owner,b.rk-owner{color:#B7791F;font-weight:800}.who.rk-admin,b.rk-admin{color:#2563EB;font-weight:800}.who.rk-mod,b.rk-mod{color:#16A34A;font-weight:800}b.rk-mem{font-weight:600}</style>
-<link rel="stylesheet" href="/css/xpertchat-1.css?v=2">
+<link rel="stylesheet" href="/css/xpertchat-1.css?v=3">
 </head>
 <body>
 <header class="top">
@@ -294,7 +294,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function pollNow(){
     api("/groups/" + gid + "/?after=" + last).then(function(x){ if (x.ok){ add(x.data.messages); showPins(x.data.pinned); } });
   }
-  window.XCG = {send: function(b, f){ send(b, f); }, gid: function(){ return gid; }};
+  window.XCG = {send: function(b, f){ send(b, f); }, gid: function(){ return gid; }, members: function(){ return (G && G.members) || []; }, role: function(){ return G && G.my_role; }};
   function send(body, file){
     if (sending) return;
     var fd = null;
@@ -602,6 +602,6 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
 </footer>
 
-<script src="/js/xpertchat-1.js?v=2" defer></script>
+<script src="/js/xpertchat-1.js?v=3" defer></script>
 </body>
 </html>

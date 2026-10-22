@@ -181,6 +181,139 @@
 
   // ---------- my stickers: chats (chat.html) and groups (group.html) ----------
   if (page !== "chat" && page !== "group") return;
+  // ---------- message actions: reply, reply privately, forward, copy, save, delete (setup_xpertchat_v3) ----------
+  var LAST = null, REPLY = null;
+  function toast(t){ var d = D.createElement("div"); d.className = "xctoast"; d.textContent = t; B.appendChild(d); setTimeout(function(){ d.remove(); }, 2600); }
+  function napi(p, body){ return fetch("/api/notify/" + p, {method: body === undefined ? "GET" : "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: body === undefined ? undefined : JSON.stringify(body)})
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); }); }
+  var BUB = page === "chat" ? ".msg8[data-mid]" : ".gm[data-mid]";
+  function info(el){
+    var mid = +el.getAttribute("data-mid"), mine = el.classList.contains(page === "chat" ? "mine" : "me");
+    var who = page === "chat" ? (mine ? "You" : ((window.XC3 && XC3.cur && XC3.cur() || {}).with || "")) : (mine ? "You" : ((el.querySelector(".who") || {}).textContent || "").replace(/^[^\w؀-ۿ]+/, "").trim());
+    var tx = el.querySelector(".cb") ? el.querySelector(".cb").innerText : (function(){ var c = el.cloneNode(true); [].forEach.call(c.querySelectorAll(".who,small,.xcq,.xcfw"), function(x){ x.remove(); }); return c.innerText; })();
+    var img = el.querySelector("img.cimg,img.gi,img.stk3,img.gs");
+    tx = (tx || "").trim();
+    return {mid: mid, mine: mine, who: who, text: tx, img: img ? img.getAttribute("src") : "", sticker: !!el.querySelector("img.stk3,img.gs"),
+            kind: el.querySelector(".xcvoice,audio") ? "Voice message" : (el.querySelector(".cfile,.gf") ? "File" : (img ? (el.querySelector("img.stk3,img.gs") ? "Sticker" : "Photo") : ""))};
+  }
+  D.addEventListener("click", function(e){ var b = e.target.closest && e.target.closest(BUB); if (b) LAST = info(b); }, true);
+  // a tap on a photo or sticker opens the actions too (instead of jumping straight to the full picture)
+  D.addEventListener("click", function(e){
+    var im = e.target.closest && e.target.closest("img.cimg,img.gi,img.stk3,img.gs"); if (!im) return;
+    var b = im.closest(BUB); if (!b || B.classList.contains("selmode")) return;
+    e.preventDefault(); e.stopPropagation(); LAST = info(b); actionSheet(LAST, true);
+  }, true);
+  // add our buttons to the message menus that open on a tap
+  new MutationObserver(function(){
+    var p = page === "chat" ? (D.getElementById("panel3") && D.querySelector("#panel3 [data-pin3]") && D.getElementById("panel3")) : (D.getElementById("gp") && D.querySelector("#gp [data-copytxt]") && D.getElementById("gp"));
+    if (!p || p.querySelector(".xcacts") || !LAST) return;
+    var host = page === "chat" ? (p.querySelector(".ct3") || p) : (p.querySelector(".gacts") || p);
+    var w = D.createElement("div"); w.className = "xcacts"; w.innerHTML = btns(LAST, false);
+    host.insertBefore(w, host.firstChild); wire(w, LAST, function(){ p.remove(); });
+  }).observe(B, {childList: true, subtree: true});
+  function btns(m, full){
+    var g = page === "group", admin = g && window.XCG && XCG.role && XCG.role() === "admin";
+    return (full && m.img ? '<a class="xcab" href="' + esc(m.img) + '" target="_blank" rel="noopener">🔍 View full size</a>' : '')
+      + '<button class="xcab" data-xa="reply">↩️ Reply</button>'
+      + (g && !m.mine ? '<button class="xcab" data-xa="private">🔒 Reply privately</button>' : '')
+      + '<button class="xcab" data-xa="fwd">↪️ Forward</button>'
+      + (full && m.text ? '<button class="xcab" data-xa="copy">📋 Copy text</button>' : '')
+      + (m.img ? '<a class="xcab" data-xa="save" href="' + esc(m.img) + '" download>⬇ Save ' + (m.sticker ? "sticker" : "photo") + '</a>' : '')
+      + (g && (m.mine || admin) ? '<button class="xcab red" data-xa="gdel">🗑 Delete for everyone</button>' : '')
+      + (full ? '<button class="xcab" data-xa="more">\u22EF Pin, edit, delete and more</button>' : '');
+  }
+  function wire(w, m, done){
+    w.addEventListener("click", function(e){
+      var a = e.target.closest("[data-xa]"); if (!a) return; var k = a.getAttribute("data-xa");
+      if (k === "save"){ setTimeout(done, 50); return; }
+      e.preventDefault(); e.stopPropagation(); done();
+      if (k === "more"){ var el0 = D.querySelector(BUB.replace("[data-mid]", '[data-mid="' + m.mid + '"]')); if (el0) setTimeout(function(){ el0.click(); }, 60); return; }
+      if (k === "reply") startReply(m);
+      else if (k === "copy"){ if (navigator.clipboard) navigator.clipboard.writeText(m.text); toast("Copied"); }
+      else if (k === "fwd") forwardSheet(m);
+      else if (k === "private") napi("groups/" + XCG.gid() + "/messages/" + m.mid + "/private/", {}).then(function(r){
+        if (!r.ok){ toast(r.d.detail || "Could not open the chat."); return; }
+        if (r.d.thread){ try { sessionStorage.setItem("xc_prefill", "Re your message in the group: “" + (m.text || m.kind).slice(0, 80) + "”\n"); } catch (x) {} location.href = "/chat?open=" + r.d.thread; return; }
+        if (confirm("You and " + r.d.name + " are not connected yet. Open their profile to send a connect request?")) location.href = r.d.slug ? "/in/" + r.d.slug : "/people";
+      });
+      else if (k === "gdel"){ if (!confirm("Delete this message for everyone in the group?")) return;
+        napi("groups/" + XCG.gid() + "/messages/" + m.mid + "/delete/", {}).then(function(r){ if (!r.ok){ toast(r.d.detail || "Could not delete."); return; } var el = D.querySelector('.gm[data-mid="' + m.mid + '"]'); if (el) el.remove(); toast("Deleted"); }); }
+    });
+  }
+  function actionSheet(m, full){
+    var s = sheet(m.kind ? m.kind : "Message"); s.el.innerHTML = '<div class="xcacts col">' + btns(m, full) + '</div>';
+    wire(s.el, m, s.close);
+  }
+  // ---- reply (quoted)
+  function composer(){ return page === "chat" ? D.getElementById("cinput") : D.getElementById("gq"); }
+  function startReply(m){
+    REPLY = m; var c = composer(); if (!c) return;
+    var bar = D.getElementById("xcrep");
+    if (!bar){ bar = D.createElement("div"); bar.id = "xcrep"; var host = page === "chat" ? D.getElementById("reply4") : D.getElementById("gform"); if (!host) return; host.parentNode.insertBefore(bar, host); }
+    bar.innerHTML = '<div class="xcq"><b>' + esc(m.who || "Message") + '</b><span>' + esc((m.text || m.kind || "").slice(0, 120)) + '</span></div><button type="button" aria-label="Cancel reply">×</button>';
+    bar.querySelector("button").onclick = stopReply; c.focus();
+  }
+  function stopReply(){ REPLY = null; var b = D.getElementById("xcrep"); if (b) b.remove(); }
+  function tag(){ var c = composer(); if (REPLY && c && c.value.trim() && !/^\[re:\d+\]/.test(c.value)){ c.value = "[re:" + REPLY.mid + "] " + c.value; setTimeout(stopReply, 30); } }
+  D.addEventListener("click", function(e){ if (e.target.closest && e.target.closest(page === "chat" ? "#csend" : "#gsend")) tag(); }, true);
+  D.addEventListener("keydown", function(e){ if (e.key === "Enter" && !e.shiftKey && e.target === composer()) tag(); }, true);
+  // ---- show quotes, "Forwarded" and @mentions inside the bubbles
+  function names(){ return (window.XCG && XCG.members ? XCG.members() : []).map(function(x){ return x.name; }).filter(Boolean).sort(function(a, b){ return b.length - a.length; }); }
+  function decorate(el){
+    if (el.getAttribute("data-xcd")) return; el.setAttribute("data-xcd", "1");
+    var host = el.querySelector(".cb") || el, h = host.innerHTML, m = h.match(/\[re:(\d+)\]\s*/);
+    if (m){
+      var o = D.querySelector(BUB.replace("[data-mid]", '[data-mid="' + m[1] + '"]')), oi = o ? info(o) : null;
+      h = h.replace(m[0], '<div class="xcq" data-jump="' + m[1] + '"><b>' + esc(oi ? oi.who : "Reply") + '</b><span>' + esc(oi ? (oi.text || oi.kind).slice(0, 90) : "Earlier message") + '</span></div>');
+    }
+    h = h.replace(/\[fwd\]\s*/, '<div class="xcfw">↪ Forwarded</div>');
+    if (page === "group" && h.indexOf("@") > -1){
+      h = h.replace(/(^|[\s>])@(all|everyone)\b/gi, '$1<b class="xcmen">@$2</b>');
+      names().forEach(function(n){ var re = new RegExp("(^|[\\s>])@(" + n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi"); h = h.replace(re, '$1<b class="xcmen">@$2</b>'); });
+    }
+    if (h !== host.innerHTML) host.innerHTML = h;
+  }
+  function decorateAll(){ [].forEach.call(D.querySelectorAll(BUB + ":not([data-xcd])"), decorate); }
+  new MutationObserver(decorateAll).observe(B, {childList: true, subtree: true}); decorateAll();
+  D.addEventListener("click", function(e){ var j = e.target.closest && e.target.closest("[data-jump]"); if (!j) return; e.stopPropagation();
+    var o = D.querySelector(BUB.replace("[data-mid]", '[data-mid="' + j.getAttribute("data-jump") + '"]')); if (o){ o.scrollIntoView({block: "center", behavior: "smooth"}); o.classList.add("xcflash"); setTimeout(function(){ o.classList.remove("xcflash"); }, 1500); } }, true);
+  // ---- forward
+  function forwardSheet(m){
+    var s = sheet("↪️ Forward to…"); s.el.innerHTML = '<p class="note">Loading your chats…</p>';
+    Promise.all([napi("threads/"), napi("groups/")]).then(function(r){
+      var rows = ((r[0].d || {}).threads || []).map(function(t){ return ["t", t.id, t.with, t.avatar, t.about || ""]; })
+        .concat(((r[1].d || {}).groups || []).map(function(g){ return ["g", g.id, g.name, g.photo, "Group"]; }));
+      if (!rows.length){ s.el.innerHTML = '<p class="note">You have no chats or groups yet.</p>'; return; }
+      s.el.innerHTML = '<input type="search" class="xcfs" placeholder="Search"><div class="xcfl">' + rows.map(function(x){ return '<label class="xcfr"><input type="checkbox" value="' + x[0] + ":" + x[1] + '">'
+        + (x[3] ? '<img src="' + esc(x[3]) + '" alt="">' : '<span class="av">' + esc((x[2] || "?").charAt(0)) + '</span>') + '<span><b>' + esc(x[2]) + '</b><small>' + esc(x[4]) + '</small></span></label>'; }).join("") + '</div>'
+        + '<p class="note">Choose up to 5.</p><button class="bt p" data-go style="width:100%">➤ Send</button>';
+      s.el.querySelector(".xcfs").oninput = function(){ var q = this.value.toLowerCase(); s.el.querySelectorAll(".xcfr").forEach(function(l){ l.style.display = l.textContent.toLowerCase().indexOf(q) > -1 ? "" : "none"; }); };
+      s.el.addEventListener("change", function(e){ var on = s.el.querySelectorAll(".xcfr input:checked"); if (on.length > 5){ e.target.checked = false; toast("Up to 5 at a time"); } });
+      s.el.querySelector("[data-go]").onclick = function(){
+        var to = [].map.call(s.el.querySelectorAll(".xcfr input:checked"), function(i){ var p = i.value.split(":"); return [p[0], +p[1]]; });
+        if (!to.length){ toast("Choose a chat first"); return; } this.disabled = true;
+        napi("forward/", {src: page === "chat" ? "t" : "g", mid: m.mid, to: to}).then(function(r){ s.close(); toast(r.ok ? "✔ Forwarded to " + r.d.sent + (r.d.problems && r.d.problems.length ? " (" + r.d.problems.join("; ") + ")" : "") : (r.d.detail || "Could not forward.")); });
+      };
+    });
+  }
+  // a private reply arrives with a short note already typed
+  if (page === "chat"){ var pf = null; try { pf = sessionStorage.getItem("xc_prefill"); sessionStorage.removeItem("xc_prefill"); } catch (x) {}
+    if (pf) var pfi = setInterval(function(){ var c = D.getElementById("cinput"); if (c && B.classList.contains("inchat")){ c.value = pf; c.focus(); clearInterval(pfi); } }, 400); }
+  // ---- @mentions: a list of members while typing @ in a group
+  if (page === "group"){
+    D.addEventListener("input", function(e){
+      if (e.target.id !== "gq") return; var q = e.target, v = q.value.slice(0, q.selectionStart), m = v.match(/(^|\s)@([^\s@]{0,20})$/);
+      var box = D.getElementById("xcmen"); if (!m){ if (box) box.remove(); return; }
+      var t = m[2].toLowerCase(), mem = (XCG.members ? XCG.members() : []).filter(function(x){ return !x.me && x.name && x.name.toLowerCase().indexOf(t) > -1; }).slice(0, 8);
+      var all = XCG.role && XCG.role() === "admin" && "all".indexOf(t) === 0;
+      if (!mem.length && !all){ if (box) box.remove(); return; }
+      if (!box){ box = D.createElement("div"); box.id = "xcmen"; var f = D.getElementById("gform"); f.parentNode.insertBefore(box, f); }
+      box.innerHTML = (all ? '<button data-men="all"><span class="av">@</span><b>all</b><small>Tell everyone in the group</small></button>' : '')
+        + mem.map(function(x){ return '<button data-men="' + esc(x.name) + '">' + (x.avatar ? '<img src="' + esc(x.avatar) + '" alt="">' : '<span class="av">' + esc(x.name.charAt(0)) + '</span>') + '<b>' + esc(x.name) + '</b>' + (x.role === "admin" ? '<small>Admin</small>' : '') + '</button>'; }).join("");
+      box.onclick = function(ev){ var b = ev.target.closest("[data-men]"); if (!b) return; var n = b.getAttribute("data-men"), pos = q.selectionStart, before = q.value.slice(0, pos).replace(/@([^\s@]{0,20})$/, "@" + n + " ");
+        q.value = before + q.value.slice(pos); q.focus(); q.selectionStart = q.selectionEnd = before.length; box.remove(); };
+    });
+  }
   var BUILTIN = "salam jazakallah shukriya mubarak inshaallah mashaallah alhamdulillah ameen eid ramadan ok thanks congrats welcome goodnight haha".split(" ");
   var MY = null, loading = null;
   function api(p, opt){ opt = opt || {}; var h = {"X-CSRFToken": ck("xc_csrf")}; if (opt.json){ h["Content-Type"] = "application/json"; }
@@ -202,6 +335,7 @@
     if (!MY){ load(); return '<p style="color:#5A657C;font-size:13px">Loading…</p>'; }
     return '<div class="xcmy' + (window.XCStkEdit ? ' edit' : '') + '"><button type="button" class="mk" data-mkstk><span>➕</span>Make a sticker</button>'
       + MY.map(function(s){ return '<button type="button" data-mystk="' + esc(s.url) + '"><img src="' + esc(s.url) + '" alt="My sticker" loading="lazy">' + (s.anim ? '<i class="an">GIF</i>' : '') + '<span class="rm" data-rmstk="' + esc(s.name) + '">×</span></button>'; }).join("") + '</div>'
+      + (MY.length ? '<p style="margin:8px 0 0;font-size:13px"><a href="/api/notify/stickers/pack/" download style="color:#16A34A;font-weight:800">\u2B07 Download my sticker pack</a> <span style="color:#5A657C">(for WhatsApp, Telegram and Discord)</span></p>' : '')
       + (MY.length ? '<p style="text-align:right;margin:6px 0 0"><button type="button" data-edstk style="border:0;background:none;color:#1B4DFF;font-weight:700;cursor:pointer">' + (window.XCStkEdit ? "Done" : "Remove stickers") + '</button></p>'
         : '<p style="font-size:12.5px;color:#5A657C;margin:6px 2px 0">Turn a photo or a few seconds of video into your own sticker. They show on every phone you sign in on.</p>');
   }
@@ -261,7 +395,7 @@
     var s = sheet("✨ Make a sticker"), el = s.el;
     el.innerHTML = '<div class="stkmk"><div class="tb"><button data-mode="photo" class="on">📷 From a photo</button><button data-mode="video">🎬 Animated, from a video</button></div>'
       + '<div class="cvw"><canvas width="512" height="512"></canvas><video playsinline muted loop hidden></video></div>'
-      + '<div class="row"><label class="bt p" style="margin:0"><span data-pick>📷 Choose a photo</span><input type="file" accept="image/*" hidden></label></div>'
+      + '<div class="row"><label class="bt p" style="margin:0"><span data-pick>📷 Choose a photo</span><input type="file" accept="image/*" hidden data-in="pick"></label><label class="bt" style="margin:0"><span data-cam>\uD83E\uDD33 Take a photo</span><input type="file" accept="image/*" capture="user" hidden data-in="cam"></label></div>'
       + '<div class="row" data-g="shape"><button data-v="circle" class="on">⚪ Circle</button><button data-v="round">▢ Rounded</button><button data-v="cut" data-only="photo">✂️ Cut out background</button><button data-v="full" data-only="video">⬛ Square</button></div>'
       + '<div class="row"><span class="lb">Zoom</span><input type="range" min="60" max="300" value="100" data-k="zoom"></div>'
       + '<div class="vrow" hidden><div class="row"><span class="lb">Start at</span><input type="range" min="0" max="100" value="0" step="0.1" data-k="start"><b data-k="startl">0.0s</b></div>'
@@ -325,7 +459,8 @@
       st.mode = m; st.dx = st.dy = 0; file = null; img = null; cutMask = null; vid.removeAttribute("src");
       el.querySelectorAll("[data-mode]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-mode") === m); });
       el.querySelector("[data-pick]").textContent = m === "video" ? "🎬 Choose a video" : "📷 Choose a photo";
-      el.querySelector("input[type=file]").accept = m === "video" ? "video/*" : "image/*";
+      el.querySelector("[data-cam]").textContent = m === "video" ? "\uD83C\uDFA5 Record a clip" : "\uD83E\uDD33 Take a photo";
+      el.querySelectorAll("input[type=file]").forEach(function(i){ i.accept = m === "video" ? "video/*" : "image/*"; });
       el.querySelector(".vrow").hidden = m !== "video";
       el.querySelectorAll("[data-only]").forEach(function(b){ b.hidden = b.getAttribute("data-only") !== m; });
       if (st.shape === "cut" && m === "video" || st.shape === "full" && m === "photo") el.querySelector('[data-g="shape"] [data-v="circle"]').click();
@@ -333,13 +468,14 @@
       render(); if (m === "video") loop(); else cancelAnimationFrame(raf);
     }
     el.querySelectorAll("[data-mode]").forEach(function(b){ b.onclick = function(){ setMode(b.getAttribute("data-mode")); }; });
-    el.querySelector("input[type=file]").onchange = function(){
+    var onPick = function(){
       var f = this.files[0]; if (!f) return; file = f;
       if (st.mode === "video"){
         if (f.size > 40 * 1024 * 1024){ alert("That video is over 40 MB. Choose a shorter one."); return; }
         vid.src = URL.createObjectURL(f); vid.onloadedmetadata = function(){ var r = el.querySelector('[data-k="start"]'); r.max = Math.max(0, (vid.duration || 0) - 1).toFixed(1); st.start = 0; r.value = 0; vid.currentTime = 0; vid.play().catch(function(){}); loop(); };
       } else { var im = new Image(); im.onload = function(){ img = im; cutMask = null; st.dx = st.dy = 0; if (st.shape === "cut") cut(); render(); }; im.src = URL.createObjectURL(f); }
     };
+    el.querySelectorAll("input[type=file]").forEach(function(i){ i.onchange = onPick; });
     el.querySelectorAll("[data-g] button").forEach(function(b){ b.onclick = function(){ var g = b.parentNode.getAttribute("data-g"); b.parentNode.querySelectorAll("button").forEach(function(z){ z.classList.toggle("on", z === b); });
       var v = b.getAttribute("data-v"); st[g] = g === "dur" ? +v : (g === "font" ? +v : v);
       if (g === "shape" && v === "cut" && img && !cutMask) cut(); if (g === "dur") vid.currentTime = st.start; render(); }; });

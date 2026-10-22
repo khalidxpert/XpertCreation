@@ -188,7 +188,7 @@ def groups(request):
             unread = GroupMessage.objects.filter(group=g, id__gt=m.last_read_id).exclude(author=u).count()
             txt = ""
             if last:
-                txt = (last.body[:60] if not last.body.startswith("[sticker:") else "\U0001F3F7 Sticker") or ("\U0001F4F7 Photo" if last.image else ("\U0001F4C4 " + last.attachment_name if last.attachment else ("\U0001F3A4 Voice message" if last.voice else "")))
+                txt = (__import__("notifications.msgx", fromlist=["clean"]).clean(last.body)[:60] if not last.body.startswith("[sticker:") else "\U0001F3F7 Sticker") or ("\U0001F4F7 Photo" if last.image else ("\U0001F4C4 " + last.attachment_name if last.attachment else ("\U0001F3A4 Voice message" if last.voice else "")))
                 if last.bot:
                     txt = "\U0001F916 " + txt
                 elif last.author_id and not last.system:

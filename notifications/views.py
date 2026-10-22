@@ -221,7 +221,7 @@ def my_threads(request):
             "id": t.id, "context": t.context, "ref_id": t.ref_id,
             "with": _name(other), "avatar": _avatar(other),
             "about": titles.get(t.ref_id, "") if t.context == "donate" else CONTEXT_LABEL.get(t.context, ""),
-            "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else last.body[:80]) or ("\U0001F4F7 Photo" if last.image else "") or (("\U0001F4C4 " + last.attachment_name) if last.attachment else "") or ("\U0001F3A4 Voice message" if last.voice else "")) if last else "",
+            "last": (("\U0001F3F7 Sticker" if last.body.startswith("[sticker:") else __import__("notifications.msgx", fromlist=["clean"]).clean(last.body)[:80]) or ("\U0001F4F7 Photo" if last.image else "") or (("\U0001F4C4 " + last.attachment_name) if last.attachment else "") or ("\U0001F3A4 Voice message" if last.voice else "")) if last else "",
             "unread": unread, "disappear": t.disappear_hours,
             "updated": t.updated_at.strftime("%d %b, %H:%M"),
         })
