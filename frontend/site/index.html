@@ -85,6 +85,34 @@ a{color:inherit;text-decoration:none}
 .hero .primary:active{transform:scale(.97)}
 .hero .ghost{padding:14px 24px;border-radius:999px;background:var(--card);
   border:1px solid var(--line);font-weight:700;font-size:15px}
+.hero2 h1{max-width:17ch;margin-left:auto;margin-right:auto}.hero2 .h2sub{max-width:46ch}
+.trust2{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.trust2 a{display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;background:var(--card);border:1px solid var(--line);text-decoration:none;color:inherit;text-align:start}
+.trust2 img{width:40px;height:40px;border-radius:50%;object-fit:cover}.trust2 b{display:block;font-size:13px}.trust2 small{display:block;font-size:11.5px;color:var(--ink-soft)}
+.trust2 .gs{min-width:40px;height:40px;padding:0 6px;border-radius:999px;background:#FEF3C7;color:#B45309;display:grid;place-items:center;font-weight:900;font-size:12px}
+.dash2{padding-top:10px}.d2h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.d2hi{font-size:14px;font-weight:600;color:var(--ink-soft)}
+.d2find{position:relative;margin:12px 0 14px}
+.d2find input{width:100%;box-sizing:border-box;padding:14px 16px 14px 44px;border-radius:16px;border:1.5px solid var(--line);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%235A657C' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 15px center;font:inherit;font-size:15.5px;color:var(--ink);outline:none;box-shadow:0 4px 14px rgba(13,20,36,.05)}
+body.rtl .d2find input{padding:14px 44px 14px 16px;background-position:calc(100% - 15px) center}
+.d2find input:focus{border-color:var(--brand)}
+.d2res{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(13,20,36,.16);max-height:340px;overflow:auto;padding:6px}
+.d2res a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;text-decoration:none;color:inherit;font-weight:600;font-size:14.5px}
+.d2res a small{margin-inline-start:auto;color:var(--ink-soft);font-weight:500;font-size:12px}.d2res a.on,.d2res a:hover{background:rgba(27,77,255,.08)}
+.d2res .none{padding:12px;color:var(--ink-soft);font-size:14px}
+.d2tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:700px){.d2tiles{grid-template-columns:1fr 1fr;gap:10px}}
+.d2tiles a{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:4px;min-height:132px;padding:16px;border-radius:22px;background:linear-gradient(150deg,var(--a),var(--b));color:#fff;text-decoration:none;box-shadow:0 10px 24px rgba(13,20,36,.14);transition:transform .15s}
+.d2tiles a:active{transform:scale(.97)}.d2tiles .e{font-size:32px;line-height:1;margin-bottom:auto}.d2tiles b{font-size:16.5px;font-weight:800}.d2tiles small{font-size:12.5px;opacity:.88;line-height:1.35}
+.d2more{margin:24px 0 10px;font-size:17px}
+.d2cats{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+@media(max-width:700px){.d2cats{grid-template-columns:repeat(4,1fr)}}
+.d2cats button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:16px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font:inherit;color:var(--ink);font-size:12.5px;font-weight:700;line-height:1.2;text-align:center}
+.d2cats button .e{font-size:24px;line-height:1}.d2cats button.on{border-color:var(--brand);background:rgba(27,77,255,.07);color:var(--brand)}
+.d2panel{margin-top:12px;padding:14px;border-radius:20px;background:var(--card);border:1px solid var(--line)}
+.d2panel h4{margin:0 0 10px;font-size:15px}.d2grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.d2grid a{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:14px;background:rgba(13,20,36,.035);text-decoration:none;color:inherit;font-weight:700;font-size:14px}
+.d2grid a .e{font-size:20px;line-height:1}.d2grid a:active{transform:scale(.98)}
+body.rtl .hero2 .eyebrow{letter-spacing:0;font-family:inherit;font-size:13px;text-transform:none}
 .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.2;z-index:-1}
 .blob.b1{width:300px;height:300px;background:var(--brand);top:-120px;left:-90px}
 .blob.b2{width:260px;height:260px;background:var(--blood);top:-60px;right:-110px}
@@ -813,6 +841,38 @@ body.signed-in .hello{margin-top:4px}
 
   <div id="bday"></div>
 <div id="pymk"></div>
+<section class="hero hero2">
+    <div class="blob b1"></div><div class="blob b2"></div>
+    <p class="eyebrow" data-i18n="tag2">Free &middot; Made in Pakistan &middot; Open to the world</p>
+    <h1 data-i18n="h1b">One app. Everything you need.</h1>
+    <p class="h2sub" data-i18n="sub2">Learn, earn, buy &amp; sell and connect: courses, jobs, freelance, store, food, cars and 102 free tools, in one free account.</p>
+    <div class="acts">
+      <a class="primary" href="/register" data-i18n="cta3">Create your free account</a>
+      <a class="ghost" href="/tools" data-i18n="cta4">Browse 102 free tools</a>
+    </div>
+    <div class="trust2">
+      <a class="fnd" href="#about"><img src="/brand/ceo-240.webp" alt="" width="40" height="40" onerror="this.remove()"><span><b>Syed Khalid Hussain Shah</b><small data-i18n="fnd">Founder &amp; CEO &middot; Microsoft Certified Professional</small></span></a>
+      <a class="grv" href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><span class="gs">G</span><span><b data-i18n="gtitle">Google reviews</b><small data-i18n="grv">Read our reviews &middot; write one</small></span></a>
+    </div>
+  </section>
+
+  <section class="sec dash2" id="start">
+    <h2 class="d2h"><span data-i18n="d2h">Start here</span><span class="d2hi" id="d2hi"></span></h2>
+    <div class="d2find">
+      <input id="d2q" type="search" autocomplete="off" placeholder="Search 80+ features: jobs, food, Quran, bills&hellip;" aria-label="Search features">
+      <div class="d2res" id="d2res" hidden></div>
+    </div>
+    <div class="d2tiles">
+      <a href="/feed" style="--a:#4F46E5;--b:#312E81"><span class="e">&#129309;</span><b>XpertConnect</b><small data-i18n="t1s">Your network, posts and chat</small></a>
+      <a href="/academy/" style="--a:#00B37E;--b:#046B4E"><span class="e">&#127891;</span><b>XpertAcademy</b><small data-i18n="t2s">Free courses with certificates</small></a>
+      <a href="/jobs" style="--a:#0891B2;--b:#164E63"><span class="e">&#128188;</span><b data-i18n="t3">Jobs</b><small data-i18n="t3s">Jobs, freelance work and your CV</small></a>
+      <a href="/money" style="--a:#16A34A;--b:#14532D"><span class="e">&#128176;</span><b data-i18n="t4">Money &amp; Bills</b><small data-i18n="t4s">Track spending, pay bills</small></a>
+    </div>
+    <h3 class="d2more" data-i18n="d2more">Explore more</h3>
+    <div class="d2cats" id="d2cats" role="tablist"></div>
+    <div class="d2panel" id="d2panel"></div>
+  </section>
+
 <section id="xcshow" hidden style="margin:6px 0 14px" data-v="2">
 <style>
 #xcshow .hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}#xcshow .hd b{font-size:16px;letter-spacing:-.01em}#xcshow .hd>a{margin-left:auto;font-size:12.5px;font-weight:800;color:#F85606;text-decoration:none}
@@ -1032,16 +1092,7 @@ window.addEventListener("load", function(){ setTimeout(function(){
     .catch(function(){});
 })();
 </script>
-<section class="hero">
-    <div class="blob b1"></div><div class="blob b2"></div>
-    <p class="eyebrow" data-i18n="tag">Free courses. Free tools.</p>
-    <h1 data-i18n="h1">Learn Excel, Word and VBA &mdash; free</h1>
-    <p data-i18n="sub">Real courses with certificates, plus languages, 102 everyday tools, a blood bank and games. Built in Lahore, open to everyone.</p>
-    <div class="acts">
-      <a class="primary" href="/academy/" data-i18n="heroCta1">Start learning</a>
-      <a class="ghost" href="/tools" data-i18n="heroCta2">Browse the tools</a>
-    </div>
-  </section>
+
 
   <section class="sec" id="platforms">
     <h2 data-i18n="secH">Our platforms</h2>
@@ -1052,10 +1103,6 @@ window.addEventListener("load", function(){ setTimeout(function(){
     <div class="dots" id="dots"></div>
     <p class="swipehint" data-i18n="swipe">Swipe to see more</p>
 
-    <div class="head" style="margin-top:22px">
-      <h3 data-i18n="allApps">All apps</h3>
-    </div>
-    <div class="tiles" id="tiles"></div>
   </section>
 
   <section class="sec">
@@ -1246,7 +1293,7 @@ window.addEventListener("load", function(){ setTimeout(function(){
     n14:{en:"Support",de:"Hilfe",ur:"سپورٹ",ar:"الدعم",hi:"सहायता",bn:"সাপোর্ট",zh:"支持",es:"Soporte",fr:"Assistance",pt:"Suporte",ru:"Поддержка",tr:"Destek",id:"Dukungan",no:"Støtte"},
     d13:{en:"Headlines from Dawn, Geo and BBC Urdu, and world news too.",de:"Schlagzeilen von Dawn, Geo und BBC Urdu, dazu Weltnachrichten.",ur:"ڈان، جیو اور بی بی سی اردو کی خبریں، اور دنیا بھر کی خبریں بھی۔",ar:"عناوين من داون وجيو وبي بي سي أردو، وأخبار العالم أيضًا.",hi:"डॉन, जियो और बीबीसी उर्दू की खबरें, और विश्व समाचार भी।",bn:"ডন, জিও ও বিবিসি উর্দুর খবর, এবং বিশ্ব সংবাদও।",zh:"来自 Dawn、Geo 和 BBC 乌尔都语的头条新闻，以及国际新闻。",es:"Titulares de Dawn, Geo y BBC Urdu, y noticias del mundo también.",fr:"Titres de Dawn, Geo et BBC Urdu, et l'actualité mondiale aussi.",pt:"Manchetes do Dawn, Geo e BBC Urdu, e notícias do mundo também.",ru:"Заголовки из Dawn, Geo и BBC Urdu, а также мировые новости.",tr:"Dawn, Geo ve BBC Urdu'dan başlıklar, ayrıca dünya haberleri.",id:"Berita utama dari Dawn, Geo, dan BBC Urdu, serta berita dunia.",no:"Overskrifter fra Dawn, Geo og BBC Urdu, og verdensnyheter også."},
     n13:{en:"News",de:"Nachrichten",ur:"خبریں",ar:"الأخبار",hi:"समाचार",bn:"সংবাদ",zh:"新闻",es:"Noticias",fr:"Actualités",pt:"Notícias",ru:"Новости",tr:"Haberler",id:"Berita",no:"Nyheter"},
-    d12:{en:"102 tools: prayer times, world clock, QR codes, GPA, EMI, zakat, BMI, passport photo and more. Works offline.",de:"102 Werkzeuge: Gebetszeiten, Weltuhr, QR-Codes, Notendurchschnitt, Kredit, Zakat, BMI und mehr. Funktioniert offline.",ur:"102 ٹولز: نماز کے اوقات، ورلڈ کلاک، QR کوڈ، قرض، زکوٰة، BMI اور مزید۔",ar:"١٠٢ أداة: مواقيت الصلاة، الساعة العالمية، رموز QR، القرض، الزكاة، والمزيد.",hi:"102 टूल्स: नमाज़ का समय, वर्ल्ड क्लॉक, QR कोड, GPA, लोन, ज़कात, BMI और अधिक।",bn:"৬৯টি টুল: নামাজের সময়, ওয়ার্ল্ড ক্লক, QR কোড, GPA, োণ, যাকাত, BMI ও আরও।",zh:"102 个工具：祈祷时间、世界时钟、二维码、GPA、贷款、天课、BMI 等。",es:"102 herramientas: horas de oracion, reloj mundial, codigos QR, GPA, prestamo, zakat, IMC y mas.",fr:"102 outils : heures de priere, horloge mondiale, codes QR, moyenne, pret, zakat, IMC et plus.",pt:"102 ferramentas: horarios de oracao, relogio mundial, codigos QR, GPA, emprestimo, zakat, IMC e mais.",ru:"102 инструментов: время молитвы, мировые часы, QR-коды, GPA, кредит, закят, ИМТ и другое.",tr:"102 arac: namaz vakitleri, dunya saati, QR kodlari, GPA, kredi, zekat, VKI ve daha fazlasi.",id:"102 alat: waktu salat, jam dunia, kode QR, GPA, pinjaman, zakat, BMI, dan lainnya.",no:"102 verktøy: bønnetider, verdensklokke, QR-koder, GPA, EMI, zakat, BMI, passbilde og mer. Fungerer uten nett."},
+    d12:{en:"102 tools: prayer times, world clock, QR codes, GPA, EMI, zakat, BMI, passport photo and more. Works offline.",de:"102 Werkzeuge: Gebetszeiten, Weltuhr, QR-Codes, Notendurchschnitt, Kredit, Zakat, BMI und mehr. Funktioniert offline.",ur:"102 ٹولز: نماز کے اوقات، ورلڈ کلاک، QR کوڈ، قرض، زکوٰة، BMI اور مزید۔",ar:"١٠٢ أداة: مواقيت الصلاة، الساعة العالمية، رموز QR، القرض، الزكاة، والمزيد.",hi:"102 टूल्स: नमाज़ का समय, वर्ल्ड क्लॉक, QR कोड, GPA, लोन, ज़कात, BMI और अधिक।",bn:"১০২টি টুল: নামাজের সময়, ওয়ার্ল্ড ক্লক, QR কোড, GPA, োণ, যাকাত, BMI ও আরও।",zh:"102 个工具：祈祷时间、世界时钟、二维码、GPA、贷款、天课、BMI 等。",es:"102 herramientas: horas de oracion, reloj mundial, codigos QR, GPA, prestamo, zakat, IMC y mas.",fr:"102 outils : heures de priere, horloge mondiale, codes QR, moyenne, pret, zakat, IMC et plus.",pt:"102 ferramentas: horarios de oracao, relogio mundial, codigos QR, GPA, emprestimo, zakat, IMC e mais.",ru:"102 инструментов: время молитвы, мировые часы, QR-коды, GPA, кредит, закят, ИМТ и другое.",tr:"102 arac: namaz vakitleri, dunya saati, QR kodlari, GPA, kredi, zekat, VKI ve daha fazlasi.",id:"102 alat: waktu salat, jam dunia, kode QR, GPA, pinjaman, zakat, BMI, dan lainnya.",no:"102 verktøy: bønnetider, verdensklokke, QR-koder, GPA, EMI, zakat, BMI, passbilde og mer. Fungerer uten nett."},
     n12:{en:"Tools",de:"Werkzeuge",ur:"ٹولز",ar:"أدوات",hi:"टूल्स",bn:"টুলস",zh:"工具",es:"Herramientas",fr:"Outils",pt:"Ferramentas",ru:"Инструменты",tr:"Araçlar",id:"Alat",no:"Verktøy"},
     aboutText2:{en:"Our founder is a Microsoft Certified Professional and a certified blockchain specialist. The idea behind this platform is simple: nobody should be held back because they cannot afford a licence or a course fee. Learn Excel, Word, PowerPoint and VBA. Learn a language. Use the tools, play the games, find a blood donor. All of it free, and all of it built here.",de:"Unser Gründer ist Microsoft Certified Professional und zertifizierter Blockchain-Spezialist. Der Gedanke dahinter ist einfach: Niemand soll scheitern, weil er sich eine Lizenz oder Kursgebühr nicht leisten kann. Alles hier ist kostenlos und wird hier gebaut.",ur:"ہمارے بانی مائیکروسافٹ سرٹیفائیڈ پروفیشنل اور سرٹیفائیڈ بلاک چین ماہر ہیں۔ سوچ سادہ ہے: کوئی اس لیے نہ رکے کہ لائسنس یا کورس کی فیس نہیں دے سکتا۔ یہاں سب کچھ مفت ہے اور یہیں بنا ہے۔",ar:"مؤسسنا محترف معتمد من مايكروسوفت ومتخصص معتمد في البلوك تشين. الفكرة بسيطة: ألا يتوقف أحد لأنه لا يقدر على ثمن ترخيص أو دورة. كل شيء هنا مجاني وصُنع هنا.",hi:"हमारे संस्थापक माइक्रोसॉफ्ट सर्टिफाइड प्रोफेशनल और सर्टिफाइड ब्लॉकचेन विशेषज्ञ हैं। सोच सरल है: कोई इसलिए न रुके कि लाइसेंस या कोर्स फीस नहीं दे सकता। यहाँ सब मुफ़्त है।",bn:"আমাদের প্রতিষ্ঠাতা মাইক্রোসফট সার্টিফাইড প্রফেশনাল ও সার্টিফাইড ব্লকচেইন বিশেষজ্ঞ। ভাবনাটি সহজ: লাইসেন্স বা কোর্স ফি দিতে না পারায় কেউ যেন আটকে না যায়। এখানে সবই বিনামূল্যে।",zh:"创始人是微软认证专家和区块链认证专家。理念很简单：不该有人因为付不起授权费或课程费而止步。这里的一切都免费。",es:"Nuestro fundador es Microsoft Certified Professional y especialista certificado en blockchain. La idea es simple: nadie debería quedarse atrás por no poder pagar una licencia o un curso. Todo aquí es gratis.",fr:"Notre fondateur est Microsoft Certified Professional et spécialiste certifié en blockchain. L'idée est simple : personne ne devrait être bloqué faute de pouvoir payer une licence ou un cours. Tout ici est gratuit.",pt:"O nosso fundador é Microsoft Certified Professional e especialista certificado em blockchain. A ideia é simples: ninguém deve ficar para trás por não poder pagar uma licença ou um curso. Aqui tudo é grátis.",ru:"Основатель — сертифицированный специалист Microsoft и по блокчейну. Идея проста: никто не должен остановиться из-за того, что не может оплатить лицензию или курс. Здесь всё бесплатно.",tr:"Kurucumuz Microsoft Sertifikalı Profesyonel ve sertifikalı blok zinciri uzmanıdır. Fikir basit: kimse lisans ya da kurs ücretini karşılayamadığı için geride kalmamalı. Burada her şey ücretsiz.",id:"Pendiri kami adalah Microsoft Certified Professional dan spesialis blockchain bersertifikat. Idenya sederhana: jangan sampai ada yang tertinggal karena tak mampu membayar lisensi atau kursus. Semua di sini gratis.",no:"Grunnleggeren vår er Microsoft Certified Professional og sertifisert blokkjedespesialist. Tanken bak plattformen er enkel: ingen skal holdes tilbake fordi de ikke har råd til en lisens eller kursavgift. Lær Excel, Word, PowerPoint og VBA. Lær et språk. Bruk verktøyene, spill spillene, finn en blodgiver. Alt sammen gratis, og alt sammen laget her."},
     aboutText:{en:"XpertCreation is a technology company in Lahore, registered with the FBR as a filing taxpayer and listed on Google Business under the same name for several years.",de:"XpertCreation ist ein Technologieunternehmen in Lahore, bei der FBR als steuerpflichtiges Unternehmen registriert und seit mehreren Jahren unter demselben Namen bei Google Business gelistet.",ur:"ایکسپرٹ کریئیشن لاہور کی ایک ٹیکنالوجی کمپنی ہے، ایف بی آر میں رجسٹرڈ اور ٹیکس گزار، اور کئی سال سے اسی نام سے گوگل بزنس پر موجود ہے۔",ar:"إكسبرت كرييشن شركة تقنية في لاهور، مسجّلة لدى FBR كدافع ضرائب ومدرجة على Google Business بالاسم نفسه منذ سنوات.",hi:"एक्सपर्टक्रिएशन लाहौर की एक टेक्नोलॉजी कंपनी है, FBR में पंजीकृत करदाता और कई वर्षों से इसी नाम से Google Business पर सूचीबद्ध।",bn:"এক্সপার্টক্রিয়েশন লাহোরের একটি প্রযুক্তি কোম্পানি, FBR-এ নিবন্ধিত করদাতা এবং কয়েক বছর ধরে একই নামে Google Business-এ তালিকাভুক্ত।",zh:"XpertCreation 是拉合尔的一家科技公司，已在 FBR 注册为纳税企业，并以同一名称在 Google Business 上登记多年。",es:"XpertCreation es una empresa tecnológica en Lahore, registrada en la FBR como contribuyente y listada en Google Business con el mismo nombre desde hace años.",fr:"XpertCreation est une entreprise technologique à Lahore, enregistrée auprès de la FBR comme contribuable et référencée sur Google Business sous le même nom depuis plusieurs années.",pt:"A XpertCreation é uma empresa de tecnologia em Lahore, registada na FBR como contribuinte e listada no Google Business com o mesmo nome há vários anos.",ru:"XpertCreation — технологическая компания в Лахоре, зарегистрированная в FBR как налогоплательщик и несколько лет представленная в Google Business под тем же названием.",tr:"XpertCreation, Lahor'da bir teknoloji şirketidir; FBR'ye vergi mükellefi olarak kayıtlı ve yıllardır aynı adla Google Business'ta listelenmektedir.",id:"XpertCreation adalah perusahaan teknologi di Lahore, terdaftar di FBR sebagai wajib pajak dan tercantum di Google Business dengan nama yang sama selama bertahun-tahun.",no:"XpertCreation er et teknologiselskap i Lahore, registrert hos FBR som skattyter og oppført på Google Business under samme navn i flere år."},
@@ -1266,6 +1313,22 @@ window.addEventListener("load", function(){ setTimeout(function(){
     n6:{en:"Quranic Arabic",de:"Koranisches Arabisch",ur:"قرآنی عربی",ar:"العربية القرآنية",hi:"क़ुरआनी अरबी",bn:"কুরআনি আরবি",zh:"古兰经阿拉伯语",es:"Árabe coránico",fr:"Arabe coranique",pt:"Árabe corânico",ru:"Коранический арабский",tr:"Kur'an Arapçası",id:"Bahasa Arab Al-Quran",no:"Koranarabisk"},
     d6:{en:"Thirty short daily lessons in Quranic Arabic: vocabulary, basic grammar, and reading short passages word by word. Taught in Urdu.",de:"Dreißig kurze Tageslektionen in koranischem Arabisch: Wortschatz, Grundgrammatik und kurze Textstellen Wort für Wort gelesen. Auf Urdu unterrichtet.",ur:"قرآنی عربی کے تیس مختصر روزانہ اسباق: الفاظ، بنیادی قواعد، اور چھوٹی عبارتیں لفظ بہ لفظ پڑھنا۔ اردو میں۔",ar:"ثلاثون درسًا يوميًا قصيرًا في العربية القرآنية: المفردات والقواعد الأساسية والقراءة كلمة بكلمة. بالأردية.",hi:"क़ुरआनी अरबी के तीस छोटे दैनिक पाठ: शब्दावली, बुनियादी व्याकरण, शब्द दर शब्द पढ़ना। उर्दू में।",bn:"কুরআনি আরবির ত্রিশটি সংক্ষিপ্ত দৈনিক পাঠ: শব্দভাণ্ডার, মৌলিক ব্যাকরণ, শব্দে শব্দে পড়া। উর্দুতে।",zh:"三十节古兰经阿拉伯语短课：词汇、基础语法，逐词阅读。以乌尔都语讲授。",es:"Treinta lecciones diarias breves de árabe coránico: vocabulario, gramática básica y lectura palabra por palabra. En urdu.",fr:"Trente courtes leçons quotidiennes d'arabe coranique : vocabulaire, grammaire de base, lecture mot à mot. En ourdou.",pt:"Trinta lições diárias curtas de árabe corânico: vocabulário, gramática básica e leitura palavra por palavra. Em urdu.",ru:"Тридцать коротких ежедневных уроков коранического арабского: лексика, базовая грамматика, чтение слово за словом. На урду.",tr:"Kur'an Arapçası için otuz kısa günlük ders: kelimeler, temel dilbilgisi, kelime kelime okuma. Urduca.",id:"Tiga puluh pelajaran harian singkat bahasa Arab Al-Quran: kosakata, tata bahasa dasar, membaca kata per kata. Dalam bahasa Urdu.",no:"Tretti korte daglige leksjoner i koranarabisk: ordforråd, grunnleggende grammatikk og lesing av korte avsnitt ord for ord. Undervist på urdu."},
     free:{en:"Free",de:"Kostenlos",ur:"مفت",ar:"مجاني",hi:"मुफ़्त",bn:"ফ্রি",zh:"免费",es:"Gratis",fr:"Gratuit",pt:"Grátis",ru:"Бесплатно",tr:"Ücretsiz",id:"Gratis",no:"Gratis"},
+    tag2:{en:"Free · Made in Pakistan · Open to the world",ur:"مفت · پاکستان میں بنی · پوری دنیا کے لیے",ar:"مجاني · صُنع في باكستان · مفتوح للعالم"},
+    h1b:{en:"One app. Everything you need.",ur:"ایک ایپ۔ ہر ضرورت کی چیز۔",ar:"تطبيق واحد. كل ما تحتاجه."},
+    sub2:{en:"Learn, earn, buy & sell and connect: courses, jobs, freelance, store, food, cars and 102 free tools, in one free account.",ur:"سیکھیں، کمائیں، خریدیں بیچیں اور جڑیں: کورسز، نوکریاں، فری لانس، اسٹور، کھانا، گاڑیاں اور 102 مفت ٹولز، ایک ہی مفت اکاؤنٹ میں۔",ar:"تعلّم واكسب واشترِ وبِع وتواصل: دورات ووظائف وعمل حر ومتجر وطعام وسيارات و١٠٢ أداة مجانية، في حساب مجاني واحد."},
+    cta3:{en:"Create your free account",ur:"اپنا مفت اکاؤنٹ بنائیں",ar:"أنشئ حسابك المجاني"},
+    cta4:{en:"Browse 102 free tools",ur:"102 مفت ٹولز دیکھیں",ar:"تصفّح ١٠٢ أداة مجانية"},
+    fnd:{en:"Founder & CEO · Microsoft Certified Professional",ur:"بانی اور سی ای او · مائیکروسافٹ سرٹیفائیڈ پروفیشنل",ar:"المؤسس والرئيس التنفيذي · محترف معتمد من مايكروسوفت"},
+    gtitle:{en:"Google reviews",ur:"گوگل ریویوز",ar:"تقييمات Google"},
+    grv:{en:"Read our reviews · write one",ur:"ہمارے ریویوز پڑھیں · اپنا لکھیں",ar:"اقرأ تقييماتنا · اكتب تقييمك"},
+    d2h:{en:"Start here",ur:"یہاں سے شروع کریں",ar:"ابدأ من هنا"},
+    t1s:{en:"Your network, posts and chat",ur:"آپ کا نیٹ ورک، پوسٹس اور چیٹ",ar:"شبكتك ومنشوراتك ودردشتك"},
+    t2s:{en:"Free courses with certificates",ur:"سرٹیفکیٹ کے ساتھ مفت کورسز",ar:"دورات مجانية مع شهادات"},
+    t3:{en:"Jobs",ur:"نوکریاں",ar:"وظائف"},
+    t3s:{en:"Jobs, freelance work and your CV",ur:"نوکریاں، فری لانس کام اور آپ کی سی وی",ar:"وظائف وعمل حر وسيرتك الذاتية"},
+    t4:{en:"Money & Bills",ur:"پیسہ اور بل",ar:"المال والفواتير"},
+    t4s:{en:"Track spending, pay bills",ur:"خرچ کا حساب، بلوں کی ادائیگی",ar:"تتبّع الإنفاق وادفع الفواتير"},
+    d2more:{en:"Explore more",ur:"مزید دیکھیں",ar:"اكتشف المزيد"},
     tag:{en:"Free courses. Free tools.",de:"Kostenlose Kurse. Kostenlose Tools.",ur:"مفت کورسز۔ مفت ٹولز۔",ar:"دورات مجانية. أدوات مجانية.",hi:"मुफ़्त कोर्स। मुफ़्त टूल्स।",bn:"বিনামূল্যে কোর্স। বিনামূল্যে টুল।",zh:"免费课程。免费工具。",es:"Cursos gratis. Herramientas gratis.",fr:"Cours gratuits. Outils gratuits.",pt:"Cursos grátis. Ferramentas grátis.",ru:"Бесплатные курсы. Бесплатные инструменты.",tr:"Ücretsiz kurslar. Ücretsiz araçlar.",id:"Kursus gratis. Alat gratis.",no:"Gratis kurs. Gratis verktøy."},
     h1:{en:"Learn Excel, Word and VBA — free",de:"Excel, Word und VBA lernen — kostenlos",ur:"ایکسل، ورڈ اور VBA سیکھیں — مفت",ar:"تعلّم Excel وWord وVBA — مجانًا",hi:"Excel, Word और VBA सीखें — मुफ़्त",bn:"Excel, Word ও VBA শিখুন — বিনামূল্যে",zh:"免费学习 Excel、Word 和 VBA",es:"Aprende Excel, Word y VBA — gratis",fr:"Apprenez Excel, Word et VBA — gratuitement",pt:"Aprenda Excel, Word e VBA — grátis",ru:"Изучайте Excel, Word и VBA — бесплатно",tr:"Excel, Word ve VBA öğrenin — ücretsiz",id:"Pelajari Excel, Word, dan VBA — gratis",no:"Lær Excel, Word og VBA – gratis"},
     sub:{en:"Real courses with certificates, plus languages, 102 everyday tools, a blood bank and games. Built in Lahore, open to everyone.",de:"Echte Kurse mit Zertifikaten, dazu Sprachen, über 30 Alltagswerkzeuge, eine Blutbank und Spiele. In Lahore gebaut, offen für alle.",ur:"سرٹیفکیٹ کے ساتھ اصل کورسز، زبانیں، 30 سے زیادہ روزمرہ ٹولز، بلڈ بینک اور گیمز۔ لاہور میں بنایا گیا، سب کے لیے کھلا۔",ar:"دورات حقيقية بشهادات، ولغات، وأكثر من 30 أداة يومية، وبنك دم وألعاب. صُنع في لاهور، ومتاح للجميع.",hi:"सर्टिफिकेट के साथ असली कोर्स, भाषाएँ, 30+ रोज़मर्रा के टूल्स, ब्लड बैंक और गेम्स। लाहौर में बना, सबके लिए खुला।",bn:"সার্টিফিকেটসহ আসল কোর্স, ভাষা, ৩০+ দৈনন্দিন টুল, ব্লাড ব্যাংক ও গেম। লাহোরে তৈরি, সবার জন্য উন্মুক্ত।",zh:"带证书的真实课程，还有语言、30 多种日常工具、血库和游戏。在拉合尔打造，人人可用。",es:"Cursos reales con certificados, además de idiomas, más de 102 herramientas cotidianas, un banco de sangre y juegos. Hecho en Lahore, abierto a todos.",fr:"De vrais cours avec certificats, plus des langues, plus de 102 outils du quotidien, une banque du sang et des jeux. Conçu à Lahore, ouvert à tous.",pt:"Cursos reais com certificados, além de idiomas, mais de 102 ferramentas do dia a dia, um banco de sangue e jogos. Feito em Lahore, aberto a todos.",ru:"Настоящие курсы с сертификатами, языки, более 30 повседневных инструментов, банк крови и игры. Сделано в Лахоре, открыто для всех.",tr:"Sertifikalı gerçek kurslar, diller, 30'dan fazla günlük araç, kan bankası ve oyunlar. Lahor'da yapıldı, herkese açık.",id:"Kursus nyata dengan sertifikat, ditambah bahasa, 102 alat sehari-hari, bank darah, dan permainan. Dibuat di Lahore, terbuka untuk semua.",no:"Ekte kurs med sertifikater, pluss språk, 102 hverdagsverktøy, en blodbank og spill. Laget i Lahore, åpent for alle."},
@@ -2257,5 +2320,80 @@ if ("serviceWorker" in navigator){
 </script>
 <script src="/js/topnav-1.js?v=75" defer></script>
 <script src="/js/pymk-1.js" defer></script>
+<script>
+/* Home: search box, 4 main tiles, "Explore more" in 7 groups (home2 v1) */
+(function(){
+  "use strict";
+  var CATS = [
+    {k:"c1", n:"Work & Career", e:"💼", items:[["XpertConnect","/feed","🤝"],["Jobs","/jobs","💼"],["Gov jobs & results","/board","🏛️"],["Freelance","/market","🧑‍💻"],["My CV","/market#cv","📄"],["Digital business card","/cards","🪪"],["Company page","/company/manage","🏢"],["Business (staff & stock)","/business","📊"]]},
+    {k:"c2", n:"Learn", e:"🎓", items:[["XpertAcademy","/academy/","🎓"],["Courses","/courses","📚"],["MCQs","/mcq","✅"],["Clips","/clips","🎬"],["Vocabulary","/vocabulary","🔤"],["Typing tutor","/typing","⌨️"],["Library","/library","📖"]]},
+    {k:"c3", n:"Social", e:"💬", items:[["Chat","/chat","💬"],["Groups & channels","/groups","👥"],["Meetups","/meetups","📍"],["Halal Rishta","/rishta","💍"],["Nearby chat","/nearby","📡"],["Events","/events","🎉"],["Roots of Love","/roots","🌳"]]},
+    {k:"c4", n:"Money", e:"💰", items:[["Money & Bills","/money","💰"],["Bills","/bills","🧾"],["Currency rates","/rates","💱"],["Rewards","/rewards","🎁"],["Blood Bank","/blood","🩸"],["Donate","/donate","🤲"]]},
+    {k:"c5", n:"Marketplace", e:"🛍️", items:[["Store","/store","🛍️"],["Food delivery","/food","🍔"],["XpertWheels: cars & bikes","/wheels","🚗"],["Property","/market#property","🏠"],["Yellow pages: all shops","/store#shops","📒"]]},
+    {k:"c6", n:"Daily Life", e:"☀️", items:[["Quran","/quran","📖"],["News","/news","📰"],["Sports","/sports","🏏"],["Weather","/weather","⛅"],["Rides","/rides","🚕"],["Step counter","/steps","👟"],["Birthdays","/birthdays","🎂"],["Games","/games","🎮"],["Shows","/shows","🎭"],["My pets","/pets","🐾"]]},
+    {k:"c7", n:"Tools", e:"🧮", items:[["All 102 free tools","/tools","🧮"],["Faraid (inheritance)","/tools/faraid-calculator/","⚖️"],["Legal documents","/legal-documents/","📜"],["QR code maker","/tools/qr-code-generator","🔳"],["Prayer times","/tools?t=prayer","🕌"],["AI Assistant","/assistant","🤖"],["Translate","/translate","🌐"]]}
+  ];
+  var EXTRA = [["Connect & chat", [["XpertConnect", "/feed"], ["Find people", "/people"], ["Chat", "/chat"], ["Groups & channels", "/groups"], ["Chat rooms", "/chat-rooms"], ["IRC", "/irc"], ["Meetups", "/meetups"], ["Halal Rishta", "/rishta"], ["Nearby chat", "/nearby"], ["Clips", "/clips"], ["Events", "/events"], ["Articles", "/articles"], ["Saved posts", "/saved"], ["Brand ambassadors", "/ambassadors"]]], ["Work & business", [["Jobs", "/jobs"], ["Gov jobs & results", "/board"], ["Freelance", "/market"], ["Property", "/market#property"], ["My CV", "/market#cv"], ["Store", "/store"], ["XpertWheels: cars & bikes", "/wheels"], ["Food delivery", "/food"], ["Company register", "/company-register"], ["Business (staff & stock)", "/business"], ["Digital business card", "/cards"], ["Brand kit", "/brand"], ["Promote", "/promote"], ["Get verified", "/get-verified"]]], ["Money", [["Money", "/money"], ["Bills", "/bills"], ["Currency rates", "/rates"], ["Rewards", "/rewards"], ["My orders", "/orders"]]], ["Learn", [["Academy", "/academy/"], ["Courses", "/courses"], ["MCQs", "/mcq"], ["Vocabulary", "/vocabulary"], ["Learn Norwegian", "/norwegian"], ["Typing tutor", "/typing"], ["Library", "/library"], ["Check a certificate", "/verify"], ["Guide", "/docs"]]], ["Faith & culture", [["Quran", "/quran"], ["Islamic", "/islamic"], ["Poetry", "/poetry"], ["Afsanay", "/afsanay"], ["Recipes", "/recipes"], ["Star signs", "/zodiac"]]], ["Fun & entertainment", [["Shows", "/shows"], ["Kids", "/kids"], ["News", "/news"], ["Sports", "/sports"], ["Cricket predict", "/predict"], ["Games", "/games"], ["What's your vibe?", "/vibe"], ["Avatar builder", "/avatar-builder"]]], ["Everyday tools", [["Tools", "/tools"], ["AI Assistant", "/assistant"], ["Translate", "/translate"], ["Weather", "/weather"], ["Step counter", "/steps"], ["Rides", "/rides"], ["Travel", "/travel"], ["Airports & airlines", "/air"], ["Bus terminals", "/bus"], ["Birthdays", "/birthdays"]]], ["Help others", [["Blood bank", "/blood"], ["Donate", "/donate"], ["My pets", "/pets"], ["Adopt a pet", "/adopt"], ["Lost & found pets", "/lost"], ["Vets", "/vets"], ["Roots of Love", "/roots"]]], ["My account", [["Settings", "/settings"], ["Help", "/help"], ["What's new", "/whats-new"]]], ["About", [["The team", "/team"], ["Ownership", "/ownership"], ["Safety", "/safety"], ["Privacy policy", "/privacy"], ["Terms of service", "/terms"], ["Terms of sale", "/terms-of-sale"], ["Refund policy", "/refund-policy"], ["Delete account", "/delete-account"]]]];
+  var cats = document.getElementById("d2cats"), panel = document.getElementById("d2panel"), q = document.getElementById("d2q"), res = document.getElementById("d2res");
+  if (!cats || !panel) return;
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  var cur = 0;
+  try { var sv = +localStorage.getItem("xc_home_cat"); if (sv >= 0 && sv < CATS.length) cur = sv; } catch (e) {}
+  var NM = {ur: ["\u06A9\u0627\u0645 \u0627\u0648\u0631 \u06A9\u06CC\u0631\u06CC\u0626\u0631", "\u0633\u06CC\u06A9\u06BE\u06CC\u06BA", "\u0633\u0648\u0634\u0644", "\u067E\u06CC\u0633\u06C1", "\u0628\u0627\u0632\u0627\u0631", "\u0631\u0648\u0632\u0645\u0631\u06C1 \u0632\u0646\u062F\u06AF\u06CC", "\u0679\u0648\u0644\u0632"],
+            ar: ["\u0627\u0644\u0639\u0645\u0644 \u0648\u0627\u0644\u0645\u0647\u0646\u0629", "\u062A\u0639\u0644\u0651\u0645", "\u0627\u062C\u062A\u0645\u0627\u0639\u064A", "\u0627\u0644\u0645\u0627\u0644", "\u0627\u0644\u0633\u0648\u0642", "\u0627\u0644\u062D\u064A\u0627\u0629 \u0627\u0644\u064A\u0648\u0645\u064A\u0629", "\u0623\u062F\u0648\u0627\u062A"]};
+  function lbl(i){ var l = document.documentElement.lang; return (NM[l] && NM[l][i]) || CATS[i].n; }
+  function drawCats(){ cats.innerHTML = CATS.map(function(c, i){ return '<button type="button" role="tab" data-i="' + i + '"><span class="e">' + c.e + '</span><span>' + esc(lbl(i)) + '</span></button>'; }).join(""); }
+  drawCats();
+  function show(i){
+    cur = i;
+    [].forEach.call(cats.children, function(b, j){ b.classList.toggle("on", j === i); b.setAttribute("aria-selected", j === i ? "true" : "false"); });
+    var c = CATS[i];
+    panel.innerHTML = '<h4>' + c.e + ' ' + esc(lbl(i)) + '</h4><div class="d2grid">' + c.items.map(function(x){ return '<a href="' + esc(x[1]) + '"><span class="e">' + x[2] + '</span>' + esc(x[0]) + '</a>'; }).join("") + '</div>';
+    try { localStorage.setItem("xc_home_cat", String(i)); } catch (e) {}
+  }
+  cats.addEventListener("click", function(e){ var b = e.target.closest("button[data-i]"); if (b) show(+b.getAttribute("data-i")); });
+  show(cur);
+
+  // search: every page in the groups above + the full menu, no repeats
+  var ALL = [], seen = {};
+  function add(n, h, g){ var key = h.toLowerCase(); if (seen[key]) return; seen[key] = 1; ALL.push({n: n, h: h, g: g}); }
+  CATS.forEach(function(c){ c.items.forEach(function(x){ add(x[0], x[1], c.n); }); });
+  EXTRA.forEach(function(g){ g[1].forEach(function(x){ add(x[0], x[1], g[0]); }); });
+  var hits = [], sel = 0;
+  function norm(s){ return String(s).toLowerCase().replace(/[^a-z0-9؀-ۿ ]+/g, " ").replace(/\s+/g, " ").trim(); }
+  function find(){
+    var t = norm(q.value);
+    if (!t){ res.hidden = true; return; }
+    var w = t.split(" ");
+    hits = ALL.map(function(x){ var n = norm(x.n + " " + x.g + " " + x.h.replace(/[\/#?=-]+/g, " ")), s = 0;
+      for (var i = 0; i < w.length; i++){ var p = n.indexOf(w[i]); if (p < 0) return null; s += p === 0 || n.charAt(p - 1) === " " ? 2 : 1; }
+      if (norm(x.n).indexOf(t) === 0) s += 5; return {x: x, s: s}; }).filter(Boolean).sort(function(a, b){ return b.s - a.s; }).slice(0, 8).map(function(r){ return r.x; });
+    sel = 0;
+    res.innerHTML = hits.length ? hits.map(function(x, i){ return '<a href="' + esc(x.h) + '"' + (i === 0 ? ' class="on"' : '') + '>' + esc(x.n) + '<small>' + esc(x.g) + '</small></a>'; }).join("")
+      : '<div class="none">Nothing found. Try another word, or open the &#9776; menu.</div>';
+    res.hidden = false;
+  }
+  q.addEventListener("input", find);
+  q.addEventListener("focus", function(){ if (q.value) find(); });
+  q.addEventListener("keydown", function(e){
+    if (res.hidden || !hits.length) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp"){ e.preventDefault(); sel = (sel + (e.key === "ArrowDown" ? 1 : hits.length - 1)) % hits.length; [].forEach.call(res.children, function(a, i){ a.classList.toggle("on", i === sel); }); }
+    else if (e.key === "Enter"){ e.preventDefault(); location.href = hits[sel].h; }
+    else if (e.key === "Escape"){ res.hidden = true; }
+  });
+  document.addEventListener("click", function(e){ if (!e.target.closest(".d2find")) res.hidden = true; });
+  var PH = {ur: "تلاش کریں: نوکریاں، کھانا، قرآن، بل…", ar: "ابحث: وظائف، طعام، القرآن، فواتير…"};
+  function ph(){ var l = document.documentElement.lang; if (PH[l]) q.placeholder = PH[l]; else q.placeholder = q.getAttribute("data-ph") || q.placeholder; }
+  q.setAttribute("data-ph", q.placeholder);
+  ph();
+  new MutationObserver(function(){ ph(); drawCats(); show(cur); }).observe(document.documentElement, {attributes: true, attributeFilter: ["lang"]});
+
+  // signed in: say hello by first name
+  fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
+    if (!u || !u.email) return; var n = String(u.full_name || "").trim().split(/\s+/)[0] || u.email.split("@")[0];
+    var hi = document.getElementById("d2hi"); if (hi) hi.textContent = "👋 " + n;
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html>
