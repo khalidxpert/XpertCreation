@@ -133,6 +133,18 @@
       + (host ? '<button class="lv-b" data-flip>🔄</button><button class="lv-b" data-mic>🎙️</button><button class="lv-b red" data-end title="End live">⏹</button>' : '<button class="lv-b" data-share>↗️</button><button class="lv-b" data-heart style="color:#FF4D6D">❤</button>')
       + "</div></div>";
     var $ = function(s){ return app.querySelector(s); }, mainV = $("[data-main]"), pip = $("[data-pip]"), pipV = pip.querySelector("video"), feed = $("[data-feed]");
+    mainV.muted = true; pipV.muted = true;      // sound plays through separate audio players (below)
+    var soundBtn = null;
+    function soundCheck(){
+      if (host) return;
+      if (R.canPlaybackAudio){ if (soundBtn){ soundBtn.remove(); soundBtn = null; } return; }
+      if (soundBtn) return;
+      soundBtn = D.createElement("button"); soundBtn.className = "lv-go"; soundBtn.textContent = "\uD83D\uDD0A Tap for sound";
+      soundBtn.style.cssText = "position:absolute;left:50%;top:42%;transform:translateX(-50%);z-index:7";
+      soundBtn.onclick = function(){ R.startAudio().then(soundCheck).catch(function(){}); };
+      $(".lv-stage").appendChild(soundBtn);
+    }
+    app.addEventListener("click", function(){ if (!R.canPlaybackAudio) R.startAudio().then(soundCheck).catch(function(){}); }, true);
     var timer = setInterval(function(){ $("[data-time]").textContent = clock((Date.now() - started) / 1000); if (R.state === "connected") $("[data-n]").textContent = R.remoteParticipants.size; }, 1000);
     function say(name, text, sys){ var e = D.createElement("div"); e.className = "lv-c" + (sys ? " sys" : ""); e.innerHTML = (name ? "<b>" + esc(name) + "</b>" : "") + esc(text); feed.appendChild(e); while (feed.children.length > 30) feed.firstChild.remove(); }
     function heart(){ var h = D.createElement("div"); h.className = "lv-heart"; h.textContent = ["❤️", "💖", "💗", "🧡", "💜"][Math.random() * 5 | 0]; h.style.setProperty("--dx", (Math.random() * 80 - 40) + "px"); $(".lv-stage").appendChild(h); setTimeout(function(){ h.remove(); }, 2300); }
@@ -157,7 +169,9 @@
       $("[data-mid]").style.display = ""; $("[data-mid]").innerHTML = "<div><div style='font-size:46px'>🎬</div><h2>Live ended</h2><p>" + esc(msg || "Thanks for watching!") + "</p><a class='lv-go' style='text-decoration:none' href='/live'>More lives</a> <a class='lv-pill' style='padding:11px 16px;text-decoration:none' href='/feed'>XpertConnect</a></div>";
       mainV.style.display = "none"; pip.style.display = "none"; $(".lv-bar").style.display = "none"; feed.style.display = "none";
     }
-    R.on(LK.RoomEvent.TrackSubscribed, layout).on(LK.RoomEvent.TrackUnsubscribed, layout).on(LK.RoomEvent.LocalTrackPublished, layout).on(LK.RoomEvent.LocalTrackUnpublished, layout)
+    R.on(LK.RoomEvent.TrackSubscribed, function(track){ if (track.kind === "audio"){ var el = track.attach(); el.setAttribute("data-lva", ""); el.autoplay = true; app.appendChild(el); soundCheck(); } layout(); })
+     .on(LK.RoomEvent.TrackUnsubscribed, function(track){ if (track.kind === "audio") track.detach().forEach(function(e){ e.remove(); }); layout(); })
+     .on(LK.RoomEvent.AudioPlaybackStatusChanged, soundCheck).on(LK.RoomEvent.LocalTrackPublished, layout).on(LK.RoomEvent.LocalTrackUnpublished, layout)
      .on(LK.RoomEvent.TrackMuted, layout).on(LK.RoomEvent.TrackUnmuted, layout)
      .on(LK.RoomEvent.ParticipantConnected, function(p){ count(); if (host){ say("", p.name + " joined", true); clearTimeout(beatSoon); beatSoon = setTimeout(beatNow, 3000); } })
      .on(LK.RoomEvent.ParticipantDisconnected, function(p){ layout(); if (!host && isHost(p)) setTimeout(function(){ api(L.id + "/").then(function(x){ if (x.live && x.live.status !== "live") over(); }); }, 4000); })
@@ -235,7 +249,7 @@
       $("[data-mid]").style.display = host ? "none" : "";
       if (!host) $("[data-mid]").innerHTML = "<div><div style='font-size:40px'>⏳</div><p>Waiting for the video…</p></div>";
       if (host){
-        var opts = {simulcast: true, videoEncoding: LK.VideoPresets.h720.encoding, videoSimulcastLayers: [LK.VideoPresets.h180, LK.VideoPresets.h360]};
+        var opts = {simulcast: true, videoEncoding: {maxBitrate: 1200000, maxFramerate: 24}, videoSimulcastLayers: [LK.VideoPresets.h180, LK.VideoPresets.h360], dtx: true, red: true};
         var ps = (preTracks && preTracks.length ? preTracks : []).map(function(t){ return R.localParticipant.publishTrack(t, t.kind === "video" ? opts : {}); });
         return Promise.all(ps.length ? ps : [R.localParticipant.enableCameraAndMicrophone()]).then(function(){
           if (micOn === false) R.localParticipant.setMicrophoneEnabled(false);
@@ -244,7 +258,7 @@
         });
       }
       say("", "Welcome! Be kind in the comments.", true);
-      layout();
+      layout(); soundCheck();
     }).catch(function(e){ over("Could not connect to the live (" + (e.message || "network") + "). Check your internet and reload."); });
     window.addEventListener("beforeunload", function(){ try { R.disconnect(); } catch (e) {} });
     window.XLROOM = R;
