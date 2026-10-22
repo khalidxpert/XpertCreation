@@ -120,6 +120,23 @@ body.rtl .hero2 .eyebrow{letter-spacing:0;font-family:inherit;font-size:13px;tex
 .steps2 i{flex:none;width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-style:normal;font-weight:800;font-size:14px;display:grid;place-items:center}
 .steps2 li:first-child a{border-color:var(--brand);background:rgba(27,77,255,.06)}
 .steps2 b{display:block;font-size:14px}.steps2 small{display:block;font-size:12px;color:var(--ink-soft);line-height:1.35;margin-top:2px}
+.d2tiles.v3 .ic{width:44px;height:44px;border-radius:12px;margin-bottom:auto;background:rgba(255,255,255,.95);display:grid;place-items:center;overflow:hidden;font-size:26px;line-height:1}
+.d2tiles.v3 .ic img{width:40px;height:40px;object-fit:contain}.d2tiles.v3 .ic.e{background:rgba(255,255,255,.18)}
+@media(max-width:700px){.d2tiles.v3{grid-template-columns:repeat(4,1fr);gap:10px 6px}
+ .d2tiles.v3 a{min-height:0;padding:0;background:none!important;box-shadow:none;color:var(--ink);align-items:center;text-align:center;gap:6px}
+ .d2tiles.v3 .ic{width:60px;height:60px;border-radius:18px;margin:0;background:linear-gradient(150deg,var(--a),var(--b));box-shadow:0 6px 16px rgba(13,20,36,.16)}
+ .d2tiles.v3 .ic img{width:46px;height:46px;border-radius:12px;background:#fff;padding:2px}.d2tiles.v3 .ic.e{background:linear-gradient(150deg,var(--a),var(--b));font-size:30px}
+ .d2tiles.v3 b{font-size:0;line-height:1.2}.d2tiles.v3 b:after{content:attr(data-s);font-size:12px;font-weight:700}.d2tiles.v3 small{display:none}}
+.eco{position:fixed;inset:0;z-index:300;background:rgba(13,20,36,.45);display:flex;align-items:flex-end;justify-content:center}
+.eco>div{background:var(--card);width:100%;max-width:880px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px 24px;box-sizing:border-box}
+@media(min-width:880px){.eco{align-items:center}.eco>div{border-radius:22px}}
+.eco .eh{display:flex;align-items:center;gap:10px;position:sticky;top:-16px;background:var(--card);padding:6px 0 10px;z-index:2}.eco .eh b{font-size:18px;flex:1}
+.eco .eh button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:20px;cursor:pointer}
+.eco input{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);font:inherit;margin-bottom:6px}
+.eco h5{margin:14px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.eco .eg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:12px 6px}
+.eco .eg2 a{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--ink);text-align:center;font-size:12px;font-weight:600;line-height:1.25}
+.eco .eg2 a span{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:26px;background:var(--g,#EEF2FF)}
 .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.2;z-index:-1}
 .blob.b1{width:300px;height:300px;background:var(--brand);top:-120px;left:-90px}
 .blob.b2{width:260px;height:260px;background:var(--blood);top:-60px;right:-110px}
@@ -876,11 +893,15 @@ body.signed-in .hello{margin-top:4px}
       <input id="d2q" type="search" autocomplete="off" placeholder="Search 80+ features: jobs, food, Quran, bills&hellip;" aria-label="Search features">
       <div class="d2res" id="d2res" hidden></div>
     </div>
-    <div class="d2tiles">
-      <a href="/feed" style="--a:#4F46E5;--b:#312E81"><img class="lg" src="/brand/xpertconnect/xc-3d-256.png?v=3" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"><b>XpertConnect</b><small data-i18n="t1s">Your network, posts and chat</small></a>
-      <a href="/academy/" style="--a:#00B37E;--b:#046B4E"><img class="lg" src="/brand/xpertacademy/mark-128.webp?v=1" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"><b>XpertAcademy</b><small data-i18n="t2s">Free courses with certificates</small></a>
-      <a href="/market" style="--a:#1B4DFF;--b:#0B1530"><img class="lg" src="/brand/xpertfreelance/mark-128.webp" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"><b>XpertFreelance</b><small data-i18n="t3s">Sell your skills, get hired, earn</small></a>
-      <a href="/store" style="--a:#F85606;--b:#B33A00"><span class="e">&#128717;&#65039;</span><b data-i18n="t4">Marketplace</b><small data-i18n="t4s">Store, food, cars and property</small></a>
+    <div class="d2tiles v3">
+      <a href="/feed" style="--a:#4F46E5;--b:#312E81"><span class="ic"><img src="/brand/xpertconnect/xc-3d-256.png?v=3" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"></span><b data-s="Connect">XpertConnect</b><small data-i18n="t1s">Your network, posts and chat</small></a>
+      <a href="/academy/" style="--a:#00B37E;--b:#046B4E"><span class="ic"><img src="/brand/xpertacademy/mark-128.webp?v=1" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"></span><b data-s="Academy">XpertAcademy</b><small data-i18n="t2s">Free courses with certificates</small></a>
+      <a href="/market" style="--a:#1B4DFF;--b:#0B1530"><span class="ic"><img src="/brand/xpertfreelance/mark-128.webp" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"></span><b data-s="Freelance">XpertFreelance</b><small data-i18n="t3s">Sell your skills, get hired, earn</small></a>
+      <a href="/store" style="--a:#F85606;--b:#B33A00"><span class="ic e">&#128717;&#65039;</span><b data-i18n="t4" data-s="Market">Marketplace</b><small data-i18n="t4s">Store, food and shops</small></a>
+      <a href="/chat" style="--a:#0EA5E9;--b:#16A34A"><span class="ic"><img src="/brand/xpertchat/mark-128.webp?v=1" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"></span><b data-s="Chat">XpertChat</b><small data-i18n="t5s">Chats, groups and offline chat</small></a>
+      <a href="/market#property" style="--a:#7C3AED;--b:#4C1D95"><span class="ic e">&#127968;</span><b data-s="Property">XpertProperty</b><small data-i18n="t6s">Buy, sell and rent homes and plots</small></a>
+      <a href="/wheels" style="--a:#0E7C66;--b:#0A4D40"><span class="ic e">&#128663;</span><b data-s="Wheels">XpertWheels</b><small data-i18n="t7s">Buy and sell cars and bikes</small></a>
+      <a href="#eco" style="--a:#0D1424;--b:#334155" id="d2eco"><span class="ic e">&#10024;</span><b data-i18n="t8" data-s="Explore">Explore all</b><small data-i18n="t8s">Everything on XpertCreation</small></a>
     </div>
     <h3 class="d2more" data-i18n="d2more">Explore more</h3>
     <div class="d2cats" id="d2cats" role="tablist"></div>
@@ -1340,7 +1361,7 @@ window.addEventListener("load", function(){ setTimeout(function(){
     t2s:{en:"Free courses with certificates",ur:"سرٹیفکیٹ کے ساتھ مفت کورسز",ar:"دورات مجانية مع شهادات"},
     t3s:{en:"Sell your skills, get hired, earn",ur:"اپنی مہارت بیچیں، کام لیں، کمائیں",ar:"بِع مهاراتك واحصل على عمل واكسب"},
     t4:{en:"Marketplace",ur:"بازار",ar:"السوق"},
-    t4s:{en:"Store, food, cars and property",ur:"اسٹور، کھانا، گاڑیاں اور پراپرٹی",ar:"متجر وطعام وسيارات وعقارات"},
+    t4s:{en:"Store, food and shops",ur:"اسٹور، کھانا اور دکانیں",ar:"متجر وطعام ومحلات"},
     d2more:{en:"Explore more",ur:"مزید دیکھیں",ar:"اكتشف المزيد"},
     s1:{en:"Create one account",ur:"ایک اکاؤنٹ بنائیں",ar:"أنشئ حسابًا واحدًا"},
     s1s:{en:"Once, for the whole XpertCreation world",ur:"صرف ایک بار، پوری ایکسپرٹ کریئیشن کے لیے",ar:"مرة واحدة، لكل عالم XpertCreation"},
@@ -1352,6 +1373,11 @@ window.addEventListener("load", function(){ setTimeout(function(){
     s4s:{en:"Connect, chat and grow on XpertConnect",ur:"ایکسپرٹ کنیکٹ پر جڑیں، بات کریں، آگے بڑھیں",ar:"تواصل ودردش وانمُ على XpertConnect"},
     s5:{en:"Sell your products",ur:"اپنی چیزیں بیچیں",ar:"بِع منتجاتك"},
     s5s:{en:"Open your own shop in the Store",ur:"اسٹور میں اپنی دکان کھولیں",ar:"افتح متجرك الخاص في المتجر"},
+    t5s:{en:"Chats, groups and offline chat",ur:"چیٹ، گروپس اور آف لائن چیٹ",ar:"دردشات ومجموعات ودردشة دون إنترنت"},
+    t6s:{en:"Buy, sell and rent homes and plots",ur:"گھر اور پلاٹ خریدیں، بیچیں، کرائے پر",ar:"شراء وبيع وتأجير المنازل والأراضي"},
+    t7s:{en:"Buy and sell cars and bikes",ur:"گاڑیاں اور بائیکس خریدیں، بیچیں",ar:"شراء وبيع السيارات والدراجات"},
+    t8:{en:"Explore all",ur:"سب دیکھیں",ar:"استكشف الكل"},
+    t8s:{en:"Everything on XpertCreation",ur:"ایکسپرٹ کریئیشن کی ہر چیز",ar:"كل شيء على XpertCreation"},
     tag:{en:"Free courses. Free tools.",de:"Kostenlose Kurse. Kostenlose Tools.",ur:"مفت کورسز۔ مفت ٹولز۔",ar:"دورات مجانية. أدوات مجانية.",hi:"मुफ़्त कोर्स। मुफ़्त टूल्स।",bn:"বিনামূল্যে কোর্স। বিনামূল্যে টুল।",zh:"免费课程。免费工具。",es:"Cursos gratis. Herramientas gratis.",fr:"Cours gratuits. Outils gratuits.",pt:"Cursos grátis. Ferramentas grátis.",ru:"Бесплатные курсы. Бесплатные инструменты.",tr:"Ücretsiz kurslar. Ücretsiz araçlar.",id:"Kursus gratis. Alat gratis.",no:"Gratis kurs. Gratis verktøy."},
     h1:{en:"Learn Excel, Word and VBA — free",de:"Excel, Word und VBA lernen — kostenlos",ur:"ایکسل، ورڈ اور VBA سیکھیں — مفت",ar:"تعلّم Excel وWord وVBA — مجانًا",hi:"Excel, Word और VBA सीखें — मुफ़्त",bn:"Excel, Word ও VBA শিখুন — বিনামূল্যে",zh:"免费学习 Excel、Word 和 VBA",es:"Aprende Excel, Word y VBA — gratis",fr:"Apprenez Excel, Word et VBA — gratuitement",pt:"Aprenda Excel, Word e VBA — grátis",ru:"Изучайте Excel, Word и VBA — бесплатно",tr:"Excel, Word ve VBA öğrenin — ücretsiz",id:"Pelajari Excel, Word, dan VBA — gratis",no:"Lær Excel, Word og VBA – gratis"},
     sub:{en:"Real courses with certificates, plus languages, 102 everyday tools, a blood bank and games. Built in Lahore, open to everyone.",de:"Echte Kurse mit Zertifikaten, dazu Sprachen, über 30 Alltagswerkzeuge, eine Blutbank und Spiele. In Lahore gebaut, offen für alle.",ur:"سرٹیفکیٹ کے ساتھ اصل کورسز، زبانیں، 30 سے زیادہ روزمرہ ٹولز، بلڈ بینک اور گیمز۔ لاہور میں بنایا گیا، سب کے لیے کھلا۔",ar:"دورات حقيقية بشهادات، ولغات، وأكثر من 30 أداة يومية، وبنك دم وألعاب. صُنع في لاهور، ومتاح للجميع.",hi:"सर्टिफिकेट के साथ असली कोर्स, भाषाएँ, 30+ रोज़मर्रा के टूल्स, ब्लड बैंक और गेम्स। लाहौर में बना, सबके लिए खुला।",bn:"সার্টিফিকেটসহ আসল কোর্স, ভাষা, ৩০+ দৈনন্দিন টুল, ব্লাড ব্যাংক ও গেম। লাহোরে তৈরি, সবার জন্য উন্মুক্ত।",zh:"带证书的真实课程，还有语言、30 多种日常工具、血库和游戏。在拉合尔打造，人人可用。",es:"Cursos reales con certificados, además de idiomas, más de 102 herramientas cotidianas, un banco de sangre y juegos. Hecho en Lahore, abierto a todos.",fr:"De vrais cours avec certificats, plus des langues, plus de 102 outils du quotidien, une banque du sang et des jeux. Conçu à Lahore, ouvert à tous.",pt:"Cursos reais com certificados, além de idiomas, mais de 102 ferramentas do dia a dia, um banco de sangue e jogos. Feito em Lahore, aberto a todos.",ru:"Настоящие курсы с сертификатами, языки, более 30 повседневных инструментов, банк крови и игры. Сделано в Лахоре, открыто для всех.",tr:"Sertifikalı gerçek kurslar, diller, 30'dan fazla günlük araç, kan bankası ve oyunlar. Lahor'da yapıldı, herkese açık.",id:"Kursus nyata dengan sertifikat, ditambah bahasa, 102 alat sehari-hari, bank darah, dan permainan. Dibuat di Lahore, terbuka untuk semua.",no:"Ekte kurs med sertifikater, pluss språk, 102 hverdagsverktøy, en blodbank og spill. Laget i Lahore, åpent for alle."},
@@ -2356,7 +2382,7 @@ if ("serviceWorker" in navigator){
     {k:"c6", n:"Daily Life", e:"☀️", items:[["Quran","/quran","📖"],["News","/news","📰"],["Sports","/sports","🏏"],["Weather","/weather","⛅"],["Rides","/rides","🚕"],["Step counter","/steps","👟"],["Birthdays","/birthdays","🎂"],["Games","/games","🎮"],["Shows","/shows","🎭"],["My pets","/pets","🐾"]]},
     {k:"c7", n:"Tools", e:"🧮", items:[["All 102 free tools","/tools","🧮"],["Faraid (inheritance)","/tools/faraid-calculator/","⚖️"],["Legal documents","/legal-documents/","📜"],["QR code maker","/tools/qr-code-generator","🔳"],["Prayer times","/tools?t=prayer","🕌"],["AI Assistant","/assistant","🤖"],["Translate","/translate","🌐"]]}
   ];
-  var EXTRA = [["Connect & chat", [["XpertConnect", "/feed"], ["Find people", "/people"], ["Chat", "/chat"], ["Groups & channels", "/groups"], ["Chat rooms", "/chat-rooms"], ["IRC", "/irc"], ["Meetups", "/meetups"], ["Halal Rishta", "/rishta"], ["Nearby chat", "/nearby"], ["Clips", "/clips"], ["Events", "/events"], ["Articles", "/articles"], ["Saved posts", "/saved"], ["Brand ambassadors", "/ambassadors"]]], ["Work & business", [["Jobs", "/jobs"], ["Gov jobs & results", "/board"], ["Freelance", "/market"], ["Property", "/market#property"], ["My CV", "/market#cv"], ["Store", "/store"], ["XpertWheels: cars & bikes", "/wheels"], ["Food delivery", "/food"], ["Company register", "/company-register"], ["Business (staff & stock)", "/business"], ["Digital business card", "/cards"], ["Brand kit", "/brand"], ["Promote", "/promote"], ["Get verified", "/get-verified"]]], ["Money", [["Money", "/money"], ["Bills", "/bills"], ["Currency rates", "/rates"], ["Rewards", "/rewards"], ["My orders", "/orders"]]], ["Learn", [["Academy", "/academy/"], ["Courses", "/courses"], ["MCQs", "/mcq"], ["Vocabulary", "/vocabulary"], ["Learn Norwegian", "/norwegian"], ["Typing tutor", "/typing"], ["Library", "/library"], ["Check a certificate", "/verify"], ["Guide", "/docs"]]], ["Faith & culture", [["Quran", "/quran"], ["Islamic", "/islamic"], ["Poetry", "/poetry"], ["Afsanay", "/afsanay"], ["Recipes", "/recipes"], ["Star signs", "/zodiac"]]], ["Fun & entertainment", [["Shows", "/shows"], ["Kids", "/kids"], ["News", "/news"], ["Sports", "/sports"], ["Cricket predict", "/predict"], ["Games", "/games"], ["What's your vibe?", "/vibe"], ["Avatar builder", "/avatar-builder"]]], ["Everyday tools", [["Tools", "/tools"], ["AI Assistant", "/assistant"], ["Translate", "/translate"], ["Weather", "/weather"], ["Step counter", "/steps"], ["Rides", "/rides"], ["Travel", "/travel"], ["Airports & airlines", "/air"], ["Bus terminals", "/bus"], ["Birthdays", "/birthdays"]]], ["Help others", [["Blood bank", "/blood"], ["Donate", "/donate"], ["My pets", "/pets"], ["Adopt a pet", "/adopt"], ["Lost & found pets", "/lost"], ["Vets", "/vets"], ["Roots of Love", "/roots"]]], ["My account", [["Settings", "/settings"], ["Help", "/help"], ["What's new", "/whats-new"]]], ["About", [["The team", "/team"], ["Ownership", "/ownership"], ["Safety", "/safety"], ["Privacy policy", "/privacy"], ["Terms of service", "/terms"], ["Terms of sale", "/terms-of-sale"], ["Refund policy", "/refund-policy"], ["Delete account", "/delete-account"]]]];
+  var EXTRA = [["Connect & chat", [["XpertConnect", "/feed"], ["Find people", "/people"], ["Chat", "/chat"], ["Groups & channels", "/groups"], ["Chat rooms", "/chat-rooms"], ["IRC", "/irc"], ["Meetups", "/meetups"], ["Halal Rishta", "/rishta"], ["Nearby chat", "/nearby"], ["Clips", "/clips"], ["Events", "/events"], ["Articles", "/articles"], ["Saved posts", "/saved"], ["Brand ambassadors", "/ambassadors"]]], ["Work & business", [["Jobs", "/jobs"], ["Gov jobs & results", "/board"], ["Freelance", "/market"], ["Property", "/market#property"], ["My CV", "/market#cv"], ["Store", "/store"], ["XpertPros: hire a plumber & more", "/pros"], ["XpertWheels: cars & bikes", "/wheels"], ["Food delivery", "/food"], ["Company register", "/company-register"], ["Business (staff & stock)", "/business"], ["Digital business card", "/cards"], ["Brand kit", "/brand"], ["Promote", "/promote"], ["Get verified", "/get-verified"]]], ["Money", [["Money", "/money"], ["Bills", "/bills"], ["Currency rates", "/rates"], ["Rewards", "/rewards"], ["My orders", "/orders"]]], ["Learn", [["Academy", "/academy/"], ["Courses", "/courses"], ["MCQs", "/mcq"], ["Vocabulary", "/vocabulary"], ["Learn Norwegian", "/norwegian"], ["Typing tutor", "/typing"], ["Library", "/library"], ["Check a certificate", "/verify"], ["Guide", "/docs"]]], ["Faith & culture", [["Quran", "/quran"], ["Islamic", "/islamic"], ["Poetry", "/poetry"], ["Afsanay", "/afsanay"], ["Recipes", "/recipes"], ["Star signs", "/zodiac"]]], ["Fun & entertainment", [["Shows", "/shows"], ["Kids", "/kids"], ["News", "/news"], ["Sports", "/sports"], ["Cricket predict", "/predict"], ["Games", "/games"], ["What's your vibe?", "/vibe"], ["Avatar builder", "/avatar-builder"]]], ["Everyday tools", [["Tools", "/tools"], ["AI Assistant", "/assistant"], ["Translate", "/translate"], ["Weather", "/weather"], ["Step counter", "/steps"], ["Rides", "/rides"], ["Travel", "/travel"], ["Airports & airlines", "/air"], ["Bus terminals", "/bus"], ["Birthdays", "/birthdays"]]], ["Help others", [["Blood bank", "/blood"], ["Donate", "/donate"], ["My pets", "/pets"], ["Adopt a pet", "/adopt"], ["Lost & found pets", "/lost"], ["Vets", "/vets"], ["Roots of Love", "/roots"]]], ["My account", [["Settings", "/settings"], ["Help", "/help"], ["What's new", "/whats-new"]]], ["About", [["The team", "/team"], ["Ownership", "/ownership"], ["Safety", "/safety"], ["Privacy policy", "/privacy"], ["Terms of service", "/terms"], ["Terms of sale", "/terms-of-sale"], ["Refund policy", "/refund-policy"], ["Delete account", "/delete-account"]]]];
   var cats = document.getElementById("d2cats"), panel = document.getElementById("d2panel"), q = document.getElementById("d2q"), res = document.getElementById("d2res");
   if (!cats || !panel) return;
   function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
@@ -2376,6 +2402,27 @@ if ("serviceWorker" in navigator){
   }
   cats.addEventListener("click", function(e){ var b = e.target.closest("button[data-i]"); if (b) show(+b.getAttribute("data-i")); });
   show(cur);
+
+  // "Explore all": every part of XpertCreation as icons
+  var GE = {"Connect & chat": "💬", "Work & business": "💼", "Money": "💰", "Learn": "🎓", "Faith & culture": "🕌", "Fun & entertainment": "🎉", "Everyday tools": "🧰", "Help others": "❤️", "My account": "👤", "About": "ℹ️"};
+  var TINT = ["#EEF2FF", "#ECFDF5", "#FFF7ED", "#FEF3C7", "#F5F3FF", "#ECFEFF", "#FDF2F8", "#F1F5F9"];
+  function eco(){
+    var have = {}, groups = CATS.map(function(c, i){ c.items.forEach(function(x){ have[x[1].toLowerCase()] = 1; }); return {n: lbl(i), items: c.items.map(function(x){ return [x[0], x[1], x[2]]; })}; });
+    EXTRA.forEach(function(g){ var it = g[1].filter(function(x){ return !have[x[1].toLowerCase()]; }).map(function(x){ have[x[1].toLowerCase()] = 1; return [x[0], x[1], GE[g[0]] || "✨"]; }); if (it.length) groups.push({n: g[0], items: it}); });
+    var w = document.createElement("div"); w.className = "eco"; w.setAttribute("role", "dialog");
+    var draw = function(q){ q = (q || "").toLowerCase().trim();
+      return groups.map(function(g, gi){ var it = g.items.filter(function(x){ return !q || (x[0] + " " + g.n).toLowerCase().indexOf(q) > -1; }); if (!it.length) return "";
+        return '<h5>' + esc(g.n) + '</h5><div class="eg2">' + it.map(function(x){ return '<a href="' + esc(x[1]) + '"><span style="--g:' + TINT[gi % TINT.length] + '">' + x[2] + '</span>' + esc(x[0]) + '</a>'; }).join("") + '</div>'; }).join("") || '<p style="color:var(--ink-soft)">Nothing found.</p>'; };
+    w.innerHTML = '<div><div class="eh"><b>✨ The XpertCreation ecosystem</b><button type="button" aria-label="Close">&times;</button></div><input type="search" placeholder="Search everything…" aria-label="Search"><div class="egs">' + draw("") + '</div></div>';
+    document.body.appendChild(w); document.body.style.overflow = "hidden";
+    var close = function(){ w.remove(); document.body.style.overflow = ""; if (location.hash === "#eco") history.replaceState(null, "", location.pathname + location.search); };
+    w.addEventListener("click", function(e){ if (e.target === w || e.target.closest(".eh button")) close(); });
+    w.querySelector("input").addEventListener("input", function(){ w.querySelector(".egs").innerHTML = draw(this.value); });
+    document.addEventListener("keydown", function k(e){ if (e.key === "Escape"){ close(); document.removeEventListener("keydown", k); } });
+  }
+  var ecoBtn = document.getElementById("d2eco");
+  if (ecoBtn) ecoBtn.addEventListener("click", function(e){ e.preventDefault(); eco(); });
+  if (location.hash === "#eco") setTimeout(eco, 0);
 
   // search: every page in the groups above + the full menu, no repeats
   var ALL = [], seen = {};
