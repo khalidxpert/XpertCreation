@@ -13,6 +13,7 @@ urlpatterns = [
     path("<int:pk>/", views.detail),
     path("<int:pk>/join/", views.join),
     path("<int:pk>/decline/", views.decline),
+    path("<int:pk>/decline-push/", views.decline_push),
     path("<int:pk>/leave/", views.leave),
     path("<int:pk>/poll/", views.poll),
     path("<int:pk>/signal/", views.signal),

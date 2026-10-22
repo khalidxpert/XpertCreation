@@ -18,7 +18,7 @@ from .models import PushSubscription
 
 TITLES = {"chat_message": "New message", "connect": "Connect", "endorse": "Endorsement", "follow": "New follower",
           "pet": "Your pet", "tick": "Blue tick", "report": "Report", "chat_report": "Chat report",
-          "market": "Freelance", "store": "Store", "rides": "Rides", "property": "Property", "rewards": "Rewards", "briefcase": "My Briefcase", "live": "Live now", "travel": "Hotels & tours", "test": "XpertCreation"}
+          "market": "Freelance", "store": "Store", "rides": "Rides", "property": "Property", "rewards": "Rewards", "briefcase": "My Briefcase", "live": "Live now", "travel": "Hotels & tours", "call": "XpertChat call", "test": "XpertCreation"}
 
 
 def _env(name):
@@ -36,13 +36,14 @@ def _env(name):
     return ""
 
 
-def _payload(kind, text, link):
+def _payload(kind, text, link, extra=None):
     tag = "xc-" + (link or kind)
-    return json.dumps({"title": TITLES.get(kind, "XpertCreation"), "body": text[:180],
-                       "url": link or "/", "tag": tag})
+    d = {"title": TITLES.get(kind, "XpertCreation"), "body": text[:180], "url": link or "/", "tag": tag, "kind": kind}
+    d.update(extra or {})
+    return json.dumps(d)
 
 
-def _deliver(sub_ids, data):
+def _deliver(sub_ids, data, ttl=86400, urgency=None):
     from pywebpush import WebPushException, webpush
     key, subject = _env("VAPID_PRIVATE_KEY"), _env("VAPID_SUBJECT") or "mailto:admin@example.com"
     if not key:
@@ -50,7 +51,8 @@ def _deliver(sub_ids, data):
     for s in PushSubscription.objects.filter(id__in=sub_ids):
         try:
             webpush(subscription_info={"endpoint": s.endpoint, "keys": {"p256dh": s.p256dh, "auth": s.auth}},
-                    data=data, vapid_private_key=key, vapid_claims={"sub": subject}, ttl=86400, timeout=6)
+                    data=data, vapid_private_key=key, vapid_claims={"sub": subject}, ttl=ttl, timeout=6,
+                    headers={"Urgency": urgency} if urgency else None)
             PushSubscription.objects.filter(id=s.id).update(last_ok=timezone.now(), fails=0)
         except WebPushException as e:
             code = getattr(getattr(e, "response", None), "status_code", 0)
@@ -63,12 +65,25 @@ def _deliver(sub_ids, data):
     PushSubscription.objects.filter(fails__gte=20).delete()
 
 
-def send(user, kind, text, link=""):
-    """Queue a push for every device of this user. Never slows down or breaks the request."""
+def devices(user):
+    """How many phones / browsers of this person can get notifications."""
+    try:
+        return PushSubscription.objects.filter(user=user).count()
+    except Exception:
+        return 0
+
+
+def send(user, kind, text, link="", extra=None, ttl=86400, urgency=None, wait=False):
+    """Queue a push for every device of this user. Never slows down or breaks the request.
+    Calls pass extra (call id, Answer/Decline), a short ttl, urgency="high", and wait=True from their own thread."""
     try:
         ids = list(PushSubscription.objects.filter(user=user).values_list("id", flat=True))
         if ids and _env("VAPID_PRIVATE_KEY"):
-            threading.Thread(target=_deliver, args=(ids, _payload(kind, text, link)), daemon=True).start()
+            args = (ids, _payload(kind, text, link, extra), ttl, urgency)
+            if wait:
+                _deliver(*args)
+            else:
+                threading.Thread(target=_deliver, args=args, daemon=True).start()
     except Exception:
         pass
 

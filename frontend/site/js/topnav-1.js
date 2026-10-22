@@ -361,7 +361,7 @@
       + ".xcpp .on{background:#1B4DFF;color:#fff}.xcpp .no{background:rgba(255,255,255,.12);color:#fff}";
     document.head.appendChild(st);
     var c = document.createElement("div"); c.className = "xcpp"; c.setAttribute("role", "dialog");
-    c.innerHTML = '<i>🔔</i><div><b>Turn on notifications?</b><p>Hear about new offers, orders, messages and connection requests on this phone, even when XpertCreation is closed.</p>'
+    c.innerHTML = '<i>🔔</i><div><b>Turn on notifications?</b><p>Hear about calls, messages, new offers, orders and connection requests on this phone, even when XpertCreation is closed.</p>'
       + '<div class="bt"><button class="on">Turn on</button><button class="no">Not now</button></div></div>';
     document.body.appendChild(c);
     c.querySelector(".no").onclick = function(){ try { localStorage.setItem(KEY, String(Date.now() + 5 * 864e5)); } catch (e){} c.remove(); };
@@ -734,5 +734,5 @@
 })();
 
 ;/* XpertChat calls and message tones on every page (setup_calls) */
-(function(){try{if(window.XCCALL||/^\/call/.test(location.pathname)||document.querySelector('script[src^="/js/xcall-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcall-1.js?v=2";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.XCCALL||/^\/call/.test(location.pathname)||document.querySelector('script[src^="/js/xcall-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcall-1.js?v=3";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 (function(){try{if(window.XCAPP||document.querySelector('script[src^="/js/xcapp-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcapp-1.js?v=4";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();

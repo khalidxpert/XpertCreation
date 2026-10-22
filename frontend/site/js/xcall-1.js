@@ -212,7 +212,10 @@
   Call.prototype.status = function(){
     if (!this.stEl) return;
     var c = this.c, n = Object.keys(this.peers).filter(function(k){ return this.peers[k].ok; }, this).length, t = "";
-    if (c.state === "ringing" && c.kind === "t") t = c.caller.id === this.me ? "Ringing…" : "Connecting…";
+    if (c.state === "ringing" && c.kind === "t"){
+      t = c.caller.id === this.me ? (c.reach === 0 ? "Calling…" : "Ringing…") : "Connecting…";
+      if (c.caller.id === this.me && c.reach === 0 && !this.toldReach){ this.toldReach = 1; this.say(c.title + " has notifications off on their phone, so it rings only while XpertCreation is open there."); }
+    }
     else if (c.state === "ringing") t = "Waiting for others to join…";
     else if (c.answered_at && n){ t = fmt((Date.now() - this.t0) / 1000); }
     else t = "Connecting…";
@@ -681,11 +684,49 @@
     });
   }
 
+  /* ------------------------------------------------------------ calls ring only when this phone allows notifications */
+  function pushNudge(){
+    if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window) || Notification.permission === "granted") return;
+    try { if (Date.now() < +(localStorage.getItem("xc_callnudge") || 0)) return; } catch (e) {}
+    fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
+      if (!u || !u.id) return;
+      var den = Notification.permission === "denied";
+      var st = D.createElement("style");
+      st.textContent = ".xknud{position:fixed;left:10px;right:10px;bottom:calc(84px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;z-index:8000;background:#0D1424;color:#fff;border-radius:16px;padding:11px 12px;display:flex;gap:10px;align-items:center;font-size:13.5px;line-height:1.4;box-shadow:0 12px 32px rgba(0,0,0,.3)}"
+        + ".xknud b{display:block;font-size:14.5px}.xknud .ur{display:block;direction:rtl;font-family:'Noto Nastaliq Urdu',serif;font-size:13px;line-height:2;opacity:.85}.xknud button{border:0;border-radius:11px;padding:9px 13px;font:inherit;font-weight:800;cursor:pointer;flex:0 0 auto}"
+        + ".xknud .on{background:#16A34A;color:#fff}.xknud .x{background:transparent;color:#fff;opacity:.7;font-size:17px;padding:4px 6px}";
+      D.head.appendChild(st);
+      var n = D.createElement("div"); n.className = "xknud"; n.setAttribute("role", "dialog");
+      n.innerHTML = '<span style="font-size:24px">📞</span><div style="flex:1;min-width:0"><b>' + (den ? "Calls can\'t ring on this phone" : "Get calls even when the app is closed") + "</b>"
+        + (den ? "Notifications are blocked. Open phone Settings → Apps → Xpert (or Chrome) → Notifications, and allow them." : "Turn on notifications so voice and video calls ring on this phone.")
+        + '<span class="ur" lang="ur">' + (den ? "فون کی سیٹنگز میں نوٹیفکیشن کی اجازت دیں" : "کال کی گھنٹی کے لیے نوٹیفکیشن آن کریں") + "</span></div>"
+        + (den ? "" : '<button class="on">Turn on</button>') + '<button class="x" aria-label="Close">✕</button>';
+      B.appendChild(n);
+      n.querySelector(".x").onclick = function(){ try { localStorage.setItem("xc_callnudge", String(Date.now() + 3 * 864e5)); } catch (e) {} n.remove(); };
+      var on = n.querySelector(".on"); if (!on) return;
+      on.onclick = function(){
+        on.disabled = true; on.textContent = "…";
+        Notification.requestPermission().then(function(p){
+          if (p !== "granted"){ n.remove(); return; }
+          return fetch("/api/notify/push/key/").then(function(r){ return r.json(); }).then(function(k){
+            return navigator.serviceWorker.register("/sw.js").then(function(){ return navigator.serviceWorker.ready; }).then(function(r){
+              return r.pushManager.getSubscription().then(function(s){ return s || r.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64u(k.key)}); }); });
+          }).then(function(sub){
+            return fetch("/api/notify/push/subscribe/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: JSON.stringify(sub.toJSON())});
+          }).then(function(){ n.innerHTML = '<span style="font-size:24px">✅</span><div style="flex:1"><b>Calls will ring on this phone</b></div>'; setTimeout(function(){ n.remove(); }, 3500); });
+        }).catch(function(){ n.remove(); });
+      };
+    }).catch(function(){});
+  }
+  function b64u(s){ var pad = "=".repeat((4 - s.length % 4) % 4), raw = atob((s + pad).replace(/-/g, "+").replace(/_/g, "/")), out = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i); return out; }
+
   window.XCCALL = { start: startCall, begin: begin, sounds: soundsPanel, tone: tone, _ring: showIncoming };
   if (PAGE === "call") callPage();
   else {
     if (PAGE === "chat") chatButtons();
     if (PAGE === "group") groupButtons();
+    if (PAGE === "chat" || PAGE === "group") setTimeout(pushNudge, 2500);
     menuLink();
     pollIncoming();
     D.addEventListener("visibilitychange", function(){ if (!D.hidden && pollT !== -1) pollIncoming(); });

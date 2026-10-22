@@ -24,6 +24,7 @@ import re
 import secrets
 import hmac
 import json
+import threading
 import time
 from datetime import timedelta
 
@@ -62,6 +63,43 @@ def _push(user, text, link):
         send(user, "call", text, link)
     except Exception:
         pass
+
+
+def _reach(c, me):
+    """For the caller of a one-to-one call: how many phones of the other person can ring (0 = notifications off)."""
+    if c.kind != "t" or c.caller_id != me.id:
+        return None
+    try:
+        from notifications.push import devices
+        other = CallMember.objects.filter(call=c).exclude(user_id=me.id).select_related("user").first()
+        return devices(other.user) if other else 0
+    except Exception:
+        return None
+
+
+def _ring(other, c, caller_name):
+    """Ring the other phone: an urgent call notification with Answer / Decline,
+    sent again every 7 seconds while the call is still ringing (5 times, about 35 seconds)."""
+    from django.core import signing
+    extra = {"title": ("\U0001F3A5 " if c.video else "\U0001F4DE ") + caller_name, "call": c.id, "video": bool(c.video),
+             "tag": "xc-call-%d" % c.id, "dec": signing.dumps({"c": c.id, "u": other.id}, salt="xc-ring")}
+    body = "Incoming %s \u00b7 tap to answer" % ("video call" if c.video else "voice call")
+
+    def go():
+        from django.db import connection
+        try:
+            from notifications.push import send
+            for i in range(5):
+                if i:
+                    time.sleep(7)
+                    if not CallMember.objects.filter(call_id=c.id, user=other, state="ringing", call__state="ringing").exists():
+                        break
+                send(other, "call", body, "/call?id=%d" % c.id, extra=extra, ttl=40, urgency="high", wait=True)
+        except Exception:
+            pass
+        finally:
+            connection.close()
+    threading.Thread(target=go, daemon=True).start()
 
 
 def _dur(c):
@@ -164,7 +202,7 @@ def _json(c, me):
             "starts_at": c.starts_at.isoformat() if c.starts_at else None, "host": c.caller_id == me.id,
             "meeting_no": c.meeting_no if c.kind == "m" else "", "speaker": c.speaker, "org": c.org, "tz": c.tz, "schedule": c.schedule or [],
             "locked": bool(c.kind == "m" and c.passcode), "passcode": c.passcode if (c.kind == "m" and c.caller_id == me.id) else "",
-            "expires_at": c.expires_at.isoformat() if c.expires_at else None}
+            "expires_at": c.expires_at.isoformat() if c.expires_at else None, "reach": _reach(c, me)}
 
 
 def _can_see(c, u, code=""):
@@ -248,7 +286,7 @@ def start(request):
         c = Call.objects.create(kind="t", ref_id=t.id, caller=u, video=video)
         CallMember.objects.create(call=c, user=u, state="joined", joined_at=_now(), seen=_now())
         CallMember.objects.create(call=c, user=other, state="ringing")
-        _push(other, "\U0001F4DE %s is calling you (%s). Tap to answer." % (V._name(u), _what(c)), "/call?id=%d" % c.id)
+        _ring(other, c, V._name(u))
         return Response(_json(c, u))
     if d.get("group"):
         try:
@@ -544,3 +582,30 @@ def meet_end(request, pk):
     Call.objects.filter(pk=c.pk).update(state="ended", ended_at=_now(), expires_at=_now())
     c.refresh_from_db()
     return Response(_json(c, request.user))
+
+
+
+# ---------------------------------------------------------------- Decline straight from the phone notification
+from rest_framework.decorators import authentication_classes  # noqa: E402
+from rest_framework.permissions import AllowAny  # noqa: E402
+
+
+@api_view(["POST"])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def decline_push(request, pk):
+    """The Decline button on the ringing notification. The notification carries a signed ticket for this call and person."""
+    from django.core import signing
+    try:
+        d = signing.loads(str((request.data or {}).get("t") or ""), salt="xc-ring", max_age=600)
+    except signing.BadSignature:
+        return _err("This call notification has expired.", 403)
+    if d.get("c") != pk:
+        return _err("This call notification has expired.", 403)
+    c = Call.objects.filter(pk=pk).first()
+    if not c:
+        return _err("Call not found.", 404)
+    CallMember.objects.filter(call=c, user_id=d.get("u"), state="ringing").update(state="declined")
+    if c.kind == "t" and c.state == "ringing":
+        _finish(c, "declined")
+    return Response({"ok": True})

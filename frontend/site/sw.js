@@ -6,7 +6,7 @@
  * honest "you are offline", and blood requests in particular must never be
  * answered from a cache.
  */
-const VERSION = "xc-v342";
+const VERSION = "xc-v343";
 const SHELL = VERSION + "-shell";
 
 // Pages worth having offline. Each is small and self-contained.
@@ -109,14 +109,33 @@ self.addEventListener("fetch", function (event) {
 
 /* ---- push notifications: show them, and open the right page when tapped ---- */
 self.addEventListener("push", function(event){
-  var d = {};
+  var d = {}, R = self.registration;
   try { d = event.data ? event.data.json() : {}; } catch (e) { d = {body: event.data ? event.data.text() : ""}; }
-  event.waitUntil(self.registration.showNotification(d.title || "XpertCreation", {
+  if (d.call){                        /* a call ringing: stays on screen, long vibration, Answer / Decline */
+    var tag = d.tag || ("xc-call-" + d.call), at = Date.now();
+    event.waitUntil(R.showNotification(d.title || "Incoming call", {
+      body: d.body || "", icon: "/brand/icon-512.png", badge: "/brand/badge-96.png", tag: tag, renotify: true,
+      requireInteraction: true, silent: false, timestamp: at, vibrate: [900, 400, 900, 400, 900, 400, 900],
+      actions: [{action: "answer", title: d.video ? "Answer video" : "Answer"}, {action: "decline", title: "Decline"}],
+      data: {url: d.url || "/", call: d.call, dec: d.dec || "", at: at}
+    }).then(function(){ return new Promise(function(ok){ setTimeout(ok, 30000); }); }).then(function(){
+      return R.getNotifications({tag: tag}).then(function(ns){ ns.forEach(function(n){ if (n.data && n.data.at === at) n.close(); }); });
+    }).catch(function(){}));
+    return;
+  }
+  var clear = d.kind === "call" ? R.getNotifications().then(function(ns){ ns.forEach(function(n){ if (n.tag && n.tag.indexOf("xc-call-") === 0) n.close(); }); }).catch(function(){}) : Promise.resolve();
+  event.waitUntil(clear.then(function(){ return R.showNotification(d.title || "XpertCreation", {
     body: d.body || "", icon: "/brand/icon-512.png", badge: "/brand/badge-96.png",
     tag: d.tag || "xc", renotify: true, data: {url: d.url || "/"}
-  }));
+  }); }));
 });
 self.addEventListener("notificationclick", function(event){
+  var nd = event.notification.data || {};
+  if (event.action === "decline" && nd.call){
+    event.notification.close();
+    event.waitUntil(fetch("/api/calls/" + nd.call + "/decline-push/", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({t: nd.dec || ""})}).catch(function(){}));
+    return;
+  }
   event.notification.close();
   var url = new URL((event.notification.data && event.notification.data.url) || "/", self.location.origin).href;
   event.waitUntil(self.clients.matchAll({type: "window", includeUncontrolled: true}).then(function(list){
