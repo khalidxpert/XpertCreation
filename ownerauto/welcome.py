@@ -74,13 +74,52 @@ def build(u):
 <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background:#EEF1F7"><tr><td align="center" style="padding:24px 12px">
 <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:20px;overflow:hidden">
 <tr><td style="background:linear-gradient(135deg,#0B1230,#1B4DFF);background-color:#1B4DFF;padding:28px 26px;color:#fff">
-<div style="font-size:15px;font-weight:800;opacity:.9">XpertCreation</div><div style="font-size:28px;font-weight:900;line-height:1.15;margin-top:6px">Welcome, %(name)s! \U0001F44B</div>
+<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:middle"><img src="https://xpertcreation.com/brand/logo-128.png" width="52" height="52" alt="XpertCreation" style="display:block;border:0;border-radius:14px;width:52px;height:52px"></td><td style="padding-left:12px;vertical-align:middle;font-size:20px;font-weight:900;color:#ffffff">XpertCreation</td></tr></table><div style="font-size:28px;font-weight:900;line-height:1.15;margin-top:6px">Welcome, %(name)s! \U0001F44B</div>
 <div style="font-size:15px;opacity:.92;margin-top:6px">One free account for everything you need.</div><div style="font-size:16px;margin-top:4px;direction:rtl;text-align:left">ایک ایپ، ہر ضرورت، ایک ہی جگہ</div></td></tr>
 <tr><td style="padding:22px 26px 6px;font-size:15px;line-height:1.6">Assalam o Alaikum %(name)s,<br><br>I am <b>Syed Khalid Hussain Shah</b>, founder of XpertCreation. Thank you for joining. We built XpertCreation in Lahore so that your network, work, shopping, learning and family can all live in one free account.<br><br>Here is a quick look at what you can do:</td></tr>
 <tr><td style="padding:0 26px"><table role="presentation" width="100%%" cellpadding="0" cellspacing="0">%(rows)s</table></td></tr>
 <tr><td style="padding:20px 26px"><table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background:#0D1424;border-radius:16px"><tr><td style="padding:18px;color:#fff;font-size:15px"><b>\U0001F4F1 Get the Android app</b><br><span style="opacity:.85;font-size:14px">Everything on your phone, with notifications.</span></td>
 <td style="padding:18px;text-align:right"><a href="%(app)s" style="display:inline-block;background:#F59E0B;color:#111;text-decoration:none;font-weight:900;padding:10px 14px;border-radius:10px">Google Play</a></td></tr></table></td></tr>
-<tr><td style="padding:0 26px 22px;font-size:15px;line-height:1.6">Start with your profile so people can find you: <a href="%(site)s/me-profile" style="color:#1B4DFF;font-weight:800">complete your profile</a>. If you need anything, just reply to me on WhatsApp.<br><br>Welcome to the family,<br><b>Syed Khalid Hussain Shah</b><br><span style="color:#5A657C;font-size:14px">Founder &amp; CEO, XpertCreation<br>xpertcreation.com &middot; WhatsApp +92 300 946 2916 &middot; khalid@xpertcreation.com</span></td></tr>
+<tr><td style="padding:0 26px 22px;font-size:15px;line-height:1.6">Start with your profile so people can find you: <a href="%(site)s/me-profile" style="color:#1B4DFF;font-weight:800">complete your profile</a>. If you need anything, just reply to me on WhatsApp.<br><br>Welcome to the family,</td></tr>
+<tr><td style="padding:0 26px 24px;border-top:1px solid #E4E8F2"><div style="height:16px"></div><table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#0D1424;font-size:13px;line-height:1.5;border-collapse:collapse">
+  <tr>
+    <td style="padding:0 14px 0 0;vertical-align:top;border-right:3px solid #1B4DFF">
+      <a href="https://xpertcreation.com" target="_blank"><img src="https://xpertcreation.com/brand/icon-180.png" width="72" height="72" alt="XpertCreation" style="display:block;border:0;border-radius:14px;width:72px;height:72px"></a>
+      <a href="https://xpertcreation.com/feed" target="_blank"><img src="https://xpertcreation.com/brand/sig-xpertconnect-96.png?v=2" width="48" height="48" alt="XpertConnect" title="XpertConnect" style="display:block;border:0;width:48px;height:48px;margin:10px auto 0"></a>
+      <div style="font-size:10px;font-weight:bold;color:#1B4DFF;text-align:center;margin-top:2px">XpertConnect</div>
+      <a href="https://xpertcreation.com/market" target="_blank"><img src="https://xpertcreation.com/brand/sig-freelance-96.png" width="44" height="44" alt="Freelance" title="Freelance marketplace" style="display:block;border:0;width:44px;height:44px;margin:10px auto 0;border-radius:10px"></a>
+      <div style="font-size:10px;font-weight:bold;color:#16A34A;text-align:center;margin-top:2px">Freelance</div>
+    </td>
+    <td style="padding:0 0 0 14px;vertical-align:top">
+      <div style="font-size:16px;font-weight:bold;color:#0D1424">Syed Khalid Hussain Shah</div>
+      <div style="font-size:13px;color:#1B4DFF;font-weight:bold">Founder &amp; CEO, XpertCreation</div>
+      <div style="font-size:12px;color:#5A657C;margin:4px 0 6px;max-width:380px">Free learning, tools, jobs and community for everyone, worldwide &mdash; XpertAcademy courses, XpertConnect networking and everyday tools, all in one place.</div>
+      <div style="font-size:12.5px;color:#0D1424">
+        &#128222; <a href="https://wa.me/923009462916" target="_blank" style="color:#0D1424;text-decoration:none">+92 300 946 2916</a> (WhatsApp)<br>
+        &#9993;&#65039; <a href="mailto:khalid@xpertcreation.com" style="color:#0D1424;text-decoration:none">khalid@xpertcreation.com</a><br>
+        &#127760; <a href="https://xpertcreation.com" target="_blank" style="color:#1B4DFF;text-decoration:none;font-weight:bold">xpertcreation.com</a>
+        &nbsp;&middot;&nbsp; <a href="https://xpertcreation.com/in/khalidxpert" target="_blank" style="color:#1B4DFF;text-decoration:none">XpertConnect profile</a><br>
+        &#128205; <a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" style="color:#1B4DFF;text-decoration:none">Find us on Google</a> (Lahore, Pakistan)
+      </div>
+      <table cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;border-collapse:separate">
+        <tr>
+          <td bgcolor="#1877F2" style="background:#1877F2;border-radius:8px;padding:6px 12px">
+            <a class="xsb" href="https://www.facebook.com/groups/1202505063279206" target="_blank" style="color:#ffffff;text-decoration:none;font-size:12px;font-weight:bold;font-family:Arial,Helvetica,sans-serif"><span style="font-family:Georgia,serif;font-size:14px">f</span>&nbsp; Facebook group</a>
+          </td>
+          <td width="6" style="width:6px;font-size:0">&nbsp;</td>
+          <td bgcolor="#7C3AED" style="background:#7C3AED;border-radius:8px;padding:6px 12px">
+            <a class="xsb" href="https://xpertcreation.com/chat-rooms" target="_blank" style="color:#ffffff;text-decoration:none;font-size:12px;font-weight:bold;font-family:Arial,Helvetica,sans-serif">#&nbsp; IRC chat rooms</a>
+          </td>
+          <td width="6" style="width:6px;font-size:0">&nbsp;</td>
+          <td bgcolor="#ffffff" style="background:#ffffff;border:2px solid #1B4DFF;border-radius:8px;padding:4px 10px">
+            <a class="xsb" href="https://xpertcreation.com/feed" target="_blank" style="color:#1B4DFF;text-decoration:none;font-size:12px;font-weight:bold;font-family:Arial,Helvetica,sans-serif"><img src="https://xpertcreation.com/brand/sig-xpertconnect-32.png?v=2" width="18" height="18" alt="" style="border:0;width:18px;height:18px;vertical-align:-4px">&nbsp;XpertConnect</a>
+          </td>
+        </tr>
+      </table>
+      <div style="font-size:11px;color:#5A657C;margin-top:5px">IRC: <a href="https://xpertcreation.com/irc" target="_blank" style="color:#5A657C">xpertcreation.com/irc</a> &middot; mIRC: irc.xpertcreation.com, port 6697 (SSL)</div>
+    </td>
+  </tr>
+</table></td></tr>
 <tr><td style="background:#F6F7FB;padding:14px 26px;font-size:12px;color:#5A657C">You get this email once, because you joined XpertCreation. XpertCreation, Lahore, Pakistan.</td></tr>
 </table></td></tr></table></body></html>""" % {"name": e(name), "rows": rows, "app": APP, "site": SITE}
     text.append("\nGet the Android app: %s\nComplete your profile: %s/me-profile\n" % (APP, SITE))
