@@ -337,21 +337,50 @@
       navigator.mediaDevices.getUserMedia({video: {facingMode: this.front ? "user" : "environment"}}).then(function(s){
         var t = s.getVideoTracks()[0]; self.local.addTrack(t); self.camOff = false; self.video = true;
         if (!self.screen) self.useTrack(t); b.classList.remove("off"); b.innerHTML = ICON.cam; self.drawSelf();
-      }).catch(function(){ self.say("Camera is not available."); });
+      }).catch(function(e){ self.say(camHelp(e)); });
       return;
     }
     this.camOff = !this.camOff; vt.enabled = !this.camOff;
     b.classList.toggle("off", this.camOff); b.innerHTML = this.camOff ? ICON.camoff : ICON.cam; this.drawSelf();
   };
+  /* Phones can open only one camera at a time, so the old camera is stopped first, then the other one is opened
+     (by facing, then by name or position in the camera list). If that fails, the first camera comes back. */
+  function openCam(front){
+    var face = front ? "user" : "environment";
+    return navigator.mediaDevices.getUserMedia({video: {facingMode: {exact: face}}}).catch(function(e){
+      if (e && e.name === "NotAllowedError") throw e;
+      return navigator.mediaDevices.enumerateDevices().then(function(ds){
+        var cams = ds.filter(function(d){ return d.kind === "videoinput"; });
+        var re = front ? /front|user|selfie/i : /back|rear|environment|world/i;
+        var pick = cams.filter(function(d){ return re.test(d.label || ""); })[0] || (cams.length > 1 ? cams[front ? 0 : cams.length - 1] : null);
+        if (!pick) throw new Error("one");
+        return navigator.mediaDevices.getUserMedia({video: {deviceId: {exact: pick.deviceId}}});
+      });
+    });
+  }
+  function camHelp(e){
+    return e && e.name === "NotAllowedError" ? "The camera is blocked. Allow it in phone Settings → Apps → Xpert → Permissions → Camera (or Chrome → Site settings → Camera)."
+      : e && e.name === "NotReadableError" ? "Another app is using the camera. Close it and try again."
+      : "Camera is not available on this phone right now.";
+  }
   Call.prototype.flip = function(){
     var self = this, old = this.local && this.local.getVideoTracks()[0];
     if (!old){ return this.say("Turn the camera on first."); }
-    this.front = !this.front;
-    navigator.mediaDevices.getUserMedia({video: {facingMode: this.front ? "user" : "environment"}}).then(function(s){
-      var t = s.getVideoTracks()[0]; self.local.removeTrack(old); old.stop(); self.local.addTrack(t); t.enabled = !self.camOff;
+    if (this.flipping) return; this.flipping = true;
+    var want = !this.front;
+    var put = function(t){
+      self.local.getVideoTracks().forEach(function(x){ self.local.removeTrack(x); });
+      self.local.addTrack(t); t.enabled = !self.camOff;
       if (!self.screen) self.useTrack(t); self.drawSelf();
       var sv = self.stage.querySelector(".xkself video"); if (sv) sv.style.transform = self.front ? "" : "none";
-    }).catch(function(){ self.front = !self.front; self.say("Only one camera found."); });
+    };
+    old.stop();
+    openCam(want).then(function(s){ self.front = want; put(s.getVideoTracks()[0]); }).catch(function(e){
+      self.say(e && e.message === "one" ? "This phone has only one camera that the browser can use." : camHelp(e));
+      return openCam(self.front).then(function(s){ put(s.getVideoTracks()[0]); }).catch(function(){
+        return navigator.mediaDevices.getUserMedia({video: true}).then(function(s){ put(s.getVideoTracks()[0]); });
+      });
+    }).catch(function(e2){ self.say(camHelp(e2)); }).then(function(){ self.flipping = false; });
   };
   Call.prototype.toggleScreen = function(b){
     var self = this;
