@@ -182,7 +182,7 @@
   // ---------- my stickers: chats (chat.html) and groups (group.html) ----------
   if (page !== "chat" && page !== "group") return;
   // ---------- message actions: reply, reply privately, forward, copy, save, delete (setup_xpertchat_v3) ----------
-  var LAST = null, REPLY = null;
+  var LAST = null, REPLY = null, PENDING = null;
   function toast(t){ var d = D.createElement("div"); d.className = "xctoast"; d.textContent = t; B.appendChild(d); setTimeout(function(){ d.remove(); }, 2600); }
   function napi(p, body){ return fetch("/api/notify/" + p, {method: body === undefined ? "GET" : "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: body === undefined ? undefined : JSON.stringify(body)})
     .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); }); }
@@ -203,9 +203,22 @@
     var b = im.closest(BUB); if (!b || B.classList.contains("selmode")) return;
     e.preventDefault(); e.stopPropagation(); LAST = info(b); actionSheet(LAST, true);
   }, true);
+  (function(){
+    var t = null, sx = 0, sy = 0, fired = 0;
+    D.addEventListener("touchstart", function(e){
+      var b = e.target.closest && e.target.closest(BUB); if (!b || B.classList.contains("selmode") || e.touches.length > 1) return;
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; clearTimeout(t);
+      t = setTimeout(function(){ fired = Date.now(); try { navigator.vibrate && navigator.vibrate(25); } catch (x) {} LAST = info(b); actionSheet(LAST, true); }, 480);
+    }, {passive: true});
+    D.addEventListener("touchmove", function(e){ if (t && (Math.abs(e.touches[0].clientX - sx) > 10 || Math.abs(e.touches[0].clientY - sy) > 10)){ clearTimeout(t); t = null; } }, {passive: true});
+    D.addEventListener("touchend", function(){ clearTimeout(t); t = null; }, {passive: true});
+    D.addEventListener("click", function(e){ if (fired && Date.now() - fired < 700){ e.preventDefault(); e.stopPropagation(); fired = 0; } }, true);
+    D.addEventListener("contextmenu", function(e){ var b = e.target.closest && e.target.closest(BUB); if (!b) return; e.preventDefault(); if (Date.now() - fired < 900) return; LAST = info(b); actionSheet(LAST, true); });
+  })();
   // add our buttons to the message menus that open on a tap
   new MutationObserver(function(){
     var p = page === "chat" ? (D.getElementById("panel3") && D.querySelector("#panel3 [data-pin3]") && D.getElementById("panel3")) : (D.getElementById("gp") && D.querySelector("#gp [data-copytxt]") && D.getElementById("gp"));
+    if (p && PENDING && Date.now() - PENDING.t < 4000){ var pb = p.querySelector("[" + PENDING.attr + '="' + PENDING.mid + '"]'); if (pb){ PENDING = null; setTimeout(function(){ pb.click(); }, 30); return; } }
     if (!p || p.querySelector(".xcacts") || !LAST) return;
     var host = page === "chat" ? (p.querySelector(".ct3") || p) : (p.querySelector(".gacts") || p);
     var w = D.createElement("div"); w.className = "xcacts"; w.innerHTML = btns(LAST, false);
@@ -220,6 +233,7 @@
       + (full && m.text ? '<button class="xcab" data-xa="copy">📋 Copy text</button>' : '')
       + (m.img ? '<a class="xcab" data-xa="save" href="' + esc(m.img) + '" download>⬇ Save ' + (m.sticker ? "sticker" : "photo") + '</a>' : '')
       + (g && (m.mine || admin) ? '<button class="xcab red" data-xa="gdel">🗑 Delete for everyone</button>' : '')
+      + (!g && full ? '<button class="xcab" data-xa="delme">🗑 Delete for me</button>' + (m.mine ? '<button class="xcab red" data-xa="delall">🗑 Delete for everyone</button>' : '') : '')
       + (full ? '<button class="xcab" data-xa="more">\u22EF Pin, edit, delete and more</button>' : '');
   }
   function wire(w, m, done){
@@ -227,6 +241,7 @@
       var a = e.target.closest("[data-xa]"); if (!a) return; var k = a.getAttribute("data-xa");
       if (k === "save"){ setTimeout(done, 50); return; }
       e.preventDefault(); e.stopPropagation(); done();
+      if (k === "delme" || k === "delall"){ PENDING = {attr: k === "delme" ? "data-xdelme" : "data-xdelall", mid: m.mid, t: Date.now()}; var el1 = D.querySelector(BUB.replace("[data-mid]", '[data-mid="' + m.mid + '"]')); if (el1) setTimeout(function(){ el1.click(); }, 60); return; }
       if (k === "more"){ var el0 = D.querySelector(BUB.replace("[data-mid]", '[data-mid="' + m.mid + '"]')); if (el0) setTimeout(function(){ el0.click(); }, 60); return; }
       if (k === "reply") startReply(m);
       else if (k === "copy"){ if (navigator.clipboard) navigator.clipboard.writeText(m.text); toast("Copied"); }
@@ -348,7 +363,10 @@
     var s = e.target.closest("[data-mystk]"); if (s){ e.stopPropagation(); sendUrl(s.getAttribute("data-mystk")); return; }
     var b = e.target.closest("[data-gstk]"); if (b){ e.stopPropagation(); if (window.XCG) XCG.send("[sticker:" + b.getAttribute("data-gstk") + "]"); closeGP(); }
   }, true);
+  var stkBusy = 0;
   function sendUrl(url){
+    if (Date.now() - stkBusy < 2500) return; stkBusy = Date.now();
+    var em0 = $("emo3"); if (em0) em0.classList.remove("on"); closeGP();
     fetch(url, {credentials: "same-origin"}).then(function(r){ return r.blob(); }).then(function(bl){
       var file = new File([bl], "sticker.webp", {type: bl.type || "image/webp"});
       if (page === "group"){ if (window.XCG) XCG.send("[sticker:me]", file); closeGP(); return; }

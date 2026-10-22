@@ -154,7 +154,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 </style>
 <script src="/js/voice-1.js?v=1"></script>
 <style>/* group roles */.who.rk-owner,b.rk-owner{color:#B7791F;font-weight:800}.who.rk-admin,b.rk-admin{color:#2563EB;font-weight:800}.who.rk-mod,b.rk-mod{color:#16A34A;font-weight:800}b.rk-mem{font-weight:600}</style>
-<link rel="stylesheet" href="/css/xpertchat-1.css?v=3">
+<link rel="stylesheet" href="/css/xpertchat-1.css?v=4">
 </head>
 <body>
 <header class="top">
@@ -246,7 +246,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function bubble(m){
     if (m.system) return '<div class="gsys">' + esc(m.body) + '</div>';
     var my = !!(m.image && m.body === "[sticker:me]"), s = my ? "" : stk(m.body);
-    return '<div class="gm' + (m.mine ? ' me' : '') + (m.bot ? ' bot' : '') + '" data-mid="' + m.id + '">' + (m.mine ? '' : '<span class="who' + (m.bot ? '' : ' rk-' + (roleOf(m.author_id) || 'mem')) + '">' + (m.bot ? '\uD83E\uDD16 ' : (RICON[roleOf(m.author_id)] || '')) + esc(m.author) + '</span>')
+    return '<div class="gm' + (m.mine ? ' me' : '') + (m.bot ? ' bot' : '') + '" data-mid="' + m.id + '" data-aid="' + (m.author_id || '') + '">' + (m.mine ? '' : '<span class="who' + (m.bot ? '' : ' rk-' + (roleOf(m.author_id) || 'mem')) + '">' + (m.bot ? '\uD83E\uDD16 ' : (RICON[roleOf(m.author_id)] || '')) + esc(m.author) + '</span>')
       + (my ? '<img class="gs" src="' + esc(m.image) + '" alt="Sticker" loading="lazy">' : m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="gi" src="' + esc(m.image) + '" alt="" loading="lazy"></a>' : '')
       + (m.voice && window.XCVoice ? XCVoice.html(m.voice) : '')
       + (m.file ? '<a class="gf" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' \u00b7 ' + kb(m.file.size) + '</a>' : '')
@@ -317,7 +317,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
                + '<label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="gedit"' + (G.only_admins_edit ? " checked" : "") + '> Only admins can edit group info</label>'
                + '<div class="gacts"><button class="gbtn" data-addp>+ Add people</button><button class="gbtn" data-link>Invite link</button><button class="gbtn" data-botset>\uD83E\uDD16 Bot</button></div><div id="glinkbox"></div>' : '')
       + '<h3 style="margin-top:16px">' + G.members.length + ' members</h3>' + G.members.map(function(m){
-          return '<div class="gmem">' + av(m.avatar, m.name) + '<span>' + roleName(m, m.me ? "You" : m.name) + (m.muted ? ' \uD83D\uDD07' : '') + '</span>' + (m.role === "admin" ? '<em>Admin</em>' : (m.bot_mod ? '<em class="mod">Moderator</em>' : ''))
+          return '<div class="gmem" data-uid="' + m.id + '">' + av(m.avatar, m.name) + '<span>' + roleName(m, m.me ? "You" : m.name) + (m.muted ? ' \uD83D\uDD07' : '') + '</span>' + (m.role === "admin" ? '<em>Admin</em>' : (m.bot_mod ? '<em class="mod">Moderator</em>' : ''))
             + (admin && !m.me ? (m.role === "admin" ? '<button class="gbtn" data-mem="dismiss_admin" data-uid="' + m.id + '">Dismiss admin</button>' : '<button class="gbtn" data-mem="make_admin" data-uid="' + m.id + '">Make admin</button>')
                + (m.role !== "admin" ? (m.bot_mod ? '<button class="gbtn" data-mem="bot_unmod" data-uid="' + m.id + '">Remove moderator</button>' : '<button class="gbtn" data-mem="bot_mod" data-uid="' + m.id + '">Make moderator</button>') : '')
                + '<button class="gbtn gred" data-mem="remove" data-uid="' + m.id + '">Remove</button>' : '') + '</div>'; }).join("")
@@ -602,8 +602,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
 </footer>
 
-<script src="/js/xpertchat-1.js?v=3" defer></script>
+<script src="/js/xpertchat-1.js?v=4" defer></script>
 <script src="/js/xcall-1.js?v=1" defer></script>
-<script src="/js/xcam-1.js?v=1" defer></script>
+<script src="/js/xcam-1.js?v=4" defer></script>
+<script src="/js/chatplus-1.js?v=4" defer></script>
+<script src="/js/xroles-1.js?v=4" defer></script>
 </body>
 </html>

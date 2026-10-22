@@ -19,8 +19,7 @@
   st.textContent = ""
    + ".xmov{position:fixed;inset:0;z-index:2147482990;background:#000;color:#fff;display:flex;flex-direction:column;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;user-select:none;-webkit-user-select:none}"
    + ".xmstage{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:0}"
-   + ".xmstage canvas,.xmstage video.pv,.xmstage img.pv{max-width:100%;max-height:100%;object-fit:contain}"
-   + "@media(max-width:700px){.xmstage canvas.live{width:100%;height:100%;object-fit:cover}}"
+   + ".xmstage canvas,.xmstage video.pv,.xmstage img.pv{max-width:100%;max-height:100%;object-fit:contain}.xmstage canvas.live{width:auto;height:auto}"
    + ".xmtop{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;z-index:3;background:linear-gradient(rgba(0,0,0,.45),transparent)}"
    + ".xmi{width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.35);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer}"
    + ".xmbot{padding:8px 0 calc(14px + env(safe-area-inset-bottom));background:#000;z-index:3}"
@@ -209,10 +208,12 @@
     c.fillStyle = gr; c.fillRect(0, H - bh * 1.6, W, bh * 1.6);
     c.strokeStyle = hexA("#ffffff", 0.85); c.lineWidth = Math.max(3, W * 0.008); c.strokeRect(W * 0.025, W * 0.025, W - W * 0.05, H - W * 0.05);
     c.fillStyle = "#fff"; c.textAlign = "center"; c.textBaseline = "middle";
-    var fs = Math.round(Math.min(W * 0.085, bh * 0.42)); c.font = "800 " + fs + "px system-ui,-apple-system,'Segoe UI',Roboto,sans-serif";
-    c.shadowColor = "rgba(0,0,0,.35)"; c.shadowBlur = fs * 0.2; c.fillText(fr.text || fr.name, W / 2, H - bh * (fr.sub ? 0.82 : 0.55)); c.shadowBlur = 0;
+    var fs = Math.round(Math.min(W * 0.085, bh * 0.42)), txt = fr.text || fr.name;
+    c.font = "800 " + fs + "px system-ui,-apple-system,'Segoe UI',Roboto,sans-serif";
+    while (fs > 10 && c.measureText(txt).width > W * 0.88){ fs -= 2; c.font = "800 " + fs + "px system-ui,-apple-system,'Segoe UI',Roboto,sans-serif"; }
+    c.shadowColor = "rgba(0,0,0,.35)"; c.shadowBlur = fs * 0.2; c.fillText(txt, W / 2, H - bh * (fr.sub ? 0.82 : 0.55)); c.shadowBlur = 0;
     if (fr.sub){ c.font = Math.round(fs * 0.62) + "px 'Noto Nastaliq Urdu','Jameel Noori Nastaleeq',serif"; c.fillText(fr.sub, W / 2, H - bh * 0.32); }
-    if (fr.deco) emoji(c, fr.deco, {x: W / 2, y: H * 0.09}, Math.round(W * 0.075), 0);
+    if (fr.deco) emoji(c, fr.deco, {x: W / 2, y: H * 0.14}, Math.round(W * 0.075), 0);
   }
   function hexA(h, a){ var m = /^#?([0-9a-f]{6})$/i.exec(h || ""); if (!m) return "rgba(27,77,255," + a + ")"; var n = parseInt(m[1], 16); return "rgba(" + (n >> 16) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")"; }
 
@@ -297,6 +298,16 @@
     if (this.cv.width !== W || this.cv.height !== H){ this.cv.width = W; this.cv.height = H; this.glc.width = W; this.glc.height = H; }
     return [W, H];
   };
+  // what you see is what you get: the live picture is cut to the shape of the screen, so frames and text are never cut off
+  Cam.prototype.crop = function(v, vw, vh){
+    var st = this.ov.querySelector(".xmstage"), A = (st.clientWidth || vw) / (st.clientHeight || vh), a = vw / vh, sx = 0, sy = 0, cw = vw, ch = vh;
+    if (a > A){ cw = Math.round(vh * A); sx = Math.round((vw - cw) / 2); } else { ch = Math.round(vw / A); sy = Math.round((vh - ch) / 2); }
+    var k = Math.min(1, 1280 / Math.max(cw, ch)), W = Math.max(2, Math.round(cw * k)), H = Math.max(2, Math.round(ch * k));
+    var cc = this.cc || (this.cc = D.createElement("canvas"));
+    if (cc.width !== W || cc.height !== H){ cc.width = W; cc.height = H; }
+    cc.getContext("2d").drawImage(v, sx, sy, cw, ch, 0, 0, W, H);
+    return cc;
+  };
   Cam.prototype.paint = function(src, sw, sh, mirror, t){
     var wh = this.size(sw, sh), W = wh[0], H = wh[1], c = this.c2;
     var done = this.gl && this.gl.draw(src, COLOURS[this.colour], mirror);
@@ -312,8 +323,9 @@
     var step = function(t){
       if (self.stopped || self.img || !self.stream) return;
       if (v.videoWidth){
-        self.paint(v, v.videoWidth, v.videoHeight, self.front, t);
-        if (self.faceF && FM && !busy && t - last > 60){ busy = true; last = t; FM._cb = function(l){ self.lms = l; busy = false; }; FM.send({image: v}).catch(function(){ busy = false; }); }
+        var cr = self.crop(v, v.videoWidth, v.videoHeight);
+        self.paint(cr, cr.width, cr.height, self.front, t);
+        if (self.faceF && FM && !busy && t - last > 60){ busy = true; last = t; FM._cb = function(l){ self.lms = l; busy = false; }; FM.send({image: cr}).catch(function(){ busy = false; }); }
         if (!self.faceF) self.lms = [];
       }
       self.raf = requestAnimationFrame(step);

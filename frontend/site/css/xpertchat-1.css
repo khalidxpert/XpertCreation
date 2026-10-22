@@ -175,3 +175,7 @@ body.xc-app #glog .gm:has(> .gs),body.xc-app #glog .gm:has(> img.gs){background:
 .xcfr input{width:20px;height:20px;flex:none}.xcfr b{display:block;font-size:15px}.xcfr small{color:#5A657C;font-size:12.5px}
 .xcflash{animation:xcfl 1.4s}@keyframes xcfl{0%,60%{box-shadow:0 0 0 4px rgba(22,163,74,.5)}100%{box-shadow:none}}
 #csend svg,#csend *,#cmic svg,#cmic *,.att3 svg,.att3 *,#gsend *{pointer-events:none}
+
+/* v4: press and hold a message for its actions */
+.msg8 img,.gm img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.msg8,.gm{-webkit-touch-callout:none}
