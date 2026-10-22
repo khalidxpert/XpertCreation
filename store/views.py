@@ -440,6 +440,12 @@ def merchant_me(request):
             m = Merchant(user=u, slug=slug)
         if m.status == "suspended":
             return _err("This shop is suspended. Contact us from the Ownership & complaints page.", 403)
+        if not new and m.status in ("pending", "rejected") and name != m.name:   # fix a typo: the link follows the new name
+            base = slugify(name)[:70] or "shop"
+            slug, n = base, 2
+            while Merchant.objects.filter(slug=slug).exclude(pk=m.pk).exists():
+                slug = "%s-%d" % (base, n); n += 1
+            m.slug = slug
         m.name, m.city, m.phone, m.kind = name, city, phone, kind
         m.address, m.about = _txt(d.get("address"), 200), _txt(d.get("about"), 2000)
         if m.status == "rejected":
@@ -889,7 +895,7 @@ def _profile_check(u):
             {"key": "phone", "label": "a phone or WhatsApp number", "ok": bool(getattr(u, "whatsapp", "") or getattr(u, "phone", "")), "link": "/account"},
             {"key": "photo", "label": "a profile picture", "ok": bool(getattr(u, "avatar", "")), "link": "/account"},
             {"key": "kyc", "label": "an approved ID check (KYC)", "ok": _kyc(u), "link": "/get-verified"},
-            {"key": "business", "label": "a verified business: company page approved by our team and its website checked with the verification file",
+            {"key": "business", "label": "a verified business: company page approved by our team (your own website checked, or a free xpertcreation.com address)",
              "ok": _biz(u)["ok"], "link": "/company/manage"}]
 
 
@@ -905,7 +911,8 @@ def _biz(u):
         return out
     c = sorted(cs, key=lambda c: (c.status == "approved" and bool(c.domain_verified_at), c.status == "approved", bool(c.domain_verified_at), c.id))[-1]
     out.update(name=c.name, approved=c.status == "approved", website=bool(c.domain_verified_at), domain=c.domain or "")
-    out["ok"] = out["approved"] and out["website"]
+    out["sub"] = getattr(c, "site_mode", "") == "sub" and bool(getattr(c, "subdomain", ""))
+    out["ok"] = out["approved"] and (out["website"] or out["sub"])     # own website checked, or a free XpertCreation address (KYC only)
     return out
 
 

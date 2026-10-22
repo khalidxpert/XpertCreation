@@ -177,6 +177,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 .cmst{border-radius:12px;padding:12px 14px;font-weight:700;margin-bottom:12px}.cmst.draft{background:#F1F5F9}.cmst.pending{background:#FEF3C7;color:#92400E}.cmst.approved{background:#DCFCE7;color:#166534}.cmst.rejected{background:#FEE2E2;color:#991B1B}
 .cmdoc{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line,#E4E8F2);font-size:14px}.cmdoc span{flex:1}
 .cmmsg{min-height:18px;font-size:13.5px;margin-top:8px}.cmmsg.bad{color:#B91C1C}.cmmsg.ok{color:#166534}
+.cmpick2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}@media(max-width:560px){.cmpick2{grid-template-columns:1fr}}.cmopt{display:flex;flex-direction:column;gap:4px;text-align:left;padding:14px;border-radius:14px;border:1.5px solid var(--line,#E4E8F2);background:#fff;cursor:pointer;font:inherit;color:inherit}.cmopt:hover{border-color:#1B4DFF}.cmopt b{font-size:15px}.cmopt small{font-size:13px;color:#5A657C;line-height:1.4}.cmlink{background:none;border:0;padding:6px 0;color:#1B4DFF;font:inherit;font-size:14px;font-weight:700;cursor:pointer;text-decoration:underline}.cmsub{display:flex;align-items:center;border:1px solid var(--line,#E4E8F2);border-radius:12px;overflow:hidden;background:#fff}.cmsub input{border:0!important;margin:0!important;flex:1;min-width:0;border-radius:0!important}.cmsub span{padding:0 12px;color:#5A657C;font-weight:700;white-space:nowrap;font-size:14px}.cmsub span.pre{padding-right:0}
 .cmimgs{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.cmimgs img{height:64px;border-radius:12px;border:1px solid var(--line,#E4E8F2)}
 </style>
 <script>
@@ -202,12 +203,13 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     var h = '<div class="cmh"><h1>\uD83C\uDFE2 ' + (C ? esc(C.name) : "Your company page") + '</h1>' + (C && C.public ? '<a class="cmbtn g" style="margin:0;text-decoration:none" href="/company/' + esc(C.slug) + '">View page</a>' : '') + '</div>';
     if (list.length > 1) h += '<div class="cmb"><label>Your companies</label><select id="cmpick">' + list.map(function(x){ return '<option value="' + x.id + '"' + (C && x.id === C.id ? " selected" : "") + '>' + esc(x.name) + '</option>'; }).join("") + '</select></div>';
     if (!C){
-      box.innerHTML = h + '<div class="cmb"><h2>Create your company page</h2><p class="sub">Free. Step 1 verifies your website, step 2 verifies your company (KYC) for the \u2714 Verified badge.</p>'
+      box.innerHTML = h + '<div class="cmb"><h2>Create your company page</h2><p class="sub">Free. Step 1: your own website, or a free XpertCreation address. Step 2: KYC for the \u2714 Verified badge.</p>'
         + f("cmname", "Company name", "", "text", "e.g. Bilal Traders") + '<button class="cmbtn" data-a="create">Create page</button><div class="cmmsg" id="cmm0"></div></div>';
       return;
     }
     var st = {draft: "Not verified yet \u2014 finish the steps below.", pending: "\u23F3 Your documents are with our team. We may contact you on WhatsApp.", approved: "\u2714 Verified company", rejected: "Not approved: " + (C.review_note || "")}[C.status];
     h += '<div class="cmst ' + C.status + '">' + esc(st) + '</div>';
+    if (C.status !== "approved") h += '<p style="text-align:right;margin:-4px 0 8px"><button class="cmlink" data-a="restart">\u21BA Typed something wrong? Start over</button></p>';
     h += '<div class="cmb"><h2>Company details</h2><p class="sub">Shown on your public page.</p>'
       + (C.status === "approved" ? '<label>Company name</label><input value="' + esc(C.name) + '" disabled>' : f("cmname", "Company name", C.name))
       + f("cmtag", "Tagline", C.tagline, "text", "One line about the company") + f("cmabout", "About", C.about, "area", "What you do, who you serve")
@@ -217,14 +219,26 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
       + '<button class="cmbtn" data-a="save">Save details</button><div class="cmmsg" id="cmm1"></div></div>';
     h += '<div class="cmb"><h2>Logo and cover</h2><div class="cmimgs">' + (C.logo ? '<img src="' + esc(C.logo) + '" alt="">' : '') + '<label class="cmbtn g" style="margin:0">Upload logo<input type="file" accept="image/*" data-img="logo" style="display:none"></label>'
       + (C.cover ? '<img src="' + esc(C.cover) + '" alt="">' : '') + '<label class="cmbtn g" style="margin:0">Upload cover<input type="file" accept="image/*" data-img="cover" style="display:none"></label></div><div class="cmmsg" id="cmm2"></div></div>';
-    var s1 = C.website_verified;
-    h += '<div class="cmb"><h2><span class="n' + (s1 ? " ok" : "") + '">' + (s1 ? "\u2714" : "1") + '</span> Verify your website</h2>'
-      + (s1 ? '<p class="sub">\uD83C\uDF10 ' + esc(C.domain) + ' is verified. Your page is public.</p>'
-         : '<p class="sub">Prove the company runs its website. Your page goes public after this.</p>' + f("cmdom", "Company website", C.domain_pending || (C.website || "").replace(/^https?:\/\//, ""), "text", "mycompany.com")
-           + '<button class="cmbtn g" data-a="dom">Get my file</button>'
-           + (C.domain_token ? '<ol style="font-size:14px;line-height:1.7;padding-left:20px"><li><button class="cmbtn g" style="margin:0" data-a="domdl">\u2B07 Download xpertcreation-verify.txt</button></li>'
-             + '<li>Upload it to the main folder of your website, so it opens at <b>https://' + esc(C.domain_pending) + '/xpertcreation-verify.txt</b></li><li>Then tap <b>Check now</b>.</li></ol><button class="cmbtn" data-a="domchk">Check now</button>' : ''))
-      + '<div class="cmmsg" id="cmm3"></div></div>';
+    var sub = C.site_mode === "sub" && C.subdomain, s1 = C.website_verified || !!sub, pick = C.site_pick || "";
+    var own = C.site_mode === "own" || (!C.site_mode && !!(C.domain_pending || C.website));
+    var ownForm = '<p class="sub">Prove the company runs its website. Your page goes public after this.</p>' + f("cmdom", "Company website", C.domain_pending || (C.website || "").replace(/^https?:\/\//, ""), "text", "mycompany.com")
+      + '<button class="cmbtn g" data-a="dom">Get my file</button>'
+      + (C.domain_token ? '<ol style="font-size:14px;line-height:1.7;padding-left:20px"><li><button class="cmbtn g" style="margin:0" data-a="domdl">⬇ Download xpertcreation-verify.txt</button></li>'
+        + '<li>Upload it to the main folder of your website, so it opens at <b>https://' + esc(C.domain_pending) + '/xpertcreation-verify.txt</b></li><li>Then tap <b>Check now</b>.</li></ol><button class="cmbtn" data-a="domchk">Check now</button>' : '')
+      + '<p><button class="cmlink" data-a="picksub">No website? Use a free XpertCreation address instead</button></p>';
+    var sugg = C.subdomain || String(C.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 30);
+    var subForm = '<p class="sub">No website needed. Pick your address: English letters, numbers and - only. Our team verifies you with KYC in step 2.</p>'
+      + '<label for="cmsubn">Your free address</label><div class="cmsub">' + (C.sub_live ? '' : '<span class="pre">xpertcreation.com/s/</span>') + '<input id="cmsubn" maxlength="30" autocapitalize="off" autocomplete="off" spellcheck="false" value="' + esc(sugg) + '" placeholder="bilal-traders">' + (C.sub_live ? '<span>.xpertcreation.com</span>' : '') + '</div>'
+      + '<button class="cmbtn" data-a="subsave">Use this address</button><p><button class="cmlink" data-a="pickown">I have my own website</button></p>';
+    h += '<div class="cmb"><h2><span class="n' + (s1 ? " ok" : "") + '">' + (s1 ? "✔" : "1") + '</span> Your web address</h2>';
+    if (C.website_verified && pick !== "sub") h += '<p class="sub">🌐 ' + esc(C.domain) + ' is verified. Your page is public.</p>';
+    else if (pick === "sub") h += subForm;
+    else if (pick === "own") h += ownForm;
+    else if (sub) h += '<p class="sub">✨ Your free address: <b>' + esc(String(C.sub_url || "").replace(/^https?:\/\//, "")) + '</b><br>No website check needed: our team verifies you with KYC in step 2. It opens your shop once the shop is approved.</p><button class="cmbtn g" data-a="picksub">Change the address</button> <button class="cmlink" data-a="pickown">Use my own website instead</button>';
+    else if (own) h += ownForm;
+    else h += '<p class="sub">Pick one. You can change it later.</p><div class="cmpick2"><button class="cmopt" data-a="pickown"><b>🌐 I have my own website</b><small>Like mycompany.com. We check it with a small file you upload.</small></button>'
+      + '<button class="cmopt" data-a="picksub"><b>✨ Use a free XpertCreation address</b><small>Like yourname.xpertcreation.com. No website needed: KYC verifies you.</small></button></div>';
+    h += '<div class="cmmsg" id="cmm3"></div></div>';
     var s2 = C.status === "approved", lock = C.status === "pending";
     h += '<div class="cmb"' + (s1 ? '' : ' style="opacity:.55"') + '><h2><span class="n' + (s2 ? " ok" : "") + '">' + (s2 ? "\u2714" : "2") + '</span> Verify your company (KYC)</h2>'
       + '<p class="sub">For the \u2714 Verified badge. Documents are private: only you and our moderators can open them, and they are deleted 30 days after the decision.</p>'
@@ -250,6 +264,10 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     if (t.hasAttribute("data-del")){ api(C.id + "/docs/", {method: "DELETE", body: {doc: +t.getAttribute("data-del")}}).then(function(r){ upd(r, "cmm4", "Removed."); }); return; }
     if (a === "create"){ api("mine/", {method: "POST", body: {name: v("cmname")}}).then(function(r){ if (!r.ok){ msg("cmm0", r.data.detail, "bad"); return; } C = r.data; list.push(C); draw(); }); return; }
     if (a === "another"){ C = null; draw(); return; }
+    if (a === "pickown" || a === "picksub"){ C.site_pick = a === "picksub" ? "sub" : "own"; draw(); if (a === "picksub" && $("cmsubn")) $("cmsubn").focus(); return; }
+    if (a === "subsave"){ msg("cmm3", "Saving…"); api(C.id + "/site/", {method: "POST", body: {mode: "sub", name: v("cmsubn")}}).then(function(r){ upd(r, "cmm3", "✔ Address saved. Now step 2: KYC."); }); return; }
+    if (a === "restart"){ if (!confirm("Start over?\n\nThis deletes this company page: its name, link, website and documents. Then you can type it again.")) return;
+      api(C.id + "/restart/", {method: "POST", body: {}}).then(function(r){ if (!r.ok){ msg("cmm1", (r.data && r.data.detail) || "Could not start over.", "bad"); return; } var id = C.id; list = list.filter(function(x){ return x.id !== id; }); C = null; draw(); msg("cmm0", "Deleted. Type the company name again.", "ok"); }); return; }
     if (a === "save"){ var b = {tagline: v("cmtag"), about: v("cmabout"), industry: v("cmind"), size: v("cmsize"), founded: v("cmfound"), city: v("cmcity"), address: v("cmaddr"), email: v("cmmail"), phone: v("cmphone")};
       if ($("cmname") && !$("cmname").disabled) b.name = v("cmname"); api(C.id + "/", {method: "POST", body: b}).then(function(r){ upd(r, "cmm1", "Saved \u2714"); }); return; }
     if (a === "dom"){ api(C.id + "/domain/", {method: "POST", body: {domain: v("cmdom")}}).then(function(r){ upd(r, "cmm3", "Now download the file and upload it to your website."); }); return; }

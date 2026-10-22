@@ -55,16 +55,16 @@ def _out(c, full=False):
          "domain": c.domain if c.domain_verified_at else "", "url": SITE + "/company/" + c.slug}
     if full:
         d.update({"whatsapp": c.whatsapp, "status": c.status, "status_label": dict(Company.STATES)[c.status], "review_note": c.review_note,
-                  "domain_pending": c.domain, "domain_token": c.domain_token, "public": public_ok(c),
+                  "domain_pending": c.domain, "domain_token": c.domain_token, "public": public_ok(c), "site_mode": c.site_mode, "subdomain": c.subdomain, "sub_url": sub_url(c), "sub_live": sub_live(),
                   "docs": [{"id": x.id, "kind": x.kind, "kind_label": dict(CompanyDoc.KINDS)[x.kind], "name": x.name, "size": x.size,
                             "when": timezone.localtime(x.uploaded_at).strftime("%d %b %Y")} for x in c.docs.order_by("id")]})
     return d
 
 
-def _unique_slug(name):
+def _unique_slug(name, me=None):
     base = slugify(name)[:50] or "company"
     s, i = base, 2
-    while Company.objects.filter(slug=s).exists() or s in ("new", "manage", "review"):
+    while Company.objects.filter(slug=s).exclude(pk=me).exists() or s in ("new", "manage", "review"):
         s = "%s-%d" % (base, i); i += 1
     return s
 
@@ -97,7 +97,9 @@ def company(request, pk):
         d = request.data
         if "name" in d and c.status != Company.APPROVED:          # a verified company's name only changes through support
             nm = _t(d.get("name"), 120)
-            if len(nm) >= 2: c.name = nm
+            if len(nm) >= 2 and nm != c.name:
+                c.name = nm
+                c.slug = _unique_slug(nm, c.pk)      # a typo in the name doesn't stay in the link (only before approval)
         for f in EDIT:
             if f in d:
                 v = d.get(f)
@@ -186,6 +188,9 @@ def domain(request, pk):
     if d != c.domain or not c.domain_token:
         c.domain, c.domain_token, c.domain_verified_at = d, secrets.token_hex(16), None
         c.save(update_fields=["domain", "domain_token", "domain_verified_at", "updated_at"])
+    if c.site_mode != "own" or c.subdomain:
+        c.site_mode, c.subdomain = "own", ""
+        c.save(update_fields=["site_mode", "subdomain", "updated_at"])
     return Response(_out(c, True))
 
 
@@ -235,8 +240,8 @@ def submit(request, pk):
     c = Company.objects.filter(pk=pk, owner=request.user).first()
     if not c:
         return _err("Company not found.", 404)
-    if not c.domain_verified_at:
-        return _err("First verify your website (step 1).")
+    if not (c.domain_verified_at or (c.site_mode == "sub" and c.subdomain)):
+        return _err("First finish step 1: verify your own website, or pick a free XpertCreation address.")
     if not PHONE.match(c.whatsapp or ""):
         return _err("Add a WhatsApp number - our team will contact you on it to verify.")
     if not c.docs.filter(kind__in=["registration", "cheque"]).exists():
@@ -394,3 +399,91 @@ def page(request, slug):
         s = re.sub(r'<meta property="og:image" content="[^"]*">', '<meta property="og:image" content="%s">' % e(SITE + _media(c.logo)), s, 1)
     r = HttpResponse(s, content_type="text/html; charset=utf-8"); r["Cache-Control"] = "public, max-age=300"
     return r
+
+
+
+# ---------------------------------------------------------------- web address: own website, or a free name.xpertcreation.com (shopsite v1)
+SUBNAME = re.compile(r"^[a-z0-9](?:[a-z0-9-]{1,28}[a-z0-9])$")
+SUB_RESERVED = set(['academy', 'account', 'admin', 'api', 'app', 'apps', 'assets', 'billing', 'blog', 'cdn', 'chat', 'cpanel', 'dev', 'digitalbloom', 'digitalbloomco', 'docs', 'files', 'food', 'ftp', 'go', 'google', 'help', 'imap', 'irc', 'jobs', 'khalid', 'khalidxpert', 'learn', 'load', 'login', 'm', 'mail', 'media', 'my', 'new', 'ns1', 'ns2', 'official', 'pay', 'payments', 'penflow', 'play', 'pop', 'register', 'root', 's', 'secure', 'security', 'shop', 'smtp', 'staging', 'static', 'status', 'store', 'support', 'team', 'test', 'verify', 'webmail', 'wheels', 'wp', 'www', 'xpert', 'xpertconnect', 'xpertcreation', 'xpertgames'])
+WILDCARD_FILE = "/etc/xpertcreation/subdomains_on"   
+
+
+def sub_live():
+    """True once *.xpertcreation.com has a DNS record (Cloudflare) and the nginx block is on."""
+    return os.path.exists(WILDCARD_FILE)
+
+
+def sub_url(c):
+    if c.site_mode != "sub" or not c.subdomain:
+        return ""
+    return ("https://%s.xpertcreation.com" % c.subdomain) if sub_live() else (SITE + "/s/" + c.subdomain)
+
+
+def _sub_taken(name, c):
+    if name in SUB_RESERVED or "--" in name:
+        return "That address is reserved. Try another one."
+    if Company.objects.filter(subdomain=name).exclude(pk=c.pk).exists():
+        return "Someone already uses %s. Try another one." % name
+    try:
+        from store.models import Merchant
+        if Merchant.objects.filter(slug=name).exclude(user=c.owner).exists():
+            return "A shop already uses %s. Try another one." % name
+    except Exception:
+        pass
+    return ""
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def site(request, pk):
+    """{mode: "sub", name: "bilal-traders"} takes a free address; {mode: "own"} goes back to your own website."""
+    c = Company.objects.filter(pk=pk, owner=request.user).first()
+    if not c:
+        return _err("Company not found.", 404)
+    mode = request.data.get("mode")
+    if mode == "own":
+        c.site_mode, c.subdomain = "own", ""
+        c.save(update_fields=["site_mode", "subdomain", "updated_at"])
+        return Response(_out(c, True))
+    if mode != "sub":
+        return _err("Pick your own website or a free XpertCreation address.")
+    name = re.sub(r"[^a-z0-9-]", "", re.sub(r"[\s_.]+", "-", str(request.data.get("name") or "").strip().lower()))[:30].strip("-")
+    if not SUBNAME.match(name):
+        return _err("Use 3 to 30 English letters, numbers or - (like bilal-traders).")
+    e = _sub_taken(name, c)
+    if e:
+        return _err(e)
+    c.site_mode, c.subdomain = "sub", name
+    c.save(update_fields=["site_mode", "subdomain", "updated_at"])
+    return Response(_out(c, True))
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def restart(request, pk):
+    """Start over: delete a company page that is not approved yet (name, link, website, documents)."""
+    c = Company.objects.filter(pk=pk, owner=request.user).first()
+    if not c:
+        return _err("Company not found.", 404)
+    if c.status == Company.APPROVED:
+        return _err("This company is verified. To change it, contact support.")
+    _wipe_docs(c); c.delete()
+    return Response({"deleted": True})
+
+
+def go(request, name):
+    """xpertcreation.com/s/<name> and <name>.xpertcreation.com: open the member's shop, else the company page."""
+    from django.http import HttpResponseRedirect
+    name = str(name or "").lower()[:30]
+    c = Company.objects.filter(subdomain=name, site_mode="sub", hidden=False).select_related("owner").first()
+    try:
+        from store.models import Merchant
+        m = Merchant.objects.filter(user=c.owner, status="approved").first() if c else Merchant.objects.filter(slug=name, status="approved").first()
+    except Exception:
+        m = None
+    if m:
+        return HttpResponseRedirect(SITE + "/shop/" + m.slug)
+    if c and public_ok(c):
+        return HttpResponseRedirect(SITE + "/company/" + c.slug)
+    return HttpResponseRedirect(SITE + "/store#shops")
+

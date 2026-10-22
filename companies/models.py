@@ -32,6 +32,8 @@ class Company(models.Model):
     domain = models.CharField(max_length=120, blank=True, default="")
     domain_token = models.CharField(max_length=40, blank=True, default="")
     domain_verified_at = models.DateTimeField(null=True, blank=True)
+    site_mode = models.CharField(max_length=4, blank=True, default="")   # "" not chosen | own (own website) | sub (free XpertCreation address)
+    subdomain = models.CharField(max_length=30, blank=True, default="", db_index=True)
     hidden = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)

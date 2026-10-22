@@ -989,7 +989,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     api("merchant/").then(function(r){
       SC = r.d; var m = SC.merchant;
       if (!m || m.status === "rejected") return applyForm(m);
-      if (m.status === "pending"){ box.innerHTML = '<div class="st-box st-empty"><div class="e">&#9203;</div><b>Your shop &ldquo;' + esc(m.name) + '&rdquo; is waiting for approval</b>Our team checks new shops within 2 working days. You will get a notification.</div>'; return; }
+      if (m.status === "pending"){ box.innerHTML = '<div class="st-box st-empty"><div class="e">&#9203;</div><b>Your shop &ldquo;' + esc(m.name) + '&rdquo; is waiting for approval</b>Our team checks new shops within 2 working days. You will get a notification.<br><button class="st-btn sm" id="apEdit" style="margin-top:12px">&#9998; Typed something wrong? Fix my application</button></div>'; $("apEdit").onclick = function(){ applyForm(m); }; return; }
       if (m.status === "suspended"){ box.innerHTML = '<div class="st-box">' + msg("Your shop is suspended: " + esc(m.note) + ". Contact us from the Ownership &amp; complaints page.", "bad") + '</div>'; return; }
       var tabs = [["seller", "Dashboard"], ["seller-products", "Products"], ["seller-orders", "Orders" + (SC.orders_new ? " (" + SC.orders_new + ")" : "")], ["inventory", "Inventory" + (SC.low_stock ? " &#9888;" : "")], ["quotes", "Quotes" + (SC.quotes_open ? " (" + SC.quotes_open + ")" : "")], ["seller-shop", "Shop profile"], ["seller-pay", "&#128179; Payments"], ["seller-more", "&#10024; Social, hours &amp; card"], ["seller-drop", "&#128230; Dropship"], ["seller-chats", "&#128172; Chats"]];
       var head = '<div class="st-shop" style="width:auto;flex:none;padding:18px;border-radius:20px;margin-bottom:10px">' + '<label title="Change logo" style="position:relative;cursor:pointer;flex:none;display:block">' + (m.logo ? '<img src="' + esc(m.logo) + '" alt="">' : '<span class="lg">' + esc(m.name.charAt(0)) + '</span>') + '<span style="position:absolute;right:-6px;bottom:-6px;width:28px;height:28px;border-radius:50%;background:#F85606;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)">\uD83D\uDCF7</span><input type="file" id="hlf" accept="image/*" hidden></label>' + '<div style="flex:1"><b style="font-size:20px">' + esc(m.name) + '</b> ' + tierB(SC.tier) + '<br><small>Seller center &middot; <a href="#shop-' + esc(m.slug) + '" style="color:#fff;text-decoration:underline">view your shop</a></small></div></div>'
@@ -1000,14 +1000,14 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
     });
   }
   function applyForm(m){
-    var ok = SC.checklist.every(function(c){ return c.ok; }) || (m && m.status === "rejected");
+    var ok = SC.checklist.every(function(c){ return c.ok; }) || (m && (m.status === "rejected" || m.status === "pending"));
     var h = '<div class="st-two"><div class="st-box st-f"><h2>&#127978; Open your shop on XpertCreation</h2>' + (m && m.status === "rejected" ? msg("Your last application was not approved: " + esc(m.note) + ". Fix it and apply again.", "bad") : '')
       + '<p style="font-size:14px;color:var(--soft)">Sell to members across Pakistan: retail (B2C), wholesale (B2B) or both. Bronze is free with 10 products.</p>'
       + '<b>Before you apply</b><ul class="st-check">' + SC.checklist.map(function(c){ return '<li>' + (c.ok ? '&#9989;' : '&#11036;') + ' ' + esc(c.label.charAt(0).toUpperCase() + c.label.slice(1)) + (c.ok ? '' : ' &middot; <a href="' + (c.key === "phone" ? "/account?back=store#phone" : c.link) + '" style="color:var(--o);font-weight:800">do it now</a>') + '</li>'; }).join("") + '</ul>';
     if (ok) h += '<label for="an">Shop name</label><input id="an" maxlength="80" value="' + esc(m ? m.name : "") + '"><div class="row2"><div><label for="ac">City</label><input id="ac" value="' + esc(m ? m.city : "") + '"></div><div><label for="aph">Phone / WhatsApp</label><input id="aph" value="' + esc(m ? m.phone : (M.me.phone || "")) + '"></div></div>'
       + '<label for="acc">Country</label><select id="acc">' + spCountryOptions((m && m.country) || M.cc || "PK") + '</select><label for="ak">You sell</label><select id="ak"><option value="b2c">Retail to customers (B2C)</option><option value="b2b">Wholesale to businesses (B2B)</option><option value="both">Both</option></select>'
       + '<label for="aad">Shop / warehouse address</label><input id="aad" value="' + esc(m ? m.address : "") + '"><label for="aab">About your shop</label><textarea id="aab">' + esc(m ? m.about : "") + '</textarea>'
-      + '<p><button class="st-btn o" id="ago">Apply for a shop</button></p><div id="amsg"></div>';
+      + '<p><button class="st-btn o" id="ago">' + (m && m.status === "pending" ? "Save my application" : "Apply for a shop") + '</button></p><div id="amsg"></div>';
     else h += msg("Complete the steps above, then come back to apply.");
     h += '</div><div>' + plansBox("bronze") + '</div></div>';
     box.innerHTML = h;
