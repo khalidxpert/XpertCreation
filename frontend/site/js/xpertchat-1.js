@@ -179,97 +179,200 @@
     var acts = lb.querySelector(".gacts"); (acts || lb).appendChild(btn);
   }
 
-  // ---------- my stickers (chat.html) ----------
-  if (page !== "chat") return;
-  var KEY = "xc_mystk_v1", MAX = 24;
-  function mine(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { return []; } }
-  function keep(a){ try { localStorage.setItem(KEY, JSON.stringify(a.slice(0, MAX))); return true; } catch (e) { alert("Your phone's sticker space is full. Remove a few stickers first."); return false; } }
-  window.XCStk = {grid: function(){
-    var a = mine();
+  // ---------- my stickers: chats (chat.html) and groups (group.html) ----------
+  if (page !== "chat" && page !== "group") return;
+  var BUILTIN = "salam jazakallah shukriya mubarak inshaallah mashaallah alhamdulillah ameen eid ramadan ok thanks congrats welcome goodnight haha".split(" ");
+  var MY = null, loading = null;
+  function api(p, opt){ opt = opt || {}; var h = {"X-CSRFToken": ck("xc_csrf")}; if (opt.json){ h["Content-Type"] = "application/json"; }
+    return fetch("/api/notify/stickers/" + p, {method: opt.method || "GET", credentials: "same-origin", headers: h, body: opt.json ? JSON.stringify(opt.json) : opt.body})
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return {ok: r.ok, d: d}; }); }); }
+  function load(){
+    if (loading) return loading;
+    loading = api("mine/").then(function(r){ MY = r.ok ? (r.d.stickers || []) : []; migrate(); refresh(); return MY; });
+    return loading;
+  }
+  function migrate(){   // stickers made before (kept only on this phone) move to the server, so they show on every device
+    var old; try { old = JSON.parse(localStorage.getItem("xc_mystk_v1") || "[]"); } catch (e) { old = []; }
+    if (!old.length) return;
+    try { localStorage.removeItem("xc_mystk_v1"); } catch (e) {}
+    old.reverse().reduce(function(p, data){ return p.then(function(){ return fetch(data).then(function(r){ return r.blob(); }).then(function(b){ var fd = new FormData(); fd.append("file", b, "s.webp"); return api("mine/", {method: "POST", body: fd}); }).then(function(r){ if (r.ok) MY = r.d.stickers; }); }); }, Promise.resolve()).then(refresh);
+  }
+  function refresh(){ var et = D.querySelector('#emo3 [data-etab="mine"].on'); if (et) et.click(); var g = D.querySelector(".xcgp .egs"); if (g) g.innerHTML = gridHtml(); }
+  function gridHtml(){
+    if (!MY){ load(); return '<p style="color:#5A657C;font-size:13px">Loading…</p>'; }
     return '<div class="xcmy' + (window.XCStkEdit ? ' edit' : '') + '"><button type="button" class="mk" data-mkstk><span>➕</span>Make a sticker</button>'
-      + a.map(function(s, i){ return '<button type="button" data-mystk="' + i + '"><img src="' + s + '" alt="My sticker"><span class="rm" data-rmstk="' + i + '">×</span></button>'; }).join("") + '</div>'
-      + (a.length ? '<p style="text-align:right;margin:6px 0 0"><button type="button" data-edstk style="border:0;background:none;color:#1B4DFF;font-weight:700;cursor:pointer">' + (window.XCStkEdit ? "Done" : "Remove stickers") + '</button></p>' : '<p style="font-size:12.5px;color:#5A657C;margin:6px 2px 0">Turn any photo into a sticker: crop it, cut out a plain background and add words. Stickers stay on this phone.</p>');
-  }};
-  function redraw(){ var et = D.querySelector('[data-etab="mine"]'); if (et) et.click(); }
+      + MY.map(function(s){ return '<button type="button" data-mystk="' + esc(s.url) + '"><img src="' + esc(s.url) + '" alt="My sticker" loading="lazy">' + (s.anim ? '<i class="an">GIF</i>' : '') + '<span class="rm" data-rmstk="' + esc(s.name) + '">×</span></button>'; }).join("") + '</div>'
+      + (MY.length ? '<p style="text-align:right;margin:6px 0 0"><button type="button" data-edstk style="border:0;background:none;color:#1B4DFF;font-weight:700;cursor:pointer">' + (window.XCStkEdit ? "Done" : "Remove stickers") + '</button></p>'
+        : '<p style="font-size:12.5px;color:#5A657C;margin:6px 2px 0">Turn a photo or a few seconds of video into your own sticker. They show on every phone you sign in on.</p>');
+  }
+  window.XCStk = {grid: gridHtml};
+  load();
   D.addEventListener("click", function(e){
     if (e.target.closest("[data-mkstk]")){ e.stopPropagation(); maker(); return; }
-    if (e.target.closest("[data-edstk]")){ e.stopPropagation(); window.XCStkEdit = !window.XCStkEdit; redraw(); return; }
-    var rm = e.target.closest("[data-rmstk]"); if (rm){ e.stopPropagation(); var a = mine(); a.splice(+rm.getAttribute("data-rmstk"), 1); keep(a); redraw(); return; }
-    var s = e.target.closest("[data-mystk]"); if (s){ e.stopPropagation(); sendMine(mine()[+s.getAttribute("data-mystk")]); }
+    if (e.target.closest("[data-edstk]")){ e.stopPropagation(); window.XCStkEdit = !window.XCStkEdit; refresh(); return; }
+    var rm = e.target.closest("[data-rmstk]"); if (rm){ e.stopPropagation(); api("mine/" + rm.getAttribute("data-rmstk") + "/", {method: "DELETE"}).then(function(r){ if (r.ok){ MY = r.d.stickers; refresh(); } }); return; }
+    var s = e.target.closest("[data-mystk]"); if (s){ e.stopPropagation(); sendUrl(s.getAttribute("data-mystk")); return; }
+    var b = e.target.closest("[data-gstk]"); if (b){ e.stopPropagation(); if (window.XCG) XCG.send("[sticker:" + b.getAttribute("data-gstk") + "]"); closeGP(); }
   }, true);
-  function sendMine(data){
-    var cur = window.XC3 && XC3.cur && XC3.cur(); if (!cur || !data) return;
-    fetch(data).then(function(r){ return r.blob(); }).then(function(bl){
-      var fd = new FormData(); fd.append("photo", bl, "sticker." + (bl.type === "image/png" ? "png" : "webp")); fd.append("message", "[sticker:me]");
-      return fetch("/api/notify/threads/" + cur.id + "/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}, body: fd});
-    }).then(function(r){ return r.json().then(function(d){ return {ok: r.ok, d: d}; }); }).then(function(r){
-      if (!r.ok){ alert(r.d.detail || "Could not send the sticker."); return; }
-      var em = $("emo3"); if (em) em.classList.remove("on");
-      if (r.d.message && XC3.add) XC3.add([r.d.message]);
+  function sendUrl(url){
+    fetch(url, {credentials: "same-origin"}).then(function(r){ return r.blob(); }).then(function(bl){
+      var file = new File([bl], "sticker.webp", {type: bl.type || "image/webp"});
+      if (page === "group"){ if (window.XCG) XCG.send("[sticker:me]", file); closeGP(); return; }
+      var cur = window.XC3 && XC3.cur && XC3.cur(); if (!cur) return;
+      var fd = new FormData(); fd.append("photo", file); fd.append("message", "[sticker:me]");
+      return fetch("/api/notify/threads/" + cur.id + "/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}, body: fd})
+        .then(function(r){ return r.json().then(function(d){ return {ok: r.ok, d: d}; }); }).then(function(r){
+          if (!r.ok){ alert(r.d.detail || "Could not send the sticker."); return; }
+          var em = $("emo3"); if (em) em.classList.remove("on");
+          if (r.d.message && XC3.add) XC3.add([r.d.message]);
+        });
     });
+  }
+  // groups: a sticker button next to the message box
+  function closeGP(){ var g = D.querySelector(".xcgp"); if (g) g.remove(); }
+  if (page === "group"){
+    var putBtn = function(){
+      var q = $("gq"); if (!q || D.getElementById("xcgstk")) return;
+      var b = D.createElement("button"); b.type = "button"; b.id = "xcgstk"; b.className = "gmic"; b.setAttribute("aria-label", "Stickers"); b.textContent = "😀";
+      q.parentNode.insertBefore(b, q);
+      b.onclick = function(){
+        if (D.querySelector(".xcgp")){ closeGP(); return; }
+        var p = D.createElement("div"); p.className = "xcgp";
+        var tab = "mine", draw = function(){
+          p.innerHTML = '<div class="etabs"><button data-gt="mine" class="' + (tab === "mine" ? "on" : "") + '">✨ My stickers</button><button data-gt="stk" class="' + (tab === "stk" ? "on" : "") + '">Stickers</button><button data-gt="x" style="margin-left:auto">×</button></div><div class="egs">'
+            + (tab === "mine" ? gridHtml() : '<div class="stkgrid">' + BUILTIN.map(function(s){ return '<button type="button" data-gstk="' + s + '"><img src="/stickers/' + s + '.svg" alt="' + s + '" loading="lazy"></button>'; }).join("") + '</div>') + '</div>';
+          p.querySelectorAll("[data-gt]").forEach(function(t){ t.onclick = function(){ var v = t.getAttribute("data-gt"); if (v === "x"){ closeGP(); return; } tab = v; draw(); }; });
+        };
+        draw(); var bar2 = q.closest("div"); bar2.parentNode.insertBefore(p, bar2);
+      };
+    };
+    new MutationObserver(putBtn).observe(B, {childList: true, subtree: true}); putBtn();
+  }
+
+  // ---------- the sticker maker: photo or video, words with colour, size and font ----------
+  var FONTS = [["Bold", "900 {s}px system-ui,'Segoe UI',Arial,sans-serif"], ["Round", "800 {s}px 'Baloo 2',system-ui,sans-serif"], ["Fun", "400 {s}px Pacifico,'Comic Sans MS',cursive"],
+               ["Classic", "700 {s}px Georgia,'Times New Roman',serif"], ["Poster", "400 {s}px Bangers,Impact,'Arial Black',sans-serif"], ["اردو", "700 {s}px 'Noto Nastaliq Urdu',serif"]];
+  var COLORS = ["#FFFFFF", "#0D1424", "#FACC15", "#EF4444", "#22C55E", "#3B82F6", "#EC4899", "#F97316"];
+  function fontsReady(){
+    if (!D.getElementById("xcstkfonts")){ var l = D.createElement("link"); l.id = "xcstkfonts"; l.rel = "stylesheet"; l.href = "https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Bangers&family=Noto+Nastaliq+Urdu:wght@700&family=Pacifico&display=swap"; D.head.appendChild(l); }
+    return D.fonts && D.fonts.load ? Promise.all(["800 40px 'Baloo 2'", "40px Bangers", "40px Pacifico", "700 40px 'Noto Nastaliq Urdu'"].map(function(f){ return D.fonts.load(f).catch(function(){}); })) : Promise.resolve();
   }
   function maker(){
     var s = sheet("✨ Make a sticker"), el = s.el;
-    el.innerHTML = '<div class="stkmk"><canvas width="512" height="512"></canvas>'
-      + '<div class="row"><label class="bt p" style="margin:0">📷 Choose a photo<input type="file" accept="image/*" hidden></label></div>'
-      + '<div class="row" data-g="shape"><button data-v="circle" class="on">⚪ Circle</button><button data-v="round">▢ Rounded</button><button data-v="cut">✂️ Cut out background</button></div>'
-      + '<div class="row"><span style="font-size:13px;color:#5A657C">Zoom</span><input type="range" min="60" max="300" value="100" data-k="zoom"></div>'
-      + '<input type="text" maxlength="24" placeholder="Words on the sticker (optional)" data-k="txt">'
-      + '<div class="row" data-g="pos"><button data-v="bottom" class="on">Words at bottom</button><button data-v="top">Words at top</button></div>'
-      + '<p class="note">Drag the photo to move it. "Cut out background" works best on a plain wall or sky behind the person.</p>'
-      + '<div class="row"><button class="bt g" data-save style="padding:12px 22px">✔ Save sticker</button></div></div>';
-    var c = el.querySelector("canvas"), x = c.getContext("2d"), img = null, st = {shape: "circle", pos: "bottom", zoom: 1, dx: 0, dy: 0, txt: ""}, cutMask = null;
-    function render(out){
+    el.innerHTML = '<div class="stkmk"><div class="tb"><button data-mode="photo" class="on">📷 From a photo</button><button data-mode="video">🎬 Animated, from a video</button></div>'
+      + '<div class="cvw"><canvas width="512" height="512"></canvas><video playsinline muted loop hidden></video></div>'
+      + '<div class="row"><label class="bt p" style="margin:0"><span data-pick>📷 Choose a photo</span><input type="file" accept="image/*" hidden></label></div>'
+      + '<div class="row" data-g="shape"><button data-v="circle" class="on">⚪ Circle</button><button data-v="round">▢ Rounded</button><button data-v="cut" data-only="photo">✂️ Cut out background</button><button data-v="full" data-only="video">⬛ Square</button></div>'
+      + '<div class="row"><span class="lb">Zoom</span><input type="range" min="60" max="300" value="100" data-k="zoom"></div>'
+      + '<div class="vrow" hidden><div class="row"><span class="lb">Start at</span><input type="range" min="0" max="100" value="0" step="0.1" data-k="start"><b data-k="startl">0.0s</b></div>'
+      + '<div class="row" data-g="dur"><span class="lb">Length</span><button data-v="2">2 s</button><button data-v="3" class="on">3 s</button><button data-v="4">4 s</button><button data-v="5">5 s</button></div></div>'
+      + '<input type="text" maxlength="28" placeholder="Words on the sticker (optional) — English or اردو" data-k="txt">'
+      + '<div class="row sw" data-g="color">' + COLORS.map(function(c, i){ return '<button data-v="' + c + '" class="' + (i ? "" : "on") + '" style="background:' + c + '" aria-label="Colour"></button>'; }).join("") + '</div>'
+      + '<div class="row" data-g="font">' + FONTS.map(function(f, i){ return '<button data-v="' + i + '" class="' + (i ? "" : "on") + '">' + f[0] + '</button>'; }).join("") + '</div>'
+      + '<div class="row" data-g="size"><button data-v="s">Small</button><button data-v="m" class="on">Medium</button><button data-v="l">Big</button></div>'
+      + '<div class="row" data-g="pos"><button data-v="bottom" class="on">Words at bottom</button><button data-v="middle">Middle</button><button data-v="top">Top</button></div>'
+      + '<p class="note" data-tip>Drag the photo to move it. "Cut out background" works best on a plain wall or sky behind the person.</p>'
+      + '<div class="row"><button class="bt g" data-save style="padding:12px 22px">✔ Save sticker</button></div><div class="note" data-msg></div></div>';
+    var c = el.querySelector("canvas"), x = c.getContext("2d"), vid = el.querySelector("video"), file = null, img = null, cutMask = null, raf = 0;
+    var st = {mode: "photo", shape: "circle", pos: "bottom", zoom: 1, dx: 0, dy: 0, txt: "", color: COLORS[0], font: 0, size: "m", start: 0, dur: 3};
+    s.onClose(function(){ cancelAnimationFrame(raf); try { vid.pause(); URL.revokeObjectURL(vid.src); } catch (e) {} });
+    function src(){ return st.mode === "video" ? (vid.videoWidth ? vid : null) : img; }
+    function dims(o){ return o === vid ? [vid.videoWidth, vid.videoHeight] : [o.width, o.height]; }
+    function rr(l, X, Y, W, H, r){ l.beginPath(); l.moveTo(X + r, Y); l.arcTo(X + W, Y, X + W, Y + H, r); l.arcTo(X + W, Y + H, X, Y + H, r); l.arcTo(X, Y + H, X, Y, r); l.arcTo(X, Y, X + W, Y, r); l.closePath(); }
+    function words(g){   // the words layer (also sent to the server for animated stickers)
+      if (!st.txt) return;
+      var len = Math.max(5, st.txt.length), base = {s: 560, m: 760, l: 980}[st.size], fs = Math.max(26, Math.min({s: 52, m: 72, l: 96}[st.size], Math.floor(base / len)));
+      var y = st.pos === "top" ? 70 : (st.pos === "middle" ? 256 : 458), dark = st.color === "#0D1424";
+      g.font = FONTS[st.font][1].replace("{s}", fs); g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
+      if (FONTS[st.font][0].charCodeAt(0) > 1500) g.direction = "rtl";
+      g.lineWidth = Math.max(8, fs / 4.5); g.strokeStyle = dark ? "#FFFFFF" : "#0D1424"; g.strokeText(st.txt, 256, y, 480);
+      g.fillStyle = st.color; g.fillText(st.txt, 256, y, 480); g.direction = "ltr";
+    }
+    function render(){
       x.clearRect(0, 0, 512, 512);
-      if (!img){ x.fillStyle = "#5A657C"; x.font = "bold 22px system-ui,sans-serif"; x.textAlign = "center"; x.fillText("Choose a photo", 256, 262); return; }
-      var pad = 26, R = 256 - pad, sz = 512 - pad * 2;
+      var o = src();
+      if (!o){ x.fillStyle = "#5A657C"; x.font = "bold 22px system-ui,sans-serif"; x.textAlign = "center"; x.fillText(st.mode === "video" ? "Choose a video" : "Choose a photo", 256, 262); return; }
+      var pad = 26, R = 256 - pad, sz = 512 - pad * 2, dd = dims(o), sc = Math.max(sz / dd[0], sz / dd[1]) * st.zoom, w = dd[0] * sc, h = dd[1] * sc;
       var lay = D.createElement("canvas"); lay.width = lay.height = 512; var l = lay.getContext("2d");
-      var sc = Math.max(sz / img.width, sz / img.height) * st.zoom, w = img.width * sc, h = img.height * sc;
       l.save();
       if (st.shape === "circle"){ l.beginPath(); l.arc(256, 256, R, 0, Math.PI * 2); l.clip(); }
       else if (st.shape === "round"){ rr(l, pad, pad, sz, sz, 70); l.clip(); }
-      l.drawImage(st.shape === "cut" && cutMask ? cutMask : img, 256 - w / 2 + st.dx, 256 - h / 2 + st.dy, w, h);
+      else if (st.shape === "full"){ l.beginPath(); l.rect(pad, pad, sz, sz); l.clip(); }
+      l.drawImage(st.shape === "cut" && cutMask ? cutMask : o, 256 - w / 2 + st.dx, 256 - h / 2 + st.dy, w, h);
       l.restore();
-      // white sticker outline around whatever is visible
-      var o = D.createElement("canvas"); o.width = o.height = 512; var oc = o.getContext("2d");
-      for (var a = 0; a < 360; a += 30){ var r = 9; oc.drawImage(lay, Math.cos(a * Math.PI / 180) * r, Math.sin(a * Math.PI / 180) * r); }
-      oc.globalCompositeOperation = "source-in"; oc.fillStyle = "#fff"; oc.fillRect(0, 0, 512, 512);
-      x.save(); x.shadowColor = "rgba(13,20,36,.28)"; x.shadowBlur = 10; x.shadowOffsetY = 3; x.drawImage(o, 0, 0); x.restore();
-      x.drawImage(lay, 0, 0);
-      if (st.txt){
-        var y = st.pos === "top" ? 70 : 462, fs = Math.min(72, Math.floor(900 / Math.max(6, st.txt.length)));
-        x.font = "900 " + fs + "px system-ui,'Segoe UI',Arial,sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.lineJoin = "round";
-        x.lineWidth = Math.max(8, fs / 5); x.strokeStyle = "#0D1424"; x.strokeText(st.txt, 256, y); x.fillStyle = "#fff"; x.fillText(st.txt, 256, y);
+      if (st.mode === "photo"){
+        var ol = D.createElement("canvas"); ol.width = ol.height = 512; var oc = ol.getContext("2d");
+        for (var a = 0; a < 360; a += 30) oc.drawImage(lay, Math.cos(a * Math.PI / 180) * 9, Math.sin(a * Math.PI / 180) * 9);
+        oc.globalCompositeOperation = "source-in"; oc.fillStyle = "#fff"; oc.fillRect(0, 0, 512, 512);
+        x.save(); x.shadowColor = "rgba(13,20,36,.28)"; x.shadowBlur = 10; x.shadowOffsetY = 3; x.drawImage(ol, 0, 0); x.restore();
       }
+      x.drawImage(lay, 0, 0); words(x);
     }
-    function rr(l, X, Y, W, H, r){ l.beginPath(); l.moveTo(X + r, Y); l.arcTo(X + W, Y, X + W, Y + H, r); l.arcTo(X + W, Y + H, X, Y + H, r); l.arcTo(X, Y + H, X, Y, r); l.arcTo(X, Y, X + W, Y, r); l.closePath(); }
-    function cut(){   // flood fill from the edges: removes a plain background
+    function loop(){ cancelAnimationFrame(raf); var tick = function(){ if (st.mode === "video" && vid.videoWidth){ if (vid.currentTime > st.start + st.dur || vid.currentTime < st.start - .3) vid.currentTime = st.start; render(); } raf = requestAnimationFrame(tick); }; tick(); }
+    function cut(){
       var w = img.width, h = img.height, k = Math.min(1, 700 / Math.max(w, h)); w = Math.round(w * k); h = Math.round(h * k);
       var cv = D.createElement("canvas"); cv.width = w; cv.height = h; var g = cv.getContext("2d"); g.drawImage(img, 0, 0, w, h);
       var id = g.getImageData(0, 0, w, h), p = id.data, seen = new Uint8Array(w * h), stack = [];
       var ref = function(i){ return [p[i * 4], p[i * 4 + 1], p[i * 4 + 2]]; };
-      for (var i = 0; i < w; i++){ stack.push(i, (h - 1) * w + i); } for (var j = 0; j < h; j++){ stack.push(j * w, j * w + w - 1); }
+      for (var i = 0; i < w; i++) stack.push(i, (h - 1) * w + i); for (var j = 0; j < h; j++) stack.push(j * w, j * w + w - 1);
       var refs = [ref(0), ref(w - 1), ref((h - 1) * w), ref(h * w - 1), ref(Math.floor(w / 2))], T = 46 * 46 * 3;
       var near = function(i){ var r = p[i * 4], gg = p[i * 4 + 1], b = p[i * 4 + 2]; for (var q = 0; q < refs.length; q++){ var a = refs[q], d = (r - a[0]) * (r - a[0]) + (gg - a[1]) * (gg - a[1]) + (b - a[2]) * (b - a[2]); if (d < T) return true; } return false; };
       while (stack.length){ var n = stack.pop(); if (seen[n]) continue; seen[n] = 1; if (!near(n)) continue; p[n * 4 + 3] = 0;
         var X = n % w, Y = (n / w) | 0; if (X > 0) stack.push(n - 1); if (X < w - 1) stack.push(n + 1); if (Y > 0) stack.push(n - w); if (Y < h - 1) stack.push(n + w); }
       g.putImageData(id, 0, 0); cutMask = cv;
     }
-    el.querySelector("input[type=file]").onchange = function(){ var f = this.files[0]; if (!f) return; var im = new Image(); im.onload = function(){ img = im; cutMask = null; st.dx = st.dy = 0; if (st.shape === "cut") cut(); render(); }; im.src = URL.createObjectURL(f); };
-    el.querySelectorAll("[data-g] button").forEach(function(b){ b.onclick = function(){ var g = b.parentNode.getAttribute("data-g"); b.parentNode.querySelectorAll("button").forEach(function(z){ z.classList.toggle("on", z === b); }); st[g] = b.getAttribute("data-v"); if (g === "shape" && st.shape === "cut" && img && !cutMask) cut(); render(); }; });
+    function setMode(m){
+      st.mode = m; st.dx = st.dy = 0; file = null; img = null; cutMask = null; vid.removeAttribute("src");
+      el.querySelectorAll("[data-mode]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-mode") === m); });
+      el.querySelector("[data-pick]").textContent = m === "video" ? "🎬 Choose a video" : "📷 Choose a photo";
+      el.querySelector("input[type=file]").accept = m === "video" ? "video/*" : "image/*";
+      el.querySelector(".vrow").hidden = m !== "video";
+      el.querySelectorAll("[data-only]").forEach(function(b){ b.hidden = b.getAttribute("data-only") !== m; });
+      if (st.shape === "cut" && m === "video" || st.shape === "full" && m === "photo") el.querySelector('[data-g="shape"] [data-v="circle"]').click();
+      el.querySelector("[data-tip]").textContent = m === "video" ? "Pick the part you want (2 to 5 seconds). Drag to move, zoom to fit. The sticker plays again and again, with no sound." : 'Drag the photo to move it. "Cut out background" works best on a plain wall or sky behind the person.';
+      render(); if (m === "video") loop(); else cancelAnimationFrame(raf);
+    }
+    el.querySelectorAll("[data-mode]").forEach(function(b){ b.onclick = function(){ setMode(b.getAttribute("data-mode")); }; });
+    el.querySelector("input[type=file]").onchange = function(){
+      var f = this.files[0]; if (!f) return; file = f;
+      if (st.mode === "video"){
+        if (f.size > 40 * 1024 * 1024){ alert("That video is over 40 MB. Choose a shorter one."); return; }
+        vid.src = URL.createObjectURL(f); vid.onloadedmetadata = function(){ var r = el.querySelector('[data-k="start"]'); r.max = Math.max(0, (vid.duration || 0) - 1).toFixed(1); st.start = 0; r.value = 0; vid.currentTime = 0; vid.play().catch(function(){}); loop(); };
+      } else { var im = new Image(); im.onload = function(){ img = im; cutMask = null; st.dx = st.dy = 0; if (st.shape === "cut") cut(); render(); }; im.src = URL.createObjectURL(f); }
+    };
+    el.querySelectorAll("[data-g] button").forEach(function(b){ b.onclick = function(){ var g = b.parentNode.getAttribute("data-g"); b.parentNode.querySelectorAll("button").forEach(function(z){ z.classList.toggle("on", z === b); });
+      var v = b.getAttribute("data-v"); st[g] = g === "dur" ? +v : (g === "font" ? +v : v);
+      if (g === "shape" && v === "cut" && img && !cutMask) cut(); if (g === "dur") vid.currentTime = st.start; render(); }; });
     el.querySelector('[data-k="zoom"]').oninput = function(){ st.zoom = this.value / 100; render(); };
     el.querySelector('[data-k="txt"]').oninput = function(){ st.txt = this.value.trim(); render(); };
+    el.querySelector('[data-k="start"]').oninput = function(){ st.start = +this.value; el.querySelector('[data-k="startl"]').textContent = st.start.toFixed(1) + "s"; vid.currentTime = st.start; };
     var drag = null;
     c.addEventListener("pointerdown", function(e){ drag = {x: e.clientX, y: e.clientY, dx: st.dx, dy: st.dy}; c.setPointerCapture(e.pointerId); });
     c.addEventListener("pointermove", function(e){ if (!drag) return; var k = 512 / c.getBoundingClientRect().width; st.dx = drag.dx + (e.clientX - drag.x) * k; st.dy = drag.dy + (e.clientY - drag.y) * k; render(); });
     c.addEventListener("pointerup", function(){ drag = null; });
+    var msg = function(t, bad){ var m = el.querySelector("[data-msg]"); m.style.color = bad ? "#B91C1C" : "#5A657C"; m.textContent = t; };
     el.querySelector("[data-save]").onclick = function(){
-      if (!img){ alert("Choose a photo first."); return; }
-      render();
-      var sm = D.createElement("canvas"); sm.width = sm.height = 320; sm.getContext("2d").drawImage(c, 0, 0, 320, 320);
-      var data = sm.toDataURL("image/webp", .86); if (data.indexOf("data:image/webp") !== 0) data = sm.toDataURL("image/png");
-      var a = mine(); a.unshift(data); if (keep(a)){ s.close(); redraw(); }
+      var btn = this;
+      if (!src()){ msg(st.mode === "video" ? "Choose a video first." : "Choose a photo first.", true); return; }
+      btn.disabled = true; render();
+      if (st.mode === "photo"){
+        var sm = D.createElement("canvas"); sm.width = sm.height = 384; sm.getContext("2d").drawImage(c, 0, 0, 384, 384);
+        sm.toBlob(function(bl){ var fd = new FormData(); fd.append("file", bl, "sticker.webp");
+          api("mine/", {method: "POST", body: fd}).then(function(r){ btn.disabled = false; if (!r.ok){ msg(r.d.detail || "Could not save.", true); return; } MY = r.d.stickers; s.close(); refresh(); }); }, "image/webp", .9);
+        return;
+      }
+      // animated: the server cuts the clip; we send the crop, the shape and the words as a see-through picture
+      var dd = dims(vid), pad = 26, sz = 512 - pad * 2, sc = Math.max(sz / dd[0], sz / dd[1]) * st.zoom;
+      var cs = sz / sc, cx = dd[0] / 2 - st.dx / sc - cs / 2, cy = dd[1] / 2 - st.dy / sc - cs / 2;
+      var ov = D.createElement("canvas"); ov.width = ov.height = 512; words(ov.getContext("2d"));
+      msg("Making your animated sticker… (a few seconds)");
+      ov.toBlob(function(ob){
+        var fd = new FormData(); fd.append("clip", file); fd.append("overlay", ob, "words.png");
+        fd.append("start", st.start); fd.append("dur", st.dur); fd.append("shape", st.shape === "round" ? "round" : (st.shape === "full" ? "full" : "circle"));
+        fd.append("cx", Math.round(cx)); fd.append("cy", Math.round(cy)); fd.append("cs", Math.round(cs));
+        api("make/", {method: "POST", body: fd}).then(function(r){ btn.disabled = false; if (!r.ok){ msg(r.d.detail || "Could not make the sticker.", true); return; } MY = r.d.stickers; s.close(); refresh(); });
+      }, "image/png");
     };
-    render();
+    setMode("photo"); fontsReady().then(render);
   }
 })();

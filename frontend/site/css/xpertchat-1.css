@@ -146,3 +146,13 @@ body.xc-app #glog .gm:not(.me){background:#fff!important}
 .xcmy .mk span{font-size:26px}
 .xcmy .rm{position:absolute;right:2px;top:2px;width:22px;height:22px;border-radius:50%;background:rgba(13,20,36,.6);color:#fff;font-size:13px;line-height:22px;text-align:center;display:none}
 .xcmy.edit .rm{display:block}
+.xcmy .an{position:absolute;left:4px;bottom:4px;font-style:normal;font-size:10px;font-weight:900;background:rgba(13,20,36,.7);color:#fff;border-radius:6px;padding:1px 5px}
+.stkmk .lb{font-size:13px;color:#5A657C;min-width:58px}.stkmk .row b{font-size:13px;min-width:38px}
+.stkmk .sw button{width:32px;height:32px;padding:0;border-radius:50%;border:2px solid #CBD5E1}.stkmk .sw button.on{outline:3px solid #1B4DFF;outline-offset:2px;background-clip:padding-box}
+.stkmk .cvw{position:relative}.stkmk .tb{margin-bottom:10px}
+.xcgp{max-height:280px;overflow:auto;background:#fff;border-top:1px solid #E3E8F0;padding:8px}
+.xcgp .etabs{display:flex;gap:4px;position:sticky;top:-8px;background:#fff;padding:2px 0 6px}
+.xcgp .etabs button{padding:5px 10px;border-radius:9px;font-size:13px;font-weight:700;border:0;background:none;cursor:pointer}.xcgp .etabs button.on{background:#F0F2F5}
+.xcgp .stkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px}.xcgp .stkgrid button{border:0;background:none;padding:2px;cursor:pointer}.xcgp .stkgrid img{width:100%;display:block}
+body.xc-app #glog .gs{width:150px;max-width:100%;display:block}
+body.xc-app #glog .gm:has(> .gs),body.xc-app #glog .gm:has(> img.gs){background:transparent!important;box-shadow:none!important}

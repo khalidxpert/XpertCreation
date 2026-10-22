@@ -56,6 +56,11 @@ def notify_admins(kind, text, link=""):
 def open_thread(context, ref_id, user_a, user_b):
     """Get or create the thread between these two people about this item.
     Order-independent: (a, b) and (b, a) are the same conversation."""
+    if context == "connect":   # one chat per two people, even after they disconnect and connect again (xpertchat v2)
+        from django.db.models import Q as _Q
+        t = ChatThread.objects.filter(context="connect").filter(_Q(a=user_a, b=user_b) | _Q(a=user_b, b=user_a)).order_by("created_at").first()
+        if t:
+            return t
     t = ChatThread.objects.filter(context=context, ref_id=ref_id) \
                           .filter(a=user_a, b=user_b).first() \
         or ChatThread.objects.filter(context=context, ref_id=ref_id) \

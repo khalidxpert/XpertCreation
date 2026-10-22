@@ -154,7 +154,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
 </style>
 <script src="/js/voice-1.js?v=1"></script>
 <style>/* group roles */.who.rk-owner,b.rk-owner{color:#B7791F;font-weight:800}.who.rk-admin,b.rk-admin{color:#2563EB;font-weight:800}.who.rk-mod,b.rk-mod{color:#16A34A;font-weight:800}b.rk-mem{font-weight:600}</style>
-<link rel="stylesheet" href="/css/xpertchat-1.css?v=1">
+<link rel="stylesheet" href="/css/xpertchat-1.css?v=2">
 </head>
 <body>
 <header class="top">
@@ -245,12 +245,12 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function roleName(mm, label){ var r = roleKind(mm); return '<b class="rk-' + (r || "mem") + '">' + (RICON[r] || "") + esc(label) + '</b>'; }
   function bubble(m){
     if (m.system) return '<div class="gsys">' + esc(m.body) + '</div>';
-    var s = stk(m.body);
+    var my = !!(m.image && m.body === "[sticker:me]"), s = my ? "" : stk(m.body);
     return '<div class="gm' + (m.mine ? ' me' : '') + (m.bot ? ' bot' : '') + '" data-mid="' + m.id + '">' + (m.mine ? '' : '<span class="who' + (m.bot ? '' : ' rk-' + (roleOf(m.author_id) || 'mem')) + '">' + (m.bot ? '\uD83E\uDD16 ' : (RICON[roleOf(m.author_id)] || '')) + esc(m.author) + '</span>')
-      + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="gi" src="' + esc(m.image) + '" alt="" loading="lazy"></a>' : '')
+      + (my ? '<img class="gs" src="' + esc(m.image) + '" alt="Sticker" loading="lazy">' : m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="gi" src="' + esc(m.image) + '" alt="" loading="lazy"></a>' : '')
       + (m.voice && window.XCVoice ? XCVoice.html(m.voice) : '')
       + (m.file ? '<a class="gf" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' \u00b7 ' + kb(m.file.size) + '</a>' : '')
-      + (s ? '<img class="gs" src="/stickers/' + s + '.svg" alt="Sticker">' : (m.body ? linkify(m.body) : ''))
+      + (s ? '<img class="gs" src="/stickers/' + s + '.svg" alt="Sticker">' : (m.body && !my ? linkify(m.body) : ''))
       + '<small>' + esc(m.when) + '</small></div>';
   }
   function add(list){
@@ -294,6 +294,7 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   function pollNow(){
     api("/groups/" + gid + "/?after=" + last).then(function(x){ if (x.ok){ add(x.data.messages); showPins(x.data.pinned); } });
   }
+  window.XCG = {send: function(b, f){ send(b, f); }, gid: function(){ return gid; }};
   function send(body, file){
     if (sending) return;
     var fd = null;
@@ -601,6 +602,6 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
   <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
 </footer>
 
-<script src="/js/xpertchat-1.js?v=1" defer></script>
+<script src="/js/xpertchat-1.js?v=2" defer></script>
 </body>
 </html>
