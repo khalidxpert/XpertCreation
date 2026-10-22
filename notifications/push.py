@@ -18,7 +18,7 @@ from .models import PushSubscription
 
 TITLES = {"chat_message": "New message", "connect": "Connect", "endorse": "Endorsement", "follow": "New follower",
           "pet": "Your pet", "tick": "Blue tick", "report": "Report", "chat_report": "Chat report",
-          "market": "Freelance", "store": "Store", "rides": "Rides", "property": "Property", "rewards": "Rewards", "test": "XpertCreation"}
+          "market": "Freelance", "store": "Store", "rides": "Rides", "property": "Property", "rewards": "Rewards", "briefcase": "My Briefcase", "test": "XpertCreation"}
 
 
 def _env(name):

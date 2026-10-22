@@ -313,7 +313,7 @@
     var ov = this.frame("PDF ready", '<div class="xshome"><div style="font-size:54px">📄</div><h1>' + esc(name) + '</h1><p>' + pages.length + " page" + (pages.length === 1 ? "" : "s") + " · " + mb + ' MB</p>'
       + '<button class="xsbig" data-r="save"><i>⬇️</i><span>Save PDF<small>To your phone or computer</small></span></button>'
       + (navigator.canShare && navigator.canShare({files: [file]}) ? '<button class="xsbig" data-r="share"><i>📤</i><span>Share<small>WhatsApp, email and more</small></span></button>' : "")
-      + (this.o.onSend ? '<button class="xsbig" data-r="send"><i>💬</i><span>Send in this chat' + (blob.size > 5 * 1048576 ? '<small>Over 5 MB - save it, or scan fewer pages</small>' : '<small>As a PDF document</small>') + "</span></button>" : "")
+      + (this.o.onSend ? '<button class="xsbig" data-r="send"><i>' + (this.o.sendIcon || "💬") + '</i><span>' + esc(this.o.sendLabel || "Send in this chat") + (blob.size > 5 * 1048576 ? '<small>Over 5 MB - save it, or scan fewer pages</small>' : '<small>' + esc(this.o.sendSub || "As a PDF document") + '</small>') + "</span></button>" : "")
       + '<button class="xsbig" data-r="jpg"><i>🖼️</i><span>Save pages as pictures (JPG)</span></button>'
       + '<button class="xsbig" data-r="open"><i>👁️</i><span>Open the PDF</span></button></div>');
     ov.querySelector(".xsmain").addEventListener("click", function(e){
