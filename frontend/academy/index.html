@@ -972,6 +972,7 @@ body.rtl .wafab{right:auto;left:16px}
   .hello .t b{font-size:17px}
 }
 </style>
+<script src="/js/academy-x-1.js?v=1"></script>
 </head>
 <body>
 <div class="bg"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span><span class="grid"></span></div>
@@ -5431,7 +5432,7 @@ body.rtl .wafab{right:auto;left:16px}
     else if (!ensureContent(courseById(view.c))) app.innerHTML = loadingView(courseById(view.c));
     else if (view.page === "course") app.innerHTML = renderCourse(courseById(view.c));
     else if (view.page === "quiz") app.innerHTML = renderQuiz(courseById(view.c));
-    else app.innerHTML = renderLesson(courseById(view.c), view.l);
+    else { app.innerHTML = renderLesson(courseById(view.c), view.l); if (window.XCLX) { try { XCLX.lesson(courseById(view.c), view.l, lessonFor(courseById(view.c), view.l).l, lang); } catch (e) { if (window.console) console.error(e); } } }
     // Tapping an answer re-renders; jumping to the top each time would make
     // the quiz unusable on a phone.
     if (!(view.page === "quiz" && quiz && !quiz.result)) window.scrollTo(0,0);
