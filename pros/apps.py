@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class ProsConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "pros"
+    verbose_name = "XpertPros (hire home services)"

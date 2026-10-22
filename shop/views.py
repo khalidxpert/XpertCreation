@@ -748,3 +748,16 @@ def _target(u, kind, tid):
         A = apps.get_model("wheels", "Ad"); a = A.objects.filter(pk=tid, user=u, status="active").first()
         return (a.pk, ("%s %s %s" % (a.make, a.model, a.year))[:150]) if a else (None, "That ad is not yours, or it is not live.")
     return _target_wheels(u, kind, tid)
+
+
+# ---- setup_pros_v2": Pro boost - a pro shown first in XpertPros searches, with a Featured badge.
+CATALOG["pro_boost"] = {"name": "Pro boost", "what": "Your XpertPros profile shown first when customers search your service and city, with a Featured badge. Join first on /pros#work.", "target": "pro",
+                        "plans": {"7d": ("7 days", 499, 7), "30d": ("30 days", 1499, 30)}}
+_target_pros = _target
+
+
+def _target(u, kind, tid):
+    if kind == "pro":
+        P = apps.get_model("pros", "Pro"); p = P.objects.filter(user=u, status="active").first()
+        return (p.pk, ("XpertPros: %s" % p.name)[:150]) if p else (None, "Join XpertPros as a pro first (xpertcreation.com/pros#work).")
+    return _target_pros(u, kind, tid)
