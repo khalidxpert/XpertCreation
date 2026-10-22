@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Football penalty shootout — score and save — XpertCreation</title>
+<!-- seo:start -->
+<meta name="description" content="Play a free football penalty shootout in your browser: pick your country, swipe to shoot past the keeper, dive to save, and win the shootout level by level up to the World Cup final.">
+<link rel="canonical" href="https://xpertcreation.com/football">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="XpertCreation">
+<meta property="og:title" content="Football penalty shootout — score and save — XpertCreation">
+<meta property="og:description" content="Play a free football penalty shootout in your browser: pick your country, swipe to shoot past the keeper, dive to save, and win the shootout level by level up to the World Cup final.">
+<meta property="og:url" content="https://xpertcreation.com/football">
+<meta property="og:image" content="https://xpertcreation.com/brand/og/p/football.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Football penalty shootout — score and save — XpertCreation">
+<meta name="twitter:description" content="Play a free football penalty shootout in your browser: pick your country, swipe to shoot past the keeper, dive to save, and win the shootout level by level up to the World Cup final.">
+<meta name="twitter:image" content="https://xpertcreation.com/brand/og/p/football.jpg">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Football penalty shootout — score and save", "url": "https://xpertcreation.com/football", "description": "Play a free football penalty shootout in your browser: pick your country, swipe to shoot past the keeper, dive to save, and win the shootout level by level up to the World Cup final.", "inLanguage": "en", "isPartOf": {"@type": "WebSite", "name": "XpertCreation", "url": "https://xpertcreation.com/"}}</script>
+<!-- seo:end -->
+<link rel="icon" href="/brand/favicon-v2.ico" sizes="any">
+<meta name="theme-color" content="#14151A">
+<style>
+:root{--ink:#0D1424;--ink-soft:#5A657C;--paper:#F6F7FB;--card:#FFF;--brand:#1B4DFF;
+  --go:#00B37E;--bad:#DC2626;--line:#E4E8F2;--display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;
+  min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:6px}
+
+.top{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:9px;padding:12px 16px;
+  background:rgba(246,247,251,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.top img{width:30px;height:30px;border-radius:10px}
+.top b{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.03em}
+.top .sp{flex:1}
+.gear{width:34px;height:34px;border-radius:11px;background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink-soft)}
+.gear svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.wrap{width:100%;max-width:640px;margin:0 auto;padding:20px 16px 60px;flex:1}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(26px,6.5vw,34px);
+  letter-spacing:-.035em;line-height:1.1}
+.lead{font-size:14px;color:var(--ink-soft);margin-top:9px}
+
+.member{display:flex;align-items:center;gap:14px;padding:15px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;margin-bottom:10px}
+.member .av3{width:54px;height:54px;border-radius:17px;object-fit:cover;flex:0 0 auto;
+  background:var(--paper)}
+.member .ph3{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;
+  background:var(--ink);color:#fff;font-weight:800;font-size:21px;flex:0 0 auto}
+.member .t{flex:1;min-width:0}
+.member .t b{display:block;font-size:15px;font-weight:700}
+.member .t small{display:block;font-size:12.5px;color:var(--brand);font-weight:600;margin-top:2px}
+.member .soc{display:flex;gap:7px}
+.member .soc a{width:34px;height:34px;border-radius:11px;background:var(--paper);
+  border:1px solid var(--line);display:grid;place-items:center;font-size:15px}
+
+.apply2{background:var(--card);border:1px dashed var(--line);border-radius:18px;
+  padding:18px;text-align:center;margin-top:22px}
+.apply2 b{display:block;font-size:14.5px;font-weight:700}
+.apply2 p{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.55}
+.apply2 button{margin-top:13px;padding:12px 24px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:13.5px}
+
+#appform{display:none;background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:18px;margin-top:14px}
+#appform.on{display:block}
+#appform label{display:block;font-size:11px;font-weight:700;color:var(--ink-soft);
+  letter-spacing:.03em;text-transform:uppercase;margin:12px 0 5px}
+#appform label:first-of-type{margin-top:0}
+#appform textarea,#appform input{width:100%;padding:12px 13px;border:1.5px solid var(--line);
+  border-radius:12px;background:var(--paper);font-size:14.5px;font-family:inherit;outline:none}
+#appform textarea{min-height:90px;resize:vertical}
+#appform textarea:focus,#appform input:focus{border-color:var(--brand);background:#fff}
+#appform .hint3{font-size:11.5px;color:var(--ink-soft);margin-top:9px;line-height:1.5}
+#appform .go6{width:100%;margin-top:14px;padding:13px;border-radius:13px;background:var(--ink);
+  color:#fff;font-weight:700;font-size:14px}
+.appstate{padding:13px 15px;border-radius:14px;font-size:13.5px;margin-top:14px;line-height:1.55}
+.appstate.pending{background:rgba(180,83,9,.09);border:1px solid rgba(180,83,9,.3);color:#92400E}
+.appstate.accepted{background:rgba(0,179,126,.09);border:1px solid rgba(0,179,126,.3);color:#00734F}
+.appstate.declined{background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)}
+
+/* ---------- bell ---------- */
+.bellbtn{position:relative;width:34px;height:34px;border-radius:11px;background:var(--card,#fff);
+  border:1px solid var(--line,#E4E8F2);display:grid;place-items:center;color:var(--ink-soft,#5A657C);
+  flex:0 0 auto}
+.bellbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.bellbtn .dot4{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 3px;
+  border-radius:99px;background:#DC2626;color:#fff;font-size:9.5px;font-weight:800;
+  display:none;align-items:center;justify-content:center;line-height:1}
+.bellbtn.has .dot4{display:flex}
+
+.belldrop{position:fixed;top:58px;right:12px;left:12px;max-width:380px;margin-left:auto;
+  z-index:200;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);
+  border-radius:18px;box-shadow:0 16px 40px rgba(13,20,36,.24);display:none;
+  max-height:70vh;overflow-y:auto}
+.belldrop.on{display:block}
+.belldrop .hd5{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line,#E4E8F2)}
+.belldrop .hd5 b{font-family:var(--display,inherit);font-weight:800;font-size:14.5px}
+.belldrop .hd5 button{margin-left:auto;font-size:11.5px;color:var(--brand,#1B4DFF);font-weight:700}
+.nitem3{display:block;padding:12px 16px;border-bottom:1px solid var(--line,#E4E8F2);
+  text-decoration:none;color:inherit}
+.nitem3:last-child{border-bottom:none}
+.nitem3.unread{background:rgba(27,77,255,.04)}
+.nitem3 p{font-size:13px;line-height:1.5}
+.nitem3 small{display:block;font-size:11px;color:var(--ink-soft,#5A657C);margin-top:4px}
+.nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
+
+/* One footer for every page. It was only on the homepage before, so the
+   tools, the games and everything else simply stopped at the bottom. */
+.xcfoot{max-width:1060px;margin:40px auto 0;padding:26px 18px 30px;
+  border-top:1px solid var(--line,#E4E8F2);
+  font-family:inherit;color:var(--ink,#0D1424)}
+.xf-grid{display:grid;gap:22px;grid-template-columns:1.4fr 1fr 1fr 1fr}
+@media(max-width:640px){.xf-grid{grid-template-columns:1fr 1fr;gap:18px}
+  .xf-grid > div:first-child{grid-column:1 / -1}}
+.xf-brand{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.xf-brand img{width:28px;height:28px;border-radius:9px}
+.xf-brand b{font-size:15px;font-weight:800;letter-spacing:-.02em}
+.xf-addr{font-size:12.5px;line-height:1.75;color:var(--ink-soft,#5A657C)}
+.xf-addr a{color:var(--ink-soft,#5A657C);text-decoration:none}
+.xf-addr a:hover{color:var(--brand,#1B4DFF)}
+.xcfoot h5{font-size:11px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft,#5A657C);margin-bottom:9px}
+.xcfoot ul{list-style:none;margin:0;padding:0}
+.xcfoot li{margin:5px 0}
+.xcfoot li a{font-size:13px;color:var(--ink,#0D1424);text-decoration:none}
+.xcfoot li a:hover{color:var(--brand,#1B4DFF)}
+.xf-cr{margin-top:22px;padding-top:16px;border-top:1px solid var(--line,#E4E8F2);
+  font-size:11.5px;color:var(--ink-soft,#5A657C);text-align:center}
+/* The links in the header, next to the logo */
+.xnav{display:flex;gap:2px;align-items:center}
+.xnav a{font-size:13px;font-weight:600;color:var(--ink-soft,#5A657C);
+  text-decoration:none;padding:6px 9px;border-radius:9px;white-space:nowrap}
+.xnav a:hover{background:rgba(27,77,255,.08);color:var(--brand,#1B4DFF)}
+@media(max-width:700px){.xnav a{padding:6px 6px;font-size:12px}
+  .xnav a.hide-s{display:none}}
+.fbi{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block}
+.wai{width:14px;height:14px;vertical-align:-2.5px;margin-right:5px;display:inline-block;color:#25D366}
+</style>
+<script type="application/ld+json" id="xcbc">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "XpertCreation", "item": "https://xpertcreation.com/"}, {"@type": "ListItem", "position": 2, "name": "Football penalty shootout", "item": "https://xpertcreation.com/football"}]}</script>
+<script type="application/ld+json" id="xcgame">{"@context": "https://schema.org", "@type": "VideoGame", "name": "Football penalty shootout", "url": "https://xpertcreation.com/football", "genre": "Sports", "gamePlatform": "Web browser", "applicationCategory": "GameApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "PKR"}, "publisher": {"@type": "Organization", "name": "XpertCreation", "url": "https://xpertcreation.com/"}}</script>
+<meta name="google-play-app" content="app-id=com.xpertcreation.app">
+<meta name="application-name" content="XpertCreation">
+<meta name="apple-mobile-web-app-title" content="XpertCreation">
+<meta name="author" content="XpertCreation">
+<meta property="og:locale:alternate" content="ur_PK">
+<link rel="preload" href="/fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style id="xcfonts">@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/bricolage-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/bricolage-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url(/fonts/jakarta-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:100 800;src:url(/fonts/jetbrains-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'JetBrains Mono';font-style:normal;font-display:swap;font-weight:100 800;src:url(/fonts/jetbrains-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:400;src:url(/fonts/spacemono400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:400;src:url(/fonts/spacemono400-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:700;src:url(/fonts/spacemono700-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:700;src:url(/fonts/spacemono700-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}</style>
+</head>
+<body>
+<header class="top">
+  <a href="https://xpertcreation.com" style="display:flex;align-items:center;gap:9px;color:inherit">
+    <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+    <b>Games</b></a>
+  <span class="sp"></span>
+  <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+</header>
+<script src="/js/topnav-1.js?v=81" defer></script>
+
+<div class="wrap" style="max-width:600px">
+<style>
+.fbtop{display:flex;align-items:center;gap:8px;margin:6px 0 8px}.fbtop h1{margin:0;flex:1;font-size:24px}
+.fbtop button{padding:9px 12px;border-radius:11px;border:1.5px solid var(--line,#E4E8F2);background:var(--card,#fff);font:inherit;font-weight:700;color:var(--ink,#0D1424);cursor:pointer}
+#fbsc{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;background:#0B1B3A;color:#fff;border-radius:14px 14px 0 0;padding:10px 14px}
+#fbsc .tm{display:flex;flex-direction:column;gap:4px;min-width:0}#fbsc .tm.r{align-items:flex-end;text-align:right}
+#fbsc .nm{font-weight:800;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#fbsc .sc{font-size:30px;font-weight:900;letter-spacing:.04em}
+.dots{display:flex;gap:4px;flex-wrap:wrap}.dots i{width:14px;height:14px;border-radius:50%;background:#334155;display:inline-block}
+.dots i.g{background:#22C55E}.dots i.m{background:#EF4444}.tm.r .dots{justify-content:flex-end}
+#fbwrap{position:relative;display:flex;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;background:#1B5E20;border-radius:0 0 14px 14px;overflow:hidden}
+#fb{display:block;touch-action:none}
+#fbmsg{min-height:44px;margin:8px 2px;font-weight:800;font-size:15px;text-align:center}
+#fbend{position:absolute;inset:0;display:grid;place-items:center;background:rgba(13,20,36,.62)}
+#fbend[hidden]{display:none}
+#fbend div{background:var(--card,#fff);color:var(--ink,#0D1424);border-radius:18px;padding:20px 22px;text-align:center;max-width:320px;margin:0 14px}
+#fbendt{display:block;font-size:22px;margin-bottom:6px}#fbends{font-size:14px;color:var(--ink-soft,#5A657C)}
+.fbbtn{margin-top:12px;padding:12px 18px;border-radius:12px;border:0;background:#16A34A;color:#fff;font:inherit;font-weight:800;cursor:pointer}
+.fbbtn.o{background:#fff;color:#0D1424;border:1.5px solid #E4E8F2}.fbbtn.wa{background:#25D366}
+#fbsetup{background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:16px;padding:14px;margin-bottom:10px}
+#fbsetup[hidden]{display:none}
+#fbsetup label{display:block;font-size:11.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft,#5A657C);margin:10px 0 6px}
+#fbsetup select{width:100%;padding:11px;border-radius:12px;border:1.5px solid var(--line,#E4E8F2);font:inherit;font-size:15px;background:var(--paper,#F6F7FB)}
+.lvls{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.lvls button{padding:10px 4px;border-radius:12px;border:2px solid #16A34A;background:var(--card,#fff);font:inherit;font-weight:800;font-size:13px;cursor:pointer;color:var(--ink,#0D1424)}
+.lvls button small{display:block;font-weight:600;font-size:11px;color:var(--ink-soft,#5A657C)}
+.lvls button.on{background:#16A34A;color:#fff}.lvls button.on small{color:#DCFCE7}.lvls button.lock{border-color:var(--line,#E4E8F2);opacity:.5;cursor:default}
+.fbhelp{font-size:13.5px;color:var(--ink-soft,#5A657C);margin-top:12px;line-height:1.6}
+.fbhelp .ur{font-family:'Noto Nastaliq Urdu','Jameel Noori Nastaleeq',serif;direction:rtl;display:block;font-size:15px;line-height:2.1}
+.fbrec{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--ink-soft,#5A657C);margin-top:8px}
+</style>
+<div class="fbtop"><h1>&#9917; Football penalties</h1><button id="fbsnd" title="Sound">&#128266;</button><button id="fbsetb">Teams &amp; level</button></div>
+<div id="fbsetup" hidden>
+  <label for="fbme">Your team</label><select id="fbme"></select>
+  <label for="fbop">Opponent</label><select id="fbop"></select>
+  <label>Level</label><div class="lvls" id="fblv"></div>
+  <button class="fbbtn" id="fbgo" style="width:100%">&#9917; Start the shootout</button>
+</div>
+<div id="fbsc"><div class="tm"><span class="nm" id="fbn1"></span><span class="dots" id="fbd1"></span></div><span class="sc" id="fbs">0 - 0</span><div class="tm r"><span class="nm" id="fbn2"></span><span class="dots" id="fbd2"></span></div></div>
+<div id="fbwrap"><canvas id="fb" aria-label="Football goal"></canvas>
+  <div id="fbend" hidden><div><b id="fbendt"></b><span id="fbends"></span><br><button class="fbbtn" id="fbagain">Play again</button> <button class="fbbtn wa" id="fbshare">Share</button></div></div>
+</div>
+<div id="fbmsg">Swipe the ball towards the goal &mdash; or tap where you want to shoot.</div>
+<div class="fbrec" id="fbrec"></div>
+<p class="fbhelp"><b>How to play:</b> 5 penalties each, then sudden death. <b>Shooting:</b> swipe from the ball to a corner of the goal (or tap the spot). Aim away from the keeper &mdash; too high and it flies over the bar. <b>Saving:</b> when the other team shoots, tap where you think the ball will go, before it gets there.
+<span class="ur">پینلٹی شوٹ آؤٹ: گیند کو گول کی طرف سوائپ کریں۔ گول کیپر بن کر گیند کو روکنے کے لیے صحیح جگہ پر ٹیپ کریں۔</span></p>
+</div>
+<script>
+(function(){
+  "use strict";
+  var TEAMS = [["Pakistan","🇵🇰","#01411C","#fff"],["Brazil","🇧🇷","#FACC15","#1D4ED8"],["Argentina","🇦🇷","#7DD3FC","#fff"],["England","🏴󠁧󠁢󠁥󠁮󠁧󠁿","#fff","#1E3A8A"],
+    ["France","🇫🇷","#1E3A8A","#fff"],["Germany","🇩🇪","#fff","#111827"],["Spain","🇪🇸","#DC2626","#FACC15"],["Portugal","🇵🇹","#991B1B","#15803D"],["Netherlands","🇳🇱","#F97316","#fff"],
+    ["Italy","🇮🇹","#2563EB","#fff"],["Croatia","🇭🇷","#fff","#DC2626"],["Morocco","🇲🇦","#B91C1C","#15803D"],["Saudi Arabia","🇸🇦","#15803D","#fff"],["Qatar","🇶🇦","#7F1D1D","#fff"],
+    ["Iran","🇮🇷","#fff","#DC2626"],["Japan","🇯🇵","#1E3A8A","#fff"],["South Korea","🇰🇷","#DC2626","#111827"],["India","🇮🇳","#2563EB","#F97316"],["Bangladesh","🇧🇩","#15803D","#DC2626"],
+    ["Turkey","🇹🇷","#DC2626","#fff"],["Egypt","🇪🇬","#DC2626","#fff"],["Nigeria","🇳🇬","#16A34A","#fff"],["Senegal","🇸🇳","#fff","#16A34A"],["USA","🇺🇸","#fff","#1E3A8A"],
+    ["Mexico","🇲🇽","#15803D","#fff"],["Uruguay","🇺🇾","#38BDF8","#fff"],["Belgium","🇧🇪","#B91C1C","#FACC15"],["Norway","🇳🇴","#DC2626","#fff"],["Australia","🇦🇺","#FACC15","#15803D"],["UAE","🇦🇪","#fff","#DC2626"]];
+  // keeper skill, keeper reach, their shooter accuracy, ball time (ms) when they shoot
+  var LEVELS = [["Easy", "Beginner", 0.22, 0.40, 0.80, 1050], ["Medium", "Club", 0.36, 0.44, 0.88, 900], ["Hard", "National", 0.48, 0.47, 0.93, 760], ["World Cup", "Final", 0.58, 0.50, 0.97, 640]];
+  function load(k, d){ try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+  function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  var $ = function(id){ return document.getElementById(id); };
+  var cv = $("fb"), g = cv.getContext("2d"), W = 0, H = 0, DPR = Math.min(2, window.devicePixelRatio || 1);
+  var S = {me: load("xcfb_me", 0), op: load("xcfb_op", 1), lv: load("xcfb_lv", 0), open: load("xcfb_open", 1), rec: load("xcfb_rec", {w: 0, l: 0, goals: 0, saves: 0}), snd: load("xcfb_snd", true)};
+  var M, anim = null, phase = "idle", pt = null;
+
+  // ---------- sound (tiny, made in the browser)
+  var AC = null;
+  function tone(f, d, type, vol){
+    if (!S.snd) return;
+    try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); var o = AC.createOscillator(), v = AC.createGain(); o.type = type || "sine"; o.frequency.value = f; v.gain.value = vol || .08; o.connect(v); v.connect(AC.destination); var t = AC.currentTime; v.gain.exponentialRampToValueAtTime(.0001, t + d); o.start(t); o.stop(t + d); } catch (e) {}
+  }
+  function kickSnd(){ tone(120, .12, "triangle", .2); }
+  function cheer(){ [523, 659, 784, 1046].forEach(function(f, i){ setTimeout(function(){ tone(f, .22, "square", .05); }, i * 90); }); }
+  function groan(){ tone(220, .35, "sawtooth", .05); setTimeout(function(){ tone(160, .4, "sawtooth", .05); }, 160); }
+
+  // ---------- layout
+  function size(){
+    var w = Math.min($("fbwrap").clientWidth || 360, 600); W = w; H = Math.round(w * 1.12);
+    cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + "px"; cv.style.height = H + "px"; g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    draw();
+  }
+  function goal(){ var gw = W * 0.72, gh = H * 0.27, x = (W - gw) / 2, y = H * 0.12; return {x: x, y: y, w: gw, h: gh, cx: W / 2, base: y + gh}; }
+  function spot(){ return {x: W / 2, y: H * 0.86}; }
+  function gp(u, v){ var G = goal(); return {x: G.cx + u * G.w / 2, y: G.base - v * G.h}; }  // goal plane point: u -1..1 left-right, v 0..1 ground-bar
+
+  // ---------- drawing
+  function pitch(){
+    for (var i = 0; i < 8; i++){ g.fillStyle = i % 2 ? "#2E7D32" : "#388E3C"; g.fillRect(0, i * H / 8, W, H / 8 + 1); }
+    var G = goal();
+    g.fillStyle = "#14532D"; g.fillRect(0, 0, W, G.y - 6);                                   // stand
+    for (var c = 0; c < 46; c++){ g.fillStyle = ["#F87171", "#FBBF24", "#60A5FA", "#F9FAFB", "#A78BFA"][c % 5]; g.globalAlpha = .55; g.beginPath(); g.arc((c * 37) % W + 8, 10 + (c * 13) % Math.max(10, G.y - 22), 4, 0, 7); g.fill(); }
+    g.globalAlpha = 1;
+    g.strokeStyle = "rgba(255,255,255,.85)"; g.lineWidth = 2.5;
+    g.beginPath(); g.moveTo(W * 0.04, G.base); g.lineTo(W * 0.96, G.base); g.stroke();            // goal line
+    g.beginPath(); g.moveTo(W * 0.16, G.base); g.lineTo(W * 0.06, H * 0.64); g.lineTo(W * 0.94, H * 0.64); g.lineTo(W * 0.84, G.base); g.stroke();   // box
+    var s = spot(); g.fillStyle = "#fff"; g.beginPath(); g.ellipse(s.x, s.y + 14, 5, 2.5, 0, 0, 7); g.fill();
+    // net
+    g.fillStyle = "rgba(255,255,255,.12)"; g.fillRect(G.x, G.y, G.w, G.h);
+    g.strokeStyle = "rgba(255,255,255,.32)"; g.lineWidth = 1;
+    for (var x = G.x; x <= G.x + G.w; x += 12){ g.beginPath(); g.moveTo(x, G.y); g.lineTo(x, G.base); g.stroke(); }
+    for (var y = G.y; y <= G.base; y += 12){ g.beginPath(); g.moveTo(G.x, y); g.lineTo(G.x + G.w, y); g.stroke(); }
+    g.strokeStyle = "#fff"; g.lineWidth = 7; g.lineCap = "round";
+    g.beginPath(); g.moveTo(G.x, G.base); g.lineTo(G.x, G.y); g.lineTo(G.x + G.w, G.y); g.lineTo(G.x + G.w, G.base); g.stroke();
+  }
+  function player(x, y, sc, kit, trim, pose){       // pose: 0 stand, 1 kick
+    g.save(); g.translate(x, y); g.scale(sc, sc);
+    g.fillStyle = "#111827"; g.fillRect(-9, 14, 7, 22); g.save(); g.translate(5, 14); g.rotate(pose ? -0.9 : 0); g.fillRect(-2, 0, 7, 22); g.restore();
+    g.fillStyle = kit; g.beginPath(); g.roundRect ? g.roundRect(-14, -18, 28, 34, 8) : g.rect(-14, -18, 28, 34); g.fill();
+    g.fillStyle = trim; g.fillRect(-14, 4, 28, 5);
+    g.fillStyle = "#C68642"; g.beginPath(); g.arc(0, -27, 10, 0, 7); g.fill();
+    g.fillStyle = "#111"; g.beginPath(); g.arc(0, -31, 10, Math.PI, 0); g.fill();
+    g.restore();
+  }
+  function keeper(k){
+    var G = goal(), p = gp(k.u, k.v), sc = G.h / 120;
+    g.save(); g.translate(p.x, p.y + (k.v < .3 ? 0 : 0)); g.rotate(k.rot || 0); g.scale(sc, sc);
+    g.fillStyle = k.kit; g.beginPath(); g.roundRect ? g.roundRect(-16, -30, 32, 40, 9) : g.rect(-16, -30, 32, 40); g.fill();
+    g.fillStyle = "#111827"; g.fillRect(-12, 10, 9, 26); g.fillRect(3, 10, 9, 26);
+    g.strokeStyle = k.kit; g.lineWidth = 9; g.lineCap = "round";
+    g.beginPath(); g.moveTo(-14, -24); g.lineTo(-30, -48); g.moveTo(14, -24); g.lineTo(30, -48); g.stroke();
+    g.fillStyle = "#FDE047"; g.beginPath(); g.arc(-31, -50, 7, 0, 7); g.arc(31, -50, 7, 0, 7); g.fill();
+    g.fillStyle = "#C68642"; g.beginPath(); g.arc(0, -40, 11, 0, 7); g.fill();
+    g.restore();
+  }
+  function ball(x, y, r){
+    g.fillStyle = "rgba(0,0,0,.25)"; g.beginPath(); g.ellipse(x, y + r * .9, r * .9, r * .35, 0, 0, 7); g.fill();
+    g.fillStyle = "#fff"; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    g.fillStyle = "#111"; g.beginPath(); g.arc(x, y, r * .36, 0, 7); g.fill();
+    for (var i = 0; i < 5; i++){ var a = i * 1.2566; g.beginPath(); g.arc(x + Math.cos(a) * r * .78, y + Math.sin(a) * r * .78, r * .2, 0, 7); g.fill(); }
+    g.strokeStyle = "#111"; g.lineWidth = 1; g.beginPath(); g.arc(x, y, r, 0, 7); g.stroke();
+  }
+  function draw(){
+    if (!W) return;
+    g.clearRect(0, 0, W, H); pitch();
+    var f = anim ? anim.frame : null, T = TEAMS;
+    var shooterKit = M && M.turn === 0 ? T[S.me] : T[S.op], keeperKit = M && M.turn === 0 ? T[S.op] : T[S.me];
+    var kp = f && f.k ? f.k : {u: 0, v: 0.02, rot: 0};
+    kp.kit = keeperKit ? keeperKit[3] === "#fff" && keeperKit[2] === "#fff" ? "#F97316" : "#F97316" : "#F97316";
+    var s = spot(), kick = f && f.t > 0;
+    var bt = f && f.b ? f.b : {x: s.x, y: s.y, r: H * 0.024};
+    if (bt.y < goal().base + 10){ keeper(kp); player(s.x - W * 0.07 * (kick ? 0.3 : 1), s.y + 8 - (kick ? 0 : 6), H / 640, shooterKit ? shooterKit[2] : "#fff", shooterKit ? shooterKit[3] : "#111", kick); ball(bt.x, bt.y, bt.r); }
+    else { keeper(kp); ball(bt.x, bt.y, bt.r); player(s.x - W * 0.07 * (kick ? 0.3 : 1), s.y + 8 - (kick ? 0 : 6), H / 640, shooterKit ? shooterKit[2] : "#fff", shooterKit ? shooterKit[3] : "#111", kick); }
+    if (pt && phase === "aim"){ g.strokeStyle = "rgba(255,255,255,.9)"; g.lineWidth = 4; g.setLineDash([8, 8]); g.beginPath(); g.moveTo(pt.x0, pt.y0); g.lineTo(pt.x, pt.y); g.stroke(); g.setLineDash([]); }
+    if (f && f.text){ g.font = "900 " + Math.round(W / 9) + "px system-ui,sans-serif"; g.textAlign = "center"; g.lineWidth = 6; g.strokeStyle = "rgba(0,0,0,.55)"; g.strokeText(f.text, W / 2, H * 0.55); g.fillStyle = f.col || "#fff"; g.fillText(f.text, W / 2, H * 0.55); }
+    if (phase === "save" && !(f && f.t > 0)){ g.font = "800 " + Math.round(W / 22) + "px system-ui"; g.textAlign = "center"; g.fillStyle = "#FDE68A"; g.fillText("You are the keeper — get ready!", W / 2, H * 0.48); }
+  }
+
+  // ---------- one kick, animated
+  function fly(shot, dive, dur, done){
+    // shot {u, v} target in goal plane (may be outside = miss); dive {u, v, at} keeper target and start time (0..1)
+    var s = spot(), G = goal(), start = performance.now(), run = 420, total = run + dur + 650, kicked = false, res = null;
+    phase = "fly"; anim = {frame: {t: 0}};
+    function step(now){
+      var e = now - start, f = {t: 0};
+      if (e > run){
+        if (!kicked){ kicked = true; kickSnd(); }
+        var p = Math.min(1, (e - run) / dur), q = p, tp = gp(shot.u, shot.v);
+        var x = s.x + (tp.x - s.x) * q, y = s.y + (tp.y - s.y) * q - Math.sin(Math.PI * q) * H * 0.06 * (0.4 + shot.v), r = H * 0.024 * (1 - 0.55 * q);
+        f.t = p; f.b = {x: x, y: y, r: r};
+        var d0 = dive.at, dp = Math.max(0, Math.min(1, (p - d0) / Math.max(.05, 1 - d0) * 1.25));
+        f.k = {u: dive.u * dp, v: 0.02 + (dive.v - 0.02) * dp, rot: dive.u * dp * 0.9};
+        if (p >= 1 && !res){ res = judge(shot, f.k); f.text = res.text; f.col = res.col; anim.res = res; (res.goal ? (M.turn === 0 ? cheer : groan) : (M.turn === 0 ? groan : cheer))(); }
+        if (res){ f.text = res.text; f.col = res.col; if (res.goal && !res.post){ f.b.y = Math.min(f.b.y, G.base - 4); } else if (!res.goal && res.saved){ f.b = {x: gp(f.k.u, f.k.v).x + (shot.u > f.k.u ? 22 : -22), y: G.base + (e - run - dur) * 0.12, r: H * 0.012}; } }
+      }
+      anim.frame = f; draw();
+      if (e < total) requestAnimationFrame(step); else { anim = null; done(res); }
+    }
+    requestAnimationFrame(step);
+  }
+  function judge(shot, k){
+    var au = Math.abs(shot.u);
+    if (shot.v > 1.04) return {goal: false, text: "Over the bar!", col: "#FCA5A5"};
+    if (au > 1.04) return {goal: false, text: "Wide!", col: "#FCA5A5"};
+    if (au > 0.95 || (shot.v > 0.95 && shot.v <= 1.04)) return {goal: false, post: true, text: shot.v > 0.95 ? "Off the bar!" : "Hit the post!", col: "#FDE68A"};
+    var reach = LEVELS[S.lv][3] * (M.turn === 0 ? 1 : 1.05);
+    var d = Math.hypot((shot.u - k.u) * 1.0, (shot.v - k.v) * 1.15);
+    if (d < reach) return {goal: false, saved: true, text: "SAVED!", col: "#93C5FD"};
+    return {goal: true, text: "GOAL!", col: "#86EFAC"};
+  }
+
+  // ---------- match
+  function newMatch(){
+    if (S.me === S.op) S.op = (S.me + 1) % TEAMS.length;
+    M = {k: [[], []], turn: 0, round: 0, over: false};
+    $("fbend").hidden = true; paint(); next();
+  }
+  function goals(i){ return M.k[i].filter(Boolean).length; }
+  function paint(){
+    $("fbn1").textContent = TEAMS[S.me][1] + " " + TEAMS[S.me][0]; $("fbn2").textContent = TEAMS[S.op][0] + " " + TEAMS[S.op][1];
+    $("fbs").textContent = goals(0) + " - " + goals(1);
+    [0, 1].forEach(function(i){ var n = Math.max(5, M.k[0].length, M.k[1].length), h = ""; for (var j = 0; j < n; j++){ var v = M.k[i][j]; h += "<i class='" + (v === true ? "g" : v === false ? "m" : "") + "'></i>"; } $("fbd" + (i + 1)).innerHTML = h; });
+    var r = S.rec; $("fbrec").innerHTML = "<span>🏆 Wins: <b>" + r.w + "</b></span><span>Losses: <b>" + r.l + "</b></span><span>⚽ Your goals: <b>" + r.goals + "</b></span><span>🧤 Your saves: <b>" + r.saves + "</b></span><span>Level: <b>" + LEVELS[S.lv][0] + "</b></span>";
+  }
+  function decided(){
+    var a = goals(0), b = goals(1), ka = M.k[0].length, kb = M.k[1].length;
+    if (ka <= 5 && kb <= 5){
+      if (a > b + (5 - kb)) return 0; if (b > a + (5 - ka)) return 1;
+      if (ka === 5 && kb === 5 && a !== b) return a > b ? 0 : 1;
+      return -1;
+    }
+    if (ka === kb && a !== b) return a > b ? 0 : 1;
+    return -1;
+  }
+  function next(){
+    var w = decided();
+    if (w >= 0) return finish(w);
+    M.turn = M.k[0].length > M.k[1].length ? 1 : 0;
+    var sudden = M.k[0].length >= 5 && M.k[1].length >= 5;
+    if (M.turn === 0){ phase = "aim"; msg((sudden ? "Sudden death! " : "") + "Your kick — swipe the ball to a corner (or tap the goal)."); draw(); }
+    else { phase = "save"; msg((sudden ? "Sudden death! " : "") + TEAMS[S.op][0] + " shoots — tap where you think it will go!"); draw(); setTimeout(theyShoot, 900); }
+  }
+  function msg(t){ $("fbmsg").textContent = t; }
+  function after(res){
+    var ok = !!(res && res.goal);
+    M.k[M.turn].push(ok);
+    if (M.turn === 0 && ok){ S.rec.goals++; } if (M.turn === 1 && res && res.saved){ S.rec.saves++; }
+    save("xcfb_rec", S.rec); paint();
+    setTimeout(next, 700);
+  }
+  // you shoot
+  function myShot(u, v){
+    if (phase !== "aim") return;
+    var L = LEVELS[S.lv], err = 0.05;
+    u += (Math.random() - .5) * 2 * err; v += (Math.random() - .5) * 2 * err;
+    var dive;
+    if (Math.random() < L[2]) dive = {u: Math.max(-0.88, Math.min(0.88, u + (Math.random() - .5) * 0.5)), v: Math.max(.05, Math.min(.85, v + (Math.random() - .5) * .4)), at: 0.05};
+    else { var side = [-0.75, -0.4, 0, 0.4, 0.75][Math.random() * 5 | 0]; dive = {u: side, v: [0.15, 0.45, 0.75][Math.random() * 3 | 0], at: 0.05}; }
+    pt = null; fly({u: u, v: v}, dive, 700, after);
+  }
+  // they shoot, you save
+  var myDive = null, flyStart = 0;
+  function theyShoot(){
+    var L = LEVELS[S.lv], miss = Math.random() > L[4];
+    var u = [-0.82, -0.55, -0.25, 0, 0.25, 0.55, 0.82][Math.random() * 7 | 0] + (Math.random() - .5) * .12, v = [0.15, 0.45, 0.8][Math.random() * 3 | 0] + (Math.random() - .5) * .1;
+    if (miss){ if (Math.random() < .5) v = 1.1 + Math.random() * .2; else u = (u < 0 ? -1 : 1) * (1.08 + Math.random() * .15); }
+    myDive = {u: 0, v: 0.02, at: 0.99}; flyStart = performance.now() + 420;
+    var shot = {u: u, v: v};
+    fly(shot, myDive, L[5], after);
+    phase = "keep";
+  }
+  function keeperTap(u, v){
+    if (phase !== "keep" && phase !== "save") return;
+    var L = LEVELS[S.lv], now = performance.now(), p = Math.max(0, (now - flyStart) / L[5]);
+    if (p >= 1) return;
+    myDive.u = Math.max(-0.9, Math.min(0.9, u)); myDive.v = Math.max(0.04, Math.min(0.85, v)); myDive.at = Math.max(0.02, p);
+  }
+  function finish(w){
+    M.over = true; phase = "idle";
+    var a = goals(0), b = goals(1);
+    if (w === 0){ S.rec.w++; if (S.lv + 1 > S.open - 1 && S.lv < LEVELS.length - 1){ S.open = Math.max(S.open, S.lv + 2); save("xcfb_open", S.open); } } else S.rec.l++;
+    save("xcfb_rec", S.rec); paint();
+    $("fbendt").textContent = w === 0 ? "🏆 You win " + a + "-" + b + "!" : "😔 " + TEAMS[S.op][0] + " win " + b + "-" + a;
+    $("fbends").textContent = w === 0 ? (S.lv < LEVELS.length - 1 ? "Next level unlocked: " + LEVELS[Math.min(LEVELS.length - 1, S.lv + 1)][0] + "." : "You beat the World Cup level!") : "So close. Try again — aim for the corners.";
+    $("fbagain").textContent = w === 0 && S.lv < LEVELS.length - 1 ? "Next level" : "Play again";
+    $("fbagain").onclick = function(){ if (w === 0 && S.lv < LEVELS.length - 1){ S.lv++; save("xcfb_lv", S.lv); } newMatch(); };
+    $("fbend").hidden = false; msg(w === 0 ? "What a shootout!" : "Better luck next time.");
+    if (w === 0) cheer();
+  }
+  $("fbshare").onclick = function(){
+    var a = goals(0), b = goals(1), t = (a > b ? "⚽ I beat " + TEAMS[S.op][0] + " " + a + "-" + b : "⚽ I lost to " + TEAMS[S.op][0] + " " + a + "-" + b) + " on penalties (" + LEVELS[S.lv][0] + " level) on XpertCreation! Can you do better?";
+    var url = "https://xpertcreation.com/football";
+    if (navigator.share) navigator.share({text: t, url: url}).catch(function(){}); else window.open("https://wa.me/?text=" + encodeURIComponent(t + " " + url), "_blank");
+  };
+
+  // ---------- input: swipe or tap
+  function pos(e){ var r = cv.getBoundingClientRect(), p = e.touches ? e.touches[0] || e.changedTouches[0] : e; return {x: p.clientX - r.left, y: p.clientY - r.top}; }
+  function toGoal(x, y){ var G = goal(); return {u: (x - G.cx) / (G.w / 2), v: (G.base - y) / G.h}; }
+  cv.addEventListener("pointerdown", function(e){
+    var p = pos(e);
+    if (phase === "aim"){ pt = {x0: p.x, y0: p.y, x: p.x, y: p.y, t: performance.now()}; cv.setPointerCapture && cv.setPointerCapture(e.pointerId); }
+    else if (phase === "keep" || phase === "save"){ var q = toGoal(p.x, p.y); keeperTap(q.u, q.v); }
+  });
+  cv.addEventListener("pointermove", function(e){ if (pt && phase === "aim"){ var p = pos(e); pt.x = p.x; pt.y = p.y; draw(); } });
+  cv.addEventListener("pointerup", function(e){
+    if (!pt || phase !== "aim") return;
+    var p = pos(e), dx = p.x - pt.x0, dy = p.y - pt.y0, len = Math.hypot(dx, dy), G = goal(), q;
+    if (len < 18){ q = toGoal(p.x, p.y); if (q.v < -0.25){ pt = null; draw(); return; } }        // a tap on the goal
+    else {
+      if (dy > -10){ pt = null; draw(); msg("Swipe up towards the goal."); return; }
+      var k = (G.base - G.h * 0.5 - pt.y0) / dy;                                                // stretch the swipe to the goal
+      var x = pt.x0 + dx * k, speed = len / Math.max(60, performance.now() - pt.t);
+      q = toGoal(x, G.base - Math.min(1.25, (len / (H * 0.42))) * G.h);
+      q.v += (speed > 2.6 ? 0.15 : 0);
+    }
+    myShot(Math.max(-1.3, Math.min(1.3, q.u)), Math.max(0.02, Math.min(1.3, q.v)));
+  });
+
+  // ---------- setup
+  function setupUI(){
+    $("fbme").innerHTML = TEAMS.map(function(t, i){ return "<option value='" + i + "'" + (i === S.me ? " selected" : "") + ">" + t[1] + " " + t[0] + "</option>"; }).join("");
+    $("fbop").innerHTML = TEAMS.map(function(t, i){ return "<option value='" + i + "'" + (i === S.op ? " selected" : "") + ">" + t[1] + " " + t[0] + "</option>"; }).join("");
+    $("fblv").innerHTML = LEVELS.map(function(l, i){ var lock = i >= S.open; return "<button data-l='" + i + "' class='" + (i === S.lv ? "on " : "") + (lock ? "lock" : "") + "'" + (lock ? " disabled" : "") + ">" + (lock ? "🔒 " : "") + l[0] + "<small>" + l[1] + "</small></button>"; }).join("");
+  }
+  $("fblv").addEventListener("click", function(e){ var b = e.target.closest("[data-l]"); if (!b || b.disabled) return; S.lv = +b.dataset.l; save("xcfb_lv", S.lv); setupUI(); });
+  $("fbsetb").onclick = function(){ setupUI(); $("fbsetup").hidden = !$("fbsetup").hidden; };
+  $("fbgo").onclick = function(){ S.me = +$("fbme").value; S.op = +$("fbop").value; if (S.me === S.op) S.op = (S.me + 1) % TEAMS.length; save("xcfb_me", S.me); save("xcfb_op", S.op); $("fbsetup").hidden = true; newMatch(); };
+  $("fbsnd").onclick = function(){ S.snd = !S.snd; save("xcfb_snd", S.snd); this.innerHTML = S.snd ? "&#128266;" : "&#128263;"; };
+  $("fbsnd").innerHTML = S.snd ? "&#128266;" : "&#128263;";
+  window.addEventListener("resize", size);
+  M = {k: [[], []], turn: 0, round: 0};
+  size(); newMatch();
+  window.XCFB = {S: S, M: function(){ return M; }, shoot: myShot, tap: keeperTap, phase: function(){ return phase; }};
+})();
+</script>
+
+
+<footer class="xcfoot">
+  <div class="xf-grid">
+    <div>
+      <div class="xf-brand">
+        <img src="/brand/logo-64.png" alt="" onerror="this.style.display='none'">
+        <b>XpertCreation</b>
+      </div>
+      <p class="xf-addr">
+        1-S-3B/2, Ghazali Park,<br>
+        Wahdat Colony, Lahore 54000<br>
+        Pakistan<br>
+        <a href="https://wa.me/923009462916" target="_blank" rel="noopener"><img class="wai" src="/icons/whatsapp-64.png" alt="" width="18" height="18" style="object-fit:contain">+92 300 946 2916</a><br>
+        <a href="mailto:khalid@xpertcreation.com">khalid@xpertcreation.com</a>
+      </p>
+    </div>
+    <div>
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="/feed">XpertConnect</a></li>
+        <li><a href="/market">Freelance</a></li>
+        <li><a href="/market#property">Property</a></li>
+        <li><a href="/store">Store</a></li>
+        <li><a href="/academy/">Academy</a></li>
+        <li><a href="/tools">Tools</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="/support">Support</a></li>
+        <li><a href="https://share.google/dlldq7AKwKRjijusO" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c3.3 0 6 2.7 6 6 0 4.5-6 14-6 14S6 12.5 6 8c0-3.3 2.7-6 6-6zm0 3.6A2.4 2.4 0 1012 10.4 2.4 2.4 0 0012 5.6z"/></svg>Find us on Google</a></li><li><a href="https://www.trustpilot.com/review/xpertcreation.com" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5l2.9 6.2 6.6.6-5 4.5 1.5 6.6L12 17l-6 3.4 1.5-6.6-5-4.5 6.6-.6z"/></svg>Review us on Trustpilot</a></li>
+        <li><a href="/verify">Check a certificate</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61595507664573" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.46-.13-2.44 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8h3.36z"/></svg>Facebook page</a></li>
+        <li><a href="https://github.com/khalidxpert/XpertCreation" target="_blank" rel="noopener"><svg class="fbi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0012 2z"/></svg>GitHub</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+        <li><a href="/terms-of-sale">Terms of sale</a></li>
+        <li><a href="/refund-policy">Refund policy</a></li>
+        <li><a href="/ownership">Ownership &amp; complaints</a></li>
+        <li><a href="/promote">Prices &amp; paid items</a></li>
+        <li><a href="/account/delete">Delete account</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="xcstats" class="xcstats"></div><script src="/footer-stats.js?v=8" defer></script>
+  <p class="xf-cr">&copy; 2026 XpertCreation &middot; Lahore, Pakistan &middot; A registered technology company</p>
+</footer>
+
+<script src="/js/share-1.js?v=22" defer></script>
+<script src="/js/winshare-1.js?v=22" defer></script>
+</body>
+</html>
