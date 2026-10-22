@@ -90,7 +90,7 @@
 
   /* ------------------------------------------------------------------ app look on phones */
   var TABS = [["Home", "/", "M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"], ["Connect", "/feed", "M16 11a4 4 0 1 0-8 0M3 20c1.5-3.5 5-5 9-5s7.5 1.5 9 5M12 3v4"],
-    ["Chat", "/chat", "M4 5h16v11H8l-4 4z"], ["Tools", "/tools", "M14 7l3-3 3 3-3 3M4 20l9-9M5 5h4v4H5zM15 15h4v4h-4z"], ["Menu", "#menu", "M4 7h16M4 12h16M4 17h16"]];
+    ["Chat", "/chat", "M4 5h16v11H8l-4 4z"], ["Alerts", "#alerts", "M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"], ["Tools", "/tools", "M14 7l3-3 3 3-3 3M4 20l9-9M5 5h4v4H5zM15 15h4v4h-4z"], ["Menu", "#menu", "M4 7h16M4 12h16M4 17h16"]];
   var NOBAR = /^\/(chat|group|groups|nearby|offline|call|cam|scan|irc|2048|chess|carrom|carrom-online|connect4|ludo|minesweeper|pool|simon|snake|sudoku|tictactoe|wordgame|arrows|login|signup)(\/|$)/;
   function phone(){ return Math.min(window.innerWidth, screen.width || 9999) <= 760; }
   function hasOwnBar(){
@@ -115,13 +115,54 @@
     }
     if (NOBAR.test(path) || hasOwnBar() || D.querySelector(".xctab")) return;
     var bar = D.createElement("nav"); bar.className = "xctab"; bar.setAttribute("aria-label", "Main");
-    bar.innerHTML = TABS.map(function(t){ return '<a href="' + t[1] + '"' + (t[1] !== "#menu" && on(t[1]) ? ' class="on"' : "") + (t[1] === "#menu" ? ' data-xcmenu="1"' : "") + '><svg viewBox="0 0 24 24"><path d="' + t[2] + '"/></svg><span>' + t[0] + "</span></a>"; }).join("");
+    bar.innerHTML = TABS.map(function(t){ return '<a href="' + t[1] + '"' + (t[1] !== "#menu" && on(t[1]) ? ' class="on"' : "") + (t[1] === "#menu" ? ' data-xcmenu="1"' : "") + (t[1] === "#alerts" ? ' data-xcalerts="1" style="display:none"' : "") + '><svg viewBox="0 0 24 24"><path d="' + t[2] + '"/></svg><span>' + t[0] + "</span>" + (t[1] === "#alerts" ? '<em class="xcbadge"></em>' : "") + "</a>"; }).join("");
     D.body.appendChild(bar); D.documentElement.classList.add("xc-tabbed");
     bar.querySelector("[data-xcmenu]").addEventListener("click", function(e){
       e.preventDefault();
       var m = D.querySelector(".tmenu"); if (m && getComputedStyle(m).display !== "none"){ m.click(); window.scrollTo({top: 0, behavior: "smooth"}); return; }
       location.href = "/tools";
     });
+    alerts(bar);
+  }
+
+  /* ------------------------------------------------------------------ Alerts tab: the bell on phones */
+  function ck(n){ var m = D.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)")); return m ? decodeURIComponent(m[1]) : ""; }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]; }); }
+  function alerts(bar){
+    var tab = bar.querySelector("[data-xcalerts]"); if (!tab) return;
+    var badge = tab.querySelector(".xcbadge"), sheet = null;
+    function read(body){ return fetch("/api/notify/read/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf")}, body: JSON.stringify(body || {})}).catch(function(){}); }
+    function count(n){ badge.textContent = n > 9 ? "9+" : n || ""; badge.style.display = n ? "block" : "none"; }
+    function draw(d){
+      if (!sheet) return;
+      var L = d.notifications || [];
+      sheet.querySelector(".xcal-l").innerHTML = L.length ? L.map(function(n){
+        return '<a class="xcal-i' + (n.read ? "" : " un") + '" href="' + esc(n.link || "#") + '" data-nid="' + n.id + '"><p>' + esc(n.text) + "</p><small>" + esc(n.when || "") + "</small></a>"; }).join("")
+        : '<div class="xcal-e">\uD83D\uDD14<br>No notifications yet.<span lang="ur">ابھی کوئی اطلاع نہیں</span></div>';
+      sheet.querySelector("[data-all]").style.display = d.unread ? "" : "none";
+    }
+    function load(){ return fetch("/api/notify/mine/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ if (d){ count(d.unread || 0); draw(d); } return d; }).catch(function(){}); }
+    function open(){
+      if (sheet) return;
+      sheet = D.createElement("div"); sheet.className = "xcal"; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-label", "Notifications");
+      sheet.innerHTML = '<div class="xcal-b"><div class="xcal-h"><b>Notifications <span lang="ur">اطلاعات</span></b><button type="button" data-all style="display:none">Mark all read</button><button type="button" data-x aria-label="Close">\u2715</button></div><div class="xcal-l"><div class="xcal-e">Loading\u2026</div></div>'
+        + '<a class="xcal-s" href="/account">\u2699\uFE0F Notification settings</a></div>';
+      D.body.appendChild(sheet); D.documentElement.classList.add("xcal-open"); tab.classList.add("on");
+      sheet.addEventListener("click", function(e){
+        if (e.target === sheet || e.target.closest("[data-x]")){ shut(); return; }
+        if (e.target.closest("[data-all]")){ read({}).then(load); return; }
+        var it = e.target.closest("[data-nid]"); if (it) read({id: it.getAttribute("data-nid")});
+      });
+      load();
+    }
+    function shut(){ if (sheet){ sheet.remove(); sheet = null; } D.documentElement.classList.remove("xcal-open"); tab.classList.remove("on"); }
+    tab.addEventListener("click", function(e){ e.preventDefault(); if (sheet) shut(); else open(); });
+    fetch("/api/auth/me/", {credentials: "same-origin"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(u){
+      if (!u || !u.id) return;
+      tab.style.display = ""; load();
+      setInterval(function(){ if (!D.hidden) load(); }, 60000);
+      D.addEventListener("visibilitychange", function(){ if (!D.hidden) load(); });
+    }).catch(function(){});
   }
 
   var css = D.createElement("style");
@@ -138,12 +179,21 @@
     ".xctab a svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}",
     ".xctab a.on{color:#1B4DFF}.xctab a.on svg{stroke-width:2.3}.xctab a:active{background:#F1F4FA}",
     "html.xc-tabbed body{padding-bottom:calc(68px + env(safe-area-inset-bottom)) !important}",
+    ".xctab a{position:relative}.xctab .xcbadge{position:absolute;top:2px;left:50%;margin-left:5px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#E11D48;color:#fff;font-style:normal;font-size:10.5px;font-weight:800;line-height:17px;text-align:center;display:none;box-sizing:border-box}",
+    ".xcal{position:fixed;inset:0;z-index:8995;background:rgba(13,20,36,.45);display:flex;align-items:flex-end;justify-content:center}",
+    ".xcal-b{background:#fff;color:#0D1424;width:100%;max-width:560px;height:min(78vh,640px);border-radius:22px 22px 0 0;display:flex;flex-direction:column;margin-bottom:calc(62px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(0,0,0,.2);font-family:inherit}",
+    ".xcal-h{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid #E4E8F2}.xcal-h b{flex:1;font-size:16px}.xcal-h b span{font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:#8A93A6;margin-left:6px}",
+    ".xcal-h button{border:0;background:#F1F4FA;border-radius:10px;padding:7px 10px;font:inherit;font-size:12.5px;font-weight:700;color:#1B4DFF;cursor:pointer}.xcal-h [data-x]{color:#0D1424}",
+    ".xcal-l{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}",
+    ".xcal-i{display:block;padding:12px 16px;border-bottom:1px solid #EEF1F6;text-decoration:none;color:inherit}.xcal-i.un{background:#F0F5FF}.xcal-i p{margin:0;font-size:14px;line-height:1.45}.xcal-i small{display:block;color:#5A657C;font-size:11.5px;margin-top:3px}",
+    ".xcal-e{padding:40px 16px;text-align:center;color:#5A657C;font-size:14px;line-height:1.8}.xcal-e span{display:block;font-family:'Noto Nastaliq Urdu',serif}",
+    ".xcal-s{display:block;text-align:center;padding:12px;font-size:13px;font-weight:700;color:#1B4DFF;text-decoration:none;border-top:1px solid #E4E8F2}",
     "html.xc-tabbed .xcb{bottom:calc(80px + env(safe-area-inset-bottom)) !important}",
     "html.xc-m .xcfoot{margin-top:18px;padding:14px 16px 18px}",
     "html.xc-m .xcfoot .xf-grid{display:none}html.xc-m .xcfoot.xcf-open .xf-grid{display:grid}",
     ".xcf-more{display:none}html.xc-m .xcf-more{display:flex;justify-content:space-between;width:100%;border:1px solid #E4E8F2;background:#fff;border-radius:12px;padding:11px 14px;font:inherit;font-size:13.5px;font-weight:700;color:#0D1424;margin-bottom:12px;cursor:pointer}",
     "html.xc-m .xcfoot.xcf-open .xcf-more span{transform:rotate(180deg)}",
-    "html.xc-m{-webkit-text-size-adjust:100%}html.xc-m body{overscroll-behavior-y:contain}",
+    "html.xc-m{-webkit-text-size-adjust:100%}",
     "@media (display-mode: standalone){html.xc-m header.top,html.xc-m header.topbar{padding-top:env(safe-area-inset-top)}}"
   ].join("\n");
   (D.head || D.documentElement).appendChild(css);
