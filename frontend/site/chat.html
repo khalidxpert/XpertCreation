@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
-<title>Chat — XpertCreation</title>
+<title>XpertChat — XpertCreation</title>
 <!-- seo:start -->
 <meta name="description" content="Your conversations on XpertCreation.">
 <link rel="canonical" href="https://xpertcreation.com/chat">
@@ -205,6 +205,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 .nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
 </style>
 <script src="/js/voice-1.js?v=1"></script>
+<link rel="stylesheet" href="/css/xpertchat-1.css?v=1">
 </head>
 <body>
 <header class="top">
@@ -281,7 +282,8 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
         + '<span class="t3"><b>' + esc(t.with) + (t.disappear ? ' <span title="Disappearing messages">\u23F1</span>' : '') + '</b>'
         + (t.about ? '<em class="about2">' + esc(t.about) + '</em>' : '')
         + '<small>' + esc(sub) + '</small></span>'
-        + (t.unread ? '<span class="badge2">' + t.unread + '</span>' : '')
+        + '<span class="rt2"><span class="tm2">' + esc((function(u){ var M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], d = new Date(), td = ("0" + d.getDate()).slice(-2) + " " + M[d.getMonth()]; return u.indexOf(td) === 0 ? (u.split(", ")[1] || "") : u.split(",")[0]; })(String(t.updated || ""))) + '</span>'
+        + (t.unread ? '<span class="badge2">' + t.unread + '</span>' : '') + '</span>'
         + '</div>';
     }).join("");
   }
@@ -310,12 +312,12 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     if (m.deleted) return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + '" data-mid="' + m.id + '" data-xdel="1" style="opacity:.7"><div class="cb"><i>🚫 ' + (m.mine ? "You deleted this message" : "This message was deleted") + '</i></div><small>' + esc(m.when) + '</small></div>';
     var tick = m.mine ? ' <span class="tick3' + (m.id <= seenUpto ? ' seen' : '') + '" data-tick="' + m.id + '">'
       + (m.id <= seenUpto ? "\u2713\u2713" : "\u2713") + '</span>' : "";
-    return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + (stk(m.body) ? " stkmsg" : "") + '" data-mid="' + m.id + '">'
+    return '<div class="msg8 ' + (m.mine ? "mine" : "theirs") + (stk(m.body) || (m.image && m.body === "[sticker:me]") ? " stkmsg" : "") + '" data-mid="' + m.id + '">'
       + (m.voice && window.XCVoice ? XCVoice.html(m.voice) : '')
       + (m.file ? '<a class="cfile" href="' + esc(m.file.url) + '">\uD83D\uDCC4 ' + esc(m.file.name) + ' <small>' + kb(m.file.size) + '</small></a>' : '')
-      + (m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="cimg" src="' + esc(m.image) + '" alt="Photo" loading="lazy"></a>' : '')
+      + (m.image && m.body === "[sticker:me]" ? '<img class="stk3" src="' + esc(m.image) + '" alt="Sticker" loading="lazy">' : m.image ? '<a href="' + esc(m.image) + '" target="_blank" rel="noopener"><img class="cimg" src="' + esc(m.image) + '" alt="Photo" loading="lazy"></a>' : '')
       + (stk(m.body) ? '<img class="stk3" src="/stickers/' + stk(m.body) + '.svg" alt="Sticker">'
-                     : (m.body ? '<div class="cb">' + linkify(m.body) + '</div>' : ''))
+                     : (m.body && m.body !== "[sticker:me]" ? '<div class="cb">' + linkify(m.body) + '</div>' : ''))
       + '<small>' + (m.edited ? '<span class="xed">edited \u00b7 </span>' : '') + esc(m.when) + tick + '</small></div>';
   }
   // ---- stickers and emoji ----
@@ -332,9 +334,9 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   var emoTab = "stk";
   function drawEmo(){
     var p = $("emo3");
-    var tabs = '<div class="etabs"><button data-etab="stk" class="' + (emoTab === "stk" ? "on" : "") + '">Stickers</button>'
+    var tabs = '<div class="etabs"><button data-etab="mine" class="' + (emoTab === "mine" ? "on" : "") + '">\u2728 My stickers</button><button data-etab="stk" class="' + (emoTab === "stk" ? "on" : "") + '">Stickers</button>'
       + Object.keys(EMOJI).map(function(k){ return '<button data-etab="' + k + '" class="' + (emoTab === k ? "on" : "") + '">' + k + '</button>'; }).join("") + '</div>';
-    var body = emoTab === "stk"
+    var body = emoTab === "mine" ? (window.XCStk ? XCStk.grid() : "") : emoTab === "stk"
       ? '<div class="stkgrid">' + STICKERS.map(function(s){ return '<button data-stk="' + s + '"><img src="/stickers/' + s + '.svg" alt="' + s + '" loading="lazy"></button>'; }).join("") + '</div>'
       : '<div class="eg">' + EMOJI[emoTab].split(" ").map(function(e){ return '<button data-emoji="' + e + '">' + e + '</button>'; }).join("") + '</div>';
     p.innerHTML = tabs + body;
@@ -363,7 +365,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   window.addEventListener("resize", setHH);
   if (window.visualViewport) window.visualViewport.addEventListener("resize", setHH);
   function setTitle(){
-    var h = document.querySelector(".wrap > h1");
+    var h = document.querySelector(".wrap h1");
     h.innerHTML = (current.avatar ? '<img class="chead-av" src="' + esc(current.avatar) + '" alt="">' : '') + esc(current.with) + (current.disappear ? " \u23F1" : "");
   }
   // ---- WhatsApp-style extras: panels, contact, media/links/docs, wallpaper, export ----
@@ -496,6 +498,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     });
   }
 
+  window.XC3 = {cur: function(){ return current; }, add: function(l){ addMessages(l); }};
   function send(){
     var box = $("cinput"), body = box.value.trim();
     if (!body || !current || sending) return;
@@ -566,7 +569,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
       document.body.classList.remove("inchat");
       $("emo3").classList.remove("on");
       $("list5").style.display = "";
-      document.querySelector(".wrap > h1").textContent = "Chat";
+      document.querySelector(".wrap h1").textContent = "Chat";
       current = null;
       loadList();
       return;
@@ -916,5 +919,6 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 </script>
 <script src="/js/xcbar-1.js?v=2" defer></script>
 <script src="/js/xchat-1.js" defer></script>
+<script src="/js/xpertchat-1.js?v=1" defer></script>
 </body>
 </html>

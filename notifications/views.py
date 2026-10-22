@@ -171,7 +171,8 @@ def _save_photo(f, thread_id):
         raise ValueError("That file is not a photo we can read.")
     if fmt not in ("JPEG", "PNG", "WEBP", "GIF"):
         raise ValueError("Use a JPG, PNG or WebP photo.")
-    im = ImageOps.exif_transpose(im).convert("RGB")
+    im = ImageOps.exif_transpose(im)
+    im = im.convert("RGBA") if ("A" in im.getbands() or "transparency" in im.info) else im.convert("RGB")   # stickers keep a see-through background
     im.thumbnail((1280, 1280))
     rel = "chat/%d/%s.webp" % (thread_id, secrets.token_hex(12))
     full = os.path.join(settings.MEDIA_ROOT, rel)
@@ -181,7 +182,7 @@ def _save_photo(f, thread_id):
     except Exception:                                   # Pillow without WebP: fall back to JPEG
         rel = rel[:-5] + ".jpg"
         full = os.path.join(settings.MEDIA_ROOT, rel)
-        im.save(full, "JPEG", quality=80, optimize=True)
+        im.convert("RGB").save(full, "JPEG", quality=80, optimize=True)
     return rel
 
 
