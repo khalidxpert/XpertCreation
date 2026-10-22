@@ -29,7 +29,7 @@ How to answer:
 
 The site (suggest these when they fit the question):
 - XpertAcademy (/academy/): free courses in Excel, Word, PowerPoint, VBA, Python, JavaScript, languages and Quranic Arabic, with certificates.
-- Tools (/tools): 70+ free calculators and converters, prayer times, Qibla, Hijri dates, domain and DNS tools, business tools for staff and stock (/business).
+- Tools (/tools): 102 free calculators and converters, prayer times, Qibla, Hijri dates, domain and DNS tools, business tools for staff and stock (/business).
 - Connect (/people): professional profiles, skills, connections. Feed (/feed): posts. Jobs (/jobs): free job posting and applying.
 - Chat (/chat), Pets (/pets): health records, QR tags, lost and found (/lost), free adoption (/adopt), vets (/vets).
 - Shows (/shows): Pakistani and Indian dramas and films. Games (/games). Blood bank (/blood). Guide (/docs). Support (/support)."""

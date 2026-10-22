@@ -22,7 +22,7 @@ class Command(BaseCommand):
         c = Company.objects.create(
             owner=k, name="XpertCreation", slug="xpertcreation",
             tagline="Learn more. Do more. All in one place.",
-            about=("XpertCreation is a free, all-in-one platform made in Lahore, Pakistan: free courses, 78 tools, jobs, "
+            about=("XpertCreation is a free, all-in-one platform made in Lahore, Pakistan: free courses, 102 tools, jobs, "
                    "XpertConnect, chat, pets, sports, shows and games - one free account for everything."),
             industry="Technology & Education", size="1-10", city="Lahore", country="PK",
             address="1-S-3B/2, Ghazali Park, Wahdat Colony, Lahore 54000, Pakistan",

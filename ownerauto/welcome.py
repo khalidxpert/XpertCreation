@@ -25,7 +25,7 @@ PARTS = [
     ]),
     ("Learn & grow", [
         ("\U0001F393", "XpertAcademy", "Free courses with certificates, in simple English.", "مفت کورسز اور سرٹیفکیٹ", "/academy/"),
-        ("\U0001F9EE", "100 free tools", "Tax, loan, BMI, Zakat calculators and many handy tools.", "۱۰۰ مفت ٹولز", "/tools"),
+        ("\U0001F9EE", "{N} free tools", "Tax, loan, BMI, Zakat, Faraid calculators, legal documents and many handy tools.", "{NU} مفت ٹولز", "/tools"),
         ("\U0001FAAA", "Digital business card", "Make a free digital visiting card and share it with a link or QR code.", "ڈیجیٹل وزیٹنگ کارڈ", "/cards"),
     ]),
     ("Family & community", [
@@ -46,6 +46,17 @@ PARTS = [
 ]
 
 
+def _tools():
+    """How many tools the Tools page has right now (so the email is never out of date)."""
+    import re
+    try:
+        n = len(re.findall(r'\{\s*id:\s*"[\w-]+",\s*g:', open("/var/www/xpertcreation-landing/tools.html", encoding="utf-8").read()))
+    except Exception:
+        n = 0
+    n = n or 100
+    return str(n), str(n).translate(str.maketrans("0123456789", "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9"))
+
+
 def _name(u):
     n = (getattr(u, "full_name", "") or "").strip() or (u.first_name if hasattr(u, "first_name") else "") or u.username or ""
     return n.split(" ")[0][:30] or "there"
@@ -58,10 +69,12 @@ def build(u):
     text = ["Assalam o Alaikum %s,\n" % name,
             "Welcome to XpertCreation! I am Syed Khalid Hussain Shah, the founder. We built XpertCreation so that everything you need is in one free account, made in Pakistan.",
             "Here is what you can do with it:\n"]
+    N, NU = _tools()
     for title, items in PARTS:
         rows += '<tr><td style="padding:18px 0 6px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#1B4DFF">%s</td></tr>' % e(title)
         text.append("\n" + title.upper())
         for em, nm, line, ur, link in items:
+            nm, ur = nm.replace("{N}", N), ur.replace("{NU}", NU)
             url = SITE + link
             rows += ('<tr><td style="padding:6px 0"><table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background:#F6F7FB;border:1px solid #E4E8F2;border-radius:14px">'
                      '<tr><td width="48" style="padding:12px 0 12px 14px;font-size:26px;vertical-align:top">%s</td>'
@@ -73,9 +86,9 @@ def build(u):
     body = """<!doctype html><html><body style="margin:0;background:#EEF1F7;font-family:Inter,Segoe UI,Arial,sans-serif;color:#0D1424">
 <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background:#EEF1F7"><tr><td align="center" style="padding:24px 12px">
 <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:20px;overflow:hidden">
-<tr><td style="background:linear-gradient(135deg,#0B1230,#1B4DFF);background-color:#1B4DFF;padding:28px 26px;color:#fff">
-<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:middle"><img src="https://xpertcreation.com/brand/logo-128.png" width="52" height="52" alt="XpertCreation" style="display:block;border:0;border-radius:14px;width:52px;height:52px"></td><td style="padding-left:12px;vertical-align:middle;font-size:20px;font-weight:900;color:#ffffff">XpertCreation</td></tr></table><div style="font-size:28px;font-weight:900;line-height:1.15;margin-top:6px">Welcome, %(name)s! \U0001F44B</div>
-<div style="font-size:15px;opacity:.92;margin-top:6px">One free account for everything you need.</div><div style="font-size:16px;margin-top:4px;direction:rtl;text-align:left">ایک ایپ، ہر ضرورت، ایک ہی جگہ</div></td></tr>
+<tr><td style="background:#ffffff;padding:26px 26px 20px;color:#0D1424;border-bottom:4px solid #1B4DFF">
+<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:middle"><a href="https://xpertcreation.com" target="_blank" style="text-decoration:none"><img src="https://xpertcreation.com/brand/logo-128.png" width="52" height="52" alt="XpertCreation" style="display:block;border:0;border-radius:14px;width:52px;height:52px"></a></td><td style="padding-left:12px;vertical-align:middle;font-size:20px;font-weight:900"><a href="https://xpertcreation.com" target="_blank" style="color:#0D1424;text-decoration:none">XpertCreation</a></td></tr></table><div style="font-size:28px;font-weight:900;line-height:1.15;margin-top:14px;color:#0D1424">Welcome, %(name)s! \U0001F44B</div>
+<div style="font-size:15px;color:#5A657C;margin-top:6px">One free account for everything you need.</div><div style="font-size:16px;margin-top:4px;direction:rtl;text-align:left;color:#1B4DFF">ایک ایپ، ہر ضرورت، ایک ہی جگہ</div></td></tr>
 <tr><td style="padding:22px 26px 6px;font-size:15px;line-height:1.6">Assalam o Alaikum %(name)s,<br><br>I am <b>Syed Khalid Hussain Shah</b>, founder of XpertCreation. Thank you for joining. We built XpertCreation in Lahore so that your network, work, shopping, learning and family can all live in one free account.<br><br>Here is a quick look at what you can do:</td></tr>
 <tr><td style="padding:0 26px"><table role="presentation" width="100%%" cellpadding="0" cellspacing="0">%(rows)s</table></td></tr>
 <tr><td style="padding:20px 26px"><table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background:#0D1424;border-radius:16px"><tr><td style="padding:18px;color:#fff;font-size:15px"><b>\U0001F4F1 Get the Android app</b><br><span style="opacity:.85;font-size:14px">Everything on your phone, with notifications.</span></td>
