@@ -137,7 +137,7 @@
     B.appendChild(ov); return ov;
   }
   function menu(){
-    var items = [["doc", "Document", IC.doc], ["scan", "Scan", IC.scan], ["gal", "Gallery", IC.gal], ["cam", "Camera", IC.cam], ["loc", "Location", IC.loc], ["con", "Contact", IC.con], ["poll", "Poll", IC.poll], ["ev", "Event", IC.ev], ["quick", "Quick reply", IC.quick]];
+    var items = [["doc", "Document", IC.doc], ["scan", "Scan", IC.scan], ["gal", "Gallery", IC.gal], ["cam", "Camera", IC.cam], ["loc", "Location", IC.loc], ["con", "Contact", IC.con], ["poll", "Poll", IC.poll], ["ev", "Event", IC.ev], ["quick", "Quick reply", IC.quick], ["vt", "Voice typing", VTI]];
     var ov = sheet('<div class="xpgrid">' + items.map(function(i){ return '<button class="xpgo" data-go="' + i[0] + '"><i>' + i[2] + "</i>" + i[1] + "</button>"; }).join("") + "</div>");
     ov.addEventListener("click", function(e){
       var b = e.target.closest("[data-go]"); if (!b) return; var k = b.dataset.go; ov.remove();
@@ -150,7 +150,14 @@
       else if (k === "poll") poll();
       else if (k === "ev") event_();
       else if (k === "quick") quick();
+      else if (k === "vt") voiceType();
     });
+  }
+  var VTI = '<svg viewBox="0 0 24 24" width="26" height="26" fill="#16A34A"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1a7 7 0 0 0 6-6.9z"/></svg>';
+  function voiceType(){   // speak Urdu / English -> the words go into the message box (setup_voice_v1)
+    var go = function(){ XCVT.sheet({onText: function(t){ var ta = EL.ta(); if (!ta) return; ta.value = (ta.value ? ta.value.replace(/\s+$/, "") + " " : "") + t; ta.dispatchEvent(new Event("input", {bubbles: true})); ta.focus(); }}); };
+    if (window.XCVT) return go();
+    var s = D.createElement("script"); s.src = "/js/urduvoice-1.js?v=1"; s.onload = go; s.onerror = function(){ toast("Could not load voice typing. Check your internet."); }; D.head.appendChild(s);
   }
   function gallery(){
     var inp = D.createElement("input"); inp.type = "file"; inp.accept = "image/*,video/*"; inp.style.display = "none"; B.appendChild(inp);

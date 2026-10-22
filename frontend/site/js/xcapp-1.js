@@ -35,7 +35,7 @@
     idealwt: ["Ideal weight", "/tools?t=idealwt", "🏃"], wheels: ["Cars & bikes", "/wheels", "🚘"], groups: ["Groups", "/groups", "👥"],
     rooms: ["Chat rooms", "/chat-rooms", "💬"], people: ["Find people", "/people", "🔍"], cards: ["Digital card", "/cards", "🎯"],
     events: ["Events", "/events", "📅"], qr: ["QR code", "/tools?t=qr", "▦"], amb: ["Ambassadors", "/ambassadors", "🌟"], cam: ["XpertCam", "/cam", "📸"],
-    meet: ["XpertMeet", "/call?new=1", "🎥"], chat: ["XpertChat", "/chat", "💬"], tools: ["All tools", "/tools", "🧰"]
+    meet: ["XpertMeet", "/call?new=1", "🎥"], vt: ["Urdu voice typing", "/urdu-voice-typing", "🎙️"], chat: ["XpertChat", "/chat", "💬"], tools: ["All tools", "/tools", "🧰"]
   };
   var MAP = [
     ["/islamic", "quran prayer qibla zakat faraid hijri tasbeeh rishta"], ["/quran", "islamic prayer qibla tasbeeh hijri"],
@@ -45,12 +45,12 @@
     ["/orders", "store food money"], ["/food", "store recipes rides orders"], ["/recipes", "food store kids"],
     ["/jobs", "freelance cv board academy typing feed brief"], ["/board", "jobs mcq academy brief"],
     ["/academy", "mcq vocab typing library gpa translate jobs"], ["/courses", "mcq vocab typing library gpa jobs"],
-    ["/mcq", "academy vocab board exam"], ["/vocabulary", "translate academy mcq flash"], ["/translate", "vocab urdukb voice norway"],
+    ["/mcq", "academy vocab board exam"], ["/vocabulary", "translate academy mcq flash"], ["/translate", "vt vocab urdukb norway"], ["/urdu-voice-typing", "translate urdukb poetry vocab chat"],
     ["/norwegian", "translate vocab academy"], ["/rishta", "islamic roots meetups verify brief"], ["/roots", "faraid birthdays rishta islamic"],
     ["/rides", "steps travel bus weather food"], ["/travel", "air bus weather rides rates brief"], ["/air", "travel weather rates brief"],
     ["/bus", "travel rides weather"], ["/weather", "prayer travel news"], ["/news", "sports weather shows rates"],
     ["/sports", "predict news games"], ["/predict", "sports games rewards"], ["/shows", "kids poetry afsanay library clips"],
-    ["/kids", "shows games typing quran library"], ["/poetry", "afsanay library shows"], ["/afsanay", "poetry library shows"],
+    ["/kids", "shows games typing quran library"], ["/poetry", "vt afsanay library shows"], ["/afsanay", "poetry library shows"],
     ["/library", "academy afsanay poetry"], ["/games", "predict sports kids"], ["/pets", "vets lost adopt"], ["/pet", "vets lost adopt"],
     ["/vets", "pets lost adopt"], ["/lost", "pets vets adopt"], ["/adopt", "pets vets lost"], ["/blood", "donate steps weather"],
     ["/donate", "blood zakat islamic"], ["/steps", "bmi water idealwt rides"], ["/pros", "store freelance rides verify"],
@@ -64,7 +64,7 @@
   ];
   var TOOLMAP = {zakat: "islamic faraid money", fbrtax: "money salary bills", salary: "tax money jobs", prayer: "islamic qibla quran", qibla: "islamic prayer quran",
     bmi: "steps water idealwt", emi: "money wheels property", gold: "money rates zakat", invoice: "store money biz", bijli: "bills money", gpa: "academy mcq exam",
-    hijri: "islamic prayer quran", tasbeeh: "islamic quran prayer", qr: "cards brand store"};
+    hijri: "islamic prayer quran", tasbeeh: "islamic quran prayer", qr: "cards brand store", voicetype: "vt translate urdukb", urdukb: "vt translate vocab"};
   var GAMES = /^\/(2048|chess|carrom|carrom-online|connect4|ludo|minesweeper|pool|simon|snake|sudoku|tictactoe|wordgame|arrows)$/;
   var SKIP = /^\/(chat|group|groups|nearby|offline|call|cam|scan|irc|login|signup|register|account\/delete|delete-account|tools)(\/|$)/;
 
