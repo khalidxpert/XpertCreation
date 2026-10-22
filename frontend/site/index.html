@@ -142,6 +142,7 @@ body.rtl .hero2 .eyebrow{letter-spacing:0;font-family:inherit;font-size:13px;tex
 @media(max-width:700px){.d2tiles.v4 a.all{flex-direction:row;justify-content:center;gap:10px;padding:10px 14px;border-radius:16px;background:linear-gradient(150deg,var(--a),var(--b))!important;color:#fff}
  .d2tiles.v4 a.all .ic{width:34px;height:34px;border-radius:10px;font-size:20px;box-shadow:none;background:rgba(255,255,255,.16)!important}
  .d2tiles.v4 a.all b{font-size:0}.d2tiles.v4 a.all b:after{content:"Explore all of XpertCreation";font-size:14.5px;font-weight:800}}
+@media(max-width:700px){.d2grid{grid-template-columns:1fr 1fr}.d2grid a{font-size:13px;padding:10px;gap:8px}}
 .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.2;z-index:-1}
 .blob.b1{width:300px;height:300px;background:var(--brand);top:-120px;left:-90px}
 .blob.b2{width:260px;height:260px;background:var(--blood);top:-60px;right:-110px}
@@ -898,7 +899,7 @@ body.signed-in .hello{margin-top:4px}
       <input id="d2q" type="search" autocomplete="off" placeholder="Search 80+ features: jobs, food, Quran, bills&hellip;" aria-label="Search features">
       <div class="d2res" id="d2res" hidden></div>
     </div>
-    <div class="d2tiles v3 v4">
+    <div class="d2tiles v3 v4 v5">
       <a href="/feed" style="--a:#4F46E5;--b:#312E81"><span class="ic"><img src="/brand/xpertconnect/xc-3d-256.png?v=3" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"></span><b data-s="Connect">XpertConnect</b><small data-i18n="t1s">Your network, posts and chat</small></a>
       <a href="/academy/" style="--a:#00B37E;--b:#046B4E"><span class="ic"><img src="/brand/xpertacademy/mark-128.webp?v=1" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"></span><b data-s="Academy">XpertAcademy</b><small data-i18n="t2s">Free courses with certificates</small></a>
       <a href="/market" style="--a:#1B4DFF;--b:#0B1530"><span class="ic"><img src="/brand/xpertfreelance/mark-128.webp" alt="" width="44" height="44" onerror="this.style.visibility='hidden'"></span><b data-s="Freelance">XpertFreelance</b><small data-i18n="t3s">Sell your skills, get hired, earn</small></a>
@@ -908,9 +909,9 @@ body.signed-in .hello{margin-top:4px}
       <a href="/wheels" style="--a:#0E7C66;--b:#0A4D40"><span class="ic e">&#128663;</span><b data-s="Wheels">XpertWheels</b><small data-i18n="t7s">Buy and sell cars and bikes</small></a>
       <a href="/pros" style="--a:#2563EB;--b:#F85606"><span class="ic e">&#128736;&#65039;</span><b data-s="Pros">XpertPros</b><small data-i18n="t9s">Hire a plumber, electrician and more</small></a>
       <a href="/games" style="--a:#7C3AED;--b:#DB2777"><span class="ic e">&#127918;</span><b data-i18n="t10" data-s="Games">Games</b><small data-i18n="t10s">Play free games with friends</small></a>
-      <a href="/roots" style="--a:#15803D;--b:#3F6212"><span class="ic e">&#127795;</span><b data-s="Roots">Roots of Love</b><small data-i18n="t11s">Your family tree and photo album</small></a>
+      <a href="/islamic" style="--a:#047857;--b:#064E3B"><span class="ic e">&#128332;</span><b data-i18n="t14" data-s="Islamic">Islamic</b><small data-i18n="t14s">Quran, prayer times, Hijri date</small></a>
+      <a href="/rishta" style="--a:#BE185D;--b:#701A75"><span class="ic e">&#128141;</span><b data-i18n="t15" data-s="Rishta">Halal Rishta</b><small data-i18n="t15s">Find a match the halal way</small></a>
       <a href="/tools" style="--a:#0F766E;--b:#04413C"><span class="ic e">&#129518;</span><b data-i18n="t12" data-s="Tools">102 free tools</b><small data-i18n="t12s">Prayer times, QR codes, zakat and more</small></a>
-      <a href="/donate" style="--a:#DB2777;--b:#831843"><span class="ic e">&#129330;</span><b data-i18n="t13" data-s="Donate">Donate</b><small data-i18n="t13s">Give and help people near you</small></a>
       <a href="#eco" style="--a:#0D1424;--b:#334155" id="d2eco" class="all"><span class="ic e">&#10024;</span><b data-i18n="t8" data-s="Explore all">Explore all of XpertCreation</b><small data-i18n="t8s">Every app and tool, in one place</small></a>
     </div>
     <h3 class="d2more" data-i18n="d2more">Explore more</h3>
@@ -1396,6 +1397,10 @@ window.addEventListener("load", function(){ setTimeout(function(){
     t12s:{en:"Prayer times, QR codes, zakat and more",ur:"نماز کے اوقات، QR کوڈ، زکوٰة اور مزید",ar:"مواقيت الصلاة ورموز QR والزكاة والمزيد"},
     t13:{en:"Donate",ur:"عطیہ",ar:"تبرّع"},
     t13s:{en:"Give and help people near you",ur:"عطیہ دیں، قریبی لوگوں کی مدد کریں",ar:"تبرّع وساعد من حولك"},
+    t14:{en:"Islamic",ur:"اسلامی",ar:"إسلامي"},
+    t14s:{en:"Quran, prayer times, Hijri date",ur:"قرآن، نماز کے اوقات، ہجری تاریخ",ar:"القرآن ومواقيت الصلاة والتاريخ الهجري"},
+    t15:{en:"Halal Rishta",ur:"حلال رشتہ",ar:"زواج حلال"},
+    t15s:{en:"Find a match the halal way",ur:"حلال طریقے سے رشتہ تلاش کریں",ar:"ابحث عن شريك بطريقة حلال"},
     tag:{en:"Free courses. Free tools.",de:"Kostenlose Kurse. Kostenlose Tools.",ur:"مفت کورسز۔ مفت ٹولز۔",ar:"دورات مجانية. أدوات مجانية.",hi:"मुफ़्त कोर्स। मुफ़्त टूल्स।",bn:"বিনামূল্যে কোর্স। বিনামূল্যে টুল।",zh:"免费课程。免费工具。",es:"Cursos gratis. Herramientas gratis.",fr:"Cours gratuits. Outils gratuits.",pt:"Cursos grátis. Ferramentas grátis.",ru:"Бесплатные курсы. Бесплатные инструменты.",tr:"Ücretsiz kurslar. Ücretsiz araçlar.",id:"Kursus gratis. Alat gratis.",no:"Gratis kurs. Gratis verktøy."},
     h1:{en:"Learn Excel, Word and VBA — free",de:"Excel, Word und VBA lernen — kostenlos",ur:"ایکسل، ورڈ اور VBA سیکھیں — مفت",ar:"تعلّم Excel وWord وVBA — مجانًا",hi:"Excel, Word और VBA सीखें — मुफ़्त",bn:"Excel, Word ও VBA শিখুন — বিনামূল্যে",zh:"免费学习 Excel、Word 和 VBA",es:"Aprende Excel, Word y VBA — gratis",fr:"Apprenez Excel, Word et VBA — gratuitement",pt:"Aprenda Excel, Word e VBA — grátis",ru:"Изучайте Excel, Word и VBA — бесплатно",tr:"Excel, Word ve VBA öğrenin — ücretsiz",id:"Pelajari Excel, Word, dan VBA — gratis",no:"Lær Excel, Word og VBA – gratis"},
     sub:{en:"Real courses with certificates, plus languages, 102 everyday tools, a blood bank and games. Built in Lahore, open to everyone.",de:"Echte Kurse mit Zertifikaten, dazu Sprachen, über 30 Alltagswerkzeuge, eine Blutbank und Spiele. In Lahore gebaut, offen für alle.",ur:"سرٹیفکیٹ کے ساتھ اصل کورسز، زبانیں، 30 سے زیادہ روزمرہ ٹولز، بلڈ بینک اور گیمز۔ لاہور میں بنایا گیا، سب کے لیے کھلا۔",ar:"دورات حقيقية بشهادات، ولغات، وأكثر من 30 أداة يومية، وبنك دم وألعاب. صُنع في لاهور، ومتاح للجميع.",hi:"सर्टिफिकेट के साथ असली कोर्स, भाषाएँ, 30+ रोज़मर्रा के टूल्स, ब्लड बैंक और गेम्स। लाहौर में बना, सबके लिए खुला।",bn:"সার্টিফিকেটসহ আসল কোর্স, ভাষা, ৩০+ দৈনন্দিন টুল, ব্লাড ব্যাংক ও গেম। লাহোরে তৈরি, সবার জন্য উন্মুক্ত।",zh:"带证书的真实课程，还有语言、30 多种日常工具、血库和游戏。在拉合尔打造，人人可用。",es:"Cursos reales con certificados, además de idiomas, más de 102 herramientas cotidianas, un banco de sangre y juegos. Hecho en Lahore, abierto a todos.",fr:"De vrais cours avec certificats, plus des langues, plus de 102 outils du quotidien, une banque du sang et des jeux. Conçu à Lahore, ouvert à tous.",pt:"Cursos reais com certificados, além de idiomas, mais de 102 ferramentas do dia a dia, um banco de sangue e jogos. Feito em Lahore, aberto a todos.",ru:"Настоящие курсы с сертификатами, языки, более 30 повседневных инструментов, банк крови и игры. Сделано в Лахоре, открыто для всех.",tr:"Sertifikalı gerçek kurslar, diller, 30'dan fazla günlük araç, kan bankası ve oyunlar. Lahor'da yapıldı, herkese açık.",id:"Kursus nyata dengan sertifikat, ditambah bahasa, 102 alat sehari-hari, bank darah, dan permainan. Dibuat di Lahore, terbuka untuk semua.",no:"Ekte kurs med sertifikater, pluss språk, 102 hverdagsverktøy, en blodbank og spill. Laget i Lahore, åpent for alle."},
@@ -2392,7 +2397,7 @@ if ("serviceWorker" in navigator){
 (function(){
   "use strict";
   var CATS = [
-    {k:"c0", n:"Popular", e:"\u2B50", items:[["Digital business card","/cards","\uD83E\uDEAA"],["Birthday reminders","/birthdays","\uD83C\uDF82"]]},
+    {k:"c0", n:"Popular", e:"\u2B50", items:[["Digital business card","/cards","\uD83E\uDEAA"],["Birthday reminders","/birthdays","\uD83C\uDF82"],["Roots of Love","/roots","\uD83C\uDF33"],["Donate","/donate","\uD83E\uDD32"],["My CV","/market#cv","\uD83D\uDCC4"],["Step counter","/steps","\uD83D\uDC5F"],["My pets","/pets","\uD83D\uDC3E"],["Rides","/rides","\uD83D\uDE95"],["News","/news","\uD83D\uDCF0"],["Sports","/sports","\uD83C\uDFCF"],["Kids","/kids","\uD83E\uDDD2"]]},
     {k:"c1", n:"Work & Career", e:"💼", items:[["XpertConnect","/feed","🤝"],["Jobs","/jobs","💼"],["Gov jobs & results","/board","🏛️"],["Freelance","/market","🧑‍💻"],["My CV","/market#cv","📄"],["Digital business card","/cards","🪪"],["Company page","/company/manage","🏢"],["Business (staff & stock)","/business","📊"]]},
     {k:"c2", n:"Learn", e:"🎓", items:[["XpertAcademy","/academy/","🎓"],["Courses","/courses","📚"],["MCQs","/mcq","✅"],["Clips","/clips","🎬"],["Vocabulary","/vocabulary","🔤"],["Typing tutor","/typing","⌨️"],["Library","/library","📖"]]},
     {k:"c3", n:"Social", e:"💬", items:[["Chat","/chat","💬"],["Groups & channels","/groups","👥"],["Meetups","/meetups","📍"],["Halal Rishta","/rishta","💍"],["Nearby chat","/nearby","📡"],["Events","/events","🎉"],["Roots of Love","/roots","🌳"]]},
