@@ -26,12 +26,13 @@
   var bar = D.createElement("div"); bar.className = "xcbar";
   bar.innerHTML = '<img src="/brand/xpertchat/mark-64.png" alt="" onerror="this.style.display=\'none\'"><b>Xpert<i>Chat</i></b>'
     + (page === "chat" ? '<button type="button" data-xc="search" aria-label="Search">' + ICON.search + '</button>' : '')
+    + '<a href="/call?new=1" class="ib" aria-label="XpertMeet video meeting" title="XpertMeet"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M15.5 10.5l5-3v9l-5-3z"/></svg></a><a href="/cam" class="ib" aria-label="XpertCam" title="XpertCam"><svg viewBox="0 0 24 24"><path d="M4 7h3l2-2.5h6L17 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="12.5" r="3.6"/></svg></a>'
     + '<button type="button" data-xc="qr" aria-label="QR code">' + ICON.qr + '</button><button type="button" data-xc="menu" aria-label="Menu">' + ICON.more + '</button>';
   var srch = D.createElement("div"); srch.className = "xcsrch"; srch.innerHTML = '<input type="search" placeholder="Search chats" aria-label="Search chats">';
 
   // ---------- bottom tabs (phones) ----------
   var tabs = D.createElement("nav"); tabs.className = "xctabs";
-  tabs.innerHTML = [["chat", "/chat", "Chats", ICON.chats], ["groups", "/groups", "Groups", ICON.groups], ["nearby", "/nearby", "Offline", ICON.nearby], ["qr", "#xcqr", "QR code", ICON.qr], ["home", "/", "Home", ICON.home]]
+  tabs.innerHTML = [["chat", "/chat", "Chats", ICON.chats], ["groups", "/groups", "Groups", ICON.groups], ["meet", "/call?new=1", "Meet", '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="M15.5 10.5l5-3v9l-5-3z"/></svg>'], ["nearby", "/nearby", "Offline", ICON.nearby], ["home", "/", "Home", ICON.home]]
     .map(function(t){ return '<a href="' + t[1] + '"' + (t[0] === "qr" ? ' data-xc="qr"' : '') + ' class="' + (t[0] === page || (t[0] === "groups" && page === "group") ? "on" : "") + '">' + t[3] + '<span>' + t[2] + '</span></a>'; }).join("");
   B.appendChild(tabs);
 
