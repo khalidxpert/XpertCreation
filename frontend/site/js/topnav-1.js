@@ -734,4 +734,4 @@
 })();
 
 ;/* XpertChat calls and message tones on every page (setup_calls) */
-(function(){try{if(window.XCCALL||/^\/call/.test(location.pathname)||document.querySelector('script[src^="/js/xcall-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcall-1.js?v=1";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.XCCALL||/^\/call/.test(location.pathname)||document.querySelector('script[src^="/js/xcall-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcall-1.js?v=2";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();

@@ -58,6 +58,11 @@
    + ".xklobby input[type=datetime-local]{color-scheme:dark}.xklobby label{display:block;text-align:left;font-size:.9rem;opacity:.85;margin-top:8px}"
    + ".xklobby label.xksr,.xksr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1)}.xksr input{width:22px;height:22px}"
    + ".xkpk{display:flex;gap:6px;flex-wrap:wrap;padding:8px 0}.xkpk .xkpill{font-size:.85rem;padding:5px 10px}"
+   + ".xkov.xkl{overflow-y:auto;-webkit-overflow-scrolling:touch}.xkov.xkl .xklobby{padding-bottom:calc(40px + env(safe-area-inset-bottom))}"
+   + ".xkseg{display:flex;gap:4px;background:#111a2e;border-radius:12px;padding:4px;margin:12px 0 4px}.xkseg button{flex:1;border:0;border-radius:9px;padding:9px 4px;background:transparent;color:#cfd8e6;font:inherit;font-weight:600;cursor:pointer}.xkseg button.on{background:#0f9d58;color:#fff}"
+   + ".xkrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:8px;border-radius:12px;background:#111a2e}.xkrow input[type=time]{width:auto!important;margin:0!important;color-scheme:dark}"
+   + ".xkdays{display:flex;gap:4px}.xkday{width:32px;height:32px;border-radius:50%;border:1px solid #33415f;background:transparent;color:#cfd8e6;font:inherit;font-weight:700;cursor:pointer}.xkday.on{background:#1B4DFF;border-color:#1B4DFF;color:#fff}"
+   + ".xklobby label{display:block;text-align:left;font-size:.9rem;opacity:.85;margin-top:8px}"
    + ".xklobby .er{color:#ff8a80;min-height:1.2em}.xkur{font-family:'Noto Nastaliq Urdu',serif;opacity:.8;display:block;margin-top:2px}";
   D.head.appendChild(st);
 
@@ -176,7 +181,7 @@
     var self = this, c = this.c;
     var ov = D.createElement("div"); ov.className = "xkov"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Call");
     ov.innerHTML = '<div class="xktop"><b>' + esc(c.title) + '</b><span class="xkst">' + (c.kind === "m" ? "XpertMeet" : "") + '</span>'
-      + (c.kind === "m" && c.code ? '<div class="xkshare"><code>' + esc(location.origin + "/call?meet=" + c.code) + '</code><button class="xkpill" data-k="copy">' + ICON.link + ' Copy link</button></div>' : "")
+      + (c.kind === "m" && c.code ? '<div class="xkshare"><code>' + esc(meetUrl(c)) + '</code><button class="xkpill" data-k="copy">' + ICON.link + ' Copy link</button></div>' : "")
       + '</div><div class="xkstage n1"></div>'
       + '<div class="xkctl">'
       + '<div class="xkcw"><button class="xkc" data-k="mute" aria-label="Mute">' + ICON.mic + '</button><div class="xklbl">Mute</div></div>'
@@ -195,7 +200,7 @@
       else if (k === "cam") self.toggleCam(b);
       else if (k === "flip") self.flip();
       else if (k === "screen") self.toggleScreen(b);
-      else if (k === "copy"){ var u = location.origin + "/call?meet=" + c.code; (navigator.share ? navigator.share({title: c.title || "XpertMeet", text: "Join my XpertMeet meeting", url: u}) : navigator.clipboard.writeText(u)).then(function(){ self.say("Link ready to share."); }).catch(function(){}); }
+      else if (k === "copy"){ var u = meetUrl(c); (navigator.share ? navigator.share({title: c.title || "XpertMeet", text: "Join my XpertMeet meeting", url: u}) : navigator.clipboard.writeText(u)).then(function(){ self.say("Link ready to share."); }).catch(function(){}); }
     });
     this.status();
   };
@@ -370,8 +375,8 @@
     CUR = new Call(c, opts || {});
     return CUR.open().catch(function(){});
   }
-  function joinAndBegin(c, video, code){
-    return api(c.id + "/join/" + (code ? "?code=" + encodeURIComponent(code) : ""), {code: code || ""}).then(function(j){ return begin(j, {video: video}); });
+  function joinAndBegin(c, video, code, pw){
+    return api(c.id + "/join/" + (code ? "?code=" + encodeURIComponent(code) : ""), {code: code || "", pwd: pw || ""}).then(function(j){ return begin(j, {video: video}); });
   }
   function startCall(target, video){
     if (CUR) return;
@@ -485,48 +490,97 @@
     }).observe(B, {childList: true});
   }
 
-  /* ------------------------------------------------------------ meeting times around the world */
-  var ZONES = [["\uD83C\uDDF5\uD83C\uDDF0", "Pakistan", "Asia/Karachi"], ["\uD83C\uDDEE\uD83C\uDDF3", "India", "Asia/Kolkata"], ["\uD83C\uDDE7\uD83C\uDDE9", "Bangladesh", "Asia/Dhaka"],
-    ["\uD83C\uDDE6\uD83C\uDDEA", "UAE", "Asia/Dubai"], ["\uD83C\uDDF8\uD83C\uDDE6", "Saudi Arabia", "Asia/Riyadh"], ["\uD83C\uDDF9\uD83C\uDDF7", "Turkey", "Europe/Istanbul"],
-    ["\uD83C\uDDEC\uD83C\uDDE7", "UK", "Europe/London"], ["\uD83C\uDDE9\uD83C\uDDEA", "Germany", "Europe/Berlin"], ["\uD83C\uDDFA\uD83C\uDDF8", "USA New York", "America/New_York"],
-    ["\uD83C\uDDFA\uD83C\uDDF8", "USA Chicago", "America/Chicago"], ["\uD83C\uDDFA\uD83C\uDDF8", "USA Los Angeles", "America/Los_Angeles"], ["\uD83C\uDDE8\uD83C\uDDE6", "Canada Toronto", "America/Toronto"],
-    ["\uD83C\uDDE8\uD83C\uDDF3", "China", "Asia/Shanghai"], ["\uD83C\uDDEF\uD83C\uDDF5", "Japan", "Asia/Tokyo"], ["\uD83C\uDDE6\uD83C\uDDFA", "Australia Sydney", "Australia/Sydney"]];
+  /* ------------------------------------------------------------ XpertMeet: invitations with times around the world */
+  var ZONES = [["🇵🇰", "Pakistan", "Asia/Karachi"], ["🇮🇳", "India", "Asia/Kolkata"], ["🇧🇩", "Bangladesh", "Asia/Dhaka"],
+    ["🇦🇪", "UAE", "Asia/Dubai"], ["🇸🇦", "Saudi Arabia", "Asia/Riyadh"], ["🇹🇷", "Turkey", "Europe/Istanbul"],
+    ["🇬🇧", "UK", "Europe/London"], ["🇩🇪", "Germany", "Europe/Berlin"], ["🇺🇸", "USA New York", "America/New_York"],
+    ["🇺🇸", "USA Chicago", "America/Chicago"], ["🇺🇸", "USA Los Angeles", "America/Los_Angeles"], ["🇨🇦", "Canada Toronto", "America/Toronto"],
+    ["🇨🇳", "China", "Asia/Shanghai"], ["🇯🇵", "Japan", "Asia/Tokyo"], ["🇦🇺", "Australia Sydney", "Australia/Sydney"]];
+  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], DS = ["S", "M", "T", "W", "T", "F", "S"];
+  var PWD = (new URLSearchParams(location.search).get("pwd") || "").replace(/\D/g, "");
   function dayKey(d, tz){ return new Intl.DateTimeFormat("en-CA", {timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit"}).format(d); }
-  function timeIn(d, tz, base){
-    var t = new Intl.DateTimeFormat("en-US", {timeZone: tz, hour: "numeric", minute: "2-digit"}).format(d);
-    var a = dayKey(d, tz), b = dayKey(d, base);
-    return t + (a > b ? " (next day)" : a < b ? " (day before)" : "");
-  }
+  function hm(d, tz){ return new Intl.DateTimeFormat("en-US", {timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: true}).format(d); }
+  function timeIn(d, tz, base){ var a = dayKey(d, tz), b = dayKey(d, base); return hm(d, tz) + (a > b ? " (next day)" : a < b ? " (day before)" : ""); }
   function dateIn(d, tz){ return new Intl.DateTimeFormat("en-GB", {timeZone: tz, weekday: "long", day: "numeric", month: "long", year: "numeric"}).format(d); }
   function myZone(){ try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Karachi"; } catch (e) { return "Asia/Karachi"; } }
-  function meetUrl(c){ return location.origin + "/call?meet=" + c.code; }
+  function zoneName(tz){ var z = ZONES.filter(function(x){ return x[2] === tz; })[0]; return z ? z[1] : String(tz || "").replace(/_/g, " ").split("/").pop(); }
+  function parts(d, tz){ var o = {}; new Intl.DateTimeFormat("en-US", {timeZone: tz, year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric", hourCycle: "h23", weekday: "short"}).formatToParts(d).forEach(function(p){ o[p.type] = p.value; }); return o; }
+  function offset(d, tz){ var p = parts(d, tz); return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second) - Math.floor(d.getTime() / 1000) * 1000; }
+  function zoned(y, mo, da, h, mi, tz){ var g = Date.UTC(y, mo - 1, da, h, mi); var t = g - offset(new Date(g), tz); return new Date(g - offset(new Date(t), tz)); }
+  function nextOcc(rule, tz){
+    var hh = +rule.time.split(":")[0], mm = +rule.time.split(":")[1], now = Date.now();
+    for (var k = 0; k < 9; k++){
+      var p = parts(new Date(now + k * 86400000), tz), wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(p.weekday);
+      if (rule.days.indexOf(wd) < 0) continue;
+      var t = zoned(+p.year, +p.month, +p.day, hh, mm, tz); if (t.getTime() > now - 3600000) return t;
+    }
+    return new Date(now);
+  }
+  function daysLabel(days){
+    var s = days.slice().sort().join(",");
+    if (s === "0,1,2,3,4,5,6") return "Daily"; if (s === "1,2,3,4,5") return "Monday to Friday"; if (s === "0,6") return "Weekends"; if (s === "1,2,3,4,5,6") return "Monday to Saturday";
+    if (days.length === 1) return DAYS[days[0]];
+    return days.slice().sort().map(function(x){ return DAYS[x].slice(0, 3); }).join(", ");
+  }
+  function hostTz(c){ return c.tz || myZone(); }
+  function spaced(n){ n = String(n || ""); return n.length === 11 ? n.slice(0, 3) + " " + n.slice(3, 7) + " " + n.slice(7) : n.replace(/(\d{3})(?=\d)/g, "$1 "); }
+  function pwOf(c){ return c.passcode || PWD; }
+  function meetUrl(c, withPw){ var pw = pwOf(c); return location.origin + "/call?meet=" + c.code + (withPw !== false && pw ? "&pwd=" + pw : ""); }
+  function whenLines(c, tz, base){   // "Daily 09:00 AM" lines, in time zone tz (base = the host's zone, for "next day")
+    if (c.schedule && c.schedule.length) return c.schedule.map(function(r){ var t = nextOcc(r, hostTz(c)); return daysLabel(r.days) + " " + timeIn(t, tz, base); });
+    if (c.starts_at){ var d = new Date(c.starts_at); return [dateIn(d, tz) + ", " + timeIn(d, tz, base)]; }
+    return ["Now"];
+  }
   function inviteText(c){
-    var d = new Date(c.starts_at), base = "Asia/Karachi";
-    var lines = ["\uD83C\uDFA5 You're invited to an XpertMeet meeting" + (c.title ? ": " + c.title : ""), "Host: " + c.caller.name, "",
-      "\uD83D\uDCC5 " + dateIn(d, base) + " (Pakistan date)", "\u23F0 Time around the world:"];
-    ZONES.forEach(function(z){ lines.push(z[0] + " " + z[1] + ": " + timeIn(d, z[2], base)); });
-    lines.push("", "\uD83D\uDC49 Join here: " + meetUrl(c), "Free on XpertCreation \u00B7 up to " + c.max + " people \u00B7 sign in to join");
-    return lines.join("\n");
+    var tz = hostTz(c), pw = pwOf(c), L = [];
+    L.push((c.org || c.caller.name) + " is inviting you to a scheduled XpertMeet meeting.", "");
+    L.push("Topic: " + (c.title || "XpertMeet meeting"));
+    if (c.speaker) L.push("Speaker: " + c.speaker);
+    if (c.org && c.org !== c.caller.name) L.push("Host: " + c.caller.name);
+    L.push("", "Time (" + zoneName(tz) + "):");
+    whenLines(c, tz, tz).forEach(function(x){ L.push(x); });
+    if (c.schedule && c.schedule.length || c.starts_at){
+      L.push("", "🌍 Time in other countries:");
+      ZONES.forEach(function(z){ if (z[2] === tz) return; L.push(z[0] + " " + z[1] + ": " + whenLines(c, z[2], tz).join(" · ")); });
+    }
+    L.push("", "Join XpertMeet:", meetUrl(c), "", "Meeting ID: " + spaced(c.meeting_no));
+    if (pw) L.push("Passcode: " + pw);
+    L.push("", "Free on XpertCreation · sign in to join · up to " + c.max + " people");
+    return L.join("\n");
   }
   function icsFile(c){
-    var d = new Date(c.starts_at), e = new Date(d.getTime() + 60 * 60000);
-    var f = function(x){ return x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); };
-    var t = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//XpertCreation//XpertMeet//EN", "BEGIN:VEVENT", "UID:" + c.code + "@xpertcreation.com", "DTSTAMP:" + f(new Date()),
-      "DTSTART:" + f(d), "DTEND:" + f(e), "SUMMARY:" + (c.title || "XpertMeet meeting").replace(/[\n,;]/g, " "), "DESCRIPTION:Join: " + meetUrl(c), "URL:" + meetUrl(c), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
-    var a = D.createElement("a"); a.href = URL.createObjectURL(new Blob([t], {type: "text/calendar"})); a.download = "XpertMeet-" + c.code + ".ics"; B.appendChild(a); a.click(); setTimeout(function(){ a.remove(); }, 500);
+    var f = function(x){ return x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); }, tz = hostTz(c), ev = [];
+    var loc = function(t){ var p = parts(t, tz); return p.year + ("0" + p.month).slice(-2) + ("0" + p.day).slice(-2) + "T" + ("0" + (+p.hour % 24)).slice(-2) + ("0" + p.minute).slice(-2) + "00"; };
+    var desc = ("Join: " + meetUrl(c) + "\\nMeeting ID: " + spaced(c.meeting_no) + (pwOf(c) ? "\\nPasscode: " + pwOf(c) : "")).replace(/[,;]/g, " ");
+    var title = (c.title || "XpertMeet meeting").replace(/[\n,;]/g, " ");
+    if (c.schedule && c.schedule.length){
+      c.schedule.forEach(function(r, i){ var t = nextOcc(r, tz), e = new Date(t.getTime() + 3600000);
+        ev.push(["BEGIN:VEVENT", "UID:" + c.code + "-" + i + "@xpertcreation.com", "DTSTAMP:" + f(new Date()), "DTSTART;TZID=" + tz + ":" + loc(t), "DTEND;TZID=" + tz + ":" + loc(e),
+          "RRULE:FREQ=WEEKLY;BYDAY=" + r.days.map(function(x){ return ["SU", "MO", "TU", "WE", "TH", "FR", "SA"][x]; }).join(","), "SUMMARY:" + title, "DESCRIPTION:" + desc, "URL:" + meetUrl(c), "END:VEVENT"].join("\r\n")); });
+    } else {
+      var d = c.starts_at ? new Date(c.starts_at) : new Date(), e2 = new Date(d.getTime() + 3600000);
+      ev.push(["BEGIN:VEVENT", "UID:" + c.code + "@xpertcreation.com", "DTSTAMP:" + f(new Date()), "DTSTART:" + f(d), "DTEND:" + f(e2), "SUMMARY:" + title, "DESCRIPTION:" + desc, "URL:" + meetUrl(c), "END:VEVENT"].join("\r\n"));
+    }
+    var t2 = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//XpertCreation//XpertMeet//EN"].concat(ev, ["END:VCALENDAR"]).join("\r\n");
+    var a = D.createElement("a"); a.href = URL.createObjectURL(new Blob([t2], {type: "text/calendar"})); a.download = "XpertMeet-" + c.code + ".ics"; B.appendChild(a); a.click(); setTimeout(function(){ a.remove(); }, 500);
   }
-  function inviteBox(c){
-    var d = new Date(c.starts_at), z = myZone();
-    return '<div class="xkinv"><p><b>' + esc(dateIn(d, z)) + ', ' + esc(timeIn(d, z, z)) + '</b> <span style="opacity:.75">(your time)</span></p>'
-      + '<div class="xktz">' + ZONES.map(function(q){ return '<span>' + q[0] + " " + esc(q[1]) + " <b>" + esc(timeIn(d, q[2], "Asia/Karachi")) + "</b></span>"; }).join("") + '</div>'
-      + '<div class="row"><button class="xkpill g" data-i="copy">\uD83D\uDCCB Copy invitation</button><a class="xkpill" style="background:#25D366;color:#fff" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(inviteText(c)) + '">WhatsApp</a><button class="xkpill o" data-i="ics">\uD83D\uDCC5 Add to calendar</button></div></div>';
+  function inviteBox(c, full){
+    var z = myZone(), tz = hostTz(c), pw = pwOf(c);
+    var head = whenLines(c, z, z).map(function(x){ return "<b>" + esc(x) + "</b>"; }).join("<br>") + ' <span style="opacity:.75">(your time)</span>';
+    return '<div class="xkinv">' + (c.org ? '<p style="margin:0 0 4px;opacity:.85">' + esc(c.org) + " is inviting you</p>" : "")
+      + (c.speaker ? '<p style="margin:0 0 6px">Speaker: <b>' + esc(c.speaker) + "</b></p>" : "")
+      + '<p style="margin:0 0 6px">' + head + "</p>"
+      + ((c.schedule && c.schedule.length) || c.starts_at ? '<div class="xktz">' + ZONES.map(function(q){ return "<span>" + q[0] + " " + esc(q[1]) + " <b>" + esc(whenLines(c, q[2], tz).join(" · ")) + "</b></span>"; }).join("") + "</div>" : "")
+      + '<p style="margin:8px 0 0">Meeting ID: <b>' + esc(spaced(c.meeting_no)) + "</b>" + (pw ? " · Passcode: <b>" + esc(pw) + "</b>" : "") + "</p>"
+      + (full ? '<div class="row"><button class="xkpill g" data-i="copy">📋 Copy invitation</button><a class="xkpill" style="background:#25D366;color:#fff" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(inviteText(c)) + '">WhatsApp</a><button class="xkpill o" data-i="ics">📅 Add to calendar</button></div>' : "")
+      + "</div>";
   }
   function wireInvite(root, c){
     root.addEventListener("click", function(e){
       var b = e.target.closest("[data-i]"); if (!b) return;
       if (b.dataset.i === "ics") return icsFile(c);
       var t = inviteText(c);
-      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent = "\u2714 Copied"; }).catch(function(){ window.prompt("Copy the invitation:", t); });
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent = "✔ Copied"; }).catch(function(){ window.prompt("Copy the invitation:", t); });
     });
   }
 
@@ -538,10 +592,13 @@
     return ov;
   }
   function home(){ location.href = "/chat"; }
+  function schedRow(i){
+    return '<div class="xkrow" data-row="' + i + '"><div class="xkdays">' + DS.map(function(d, k){ return '<button type="button" class="xkday' + (k ? " on" : " on") + '" data-d="' + k + '" aria-label="' + DAYS[k] + '">' + d + "</button>"; }).join("") + '</div><input type="time" value="' + (i ? "10:00" : "09:00") + '" aria-label="Time">' + (i ? '<button type="button" class="xkpill o" data-rmrow="1" aria-label="Remove">✕</button>' : "") + "</div>";
+  }
   function callPage(){
-    var q = new URLSearchParams(location.search), id = q.get("id"), meet = (q.get("meet") || "").toLowerCase().replace(/[^a-z-]/g, "");
+    var q = new URLSearchParams(location.search), id = q.get("id"), meet = (q.get("meet") || q.get("mid") || "").toLowerCase().replace(/[^a-z0-9-]/g, "");
     var signin = function(){ lobby('<h1>Sign in to join</h1><p>Calls and meetings are for XpertCreation members.<span class="xkur" dir="rtl" lang="ur">کال اور میٹنگ کے لیے سائن ان کریں۔</span></p><div class="row"><a class="xkpill g" href="/login?next=' + encodeURIComponent(location.pathname + location.search) + '">Sign in</a><a class="xkpill o" href="/register">Join free</a></div>'); };
-    var fail = function(e){ if (e.status === 401 || e.status === 403 && !/full|admins/i.test(e.message)) return signin(); lobby('<h1>Can\'t open this</h1><p class="er">' + esc(e.message) + '</p><div class="row"><a class="xkpill o" href="/chat">Back to XpertChat</a></div>'); };
+    var fail = function(e){ if (e.status === 401 || e.status === 403 && /credentials|authenticat/i.test(e.message)) return signin(); lobby('<h1>Can\'t open this</h1><p class="er">' + esc(e.message) + '</p><div class="row"><a class="xkpill o" href="/call?new=1">XpertMeet</a><a class="xkpill o" href="/chat">XpertChat</a></div>'); };
     if (id && /^\d+$/.test(id)){
       api(id + "/").then(function(c){
         if (c.state !== "ringing" && c.state !== "live"){ return lobby("<h1>" + esc(c.title) + "</h1><p>This call has ended.</p><div class=\"row\"><a class=\"xkpill o\" href=\"" + esc(c.link) + "\">Open the chat</a></div>"); }
@@ -560,43 +617,67 @@
     }
     if (meet){
       api("meet/" + meet + "/").then(function(c){
-        if (c.state !== "ringing" && c.state !== "live") return lobby("<h1>" + esc(c.title) + "</h1><p>This meeting has ended. Ask the host for a new link.</p><div class=\"row\"><a class=\"xkpill g\" href=\"/call?new=1\">Start your own meeting</a></div>");
-        var joinedN = c.members.filter(function(m){ return m.state === "joined"; }).length;
-        var later = c.starts_at && new Date(c.starts_at) > new Date(Date.now() + 60000);
-        var l = lobby("<h1>" + esc(c.title || "XpertMeet meeting") + "</h1><p>Hosted by " + esc(c.caller.name) + " \u00B7 " + joinedN + "/" + c.max + " in the meeting</p>"
-          + (c.starts_at ? inviteBox(c) : "")
-          + "<div class=\"row\"><button class=\"xkpill g\" data-v=\"1\">\uD83C\uDFA5 " + (later ? "Join early with video" : "Join with video") + "</button><button class=\"xkpill o\" data-v=\"0\">\uD83C\uDFA4 Voice only</button></div><p class=\"er\"></p>");
-        if (c.starts_at) wireInvite(l, c);
-        l.addEventListener("click", function(e){ var b = e.target.closest("[data-v]"); if (!b) return;
-          joinAndBegin(c, b.dataset.v === "1", meet).then(function(){ l.remove(); if (CUR) CUR.onEnd = function(){ lobby("<h1>You left the meeting</h1><div class=\"row\"><a class=\"xkpill g\" href=\"" + location.pathname + location.search + "\">Rejoin</a><a class=\"xkpill o\" href=\"/chat\">XpertChat</a></div>"); }; })
-            .catch(function(er){ l.querySelector(".er").textContent = er.message; if (er.status === 401) signin(); }); });
+        if (c.state !== "ringing" && c.state !== "live") return lobby("<h1>" + esc(c.title || "XpertMeet") + "</h1><p>This meeting has ended. Ask the host for a new link.</p><div class=\"row\"><a class=\"xkpill g\" href=\"/call?new=1\">Start your own meeting</a></div>");
+        if (!/[a-z]/.test(meet)) history.replaceState(null, "", "/call?meet=" + c.code + (PWD ? "&pwd=" + PWD : ""));
+        var joinedN = c.members.filter(function(m){ return m.state === "joined"; }).length, needPw = c.locked && !c.host && !PWD;
+        var l = lobby("<h1>" + esc(c.title || "XpertMeet meeting") + "</h1><p>Hosted by " + esc(c.caller.name) + " · " + joinedN + "/" + c.max + " in the meeting now</p>"
+          + inviteBox(c, c.host)
+          + (needPw ? '<label>Passcode</label><input inputmode="numeric" maxlength="10" placeholder="From the invitation" data-pw>' : "")
+          + "<div class=\"row\"><button class=\"xkpill g\" data-v=\"1\">🎥 Join with video</button><button class=\"xkpill o\" data-v=\"0\">🎤 Voice only</button></div>"
+          + (c.host ? '<div class="row"><button class="xkpill o" data-endm="1" style="border-color:#ff8a80;color:#ff8a80">End this meeting' + (c.schedule && c.schedule.length ? " series" : "") + "</button></div>" : "") + "<p class=\"er\"></p>");
+        if (c.host) wireInvite(l, c);
+        l.addEventListener("click", function(e){
+          var en = e.target.closest("[data-endm]"); if (en){ if (!window.confirm("End this meeting for everyone? The link will stop working.")) return; return api(c.id + "/end/", {}).then(function(){ lobby("<h1>Meeting ended</h1><div class=\"row\"><a class=\"xkpill g\" href=\"/call?new=1\">New meeting</a></div>"); }).catch(fail); }
+          var b = e.target.closest("[data-v]"); if (!b) return;
+          var pin = l.querySelector("[data-pw]"), pw = PWD || (pin ? pin.value.replace(/\D/g, "") : "");
+          if (needPw && !pw){ l.querySelector(".er").textContent = "Type the passcode from the invitation."; return; }
+          joinAndBegin(c, b.dataset.v === "1", c.code, pw).then(function(){ if (pw) PWD = pw; l.remove(); if (CUR) CUR.onEnd = function(){ lobby("<h1>You left the meeting</h1><div class=\"row\"><a class=\"xkpill g\" href=\"" + location.pathname + location.search + "\">Rejoin</a><a class=\"xkpill o\" href=\"/chat\">XpertChat</a></div>"); }; })
+            .catch(function(er){ l.querySelector(".er").textContent = er.message; if (er.status === 401) signin(); });
+        });
       }).catch(fail);
       return;
     }
     var l = lobby('<h1>XpertMeet</h1><p>Video meetings on XpertCreation · up to 4 people · free<span class="xkur" dir="rtl" lang="ur">ایکسپرٹ میٹ: مفت ویڈیو میٹنگ، 4 افراد تک</span></p>'
-      + '<input maxlength="80" placeholder="Meeting name (optional)" aria-label="Meeting name"><div class="row"><button class="xkpill g" data-v="1">\uD83C\uDFA5 Start video meeting now</button><button class="xkpill o" data-v="0">\uD83C\uDFA4 Voice meeting</button></div>'
-      + '<label>Or schedule it for later (your time, ' + esc(myZone()) + '):</label><input type="datetime-local" aria-label="Meeting date and time"><div class="row"><button class="xkpill g" data-s="1">\uD83D\uDCC5 Schedule and get the invitation</button></div><div class="xkmine"></div>'
-      + '<p style="margin-top:18px">Have a link? Paste it here:</p><input placeholder="xpertcreation.com/call?meet=abc-defg-hij" aria-label="Meeting link"><div class="row"><button class="xkpill o" data-j="1">Join</button></div><p class="er"></p>');
+      + '<label>Topic</label><input maxlength="80" placeholder="e.g. Leadership class" data-f="title">'
+      + '<label>Speaker (optional)</label><input maxlength="80" placeholder="Who is speaking" data-f="speaker">'
+      + '<label>Inviting as (optional)</label><input maxlength="100" placeholder="Your organisation, or leave empty to use your name" data-f="org">'
+      + '<div class="xkseg"><button type="button" class="on" data-w="now">Now</button><button type="button" data-w="once">One time</button><button type="button" data-w="rep">Repeating</button></div>'
+      + '<div data-wbox="once" hidden><label>Date and time (your time, ' + esc(zoneName(myZone())) + ')</label><input type="datetime-local" data-f="when"></div>'
+      + '<div data-wbox="rep" hidden><label>Days and time (your time, ' + esc(zoneName(myZone())) + ')</label><div data-rows>' + schedRow(0) + '</div><button type="button" class="xkpill o" data-addrow="1" style="margin-top:6px">+ Add another time</button><p style="font-size:.85rem;opacity:.75;margin:6px 0 0">Example: every day at 09:00, and a second row for Sunday at 10:00. The same link works every time.</p></div>'
+      + '<label>Passcode (optional)</label><input inputmode="numeric" maxlength="10" placeholder="We make a 6-digit one for you" data-f="passcode">'
+      + '<div class="row"><button class="xkpill g" data-go="1">🎥 Start meeting now</button><button class="xkpill o" data-go="0">🎤 Voice only</button></div><div class="xkmine"></div>'
+      + '<p style="margin-top:18px"><b>Join a meeting</b></p><input placeholder="Meeting ID or link" data-j1><input inputmode="numeric" maxlength="10" placeholder="Passcode" data-j2><div class="row"><button class="xkpill o" data-j="1">Join</button></div><p class="er"></p>');
+    var mode = "now", F = function(k){ return l.querySelector('[data-f="' + k + '"]'); }, er = l.querySelector(".er");
     api("meet/mine/").then(function(r){ var box = l.querySelector(".xkmine"); if (!box || !r.meetings.length) return;
-      box.innerHTML = '<p style="margin-top:16px"><b>Your meetings coming up</b></p>' + r.meetings.map(function(c){ return '<p><a style="color:#8ab4ff" href="/call?meet=' + esc(c.code) + '">' + esc(c.title || "Meeting") + " \u00B7 " + esc(dateIn(new Date(c.starts_at), myZone())) + ", " + esc(timeIn(new Date(c.starts_at), myZone(), myZone())) + "</a></p>"; }).join(""); }).catch(function(){});
+      box.innerHTML = '<p style="margin-top:16px"><b>Your meetings</b></p>' + r.meetings.map(function(c){ return '<p><a style="color:#8ab4ff" href="/call?meet=' + esc(c.code) + '">' + esc(c.title || "Meeting") + " · " + esc(whenLines(c, myZone(), myZone()).join(", ")) + "</a></p>"; }).join(""); }).catch(function(){});
     l.addEventListener("click", function(e){
-      var b = e.target.closest("button"); if (!b) return; var ins = l.querySelectorAll("input"), er = l.querySelector(".er");
-      if (b.dataset.j){ var m = (ins[2].value.match(/meet=([a-z-]+)/i) || [null, ins[2].value.trim()])[1]; if (m) location.href = "/call?meet=" + encodeURIComponent(m.toLowerCase()); return; }
-      if (b.dataset.s){
-        if (!ins[1].value){ er.textContent = "Pick the date and time first."; return; }
-        var when = new Date(ins[1].value); if (isNaN(when)){ er.textContent = "That date is not valid."; return; }
-        b.disabled = true;
-        return api("meet/new/", {title: ins[0].value.trim(), video: true, when: when.toISOString()}).then(function(c){
-          history.replaceState(null, "", "/call?meet=" + c.code);
-          var l3 = lobby("<h1>Meeting scheduled \u2714</h1><p>" + esc(c.title || "XpertMeet meeting") + "</p>" + inviteBox(c) + '<div class="xkshare"><code>' + esc(meetUrl(c)) + '</code></div><div class="row"><a class="xkpill o" href="/call?meet=' + esc(c.code) + '">Open the meeting page</a></div>');
-          wireInvite(l3, c);
-        }).catch(function(e3){ b.disabled = false; if (e3.status === 401 || e3.status === 403) return signin(); er.textContent = e3.message; });
+      var w = e.target.closest("[data-w]");
+      if (w){ mode = w.dataset.w; [].forEach.call(l.querySelectorAll("[data-w]"), function(x){ x.classList.toggle("on", x === w); });
+        [].forEach.call(l.querySelectorAll("[data-wbox]"), function(x){ x.hidden = x.dataset.wbox !== mode; });
+        l.querySelector('[data-go="1"]').innerHTML = mode === "now" ? "🎥 Start meeting now" : "📅 Create meeting and invitation"; l.querySelector('[data-go="0"]').hidden = mode !== "now"; return; }
+      var dd = e.target.closest("[data-d]"); if (dd){ dd.classList.toggle("on"); return; }
+      if (e.target.closest("[data-addrow]")){ var rows = l.querySelector("[data-rows]"); if (rows.children.length < 7){ rows.insertAdjacentHTML("beforeend", schedRow(rows.children.length)); var last = rows.lastElementChild; [].forEach.call(last.querySelectorAll("[data-d]"), function(x, k){ x.classList.toggle("on", k === 0); }); } return; }
+      if (e.target.closest("[data-rmrow]")){ e.target.closest("[data-row]").remove(); return; }
+      if (e.target.closest("[data-j]")){
+        var v = l.querySelector("[data-j1]").value.trim(), pw = l.querySelector("[data-j2]").value.replace(/\D/g, ""), m = v.match(/meet=([a-z-]+)/i), p2 = v.match(/pwd=(\d+)/);
+        var key = m ? m[1].toLowerCase() : v.replace(/\s/g, "");
+        if (!key){ er.textContent = "Type the Meeting ID or paste the link."; return; }
+        location.href = "/call?meet=" + encodeURIComponent(key) + ((pw || (p2 && p2[1])) ? "&pwd=" + (pw || p2[1]) : ""); return;
       }
-      b.disabled = true;
-      api("meet/new/", {title: ins[0].value.trim(), video: b.dataset.v === "1"}).then(function(c){
+      var g = e.target.closest("[data-go]"); if (!g) return;
+      var body = {title: F("title").value.trim(), speaker: F("speaker").value.trim(), org: F("org").value.trim(), passcode: F("passcode").value.trim(), video: g.dataset.go === "1", tz: myZone()};
+      if (mode === "once"){ if (!F("when").value){ er.textContent = "Pick the date and time."; return; } var wd = new Date(F("when").value); if (isNaN(wd)){ er.textContent = "That date is not valid."; return; } body.when = wd.toISOString(); body.video = true; }
+      if (mode === "rep"){
+        body.schedule = [].map.call(l.querySelectorAll("[data-row]"), function(r){ return {days: [].filter.call(r.querySelectorAll("[data-d]"), function(x){ return x.classList.contains("on"); }).map(function(x){ return +x.dataset.d; }), time: r.querySelector("input[type=time]").value}; }).filter(function(r){ return r.days.length && r.time; });
+        if (!body.schedule.length){ er.textContent = "Pick at least one day and a time."; return; } body.video = true;
+      }
+      g.disabled = true;
+      api("meet/new/", body).then(function(c){
         history.replaceState(null, "", "/call?meet=" + c.code);
-        l.remove(); begin(c, {video: b.dataset.v === "1"}); if (CUR) CUR.onEnd = function(){ lobby("<h1>Meeting ended</h1><div class=\"row\"><a class=\"xkpill g\" href=\"/call?new=1\">New meeting</a><a class=\"xkpill o\" href=\"/chat\">XpertChat</a></div>"); };
-      }).catch(function(e2){ b.disabled = false; if (e2.status === 401 || e2.status === 403) return signin(); er.textContent = e2.message; });
+        if (mode === "now"){ l.remove(); begin(c, {video: body.video}); if (CUR) CUR.onEnd = function(){ lobby("<h1>Meeting ended</h1><div class=\"row\"><a class=\"xkpill g\" href=\"/call?new=1\">New meeting</a><a class=\"xkpill o\" href=\"/chat\">XpertChat</a></div>"); }; return; }
+        var l3 = lobby("<h1>Meeting ready ✔</h1><p>" + esc(c.title || "XpertMeet meeting") + "</p>" + inviteBox(c, true) + '<div class="xkshare"><code>' + esc(meetUrl(c)) + '</code></div><div class="row"><a class="xkpill o" href="/call?meet=' + esc(c.code) + '">Open the meeting page</a></div>');
+        wireInvite(l3, c);
+      }).catch(function(e2){ g.disabled = false; if (e2.status === 401 || e2.status === 403 && /credentials|authenticat/i.test(e2.message)) return signin(); er.textContent = e2.message; });
     });
   }
 

@@ -25,6 +25,7 @@
     con: '<svg viewBox="0 0 24 24" width="26" height="26" fill="#009DE2"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.4 0-8 2.2-8 5v3h16v-3c0-2.8-3.6-5-8-5z"/></svg>',
     poll: '<svg viewBox="0 0 24 24" width="26" height="26" fill="#FFB938"><rect x="3" y="4" width="14" height="3.4" rx="1.7"/><rect x="3" y="10.3" width="18" height="3.4" rx="1.7"/><rect x="3" y="16.6" width="9" height="3.4" rx="1.7"/></svg>',
     ev: '<svg viewBox="0 0 24 24" width="26" height="26" fill="#FF2E74"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9h14v11H5zm2 2v4h4v-4z"/></svg>',
+    scan: '<svg viewBox="0 0 24 24" width="26" height="26" fill="#0F9D58"><path d="M3 7V4a1 1 0 0 1 1-1h3v2H5v2zm14-4h3a1 1 0 0 1 1 1v3h-2V5h-2zM5 17v2h2v2H4a1 1 0 0 1-1-1v-3zm14 0h2v3a1 1 0 0 1-1 1h-3v-2h2zM3 11h18v2H3z"/></svg>',
     quick: '<svg viewBox="0 0 24 24" width="26" height="26" fill="#F5A623"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>',
     clip: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5l-8.2 8.2a5 5 0 0 1-7.1-7.1l8.5-8.5a3.4 3.4 0 0 1 4.8 4.8l-8.4 8.4a1.7 1.7 0 0 1-2.4-2.4l7.7-7.7"/></svg>',
     camo: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 7h3l2-2.5h6L17 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="12.5" r="3.6"/></svg>'
@@ -136,12 +137,13 @@
     B.appendChild(ov); return ov;
   }
   function menu(){
-    var items = [["doc", "Document", IC.doc], ["gal", "Gallery", IC.gal], ["cam", "Camera", IC.cam], ["loc", "Location", IC.loc], ["con", "Contact", IC.con], ["poll", "Poll", IC.poll], ["ev", "Event", IC.ev], ["quick", "Quick reply", IC.quick]];
+    var items = [["doc", "Document", IC.doc], ["scan", "Scan", IC.scan], ["gal", "Gallery", IC.gal], ["cam", "Camera", IC.cam], ["loc", "Location", IC.loc], ["con", "Contact", IC.con], ["poll", "Poll", IC.poll], ["ev", "Event", IC.ev], ["quick", "Quick reply", IC.quick]];
     var ov = sheet('<div class="xpgrid">' + items.map(function(i){ return '<button class="xpgo" data-go="' + i[0] + '"><i>' + i[2] + "</i>" + i[1] + "</button>"; }).join("") + "</div>");
     ov.addEventListener("click", function(e){
       var b = e.target.closest("[data-go]"); if (!b) return; var k = b.dataset.go; ov.remove();
       if (k === "doc"){ var f = EL.file(); if (f){ f.setAttribute("accept", ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"); f.click(); setTimeout(function(){ f.setAttribute("accept", "image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"); }, 1500); } }
       else if (k === "gal") gallery();
+      else if (k === "scan"){ if (window.XSCAN) XSCAN.open({onSend: function(f){ return sendFile(f); }, onSendText: function(t){ return sendText(t); }}); else toast("The scanner is loading, try again in a moment."); }
       else if (k === "cam") openCam();
       else if (k === "loc") location_();
       else if (k === "con") contact();

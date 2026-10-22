@@ -11,6 +11,13 @@ class Call(models.Model):
     code = models.CharField(max_length=16, blank=True, default="", db_index=True)   # meeting link code
     title = models.CharField(max_length=80, blank=True, default="")
     starts_at = models.DateTimeField(null=True, blank=True)      # scheduled meeting time (XpertMeet)
+    meeting_no = models.CharField(max_length=12, blank=True, default="", db_index=True)   # Meeting ID people can type
+    passcode = models.CharField(max_length=10, blank=True, default="")
+    speaker = models.CharField(max_length=80, blank=True, default="")
+    org = models.CharField(max_length=100, blank=True, default="")      # "<org> is inviting you"
+    tz = models.CharField(max_length=40, blank=True, default="")        # the host's time zone, for repeating meetings
+    schedule = models.JSONField(default=list, blank=True)              # [{"days": [0..6, 0 = Sunday], "time": "09:00"}]
+    expires_at = models.DateTimeField(null=True, blank=True)
     caller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
     video = models.BooleanField(default=False)
     state = models.CharField(max_length=9, choices=STATES, default="ringing", db_index=True)

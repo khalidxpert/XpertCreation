@@ -8,6 +8,7 @@ urlpatterns = [
     path("active/", views.active),
     path("meet/new/", views.meet_new),
     path("meet/mine/", views.meet_mine),
+    path("<int:pk>/end/", views.meet_end),
     path("meet/<str:code>/", views.meet_find),
     path("<int:pk>/", views.detail),
     path("<int:pk>/join/", views.join),
