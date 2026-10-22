@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     "xlate",
     "shop",
     "meetup",
+    "xcam",
     "xcalls",
     "learnx",
     "pros",
