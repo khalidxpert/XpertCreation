@@ -35,6 +35,7 @@ class Doc(models.Model):
     mime = models.CharField(max_length=80)
     size = models.PositiveIntegerField(default=0)
     path = models.CharField(max_length=80, unique=True)              # name of the encrypted file in the store
+    num = models.TextField(blank=True, default="")                   # card / passport number, encrypted (store.enc_text)
     expires = models.DateField(null=True, blank=True)
     reminded = models.CharField(max_length=40, blank=True, default="")  # stages already sent: "60,30"
     created_at = models.DateTimeField(auto_now_add=True)

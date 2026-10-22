@@ -267,7 +267,7 @@
       if (self.mode === "id"){
         self.idParts.push(done);
         if (self.idParts.length < 2){ self.say("Now scan the BACK of the card"); return setTimeout(function(){ self.pick(true); }, 700); }
-        done = idPage(self.idParts); self.mode = "doc"; self.idParts = [];
+        done = idPage(self.idParts); self.mode = "doc"; self.idParts = []; self.wasId = true;
       }
       self.pages.push(done);
       if (self.queue && self.queue.length){ var nx = self.queue.shift(); return self.crop(nx); }
@@ -322,7 +322,7 @@
       if (r === "open"){ window.open(url, "_blank"); }
       if (r === "share") navigator.share({files: [file], title: name}).catch(function(){});
       if (r === "jpg") pages.forEach(function(p, i){ setTimeout(function(){ dl(p.url, name.replace(".pdf", "-" + (i + 1) + ".jpg")); }, i * 400); });
-      if (r === "send" && blob.size <= 5 * 1048576){ b.disabled = true; Promise.resolve(self.o.onSend(file)).then(function(){ self.close(); }).catch(function(x){ b.disabled = false; self.say((x && x.message) || "Could not send it."); }); }
+      if (r === "send" && blob.size <= 5 * 1048576){ b.disabled = true; Promise.resolve(self.o.onSend(file, {pages: pages.map(function(p){ return p.url; }), id: !!self.wasId})).then(function(){ self.close(); }).catch(function(x){ b.disabled = false; self.say((x && x.message) || "Could not send it."); }); }
     });
   };
   function dl(url, name){ var a = D.createElement("a"); a.href = url; a.download = name; B.appendChild(a); a.click(); a.remove(); }
@@ -348,8 +348,8 @@
     });
   };
 
-  function open(opts){ var s = new Scanner(opts); s.home(); return s; }
-  window.XSCAN = {open: open, _detect: detect, _warp: warp, _look: look, _pdf: makePdf};
+  function open(opts){ var s = new Scanner(opts); s.home(); if (opts && opts.start === "id"){ s.mode = "id"; s.idParts = []; s.say("Scan the FRONT of the card"); setTimeout(function(){ s.pick(true); }, 600); } return s; }
+  window.XSCAN = {open: open, read: readText, _detect: detect, _warp: warp, _look: look, _pdf: makePdf};
   if (/^\/scan/.test(location.pathname)){
     var go = function(){ open({onClose: function(){ var h = D.createElement("div"); h.className = "xsov"; h.innerHTML = '<div class="xshome"><div style="font-size:46px">📄</div><h1>XpertScan</h1><p>Scan papers into a clean PDF.</p><button class="xsb g" id="xsagain">Start scanning</button> <a class="xsb o" href="/" style="text-decoration:none;display:inline-block">Home</a></div>'; B.appendChild(h); h.querySelector("#xsagain").onclick = function(){ h.remove(); go(); }; }}); };
     go();

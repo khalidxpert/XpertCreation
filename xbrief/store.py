@@ -64,3 +64,14 @@ def remove(name):
         os.remove(_p(name))
     except (OSError, ValueError):
         pass
+
+
+def enc_text(t):
+    return _f().encrypt(t.encode()).decode() if t else ""
+
+
+def dec_text(t):
+    try:
+        return _f().decrypt(t.encode()).decode() if t else ""
+    except Exception:
+        return ""

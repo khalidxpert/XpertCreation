@@ -80,11 +80,15 @@ def _clean(s, n):
     return re.sub(r"[\x00-\x1f\x7f]", " ", str(s or "")).strip()[:n]
 
 
+def _num(v):
+    return re.sub(r"[^A-Za-z0-9\- ]", "", str(v or "")).strip()[:40]
+
+
 def shape(d):
     days = (d.expires - timezone.localdate()).days if d.expires else None
     return {"id": d.id, "folder": d.folder, "title": d.title, "note": d.note, "fname": d.fname, "mime": d.mime,
             "size": d.size, "expires": d.expires.isoformat() if d.expires else None, "days_left": days,
-            "created": d.created_at.isoformat(), "url": "/api/brief/docs/%d/file/" % d.id}
+            "created": d.created_at.isoformat(), "url": "/api/brief/docs/%d/file/" % d.id, "number": store.dec_text(d.num)}
 
 
 @api_view(["GET"])
@@ -168,7 +172,8 @@ def upload(request):
     title = _clean(request.data.get("title"), 120) or fname.rsplit(".", 1)[0][:120]
     name = store.save(data)
     d = Doc.objects.create(owner=u, folder=folder_key, title=title, note=_clean(request.data.get("note"), 300),
-                           fname=fname, mime=mime, size=len(data), path=name, expires=exp)
+                           fname=fname, mime=mime, size=len(data), path=name, expires=exp,
+                           num=store.enc_text(_num(request.data.get("number"))))
     return Response(shape(d), status=201)
 
 
@@ -191,6 +196,8 @@ def doc(request, pk):
         d.title = t
     if "note" in v:
         d.note = _clean(v.get("note"), 300)
+    if "number" in v:
+        d.num = store.enc_text(_num(v.get("number")))
     if "folder" in v:
         if not _folder_ok(request.user, v.get("folder")):
             return _err("Folder not found.")

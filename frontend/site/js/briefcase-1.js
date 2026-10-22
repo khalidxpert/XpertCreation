@@ -84,7 +84,9 @@
     ".bc-hint{font-size:12px;color:#5A657C;margin-top:6px;line-height:1.5}",
     ".bc-link{word-break:break-all;background:#F6F7FB;border:1px dashed #C9D1E3;border-radius:12px;padding:10px;font-size:13px}",
     ".bc-toast{position:fixed;left:50%;bottom:150px;transform:translate(-50%,20px);opacity:0;background:#0D1424;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:2147483600;transition:.25s}.bc-toast.on{opacity:1;transform:translate(-50%,0)}",
-    ".bc-exp .bc-row{border-color:#F5D9A8;background:#FFFBF2}"
+    ".bc-exp .bc-row{border-color:#F5D9A8;background:#FFFBF2}",
+    ".bc-num{display:flex;align-items:center;gap:8px;margin-top:10px;background:#F6F7FB;border:1px solid #E4E8F2;border-radius:12px;padding:6px 6px 6px 12px}.bc-num span{font-size:12px;color:#5A657C;font-weight:800}.bc-num b{flex:1;font-size:16px;letter-spacing:.04em;font-family:ui-monospace,Menlo,monospace}.bc-num .bc-btn{padding:7px 10px}",
+    ".bc-auto{background:#EEF2FF;border-radius:10px;padding:8px 10px;color:#1B3BB3}"
   ].join("\n");
   D.head.appendChild(css);
 
@@ -119,7 +121,7 @@
   }
 
   function row(d){
-    return '<div class="bc-row' + (S.pick && S.pick[d.id] ? " on" : "") + '" data-d="' + d.id + '"><span class="ck">✓</span><div class="th" data-th="' + d.id + '">' + kindIcon(d) + '</div><div class="t"><b>' + esc(d.title) + "</b><small>" + esc(folderOf(d.folder).name) + " · " + mb(d.size) + "</small>" + badge(d) + "</div></div>";
+    return '<div class="bc-row' + (S.pick && S.pick[d.id] ? " on" : "") + '" data-d="' + d.id + '"><span class="ck">✓</span><div class="th" data-th="' + d.id + '">' + kindIcon(d) + '</div><div class="t"><b>' + esc(d.title) + "</b><small>" + esc(d.number ? "No. " + mask(d.number) : folderOf(d.folder).name) + " · " + mb(d.size) + "</small>" + badge(d) + "</div></div>";
   }
 
   function thumbs(){
@@ -173,16 +175,17 @@
   function addMenu(){
     var ov = sheet('<h3>Add a document</h3>'
       + '<button class="bc-big" data-a="scan"><i>📷</i><span><b>Scan with camera</b><small>Paper, certificate, letter - straightened and cleaned (XpertScan)</small></span></button>'
-      + '<button class="bc-big" data-a="id"><i>🪪</i><span><b>Scan an ID card or passport</b><small>Front and back on one page - add the expiry date for a reminder</small></span></button>'
+      + '<button class="bc-big" data-a="id"><i>🪪</i><span><b>Scan an ID card / licence</b><small>Front and back on one page - number and expiry are read for you</small></span></button>'
+      + '<button class="bc-big" data-a="pp"><i>🛂</i><span><b>Scan a passport</b><small>The photo page - number and expiry are read for you</small></span></button>'
       + '<button class="bc-big" data-a="up"><i>⬆️</i><span><b>Upload a file</b><small>PDF, picture, Word or Excel - up to 8 MB each</small></span></button>'
       + '<button class="bc-btn ghost" data-x="1" style="width:100%;margin-top:4px">Cancel</button>');
     ov.addEventListener("click", function(e){
       var b = e.target.closest("[data-a]"); if (!b) return; var a = b.dataset.a; ov.remove();
       if (a === "up") return pickFiles();
       if (!window.XSCAN){ toast("The scanner is loading, try again in a moment."); return; }
-      var folder = a === "id" ? "id" : (S.view === "folder" ? S.folder : "other");
-      XSCAN.open({sendLabel: "Save to My Briefcase", sendIcon: "💼", sendSub: "Locked, only you can open it", onSend: function(file){
-        return new Promise(function(res){ setTimeout(function(){ details([file], folder, a === "id"); res(); }, 50); });
+      var card = a === "id" || a === "pp", folder = card ? "id" : (S.view === "folder" ? S.folder : "other");
+      XSCAN.open({start: a === "id" ? "id" : "", sendLabel: "Save to My Briefcase", sendIcon: "💼", sendSub: "Locked, only you can open it", onSend: function(file, info){
+        return new Promise(function(res){ setTimeout(function(){ details([file], folder, card ? (a === "pp" ? "pp" : "id") : "", info); res(); }, 50); });
       }});
     });
   }
@@ -195,18 +198,20 @@
     inp.click();
   }
 
-  function details(files, folder, isId){
+  function details(files, folder, isId, info){
     var one = files.length === 1, f0 = files[0];
     var big = files.filter(function(f){ return f.size > S.max_file; });
     var ov = sheet("<h3>" + (one ? "Save to My Briefcase" : "Save " + files.length + " files") + "</h3>"
       + (big.length ? '<p class="bc-hint" style="color:#B91C1C">' + big.length + " file" + (big.length === 1 ? " is" : "s are") + " over 8 MB and will be skipped.</p>" : "")
       + (one ? '<label>Name</label><input name="title" maxlength="120" placeholder="' + (isId ? "e.g. My CNIC, Passport" : "e.g. Matric certificate, Experience letter") + '" value="' + esc(/^XpertScan-/.test(f0.name) ? "" : f0.name.replace(/\.[^.]+$/, "")) + '">' : "")
       + "<label>Folder</label>" + folderSelect(folder)
+      + (one ? '<label>Card / passport number (optional)</label><input name="number" maxlength="40" autocomplete="off" placeholder="e.g. 35202-1234567-1">' : "")
       + "<label>Expiry date (optional)</label><input name=\"expires\" type=\"date\">"
+      + '<p class="bc-hint bc-auto" style="display:none"></p>'
       + '<p class="bc-hint">For an ID card, passport, licence or visa. You get a reminder 60, 30 and 7 days before, and on the day.<br><span dir="rtl">میعاد ختم ہونے سے پہلے آپ کو یاددہانی ملے گی۔</span></p>'
       + (one ? '<label>Note (optional)</label><textarea name="note" maxlength="300" placeholder="e.g. Original is in the blue file at home"></textarea>' : "")
       + '<div class="bc-acts"><button class="bc-btn ghost" data-x="1">Cancel</button><button class="bc-btn blue" data-save="1">Save</button></div><p class="bc-hint bc-st"></p>');
-    if (isId) setTimeout(function(){ var e = ov.querySelector("[name=expires]"); if (e) e.focus(); }, 300);
+    if (isId && info && info.pages && info.pages.length && window.XSCAN && XSCAN.read) autoRead(ov, info.pages, isId);
     ov.querySelector("[data-save]").addEventListener("click", function(){
       var btn = this, st = ov.querySelector(".bc-st"), ok = files.filter(function(f){ return f.size <= S.max_file; });
       if (!ok.length) return;
@@ -223,7 +228,7 @@
         }
         var f = ok[i++], fd = new FormData();
         fd.append("file", f, f.name); fd.append("folder", val("folder")); fd.append("expires", val("expires"));
-        if (one){ fd.append("title", val("title")); fd.append("note", val("note")); }
+        if (one){ fd.append("title", val("title")); fd.append("note", val("note")); fd.append("number", val("number")); }
         st.textContent = "Saving " + i + " of " + ok.length + "…";
         req("POST", "docs/", fd).then(function(){ done++; setTimeout(next, 1100); }).catch(function(e){ errs.push(f.name + ": " + e.message); if (e.signin) location.href = "/login?next=/briefcase"; setTimeout(next, 1100); });
       })();
@@ -232,10 +237,72 @@
 
   function alertBox(t){ sheet("<h3>Some files were not saved</h3><p style=\"white-space:pre-line;font-size:14px\">" + esc(t) + '</p><button class="bc-btn" data-x="1" style="width:100%">OK</button>'); }
 
+  function mask(n){ n = String(n || ""); var k = n.replace(/[^A-Za-z0-9]/g, ""); if (k.length <= 4) return n; var keep = 0; return n.replace(/[A-Za-z0-9]/g, function(c){ keep++; return keep <= 2 || keep > k.length - 2 ? c : "•"; }); }
+
+  /* Reads the number and the expiry date from the text of an ID card, driving licence or passport.
+     Passport: the two machine lines at the bottom (with check digits). CNIC: 12345-1234567-1 and the latest date. */
+  var MON = {JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6, JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12};
+  function iso(y, m, d){ if (y < 100) y += 2000; if (m < 1 || m > 12 || d < 1 || d > 31 || y < 1950 || y > 2100) return null; return y + "-" + ("0" + m).slice(-2) + "-" + ("0" + d).slice(-2); }
+  function mrzCheck(s, digit){ var w = [7, 3, 1], t = 0; for (var i = 0; i < s.length; i++){ var c = s.charAt(i), v = c === "<" ? 0 : /\d/.test(c) ? +c : c.charCodeAt(0) - 55; t += v * w[i % 3]; } return t % 10 === +digit; }
+  function fix(t, bad, good){   // a letter OCR put next to a digit is usually a digit (O->0, I/L->1); done twice for runs
+    var cls = "[" + bad.replace(/[|]/g, "\\|") + "]", re = new RegExp("(\\d)" + cls + "|" + cls + "(\\d)", "g");
+    for (var k = 0; k < 2; k++) t = t.replace(re, function(m, a, b){ return a != null ? a + good : good + b; });
+    return t;
+  }
+  function cardInfo(text){
+    var out = {kind: "", number: "", expires: "", sure: false};
+    var T = String(text || "").replace(/\r/g, ""), U = T.toUpperCase();
+    // passport: line 2 of the machine zone
+    var lines = U.split("\n").map(function(l){ return l.replace(/\s+/g, "").replace(/[«‹]/g, "<"); });
+    for (var i = 0; i < lines.length; i++){
+      var l = fix(lines[i], "O", "0");
+      var m = l.match(/([A-Z0-9<]{9})(\d)([A-Z<]{3})(\d{6})(\d)([MF<X])(\d{6})(\d)/);
+      if (m && (mrzCheck(m[1], m[2]) || mrzCheck(m[7], m[8]))){
+        out.kind = "pp"; out.number = m[1].replace(/<+$/g, "").replace(/</g, "");
+        var e = m[7]; out.expires = iso(+e.slice(0, 2), +e.slice(2, 4), +e.slice(4, 6)) || ""; out.sure = mrzCheck(m[7], m[8]); return out;
+      }
+    }
+    if (/PASSPORT/.test(U)) out.kind = "pp";
+    else if (/LICEN[CS]E|DRIVING/.test(U)) out.kind = "dl";
+    else if (/IDENTITY|NADRA|PAKISTAN|CNIC|NATIONAL/.test(U)) out.kind = "id";
+    // Pakistani CNIC number (OCR sometimes reads O for 0 and spaces around the dashes)
+    var D2 = fix(fix(U, "O", "0"), "IL|", "1");
+    var c = D2.match(/(\d{5})\s*[-–—~]\s*(\d{7})\s*[-–—~]\s*(\d)(?!\d)/) || D2.match(/(?:^|\D)(\d{5})(\d{7})(\d)(?!\d)/);
+    if (c){ out.number = c[1] + "-" + c[2] + "-" + c[3]; if (!out.kind) out.kind = "id"; }
+    // dates: 12.05.2030, 12/05/2030, 12-05-2030, 12 MAY 2030
+    var dates = [], re = /(\d{1,2})\s*[.,\/\-]\s*(\d{1,2})\s*[.,\/\-]\s*(\d{4})|(\d{1,2})\s*(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[A-Z]*[\s\/]*(\d{2,4})/g, x;
+    while ((x = re.exec(D2))){
+      var dt = x[3] ? iso(+x[3], +x[2], +x[1]) : iso(+x[6], MON[x[5]], +x[4]);
+      if (dt) dates.push({d: dt, at: x.index});
+    }
+    var kw = D2.search(/EXPIR|VALID\s*(UP\s*TO|TILL|UNTIL)|DATE\s*OF\s*EXP/);
+    if (kw >= 0){ var after = dates.filter(function(z){ return z.at >= kw; }); if (after.length){ out.expires = after[0].d; out.sure = true; } }
+    if (!out.expires && dates.length){ out.expires = dates.map(function(z){ return z.d; }).sort().pop(); }
+    if (/LIFE\s*TIME/.test(D2) && !out.sure){ out.expires = ""; out.life = true; }
+    if (!out.number && out.kind === "pp"){ var pn = D2.match(/\b([A-Z]{1,2}\d{6,8})\b/); if (pn) out.number = pn[1]; }
+    return out;
+  }
+
+  function autoRead(ov, pages, kind){
+    var tip = ov.querySelector(".bc-auto"), set = function(n, v){ var e = ov.querySelector("[name=" + n + "]"); if (e && v && !e.value) e.value = v; };
+    tip.style.display = "block"; tip.textContent = "⏳ Reading the number and expiry date from your card…";
+    XSCAN.read(pages.slice(0, 2), "eng", function(st, p){ if (st === "recognizing text") tip.textContent = "⏳ Reading the card… " + Math.round(p * 100) + "%"; })
+      .then(function(t){
+        if (!ov.isConnected) return;
+        var r = cardInfo(t);
+        set("number", r.number); set("expires", r.expires);
+        set("title", r.kind === "pp" ? "Passport" : r.kind === "dl" ? "Driving licence" : r.kind === "id" || kind === "id" ? "CNIC (ID card)" : "");
+        if (!r.number && !r.expires) tip.textContent = "Could not read the number or date. Please type them (a clearer, flat photo in good light helps).";
+        else tip.innerHTML = "✅ Found " + [r.number ? "the number" : "", r.expires ? "the expiry date" : ""].filter(Boolean).join(" and ") + ". <b>Please check them</b> before saving." + (r.life ? " This card looks like it has no expiry (lifetime)." : "") + (!r.expires && !r.life ? " Add the expiry date yourself." : "");
+      })
+      .catch(function(){ if (ov.isConnected) tip.textContent = "Could not read the card here. Please type the number and expiry date."; });
+  }
+
   /* ------------------------------------------------------------ one document */
   function openDoc(d){
     var ov = sheet('<div class="bc-prev">' + (isImg(d) ? '<img alt="" src="' + d.url + '">' : '<div style="font-size:60px;padding:20px">' + kindIcon(d) + "</div>") + "</div>"
       + "<h3 style=\"margin-bottom:2px\">" + esc(d.title) + '</h3><div style="font-size:12.5px;color:#5A657C">' + esc(folderOf(d.folder).icon + " " + folderOf(d.folder).name) + " · " + mb(d.size) + " · added " + nice(d.created.slice(0, 10)) + "</div>" + badge(d)
+      + (d.number ? '<div class="bc-num"><span>No.</span><b data-num="1">' + esc(mask(d.number)) + '</b><button class="bc-btn ghost" data-o="eye">👁️</button><button class="bc-btn ghost" data-o="cpn">📋</button></div>' : "")
       + (d.note ? '<p style="font-size:14px;margin:8px 0 0">' + esc(d.note) + "</p>" : "")
       + '<div class="bc-sec">Download</div><div class="bc-acts">'
       + '<button class="bc-btn ghost" data-o="orig">⬇️ Original</button>'
@@ -250,6 +317,8 @@
     ov.addEventListener("click", function(e){
       var b = e.target.closest("[data-o]"); if (!b) return; var o = b.dataset.o;
       if (o === "orig") dl(d.url + "?dl=1", d.fname);
+      if (o === "eye"){ var nb = ov.querySelector("[data-num]"); nb.textContent = nb.textContent === d.number ? mask(d.number) : d.number; }
+      if (o === "cpn") (navigator.clipboard ? navigator.clipboard.writeText(d.number) : Promise.reject()).then(function(){ toast("Number copied"); }).catch(function(){ toast(d.number); });
       if (o === "view") window.open(d.url, "_blank");
       if (o === "pdf" || o === "jpg" || o === "png") convert(d, o, b);
       if (o === "share") shareFile(d, b);
@@ -346,12 +415,13 @@
 
   function edit(d){
     var ov = sheet("<h3>Edit</h3><label>Name</label><input name=\"title\" maxlength=\"120\" value=\"" + esc(d.title) + "\"><label>Folder</label>" + folderSelect(d.folder)
+      + "<label>Card / passport number</label><input name=\"number\" maxlength=\"40\" autocomplete=\"off\" value=\"" + esc(d.number || "") + "\">"
       + "<label>Expiry date</label><input name=\"expires\" type=\"date\" value=\"" + esc(d.expires || "") + "\"><p class=\"bc-hint\">Leave empty if it does not expire.</p>"
       + "<label>Note</label><textarea name=\"note\" maxlength=\"300\">" + esc(d.note) + "</textarea>"
       + '<div class="bc-acts"><button class="bc-btn ghost" data-x="1">Cancel</button><button class="bc-btn blue" data-ok="1">Save</button></div>');
     ov.querySelector("[data-ok]").addEventListener("click", function(){
       var b = this, v = function(n){ return ov.querySelector("[name=" + n + "]").value; }; b.disabled = true;
-      req("PATCH", "docs/" + d.id + "/", {title: v("title"), folder: v("folder"), expires: v("expires"), note: v("note")})
+      req("PATCH", "docs/" + d.id + "/", {title: v("title"), folder: v("folder"), expires: v("expires"), note: v("note"), number: v("number")})
         .then(function(){ ov.remove(); toast("Saved ✓"); return load(); }).catch(function(e){ toast(e.message); b.disabled = false; });
     });
   }
@@ -409,5 +479,5 @@
     else if ((m = h.match(/^#f-(\w+)$/)) && S.folders.some(function(f){ return f.key === m[1]; })) go("folder", m[1]);
     else if (h === "#add") addMenu();
   });
-  window.XBRIEF = {_pdf: pdf, reload: load};
+  window.XBRIEF = {_pdf: pdf, _card: cardInfo, reload: load};
 })();
