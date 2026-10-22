@@ -206,6 +206,8 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 </style>
 <script src="/js/voice-1.js?v=1"></script>
 <link rel="stylesheet" href="/css/xpertchat-1.css?v=5">
+<script src="/js/stickerpacks-1.js?v=1"></script>
+<script src="/js/bizstickers-1.js?v=1" defer></script>
 </head>
 <body>
 <header class="top">
@@ -216,7 +218,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=78" defer></script>
+<script src="/js/topnav-1.js?v=79" defer></script>
 
 <div class="wrap">
   <h1>Chat</h1>
@@ -321,7 +323,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
       + '<small>' + (m.edited ? '<span class="xed">edited \u00b7 </span>' : '') + esc(m.when) + tick + '</small></div>';
   }
   // ---- stickers and emoji ----
-  var STICKERS = "salam jazakallah shukriya mubarak inshaallah mashaallah alhamdulillah ameen eid ramadan ok thanks congrats welcome goodnight haha".split(" ");
+  var STICKERS = "salam jazakallah shukriya mubarak inshaallah mashaallah alhamdulillah ameen eid ramadan ok thanks congrats welcome goodnight haha".split(" ").concat((window.XCSTK && XCSTK.all) || []);
   function stk(body){ var m = /^\[sticker:([a-z0-9-]+)\]$/.exec(body || ""); return m && STICKERS.indexOf(m[1]) >= 0 ? m[1] : ""; }
   var EMOJI = {
     "\uD83D\uDE00": "😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 😉 😍 🥰 😘 😋 😎 🤩 🥳 😏 😔 😢 😭 😤 😠 🤔 🤗 🤭 🙄 😴 🤒 😷",
@@ -337,7 +339,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     var tabs = '<div class="etabs"><button data-etab="mine" class="' + (emoTab === "mine" ? "on" : "") + '">\u2728 My stickers</button><button data-etab="stk" class="' + (emoTab === "stk" ? "on" : "") + '">Stickers</button>'
       + Object.keys(EMOJI).map(function(k){ return '<button data-etab="' + k + '" class="' + (emoTab === k ? "on" : "") + '">' + k + '</button>'; }).join("") + '</div>';
     var body = emoTab === "mine" ? (window.XCStk ? XCStk.grid() : "") : emoTab === "stk"
-      ? '<div class="stkgrid">' + STICKERS.map(function(s){ return '<button data-stk="' + s + '"><img src="/stickers/' + s + '.svg" alt="' + s + '" loading="lazy"></button>'; }).join("") + '</div>'
+      ? (window.XCSTK ? XCSTK.grid("data-stk") : '<div class="stkgrid">' + STICKERS.map(function(s){ return '<button data-stk="' + s + '"><img src="/stickers/' + s + '.svg" alt="' + s + '" loading="lazy"></button>'; }).join("") + '</div>')
       : '<div class="eg">' + EMOJI[emoTab].split(" ").map(function(e){ return '<button data-emoji="' + e + '">' + e + '</button>'; }).join("") + '</div>';
     p.innerHTML = tabs + body;
   }
@@ -919,7 +921,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 </script>
 <script src="/js/xcbar-1.js?v=2" defer></script>
 <script src="/js/xchat-1.js" defer></script>
-<script src="/js/xpertchat-1.js?v=5" defer></script>
+<script src="/js/xpertchat-1.js?v=6" defer></script>
 <script src="/js/xcall-1.js?v=2" defer></script>
 <script src="/js/xcam-1.js?v=5" defer></script>
 <script src="/js/chatplus-1.js?v=2" defer></script>

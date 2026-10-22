@@ -349,13 +349,13 @@
   function refresh(){ var et = D.querySelector('#emo3 [data-etab="mine"].on'); if (et) et.click(); var g = D.querySelector(".xcgp .egs"); if (g) g.innerHTML = gridHtml(); }
   function gridHtml(){
     if (!MY){ load(); return '<p style="color:#5A657C;font-size:13px">Loading…</p>'; }
-    return '<div class="xcmy' + (window.XCStkEdit ? ' edit' : '') + '"><button type="button" class="mk" data-mkstk><span>➕</span>Make a sticker</button>'
+    return '<div class="xcmy' + (window.XCStkEdit ? ' edit' : '') + '"><button type="button" class="mk" data-mkstk><span>➕</span>Make a sticker</button><button type="button" class="mk" data-bizstk><span>🏢</span>Business stickers</button>'
       + MY.map(function(s){ return '<button type="button" data-mystk="' + esc(s.url) + '"><img src="' + esc(s.url) + '" alt="My sticker" loading="lazy">' + (s.anim ? '<i class="an">GIF</i>' : '') + '<span class="rm" data-rmstk="' + esc(s.name) + '">×</span></button>'; }).join("") + '</div>'
       + (MY.length ? '<p style="margin:8px 0 0;font-size:13px"><a href="/api/notify/stickers/pack/" download style="color:#16A34A;font-weight:800">\u2B07 Download my sticker pack</a> <span style="color:#5A657C">(for WhatsApp, Telegram and Discord)</span></p>' : '')
       + (MY.length ? '<p style="text-align:right;margin:6px 0 0"><button type="button" data-edstk style="border:0;background:none;color:#1B4DFF;font-weight:700;cursor:pointer">' + (window.XCStkEdit ? "Done" : "Remove stickers") + '</button></p>'
         : '<p style="font-size:12.5px;color:#5A657C;margin:6px 2px 0">Turn a photo or a few seconds of video into your own sticker. They show on every phone you sign in on.</p>');
   }
-  window.XCStk = {grid: gridHtml};
+  window.XCStk = {grid: gridHtml, reload: function(){ loading = null; return load(); }};
   load();
   D.addEventListener("click", function(e){
     if (e.target.closest("[data-mkstk]")){ e.stopPropagation(); maker(); return; }
@@ -393,10 +393,10 @@
         var p = D.createElement("div"); p.className = "xcgp";
         var tab = "mine", draw = function(){
           p.innerHTML = '<div class="etabs"><button data-gt="mine" class="' + (tab === "mine" ? "on" : "") + '">✨ My stickers</button><button data-gt="stk" class="' + (tab === "stk" ? "on" : "") + '">Stickers</button><button data-gt="x" style="margin-left:auto">×</button></div><div class="egs">'
-            + (tab === "mine" ? gridHtml() : '<div class="stkgrid">' + BUILTIN.map(function(s){ return '<button type="button" data-gstk="' + s + '"><img src="/stickers/' + s + '.svg" alt="' + s + '" loading="lazy"></button>'; }).join("") + '</div>') + '</div>';
+            + (tab === "mine" ? gridHtml() : window.XCSTK ? XCSTK.grid("data-gstk") : '<div class="stkgrid">' + BUILTIN.map(function(s){ return '<button type="button" data-gstk="' + s + '"><img src="/stickers/' + s + '.svg" alt="' + s + '" loading="lazy"></button>'; }).join("") + '</div>') + '</div>';
           p.querySelectorAll("[data-gt]").forEach(function(t){ t.onclick = function(){ var v = t.getAttribute("data-gt"); if (v === "x"){ closeGP(); return; } tab = v; draw(); }; });
         };
-        draw(); var bar2 = q.closest("div"); bar2.parentNode.insertBefore(p, bar2);
+        draw(); var bar2 = q.closest(".xpbar") || q.closest("div"); bar2.parentNode.insertBefore(p, bar2);
       };
     };
     new MutationObserver(putBtn).observe(B, {childList: true, subtree: true}); putBtn();
