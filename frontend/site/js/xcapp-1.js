@@ -35,7 +35,7 @@
     idealwt: ["Ideal weight", "/tools?t=idealwt", "🏃"], wheels: ["Cars & bikes", "/wheels", "🚘"], groups: ["Groups", "/groups", "👥"],
     rooms: ["Chat rooms", "/chat-rooms", "💬"], people: ["Find people", "/people", "🔍"], cards: ["Digital card", "/cards", "🎯"],
     events: ["Events", "/events", "📅"], qr: ["QR code", "/tools?t=qr", "▦"], amb: ["Ambassadors", "/ambassadors", "🌟"], cam: ["XpertCam", "/cam", "📸"],
-    meet: ["XpertMeet", "/call?new=1", "🎥"], vt: ["Urdu voice typing", "/urdu-voice-typing", "🎙️"], chat: ["XpertChat", "/chat", "💬"], tools: ["All tools", "/tools", "🧰"]
+    meet: ["XpertMeet", "/call?new=1", "🎥"], vt: ["Urdu voice typing", "/urdu-voice-typing", "🎙️"], live: ["Go Live", "/live", "🔴"], chat: ["XpertChat", "/chat", "💬"], tools: ["All tools", "/tools", "🧰"]
   };
   var MAP = [
     ["/islamic", "quran prayer qibla zakat faraid hijri tasbeeh rishta"], ["/quran", "islamic prayer qibla tasbeeh hijri"],
@@ -54,13 +54,13 @@
     ["/library", "academy afsanay poetry"], ["/games", "predict sports kids"], ["/pets", "vets lost adopt"], ["/pet", "vets lost adopt"],
     ["/vets", "pets lost adopt"], ["/lost", "pets vets adopt"], ["/adopt", "pets vets lost"], ["/blood", "donate steps weather"],
     ["/donate", "blood zakat islamic"], ["/steps", "bmi water idealwt rides"], ["/pros", "store freelance rides verify"],
-    ["/wheels", "rides property legal emi"], ["/feed", "groups meetups rooms promote people"], ["/people", "feed cards verify cv"],
+    ["/wheels", "rides property legal emi"], ["/feed", "live groups meetups rooms promote people"], ["/live", "feed groups meetups meet"], ["/people", "feed cards verify cv"],
     ["/in", "feed cards verify cv"], ["/meetups", "groups events rooms"], ["/events", "meetups groups birthdays"],
     ["/birthdays", "events roots"], ["/cards", "brand people qr bizstk"], ["/card", "brand people qr bizstk"], ["/brand", "bizstk cards store"],
     ["/company", "bizstk brand store promote jobs"], ["/company-register", "store bizstk brand verify"], ["/promote", "rewards store amb"],
     ["/rewards", "promote predict amb"], ["/ambassadors", "rewards promote verify"], ["/briefcase", "scan legal jobs verify"],
     ["/business-stickers", "store brand cards chat"], ["/business", "store invoice bizstk money"], ["/typing", "academy jobs kids"],
-    ["/clips", "cam shows feed"], ["/get-verified", "brief scan feed"], ["/safety", "verify brief"]
+    ["/clips", "cam live shows feed"], ["/get-verified", "brief scan feed"], ["/safety", "verify brief"]
   ];
   var TOOLMAP = {zakat: "islamic faraid money", fbrtax: "money salary bills", salary: "tax money jobs", prayer: "islamic qibla quran", qibla: "islamic prayer quran",
     bmi: "steps water idealwt", emi: "money wheels property", gold: "money rates zakat", invoice: "store money biz", bijli: "bills money", gpa: "academy mcq exam",
