@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     "xlate",
     "shop",
     "meetup",
+    "passkeys",
     "ownerauto",
     "sellerpay",
     "wheels",

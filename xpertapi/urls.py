@@ -56,6 +56,7 @@ urlpatterns = [
     path("api/translate/", include("xlate.urls")),
     path("api/shop/", include("shop.urls")),
     path("api/meetup/", include("meetup.urls")),
+    path("api/passkey/", include("passkeys.urls")),
     path("api/sellerpay/", include("sellerpay.urls")),
     path("api/wheels/", include("wheels.urls")),
     path("api/food/", include("xfood.urls")),
