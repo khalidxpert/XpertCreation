@@ -16,6 +16,7 @@
     return fetch("/api/calls/" + p, o).then(function(r){ return r.text().then(function(t){ var d = {}; try { d = t ? JSON.parse(t) : {}; } catch (e) {} if (!r.ok){ var er = new Error(d.detail || ("Error " + r.status)); er.status = r.status; throw er; } return d; }); });
   }
   var ICON = {
+    chat: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2zm3 6.2a1.3 1.3 0 1 0 0 .1zm5 0a1.3 1.3 0 1 0 0 .1zm5 0a1.3 1.3 0 1 0 0 .1z"/></svg>',
     phone: '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>',
     video: '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg>',
     mic: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg>',
@@ -188,6 +189,7 @@
       + '<div class="xkcw"><button class="xkc' + (this.camOff ? " off" : "") + '" data-k="cam" aria-label="Camera">' + (this.camOff ? ICON.camoff : ICON.cam) + '</button><div class="xklbl">Camera</div></div>'
       + '<div class="xkcw"><button class="xkc" data-k="flip" aria-label="Switch camera">' + ICON.flip + '</button><div class="xklbl">Flip</div></div>'
       + (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia && !/Android|iPhone|iPad/i.test(navigator.userAgent) ? '<div class="xkcw"><button class="xkc" data-k="screen" aria-label="Share screen">' + ICON.screen + '</button><div class="xklbl">Screen</div></div>' : "")
+      + '<div class="xkcw"><button class="xkc" data-k="chat" aria-label="Chat in this call">' + ICON.chat + '</button><div class="xklbl">Chat</div></div>'
       + '<div class="xkcw"><button class="xkc red" data-k="end" aria-label="End call">' + ICON.end + '</button><div class="xklbl">End</div></div>'
       + '</div>';
     B.appendChild(ov); this.ov = ov; this.stage = ov.querySelector(".xkstage"); this.stEl = ov.querySelector(".xkst");
@@ -199,6 +201,7 @@
       else if (k === "mute") self.toggleMute(b);
       else if (k === "cam") self.toggleCam(b);
       else if (k === "flip") self.flip();
+      else if (k === "chat") self.chat();
       else if (k === "screen") self.toggleScreen(b);
       else if (k === "copy"){ var u = meetUrl(c); (navigator.share ? navigator.share({title: c.title || "XpertMeet", text: "Join my XpertMeet meeting", url: u}) : navigator.clipboard.writeText(u)).then(function(){ self.say("Link ready to share."); }).catch(function(){}); }
     });
@@ -208,6 +211,69 @@
     if (!this.stage) return; var m = this.stage.querySelector(".xkmsg");
     if (!m){ m = D.createElement("div"); m.className = "xkmsg"; this.stage.appendChild(m); }
     m.textContent = t; clearTimeout(this.sayT); var mm = m; this.sayT = setTimeout(function(){ mm.remove(); }, 5000);
+  };
+  /* v6: chat during a call (works even when the voice or video does not get through) */
+  var CHATCSS = ".xkchat{position:absolute;left:0;right:0;bottom:0;max-height:62%;display:flex;flex-direction:column;background:#0f172a;border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.45);z-index:6;padding-bottom:env(safe-area-inset-bottom)}"
+    + ".xkchh{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.1)}.xkchh b{font-size:1rem}.xkchh button{background:none;border:0;color:#fff;font-size:26px;line-height:1;cursor:pointer}"
+    + ".xkchl{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-height:90px}"
+    + ".xkchm{max-width:80%;padding:7px 11px;border-radius:14px;background:rgba(255,255,255,.12);font-size:.95rem;line-height:1.35;word-wrap:break-word;align-self:flex-start}.xkchm.me{align-self:flex-end;background:#1B4DFF}.xkchm small{display:block;font-size:.72rem;opacity:.7;margin-bottom:2px}"
+    + ".xkchq{display:flex;gap:6px;overflow-x:auto;padding:4px 12px 8px}.xkchq button{flex:none;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;border-radius:16px;padding:6px 11px;font:inherit;font-size:.82rem;cursor:pointer;white-space:nowrap}"
+    + ".xkchf{display:flex;gap:8px;padding:8px 12px 12px}.xkchf input{flex:1;min-width:0;border-radius:22px;border:0;padding:11px 15px;font:inherit;font-size:16px;color:#0b1220}.xkchf button{border:0;border-radius:50%;width:44px;height:44px;background:#0f9d58;color:#fff;font-size:18px;cursor:pointer}"
+    + ".xkbdg{position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;border-radius:9px;background:#e53935;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}.xkcw{position:relative}";
+  var QUICK = ["I can't hear you · آواز نہیں آ رہی", "Can you hear me? · میری آواز آ رہی ہے؟",
+    "Video is not showing · ویڈیو نہیں آ رہی", "Call me again · دوبارہ کال کریں", "I'll call back · میں واپس کال کرتا ہوں"];
+  function chatCss(){ if (!D.getElementById("xkchcss")){ var st = D.createElement("style"); st.id = "xkchcss"; st.textContent = CHATCSS; D.head.appendChild(st); } }
+  Call.prototype.chat = function(){
+    var self = this;
+    chatCss();
+    var box = this.ov.querySelector(".xkchat");
+    if (box){ box.remove(); return; }
+    box = D.createElement("div"); box.className = "xkchat";
+    box.innerHTML = '<div class="xkchh"><b>Chat in this call</b><button type="button" data-x aria-label="Close chat">×</button></div><div class="xkchl"></div>'
+      + '<div class="xkchq">' + QUICK.map(function(q){ return '<button type="button" data-q="' + esc(q) + '">' + esc(q) + '</button>'; }).join("") + '</div>'
+      + '<form class="xkchf"><input maxlength="500" placeholder="Type a message" autocomplete="off" enterkeyhint="send"><button aria-label="Send">➤</button></form>';
+    this.ov.appendChild(box);
+    var list = box.querySelector(".xkchl");
+    (this.chatLog || []).forEach(function(m){ self.chatRow(list, m); });
+    if (!(this.chatLog || []).length) list.innerHTML = '<p style="opacity:.6;font-size:.85rem;margin:6px 2px">If the voice or video is not coming through, send a message here.<br><span dir="rtl" lang="ur">اگر آواز یا ویڈیو نہیں آ رہی تو یہاں پیغام بھیجیں۔</span></p>';
+    list.scrollTop = list.scrollHeight;
+    this.chatUnread = 0; this.chatBadge();
+    box.addEventListener("click", function(e){
+      e.stopPropagation();
+      if (e.target.closest("[data-x]")) return box.remove();
+      var q = e.target.closest("[data-q]"); if (q) self.chatSend(q.getAttribute("data-q"));
+    });
+    box.querySelector("form").addEventListener("submit", function(e){ e.preventDefault(); var i = box.querySelector("input"); var v = i.value.trim(); if (v){ self.chatSend(v); i.value = ""; } i.focus(); });
+  };
+  Call.prototype.chatRow = function(list, m){
+    if (list.querySelector("p")) list.innerHTML = "";
+    var d = D.createElement("div"); d.className = "xkchm" + (m.me ? " me" : "");
+    d.innerHTML = (m.me || this.c.kind === "t" ? "" : "<small>" + esc(m.n) + "</small>") + esc(m.t);
+    list.appendChild(d); list.scrollTop = list.scrollHeight;
+  };
+  Call.prototype.chatSend = function(text){
+    var self = this, me = (this.c.members || []).filter(function(m){ return m.id === self.me; })[0] || {};
+    var to = (this.c.members || []).filter(function(m){ return m.id !== self.me && m.state === "joined"; });
+    if (!to.length){ this.say("The other person has not joined yet."); return; }
+    to.forEach(function(m){ self.send(m.id, "chat", {t: text, n: me.name || ""}); });
+    if (this.c.kind === "t" && this.c.ref_id){
+      fetch("/api/notify/threads/" + this.c.ref_id + "/", {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": ck("xc_csrf") || ck("csrftoken")}, body: JSON.stringify({message: text})}).catch(function(){});
+    }
+    this.chatAdd({t: text, n: me.name || "", me: true});
+  };
+  Call.prototype.chatAdd = function(m){
+    this.chatLog = (this.chatLog || []).concat([m]).slice(-100);
+    var list = this.ov && this.ov.querySelector(".xkchat .xkchl");
+    if (list) this.chatRow(list, m);
+    else if (!m.me){ this.chatUnread = (this.chatUnread || 0) + 1; this.chatBadge(); this.say((this.c.kind === "t" ? "" : m.n + ": ") + m.t); try { navigator.vibrate && navigator.vibrate(80); } catch (e) {} }
+  };
+  Call.prototype.chatBadge = function(){
+    var b = this.ov && this.ov.querySelector('[data-k="chat"]'); if (!b) return;
+    chatCss();
+    var g = b.parentNode.querySelector(".xkbdg");
+    if (!this.chatUnread){ if (g) g.remove(); return; }
+    if (!g){ g = D.createElement("span"); g.className = "xkbdg"; b.parentNode.appendChild(g); }
+    g.textContent = this.chatUnread > 9 ? "9+" : this.chatUnread;
   };
   Call.prototype.status = function(){
     if (!this.stEl) return;
@@ -312,6 +378,7 @@
     } else if (s.kind === "ice" && p){
       if (p.pc.remoteDescription) p.pc.addIceCandidate(data).catch(function(){}); else p.q.push(data);
     } else if (s.kind === "bye"){ this.drop(s.from); }
+    else if (s.kind === "chat" && data && data.t){ this.chatAdd({t: String(data.t).slice(0, 500), n: (this.names[s.from] || {}).name || data.n || "", me: false}); }
   };
   Call.prototype.drop = function(uid){
     var p = this.peers[uid]; if (!p) return;

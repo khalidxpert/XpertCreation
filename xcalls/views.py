@@ -470,8 +470,10 @@ def signal(request, pk):
     if not c or c.state not in ACTIVE:
         return _err("This call has ended.", 410)
     kind, data = str(d.get("kind") or ""), d.get("data")
-    if kind not in ("offer", "answer", "ice", "bye"):
+    if kind not in ("offer", "answer", "ice", "bye", "chat"):
         return _err("Unknown message.")
+    if kind == "chat" and len(data if isinstance(data, str) else json.dumps(data)) > 3000:
+        return _err("Message too long.")
     data = data if isinstance(data, str) else json.dumps(data)
     if len(data) > 20000:
         return _err("Too big.")
