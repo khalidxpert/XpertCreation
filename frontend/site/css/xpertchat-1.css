@@ -180,3 +180,14 @@ body.xc-app #glog .gm:has(> .gs),body.xc-app #glog .gm:has(> img.gs){background:
 .msg8 img,.gm img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .msg8,.gm{-webkit-touch-callout:none}
 .xcbar .xcmeet{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;color:inherit;text-decoration:none}.xcbar .xcmeet:hover{background:rgba(255,255,255,.15)}
+
+/* v5: call buttons in the chat header */
+body.xc-app.inchat .xcpane > h1{display:block!important;line-height:58px;padding-right:146px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.xc-app.inchat .xcpane > h1 .chead-av{display:inline-block;vertical-align:middle;margin:0 10px 0 0!important;position:relative;top:-2px}
+body.xc-app .thd3 .xkbar{display:inline-flex;gap:6px;margin-left:auto;margin-right:2px}
+body.xc-app .thd3 .xkbtn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18)!important;color:#fff!important;border:0}
+body.xc-app .thd3 .xkbtn svg{width:22px;height:22px;fill:#fff}
+body.xc-app .thd3 .xkbtn:active{background:rgba(255,255,255,.34)!important}
+.gh .xkbar{display:inline-flex;gap:6px;flex:0 0 auto}
+.gh .xkbtn{width:40px;height:40px;border-radius:50%;background:#EEF2FF!important;color:#1B4DFF!important}
+.gh .xkbtn svg{width:21px;height:21px}
