@@ -34,9 +34,7 @@ r = git("pull", "--ff-only", "--quiet")
 if r.returncode:
     sys.exit("git pull failed: " + r.stderr[-300:])
 after = git("rev-parse", "HEAD").stdout.strip()
-BUILT = "/root/.docs_built_commit"
-last = open(BUILT).read().strip() if os.path.exists(BUILT) else ""
-if last == after and not FORCE and os.path.exists(LAND + "/docs/index.html"):
+if before == after and not FORCE and os.path.exists(LAND + "/docs/index.html"):
     print("no change in the guide (%s) - nothing to do" % after[:7])
     sys.exit(0)
 DOCS = {}
@@ -255,5 +253,3 @@ try:
 except Exception:
     pass
 print("\nAPPLIED - %d pages, %d footer links, %d sitemap urls. Backups in %s" % (len(built), len(foot), add.count("<url>"), bak))
-if APPLY:
-    open(BUILT, "w").write(after)

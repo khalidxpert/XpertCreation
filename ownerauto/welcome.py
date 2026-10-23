@@ -1,5 +1,6 @@
 """The welcome email: a short note from the founder and one line + link for every part of XpertCreation."""
 import html
+import re
 import logging
 
 from django.conf import settings
@@ -12,38 +13,63 @@ APP = "https://play.google.com/store/apps/details?id=com.xpertcreation.app"
 # (emoji, name, one line, Urdu line, link)
 PARTS = [
     ("Connect & earn", [
-        ("\U0001F91D", "XpertConnect", "Pakistan's own social network: post, follow, chat and grow your network.", "اپنا نیٹ ورک بنائیں", "/feed"),
-        ("\U0001F4AC", "Chat & Groups", "Private chats, groups, channels and chat rooms with friends and family.", "دوستوں اور گھر والوں سے مفت بات کریں", "/chat"),
+        ("\U0001F91D", "XpertConnect", "Pakistan's own social network: post, follow, go live and grow your network.", "اپنا نیٹ ورک بنائیں", "/feed"),
+        ("\U0001F4AC", "XpertChat", "Chats, groups and channels, stickers, voice notes, and free voice and video calls.", "مفت چیٹ اور وائس / ویڈیو کال", "/chat"),
+        ("\U0001F3A5", "XpertMeet", "Online meetings with a link, raise hand, reactions and an invitation with the time in 15 countries.", "آن لائن میٹنگ، مفت", "/call"),
+        ("\U0001F534", "Go Live", "Go live from your phone; your followers get a notification and can comment.", "اپنے فون سے لائیو جائیں", "/live"),
         ("\U0001F9D1‍\U0001F4BB", "XpertFreelance", "Sell your skills or hire designers, developers, writers and tutors.", "اپنا ہنر بیچیں", "/market"),
         ("\U0001F4BC", "XpertJobs", "Private jobs, government jobs, results and scholarships.", "نوکری تلاش کریں", "/jobs"),
+        ("\U0001F3E2", "Company pages", "Put your business on XpertConnect with a verified company page.", "اپنی کمپنی کا پیج بنائیں", "/companies"),
     ]),
     ("Buy & sell", [
         ("\U0001F6CD️", "XpertStore", "Shop online, or open your own shop free and sell across Pakistan.", "اپنی دکان مفت کھولیں", "/store"),
         ("\U0001F354", "Food delivery", "Order from restaurants and home kitchens near you. Restaurants join free.", "کھانا گھر بیٹھے منگوائیں", "/food"),
         ("\U0001F697", "XpertWheels", "Buy and sell cars and bikes. Free ads, buyers call you directly.", "گاڑی اور بائیک خریدیں یا بیچیں", "/wheels"),
         ("\U0001F3E0", "XpertProperty", "Houses, flats, plots and shops to buy, sell or rent.", "مکان، فلیٹ یا پلاٹ", "/market#property"),
+        ("\U0001F6E0️", "XpertPros", "Hire ID-verified plumbers, electricians, AC technicians and more. Pay the worker directly.", "قابلِ اعتماد کاریگر بلائیں", "/pros"),
+        ("\U0001F3E8", "Hotels & Tours", "Book hotels, guest houses and tour packages free, and pay at the hotel.", "ہوٹل اور ٹور بک کریں", "/hotels"),
     ]),
     ("Learn & grow", [
-        ("\U0001F393", "XpertAcademy", "Free courses with certificates, in simple English.", "مفت کورسز اور سرٹیفکیٹ", "/academy/"),
+        ("\U0001F393", "XpertAcademy", "{C} free courses with certificates: Office, programming, languages, IELTS and skills for work.", "مفت کورسز اور سرٹیفکیٹ", "/academy/"),
         ("\U0001F9EE", "{N} free tools", "Tax, loan, BMI, Zakat, Faraid calculators, legal documents and many handy tools.", "{NU} مفت ٹولز", "/tools"),
+        ("\U0001F3AC", "Video Translate", "Subtitles and a transcript for your video, translated into Urdu and 20+ languages.", "ویڈیو کے سب ٹائٹل کسی بھی زبان میں", "/video-translate"),
+        ("\U0001F310", "Translate & voice typing", "Translate between Urdu, English, Arabic and more, and speak to type in Urdu.", "بول کر اردو لکھیں", "/translate"),
+        ("\U0001F916", "AI Assistant", "Ask about studies, Excel, writing and more, in Urdu or English.", "مفت اے آئی مددگار", "/assistant"),
         ("\U0001FAAA", "Digital business card", "Make a free digital visiting card and share it with a link or QR code.", "ڈیجیٹل وزیٹنگ کارڈ", "/cards"),
     ]),
     ("Family & community", [
         ("\U0001F48D", "Halal Rishta", "Find a rishta the halal way, with your family. Verified members only.", "حلال رشتہ", "/rishta"),
         ("\U0001F333", "Roots of Love", "Build your family tree together with your whole family.", "اپنا خاندانی شجرہ بنائیں", "/roots"),
+        ("\U0001F54C", "Islamic corner", "Ayah of the day, the Holy Quran with Urdu translation, the Hijri date and Islamic tools.", "قرآن پاک اور اسلامی ٹولز", "/islamic"),
         ("\U0001F465", "Meetups", "Meet people in your city who like what you like.", "اپنے شہر کے لوگوں سے ملیں", "/meetups"),
         ("\U0001FA78", "Blood Bank", "Give blood, save a life. Find a donor near you in minutes.", "خون دیں، زندگی بچائیں", "/blood"),
-        ("\U0001F4D6", "The Holy Quran", "Read the Holy Quran with Urdu translation, anytime.", "قرآن پاک اردو ترجمے کے ساتھ", "/quran"),
+        ("\U0001F43E", "Pets", "Your pet's profile, a QR tag for lost pets, adoption and vets.", "اپنے پالتو جانور کا خیال", "/pets"),
+        ("\U0001F9F8", "Kids", "Safe cartoons, rhymes, stories and learning videos for children, picked by our team.", "بچوں کے لیے محفوظ کارٹون اور کہانیاں", "/kids"),
     ]),
     ("Everyday", [
-        ("\U0001F4A1", "Money & Bills", "Check your electricity and gas bill in seconds.", "بجلی اور گیس کا بل چیک کریں", "/bills"),
-        ("\U0001F3AC", "XpertClips", "Watch and share short videos.", "مختصر ویڈیوز", "/clips"),
+        ("\U0001F4A1", "Electricity & gas bills", "Check your electricity or gas bill in seconds.", "بجلی اور گیس کا بل چیک کریں", "/bills"),
+        ("\U0001F4B0", "Money", "Keep track of cash, mobile wallets and bank balances, on all your devices.", "اپنے پیسوں کا حساب رکھیں", "/money"),
+        ("\U0001F4BC", "My Briefcase", "Keep your degrees, ID card and passport safe, with a reminder before they expire.", "اپنے کاغذات محفوظ رکھیں", "/briefcase"),
+        ("\U0001F4C4", "XpertScan", "Scan papers and ID cards with your phone into a clean PDF.", "فون سے اسکین کر کے پی ڈی ایف", "/scan"),
+        ("\U0001F698", "Ladies rides", "Safe rides by women drivers, for women: car, rickshaw or bike.", "خواتین کے لیے محفوظ سفر", "/rides"),
+        ("\U0001F45F", "Step counter", "Count your steps and see your walk on a live map.", "قدم گنیں، صحت مند رہیں", "/steps"),
+        ("\U0001F3AC", "XpertClips & XpertCam", "Watch and share short videos, and take photos with fun filters.", "مختصر ویڈیوز اور فلٹرز", "/clips"),
         ("\U0001F3CF", "News & Sports", "Live cricket scores and the latest news.", "لائیو کرکٹ اسکور", "/sports"),
-        ("\U0001F3AE", "Games", "Ludo, carrom and chess with friends, free in your browser.", "دوستوں کے ساتھ کھیلیں", "/games"),
+        ("\U0001F3AE", "Games", "Ludo, carrom, chess and football with friends, free in your browser.", "دوستوں کے ساتھ کھیلیں", "/games"),
         ("\U0001F382", "Birthday Reminders", "Never forget a birthday again.", "سالگرہ کبھی نہ بھولیں", "/birthdays"),
-        ("\U0001F4F6", "Nearby chat", "Chat with people around you, even without internet.", "بغیر انٹرنیٹ کے قریب لوگوں سے بات کریں", "/nearby"),
+        ("\U0001F4F6", "Nearby chat", "Chat and share with people around you, even without internet.", "بغیر انٹرنیٹ کے قریب لوگوں سے بات کریں", "/nearby"),
+        ("\U0001F381", "Rewards", "Use XpertCreation, earn points and spin the lucky wheel.", "پوائنٹس کمائیں", "/rewards"),
     ]),
 ]
+
+def _courses():
+    """How many courses XpertAcademy has right now."""
+    try:
+        h = open("/var/www/xpertacademy/index.html", encoding="utf-8").read()
+        n = len(re.findall(r'\n  \{\n    "id": "[\w-]+",\n    "name"', h))
+    except Exception:
+        n = 0
+    return str(n if n >= 10 else 30)
 
 
 def _tools():
@@ -70,11 +96,13 @@ def build(u):
             "Welcome to XpertCreation! I am Syed Khalid Hussain Shah, the founder. We built XpertCreation so that everything you need is in one free account, made in Pakistan.",
             "Here is what you can do with it:\n"]
     N, NU = _tools()
+    C = _courses()
     for title, items in PARTS:
         rows += '<tr><td style="padding:18px 0 6px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#1B4DFF">%s</td></tr>' % e(title)
         text.append("\n" + title.upper())
         for em, nm, line, ur, link in items:
             nm, ur = nm.replace("{N}", N), ur.replace("{NU}", NU)
+            line = line.replace("{C}", C)
             url = SITE + link
             rows += ('<tr><td style="padding:6px 0"><table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background:#F6F7FB;border:1px solid #E4E8F2;border-radius:14px">'
                      '<tr><td width="48" style="padding:12px 0 12px 14px;font-size:26px;vertical-align:top">%s</td>'
