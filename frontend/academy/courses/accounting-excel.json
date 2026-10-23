@@ -1,0 +1,631 @@
+{
+ "day-1": {
+  "t": "Day 1 — Why keep accounts",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand why accounts matter",
+     "Learn the six basic words"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes. Keep Excel open; every lesson has a small sheet to make."
+   },
+   {
+    "k": "h",
+    "v": "1) Why"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know if the business really makes a profit",
+     "Know who owes you and whom you owe",
+     "Get loans, investors and tax filing right",
+     "Catch theft and mistakes early"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Six basic words"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Income (revenue) - money earned from sales or services",
+     "Expense - money spent to run the business: rent, salaries, electricity",
+     "Asset - what the business owns: cash, stock, equipment, money others owe you",
+     "Liability - what the business owes: loans, unpaid supplier bills",
+     "Capital (equity) - the owner's money in the business",
+     "Profit - income minus expenses"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) The accounting equation"
+   },
+   {
+    "k": "p",
+    "v": "Assets = Liabilities + Capital. Everything the business owns was paid for either by borrowing or by the owner's money. Every entry you make keeps this balance."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write 3 examples each of income, expense, asset and liability for a small shop.|Check the equation with simple numbers: cash 50,000 = loan 20,000 + capital 30,000."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Debit and credit",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand double entry",
+     "Apply the debit and credit rules"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Double entry"
+   },
+   {
+    "k": "p",
+    "v": "Every transaction touches at least two accounts, and the total debit always equals the total credit. If you buy a chair for Rs 5,000 cash, furniture goes up and cash goes down by the same amount."
+   },
+   {
+    "k": "h",
+    "v": "2) The rules"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Assets and expenses: increase = debit, decrease = credit",
+     "Liabilities, capital and income: increase = credit, decrease = debit"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Examples"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Owner puts Rs 100,000 in the business: debit Cash, credit Capital",
+     "Buy stock for Rs 40,000 cash: debit Stock (Purchases), credit Cash",
+     "Sell goods for Rs 15,000 cash: debit Cash, credit Sales",
+     "Pay rent Rs 10,000: debit Rent expense, credit Cash",
+     "Buy on credit from a supplier: debit Purchases, credit the Supplier (payable)"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write the debit and credit for 5 transactions of your own business or an imaginary shop."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — The journal in Excel",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Record every transaction in one sheet",
+     "Check that debits equal credits"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Columns"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A: Date",
+     "B: Voucher number",
+     "C: Account",
+     "D: Debit",
+     "E: Credit",
+     "F: Narration - a short note of what happened"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Make it a table"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Type the headings in row 1.|Select the data and press Ctrl + T to make it an Excel table.|Format columns D and E as numbers with a thousands separator.|Under the table, total each column with =SUM()."
+   },
+   {
+    "k": "h",
+    "v": "3) The check"
+   },
+   {
+    "k": "p",
+    "v": "Put =SUM(D:D)-SUM(E:E) in a cell. It must be 0. If not, a line is missing or one side was typed wrong. Use Data > Data Validation on column C so only names from your account list can be typed."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make the journal sheet.|Enter 10 transactions from yesterday.|Make sure the difference is 0."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — The ledger with SUMIFS",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "See the balance of every account",
+     "Build it with one formula"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Account list"
+   },
+   {
+    "k": "p",
+    "v": "On a new sheet, list every account in column A: Cash, Bank, Stock, Sales, Purchases, Rent, Salaries, Capital, Loan, each customer and supplier. In column B write its type: Asset, Liability, Capital, Income or Expense."
+   },
+   {
+    "k": "h",
+    "v": "2) Totals per account"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Debit total: =SUMIFS(Journal[Debit], Journal[Account], A2)",
+     "Credit total: =SUMIFS(Journal[Credit], Journal[Account], A2)",
+     "Balance: debit total minus credit total"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Reading the balance"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Assets and expenses normally have a debit balance (positive)",
+     "Liabilities, capital and income normally have a credit balance (negative in this sheet)",
+     "A cash balance below zero means a mistake - you cannot spend cash you don't have"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make the account list.|Add the three SUMIFS columns.|Check that the cash balance matches the cash in your drawer."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — The trial balance",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Prove the books are in balance",
+     "Find common mistakes"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) What it is"
+   },
+   {
+    "k": "p",
+    "v": "A list of every account with its debit or credit balance on one date. The two columns must have the same total."
+   },
+   {
+    "k": "h",
+    "v": "2) In Excel"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Debit column: =IF(balance>0, balance, 0)",
+     "Credit column: =IF(balance<0, -balance, 0)",
+     "Total both columns at the bottom and compare"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Mistakes it cannot catch"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A transaction never entered at all",
+     "The right amount in the wrong account (rent posted as salaries)",
+     "The same wrong amount on both sides",
+     "So also compare cash and bank balances with real cash and bank statements"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Build the trial balance from your ledger.|If the totals differ, find the line that causes it."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Cash book and bank reconciliation",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Keep a daily cash book",
+     "Match your records with the bank statement"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Cash book"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Columns: date, details, cash in, cash out, running balance",
+     "Running balance: =previous balance + in - out",
+     "Count the cash in the drawer every evening and compare"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Why the bank balance differs"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Cheques you issued that the bank has not paid yet",
+     "Deposits you made that the bank has not added yet",
+     "Bank charges, profit or tax the bank added that you did not record",
+     "Mistakes on either side"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Reconciliation"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Start with the balance in your bank book.|Add issued cheques not yet paid.|Subtract deposits not yet credited.|Adjust for bank charges and profit (and record them in your books).|The result must equal the bank statement balance."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a cash book for one week.|Do one reconciliation with last month's bank statement."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Invoices and money customers owe",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make a clean invoice template",
+     "Track who owes you and for how long"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Invoice template"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Your business name, address, phone and tax number if you have one",
+     "Invoice number and date",
+     "Customer name and address",
+     "Lines: item, quantity, rate, amount (=quantity * rate)",
+     "Subtotal, discount, tax if any, and total",
+     "Payment terms: for example 'due within 15 days'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Receivables list"
+   },
+   {
+    "k": "p",
+    "v": "Keep a sheet with invoice number, customer, date, amount, amount received and balance. Add 'days due' with =TODAY()-date."
+   },
+   {
+    "k": "h",
+    "v": "3) Ageing"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Group balances into 0-30, 31-60, 61-90 and over 90 days",
+     "Call customers before invoices get old",
+     "Old balances are hard to collect - follow up politely but regularly"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make the invoice template and save it as a template file.|Make the receivables sheet with days due."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Purchases, suppliers and stock",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Track what you owe suppliers",
+     "Keep a simple stock sheet"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Payables"
+   },
+   {
+    "k": "p",
+    "v": "Record every supplier bill with date, amount, amount paid and balance. Pay on time to keep good prices and credit, but check every bill against what you actually received."
+   },
+   {
+    "k": "h",
+    "v": "2) Stock sheet"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Columns: item, opening stock, purchased, sold, closing stock",
+     "Closing stock: =opening + purchased - sold",
+     "Reorder level: highlight the cell with Conditional Formatting when closing stock falls below it",
+     "Stock value: closing quantity x cost price"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Count often"
+   },
+   {
+    "k": "p",
+    "v": "Count the real stock at least once a month and compare it with the sheet. A difference means breakage, theft or a recording mistake - find which."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a stock sheet for 10 items with a reorder level.|Make a supplier balance sheet."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Salary sheet",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Calculate monthly salaries correctly",
+     "Keep a clean record for staff"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Columns"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Employee name and CNIC (keep this file private)",
+     "Basic salary and allowances",
+     "Days present and leave",
+     "Overtime",
+     "Deductions: advance, absence, any tax or contributions required by law",
+     "Net salary = gross salary - deductions"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Useful formulas"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Absence deduction: =basic / days in month * days absent",
+     "Gross: =basic + allowances + overtime",
+     "Net: =gross - SUM(deductions)",
+     "Total of the whole sheet = salary expense for the month"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Good practice"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pay through the bank when you can - it leaves a record",
+     "Give each person a payslip",
+     "Protect the file with a password; salaries are private"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a salary sheet for 3 imaginary staff.|Check the total net salary with a calculator."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Profit and loss and balance sheet",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make the two main reports",
+     "Set a monthly routine"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Profit and loss (income statement)"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Sales",
+     "minus cost of goods sold (opening stock + purchases - closing stock)",
+     "= gross profit",
+     "minus expenses (rent, salaries, electricity, delivery)",
+     "= net profit for the period"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Balance sheet"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Assets: cash, bank, stock, receivables, equipment",
+     "Liabilities: payables, loans",
+     "Capital: owner's capital + net profit - drawings",
+     "Check: assets = liabilities + capital"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Monthly routine"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Enter every transaction in the journal weekly.|Reconcile cash and bank.|Count stock.|Print the trial balance, profit and loss and balance sheet.|Compare with last month and write what changed."
+   },
+   {
+    "k": "tip",
+    "v": "For tax returns and audits, work with a qualified accountant. These sheets will make their work faster and cheaper."
+   },
+   {
+    "k": "h",
+    "v": "You finished the course"
+   },
+   {
+    "k": "p",
+    "v": "Take the quiz to get your certificate, then keep one month of real accounts with these sheets."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Build a profit and loss and a balance sheet from your trial balance.|Check that the balance sheet balances."
+   }
+  ]
+ }
+}

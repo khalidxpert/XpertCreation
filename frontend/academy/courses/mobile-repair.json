@@ -1,0 +1,620 @@
+{
+ "day-1": {
+  "t": "Day 1 — The trade and staying safe",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand what a repair technician does",
+     "Learn the safety rules before touching a phone"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes. This course teaches the basics; real skill comes from practice on old phones."
+   },
+   {
+    "k": "h",
+    "v": "1) The work"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Most jobs: screen, battery, charging port, software problems, speaker and mic",
+     "Harder jobs: board-level faults that need soldering under a microscope",
+     "Customers want three things: a fair price, a quick repair and honesty"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Battery safety"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Lithium batteries can catch fire if bent, pierced or shorted",
+     "Never use a metal tool to pry a battery",
+     "A swollen battery must be replaced, never pressed back in",
+     "Keep a metal tray or sand bucket nearby for a hot battery"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Static and fumes"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Static electricity from your body can kill a chip - use an anti-static mat and wrist strap",
+     "Solder and flux give fumes - work with a fan or open window",
+     "Protect your eyes when using a heat gun"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Practise on old, dead phones first. Never learn on a customer's phone."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Collect 2 or 3 old phones from family to practise on.|Prepare a clean, well-lit table with a fan."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Tools you need",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know the basic toolkit",
+     "Start with a small budget"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Starter kit"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Precision screwdriver set (Phillips, Pentalobe, Tri-point, Torx)",
+     "Plastic opening picks and a spudger",
+     "Suction cup",
+     "Fine tweezers",
+     "Anti-static mat and wrist strap",
+     "Magnifying lamp"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Next level"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hot air station or heat gun for softening glue",
+     "Soldering iron with fine tips, solder wire and flux",
+     "Digital multimeter",
+     "Regulated DC power supply",
+     "Isopropyl alcohol (99%) and a soft brush for cleaning"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Buying tips"
+   },
+   {
+    "k": "p",
+    "v": "Buy good screwdrivers first; cheap ones strip tiny screws and damage phones. You can add the hot air station and microscope when your work grows."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a list of the starter kit with prices from your local market.|Write what you will buy now and what later."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Inside a phone",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Name the main parts",
+     "Understand how they connect"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Main parts"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Motherboard (logic board) - the brain with processor, memory and chips",
+     "Battery - connected to the board with a small connector",
+     "Display - glass, touch layer and screen, joined as one part in most phones",
+     "Charging port - often on a small sub-board with the mic",
+     "Cameras, earpiece, loudspeaker, vibration motor",
+     "Flex cables - thin ribbons that join the parts"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) How they connect"
+   },
+   {
+    "k": "p",
+    "v": "Most parts plug into the board with press-fit connectors, like tiny buttons. They come off by lifting gently with a plastic spudger and go back with light finger pressure. Forcing them breaks the pins."
+   },
+   {
+    "k": "h",
+    "v": "3) Look before you touch"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Take a photo at every step - it shows where screws and cables go",
+     "Screws have different lengths; a long screw in the wrong hole can damage the board",
+     "Use a magnetic mat or a paper with marked spots for screws"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Open an old phone and take a photo of the inside.|Label each part on the photo."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Opening a phone safely",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Open a phone without breaking it",
+     "Always disconnect the battery first"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Before opening"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Ask the customer to back up their data.|Note what works and what does not, in front of the customer.|Switch the phone off and remove the SIM tray."
+   },
+   {
+    "k": "h",
+    "v": "2) Opening"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Warm the edges with a heat gun on low for a minute to soften the glue.|Lift a corner with the suction cup.|Slide a plastic pick in and move it slowly around the edge.|Watch for flex cables - many phones open like a book.|Unscrew the shield over the battery connector and disconnect the battery first."
+   },
+   {
+    "k": "h",
+    "v": "3) Closing"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Test before you close: power, touch, cameras, sound, charging",
+     "Replace the adhesive so the phone stays sealed",
+     "Put every screw back in its own hole"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Too much heat can damage the screen or the battery. Keep the heat gun moving and on a low setting."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Open and close an old phone twice.|Time yourself and note what was hard."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Software problems",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Fix common software faults",
+     "Stay on the right side of the law"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Common fixes"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Slow or hanging: free up storage, close background apps, update the system",
+     "An app crashes: clear its cache, update or reinstall it",
+     "Strange behaviour: start in safe mode to see if a downloaded app is the cause",
+     "Nothing helps: back up, then factory reset",
+     "Stuck on the logo: reinstall the official system software with the maker's tool"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Use only official software"
+   },
+   {
+    "k": "p",
+    "v": "Install system software only from the phone maker. Modified files from unknown websites can carry viruses and steal the customer's data."
+   },
+   {
+    "k": "h",
+    "v": "3) Legal and honest"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Never remove an account lock or change the IMEI of a phone - it is illegal and helps thieves",
+     "Check that a phone's IMEI is registered with PTA (DIRBS) before you buy or sell a used phone",
+     "Unlock only with proof that the customer owns the phone"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|On your own phone, check storage, battery use and updates.|Find how to start it in safe mode."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Charging and battery faults",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Find why a phone won't charge",
+     "Replace a battery safely"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Not charging - check in order"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Try another cable and adapter.|Look into the port with a light: lint and dust are the most common cause.|Clean it gently with a wooden toothpick or a brush and alcohol - never a metal pin.|Check the charging current with a USB meter.|If still bad, replace the charging port or its sub-board."
+   },
+   {
+    "k": "h",
+    "v": "2) Battery problems"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Drains fast or shuts off at 20%: the battery is old",
+     "Swollen: the screen or back lifts - replace at once",
+     "Check battery health in settings if the phone shows it"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Replacing a battery"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Disconnect the battery connector first.|Pull the glue tabs slowly, or use a little alcohol under the battery to soften the glue.|Never bend or pierce the battery.|Fit a good-quality battery of the same type and connect it last."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Clean the charging port of an old phone.|Practise removing and refitting its battery."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Screen replacement",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand screen types",
+     "Replace a screen and test it"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Screen types"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "LCD - cheaper, has a backlight",
+     "OLED / AMOLED - thinner, deeper blacks, more expensive",
+     "Original, refurbished and copy parts differ in colour, brightness and touch"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Replacing"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Open the phone and disconnect the battery.|Disconnect the display flex cable.|Move any parts that stay (earpiece, sensors, front camera bracket) to the new screen.|Connect the new screen and battery, and test before closing.|Fit new adhesive and close."
+   },
+   {
+    "k": "h",
+    "v": "3) Be honest with the customer"
+   },
+   {
+    "k": "p",
+    "v": "Tell the customer which quality of screen you are fitting and the price of each. A copy screen sold as original ruins your name in the market."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|On an old phone, remove and refit the screen.|Write the price difference between two screen qualities in your market."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Speaker, mic, camera and buttons",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Fix sound and camera faults",
+     "Clean before you replace"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) No sound or low sound"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Test with headphones or a speaker test in settings",
+     "Clean the speaker mesh with a soft brush",
+     "Check if the phone thinks headphones are plugged in",
+     "Replace the speaker if still faulty"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Mic problems"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Record a voice note to test",
+     "Clean the mic hole gently",
+     "The main mic is often on the charging sub-board"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Camera and buttons"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Blurry photos: clean the lens glass; a cracked lens glass can be replaced",
+     "Camera app fails: restart, clear cache, then check the camera connector",
+     "Buttons not working: clean, then check the button flex cable"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Test speaker, mic and camera on 2 phones.|Write which part you would check first for each fault."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Using a multimeter",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Measure voltage and check continuity",
+     "Find a short circuit safely"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Three settings you will use"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "DC voltage - check battery voltage (a healthy phone battery is about 3.7 to 4.4 V)",
+     "Continuity - beeps when two points are connected; checks broken flex cables",
+     "Diode mode - compare readings on connector pins with a good board"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Finding a short"
+   },
+   {
+    "k": "p",
+    "v": "If a phone draws high current from the power supply without turning on, there is a short on the board. Technicians find the hot component with a thermal camera or by applying a little alcohol and watching where it dries first. This is advanced work - learn it after the basics."
+   },
+   {
+    "k": "warn",
+    "v": "Always set the meter before touching the probes to the board, and never measure resistance on a powered board."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Measure the voltage of an old phone battery.|Check continuity of a charging cable from end to end."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Running a repair counter",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Price fairly and give a warranty",
+     "Earn the customer's trust"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Job card for every phone"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Customer name and number",
+     "Phone model and IMEI",
+     "Fault described by the customer and what you saw",
+     "Price agreed and delivery date",
+     "Customer's signature"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Pricing and warranty"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Price = part cost + your labour + a small margin",
+     "Give a short warranty on your work and parts, in writing",
+     "Never charge for a repair you could not do"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Customer data"
+   },
+   {
+    "k": "p",
+    "v": "Phones hold photos, chats and bank apps. Never open the customer's files, never copy anything, and keep phones locked away at night. Your honesty is your best advertisement."
+   },
+   {
+    "k": "h",
+    "v": "You finished the course"
+   },
+   {
+    "k": "p",
+    "v": "Take the quiz to get your certificate. Then keep practising on old phones, and consider working with an experienced technician to learn board-level repair."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Design your job card.|Write your price list for 5 common repairs."
+   }
+  ]
+ }
+}

@@ -1,0 +1,600 @@
+{
+ "day-1": {
+  "t": "Day 1 — How scammers think",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand why scams work",
+     "Recognise the common tricks"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes. Share each lesson with your parents and children too."
+   },
+   {
+    "k": "h",
+    "v": "1) The three tricks"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Hurry - 'Your account will be blocked in 10 minutes'",
+     "Fear - 'Police case against you', 'Your SIM will be closed'",
+     "Greed - 'You won a prize', 'Earn Rs 5,000 a day from home'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Common scams in Pakistan"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Fake prize and lucky draw messages asking for a 'processing fee'",
+     "Fake messages about government support money asking for codes or fees",
+     "Calls pretending to be your bank asking for card details or a code",
+     "Fake job offers abroad that ask for money first",
+     "A 'friend' on chat who suddenly needs money urgently"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) The golden rule"
+   },
+   {
+    "k": "p",
+    "v": "If a message or call makes you hurry, fear or feel lucky, stop. Hang up, wait, and check yourself through an official number or website. Real banks and offices never mind if you call them back."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Look at your messages and find one that uses hurry, fear or greed.|Tell one family member the golden rule today."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Strong passwords and two-step login",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make passwords hard to guess",
+     "Turn on two-step login on your main accounts"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) A strong password"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Long: at least 12 characters",
+     "A phrase is easy to remember: 'Chai-at-4-with-Ammi!'",
+     "Different for every important account",
+     "Never your name, phone number, CNIC or date of birth"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Remembering them"
+   },
+   {
+    "k": "p",
+    "v": "Use the password manager built into your phone or browser, or a trusted password manager app. If you write passwords down, keep the notebook at home in a safe place, never in your wallet or phone gallery."
+   },
+   {
+    "k": "h",
+    "v": "3) Two-step login"
+   },
+   {
+    "k": "p",
+    "v": "With two-step login, a thief needs your password and also a code from your phone. Turn it on for your email first - whoever controls your email can reset all your other accounts - then for social media, chat apps and XpertCreation."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Change the password of your main email to a long phrase.|Turn on two-step login for your email."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Never share a code (OTP)",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand what one-time codes are for",
+     "Never be tricked into sharing one"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) What a code does"
+   },
+   {
+    "k": "p",
+    "v": "A one-time code (OTP) is like the key to your house for one minute. It lets someone log in to your account, move money or take over your chat on a new phone. Whoever has the code can act as you."
+   },
+   {
+    "k": "h",
+    "v": "2) The rule"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "No bank, telecom company, courier or government office will ever ask you for a code",
+     "Read the message: it often says 'Do not share this code'",
+     "If someone asks for a code, it is a scam - every time"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Common tricks"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "'I sent a code to your number by mistake, please send it back'",
+     "'Your parcel is waiting, tell me the code to confirm the address'",
+     "'This is your bank, tell me the code to stop the fraud'"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "If you already shared a code, act now: open the account, log out other devices, change the password and call your bank on its official helpline."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Tell your parents: never share any code with anyone.|Save your bank's official helpline in your contacts."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Keep your chat account safe",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Stop people taking over your chat account",
+     "Know the signs of a hacked friend"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Turn on the PIN"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Open the settings of your chat app.|Find Account, then two-step verification.|Set a 6-digit PIN that is not your birthday and add your email.|Do the same on XpertChat and other apps that offer it."
+   },
+   {
+    "k": "h",
+    "v": "2) Check linked devices"
+   },
+   {
+    "k": "p",
+    "v": "Chat apps can be opened on a computer or another phone. Check 'Linked devices' in settings and log out anything you don't recognise."
+   },
+   {
+    "k": "h",
+    "v": "3) When a friend asks for money"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Call them on their normal number and hear their voice",
+     "Ask something only they would know",
+     "Scammers who take over an account message everyone in the contact list"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Turn on the PIN in your chat app.|Check linked devices and remove unknown ones."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Fake links and fake websites",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Check a link before tapping it",
+     "Spot fake websites"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Before you tap"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Who sent it? A stranger, or a friend sending something unusual?",
+     "Long press the link to see the real address",
+     "Short links hide where they go",
+     "Spelling tricks: 'xpertcreatlon.com' instead of 'xpertcreation.com'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) On a website"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Look at the address bar, not the logo - anyone can copy a logo",
+     "Prices that are far too low are a warning",
+     "Only cash-on-delivery or advance payment to a personal account is a warning",
+     "No real address or phone, or reviews that all sound the same"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) If you entered details on a fake page"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Change that password at once, on the real website.|If it was a card or bank login, call your bank's helpline to block it.|Turn on two-step login."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Long press a link in your messages and read the real address.|Type your bank's address yourself and bookmark it."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Mobile wallets and banking",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use mobile banking and wallets safely",
+     "Know what to do if money goes missing"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Everyday rules"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Never share your PIN, card number with the back code, or codes",
+     "Use the official app from the official app store only",
+     "Set a daily transfer limit you are comfortable with",
+     "Turn on SMS or app alerts for every transaction"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) SIM safety"
+   },
+   {
+    "k": "p",
+    "v": "If your phone suddenly shows 'No service' for a long time when others around you have signal, someone may have taken a duplicate of your SIM. Call your telecom company and your bank at once."
+   },
+   {
+    "k": "h",
+    "v": "3) If money goes missing"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Call your bank or wallet's official helpline immediately and ask them to block the account or card.|Note the time, amount and any messages.|Make a written complaint to the bank and keep the reference number.|Report it to the cyber crime authority."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Turn on transaction alerts.|Check your daily transfer limit in your banking app."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Safe phone settings",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Lock down your phone",
+     "Control what apps can see"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The basics"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Screen lock with a PIN, pattern or fingerprint",
+     "Install system updates - they fix security holes",
+     "Install apps only from the official app store",
+     "Turn on the 'find my phone' feature"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) App permissions"
+   },
+   {
+    "k": "p",
+    "v": "A torch app does not need your contacts. Check Settings > Apps > Permissions and remove access to camera, microphone, location, contacts and SMS from apps that do not need them."
+   },
+   {
+    "k": "h",
+    "v": "3) Public Wi-Fi and charging"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Avoid banking on free public Wi-Fi",
+     "Use your own charger and cable in public places",
+     "Do not leave your phone unlocked with others"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Check permissions of 5 apps and remove what they don't need.|Turn on 'find my phone'."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Privacy, blackmail and harassment",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Share less about yourself",
+     "Know what to do if someone threatens you"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Think before you share"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Keep your profile private and accept only people you know",
+     "Don't post your CNIC, home address, travel plans or children's school",
+     "Never send private photos or videos to anyone - they can be saved and misused"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) If someone blackmails or harasses you"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Do not pay and do not send anything more - paying brings more demands.|Do not delete the chats: take screenshots with the date, name and profile link.|Block the person and report the account on the platform.|Tell a trusted family member.|Report it to the cyber crime authority (the National Cyber Crime Investigation Agency, earlier the FIA Cyber Crime Wing). Check its official website for the current helpline and online complaint form."
+   },
+   {
+    "k": "p",
+    "v": "It is not your fault. The law in Pakistan punishes online harassment and blackmail, and complaints can be made confidentially."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Set your social profiles to private.|Save the official cyber crime complaint website in your bookmarks."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Fake jobs and online shopping scams",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Recognise job and earning scams",
+     "Shop online safely"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Job and earning scams"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A real employer does not ask you to pay for a job, visa or 'registration'",
+     "'Like videos and earn' or 'complete tasks' schemes that ask you to deposit money first",
+     "Investment groups promising fixed daily profit",
+     "Check overseas job offers only through licensed agents and official channels"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Shopping"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Buy from known shops or sellers with real reviews",
+     "Prefer cash on delivery or safe payment through the platform when buying from a new seller",
+     "Never send advance money to a personal account for a 'too cheap' phone or bike",
+     "Check the parcel before paying the courier when allowed"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) On XpertCreation"
+   },
+   {
+    "k": "p",
+    "v": "Use the site's own chat and payment options, check the seller's ID-verified badge, and report anyone who asks you to pay outside the site."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write 3 signs of a fake job offer.|Tell one young person in your family about task scams."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — If something goes wrong: action plan",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know the exact steps after a hack or scam",
+     "Make a family safety plan"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 15 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Account hacked"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Use the 'forgot password' option to take it back.|Change the password and log out all other devices.|Turn on two-step login.|Tell your contacts not to trust messages from that account until it is fixed.|Report the hack to the platform."
+   },
+   {
+    "k": "h",
+    "v": "2) Money lost"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Call your bank or wallet helpline at once - minutes matter.|Keep screenshots, numbers and transaction IDs.|File a written complaint with the bank and get a reference.|Report to the cyber crime authority with all the evidence."
+   },
+   {
+    "k": "h",
+    "v": "3) Family safety plan"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A family rule: we never share codes, and we check money requests by phone",
+     "Parents and children can ask each other before tapping a strange link",
+     "Keep important helplines saved: your bank, your telecom company, cyber crime",
+     "Review phone settings of elderly parents once a month"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "You finished the course"
+   },
+   {
+    "k": "p",
+    "v": "Take the quiz to get your certificate, and share this course with your family - one shared lesson can save someone's savings."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write your family safety plan in 5 lines.|Save the three helplines in your phone."
+   }
+  ]
+ }
+}

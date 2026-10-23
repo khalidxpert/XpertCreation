@@ -1,0 +1,603 @@
+{
+ "day-1": {
+  "t": "Day 1 — What a website needs",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand the parts of a website",
+     "Plan what your site is for"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The four parts"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Domain - the address people type, like yourshop.com",
+     "Hosting - a computer on the internet that stores your site and shows it to visitors",
+     "Website software - a free content management system (CMS) that lets you add pages without code",
+     "Content - your text, photos, prices and contact details"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Why a website"
+   },
+   {
+    "k": "p",
+    "v": "Social media pages are rented space: the rules and reach can change any day. A website is yours. It shows up on search, looks professional on a visiting card, and works for you all day."
+   },
+   {
+    "k": "h",
+    "v": "3) Costs"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Domain: a yearly fee",
+     "Hosting: a monthly or yearly fee; small business plans are low-cost",
+     "Website software and many themes: free",
+     "Your time: a weekend for a simple site"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "No budget yet? An XpertCreation Store shop on a free subdomain is a good first step, and you can move to your own domain later."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write in one line what your site is for: sell, show services, or share information.|List 5 things a visitor must find on it."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Choosing a domain name",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pick a good name",
+     "Register it safely in your own name"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) A good domain is"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Short and easy to spell when you say it on the phone",
+     "Your business name or what you do: ahmedtailors.com",
+     "Without hyphens and numbers if possible",
+     ".com for everyone, .pk for a Pakistan audience"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Registering"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Search the name at a domain registrar.|Compare the first-year price and the renewal price - renewal is often higher.|Register it with your own name and email, not your web designer's.|Turn on auto-renew so you never lose it."
+   },
+   {
+    "k": "warn",
+    "v": "If someone else registers the domain for you, make sure the account is in your name. Many businesses lost their domain because only the designer had the login."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write 5 name ideas.|Check which are free.|Pick one and note its yearly renewal price."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Choosing hosting",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand hosting plans",
+     "Choose one that fits a small business"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Types of hosting"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Shared hosting - many sites on one server; cheap and fine for most small sites",
+     "Managed hosting for website builders - easier, a bit more expensive",
+     "Your own server (VPS) - powerful, but you must manage it yourself"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) What to check"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Free SSL certificate - the lock icon and https",
+     "Daily or weekly backups",
+     "A one-click installer for the website software",
+     "Support that answers quickly, ideally in your language",
+     "Enough storage for your photos"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Connect domain and hosting"
+   },
+   {
+    "k": "p",
+    "v": "Your host gives you two 'nameserver' addresses. Paste them in your domain settings at the registrar. It can take a few hours before the domain opens your hosting."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Compare 3 hosting plans for price, SSL, backups and support.|Write which one you would pick and why."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Installing the website software",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Install the free website builder",
+     "Log in to your dashboard safely"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) One-click install"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Log in to your hosting control panel.|Find the app installer and choose the website builder (CMS).|Pick your domain and choose https.|Set the site title, an admin username (not 'admin') and a strong password.|Click install and wait a minute."
+   },
+   {
+    "k": "h",
+    "v": "2) Your dashboard"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pages - Home, About, Contact",
+     "Posts - news or blog articles",
+     "Appearance - themes and menus",
+     "Plugins - add-ons for forms, maps, shops",
+     "Settings - site name, time zone, language"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Save your admin login in a password manager or a safe notebook. Never share it on chat."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Install the website software on a test domain or a free trial.|Log in and open each menu once."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Theme and design",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Choose a clean, fast theme",
+     "Set your logo, colours and fonts"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Choosing a theme"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Light and fast - avoid themes full of moving effects",
+     "Looks good on a phone - most visitors come from mobiles",
+     "Updated recently and well reviewed",
+     "Supports right-to-left text if you will write in Urdu"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Your brand"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Logo at the top left (top right for Urdu)",
+     "Two main colours, used everywhere",
+     "One easy-to-read font for text",
+     "Plenty of white space"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) The menu"
+   },
+   {
+    "k": "p",
+    "v": "Keep the menu short: Home, About, Services or Products, Contact. Five or six items at most."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Install a free theme.|Upload your logo and set two colours.|Open the site on your phone and check it looks right."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Pages every business needs",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Create the main pages",
+     "Know what goes on each one"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Home"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "One sentence: what you do and for whom",
+     "A clear button: Call now, Order, or Get a quote",
+     "3 main services or best products",
+     "Real photos and honest reviews from customers"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Other pages"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "About - your story, team and experience",
+     "Services or Products - each with price or 'from' price",
+     "Contact - phone, email, address, map, working hours",
+     "Privacy policy - what you do with visitors' data"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Write for the visitor"
+   },
+   {
+    "k": "p",
+    "v": "Visitors scan, they don't read. Use short headings, short paragraphs and points. Answer their questions: price, time, location, how to order."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Create the 5 pages.|Write the one-sentence headline for your home page."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Text and pictures",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write clear content",
+     "Add photos that load fast"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Writing"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "One idea per paragraph",
+     "Use the words your customers use when they search",
+     "Check spelling; ask a friend to read it",
+     "Put your phone number where people can tap to call"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Photos"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use your own photos or free stock photos with a licence that allows business use",
+     "Make them smaller before upload: about 1600 pixels wide is enough",
+     "Compress them so each is under 300 KB",
+     "Add 'alt text' - a short description for search engines and blind visitors"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Do not copy pictures or text from other websites. It can bring legal trouble and hurts your search ranking."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Resize and compress 3 photos.|Add them to your Home page with alt text."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Contact forms, maps and calls",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make it easy to contact you",
+     "Keep spam out"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Contact form"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Install a contact form plugin.|Ask only what you need: name, phone, message.|Send the form to your email and test it.|Turn on spam protection (a simple check box or puzzle)."
+   },
+   {
+    "k": "h",
+    "v": "2) Map and address"
+   },
+   {
+    "k": "p",
+    "v": "Add a map of your location from a free map service, with your full address below it. It helps people find you and builds trust."
+   },
+   {
+    "k": "h",
+    "v": "3) Click to call and chat"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make your phone number a tap-to-call link",
+     "Add a chat button that opens your business chat",
+     "Show working hours so people know when you reply"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Add a form, a map and a tap-to-call number to your Contact page.|Send yourself a test message."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Getting found on search",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Help search engines understand your site",
+     "Get listed as a local business"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Basics on every page"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A clear title with your service and city: 'Tailor in Lahore - Ahmed Tailors'",
+     "A one-line description under 160 characters",
+     "One main heading per page",
+     "Fast loading - small photos, few plugins"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Tell search engines about your site"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Turn on the sitemap in your search plugin.|Add your site to the free webmaster tools of the main search engines.|Submit the sitemap link there."
+   },
+   {
+    "k": "h",
+    "v": "3) Local listing"
+   },
+   {
+    "k": "p",
+    "v": "Create a free business listing on the main map services with the same name, address and phone as your site. Ask real customers for reviews."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write titles and descriptions for your 5 pages.|Submit your sitemap."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Security, backups and launch",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Keep your site safe",
+     "Launch with a checklist"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Security"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Update the website software, theme and plugins every month",
+     "Use few plugins, only well-known ones; delete the ones you don't use",
+     "Strong admin password and two-step login",
+     "Never install 'free' copies of paid themes - they often contain malware"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Backups"
+   },
+   {
+    "k": "p",
+    "v": "Turn on automatic backups at your host or with a backup plugin, and keep one copy outside the hosting (for example on your computer). Test once that you can restore it."
+   },
+   {
+    "k": "h",
+    "v": "3) Launch checklist"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Every page opens on phone and computer",
+     "Forms reach your email",
+     "https lock shows on every page",
+     "Phone, address and hours are correct",
+     "Share the link on XpertConnect and your visiting card"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "You finished the course"
+   },
+   {
+    "k": "p",
+    "v": "Take the quiz to get your certificate, then launch your site and update it at least once a month."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Go through the launch checklist.|Set a monthly reminder for updates and backups."
+   }
+  ]
+ }
+}

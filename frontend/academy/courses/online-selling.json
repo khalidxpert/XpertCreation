@@ -1,0 +1,636 @@
+{
+ "day-1": {
+  "t": "Day 1 — How online selling works",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand the ways people sell online",
+     "Pick the model that suits your money and time"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Four common models"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Own stock - you buy products, keep them at home or in a shop, and ship each order",
+     "Handmade - you make the product yourself: food, clothes, crafts, jewellery",
+     "Wholesale and resale - you buy in bulk from a market and sell single pieces with a margin",
+     "Selling for others - you list products of a supplier and take a commission; the supplier ships"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) How the money flows"
+   },
+   {
+    "k": "p",
+    "v": "A customer orders, you pack, a courier delivers. In Pakistan most buyers still pay cash on delivery (COD): the courier collects the cash and sends it to you a few days later, minus its charges. Online payment is growing, and it means fewer refused parcels."
+   },
+   {
+    "k": "h",
+    "v": "3) What it really takes"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A small starting stock - many people start with Rs 10,000 to 30,000",
+     "1 to 3 hours a day for messages, packing and posting",
+     "Patience: the first orders take weeks, not days"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Be careful with anyone who sells you a 'ready-made shop' that 'earns by itself'. Every real shop needs work, good products and honest service."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write which of the four models fits you.|Write how much money you can risk without hurting your home budget.|Write how many hours a day you can give."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Choosing what to sell",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Find a product people want",
+     "Check it is worth selling before you buy"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) A good first product is"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Light and small - cheap to deliver",
+     "Hard to break - fewer returns",
+     "Something people buy again - tea, skin care, stationery, baby items",
+     "Priced between Rs 800 and Rs 5,000 - easy to buy, still leaves profit",
+     "Easy to explain in a photo"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Check demand"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Search the product on XpertCreation Store and other shops.|Note how many sellers there are and their prices.|Read reviews: what do buyers complain about? That is your chance to do better.|Ask 10 people you know if they would buy it, and at what price."
+   },
+   {
+    "k": "h",
+    "v": "3) What not to sell"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Copies of famous brands - it is illegal and accounts get closed",
+     "Medicines, weapons, or anything that needs a licence you don't have",
+     "Products you cannot get again when they sell out"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|List 5 product ideas.|Score each from 1 to 5 for weight, breakage, repeat buying and profit.|Keep the top 2 for tomorrow."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Buying stock and setting the price",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Find a reliable supplier",
+     "Work out your real cost and a fair price"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Where to buy"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Wholesale markets in your city",
+     "Factories and small makers who sell in bulk",
+     "Suppliers on business-to-business websites - order a sample first"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Your real cost per piece"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Purchase price of one piece|+ packing (bag, box, tape, label)|+ your share of delivery, if you offer free delivery|+ a little for returns and damage (about 5%)|+ any platform or payment fee|= your real cost"
+   },
+   {
+    "k": "h",
+    "v": "3) Setting the price"
+   },
+   {
+    "k": "p",
+    "v": "Look at the market price, then make sure you keep a healthy profit over your real cost. Many small sellers aim for 25% to 40% profit. If the market price leaves you almost nothing, choose another product rather than selling at a loss."
+   },
+   {
+    "k": "warn",
+    "v": "Always buy a small quantity first. Check the quality yourself before buying 100 pieces."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a cost sheet for one product with the five lines above.|Write the price you will sell at and your profit per piece."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Photos and listings that sell",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Take clear product photos with your phone",
+     "Write a title and description buyers trust"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Photos"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Daylight from a window, no harsh flash",
+     "Plain white or light background - a sheet of chart paper works",
+     "At least 4 photos: front, back, close-up, the product in use",
+     "Show the size: in a hand or next to a common object",
+     "Real photos of your own stock, never copied from others"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Title formula"
+   },
+   {
+    "k": "p",
+    "v": "What it is + key feature + size or quantity + who it is for. Example: 'Cotton baby blanket, soft double layer, 100 x 80 cm, for newborns'."
+   },
+   {
+    "k": "h",
+    "v": "3) Description"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "First line: the main benefit",
+     "Short points: material, size, colour, what is in the box",
+     "Care instructions and delivery time",
+     "Honest notes: if the colour looks slightly different in light, say so"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Take 4 photos of one product.|Write its title with the formula.|Write a 5-point description."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Your shop on XpertCreation Store",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Set up your shop",
+     "Add your first products with stock"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Before you start"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Complete your XpertCreation profile with a real photo",
+     "Finish KYC - shops are approved only after it",
+     "Choose a shop name that is short and easy to say"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Set up the shop"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Open Store and apply as a merchant.|Add your logo, banner, city and a short About text.|Write your delivery and return policy in plain words.|Pick a plan that fits the number of products you will list."
+   },
+   {
+    "k": "h",
+    "v": "3) Add products and stock"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Upload the photos and listing from Day 4",
+     "Enter the quantity you really have",
+     "Set a reorder level - for example 5 - so you get a reminder before you run out",
+     "Use wholesale prices with a minimum quantity if you also sell to shops"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write your shop name and About text.|Add 3 products with photos, price and stock."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Orders, packing and delivery",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Handle an order from start to finish",
+     "Pack so nothing breaks"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) When an order comes"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Confirm the order with the buyer by message or call, especially for cash on delivery.|Check the address and phone number.|Pack the same day if you can.|Book the courier and share the tracking number with the buyer."
+   },
+   {
+    "k": "h",
+    "v": "2) Packing"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A plastic bag inside a box keeps out water",
+     "Bubble wrap or newspaper around anything that can break",
+     "Label with name, address, phone and order number",
+     "A small thank-you card brings repeat buyers"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Delivery"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Compare courier rates and how fast they pay you the COD cash",
+     "Decide: free delivery (price includes it) or a fixed delivery charge",
+     "Keep a list of parcels and follow up any that are late"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Confirm cash-on-delivery orders before sending. Refused parcels cost you delivery both ways."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write your order confirmation message.|Pack one product as if it were going to another city."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Returns, reviews and customer service",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a fair return policy",
+     "Turn unhappy buyers into loyal ones"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Return policy"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "How many days the buyer has (for example 7 days)",
+     "Which items cannot be returned (used, opened food, undergarments)",
+     "Who pays the return delivery",
+     "How fast you refund or replace"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Reviews"
+   },
+   {
+    "k": "p",
+    "v": "Ask happy buyers to leave an honest review. Never write fake reviews or pay for them - buyers notice, and the platform can close your shop. One honest 4-star review with a photo is worth more than ten fake 5-star ones."
+   },
+   {
+    "k": "h",
+    "v": "3) Handling complaints"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Reply within a few hours.|Say sorry for the trouble, even if it was the courier's fault.|Offer a solution: replace, refund or a discount on the next order.|Learn from it: change the packing, the photo or the description."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write your return policy in 4 lines.|Write a polite reply to 'My item arrived broken'."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Big marketplaces and selling abroad",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand how large international marketplaces work",
+     "Know what you need before you apply"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) How they work"
+   },
+   {
+    "k": "p",
+    "v": "Large marketplaces bring millions of buyers but charge a fee on every sale, and some charge a monthly fee. Many offer a warehouse service: you send your stock to their warehouse, and they pack, ship and handle returns for an extra fee."
+   },
+   {
+    "k": "h",
+    "v": "2) What you usually need"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Your ID card and proof of address",
+     "A bank account that can receive foreign payments",
+     "Sometimes a registered business and a tax number",
+     "Products with a barcode and proper labels",
+     "Money for stock, shipping to the warehouse and fees, before the first payment arrives"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Start small"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Learn with one or two products first",
+     "Work out every fee before you set the price",
+     "Expect a few months before steady sales",
+     "Handmade and local products (shawls, leather, ceramics) do well abroad"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Many paid courses promise quick money from foreign marketplaces. Read each marketplace's own seller rules for free first; they change often."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|List the documents you already have and the ones you would need.|Pick one local product that could sell abroad and write why."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Getting customers",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Bring people to your shop",
+     "Turn first-time buyers into repeat buyers"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Free ways"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Post your products on XpertConnect with a clear photo and price",
+     "Share your shop link with friends, family and local groups",
+     "Short videos: unboxing, how to use, before and after",
+     "Answer questions fast - quick replies win sales"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Paid ways"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Boost your best product, not your whole shop",
+     "Start with a small budget and check the results",
+     "Run an offer with an end date: 'Free delivery till Sunday'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Keep them coming back"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A thank-you card with a small discount code",
+     "A message when new stock arrives",
+     "Bundles: buy 2, get a better price"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write 3 posts for one product: a photo post, a short video idea and an offer.|Write your thank-you card text."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Money, records and growing",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know if your shop is really making profit",
+     "Plan your next step"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Keep simple records"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Every sale: date, product, price, delivery charge, COD received or not",
+     "Every expense: stock, packing, courier, boosts, fees",
+     "Once a month: total sales - total costs = profit"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Watch your cash"
+   },
+   {
+    "k": "p",
+    "v": "Cash on delivery money often reaches you days later, while you pay for new stock today. Keep some cash aside so you can restock without stopping."
+   },
+   {
+    "k": "h",
+    "v": "3) Growing"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Add products your buyers ask for",
+     "Drop products that sit unsold for months",
+     "When sales grow, register your business and get a tax number - it opens bigger buyers and marketplaces",
+     "Write down what you learned each month"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "You finished the course"
+   },
+   {
+    "k": "p",
+    "v": "Take the quiz to get your certificate. Then open one shop, list three good products, and serve your first ten buyers really well."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a one-month sheet for sales and expenses.|Write your goal for the next 3 months."
+   }
+  ]
+ }
+}
