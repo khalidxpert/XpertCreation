@@ -191,3 +191,6 @@ body.xc-app .thd3 .xkbtn:active{background:rgba(255,255,255,.34)!important}
 .gh .xkbar{display:inline-flex;gap:6px;flex:0 0 auto}
 .gh .xkbtn{width:40px;height:40px;border-radius:50%;background:#EEF2FF!important;color:#1B4DFF!important}
 .gh .xkbtn svg{width:21px;height:21px}
+
+/* v6: back arrow lined up with the picture and the call buttons */
+body.xc-app .thd3 .back3{align-self:center!important}

@@ -156,6 +156,8 @@ def _tidy(c):
         return c
     now = _now()
     CallMember.objects.filter(call=c, state="joined", seen__lt=now - timedelta(seconds=STALE_SECS)).update(state="left")
+    if c.state == "live":
+        CallMember.objects.filter(call=c, state="ringing", seen__isnull=False, seen__lt=now - timedelta(seconds=RING_SECS)).update(state="declined")
     joined = CallMember.objects.filter(call=c, state="joined").count()
     if c.kind == "m":
         exp = c.expires_at or ((max(c.created, c.starts_at) if c.starts_at else c.created) + timedelta(seconds=MEET_WAIT_SECS))
@@ -184,20 +186,26 @@ def _person(u):
 
 
 def _json(c, me):
+    ms = list(CallMember.objects.filter(call=c).select_related("user"))
     if c.kind == "t":
         t = ChatThread.objects.filter(pk=c.ref_id).select_related("a", "b").first()
         title = V._name(t.other(me)) if t and t.has(me) else "Call"
         avatar = V._avatar(t.other(me)) if t and t.has(me) else ""
         link = "/chat?open=%d" % c.ref_id
+        others = [m.user for m in ms if m.user_id != me.id and m.state in ("ringing", "joined")]
+        if len(ms) > 2 or not (t and t.has(me)):
+            title = ", ".join(V._name(x) for x in others[:3]) or title
+            avatar = V._avatar(others[0]) if others else avatar
     elif c.kind == "g":
         g = ChatGroup.objects.filter(pk=c.ref_id).first()
         title, avatar, link = (g.name if g else "Group call"), "", "/group/%d" % c.ref_id
     else:
         title, avatar, link = (c.title or "XpertMeet meeting"), "", "/call?meet=%s" % c.code
-    ms = list(CallMember.objects.filter(call=c).select_related("user"))
+    stv = cache.get_many(["xccall:st:%d:%d" % (c.id, m.user_id) for m in ms]) if ms else {}
     return {"id": c.id, "kind": c.kind, "ref_id": c.ref_id, "video": c.video, "state": c.state, "title": title, "avatar": avatar,
-            "caller": _person(c.caller), "me": me.id, "max": 2 if c.kind == "t" else MAX_PEOPLE, "link": link, "code": c.code if c.kind == "m" else "",
-            "members": [dict(_person(m.user), state=m.state) for m in ms],
+            "caller": _person(c.caller), "me": me.id, "max": 2 if c.kind == "t" and len(ms) <= 2 else MAX_PEOPLE, "created": c.created.isoformat(),
+            "lock": bool(cache.get("xccall:lock:%d" % c.id)), "link": link, "code": c.code if c.kind == "m" else "",
+            "members": [dict(_person(m.user), state=m.state, st=stv.get("xccall:st:%d:%d" % (c.id, m.user_id)) or {}) for m in ms],
             "answered_at": c.answered_at.isoformat() if c.answered_at else None, "now": _now().isoformat(),
             "starts_at": c.starts_at.isoformat() if c.starts_at else None, "host": c.caller_id == me.id,
             "meeting_no": c.meeting_no if c.kind == "m" else "", "speaker": c.speaker, "org": c.org, "tz": c.tz, "schedule": c.schedule or [],
@@ -335,9 +343,10 @@ def incoming(request):
         unread = _unread(u)
     except Exception:
         unread = None
-    for m in CallMember.objects.filter(user=u, state="ringing", call__state="ringing", call__kind="t", call__created__gte=since).select_related("call", "call__caller"):
+    for m in CallMember.objects.filter(Q(call__created__gte=since) | Q(seen__gte=since), user=u, state="ringing", call__state__in=ACTIVE,
+                                       call__kind__in=("t", "m")).select_related("call", "call__caller"):
         c = _tidy(m.call)
-        if c.state == "ringing":
+        if c.state in ACTIVE and CallMember.objects.filter(pk=m.pk, state="ringing").exists():
             return Response({"call": _json(c, u), "unread": unread})
     return Response({"call": None, "unread": unread})
 
@@ -389,7 +398,13 @@ def join(request, pk):
     m = CallMember.objects.filter(call=c, user=u).first()
     if c.kind == "t" and not m:
         return _err("Call not found.", 404)
-    if c.kind == "m" and c.passcode and c.caller_id != u.id and not (m and m.state in ("joined", "left")):
+    if cache.get("xccall:out:%d:%d" % (c.id, u.id)):
+        return _err("The host removed you from this call.", 403)
+    if cache.get("xccall:lock:%d" % c.id) and c.caller_id != u.id and not (m and m.state in ("joined", "ringing")):
+        return _err("The host has locked this meeting. Ask the host to unlock it.", 423)
+    if c.kind == "t" and g_blocked_or_full(c, u):
+        return _err("This call is full (%d people)." % MAX_PEOPLE, 409)
+    if c.kind == "m" and c.passcode and c.caller_id != u.id and not (m and m.state in ("joined", "left", "ringing")):
         pw = str(request.data.get("pwd") or request.GET.get("pwd") or "").strip()
         if not cache.add("xcmpw:%d:%d" % (c.pk, u.pk), 1, 2):
             return _err("Please wait a moment.", 429)
@@ -470,8 +485,10 @@ def signal(request, pk):
     if not c or c.state not in ACTIVE:
         return _err("This call has ended.", 410)
     kind, data = str(d.get("kind") or ""), d.get("data")
-    if kind not in ("offer", "answer", "ice", "bye", "chat"):
+    if kind not in ("offer", "answer", "ice", "bye", "chat", "rx", "st", "cap", "host"):
         return _err("Unknown message.")
+    if kind in ("rx", "st", "cap", "host"):
+        return _extra_signal(c, u, kind, data, d.get("to"))
     if kind == "chat" and len(data if isinstance(data, str) else json.dumps(data)) > 3000:
         return _err("Message too long.")
     data = data if isinstance(data, str) else json.dumps(data)
@@ -483,7 +500,7 @@ def signal(request, pk):
         return _err("Who to?")
     if not CallMember.objects.filter(call=c, user=u, state="joined").exists() or not CallMember.objects.filter(call=c, user_id=to).exclude(state="declined").exists():
         return _err("Not in this call.", 403)
-    if Signal.objects.filter(call=c, sender=u).count() > 400:
+    if Signal.objects.filter(call=c, sender=u, kind__in=("offer", "answer", "ice", "bye")).count() > 400:
         return _err("Too many messages.", 429)
     s = Signal.objects.create(call=c, sender=u, to_id=to, kind=kind, data=data)
     return Response({"id": s.id})
@@ -611,3 +628,110 @@ def decline_push(request, pk):
     if c.kind == "t" and c.state == "ringing":
         _finish(c, "declined")
     return Response({"ok": True})
+
+
+
+# ---------------------------------------------------------------- v7: more people, reactions, hands, captions, host tools
+def _everyone(c, but):
+    return list(CallMember.objects.filter(call=c, state="joined").exclude(user_id=but.id).values_list("user_id", flat=True))
+
+
+def _extra_signal(c, u, kind, data, to):
+    if not CallMember.objects.filter(call=c, user=u, state="joined").exists():
+        return _err("Not in this call.", 403)
+    raw = data if isinstance(data, str) else json.dumps(data)
+    if len(raw) > 2000:
+        return _err("Too big.")
+    try:
+        obj = json.loads(raw) if raw else {}
+    except ValueError:
+        return _err("Bad message.")
+    if not isinstance(obj, dict):
+        return _err("Bad message.")
+    rk = "xccall:rate:%d:%d" % (c.id, u.id)
+    if cache.add(rk, 1, 60):
+        n = 1
+    else:
+        try:
+            n = cache.incr(rk)
+        except ValueError:
+            cache.set(rk, 1, 60); n = 1
+    if n > 150:
+        return _err("Slow down a little.", 429)
+    if kind == "st":              # my microphone, camera and raised hand - everyone sees it on the next poll
+        st = {k: bool(obj.get(k)) for k in ("mic", "cam", "hand")}
+        cache.set("xccall:st:%d:%d" % (c.id, u.id), st, 6 * 3600)
+        return Response({"ok": True})
+    if kind == "host":
+        if c.caller_id != u.id:
+            return _err("Only the host can do that.", 403)
+        act = str(obj.get("a") or "")
+        try:
+            who = int(obj.get("u") or 0)
+        except (TypeError, ValueError):
+            who = 0
+        if act == "lock":
+            cache.set("xccall:lock:%d" % c.id, 1, 24 * 3600)
+        elif act == "unlock":
+            cache.delete("xccall:lock:%d" % c.id)
+        elif act == "remove" and who and who != u.id:
+            CallMember.objects.filter(call=c, user_id=who, state__in=("joined", "ringing")).update(state="left")
+            cache.set("xccall:out:%d:%d" % (c.id, who), 1, 24 * 3600)
+            Signal.objects.create(call=c, sender=u, to_id=who, kind="host", data=json.dumps({"a": "removed"}))
+        elif act in ("mute", "lower") and who:
+            if CallMember.objects.filter(call=c, user_id=who, state="joined").exists():
+                Signal.objects.create(call=c, sender=u, to_id=who, kind="host", data=json.dumps({"a": act}))
+        elif act in ("mute_all", "lower_all"):
+            for uid in _everyone(c, u):
+                Signal.objects.create(call=c, sender=u, to_id=uid, kind="host", data=json.dumps({"a": act[:-4]}))
+        else:
+            return _err("Unknown host action.")
+        return Response({"ok": True, "lock": bool(cache.get("xccall:lock:%d" % c.id))})
+    clean = json.dumps({k: (str(v)[:400] if isinstance(v, str) else v) for k, v in obj.items() if k in ("e", "t", "n", "lang", "final")})
+    for uid in _everyone(c, u):
+        Signal.objects.create(call=c, sender=u, to_id=uid, kind=kind, data=clean)
+    return Response({"ok": True})
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_person(request, pk):
+    """Ring one more person into a one-to-one call or a meeting: {thread: id of my chat with that person}."""
+    u, d = request.user, request.data
+    c = _get(pk, u, request)
+    if not c:
+        return _err("Call not found.", 404)
+    c = _tidy(c)
+    if c.state not in ACTIVE:
+        return _err("This call has ended.", 410)
+    if c.kind not in ("t", "m"):
+        return _err("In a group call, people join from the group.")
+    if not CallMember.objects.filter(call=c, user=u, state="joined").exists():
+        return _err("Join the call first.", 403)
+    if c.kind == "m" and c.caller_id != u.id and cache.get("xccall:lock:%d" % c.id):
+        return _err("The meeting is locked.", 423)
+    if not cache.add("xccall:add:%d" % u.pk, 1, 3):
+        return _err("Please wait a moment.", 429)
+    try:
+        t = ChatThread.objects.select_related("a", "b").get(pk=int(d.get("thread")))
+    except (ChatThread.DoesNotExist, TypeError, ValueError):
+        return _err("Chat not found.", 404)
+    if not t.has(u):
+        return _err("Chat not found.", 404)
+    other = t.other(u)
+    if V._blocked(u, other):
+        return _err("You can't call this person.", 403)
+    m = CallMember.objects.filter(call=c, user=other).first()
+    if m and m.state == "joined":
+        return _err("%s is already in this call." % V._name(other), 409)
+    if CallMember.objects.filter(call=c, state__in=("joined", "ringing")).exclude(user=other).count() >= MAX_PEOPLE:
+        return _err("This call is full (%d people)." % MAX_PEOPLE, 409)
+    if _busy(other, but=c.id):
+        return _err("%s is on another call right now." % V._name(other), 409)
+    cache.delete("xccall:out:%d:%d" % (c.id, other.id))
+    if m:
+        m.state, m.seen = "ringing", _now(); m.save(update_fields=["state", "seen"])
+    else:
+        CallMember.objects.create(call=c, user=other, state="ringing", seen=_now())
+    _ring(other, c, V._name(u))
+    return Response(_json(c, u))

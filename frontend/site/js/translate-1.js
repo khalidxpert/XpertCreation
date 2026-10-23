@@ -18,7 +18,21 @@
     var b = document.createElement("button"); b.type = "button"; b.className = "xtr"; b.textContent = "\uD83C\uDF10 Translate";
     el.insertAdjacentElement("afterend", b);
   }
-  function scan(){ [].forEach.call(document.querySelectorAll(".fbody, .msg8 .cb"), add); }
+  function scan(){ [].forEach.call(document.querySelectorAll(".fbody"), add); }
+  /* v2: in XpertChat, Translate is in the message menu (tap a message), not under every message */
+  window.XCTR = {open: function(el){
+    if (!el) return;
+    var b = el.nextElementSibling;
+    if (!b || !b.classList.contains("xtr")){ b = document.createElement("button"); b.type = "button"; b.className = "xtr"; b.textContent = "\uD83C\uDF10 Translate"; el.setAttribute("data-xtr", "1"); el.insertAdjacentElement("afterend", b); }
+    b.click();
+    setTimeout(function(){ var m = b.nextElementSibling; if (m && m.scrollIntoView) m.scrollIntoView({block: "nearest", behavior: "smooth"}); }, 60);
+  }};
+  document.addEventListener("click", function(e){
+    var t = e.target.closest && e.target.closest("[data-xtr3]"); if (!t) return;
+    e.preventDefault(); e.stopPropagation();
+    var p = document.getElementById("panel3"); if (p) p.remove();
+    window.XCTR.open(document.querySelector('.msg8[data-mid="' + t.getAttribute("data-xtr3") + '"] .cb'));
+  }, true);
   function run(btn, to, name){
     var src = btn.previousElementSibling; while (src && !src.matches(".fbody, .cb")) src = src.previousElementSibling;
     if (!src) return;

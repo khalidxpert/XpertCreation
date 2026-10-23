@@ -224,7 +224,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 .nempty{padding:30px 16px;text-align:center;font-size:13px;color:var(--ink-soft,#5A657C)}
 </style>
 <script src="/js/voice-1.js?v=1"></script>
-<link rel="stylesheet" href="/css/xpertchat-1.css?v=6">
+<link rel="stylesheet" href="/css/xpertchat-1.css?v=7">
 <script src="/js/stickerpacks-1.js?v=1"></script>
 <script src="/js/bizstickers-1.js?v=1" defer></script>
 <link rel="preload" href="/fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -239,7 +239,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   <a class="gear" href="https://xpertcreation.com" aria-label="Home" title="Home">
     <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
 </header>
-<script src="/js/topnav-1.js?v=87" defer></script>
+<script src="/js/topnav-1.js?v=88" defer></script>
 
 <div class="wrap">
   <h1>Chat</h1>
@@ -764,7 +764,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     if (bb3 && current && !e.target.closest("a") && !document.body.classList.contains("selmode") && !$("panel3")){
       var id3 = +bb3.getAttribute("data-mid"), isP = PINS3.some(function(p){ return p.id === id3; }), m3 = MSG3[id3] || {};
       panel("Message", '<div class="ct3" style="padding:0"><button class="pbt3" data-pin3="' + id3 + '">' + (isP ? "Unpin" : "\uD83D\uDCCC Pin") + '</button>'
-        + (m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-copy="' + esc(m3.body) + '">Copy text</button>' : '') + (m3.mine && !m3.deleted && m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-xedit="' + id3 + '">\u270F\uFE0F Edit</button>' : '') + (m3.deleted ? '' : '<button class="pbt3 ghost" data-xdelme="' + id3 + '">\uD83D\uDDD1 Delete for me</button>') + (m3.mine && !m3.deleted ? '<button class="pbt3 ghost" data-xdelall="' + id3 + '" style="color:#B91C1C">\uD83D\uDDD1 Delete for everyone</button>' : '') + '<button class="pbt3 ghost" data-pclose>Cancel</button></div>');
+        + (m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-copy="' + esc(m3.body) + '">Copy text</button>' : '') + (m3.body && !m3.deleted && m3.body.indexOf("[sticker:") !== 0 && window.XCTR ? '<button class="pbt3 ghost" data-xtr3="' + id3 + '">🌐 Translate</button>' : '') + (m3.mine && !m3.deleted && m3.body && m3.body.indexOf("[sticker:") !== 0 ? '<button class="pbt3 ghost" data-xedit="' + id3 + '">\u270F\uFE0F Edit</button>' : '') + (m3.deleted ? '' : '<button class="pbt3 ghost" data-xdelme="' + id3 + '">\uD83D\uDDD1 Delete for me</button>') + (m3.mine && !m3.deleted ? '<button class="pbt3 ghost" data-xdelall="' + id3 + '" style="color:#B91C1C">\uD83D\uDDD1 Delete for everyone</button>' : '') + '<button class="pbt3 ghost" data-pclose>Cancel</button></div>');
       return;
     }
     var pn3 = e.target.closest("[data-pin3]");
@@ -979,7 +979,28 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   }
 })();
 </script>
-<script src="/js/translate-1.js?v=1" defer></script>
+<script src="/js/translate-1.js?v=3" defer></script>
+<script>
+/* v8: the chat stays at the newest message - when it opens, when you send, while pictures and voice notes load,
+   and when the keyboard opens - unless you scroll up to read older messages */
+(function(){
+  var box = document.getElementById("msgs3"); if (!box) return;
+  var stick = true, touched = 0;
+  function bottom(){ box.scrollTop = box.scrollHeight; }
+  function near(){ return box.scrollHeight - box.scrollTop - box.clientHeight < 160; }
+  ["touchstart", "touchmove", "wheel", "mousedown"].forEach(function(ev){ box.addEventListener(ev, function(){ touched = Date.now(); }, {passive: true}); });
+  box.addEventListener("scroll", function(){ if (Date.now() - touched < 1200) stick = near(); }, {passive: true});
+  new MutationObserver(function(){ if (stick) bottom(); }).observe(box, {childList: true, subtree: true});
+  box.addEventListener("load", function(){ if (stick) bottom(); }, true);
+  if (window.ResizeObserver) new ResizeObserver(function(){ if (stick) bottom(); }).observe(box);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", function(){ if (stick) setTimeout(bottom, 60); });
+  var h1 = document.querySelector(".wrap h1");
+  if (h1) new MutationObserver(function(){ stick = true; bottom(); [150, 500, 1200].forEach(function(t){ setTimeout(function(){ if (stick) bottom(); }, t); }); }).observe(h1, {childList: true, characterData: true, subtree: true});
+  var again = function(){ stick = true; bottom(); setTimeout(bottom, 80); setTimeout(bottom, 400); };
+  document.addEventListener("click", function(e){ if (e.target.closest && e.target.closest("#csend")) again(); }, true);
+  document.addEventListener("keydown", function(e){ if (e.key === "Enter" && !e.shiftKey && e.target && e.target.id === "cinput") again(); }, true);
+})();
+</script>
 <script>
 /* live count on the Chat rooms button */
 (function(){ var a = document.getElementById("xcrooms"); if (!a) return;
@@ -989,7 +1010,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 <script src="/js/xcbar-1.js?v=2" defer></script>
 <script src="/js/xchat-1.js" defer></script>
 <script src="/js/xpertchat-1.js?v=6" defer></script>
-<script src="/js/xcall-1.js?v=6" defer></script>
+<script src="/js/xcall-1.js?v=7" defer></script>
 <script src="/js/xcam-1.js?v=5" defer></script>
 <script src="/js/chatplus-1.js?v=6" defer></script>
 <script src="/js/xscan-1.js?v=2" defer></script>

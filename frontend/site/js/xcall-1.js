@@ -190,6 +190,7 @@
       + '<div class="xkcw"><button class="xkc" data-k="flip" aria-label="Switch camera">' + ICON.flip + '</button><div class="xklbl">Flip</div></div>'
       + (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia && !/Android|iPhone|iPad/i.test(navigator.userAgent) ? '<div class="xkcw"><button class="xkc" data-k="screen" aria-label="Share screen">' + ICON.screen + '</button><div class="xklbl">Screen</div></div>' : "")
       + '<div class="xkcw"><button class="xkc" data-k="chat" aria-label="Chat in this call">' + ICON.chat + '</button><div class="xklbl">Chat</div></div>'
+      + '<div class="xkcw"><button class="xkc" data-k="more" aria-label="More">' + ICON.more + '</button><div class="xklbl">More</div></div>'
       + '<div class="xkcw"><button class="xkc red" data-k="end" aria-label="End call">' + ICON.end + '</button><div class="xklbl">End</div></div>'
       + '</div>';
     B.appendChild(ov); this.ov = ov; this.stage = ov.querySelector(".xkstage"); this.stEl = ov.querySelector(".xkst");
@@ -202,8 +203,9 @@
       else if (k === "cam") self.toggleCam(b);
       else if (k === "flip") self.flip();
       else if (k === "chat") self.chat();
+      else if (k === "more") self.more();
       else if (k === "screen") self.toggleScreen(b);
-      else if (k === "copy"){ var u = meetUrl(c); (navigator.share ? navigator.share({title: c.title || "XpertMeet", text: "Join my XpertMeet meeting", url: u}) : navigator.clipboard.writeText(u)).then(function(){ self.say("Link ready to share."); }).catch(function(){}); }
+      else if (k === "copy") self.shareInvite(false);
     });
     this.status();
   };
@@ -274,6 +276,211 @@
     if (!this.chatUnread){ if (g) g.remove(); return; }
     if (!g){ g = D.createElement("span"); g.className = "xkbdg"; b.parentNode.appendChild(g); }
     g.textContent = this.chatUnread > 9 ? "9+" : this.chatUnread;
+  };
+  /* v7: meeting tools - raise hand, reactions, participants, add a person, live captions, meeting info, host tools, settings */
+  ICON.more = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/></svg>';
+  var MTCSS = ".xktile .xkav{width:min(42vw,180px);height:min(42vw,180px);font-size:4rem}"
+    + ".xkhnd{position:absolute;top:8px;left:8px;z-index:4;background:#FBBF24;color:#111;border-radius:12px;padding:3px 9px;font-size:.95rem;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.35)}"
+    + ".xkself .xkhnd{top:6px;left:6px;font-size:.8rem;padding:2px 6px}.xknm .xkmo{margin-left:5px}"
+    + ".xkfx{position:absolute;bottom:14%;font-size:44px;z-index:5;pointer-events:none;animation:xkup 2.6s ease-out forwards}"
+    + "@keyframes xkup{0%{transform:translateY(0) scale(.6);opacity:0}15%{transform:translateY(-10px) scale(1.15);opacity:1}100%{transform:translateY(-230px) scale(1);opacity:0}}"
+    + ".xkcap{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);max-width:92%;background:rgba(0,0,0,.78);color:#fff;padding:8px 14px;border-radius:12px;font-size:1.05rem;line-height:1.4;z-index:5;text-align:center}.xkcap b{color:#FBBF24;margin-right:6px}"
+    + ".xksh{position:absolute;left:0;right:0;bottom:0;max-height:78%;overflow:auto;background:#0f172a;border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.5);z-index:7;padding:6px 14px calc(16px + env(safe-area-inset-bottom))}"
+    + ".xksh .grab{width:44px;height:5px;border-radius:3px;background:rgba(255,255,255,.3);margin:6px auto 10px}.xksh h3{margin:4px 2px 12px;font-size:1.05rem;display:flex;justify-content:space-between;align-items:center}.xksh h3 button{background:none;border:0;color:#fff;font-size:26px;line-height:1;cursor:pointer}"
+    + ".xkrx{display:flex;gap:8px;align-items:center;overflow-x:auto;padding-bottom:8px}.xkrx button{flex:none;border:0;background:rgba(255,255,255,.1);color:#fff;border-radius:22px;font-size:24px;width:48px;height:48px;cursor:pointer}"
+    + ".xkrx .hand{width:auto;padding:0 16px;font-size:1rem;font-weight:700;display:flex;align-items:center;gap:6px}.xkrx .hand.on{background:#FBBF24;color:#111}"
+    + ".xkgd{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.xkgd button{border:0;background:transparent;color:#fff;padding:12px 4px;border-radius:12px;cursor:pointer;font:inherit;font-size:.88rem;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}"
+    + ".xkgd button:active,.xkgd button:hover{background:rgba(255,255,255,.08)}.xkgd i{font-style:normal;font-size:26px;line-height:1}.xkgd button.on i{filter:drop-shadow(0 0 6px #22c55e)}.xkgd sup{position:absolute;top:8px;right:28%;font-size:.75rem;font-weight:700}"
+    + ".xkpr{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.08)}.xkpr .av{width:40px;height:40px;border-radius:50%;background:#2a3a5e center/cover;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}"
+    + ".xkpr .nm{flex:1;min-width:0}.xkpr .nm b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xkpr .nm small{opacity:.65}.xkpr .ic{font-size:1.05rem;display:flex;gap:6px}"
+    + ".xkpr{flex-wrap:wrap}.xkpr .act{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;flex-basis:100%;padding-left:50px}.xkpr .act button,.xkbtns button{border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;border-radius:14px;padding:5px 10px;font:inherit;font-size:.8rem;cursor:pointer}"
+    + ".xkbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.xkbtns button{padding:9px 14px;font-size:.9rem}.xkbtns button.g{background:#0f9d58;border-color:#0f9d58}.xkbtns button.r{background:#e53935;border-color:#e53935}"
+    + ".xksh input[type=search]{width:100%;box-sizing:border-box;border-radius:12px;border:0;padding:11px 14px;font:inherit;font-size:16px;margin-bottom:8px}"
+    + ".xkset{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 2px;border-bottom:1px solid rgba(255,255,255,.08)}.xkset input{width:22px;height:22px}.xkset select{font:inherit;border-radius:8px;padding:6px}"
+    + ".xkinfo p{margin:6px 0;line-height:1.5}.xkinfo .k{opacity:.65;display:inline-block;min-width:96px}"
+    + "@media(max-width:430px){.xkctl{gap:8px}.xkc{width:50px;height:50px}.xklbl{font-size:.7rem}}";
+  function mtCss(){ if (!D.getElementById("xkmtcss")){ var s = D.createElement("style"); s.id = "xkmtcss"; s.textContent = MTCSS; D.head.appendChild(s); } }
+  function pref(k, d){ try { var v = localStorage.getItem("xc_mt_" + k); return v === null ? d : v === "1" ? true : v === "0" ? false : v; } catch (e) { return d; } }
+  function setPref(k, v){ try { localStorage.setItem("xc_mt_" + k, v === true ? "1" : v === false ? "0" : v); } catch (e) {} }
+  var RX = ["👍", "❤️", "😂", "👏", "🎉", "😮"];
+
+  Call.prototype.isHost = function(){ return this.c && this.c.caller && this.c.caller.id === this.me && this.c.kind !== "t"; };
+  Call.prototype.nameOf = function(uid){ return (this.names[uid] || {}).name || "Someone"; };
+  Call.prototype.pushSt = function(){ if (this.stopped) return; this.send(0, "st", {mic: !this.muted, cam: !this.camOff, hand: !!this.hand}); };
+  Call.prototype.sheet = function(title, html){
+    mtCss(); this.closeSheet();
+    var s = D.createElement("div"); s.className = "xksh";
+    s.innerHTML = '<div class="grab"></div>' + (title ? '<h3>' + esc(title) + '<button type="button" data-x aria-label="Close">×</button></h3>' : "") + html;
+    s.addEventListener("click", function(e){ e.stopPropagation(); if (e.target.closest("[data-x]")) s.remove(); });
+    this.ov.appendChild(s); return s;
+  };
+  Call.prototype.closeSheet = function(){ var o = this.ov && this.ov.querySelector(".xksh"); if (o) o.remove(); };
+  Call.prototype.more = function(){
+    var self = this, c = this.c, n = (c.members || []).filter(function(m){ return m.state === "joined"; }).length;
+    var items = [["people", "👥", "Participants", n], c.kind !== "g" ? ["add", "➕", "Add person"] : null, ["cap", "💬", this.capOn ? "Stop captions" : "Live captions", 0, this.capOn],
+      ["info", "ℹ️", c.kind === "m" ? "Meeting info" : "Call info"], this.isHost() ? ["host", "🛡️", "Host tools"] : null, c.kind === "m" ? ["invite", "📋", "Copy invitation"] : null, ["set", "⚙️", "Settings"]];
+    var s = this.sheet("", '<div class="xkrx"><button type="button" class="hand' + (this.hand ? " on" : "") + '" data-m="hand">✋ ' + (this.hand ? "Lower hand" : "Raise hand") + '</button>'
+      + RX.map(function(e){ return '<button type="button" data-rx="' + e + '">' + e + "</button>"; }).join("") + "</div>"
+      + '<div class="xkgd">' + items.filter(Boolean).map(function(it){ return '<button type="button" data-m="' + it[0] + '"' + (it[4] ? ' class="on"' : "") + "><i>" + it[1] + "</i>" + esc(it[2]) + (it[3] ? "<sup>" + it[3] + "</sup>" : "") + "</button>"; }).join("") + "</div>");
+    s.addEventListener("click", function(e){
+      var r = e.target.closest("[data-rx]"); if (r){ self.react(r.dataset.rx); s.remove(); return; }
+      var b = e.target.closest("[data-m]"); if (!b) return; var m = b.dataset.m;
+      if (m === "hand"){ self.setHand(!self.hand); s.remove(); }
+      else if (m === "people") self.people();
+      else if (m === "add") self.addPerson();
+      else if (m === "cap"){ s.remove(); self.captions(!self.capOn); }
+      else if (m === "info") self.info();
+      else if (m === "host") self.hostTools();
+      else if (m === "invite"){ s.remove(); self.shareInvite(true); }
+      else if (m === "set") self.settings();
+    });
+  };
+  Call.prototype.setHand = function(on){ this.hand = !!on; this.pushSt(); this.paintSelf(); this.say(on ? "✋ Your hand is raised. Everyone can see it." : "Hand lowered."); };
+  Call.prototype.react = function(e){ this.send(0, "rx", {e: e}); this.fly(this.stage.querySelector(".xkself") || this.stage, e); };
+  Call.prototype.fly = function(box, e){
+    mtCss(); if (!box) return; var f = D.createElement("span"); f.className = "xkfx"; f.textContent = e;
+    f.style.left = (20 + Math.random() * 50) + "%"; box.appendChild(f); setTimeout(function(){ f.remove(); }, 2700);
+  };
+  Call.prototype.shareInvite = function(copyOnly){
+    var self = this, t = inviteText(this.c);
+    var done = function(){ self.say("Invitation copied - paste it in a chat or email."); };
+    if (!copyOnly && navigator.share) return navigator.share({title: this.c.title || "XpertMeet", text: t}).catch(function(){});
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(done).catch(function(){ window.prompt("Copy the invitation:", t); });
+  };
+  Call.prototype.people = function(){
+    var self = this, c = this.c, host = this.isHost();
+    var ms = (c.members || []).filter(function(m){ return m.state === "joined" || m.state === "ringing"; });
+    ms.sort(function(a, b){ return (b.st && b.st.hand ? 1 : 0) - (a.st && a.st.hand ? 1 : 0); });
+    var rows = ms.map(function(m){
+      var st = m.st || {}, me = m.id === self.me, hostMark = c.caller && m.id === c.caller.id && c.kind !== "t";
+      if (me) st = {mic: !self.muted, cam: !self.camOff, hand: !!self.hand};
+      return '<div class="xkpr"><span class="av"' + avatarStyle(m.avatar) + ">" + (m.avatar ? "" : initials(m.name)) + '</span><span class="nm"><b>' + esc(m.name) + (me ? " (you)" : "") + "</b><small>"
+        + (m.state === "ringing" ? "Ringing…" : hostMark ? "Host" : "In the call") + '</small></span><span class="ic">' + (st.hand ? "✋" : "") + (m.state === "joined" && st.mic === false ? "🔇" : "") + (m.state === "joined" && st.cam === false ? "🚫📷" : "") + "</span>"
+        + (host && !me && m.state === "joined" ? '<span class="act"><button data-h="mute" data-u="' + m.id + '">Mute</button>' + (st.hand ? '<button data-h="lower" data-u="' + m.id + '">Lower hand</button>' : "") + '<button data-h="remove" data-u="' + m.id + '">Remove</button></span>' : "")
+        + "</div>";
+    }).join("");
+    var s = this.sheet("Participants (" + ms.filter(function(m){ return m.state === "joined"; }).length + ")", rows
+      + '<div class="xkbtns">' + (c.kind !== "g" ? '<button class="g" data-p="add">➕ Add person</button>' : "") + (c.kind === "m" ? '<button data-p="invite">📋 Invite by link</button>' : "") + (host ? '<button data-p="muteall">🔇 Mute all</button>' : "") + "</div>");
+    s.addEventListener("click", function(e){
+      var h = e.target.closest("[data-h]");
+      if (h){ var who = +h.dataset.u, a = h.dataset.h;
+        if (a === "remove" && !window.confirm("Remove " + self.nameOf(who) + " from this call?")) return;
+        self.host(a, who).then(function(){ self.say(a === "remove" ? self.nameOf(who) + " was removed." : a === "mute" ? self.nameOf(who) + " was muted." : "Hand lowered."); if (a !== "mute") s.remove(); }); return; }
+      var p = e.target.closest("[data-p]"); if (!p) return;
+      if (p.dataset.p === "add") self.addPerson(); else if (p.dataset.p === "invite"){ s.remove(); self.shareInvite(false); } else if (p.dataset.p === "muteall") self.host("mute_all").then(function(){ self.say("Everyone else was muted."); });
+    });
+  };
+  Call.prototype.host = function(a, who){ var self = this; return api(this.q("signal/"), {to: 0, kind: "host", data: JSON.stringify({a: a, u: who || 0}), code: this.code}).then(function(r){ if (r && r.lock != null) self.c.lock = r.lock; return r; }).catch(function(e){ self.say(e.message || "Could not do that."); throw e; }); };
+  Call.prototype.hostTools = function(){
+    var self = this, c = this.c;
+    var s = this.sheet("Host tools", '<div class="xkbtns" style="flex-direction:column">'
+      + '<button data-t="mute_all">🔇 Mute everyone</button><button data-t="lower_all">✋ Lower all hands</button>'
+      + '<button data-t="' + (c.lock ? "unlock" : "lock") + '">' + (c.lock ? "🔓 Unlock — let new people join" : "🔒 Lock — no new people can join") + "</button>"
+      + (c.kind === "m" ? '<button class="r" data-t="endall">⏹ End the meeting for everyone</button>' : "") + "</div>"
+      + '<p style="opacity:.7;font-size:.85rem;margin-top:12px">Muting turns off someone\'s microphone; only they can turn it back on. A removed person cannot join this call again.</p>');
+    s.addEventListener("click", function(e){
+      var b = e.target.closest("[data-t]"); if (!b) return; var t = b.dataset.t;
+      if (t === "endall"){ if (!window.confirm("End the meeting for everyone?")) return; api(c.id + "/end/", {code: self.code}).then(function(){ self.hang(true, "ended"); }).catch(function(e2){ self.say(e2.message); }); return; }
+      self.host(t).then(function(){ s.remove(); self.say({mute_all: "Everyone else was muted.", lower_all: "All hands lowered.", lock: "🔒 Meeting locked.", unlock: "🔓 Meeting unlocked."}[t]); });
+    });
+  };
+  Call.prototype.addPerson = function(){
+    var self = this;
+    var s = this.sheet("Add a person to this call", '<input type="search" placeholder="Search your chats" data-q><div data-list><p style="opacity:.7">Loading your chats…</p></div>'
+      + (this.c.kind === "m" ? '<div class="xkbtns"><button data-inv>📋 Or send the invitation link</button></div>' : ""));
+    var list = s.querySelector("[data-list]"), all = [];
+    var draw = function(q){
+      q = (q || "").toLowerCase();
+      var inCall = {}; (self.c.members || []).forEach(function(m){ if (m.state === "joined" || m.state === "ringing") inCall[m.name] = m.state; });
+      var rows = all.filter(function(t){ return !q || String(t["with"] || "").toLowerCase().indexOf(q) > -1; }).slice(0, 40);
+      list.innerHTML = rows.length ? rows.map(function(t){ var st = inCall[t["with"]];
+        return '<div class="xkpr"><span class="av"' + avatarStyle(t.avatar) + ">" + (t.avatar ? "" : initials(t["with"])) + '</span><span class="nm"><b>' + esc(t["with"]) + "</b><small>" + (st === "joined" ? "In the call" : st === "ringing" ? "Ringing…" : "") + '</small></span>'
+          + (st ? "" : '<span class="act"><button data-add="' + t.id + '">📞 Call</button></span>') + "</div>"; }).join("") : '<p style="opacity:.7">No chats found. You can add people you already chat with.</p>';
+    };
+    fetch("/api/notify/threads/", {credentials: "same-origin"}).then(function(r){ return r.json(); }).then(function(d){ all = (d.threads || []).filter(function(t){ return !t.context || t.context === "chat" || t.context === ""; }); draw(""); }).catch(function(){ list.innerHTML = '<p style="opacity:.7">Could not load your chats.</p>'; });
+    s.querySelector("[data-q]").addEventListener("input", function(e){ draw(e.target.value); });
+    s.addEventListener("click", function(e){
+      if (e.target.closest("[data-inv]")){ s.remove(); self.shareInvite(false); return; }
+      var b = e.target.closest("[data-add]"); if (!b) return; b.disabled = true; b.textContent = "…";
+      api(self.q("add/"), {thread: +b.dataset.add, code: self.code}).then(function(c2){ self.c = c2; (c2.members || []).forEach(function(m){ self.names[m.id] = m; }); draw(s.querySelector("[data-q]").value); self.say("📞 Ringing…"); })
+        .catch(function(e2){ b.disabled = false; b.textContent = "📞 Call"; self.say(e2.message || "Could not add."); });
+    });
+  };
+  Call.prototype.info = function(){
+    var c = this.c, self = this, n = (c.members || []).filter(function(m){ return m.state === "joined"; }).length, pw = pwOf(c);
+    var row = function(k, v){ return v ? '<p><span class="k">' + esc(k) + "</span> <b>" + esc(v) + "</b></p>" : ""; };
+    var h = '<div class="xkinfo">' + row("Topic", c.title) + (c.kind === "m" ? row("Speaker", c.speaker) + row("Host", c.caller && c.caller.name) + row("Meeting ID", spaced(c.meeting_no)) + row("Passcode", pw) : "")
+      + row("Time", whenLines(c, myZone(), myZone()).join(", ")) + row("In the call", n + " of " + (c.max || 4)) + row("Encryption", "Sound and video go straight between devices, encrypted")
+      + (c.kind === "m" ? '<p style="word-break:break-all;opacity:.85">' + esc(meetUrl(c)) + "</p>" : "") + "</div>"
+      + (c.kind === "m" ? '<div class="xkbtns"><button class="g" data-i2="share">📤 Share invitation</button><button data-i2="copy">📋 Copy</button><button data-i2="ics">📅 Calendar</button></div>' : "");
+    var s = this.sheet(c.kind === "m" ? "Meeting info" : "Call info", h);
+    s.addEventListener("click", function(e){ var b = e.target.closest("[data-i2]"); if (!b) return; if (b.dataset.i2 === "ics") icsFile(c); else self.shareInvite(b.dataset.i2 === "copy"); });
+  };
+  Call.prototype.settings = function(){
+    var self = this, tg = function(k, label, d){ return '<label class="xkset"><span>' + esc(label) + '</span><input type="checkbox" data-s="' + k + '"' + (pref(k, d) ? " checked" : "") + "></label>"; };
+    var lang = pref("caplang", "en-US");
+    var s = this.sheet("Settings", tg("snd", "Sound when people join or leave", true) + tg("mirror", "Mirror my video (only on my screen)", true) + tg("self", "Show my own video", true) + tg("caps", "Show captions from others", true)
+      + '<label class="xkset"><span>Captions language for my voice</span><select data-l><option value="en-US"' + (lang === "en-US" ? " selected" : "") + '>English</option><option value="ur-PK"' + (lang === "ur-PK" ? " selected" : "") + '>اردو Urdu</option><option value="hi-IN"' + (lang === "hi-IN" ? " selected" : "") + '>Hindi</option><option value="ar-SA"' + (lang === "ar-SA" ? " selected" : "") + ">العربية Arabic</option></select></label>");
+    s.addEventListener("change", function(e){
+      if (e.target.dataset.s){ setPref(e.target.dataset.s, e.target.checked); self.paintSelf(); }
+      if (e.target.hasAttribute("data-l")){ setPref("caplang", e.target.value); if (self.capOn){ self.captions(false); self.captions(true); } }
+    });
+  };
+  Call.prototype.captions = function(on){
+    var self = this, R = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!on){ this.capOn = false; if (this.rec){ try { this.rec.stop(); } catch (e) {} this.rec = null; } this.say("Captions off."); return; }
+    if (!R){ this.say("Live captions are not supported in this browser. Use Chrome on a computer or phone."); return; }
+    var rec = new R(); rec.lang = pref("caplang", "en-US"); rec.continuous = true; rec.interimResults = false;
+    rec.onresult = function(ev){ for (var i = ev.resultIndex; i < ev.results.length; i++){ if (ev.results[i].isFinal){ var t = ev.results[i][0].transcript.trim(); if (t){ self.send(0, "cap", {t: t.slice(0, 380), lang: rec.lang}); self.showCap("You", t); } } } };
+    rec.onerror = function(ev){ if (ev.error === "not-allowed" || ev.error === "audio-capture" || ev.error === "service-not-allowed"){ self.capOn = false; self.say("Captions can't use the microphone on this device during the call."); } };
+    rec.onend = function(){ if (self.capOn && !self.stopped && self.rec === rec){ try { rec.start(); } catch (e) {} } };
+    this.rec = rec; this.capOn = true;
+    try { rec.start(); this.say("💬 Live captions on - what you say is shown as text to everyone (beta)."); } catch (e) { this.capOn = false; this.say("Captions could not start."); }
+  };
+  Call.prototype.showCap = function(who, t){
+    mtCss(); var b = this.stage && this.stage.querySelector(".xkcap");
+    if (!b){ b = D.createElement("div"); b.className = "xkcap"; this.stage.appendChild(b); }
+    b.innerHTML = "<b>" + esc(who) + ":</b>" + esc(t); clearTimeout(this.capT); this.capT = setTimeout(function(){ b.remove(); }, 6500);
+  };
+  Call.prototype.onExtra = function(s, data){
+    var self = this;
+    if (s.kind === "rx" && data.e && RX.indexOf(data.e) > -1){ this.fly(this.stage.querySelector('.xktile[data-u="' + s.from + '"]') || this.stage, data.e); return true; }
+    if (s.kind === "cap" && data.t){ if (pref("caps", true)) this.showCap(this.nameOf(s.from), String(data.t)); return true; }
+    if (s.kind === "host"){
+      if (data.a === "mute" && !this.muted){ var mb = this.ov.querySelector('[data-k="mute"]'); if (mb) this.toggleMute(mb); this.say("🔇 The host muted you. Tap Mute to talk again."); }
+      if (data.a === "lower" && this.hand){ this.hand = false; this.pushSt(); this.paintSelf(); this.say("The host lowered your hand."); }
+      if (data.a === "removed"){ this.hang(true, "removed"); }
+      return true;
+    }
+    return false;
+  };
+  Call.prototype.paintSelf = function(){
+    mtCss(); var el = this.stage && this.stage.querySelector(".xkself"); if (!el) return;
+    var v = el.querySelector("video"); if (v && !this.screen) v.style.transform = pref("mirror", true) && this.front ? "" : "none";
+    if (!pref("self", true)) el.style.visibility = "hidden"; else el.style.visibility = "";
+    var h = el.querySelector(".xkhnd"); if (this.hand && !h){ h = D.createElement("span"); h.className = "xkhnd"; h.textContent = "✋"; el.appendChild(h); } else if (!this.hand && h) h.remove();
+  };
+  Call.prototype.paintPeople = function(){
+    var self = this, c = this.c; if (!c || !this.stage) return; mtCss();
+    var prev = this.prevSt || {}, now = {}, joinedNow = {};
+    (c.members || []).forEach(function(m){
+      if (m.id === self.me) return;
+      var st = m.st || {}; now[m.id] = st; if (m.state === "joined") joinedNow[m.id] = 1;
+      var t = self.stage.querySelector('.xktile[data-u="' + m.id + '"]');
+      if (t){
+        var h = t.querySelector(".xkhnd"); if (st.hand && !h){ h = D.createElement("span"); h.className = "xkhnd"; h.textContent = "✋ " + m.name.split(" ")[0]; t.appendChild(h); } else if (!st.hand && h) h.remove();
+        var nm = t.querySelector(".xknm"); if (nm) nm.innerHTML = esc(m.name) + (st.mic === false ? '<span class="xkmo">🔇</span>' : "");
+      }
+      if (self.prevSt && st.hand && !(prev[m.id] || {}).hand) self.say("✋ " + m.name + " raised a hand");
+    });
+    if (this.prevJoined){
+      Object.keys(joinedNow).forEach(function(k){ if (!self.prevJoined[k]){ self.say(self.nameOf(+k) + " joined"); if (pref("snd", true)) try { tone("grp", true); } catch (e) {} } });
+      Object.keys(this.prevJoined).forEach(function(k){ if (!joinedNow[k]) self.say(self.nameOf(+k) + " left"); });
+    }
+    this.prevSt = now; this.prevJoined = joinedNow;
+    if (!this.stInit && this.local){ this.stInit = true; this.pushSt(); }
+    var me = (c.members || []).filter(function(m){ return m.id === self.me; })[0];
+    if (me && me.st && me.st.hand !== undefined && this.hand === undefined) this.hand = me.st.hand;
   };
   Call.prototype.status = function(){
     if (!this.stEl) return;
@@ -378,6 +585,7 @@
     } else if (s.kind === "ice" && p){
       if (p.pc.remoteDescription) p.pc.addIceCandidate(data).catch(function(){}); else p.q.push(data);
     } else if (s.kind === "bye"){ this.drop(s.from); }
+    else if ((s.kind === "rx" || s.kind === "cap" || s.kind === "host") && data && this.onExtra(s, data)){ /* handled */ }
     else if (s.kind === "chat" && data && data.t){ this.chatAdd({t: String(data.t).slice(0, 500), n: (this.names[s.from] || {}).name || data.n || "", me: false}); }
   };
   Call.prototype.drop = function(uid){
@@ -464,12 +672,20 @@
     if (!remote){ Object.keys(this.peers).forEach(function(k){ self.send(k, "bye", {}); }); api(this.q("leave/"), {code: this.code}).catch(function(){}); }
     Object.keys(this.peers).forEach(function(k){ try { self.peers[k].pc.close(); } catch (e) {} });
     [this.local, this.screen].forEach(function(s){ if (s) s.getTracks().forEach(function(t){ t.stop(); }); });
-    var msg = why === "missed" ? (this.c.caller.id === this.me ? "No answer" : "Missed call") : why === "declined" ? "Call declined" : "Call ended";
+    var msg = why === "removed" ? "The host removed you from this call" : why === "missed" ? (this.c.caller.id === this.me ? "No answer" : "Missed call") : why === "declined" ? "Call declined" : "Call ended";
     if (this.stEl) this.stEl.textContent = msg + (this.t0 ? " · " + fmt((Date.now() - this.t0) / 1000) : "");
     var ov = this.ov; setTimeout(function(){ if (ov) ov.remove(); B.style.overflow = ""; if (self.onEnd) self.onEnd(); }, remote ? 1600 : 700);
     CUR = null;
   };
 
+  (function(){
+    var tm = Call.prototype.toggleMute, tc = Call.prototype.toggleCam, ds = Call.prototype.drawSelf, stt = Call.prototype.status, hg = Call.prototype.hang;
+    Call.prototype.toggleMute = function(b){ tm.call(this, b); this.pushSt(); };
+    Call.prototype.toggleCam = function(b){ tc.call(this, b); var self = this; setTimeout(function(){ self.pushSt(); }, 400); };
+    Call.prototype.drawSelf = function(){ ds.call(this); this.paintSelf(); };
+    Call.prototype.status = function(){ stt.call(this); try { this.paintPeople(); } catch (e) {} };
+    Call.prototype.hang = function(remote, why){ if (this.rec){ this.capOn = false; try { this.rec.stop(); } catch (e) {} } hg.call(this, remote, why); };
+  })();
   function begin(c, opts){
     if (CUR){ return; }
     CUR = new Call(c, opts || {});
@@ -629,17 +845,18 @@
   function whenLines(c, tz, base){   // "Daily 09:00 AM" lines, in time zone tz (base = the host's zone, for "next day")
     if (c.schedule && c.schedule.length) return c.schedule.map(function(r){ var t = nextOcc(r, hostTz(c)); return daysLabel(r.days) + " " + timeIn(t, tz, base); });
     if (c.starts_at){ var d = new Date(c.starts_at); return [dateIn(d, tz) + ", " + timeIn(d, tz, base)]; }
-    return ["Now"];
+    var sd = new Date(c.answered_at || c.created || Date.now());
+    return ["Started " + dateIn(sd, tz) + ", " + timeIn(sd, tz, base)];
   }
   function inviteText(c){
     var tz = hostTz(c), pw = pwOf(c), L = [];
-    L.push((c.org || c.caller.name) + " is inviting you to a scheduled XpertMeet meeting.", "");
+    L.push((c.org || c.caller.name) + " is inviting you to " + ((c.schedule && c.schedule.length) || c.starts_at ? "a scheduled XpertMeet meeting." : "an XpertMeet meeting that is on now."), "");
     L.push("Topic: " + (c.title || "XpertMeet meeting"));
     if (c.speaker) L.push("Speaker: " + c.speaker);
     if (c.org && c.org !== c.caller.name) L.push("Host: " + c.caller.name);
     L.push("", "Time (" + zoneName(tz) + "):");
     whenLines(c, tz, tz).forEach(function(x){ L.push(x); });
-    if (c.schedule && c.schedule.length || c.starts_at){
+    if (whenLines(c, tz, tz).length){
       L.push("", "🌍 Time in other countries:");
       ZONES.forEach(function(z){ if (z[2] === tz) return; L.push(z[0] + " " + z[1] + ": " + whenLines(c, z[2], tz).join(" · ")); });
     }
@@ -670,7 +887,7 @@
     return '<div class="xkinv">' + (c.org ? '<p style="margin:0 0 4px;opacity:.85">' + esc(c.org) + " is inviting you</p>" : "")
       + (c.speaker ? '<p style="margin:0 0 6px">Speaker: <b>' + esc(c.speaker) + "</b></p>" : "")
       + '<p style="margin:0 0 6px">' + head + "</p>"
-      + ((c.schedule && c.schedule.length) || c.starts_at ? '<div class="xktz">' + ZONES.map(function(q){ return "<span>" + q[0] + " " + esc(q[1]) + " <b>" + esc(whenLines(c, q[2], tz).join(" · ")) + "</b></span>"; }).join("") + "</div>" : "")
+      + (whenLines(c, tz, tz).length ? '<div class="xktz">' + ZONES.map(function(q){ return "<span>" + q[0] + " " + esc(q[1]) + " <b>" + esc(whenLines(c, q[2], tz).join(" · ")) + "</b></span>"; }).join("") + "</div>" : "")
       + '<p style="margin:8px 0 0">Meeting ID: <b>' + esc(spaced(c.meeting_no)) + "</b>" + (pw ? " · Passcode: <b>" + esc(pw) + "</b>" : "") + "</p>"
       + (full ? '<div class="row"><button class="xkpill g" data-i="copy">📋 Copy invitation</button><a class="xkpill" style="background:#25D366;color:#fff" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(inviteText(c)) + '">WhatsApp</a><button class="xkpill o" data-i="ics">📅 Add to calendar</button></div>' : "")
       + "</div>";
