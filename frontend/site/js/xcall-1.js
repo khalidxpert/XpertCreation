@@ -236,6 +236,7 @@
       t = D.createElement("div"); t.className = "xktile"; t.dataset.u = uid;
       t.innerHTML = '<div class="xkav"' + avatarStyle(m.avatar) + '>' + (m.avatar ? "" : initials(m.name)) + '</div><video autoplay playsinline style="display:none"></video><span class="xknm">' + esc(m.name || "") + '</span>';
       this.stage.insertBefore(t, this.stage.querySelector(".xkself"));
+      var wt = this.stage.querySelector('[data-u="wait"]'); if (wt) wt.remove();
     }
     return t;
   };

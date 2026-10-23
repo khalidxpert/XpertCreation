@@ -162,6 +162,27 @@ img.av6{object-fit:cover}.chead-av{width:34px;height:34px;border-radius:50%;obje
 .ct3 h3{margin:4px 0 0}.ct3 p{margin:0}
 .pbt3{display:block;width:100%;max-width:320px;padding:12px;border-radius:12px;border:0;background:var(--brand);color:#fff;font:inherit;font-weight:800;text-decoration:none;cursor:pointer;text-align:center}
 .pbt3.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+/* v7: contact info */
+.chead-ini{display:inline-block;color:#fff;font-weight:800;font-size:16px;text-align:center;line-height:34px;font-style:normal}
+body.xc-app.inchat .xcpane > h1 .chead-ini{line-height:36px}
+.wrap h1[data-contact3]{cursor:pointer}
+.cta3{display:flex;gap:10px;justify-content:center;margin:10px 0 4px;flex-wrap:wrap}
+.cta3 button,.cta3 a{width:76px;padding:10px 4px 8px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--brand);font:inherit;font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;text-decoration:none}
+.cta3 span{color:var(--ink)}
+.cis3{border-top:8px solid var(--paper);margin:0 -16px}
+.ci3{display:flex;align-items:center;gap:14px;width:100%;padding:13px 18px;border:0;border-bottom:1px solid var(--line);background:var(--card);font:inherit;font-size:15px;text-align:left;cursor:pointer;color:var(--ink)}
+.ci3:last-child{border-bottom:0}.ci3.red{color:#B91C1C}
+.cic3{width:24px;text-align:center;font-size:18px}
+.cil3{flex:1;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.cil3 small{margin-left:auto;color:var(--ink-soft);font-size:13px}
+.cms3{display:flex;gap:4px;width:100%}.cms3:empty{display:none}
+.cms3 img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+.hit3{outline:3px solid #F59E0B;outline-offset:2px;border-radius:12px}
+#panel3{z-index:100000}
+#fsb3{display:flex;gap:6px;padding:8px 10px;background:var(--card);border-bottom:1px solid var(--line)}
+#fsb3 input{flex:1;min-width:0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--line);font:inherit;font-size:15px}
+#fsb3 button{padding:8px 12px;border-radius:10px;border:0;background:var(--brand);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+#fsb3 #fs3x{background:var(--paper);color:var(--ink);font-size:18px}
 .wgrid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
 .wgrid3 button,.wbtn3{height:72px;border-radius:12px;border:2px solid var(--line);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:6px;color:#0D1424}
 .wgrid3 button.on{border-color:var(--brand)}
@@ -366,9 +387,13 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
   }
   window.addEventListener("resize", setHH);
   if (window.visualViewport) window.visualViewport.addEventListener("resize", setHH);
+  function avColor(s){ var C = ["#1B4DFF", "#0E9F6E", "#D97706", "#7C3AED", "#DB2777", "#0891B2", "#DC2626", "#4B5563"], h = 0; s = String(s || "?"); for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 997; return C[h % C.length]; }
+  function avIni(s){ return esc((String(s || "?").trim().charAt(0) || "?").toUpperCase()); }
   function setTitle(){
     var h = document.querySelector(".wrap h1");
-    h.innerHTML = (current.avatar ? '<img class="chead-av" src="' + esc(current.avatar) + '" alt="">' : '') + esc(current.with) + (current.disappear ? " \u23F1" : "");
+    h.innerHTML = (current.avatar ? '<img class="chead-av" src="' + esc(current.avatar) + '" alt="">' : '<span class="chead-av chead-ini" style="background:' + avColor(current.with) + '">' + avIni(current.with) + '</span>')
+      + '<span class="chead-nm">' + esc(current.with) + (current.disappear ? " ⏱" : "") + '</span>';
+    h.setAttribute("data-contact3", "1"); h.setAttribute("role", "button"); h.title = "Contact info";
   }
   // ---- WhatsApp-style extras: panels, contact, media/links/docs, wallpaper, export ----
   var WALLS = {none: "", beige: "#EFE7DD", mint: "#DCF3E6", sky: "#DCEBF7", lilac: "#EDE3F5", sand: "#F6EBD9",
@@ -411,11 +436,53 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
     });
   }
   function contactPanel(){
-    var c = current.contact || {};
-    panel("Contact", '<div class="ct3">' + (current.avatar ? '<img src="' + esc(current.avatar) + '" alt="">' : '<span class="ctl3">' + esc(current.with.charAt(0)) + '</span>')
-      + '<h3>' + esc(current.with) + '</h3>' + (c.headline ? '<p>' + esc(c.headline) + '</p>' : '') + (c.city ? '<p class="mut3">' + esc(c.city) + '</p>' : '')
-      + (c.slug ? '<a class="pbt3" href="/in/' + encodeURIComponent(c.slug) + '">View profile</a>' : '')
-      + '<button class="pbt3 ghost" data-openmedia>Media, links and docs</button></div>');
+    var c = current.contact || {}, I = {
+      ph: '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>',
+      vd: '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11z"/></svg>',
+      pr: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+      sr: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'};
+    var big = current.avatar ? '<a href="' + esc(current.avatar) + '" target="_blank" rel="noopener"><img src="' + esc(current.avatar) + '" alt=""></a>'
+                             : '<span class="ctl3" style="background:' + avColor(current.with) + ';color:#fff">' + avIni(current.with) + '</span>';
+    var row = function(attr, icon, label, extra, red){ return '<button class="ci3' + (red ? " red" : "") + '" ' + attr + '><span class="cic3">' + icon + '</span><span class="cil3">' + label + (extra || "") + '</span></button>'; };
+    var p = panel("Contact info", '<div class="ct3">' + big + '<h3>' + esc(current.with) + '</h3>' + (c.headline ? '<p>' + esc(c.headline) + '</p>' : '') + (c.city ? '<p class="mut3">' + esc(c.city) + '</p>' : '')
+      + '<div class="cta3"><button data-ccall="0">' + I.ph + '<span>Voice</span></button><button data-ccall="1">' + I.vd + '<span>Video</span></button>'
+      + (c.slug ? '<a href="/in/' + encodeURIComponent(c.slug) + '">' + I.pr + '<span>Profile</span></a>' : '')
+      + '<button data-csearch>' + I.sr + '<span>Search</span></button></div></div>'
+      + '<div class="cis3">' + row("data-media3", "🖼️", "Media, links and docs", '<small id="cmc3"></small><span class="cms3" id="cms3"></span>') + '</div>'
+      + '<div class="cis3">' + row("data-wall3", "🎨", "Wallpaper") + row("data-dis3", "⏱️", "Disappearing messages", current.disappear ? '<small>On</small>' : '<small>Off</small>')
+      + row("data-export3", "📤", "Export chat") + row("data-clear3", "🧹", "Clear chat") + '</div>'
+      + '<div class="cis3">' + row("data-block3", "⛔", (current.i_blocked ? "Unblock " : "Block ") + esc(current.with), "", true)
+      + row("data-report3", "🚩", "Report " + esc(current.with), "", true) + row("data-del3", "🗑️", "Delete chat", "", true) + '</div>');
+    p.addEventListener("click", function(e){
+      var cc = e.target.closest("[data-ccall]");
+      if (cc){ var b = document.querySelector('.thd3 .xkbtn[data-v="' + cc.getAttribute("data-ccall") + '"]'); p.remove(); if (b) b.click(); return; }
+      if (e.target.closest("[data-csearch]")){ p.remove(); searchBar(); return; }
+      if (e.target.closest(".ci3")) p.remove();
+    });
+    api("/threads/" + current.id + "/media/").then(function(r){
+      var d = r.data || {}, m = d.media || [], n = m.length + (d.links || []).length + (d.docs || []).length;
+      if ($("cmc3")) $("cmc3").textContent = n ? n + (n === 1 ? " item" : " items") : "None yet";
+      if ($("cms3")) $("cms3").innerHTML = m.slice(0, 4).map(function(x){ return '<img src="' + esc(x.url) + '" alt="" loading="lazy">'; }).join("");
+    });
+  }
+  function searchBar(){
+    var bar = $("fsb3");
+    if (!bar){ bar = document.createElement("div"); bar.id = "fsb3"; $("msgs3").parentNode.insertBefore(bar, $("msgs3")); }
+    bar.innerHTML = '<input id="fs3" type="search" placeholder="Search in this chat" autocomplete="off"><button type="button" id="fs3b">Find</button><button type="button" id="fs3x" aria-label="Close search">\u00d7</button>';
+    var go = function(){ var v = $("fs3").value.trim(); if (v) findInChat(v); };
+    $("fs3b").onclick = go; $("fs3x").onclick = function(){ bar.remove(); };
+    $("fs3").onkeydown = function(e){ if (e.key === "Enter"){ e.preventDefault(); go(); } };
+    $("fs3").focus();
+  }
+  var fsLast = "", fsIdx = -1;
+  function findInChat(q){
+    q = q.toLowerCase();
+    var hits = [].filter.call(document.querySelectorAll("#msgs3 > *"), function(el){ el.classList.remove("hit3"); return (el.textContent || "").toLowerCase().indexOf(q) > -1; });
+    if (!hits.length){ $("fs3b").textContent = "None"; setTimeout(function(){ if ($("fs3b")) $("fs3b").textContent = "Find"; }, 1500); return; }
+    fsIdx = q === fsLast ? (fsIdx - 1 + hits.length) % hits.length : hits.length - 1; fsLast = q;
+    var hit = hits[fsIdx]; $("fs3b").textContent = (hits.length - fsIdx) + "/" + hits.length;
+    hit.classList.add("hit3"); hit.scrollIntoView({block: "center", behavior: "smooth"});
+    setTimeout(function(){ hit.classList.remove("hit3"); }, 2600);
   }
   function wallPanel(){
     var cur = getWall();
@@ -922,7 +989,7 @@ body.inchat #grp3,body.inchat #gprivacy3{display:none}
 <script src="/js/xcbar-1.js?v=2" defer></script>
 <script src="/js/xchat-1.js" defer></script>
 <script src="/js/xpertchat-1.js?v=6" defer></script>
-<script src="/js/xcall-1.js?v=4" defer></script>
+<script src="/js/xcall-1.js?v=5" defer></script>
 <script src="/js/xcam-1.js?v=5" defer></script>
 <script src="/js/chatplus-1.js?v=6" defer></script>
 <script src="/js/xscan-1.js?v=2" defer></script>
