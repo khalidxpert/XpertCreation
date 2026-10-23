@@ -393,11 +393,11 @@
          ask: ["In C2, write the tax for Rice bag using the rate in E1, so the same formula still works when copied down to C3.", "C2 میں E1 والی شرح سے ٹیکس نکالیں، اس طرح کہ نیچے کاپی کرنے پر بھی درست رہے۔"], hint: "Pin the rate with dollar signs: $E$1.", ans: "=B2*$E$1" },
     8: { rows: [["Student","Marks","Result"],["Ayesha","78",""],["Bilal","35",""],["Hina","91",""]], cell: "C2", expect: "Pass", copy: { to: "C3", expect: "Fail" },
          ask: ["In C2, show Pass if the marks are 40 or more, otherwise Fail.", "C2 میں 40 یا زیادہ نمبر پر Pass ورنہ Fail دکھائیں۔"], hint: "=IF(test, value if true, value if false). Text needs double quotes.", ans: "=IF(B2>=40,\"Pass\",\"Fail\")" },
-    9: { rows: SALES.concat([["","","",""],["Lahore total","","",""]]), cell: "B8", expect: 36800, need: /SUMIF/i,
+    10: { rows: SALES.concat([["","","",""],["Lahore total","","",""]]), cell: "B8", expect: 36800, need: /SUMIF/i,
          ask: ["In B8, add up all the Lahore sales with SUMIF.", "B8 میں SUMIF سے لاہور کی تمام سیلز جمع کریں۔"], hint: "SUMIF(where to look, what to match, what to add).", ans: "=SUMIF(B2:B6,\"Lahore\",D2:D6)" },
-    10: { rows: [["Code","Product","Price","","Find","Price"],["P01","Rice bag","2500","","P03",""],["P02","Cooking oil","890","","",""],["P03","Sugar","640","","",""],["P04","Tea","1150","","",""]], cell: "F2", expect: 640, need: /LOOKUP/i,
+    11: { rows: [["Code","Product","Price","","Find","Price"],["P01","Rice bag","2500","","P03",""],["P02","Cooking oil","890","","",""],["P03","Sugar","640","","",""],["P04","Tea","1150","","",""]], cell: "F2", expect: 640, need: /LOOKUP/i,
          ask: ["In F2, look up the price of the code in E2.", "F2 میں E2 والے کوڈ کی قیمت تلاش کریں۔"], hint: "=VLOOKUP(what, table, column number, FALSE)", ans: "=VLOOKUP(E2,A2:C5,3,FALSE)  or  =XLOOKUP(E2,A2:A5,C2:C5)" },
-    11: { rows: [["Roll","Name","Urdu","English","Maths","Science","Total"],["1","Ayesha","78","82","91","88",""],["2","Bilal","45","38","52","41",""]], cell: "G2", expect: 339, copy: { to: "G3", expect: 176 }, need: /SUM/i,
+    13: { rows: [["Roll","Name","Urdu","English","Maths","Science","Total"],["1","Ayesha","78","82","91","88",""],["2","Bilal","45","38","52","41",""]], cell: "G2", expect: 339, copy: { to: "G3", expect: 176 }, need: /SUM/i,
          ask: ["In G2, add Ayesha's four marks, so it also works when copied down for Bilal.", "G2 میں عائشہ کے چاروں نمبر جمع کریں، اس طرح کہ بلال کے لیے کاپی کرنے پر بھی کام کرے۔"], hint: "=SUM(C2:F2)", ans: "=SUM(C2:F2)" }
   };
   function addrRC(a){ var x = parseRef(a); return x; }
@@ -441,7 +441,7 @@
   /* ------------------------------------------------------------ quick check */
   function loadChecks(){
     if (CHECKS) return Promise.resolve(CHECKS);
-    if (!CHK_LOADING) CHK_LOADING = fetch("/academy/checks.json?v=1", { credentials: "same-origin" }).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(d){ CHECKS = d || {}; return CHECKS; });
+    if (!CHK_LOADING) CHK_LOADING = fetch("/academy/checks.json?v=2", { credentials: "same-origin" }).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(d){ CHECKS = d || {}; return CHECKS; });
     return CHK_LOADING;
   }
   function pairsOf(l){
