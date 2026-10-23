@@ -1,0 +1,612 @@
+{
+ "day-1": {
+  "t": "Day 1 — Is freelancing for you?",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Understand how freelancing works",
+     "Be honest about the time and effort it needs"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) How it works"
+   },
+   {
+    "k": "p",
+    "v": "A freelancer sells a service to clients one job at a time instead of working for one employer. The client pays for a result: a logo, a translated document, a website fix, ten social media posts."
+   },
+   {
+    "k": "h",
+    "v": "2) The good and the hard"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Good - work from home, choose your hours, clients from any city or country",
+     "Hard - income goes up and down, the first clients take time, you are your own boss and your own salesman"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) What you need"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "One skill people pay for, at a level you can deliver",
+     "A phone or computer and stable internet",
+     "2 to 3 hours a day for the first months",
+     "Patience - most beginners take weeks to get the first order"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Nobody can promise you fixed income from day one. Anyone who sells you a course 'guaranteeing' Rs 100,000 a month is not being honest."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|List 3 things friends or family already ask you for help with.|Next to each, write if people would pay for it.|Circle the one you enjoy most."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Choosing your service",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pick one clear, sellable service",
+     "Check the demand before you start"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Services in demand"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Writing and translation - Urdu, English, Arabic, Punjabi",
+     "Graphic design - logos, posts, banners",
+     "Video editing and subtitles",
+     "Data entry and Excel work",
+     "Social media management for small businesses",
+     "Website fixes, simple apps, programming",
+     "Online tutoring - Quran, maths, English, coding"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Narrow is better"
+   },
+   {
+    "k": "p",
+    "v": "'I do everything' sounds like 'I am not sure what I am good at'. 'I design menus for restaurants' is clear and easy to remember. You can add more services later."
+   },
+   {
+    "k": "h",
+    "v": "3) Check demand"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Search the freelance marketplace (for example XpertCreation Freelance) for your service.|Look at how many people offer it and what they charge.|Look for a gap: a city, a language or a type of client others ignore."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write your service in one sentence: 'I help [who] with [what].'|Find 5 people already selling it and note their prices."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Your profile",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a profile that makes clients trust you",
+     "Use a professional photo and title"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The photo"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Your real face, smiling, good light, plain background",
+     "No sunglasses, no group photos, no cartoons"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) The title"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Weak: Freelancer | Hard worker",
+     "Strong: Urdu-English translator for business documents",
+     "Strong: Restaurant menu and social post designer"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) The about section"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Line 1 - who you help and how|Lines 2-3 - your experience or training, with numbers if true ('translated 40 documents')|Line 4 - what makes you different (fast, a language, a city)|Line 5 - a friendly call to action: message me with your project"
+   },
+   {
+    "k": "tip",
+    "v": "On XpertCreation, verify your ID (KYC) - verified sellers get more trust and are the only ones who can sell."
+   },
+   {
+    "k": "warn",
+    "v": "Write only true facts. Fake reviews or fake experience get accounts closed."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write your title and 5-line about section.|Ask a friend: would you hire me after reading this?"
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — A portfolio without clients",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make samples that prove your skill",
+     "Show them in a simple portfolio"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The chicken-and-egg problem"
+   },
+   {
+    "k": "p",
+    "v": "Clients want to see past work, but you have no clients yet. The answer: make sample projects yourself. A designer designs a logo for an imaginary cafe. A translator translates a public government notice."
+   },
+   {
+    "k": "h",
+    "v": "2) What makes a good sample"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Looks like a real job a client would pay for",
+     "Shows before and after if possible",
+     "A short note: the problem, what you did, the result",
+     "3 to 5 strong samples beat 20 weak ones"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Where to keep it"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Your freelance profile gallery",
+     "A post series on XpertConnect",
+     "A simple shared folder link with your best files"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Never put another company's real logo or someone else's work in your portfolio as your own."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make one sample project today.|Write the 3-line note for it.|Add it to your profile."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Pricing your work",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Set a starting price",
+     "Use packages to sell more"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Start fair, not free"
+   },
+   {
+    "k": "p",
+    "v": "Very low prices attract difficult clients and teach people your work has little value. Start a little below experienced sellers, then raise your price after every few good reviews."
+   },
+   {
+    "k": "h",
+    "v": "2) Price by the job, not the hour"
+   },
+   {
+    "k": "p",
+    "v": "Clients like knowing the total. Work out how many hours a job takes, multiply by the hourly amount you want, and round it to a clean price."
+   },
+   {
+    "k": "h",
+    "v": "3) Three packages"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Basic - one logo idea, 2 changes, 3 days",
+     "Standard - three ideas, 5 changes, source files, 3 days",
+     "Premium - three ideas, unlimited changes for a week, social media versions, 2 days"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Most clients pick the middle package. Make it your best value."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Time yourself doing one sample job.|Work out a price from your hours.|Write your 3 packages."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Proposals that win",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write short proposals clients actually read",
+     "Avoid the mistakes that get you ignored"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Clients read the first two lines"
+   },
+   {
+    "k": "p",
+    "v": "A client posting a job may get 30 replies. Most start with 'Dear Sir, I am a hard-working freelancer with vast experience'. Yours must start with their project."
+   },
+   {
+    "k": "h",
+    "v": "2) A 5-line proposal"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Show you read the job: 'You need your 12-page catalogue translated into Urdu by Friday.'|Say how you will do it in one line.|Show one relevant sample.|Give a price and a delivery date.|Ask one smart question about the project."
+   },
+   {
+    "k": "h",
+    "v": "3) Do not"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Copy-paste the same proposal everywhere",
+     "Beg or say 'please give me a chance'",
+     "Promise things you cannot deliver",
+     "Ask to move payment outside the platform before trust is built"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Find one real job post in your service.|Write a 5-line proposal for it.|Read it as the client - is it about them?"
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Talking to clients",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Agree clear terms before you start",
+     "Handle changes and difficult moments politely"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Agree in writing"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "What exactly will you deliver",
+     "How many changes are included",
+     "The price and when it is paid",
+     "The deadline",
+     "What happens if the client wants more"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Keep the client informed"
+   },
+   {
+    "k": "p",
+    "v": "Send a short update before the client asks: 'First draft is ready, sharing tonight.' Silence makes clients nervous."
+   },
+   {
+    "k": "h",
+    "v": "3) When things go wrong"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Late? Tell them early, with a new date and a reason",
+     "Extra work asked? Agree a small extra price first",
+     "Angry client? Reply calmly, the next day if needed, and focus on a fix"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write a short 'project agreement' message you can reuse.|Write a polite reply for a client who asks for free extra work."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Delivering great work",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Deliver work that earns 5-star reviews",
+     "Use a simple checklist every time"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The delivery checklist"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Did I do everything we agreed?",
+     "Spelling and names checked",
+     "Files named clearly and in the right formats",
+     "A short note explaining what is inside",
+     "Delivered on or before the deadline"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) A little extra"
+   },
+   {
+    "k": "p",
+    "v": "Add one small surprise that costs you little: a social media size of the logo, a printable PDF, a 2-minute video explaining the work. Clients remember it and write about it in reviews."
+   },
+   {
+    "k": "h",
+    "v": "3) Ask for the review"
+   },
+   {
+    "k": "p",
+    "v": "After the client is happy, ask politely: 'If you are happy with the work, a short review would help me a lot.' Never offer money or discounts for good reviews."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write your delivery checklist on your phone.|Write a delivery message template."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Getting paid safely",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Choose safe ways to get paid",
+     "Avoid common scams"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Safe payment"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use the platform's payment system - on XpertCreation Freelance the money is held until the work is delivered",
+     "For outside clients: take part of the payment in advance for big jobs",
+     "In Pakistan, earnings usually reach you by bank account, JazzCash or Easypaisa"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Scams freelancers meet"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "A 'client' sends a cheque or transfer for too much and asks you to send the extra back",
+     "Someone asks you to pay a fee to get the job",
+     "A client asks for your login codes or OTP",
+     "Work 'tests' that are really free work for a big project"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "A real client never asks you to pay to get work, and never needs your password or OTP."
+   },
+   {
+    "k": "h",
+    "v": "3) Keep records"
+   },
+   {
+    "k": "p",
+    "v": "Keep a list of every job: client, date, price, paid or not. It helps you with taxes and shows your growth."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make an income table: date, client, service, price, paid.|Write the scam warning signs on a note you can see."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Growing: repeat clients and higher prices",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Turn one job into many",
+     "Plan your next 90 days"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Repeat clients are the best clients"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Check in a month after delivery: 'How is the new menu working?'",
+     "Offer a monthly package for regular work",
+     "Ask happy clients who else might need your help"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Raise your price"
+   },
+   {
+    "k": "p",
+    "v": "After about 5 good reviews, raise prices for new clients by 10 to 20 percent. Keep the old price for loyal clients for a while as thanks."
+   },
+   {
+    "k": "h",
+    "v": "3) Your 90-day plan"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Month 1 - profile, 5 samples, 20 proposals|Month 2 - first clients, reviews, improve packages|Month 3 - repeat clients, raise prices, add one related service"
+   },
+   {
+    "k": "tip",
+    "v": "Open your service on XpertCreation Freelance and share your first gig on XpertConnect with #XpertAcademy. Now take the quiz for your certificate."
+   }
+  ]
+ }
+}

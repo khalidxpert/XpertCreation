@@ -1,0 +1,642 @@
+{
+ "day-1": {
+  "t": "Day 1 — What AI assistants can and cannot do",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what an AI assistant is",
+     "See five jobs it does well",
+     "Know the three things it gets wrong"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes. Open XpertCreation's AI Assistant (xpertcreation.com/assistant) in another tab and try each example."
+   },
+   {
+    "k": "h",
+    "v": "1) What it is"
+   },
+   {
+    "k": "p",
+    "v": "An AI assistant is a program that has read a huge amount of text and learned how words usually follow each other. You type a request in normal language, and it writes an answer. It does not look things up in a book the way you do - it predicts a likely answer."
+   },
+   {
+    "k": "h",
+    "v": "2) Five jobs it does well"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Writing a first draft: an email, a CV summary, a social media post",
+     "Explaining a hard topic in simple words, in Urdu or English",
+     "Summarising a long text into five points",
+     "Making lists and plans: a study timetable, a shopping list, an event plan",
+     "Rewriting: shorter, more polite, more formal, or for a child"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Three things it gets wrong"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Facts and numbers - it can invent a date, a law or a price that sounds right but is not",
+     "Very recent news - it may not know what happened this month",
+     "Your private situation - it does not know your company, your teacher or your family unless you tell it"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Never copy an AI answer about medicine, law, money or religion and act on it without checking with a real expert or an official source."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Ask the assistant: Explain what inflation is to a 12-year-old, in 5 lines.|Then ask: Now say it in Urdu.|Then ask: Give one example from Pakistan.|Notice how each follow-up improves the answer."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — How to ask: the 4-part prompt",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write requests that get useful answers the first time",
+     "Use the 4 parts: role, task, details, format"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Why short questions give weak answers"
+   },
+   {
+    "k": "p",
+    "v": "If you type only 'write a CV', the assistant has to guess your job, your experience and the style you want. It guesses something average. The more you tell it, the less it guesses."
+   },
+   {
+    "k": "h",
+    "v": "2) The 4 parts"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Role - who should it act as? 'You are an HR manager in Lahore.'",
+     "Task - what exactly? 'Write a 4-line CV summary.'",
+     "Details - facts it must use: 'Accountant, 3 years, Excel, tax returns, looking for a bank job.'",
+     "Format - how should it look? 'Simple English, bullet points, no more than 60 words.'"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Before and after"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Weak: Write an email to my boss.",
+     "Strong: You are my office assistant. Write a polite email to my manager, Mr. Ahmed, asking for leave on 12 and 13 December for my sister's wedding. I have finished the monthly report. Keep it under 80 words, formal English."
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Keep a note on your phone with your best prompts. You will reuse them again and again."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Pick a real task you have this week.|Write it with all 4 parts.|Send it and compare with a one-line version of the same request."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Writing faster: emails, posts and CVs",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Draft emails and posts in minutes",
+     "Improve your own writing instead of replacing it"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Draft, then edit"
+   },
+   {
+    "k": "p",
+    "v": "Let the assistant write the first draft, then you change it so it sounds like you. Readers can often tell when a text is 100% AI: it is too long, too polite and full of words like 'delighted' and 'esteemed'."
+   },
+   {
+    "k": "h",
+    "v": "2) Useful requests"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make this shorter and clearer: (paste your text)",
+     "Fix the grammar but keep my words",
+     "Write 3 versions: friendly, formal, very short",
+     "Turn these notes into a professional email: (paste notes)",
+     "Write a post for my bakery's page about our new chocolate cake, with 3 hashtags"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) CV help"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Paste your job duties and ask: turn these into 5 achievement bullet points starting with action verbs",
+     "Ask: what skills is this job advert asking for? (paste the advert)",
+     "Never let it invent experience, degrees or numbers you do not have"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "A CV with invented facts can cost you the job when the employer checks. Use AI for wording, not for facts."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write a 3-line message in your own words asking a shop for a price list.|Ask the assistant to make it polite and clear.|Change one sentence back to your own style."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Studying with AI",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use AI as a tutor, not a cheat sheet",
+     "Make quizzes and flashcards from your notes"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Ask it to teach, not to answer"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Explain photosynthesis step by step, then ask me 3 questions to check I understood",
+     "I think the answer is B because ... Am I right? Explain my mistake",
+     "Give me a simpler example of this formula"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Make practice material"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Paste your chapter notes and ask: make 10 multiple-choice questions with answers at the end",
+     "Ask: make 15 flashcards, question on one side, answer on the other",
+     "Ask: make a 7-day revision plan for these 5 topics, 1 hour a day"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "XpertAcademy's MCQ section and XpertCreation's own Assistant work well together: learn with the Assistant, then test yourself with real MCQs."
+   },
+   {
+    "k": "warn",
+    "v": "Many schools and universities count copying AI answers into homework as cheating. Use it to understand, then write in your own words."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Choose one topic from your studies or job.|Ask the assistant to explain it and then quiz you with 3 questions.|Answer them and ask it to mark your answers."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Checking AI answers",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Spot invented facts",
+     "Check important answers in three quick ways"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Why it invents things"
+   },
+   {
+    "k": "p",
+    "v": "The assistant always produces an answer that sounds confident, even when it does not know. It can make up a book title, a court case, a phone number or a statistic. This is sometimes called a 'hallucination'."
+   },
+   {
+    "k": "h",
+    "v": "2) Three checks"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ask it: how sure are you, and what is your source? Then open the source yourself",
+     "Search the key fact on an official website (government, university, company page)",
+     "Ask the same question in a new chat - if the answers disagree, be careful"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Red flags"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Exact numbers with no source",
+     "Very recent events",
+     "Laws, fees, tax rates and visa rules - they change often",
+     "Quotes from famous people"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "For tax, visa and fee questions, always end on the official website. The AI can tell you what to look for; the official page tells you the truth."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Ask: what is the fee for a new passport in Pakistan?|Then find the official passport office page and compare.|Write down which answer you would trust and why."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Pictures with AI",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Describe a picture so AI can draw it",
+     "Know where AI pictures are fine to use and where they are not"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Describe it like a photographer"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Subject - a cup of chai on a wooden table",
+     "Setting - a balcony in the evening, city lights behind",
+     "Style - realistic photo / watercolour / flat cartoon",
+     "Details - steam rising, warm light, close-up",
+     "Format - square for a post, tall for a story"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Good uses"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Ideas and mood boards before a real photo shoot",
+     "Backgrounds for posts and thumbnails",
+     "Illustrations for a lesson or a story"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Do not"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make fake photos of real people, or put them in situations that never happened",
+     "Copy another company's logo or a famous cartoon character",
+     "Use an AI picture as 'proof' of a product you sell - customers expect the real thing"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Fake pictures of real people can be against the law and can hurt someone badly. Do not make them, even as a joke."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write a 5-part description for a poster of your favourite food.|Give it to an AI picture tool.|Change one part (style or light) and compare the two pictures."
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Saving time at work",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use AI for meetings, lists, spreadsheets and translations",
+     "Build a small daily routine"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Everyday office tasks"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Turn rough meeting notes into minutes with action points and names",
+     "Write an Excel formula: 'I have dates in column A and amounts in B; total the amounts for March'",
+     "Translate a customer message from English to Urdu and back",
+     "Make a checklist for opening the shop every morning"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Videos and voice"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "XpertCreation's Video Translate turns a video into subtitles and a transcript in your language",
+     "Urdu voice typing turns your speech into written Urdu - then the assistant can polish it"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) A 10-minute morning routine"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Paste today's to-do list and ask: put these in order of importance and give each a time.|Paste unread customer messages and ask for short, polite reply drafts.|Ask for one tip to improve your work today."
+   },
+   {
+    "k": "tip",
+    "v": "Time yourself for one week. Most people save 3 to 5 hours on writing and planning alone."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Ask the assistant for an Excel formula for a real sheet you use.|Test it in Excel.|If it is wrong, tell the assistant what happened and ask again."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Privacy and safety",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what never to type into an AI tool",
+     "Spot AI-made scams"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Never paste"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Passwords, PINs and one-time codes",
+     "CNIC, passport and bank card numbers",
+     "Customer or patient details",
+     "Your company's secret documents, unless your company allows that tool"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) AI scams are getting better"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Voice calls that sound like a relative asking for money urgently",
+     "Perfect-English emails pretending to be your bank",
+     "Fake videos of famous people promising profits"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "If someone asks for money or a code in a hurry, stop. Call the person back on the number you already have, or visit the bank yourself."
+   },
+   {
+    "k": "h",
+    "v": "3) A family safe word"
+   },
+   {
+    "k": "p",
+    "v": "Agree a secret word with your family. If someone calls claiming to be your son or sister in trouble, ask for the word. A scammer will not know it."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Agree a safe word with two family members today.|Check your phone for apps you gave AI access to, and remove any you do not use."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Earning with AI skills",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "See small services you can sell",
+     "Price your work fairly and honestly"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Services people pay for"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Writing product descriptions for small online shops",
+     "Turning a business's notes into social media posts for a month",
+     "Subtitles and translation for videos (Urdu, English, Punjabi)",
+     "CV and cover letter improvement",
+     "Simple presentations from a client's notes"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Your real value"
+   },
+   {
+    "k": "p",
+    "v": "Anyone can open an AI tool. Clients pay you for judgement: knowing what to ask, checking the facts, fixing the tone, and delivering on time. AI is your tool, the quality is your job."
+   },
+   {
+    "k": "h",
+    "v": "3) Be honest"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Tell clients you use AI tools if they ask",
+     "Check every fact and name before you deliver",
+     "Never submit AI work as a student's own exam or thesis"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "You can offer these services on XpertCreation Freelance once your ID is verified."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Pick one service from the list.|Make one free sample for a friend's business.|Ask for honest feedback and improve it."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Your AI toolkit and project",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Put the ten days together",
+     "Make your personal prompt library"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Your prompt library"
+   },
+   {
+    "k": "p",
+    "v": "Make a note on your phone called 'My prompts'. Save the 10 requests you use most, written with the 4 parts. Copy, change the details, send."
+   },
+   {
+    "k": "h",
+    "v": "2) Final project"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Choose a small real goal: a CV, a shop page, a study plan or a month of posts.|Plan it with the assistant (Day 2 prompts).|Draft it (Day 3).|Check every fact (Day 5).|Add a picture (Day 6).|Share the result on XpertConnect with #XpertAcademy."
+   },
+   {
+    "k": "h",
+    "v": "3) Remember"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "AI drafts, you decide",
+     "Check facts that matter",
+     "Keep private things private",
+     "Be honest about using it"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Now take the quiz to get your certificate."
+   }
+  ]
+ }
+}

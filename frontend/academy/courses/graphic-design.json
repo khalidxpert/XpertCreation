@@ -1,0 +1,628 @@
+{
+ "day-1": {
+  "t": "Day 1 — What good design does",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know the job of a design",
+     "Spot why some posters look professional and others do not"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes. Any free design app on your phone or computer is fine for this course."
+   },
+   {
+    "k": "h",
+    "v": "1) Design is communication"
+   },
+   {
+    "k": "p",
+    "v": "A design is not decoration. Its job is to make one message clear in a few seconds: 'Sale this Friday', 'We fix phones', 'Join our class'. If people cannot tell the message in 3 seconds, the design has failed, however pretty it is."
+   },
+   {
+    "k": "h",
+    "v": "2) Why amateur designs look amateur"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Too many fonts and colours",
+     "Everything is the same size, so nothing stands out",
+     "Text squeezed to the edges",
+     "Blurry or stretched pictures"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) The 3-second test"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Show your design to someone for 3 seconds.|Take it away.|Ask: what was it about? If they cannot say, simplify it."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Collect 5 posters or posts you like and 5 you dislike.|Write one reason for each.|Keep this collection - it is your 'inspiration folder'."
+   }
+  ]
+ },
+ "day-2": {
+  "t": "Day 2 — Layout: space, alignment, hierarchy",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use empty space on purpose",
+     "Line things up",
+     "Make the most important thing biggest"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) White space"
+   },
+   {
+    "k": "p",
+    "v": "Empty space is not wasted space. It gives the eye a rest and makes the message stand out. Leave a clear margin around the edges - at least the width of your thumb on a phone-sized design."
+   },
+   {
+    "k": "h",
+    "v": "2) Alignment"
+   },
+   {
+    "k": "p",
+    "v": "Line up text and pictures along invisible lines - all left, or all centred. When elements are placed randomly the design feels messy even if the viewer cannot say why."
+   },
+   {
+    "k": "h",
+    "v": "3) Hierarchy"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "1st - the big message (headline)",
+     "2nd - the key detail (date, price, offer)",
+     "3rd - the small print (address, phone, website)"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Squint at your design. Whatever you still see clearly is what people notice first."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a post for 'Free eye check-up, Saturday 10am-2pm'.|Make the headline 3 times bigger than the details.|Align everything to the left and keep a margin."
+   }
+  ]
+ },
+ "day-3": {
+  "t": "Day 3 — Colour",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Choose a colour palette",
+     "Keep text readable"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) A simple palette"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "1 main colour - your brand colour",
+     "1 accent colour - for buttons, prices and highlights",
+     "Neutrals - white, light grey, dark grey or near-black for text"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) What colours say"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Green - fresh, natural, money, Islamic themes",
+     "Blue - trust, calm, banks, tech",
+     "Red and orange - energy, food, sale, urgency",
+     "Black and gold - luxury, weddings"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Contrast"
+   },
+   {
+    "k": "p",
+    "v": "Text must stand out from its background: dark text on light, or light text on dark. Yellow text on white or red text on green is hard to read, especially for older people."
+   },
+   {
+    "k": "warn",
+    "v": "Never put text directly on a busy photo. Add a solid or semi-transparent band behind it."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Choose a main and an accent colour for a real or imaginary business.|Redo yesterday's post with these colours.|Check the text is easy to read on a phone at arm's length."
+   }
+  ]
+ },
+ "day-4": {
+  "t": "Day 4 — Fonts and text",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Pair two fonts",
+     "Write less text"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Two fonts are enough"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "One strong font for headlines",
+     "One simple, readable font for everything else",
+     "For Urdu, a clean Nastaliq or Naskh font - and never stretch it"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Less text, more message"
+   },
+   {
+    "k": "p",
+    "v": "People do not read posters - they glance at them. Cut your text in half, then cut it again. Keep the headline under 7 words if you can."
+   },
+   {
+    "k": "h",
+    "v": "3) Readability rules"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "No ALL CAPITALS for long sentences",
+     "Do not centre long paragraphs",
+     "Keep line spacing comfortable",
+     "Check spelling twice - especially names and phone numbers"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Write a 30-word event announcement.|Cut it to 15 words without losing the meaning.|Design it with only two fonts."
+   }
+  ]
+ },
+ "day-5": {
+  "t": "Day 5 — Pictures and icons",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use sharp, legal pictures",
+     "Crop for focus"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Quality first"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use photos larger than your design, never enlarge small ones",
+     "Never stretch a photo out of shape - resize from a corner",
+     "One great photo beats five average ones"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Crop with purpose"
+   },
+   {
+    "k": "p",
+    "v": "Crop away anything that does not help the message. Faces and products should fill the frame. Leave space in the direction a person is looking."
+   },
+   {
+    "k": "h",
+    "v": "3) Where pictures come from"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Your own photos - best for real products",
+     "Free stock photo sites that allow commercial use - read the licence",
+     "Simple icons in one style, all outline or all filled"
+    ]
+   },
+   {
+    "k": "warn",
+    "v": "Pictures from a web search are usually owned by someone. Using them in a business design can bring a copyright complaint."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Take a photo of a product near a window.|Crop it three different ways.|Choose the crop that makes the product clearest."
+   }
+  ]
+ },
+ "day-6": {
+  "t": "Day 6 — Social media posts",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use the right sizes",
+     "Build a post template you can reuse"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Common sizes"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Square post - 1080 x 1080 pixels",
+     "Tall post - 1080 x 1350 pixels (shows bigger in feeds)",
+     "Story or short video cover - 1080 x 1920 pixels",
+     "Link preview / cover - 1200 x 630 pixels"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Safe zones"
+   },
+   {
+    "k": "p",
+    "v": "In stories and short videos the top and bottom of the screen get covered by names, buttons and captions. Keep important text in the middle area."
+   },
+   {
+    "k": "h",
+    "v": "3) A reusable template"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Your logo always in the same corner",
+     "Same two fonts and colours",
+     "A fixed spot for the headline and the call to action",
+     "Change only the photo and words each time"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "A consistent look makes people recognise your posts before they read the name."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Make a 1080 x 1350 template with your logo, colours and fonts.|Use it for three different posts.|Put the three side by side - do they look like one brand?"
+   }
+  ]
+ },
+ "day-7": {
+  "t": "Day 7 — Designing a simple logo",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Know what makes a logo work",
+     "Sketch and test logo ideas"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) A good logo is simple"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Recognisable when tiny - on a phone or a pen",
+     "Works in one colour (black and white)",
+     "Not full of details or gradients",
+     "Fits the business: a law firm and a toy shop should not look the same"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Types of logo"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Wordmark - the name in a special style",
+     "Icon - a symbol",
+     "Combination - icon plus name, the most common for small businesses"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Process"
+   },
+   {
+    "k": "steps",
+    "v": "Step by step:|Write 10 words that describe the business.|Sketch 10 tiny ideas on paper in 10 minutes - quantity first.|Pick 3 and make them on the computer in black only.|Test them very small and on a dark background.|Add colour last."
+   },
+   {
+    "k": "warn",
+    "v": "Never copy or slightly change another company's logo. It is illegal and can force the business to throw away all its printed material."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Do the 5-step process for a made-up business, for example 'Ali's Chai Corner'."
+   }
+  ]
+ },
+ "day-8": {
+  "t": "Day 8 — Print design: cards, flyers, banners",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Prepare designs that print correctly",
+     "Avoid costly print mistakes"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) Screen is not paper"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Use high resolution - 300 DPI for small prints like cards and flyers",
+     "Ask the printer for the exact size, including 'bleed' (extra 3 mm on each side that gets cut off)",
+     "Keep text at least 5 mm inside the cut line",
+     "Colours look darker on paper than on a bright phone screen"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Visiting card checklist"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Name, title, phone, email or website, address",
+     "Logo",
+     "A QR code to your profile or digital card",
+     "Readable text - at least 8 point"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Send a PDF"
+   },
+   {
+    "k": "p",
+    "v": "Send printers a high-quality PDF, not a screenshot. Always ask for one test print before printing 1,000 copies."
+   },
+   {
+    "k": "tip",
+    "v": "XpertCreation's digital card (/c/yourname) works well as the QR code target on a printed card."
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Design a visiting card at the standard size your printer uses, with bleed.|Add a QR code.|Print one copy at home or a shop and check it."
+   }
+  ]
+ },
+ "day-9": {
+  "t": "Day 9 — Feedback and fixing your own work",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Review designs with a checklist",
+     "Take feedback without taking it personally"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The design checklist"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Can the message be understood in 3 seconds?",
+     "Is one thing clearly the most important?",
+     "Two fonts, a small palette?",
+     "Enough space and good alignment?",
+     "Readable on a phone?",
+     "Spelling, phone number and dates correct?"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Asking for feedback"
+   },
+   {
+    "k": "p",
+    "v": "Do not ask 'Do you like it?'. Ask 'What do you notice first?' and 'What would you do after seeing this?'. The answers show whether the design works."
+   },
+   {
+    "k": "h",
+    "v": "3) Client changes"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Agree how many rounds of changes are included before you start",
+     "Ask why a change is wanted - the real problem may need a different fix",
+     "Save each version so you can go back"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "Try it"
+   },
+   {
+    "k": "steps",
+    "v": "Do this now:|Run the checklist on everything you made this week.|Fix one design.|Show the before and after to a friend."
+   }
+  ]
+ },
+ "day-10": {
+  "t": "Day 10 — Your portfolio project",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make a small brand kit for one business",
+     "Share it as a portfolio piece"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 25 minutes."
+   },
+   {
+    "k": "h",
+    "v": "1) The brand kit"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Logo in colour and in black",
+     "Colour palette with codes",
+     "Two fonts",
+     "One social post template",
+     "One visiting card"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "2) Present it"
+   },
+   {
+    "k": "p",
+    "v": "Show the kit on one image: logo at the top, colours as circles, fonts written out, then the post and the card. Write 3 lines: the business, the problem, your solution."
+   },
+   {
+    "k": "h",
+    "v": "3) Next steps"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Make 2 more brand kits for different kinds of business",
+     "Offer design services on XpertCreation Freelance",
+     "Use XpertCreation's Brand kit tool to keep a business's colours and logo in one place"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "Share your brand kit on XpertConnect with #XpertAcademy. Now take the quiz to get your certificate."
+   }
+  ]
+ }
+}
