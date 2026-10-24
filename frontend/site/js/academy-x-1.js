@@ -441,7 +441,7 @@
   /* ------------------------------------------------------------ quick check */
   function loadChecks(){
     if (CHECKS) return Promise.resolve(CHECKS);
-    if (!CHK_LOADING) CHK_LOADING = fetch("/academy/checks.json?v=2", { credentials: "same-origin" }).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(d){ CHECKS = d || {}; return CHECKS; });
+    if (!CHK_LOADING) CHK_LOADING = fetch("/academy/checks.json?v=3", { credentials: "same-origin" }).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(d){ CHECKS = d || {}; return CHECKS; });
     return CHK_LOADING;
   }
   function pairsOf(l){

@@ -1143,5 +1143,162 @@
     ]
    }
   ]
+ },
+ "day-11": {
+  "t": "Day 11 - Project: WiFi Password Viewer",
+  "b": [
+   {
+    "k": "h",
+    "v": "Today's goal"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Write a real program that reads the WiFi passwords already saved on your own Windows PC",
+     "Learn how Python can run a Windows command and read its answer",
+     "Pull out just the part you want from a block of text"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "About 20 minutes. This is a project lesson - you build one small program step by step."
+   },
+   {
+    "k": "h",
+    "v": "What this program does"
+   },
+   {
+    "k": "p",
+    "v": "When you connect to a WiFi network, Windows remembers its password so you do not type it every time. This program asks Windows for that list and shows you the passwords - handy when you forget your own home or office WiFi password."
+   },
+   {
+    "k": "warn",
+    "v": "Use this only on your own computer, for your own networks. It does not find or break into anyone's WiFi - it only shows networks this PC has already joined, which you could also see by clicking in Windows settings. It needs real Windows, so it will not run in the box on this page; copy it to your PC and run it there."
+   },
+   {
+    "k": "h",
+    "v": "1) The idea"
+   },
+   {
+    "k": "p",
+    "v": "Windows has a built-in command called netsh. If you open Command Prompt and type  netsh wlan show profiles  it prints every saved network. Our program will run that same command from Python and read the answer, instead of you typing it by hand."
+   },
+   {
+    "k": "h",
+    "v": "2) Get the list of networks"
+   },
+   {
+    "k": "p",
+    "v": "subprocess lets Python run a command and catch what it prints. We go line by line and keep only the lines that have the network name in them."
+   },
+   {
+    "k": "code",
+    "v": "@Python\nimport subprocess\n\ndef get_wifi_profiles():\n    out = subprocess.check_output(\n        [\"netsh\", \"wlan\", \"show\", \"profiles\"], text=True\n    )\n    names = []\n    for line in out.splitlines():\n        if \"All User Profile\" in line:\n            names.append(line.split(\":\", 1)[1].strip())\n    return names"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "check_output runs the command and gives back everything it printed as text",
+     "text=True means we get normal text, not raw bytes",
+     "Each network line looks like   All User Profile : HomeWiFi",
+     "split(\":\", 1) cuts the line at the first colon, and [1] is the part after it",
+     "strip() removes the spaces around the name"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "3) Get the password for one network"
+   },
+   {
+    "k": "p",
+    "v": "Asking for one network with  key=clear  makes Windows print its password on a line called Key Content. We read that one line."
+   },
+   {
+    "k": "code",
+    "v": "@Python\ndef get_wifi_password(name):\n    try:\n        out = subprocess.check_output(\n            [\"netsh\", \"wlan\", \"show\", \"profile\", name, \"key=clear\"], text=True\n        )\n    except subprocess.CalledProcessError:\n        return \"N/A\"\n    for line in out.splitlines():\n        if \"Key Content\" in line:\n            return line.split(\":\", 1)[1].strip()\n    return \"(open network - no password)\""
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "We pass the network name so Windows shows that one network",
+     "key=clear is what asks for the real password text",
+     "try/except catches a network that no longer exists so the program does not crash",
+     "An open network has no password, so we return a short note instead"
+    ]
+   },
+   {
+    "k": "h",
+    "v": "4) Put it together"
+   },
+   {
+    "k": "p",
+    "v": "main gets the list, then asks for each password and prints it."
+   },
+   {
+    "k": "code",
+    "v": "@Python\ndef main():\n    names = get_wifi_profiles()\n    if not names:\n        print(\"No saved WiFi networks found on this PC.\")\n        return\n    for name in names:\n        print(name, \"->\", get_wifi_password(name))\n\n\nif __name__ == \"__main__\":\n    main()"
+   },
+   {
+    "k": "h",
+    "v": "5) The whole program"
+   },
+   {
+    "k": "p",
+    "v": "This is everything in one file. Download it with the button below, or copy it into a file called wifi_viewer.py on your PC."
+   },
+   {
+    "k": "code",
+    "v": "@Python\n# wifi_viewer.py - see the WiFi passwords saved on YOUR OWN Windows PC\n# Run it on your own computer. It only shows networks this PC has already joined.\nimport subprocess\n\n\ndef get_wifi_profiles():\n    \"\"\"Return the names of every WiFi network saved on this PC.\"\"\"\n    out = subprocess.check_output(\n        [\"netsh\", \"wlan\", \"show\", \"profiles\"], text=True\n    )\n    names = []\n    for line in out.splitlines():\n        if \"All User Profile\" in line:\n            names.append(line.split(\":\", 1)[1].strip())\n    return names\n\n\ndef get_wifi_password(name):\n    \"\"\"Return the saved password for one network, or a note if there is none.\"\"\"\n    try:\n        out = subprocess.check_output(\n            [\"netsh\", \"wlan\", \"show\", \"profile\", name, \"key=clear\"], text=True\n        )\n    except subprocess.CalledProcessError:\n        return \"N/A\"\n    for line in out.splitlines():\n        if \"Key Content\" in line:\n            return line.split(\":\", 1)[1].strip()\n    return \"(open network - no password)\"\n\n\ndef main():\n    names = get_wifi_profiles()\n    if not names:\n        print(\"No saved WiFi networks found on this PC.\")\n        return\n    for name in names:\n        print(name, \"->\", get_wifi_password(name))\n\n\nif __name__ == \"__main__\":\n    main()"
+   },
+   {
+    "k": "file",
+    "v": {
+     "url": "/academy/files/python/wifi_viewer.py",
+     "name": "wifi_viewer.py",
+     "note": "Run on your own Windows PC: python wifi_viewer.py"
+    }
+   },
+   {
+    "k": "h",
+    "v": "6) Run it on your PC"
+   },
+   {
+    "k": "steps",
+    "v": "Three steps on your own Windows computer:|Save the code in a file named wifi_viewer.py|Open Command Prompt in that folder|Type  python wifi_viewer.py  and press Enter"
+   },
+   {
+    "k": "tip",
+    "v": "If it says python is not found, install Python from python.org first and tick \"Add Python to PATH\" during setup."
+   },
+   {
+    "k": "h",
+    "v": "7) Now make it yours"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Print a neat numbered list instead of name -> password",
+     "Save the results into a text file called my_wifi.txt",
+     "Skip the open networks that have no password",
+     "Ask the user for one network name and show only that one"
+    ]
+   },
+   {
+    "k": "tip",
+    "v": "You already used everything here in earlier lessons: lists, loops, functions, if and splitting text. The only new piece is subprocess, which just runs a program and hands you back what it printed."
+   },
+   {
+    "k": "h",
+    "v": "Homework"
+   },
+   {
+    "k": "bullets",
+    "v": [
+     "Run the program on your PC and find a password you had forgotten",
+     "Change it to save the list into my_wifi.txt",
+     "Take the quick check below"
+    ]
+   }
+  ]
  }
 }
