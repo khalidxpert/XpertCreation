@@ -418,3 +418,38 @@ try:
         DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
 except Exception:
     pass
+
+
+# --- Social sign in (Google / Discord) ---
+SOCIAL_LOGIN = {
+    "google": {
+        "client_id": env("GOOGLE_CLIENT_ID"),
+        "client_secret": env("GOOGLE_CLIENT_SECRET"),
+        "redirect": env("GOOGLE_REDIRECT",
+                        "https://xpertcreation.com/api/auth/social/google/callback/"),
+    },
+    "discord": {
+        "client_id": env("DISCORD_CLIENT_ID"),
+        "client_secret": env("DISCORD_CLIENT_SECRET"),
+        "redirect": env("DISCORD_REDIRECT",
+                        "https://xpertcreation.com/api/auth/social/discord/callback/"),
+    },
+    "facebook": {
+        "client_id": env("FACEBOOK_CLIENT_ID"),
+        "client_secret": env("FACEBOOK_CLIENT_SECRET"),
+        "redirect": env("FACEBOOK_REDIRECT",
+                        "https://xpertcreation.com/api/auth/social/facebook/callback/"),
+    },
+    "x": {
+        "client_id": env("X_CLIENT_ID"),
+        "client_secret": env("X_CLIENT_SECRET"),
+        "redirect": env("X_REDIRECT",
+                        "https://xpertcreation.com/api/auth/social/x/callback/"),
+    },
+    "telegram": {
+        "bot_token": env("TELEGRAM_BOT_TOKEN"),
+        "bot_username": env("TELEGRAM_BOT_USERNAME"),
+    },
+}
+SOCIAL_LOGIN_DONE = env("SOCIAL_LOGIN_DONE", "https://xpertcreation.com/login?social=1")
+SOCIAL_LOGIN_FAIL = env("SOCIAL_LOGIN_FAIL", "https://xpertcreation.com/login?social=error")

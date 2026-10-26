@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 from . import community
+from . import social
 
 app_name = "accounts"
 
@@ -9,6 +10,9 @@ from . import usernames  # noqa: E402
 
 urlpatterns = [
     path("csrf/", views.csrf, name="csrf"),
+    path("social/providers/", social.providers, name="social-providers"),
+    path("social/<str:provider>/callback/", social.callback, name="social-callback"),
+    path("social/<str:provider>/", social.start, name="social-start"),
 
     path("register/", views.register, name="register"),
     path("verify-email/", views.verify_email, name="verify-email"),
