@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bazaar — buy & sell in Pakistan | XpertCreation</title>
+<meta name="description" content="Buy and sell mobiles, cars, property, electronics and more. Post a free ad in minutes.">
+<style>
+  :root{--ink:#1f2937;--muted:#6b7280;--line:#e6e8f0;--brand:#0f766e;--soft:#f6f7fb}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--soft)}
+  header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:10px 14px}
+  .bar{display:flex;align-items:center;gap:10px}
+  .logo{font-weight:800;font-size:17px;color:var(--brand);text-decoration:none}
+  .post{margin-left:auto;background:var(--brand);color:#fff;border:0;border-radius:999px;padding:9px 14px;font-weight:700;font-size:13px}
+  .search{margin-top:10px;display:flex;gap:8px}
+  .search input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit;font-size:14px}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 14px 4px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{white-space:nowrap;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--ink)}
+  .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  main{padding:12px 14px 40px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;padding:0}
+  .card img{width:100%;height:118px;object-fit:cover;display:block;background:#eef0f6}
+  .card .ph{width:100%;height:118px;display:flex;align-items:center;justify-content:center;background:#eef0f6;color:#9aa0b0;font-size:26px}
+  .card .b{padding:8px 9px 10px}
+  .price{font-weight:800;font-size:14px}
+  .title{font-size:13px;line-height:18px;color:var(--ink);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta{font-size:11px;color:var(--muted);margin-top:4px}
+  .empty{padding:40px 10px;text-align:center;color:var(--muted);font-size:14px}
+  .sheet{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:flex-end;z-index:40}
+  .sheet.on{display:flex}
+  .panel{background:#fff;width:100%;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px}
+  .panel h2{font-size:17px;margin:0 0 10px}
+  .row{display:flex;gap:10px}
+  .field{margin-bottom:10px;flex:1}
+  label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+  input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:14px;background:#fff}
+  textarea{min-height:80px;resize:vertical}
+  .btn{background:var(--brand);color:#fff;border:0;border-radius:12px;padding:12px;font-weight:700;font-size:14px;width:100%}
+  .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .msg{font-size:13px;color:#b91c1c;margin:6px 0}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+  .gallery{display:flex;gap:8px;overflow-x:auto;margin-bottom:10px}
+  .gallery img{height:180px;border-radius:12px}
+  .fav{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="logo" href="/">XpertCreation</a>
+    <a class="logo" href="/bazaar" style="color:var(--ink);font-size:15px">Bazaar</a>
+    <button class="post" id="postBtn">+ Post ad</button>
+  </div>
+  <div class="search">
+    <input id="q" placeholder="What are you looking for?" autocomplete="off">
+  </div>
+</header>
+
+<div class="chips" id="chips"></div>
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">Koi ad nahi mila.</div>
+</main>
+
+<div class="sheet" id="sheet">
+  <div class="panel" id="panel"></div>
+</div>
+
+<script>
+const API = "/api/classifieds/";
+const $ = (s) => document.querySelector(s);
+let state = { category: "", q: "" };
+
+function csrf() {
+  const m = document.cookie.match(/(^|;)\s*csrftoken=([^;]+)/);
+  return m ? decodeURIComponent(m[2]) : "";
+}
+fetch(API + "csrf/", { credentials: "same-origin" });
+
+function money(n) {
+  const v = Number(n || 0);
+  return "Rs " + v.toLocaleString("en-PK");
+}
+
+function card(a) {
+  const img = a.cover ? '<img loading="lazy" src="' + a.cover + '" alt="">'
+                      : '<div class="ph">📦</div>';
+  return '<button class="card" data-id="' + a.id + '">' + img +
+    '<div class="b"><div class="price">' +
+    (a.price_type === "free" ? "Free" : money(a.price)) +
+    '</div><div class="title">' + esc(a.title) + '</div>' +
+    '<div class="meta">' + esc(a.city) + " · " + esc(a.category) + "</div></div></button>";
+}
+
+function esc(t) {
+  return String(t || "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+async function load() {
+  const p = new URLSearchParams();
+  if (state.q) p.set("q", state.q);
+  if (state.category) p.set("category", state.category);
+  const r = await fetch(API + "ads/?" + p.toString(), { credentials: "same-origin" });
+  const d = await r.json();
+  const rows = d.results || d || [];
+  $("#grid").innerHTML = rows.map(card).join("");
+  $("#empty").style.display = rows.length ? "none" : "block";
+}
+
+async function loadCats() {
+  const r = await fetch(API + "categories/", { credentials: "same-origin" });
+  const cats = await r.json();
+  const all = `<button class="chip on" data-cat="">All</button>`;
+  $("#chips").innerHTML = all + cats.map((c) =>
+    `<button class="chip" data-cat="${c.slug}">${esc(c.icon)} ${esc(c.name)}</button>`).join("");
+}
+
+$("#chips").addEventListener("click", (e) => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  document.querySelectorAll(".chip").forEach((c) => c.classList.remove("on"));
+  b.classList.add("on");
+  state.category = b.dataset.cat;
+  load();
+});
+
+let t;
+$("#q").addEventListener("input", (e) => {
+  clearTimeout(t);
+  t = setTimeout(() => { state.q = e.target.value.trim(); load(); }, 300);
+});
+
+/* ---------- detail ---------- */
+$("#grid").addEventListener("click", (e) => {
+  const c = e.target.closest(".card");
+  if (c) openAd(c.dataset.id);
+});
+
+async function openAd(id) {
+  const r = await fetch(API + "ads/" + id + "/", { credentials: "same-origin" });
+  if (!r.ok) return;
+  const a = await r.json();
+  const imgs = a.images.length
+    ? '<div class="gallery">' + a.images.map((i) => '<img src="' + i.url + '" alt="">').join("") + "</div>"
+    : "";
+  $("#panel").innerHTML =
+    '<h2>' + esc(a.title) + "</h2>" +
+    '<div class="price" style="font-size:20px;margin-bottom:8px">' +
+      (a.price_type === "free" ? "Free" : money(a.price)) +
+      (a.price_type === "negotiable" ? ' <span style="font-size:12px;color:#6b7280">negotiable</span>' : "") +
+    "</div>" + imgs +
+    '<div class="meta" style="margin-bottom:10px">' + esc(a.category) + " · " + esc(a.city) +
+      (a.area ? " · " + esc(a.area) : "") + " · " + esc(a.seller_name) +
+      " · " + a.views + " views</div>" +
+    '<p style="font-size:14px;line-height:22px;white-space:pre-wrap">' + esc(a.description) + "</p>" +
+    (a.phone ? '<p style="font-size:14px"><b>Phone:</b> ' + esc(a.phone) + "</p>" : "") +
+    '<div class="row" style="margin-top:12px">' +
+      '<button class="fav" id="favBtn">♡ Save</button>' +
+      (a.is_mine ? '<button class="fav" id="soldBtn">Mark sold</button>' : "") +
+      '<button class="fav" id="closeBtn" style="margin-left:auto">Close</button>' +
+    "</div>";
+  $("#sheet").classList.add("on");
+
+  $("#closeBtn").onclick = () => $("#sheet").classList.remove("on");
+  $("#favBtn").onclick = async () => {
+    const rr = await fetch(API + "ads/" + id + "/favorite/", {
+      method: "POST", credentials: "same-origin",
+      headers: { "X-CSRFToken": csrf() }
+    });
+    if (rr.status === 403 || rr.status === 401) { $("#favBtn").textContent = "login karein"; return; }
+    const d = await rr.json();
+    $("#favBtn").textContent = d.favorited ? "♥ Saved" : "♡ Save";
+  };
+  if (a.is_mine) {
+    $("#soldBtn").onclick = async () => {
+      await fetch(API + "ads/" + id + "/sold/", {
+        method: "POST", credentials: "same-origin",
+        headers: { "X-CSRFToken": csrf() }
+      });
+      $("#sheet").classList.remove("on");
+      load();
+    };
+  }
+}
+
+$("#sheet").addEventListener("click", (e) => {
+  if (e.target.id === "sheet") $("#sheet").classList.remove("on");
+});
+
+/* ---------- post form ---------- */
+$("#postBtn").onclick = async () => {
+  const r = await fetch(API + "categories/", { credentials: "same-origin" });
+  const cats = await r.json();
+  $("#panel").innerHTML =
+    '<h2>Post a free ad</h2>' +
+    '<div class="field"><label>Title</label><input id="f_title" maxlength="120" placeholder="iPhone 13 Pro 256GB"></div>' +
+    '<div class="row"><div class="field"><label>Category</label><select id="f_cat">' +
+      cats.map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join("") +
+    "</select></div></div>" +
+    '<div class="row"><div class="field"><label>Price (Rs)</label><input id="f_price" inputmode="numeric" placeholder="85000"></div>' +
+    '<div class="field"><label>Type</label><select id="f_ptype"><option value="fixed">Fixed</option><option value="negotiable">Negotiable</option><option value="free">Free</option></select></div></div>' +
+    '<div class="row"><div class="field"><label>Condition</label><select id="f_cond"><option value="used">Used</option><option value="new">New</option></select></div>' +
+    '<div class="field"><label>City</label><input id="f_city" placeholder="Lahore"></div></div>' +
+    '<div class="row"><div class="field"><label>Area (optional)</label><input id="f_area" placeholder="DHA Phase 5"></div>' +
+    '<div class="field"><label>Phone (optional)</label><input id="f_phone" placeholder="03xx xxxxxxx"></div></div>' +
+    '<div class="field"><label>Description</label><textarea id="f_desc" placeholder="Condition, warranty, kya included hai..."></textarea></div>' +
+    '<div class="field"><label>Photos (max 6)</label><input id="f_imgs" type="file" accept="image/*" multiple></div>' +
+    '<div class="msg" id="f_msg"></div>' +
+    '<button class="btn" id="f_send">Post ad</button>' +
+    '<button class="btn ghost" id="f_cancel" style="margin-top:8px">Cancel</button>' +
+    '<div class="note">Ad post karne ke liye login zaruri hai. Login na ho to pehle /account par jayein.</div>';
+  $("#sheet").classList.add("on");
+  $("#f_cancel").onclick = () => $("#sheet").classList.remove("on");
+
+  $("#f_send").onclick = async () => {
+    const body = {
+      title: $("#f_title").value.trim(),
+      category_id: Number($("#f_cat").value),
+      price: Number($("#f_price").value || 0),
+      price_type: $("#f_ptype").value,
+      condition: $("#f_cond").value,
+      city: $("#f_city").value.trim(),
+      area: $("#f_area").value.trim(),
+      phone: $("#f_phone").value.trim(),
+      description: $("#f_desc").value.trim()
+    };
+    if (!body.title || !body.city || !body.description) {
+      $("#f_msg").textContent = "Title, city aur description zaruri hain.";
+      return;
+    }
+    const r = await fetch(API + "ads/", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
+      body: JSON.stringify(body)
+    });
+    if (r.status === 401 || r.status === 403) {
+      $("#f_msg").innerHTML = 'Login zaruri hai — <a href="/account">login karein</a>.';
+      return;
+    }
+    if (!r.ok) { $("#f_msg").textContent = "Ad post nahi hui, dobara koshish karein."; return; }
+    const ad = await r.json();
+
+    const files = $("#f_imgs").files;
+    for (let i = 0; i < Math.min(files.length, 6); i++) {
+      const fd = new FormData();
+      fd.append("image", files[i]);
+      await fetch(API + "ads/" + ad.id + "/images/", {
+        method: "POST", credentials: "same-origin",
+        headers: { "X-CSRFToken": csrf() }, body: fd
+      });
+    }
+    $("#sheet").classList.remove("on");
+    load();
+  };
+};
+
+loadCats();
+load();
+</script>
+</body>
+</html>

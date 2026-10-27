@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 from . import community
 from . import social
+from . import telegram_login as tg_login
 
 app_name = "accounts"
 
@@ -12,6 +13,9 @@ urlpatterns = [
     path("csrf/", views.csrf, name="csrf"),
     path("social/providers/", social.providers, name="social-providers"),
     path("social/<str:provider>/callback/", social.callback, name="social-callback"),
+    path("social/telegram/start/", tg_login.start, name="telegram-login-start"),
+    path("social/telegram/finish/", tg_login.finish, name="telegram-login-finish"),
+    path("social/telegram/hook/<str:secret>/", tg_login.hook, name="telegram-login-hook"),
     path("social/<str:provider>/", social.start, name="social-start"),
 
     path("register/", views.register, name="register"),

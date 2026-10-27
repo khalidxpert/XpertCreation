@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bazaar — Buy &amp; Sell in Pakistan | XpertCreation</title>
+<meta name="description" content="Buy and sell mobiles, cars, property, electronics, furniture and more. Post a free ad in minutes on XpertCreation Bazaar.">
+<style>
+  :root{--ink:#1f2937;--muted:#6b7280;--line:#e6e8f0;--brand:#0f766e;--soft:#f6f7fb;--danger:#b91c1c}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Naskh Arabic",sans-serif;color:var(--ink);background:var(--soft)}
+  body[dir="rtl"]{font-family:"Noto Naskh Arabic",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:10px 14px}
+  .bar{display:flex;align-items:center;gap:8px}
+  .logo{font-weight:800;font-size:17px;color:var(--brand);text-decoration:none}
+  .logo.sub{color:var(--ink);font-size:15px}
+  .lang{margin-inline-start:auto;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700;color:var(--ink)}
+  .post{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:9px 13px;font-weight:700;font-size:13px;white-space:nowrap}
+  .search{margin-top:10px;display:flex;gap:8px}
+  .search input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit;font-size:14px}
+  .fbtn{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:0 12px;font-size:13px;font-weight:700;color:var(--ink)}
+  .fbtn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .filters{display:none;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .filters.on{display:block}
+  .frow{display:flex;gap:8px;margin-bottom:8px}
+  .frow > *{flex:1;min-width:0}
+  .filters label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px}
+  .filters input,.filters select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:9px;font:inherit;font-size:13px;background:#fff}
+  .factions{display:flex;gap:8px}
+  .factions button{flex:1;border-radius:10px;padding:10px;font-size:13px;font-weight:700;border:1.5px solid var(--line);background:#fff;color:var(--ink)}
+  .factions button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 14px 4px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{white-space:nowrap;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--ink)}
+  .chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .tabs{display:flex;gap:8px;padding:6px 14px 0}
+  .tab{border:0;background:transparent;padding:8px 2px;font-size:13px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent}
+  .tab.on{color:var(--brand);border-bottom-color:var(--brand)}
+  main{padding:12px 14px 40px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:start;padding:0;cursor:pointer}
+  .card img{width:100%;height:118px;object-fit:cover;display:block;background:#eef0f6}
+  .card .ph{width:100%;height:118px;display:flex;align-items:center;justify-content:center;background:#eef0f6;color:#9aa0b0;font-size:26px}
+  .card .b{padding:8px 9px 10px}
+  .price{font-weight:800;font-size:14px}
+  .title{font-size:13px;line-height:18px;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta{font-size:11px;color:var(--muted);margin-top:4px}
+  .badge{display:inline-block;font-size:10px;font-weight:700;border-radius:6px;padding:2px 5px;background:#eef2ff;color:#3730a3;margin-inline-end:4px}
+  .empty{padding:46px 10px;text-align:center;color:var(--muted);font-size:14px}
+  .sheet{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:flex-end;z-index:40}
+  .sheet.on{display:flex}
+  .panel{background:#fff;width:100%;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px}
+  .panel h2{font-size:17px;margin:0 0 10px}
+  .row{display:flex;gap:10px}
+  .field{margin-bottom:10px;flex:1;min-width:0}
+  label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+  input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:14px;background:#fff}
+  textarea{min-height:80px;resize:vertical}
+  .btn{background:var(--brand);color:#fff;border:0;border-radius:12px;padding:12px;font-weight:700;font-size:14px;width:100%}
+  .btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .msg{font-size:13px;color:var(--danger);margin:6px 0}
+  .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:18px}
+  .gallery{display:flex;gap:8px;overflow-x:auto;margin-bottom:10px}
+  .gallery img{height:180px;border-radius:12px}
+  .act{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
+  .act.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+  .desc{font-size:14px;line-height:22px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="logo" href="/">XpertCreation</a>
+    <a class="logo sub" href="/bazaar">Bazaar</a>
+    <button class="lang" id="langBtn">اردو</button>
+    <button class="post" id="postBtn" data-i18n="post_ad">+ Post ad</button>
+  </div>
+  <div class="search">
+    <input id="q" data-i18n-ph="search_ph" placeholder="What are you looking for?" autocomplete="off">
+    <button class="fbtn" id="fToggle" data-i18n="filters">Filters</button>
+  </div>
+  <div class="filters" id="filters">
+    <div class="frow">
+      <div><label data-i18n="city">City</label><select id="fCity"></select></div>
+      <div><label data-i18n="condition">Condition</label>
+        <select id="fCond">
+          <option value="" data-i18n="any">Any</option>
+          <option value="new" data-i18n="cond_new">New</option>
+          <option value="used" data-i18n="cond_used">Used</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div><label data-i18n="min_price">Min price</label><input id="fMin" inputmode="numeric" placeholder="0"></div>
+      <div><label data-i18n="max_price">Max price</label><input id="fMax" inputmode="numeric" placeholder="Any"></div>
+    </div>
+    <div class="frow">
+      <div><label data-i18n="sort">Sort by</label>
+        <select id="fSort">
+          <option value="new" data-i18n="sort_new">Newest first</option>
+          <option value="price_asc" data-i18n="sort_asc">Price: low to high</option>
+          <option value="price_desc" data-i18n="sort_desc">Price: high to low</option>
+        </select>
+      </div>
+    </div>
+    <div class="factions">
+      <button id="fReset" data-i18n="reset">Reset</button>
+      <button class="primary" id="fApply" data-i18n="apply">Apply</button>
+    </div>
+  </div>
+</header>
+
+<div class="chips" id="chips"></div>
+<div class="tabs" id="tabs">
+  <button class="tab on" data-tab="all" data-i18n="tab_all">All ads</button>
+  <button class="tab" data-tab="saved" data-i18n="tab_saved">Saved</button>
+  <button class="tab" data-tab="mine" data-i18n="tab_mine">My ads</button>
+</div>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none"></div>
+</main>
+
+<div class="sheet" id="sheet"><div class="panel" id="panel"></div></div>
+
+<script>
+const API = "/api/classifieds/";
+const $ = (s) => document.querySelector(s);
+
+const CITIES = ["Lahore","Karachi","Islamabad","Rawalpindi","Faisalabad","Multan",
+  "Peshawar","Quetta","Gujranwala","Sialkot","Hyderabad","Bahawalpur","Sargodha",
+  "Abbottabad","Sukkur","Larkana","Mardan","Mirpur","Muzaffarabad","Other"];
+
+const I18N = {
+  en: {
+    post_ad: "+ Post ad", search_ph: "What are you looking for?", filters: "Filters",
+    city: "City", all_cities: "All cities", condition: "Condition", any: "Any",
+    cond_new: "New", cond_used: "Used", min_price: "Min price", max_price: "Max price",
+    sort: "Sort by", sort_new: "Newest first", sort_asc: "Price: low to high",
+    sort_desc: "Price: high to low", reset: "Reset", apply: "Apply",
+    cat_all: "All", tab_all: "All ads", tab_saved: "Saved", tab_mine: "My ads",
+    empty: "No ads found. Try another search or post your own.",
+    empty_saved: "You have not saved any ad yet.",
+    empty_mine: "You have not posted any ad yet.",
+    loading: "Loading...", negotiable: "negotiable", free: "Free",
+    views: "views", phone: "Phone", save: "♡ Save", saved: "♥ Saved",
+    report: "Report", mark_sold: "Mark sold", mark_active: "Mark active", close: "Close",
+    post_title: "Post a free ad", f_title: "Title", f_title_ph: "iPhone 13 Pro 256GB",
+    f_cat: "Category", f_price: "Price (Rs)", f_ptype: "Price type", f_fixed: "Fixed",
+    f_nego: "Negotiable", f_free: "Free", f_cond: "Condition", f_city: "City",
+    f_area: "Area (optional)", f_area_ph: "DHA Phase 5", f_phone: "Phone (optional)",
+    f_phone_ph: "03xx xxxxxxx", f_desc: "Description",
+    f_desc_ph: "Condition, warranty, what is included...", f_imgs: "Photos (max 6)",
+    f_send: "Post ad", cancel: "Cancel",
+    need_fields: "Title and description are required.",
+    login_needed: "Please log in to continue.", login_link: "Log in",
+    post_fail: "Could not post the ad. Please try again.",
+    post_ok: "Ad posted.", report_prompt: "Why are you reporting this ad?",
+    report_ok: "Reported. Thank you.", posted_by: "Posted by"
+  },
+  ur: {
+    post_ad: "+ اشتہار دیں", search_ph: "آپ کیا تلاش کر رہے ہیں؟", filters: "فلٹر",
+    city: "شہر", all_cities: "تمام شہر", condition: "حالت", any: "کوئی بھی",
+    cond_new: "نیا", cond_used: "استعمال شدہ", min_price: "کم از کم قیمت", max_price: "زیادہ سے زیادہ قیمت",
+    sort: "ترتیب", sort_new: "نئے پہلے", sort_asc: "قیمت: کم سے زیادہ",
+    sort_desc: "قیمت: زیادہ سے کم", reset: "ری سیٹ", apply: "لاگو کریں",
+    cat_all: "تمام", tab_all: "تمام اشتہارات", tab_saved: "محفوظ", tab_mine: "میرے اشتہارات",
+    empty: "کوئی اشتہار نہیں ملا۔ دوسری تلاش کریں یا اپنا اشتہار دیں۔",
+    empty_saved: "آپ نے ابھی کوئی اشتہار محفوظ نہیں کیا۔",
+    empty_mine: "آپ نے ابھی کوئی اشتہار نہیں دیا۔",
+    loading: "لوڈ ہو رہا ہے...", negotiable: "قابلِ گفتگو", free: "مفت",
+    views: "ویوز", phone: "فون", save: "♡ محفوظ", saved: "♥ محفوظ شدہ",
+    report: "رپورٹ", mark_sold: "فروخت شدہ", mark_active: "دوبارہ فعال", close: "بند کریں",
+    post_title: "مفت اشتہار دیں", f_title: "عنوان", f_title_ph: "آئی فون 13 پرو 256 جی بی",
+    f_cat: "قسم", f_price: "قیمت (روپے)", f_ptype: "قیمت کی نوعیت", f_fixed: "مقرر",
+    f_nego: "قابلِ گفتگو", f_free: "مفت", f_cond: "حالت", f_city: "شہر",
+    f_area: "علاقہ (اختیاری)", f_area_ph: "ڈی ایچ اے فیز 5", f_phone: "فون (اختیاری)",
+    f_phone_ph: "03xx xxxxxxx", f_desc: "تفصیل",
+    f_desc_ph: "حالت، وارنٹی، کیا شامل ہے...", f_imgs: "تصاویر (زیادہ سے زیادہ 6)",
+    f_send: "اشتہار دیں", cancel: "منسوخ",
+    need_fields: "عنوان اور تفصیل لازمی ہیں۔",
+    login_needed: "جاری رکھنے کے لیے لاگ اِن کریں۔", login_link: "لاگ اِن",
+    post_fail: "اشتہار نہیں ہو سکا، دوبارہ کوشش کریں۔",
+    post_ok: "اشتہار لگ گیا۔", report_prompt: "آپ اس اشتہار کی رپورٹ کیوں کر رہے ہیں؟",
+    report_ok: "رپورٹ موصول ہو گئی، شکریہ۔", posted_by: "کی طرف سے"
+  }
+};
+
+let lang = "en";
+let tab = "all";
+let state = { category: "", q: "", city: "", cond: "", min: "", max: "", sort: "new" };
+
+try { lang = localStorage.getItem("bz_lang") || "en"; } catch (e) {}
+function t(k) { return (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k; }
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ur" ? "rtl" : "ltr";
+  document.body.dir = lang === "ur" ? "rtl" : "ltr";
+  $("#langBtn").textContent = lang === "ur" ? "English" : "اردو";
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+  try { localStorage.setItem("bz_lang", lang); } catch (e) {}
+}
+
+let CSRF_TOKEN = "";
+fetch(API + "csrf/", { credentials: "same-origin" })
+  .then((r) => r.json())
+  .then((d) => { CSRF_TOKEN = (d && d.token) || ""; })
+  .catch(() => {});
+function csrf() {
+  const m = document.cookie.match(/(^|;)\s*csrftoken=([^;]+)/);
+  return m ? decodeURIComponent(m[2]) : CSRF_TOKEN;
+}
+
+function esc(v) {
+  return String(v == null ? "" : v).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function money(n) { return "Rs " + Number(n || 0).toLocaleString("en-PK"); }
+function priceLabel(a) {
+  return a.price_type === "free" ? t("free") : money(a.price);
+}
+
+function card(a) {
+  const img = a.cover
+    ? '<img loading="lazy" src="' + a.cover + '" alt="">'
+    : '<div class="ph">📦</div>';
+  const badge = a.condition === "new" ? '<span class="badge">' + t("cond_new") + "</span>" : "";
+  return '<button class="card" data-id="' + a.id + '">' + img +
+    '<div class="b"><div class="price">' + esc(priceLabel(a)) + "</div>" +
+    '<div class="title">' + badge + esc(a.title) + "</div>" +
+    '<div class="meta">' + esc(a.city) + " · " + esc(a.category) + "</div></div></button>";
+}
+
+function fillCities() {
+  const sel = $("#fCity");
+  sel.innerHTML = '<option value="">' + t("all_cities") + "</option>" +
+    CITIES.map((c) => '<option value="' + c + '">' + c + "</option>").join("");
+  sel.value = state.city;
+}
+
+async function loadCats() {
+  const r = await fetch(API + "categories/", { credentials: "same-origin" });
+  const cats = await r.json();
+  $("#chips").innerHTML = '<button class="chip on" data-cat="">' + t("cat_all") + "</button>" +
+    cats.map((c) => '<button class="chip" data-cat="' + c.slug + '">' +
+      esc(c.icon) + " " + esc(c.name) + "</button>").join("");
+}
+
+async function load() {
+  const grid = $("#grid"), empty = $("#empty");
+  grid.innerHTML = '<div class="empty">' + t("loading") + "</div>";
+  empty.style.display = "none";
+
+  let url;
+  if (tab === "all") {
+    const p = new URLSearchParams();
+    if (state.q) p.set("q", state.q);
+    if (state.category) p.set("category", state.category);
+    if (state.city) p.set("city", state.city);
+    if (state.cond) p.set("condition", state.cond);
+    if (state.min) p.set("min_price", state.min);
+    if (state.max) p.set("max_price", state.max);
+    if (state.sort) p.set("sort", state.sort);
+    url = API + "ads/?" + p.toString();
+  } else if (tab === "saved") {
+    url = API + "favorites/";
+  } else {
+    url = API + "my/";
+  }
+
+  const r = await fetch(url, { credentials: "same-origin" });
+  if (r.status === 401 || r.status === 403) {
+    grid.innerHTML = "";
+    empty.textContent = t("login_needed");
+    empty.style.display = "block";
+    return;
+  }
+  const d = await r.json();
+  const rows = d.results || d || [];
+  grid.innerHTML = rows.map(card).join("");
+  if (!rows.length) {
+    empty.textContent = t(tab === "saved" ? "empty_saved" : tab === "mine" ? "empty_mine" : "empty");
+    empty.style.display = "block";
+  }
+}
+
+/* filters */
+$("#fToggle").onclick = () => {
+  $("#filters").classList.toggle("on");
+  $("#fToggle").classList.toggle("on");
+};
+$("#fApply").onclick = () => {
+  state.city = $("#fCity").value;
+  state.cond = $("#fCond").value;
+  state.min = $("#fMin").value.trim();
+  state.max = $("#fMax").value.trim();
+  state.sort = $("#fSort").value;
+  $("#filters").classList.remove("on");
+  $("#fToggle").classList.remove("on");
+  load();
+};
+$("#fReset").onclick = () => {
+  state.city = state.cond = state.min = state.max = "";
+  state.sort = "new";
+  $("#fMin").value = ""; $("#fMax").value = "";
+  $("#fCond").value = ""; $("#fSort").value = "new";
+  fillCities();
+  load();
+};
+
+$("#chips").addEventListener("click", (e) => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  document.querySelectorAll(".chip").forEach((c) => c.classList.remove("on"));
+  b.classList.add("on");
+  state.category = b.dataset.cat;
+  load();
+});
+
+let timer;
+$("#q").addEventListener("input", (e) => {
+  clearTimeout(timer);
+  timer = setTimeout(() => { state.q = e.target.value.trim(); if (tab !== "all") setTab("all"); else load(); }, 300);
+});
+
+function setTab(next) {
+  tab = next;
+  document.querySelectorAll(".tab").forEach((b) => b.classList.toggle("on", b.dataset.tab === tab));
+  load();
+}
+$("#tabs").addEventListener("click", (e) => {
+  const b = e.target.closest(".tab");
+  if (b) setTab(b.dataset.tab);
+});
+
+/* detail */
+$("#grid").addEventListener("click", (e) => {
+  const c = e.target.closest(".card");
+  if (c) openAd(c.dataset.id);
+});
+
+async function openAd(id) {
+  const r = await fetch(API + "ads/" + id + "/", { credentials: "same-origin" });
+  if (!r.ok) return;
+  const a = await r.json();
+  const imgs = a.images.length
+    ? '<div class="gallery">' + a.images.map((i) => '<img src="' + i.url + '" alt="">').join("") + "</div>"
+    : "";
+  const nego = a.price_type === "negotiable"
+    ? ' <span style="font-size:12px;color:#6b7280">' + t("negotiable") + "</span>" : "";
+  $("#panel").innerHTML =
+    '<h2>' + esc(a.title) + "</h2>" +
+    '<div class="price" style="font-size:20px;margin-bottom:8px">' + esc(priceLabel(a)) + nego + "</div>" +
+    imgs +
+    '<div class="meta" style="margin-bottom:10px">' + esc(a.category) + " · " + esc(a.city) +
+      (a.area ? " · " + esc(a.area) : "") + " · " + t("views") + " " + a.views + "</div>" +
+    '<p class="desc">' + esc(a.description) + "</p>" +
+    (a.phone ? '<p style="font-size:14px"><b>' + t("phone") + ":</b> " + esc(a.phone) + "</p>" : "") +
+    '<div class="row" style="margin-top:12px;flex-wrap:wrap">' +
+      '<button class="act" id="favBtn">' + t("save") + "</button>" +
+      (a.is_mine
+        ? '<button class="act" id="soldBtn">' + t(a.status === "active" ? "mark_sold" : "mark_active") + "</button>"
+        : '<button class="act" id="repBtn">' + t("report") + "</button>") +
+      '<button class="act" id="closeBtn" style="margin-inline-start:auto">' + t("close") + "</button>" +
+    "</div>";
+  $("#sheet").classList.add("on");
+
+  $("#closeBtn").onclick = () => $("#sheet").classList.remove("on");
+  $("#favBtn").onclick = async () => {
+    const rr = await fetch(API + "ads/" + id + "/favorite/", {
+      method: "POST", credentials: "same-origin", headers: { "X-CSRFToken": csrf() }
+    });
+    if (rr.status === 401 || rr.status === 403) { $("#favBtn").textContent = t("login_needed"); return; }
+    const d = await rr.json();
+    $("#favBtn").textContent = d.favorited ? t("saved") : t("save");
+  };
+  const rep = $("#repBtn");
+  if (rep) rep.onclick = async () => {
+    const reason = window.prompt(t("report_prompt"), "");
+    if (!reason) return;
+    await fetch(API + "ads/" + id + "/report/", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
+      body: JSON.stringify({ reason: reason })
+    });
+    rep.textContent = t("report_ok");
+  };
+  const sold = $("#soldBtn");
+  if (sold) sold.onclick = async () => {
+    await fetch(API + "ads/" + id + "/sold/", {
+      method: "POST", credentials: "same-origin", headers: { "X-CSRFToken": csrf() }
+    });
+    $("#sheet").classList.remove("on");
+    load();
+  };
+}
+
+$("#sheet").addEventListener("click", (e) => {
+  if (e.target.id === "sheet") $("#sheet").classList.remove("on");
+});
+
+/* post */
+$("#postBtn").onclick = async () => {
+  const r = await fetch(API + "categories/", { credentials: "same-origin" });
+  const cats = await r.json();
+  $("#panel").innerHTML =
+    "<h2>" + t("post_title") + "</h2>" +
+    '<div class="field"><label>' + t("f_title") + '</label><input id="f_title" maxlength="120" placeholder="' + t("f_title_ph") + '"></div>' +
+    '<div class="field"><label>' + t("f_cat") + '</label><select id="f_cat">' +
+      cats.map((c) => '<option value="' + c.id + '">' + esc(c.name) + "</option>").join("") + "</select></div>" +
+    '<div class="row"><div class="field"><label>' + t("f_price") + '</label><input id="f_price" inputmode="numeric" placeholder="85000"></div>' +
+    '<div class="field"><label>' + t("f_ptype") + '</label><select id="f_ptype">' +
+      '<option value="fixed">' + t("f_fixed") + '</option><option value="negotiable">' + t("f_nego") +
+      '</option><option value="free">' + t("f_free") + "</option></select></div></div>" +
+    '<div class="row"><div class="field"><label>' + t("f_cond") + '</label><select id="f_cond">' +
+      '<option value="used">' + t("cond_used") + '</option><option value="new">' + t("cond_new") + "</option></select></div>" +
+    '<div class="field"><label>' + t("f_city") + '</label><select id="f_pcity">' +
+      CITIES.map((c) => '<option value="' + c + '">' + c + "</option>").join("") + "</select></div></div>" +
+    '<div class="row"><div class="field"><label>' + t("f_area") + '</label><input id="f_area" placeholder="' + t("f_area_ph") + '"></div>' +
+    '<div class="field"><label>' + t("f_phone") + '</label><input id="f_phone" placeholder="' + t("f_phone_ph") + '"></div></div>' +
+    '<div class="field"><label>' + t("f_desc") + '</label><textarea id="f_desc" placeholder="' + t("f_desc_ph") + '"></textarea></div>' +
+    '<div class="field"><label>' + t("f_imgs") + '</label><input id="f_imgs" type="file" accept="image/*" multiple></div>' +
+    '<div class="msg" id="f_msg"></div>' +
+    '<button class="btn" id="f_send">' + t("f_send") + "</button>" +
+    '<button class="btn ghost" id="f_cancel" style="margin-top:8px">' + t("cancel") + "</button>";
+  $("#sheet").classList.add("on");
+  $("#f_cancel").onclick = () => $("#sheet").classList.remove("on");
+
+  $("#f_send").onclick = async () => {
+    const body = {
+      title: $("#f_title").value.trim(),
+      category_id: Number($("#f_cat").value),
+      price: Number($("#f_price").value || 0),
+      price_type: $("#f_ptype").value,
+      condition: $("#f_cond").value,
+      city: $("#f_pcity").value,
+      area: $("#f_area").value.trim(),
+      phone: $("#f_phone").value.trim(),
+      description: $("#f_desc").value.trim()
+    };
+    if (!body.title || !body.description) { $("#f_msg").textContent = t("need_fields"); return; }
+
+    const rr = await fetch(API + "ads/", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "X-CSRFToken": csrf() },
+      body: JSON.stringify(body)
+    });
+    if (rr.status === 401 || rr.status === 403) {
+      $("#f_msg").innerHTML = t("login_needed") + ' <a href="/account">' + t("login_link") + "</a>";
+      return;
+    }
+    if (!rr.ok) { $("#f_msg").textContent = t("post_fail"); return; }
+
+    const ad = await rr.json();
+    const files = $("#f_imgs").files;
+    for (let i = 0; i < Math.min(files.length, 6); i++) {
+      const fd = new FormData();
+      fd.append("image", files[i]);
+      await fetch(API + "ads/" + ad.id + "/images/", {
+        method: "POST", credentials: "same-origin", headers: { "X-CSRFToken": csrf() }, body: fd
+      });
+    }
+    $("#sheet").classList.remove("on");
+    if (tab !== "all") setTab("all"); else load();
+  };
+};
+
+$("#langBtn").onclick = () => {
+  lang = lang === "ur" ? "en" : "ur";
+  applyLang(); fillCities(); loadCats(); load();
+};
+
+applyLang();
+fillCities();
+loadCats();
+load();
+</script>
+</body>
+</html>
