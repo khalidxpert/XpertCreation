@@ -42,7 +42,7 @@ CAPITALS = {
  "MU":"Port Louis","MX":"Mexico City","FM":"Palikir","MD":"Chisinau","MC":"Monaco","MN":"Ulaanbaatar",
  "ME":"Podgorica","MA":"Rabat","MZ":"Maputo","MM":"Naypyidaw","NA":"Windhoek","NR":"Yaren","NP":"Kathmandu",
  "NL":"Amsterdam","NZ":"Wellington","NI":"Managua","NE":"Niamey","NG":"Abuja","KP":"Pyongyang","MK":"Skopje",
- "NO":"Oslo","OM":"Muscat","PK":"Islamabad","PW":"Ngerulmud","PS":"Ramallah","PA":"Panama City",
+ "NO":"Oslo","OM":"Muscat","PK":"Lahore","PW":"Ngerulmud","PS":"Ramallah","PA":"Panama City",
  "PG":"Port Moresby","PY":"Asuncion","PE":"Lima","PH":"Manila","PL":"Warsaw","PT":"Lisbon","QA":"Doha",
  "RO":"Bucharest","RU":"Moscow","RW":"Kigali","KN":"Basseterre","LC":"Castries","VC":"Kingstown","WS":"Apia",
  "SM":"San Marino","ST":"Sao Tome","SA":"Riyadh","SN":"Dakar","RS":"Belgrade","SC":"Victoria","SL":"Freetown",
