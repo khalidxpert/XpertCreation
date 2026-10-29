@@ -510,7 +510,7 @@
     var d = document.createElement("section"); d.className = "xlx xqa"; d.id = "qa";
     var lesson = String(i), state = { me: false, staff: false, qs: [] };
     d.innerHTML = '<h3>💬 ' + both("Questions about this lesson", "اس سبق کے بارے میں سوالات") + '</h3><div class="xqform"></div><div class="xqlist"><p class="xmuted">' + esc(L("Loading…", "لوڈ ہو رہا ہے…")) + "</p></div>";
-    function person(p){ var n = esc(p.name); return (p.slug ? '<a href="/in/' + encodeURIComponent(p.slug) + '">' + n + "</a>" : "<b>" + n + "</b>") + (p.staff ? '<span class="xtag">' + esc(L("Team", "ٹیم")) + "</span>" : ""); }
+    function person(p){ var n = esc(p.name); return (function(){ var _u = p.slug ? "/in/" + encodeURIComponent(p.slug) : (p.uid ? "/feed?user=" + encodeURIComponent(p.uid) : ""); return _u ? '<a href="' + _u + '">' + n + "</a>" : "<b>" + n + "</b>"; })() + (p.staff ? '<span class="xtag">' + esc(L("Team", "ٹیم")) + "</span>" : ""); }
     function item(p, q){
       var acts = "";
       if (q && (state.staff || q.mine) && !p.mine) acts += '<button class="xlink" data-help="' + p.id + '">' + (p.helpful ? "↩ " + esc(L("Not helpful", "مددگار نہیں")) : "✔ " + esc(L("Helpful", "مددگار"))) + "</button>";

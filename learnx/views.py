@@ -46,7 +46,7 @@ def _notify(user, text, link):
 
 
 def _row(q, me, slugs):
-    return {"id": q.id, "body": q.body, "name": _name(q.user), "slug": slugs.get(q.user_id, ""),
+    return {"id": q.id, "body": q.body, "name": _name(q.user), "slug": slugs.get(q.user_id, ""), "uid": q.user_id,
             "mine": bool(me and me.is_authenticated and q.user_id == me.id), "staff": _staff(q.user),
             "helpful": q.helpful, "at": q.created.isoformat()}
 
