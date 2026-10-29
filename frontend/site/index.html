@@ -1850,10 +1850,10 @@ window.addEventListener("load", function(){ setTimeout(function(){
     }
   }
 
-  function weatherChip(city, retry){
+  function weatherChip(city, cc, retry){
     var line = document.getElementById("wxline");
     if (!line) return;
-    fetch("/api/weather/?city=" + encodeURIComponent(city), {credentials:"same-origin"})
+    fetch((city ? "/api/weather/?city=" + encodeURIComponent(city) : "/api/weather/?auto=1" + (cc ? "&cc=" + encodeURIComponent(cc) : "")), {credentials:"same-origin"})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(w){
         if (!w || w.temp === undefined) throw new Error("no data");
@@ -1866,7 +1866,7 @@ window.addEventListener("load", function(){ setTimeout(function(){
         // sambhla nahi hota. Ek dafa dobara, phir link — khali dash
         // chhorne se lagta hai ke feature hi toota hua hai.
         if (!retry){
-          setTimeout(function(){ weatherChip(city, true); }, 1500);
+          setTimeout(function(){ weatherChip(city, cc, true); }, 1500);
           return;
         }
         line.innerHTML = '<a class="v dim" href="/weather">check the weather</a>';
@@ -1978,7 +1978,7 @@ window.addEventListener("load", function(){ setTimeout(function(){
 
       startClock();
 
-      weatherChip("Lahore");
+      weatherChip("", u.country || "");
 
       if (u.birthday_today && bd){
         bd.innerHTML = '<div class="bcard" id="bcard">'

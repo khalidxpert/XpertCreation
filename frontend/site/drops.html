@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project: Drop Social — community, creators and a 30-day blockchain course | XpertCreation</title>
+<meta name="description" content="An overview of the Drop Social project: what the platform is, what I am building on it, the 30-day Blockchain Basics series, the roadmap, and how to join with my invite code.">
+<link rel="canonical" href="https://xpertcreation.com/drops/">
+<style>
+  :root{
+    --ink:#0b0d12;--muted:#5b6472;--line:#e6e8ee;--bg:#fff;--soft:#f6f7fb;
+    --accent:#1d4ed8;--accent-soft:#eaefff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);line-height:1.65;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:780px;margin:0 auto;padding:0 20px}
+  header{padding:16px 0;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:700}
+  .brand span.dotwrap{display:flex;align-items:center;gap:9px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .brand a{font-size:13px;font-weight:600;text-decoration:none;color:var(--muted)}
+
+  .hero{padding:30px 0 6px}
+  .pill{display:inline-block;background:var(--accent-soft);color:#1e3a8a;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700}
+  h1{font-size:clamp(26px,6.6vw,40px);line-height:1.12;letter-spacing:-.9px;margin:12px 0 12px}
+  .lede{font-size:17px;color:#333a45;margin:0 0 18px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+  .tag{font-size:12px;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted)}
+  .cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;
+    border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;
+    border:1px solid var(--line);background:#fff;color:var(--ink);
+  }
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .code{display:inline-flex;align-items:center;gap:10px;background:var(--accent-soft);border-radius:12px;padding:9px 13px;font-size:14px;color:#1e3a8a;margin-top:10px}
+  .code b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1px}
+  .code button{border:0;background:#fff;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;cursor:pointer;color:#1e3a8a}
+
+  section{padding:24px 0;border-top:1px solid var(--line);margin-top:8px}
+  h2{font-size:20px;letter-spacing:-.3px;margin:0 0 12px}
+  h3{font-size:15px;margin:16px 0 6px}
+  p{margin:0 0 10px}
+  ul,ol{padding-left:20px;margin:0 0 10px}
+  li{margin-bottom:7px}
+  .muted{color:var(--muted);font-size:14px}
+  .grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:600px){.grid{grid-template-columns:1fr 1fr}}
+  .card{border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .card h3{margin:0 0 5px}
+  .card p{margin:0;color:var(--muted);font-size:14px}
+  .box{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--soft);margin:12px 0;font-size:14px}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0}
+  .steps li{position:relative;padding-left:36px;margin-bottom:13px;font-size:15px}
+  .steps li::before{
+    counter-increment:s;content:counter(s);position:absolute;left:0;top:0;
+    width:25px;height:25px;border-radius:50%;background:var(--ink);color:#fff;
+    font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  }
+  .road{border-left:2px solid var(--line);margin:6px 0 0 8px;padding-left:18px}
+  .road .r{position:relative;margin-bottom:16px}
+  .road .r::before{content:"";position:absolute;left:-25px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .road .r.done::before{background:var(--muted)}
+  .road .r p{margin:0;color:var(--muted);font-size:14px}
+  .road .r strong{display:block;font-size:15px}
+  footer{padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap brand">
+    <span class="dotwrap"><span class="dot"></span> XpertCreation</span>
+    <a href="https://xpertcreation.com">Projects</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <span class="pill">Project overview</span>
+    <h1>Drop Social: building a real community, and teaching blockchain in public.</h1>
+    <p class="lede">
+      Drop Social (Drops) is a social app where creators post, run their own channels, host live audio
+      rooms and keep a share of the value they create. My project there is simple: build an audience
+      by teaching, not by shouting — 30 lessons, one a day, in plain English.
+    </p>
+    <div class="meta">
+      <span class="tag">Platform: Drops (web · Android · iOS)</span>
+      <span class="tag">Role: creator &amp; educator</span>
+      <span class="tag">Format: daily series + community</span>
+      <span class="tag">Status: active</span>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="https://app.dropsocial.fun/i/yummrf" rel="noopener">Open the project on Drops</a>
+      <a class="btn" href="#inside">See what's inside</a>
+    </div>
+    <div class="code">Invite code <b id="code">yummrf</b> <button id="copy" type="button">Copy</button></div>
+  </div>
+
+  <section>
+    <h2>What the platform is</h2>
+    <p>
+      Drops is a social platform operated by Yalafi Technology. It combines a feed, creator-run
+      group chats (Channels), live audio rooms (Drop Calls), direct messages, tipping, and creator
+      stores. It is free to use on Android, iOS and the web, with optional premium badges.
+    </p>
+    <p>
+      Its economic layer is <strong>DROPS</strong> — a BEP-20 token on BNB Smart Chain with a fixed
+      supply of 100,000,000. Activity earns rewards; claiming requires a minimum threshold and
+      two-factor authentication. Token value is not guaranteed by anyone, and anyone telling you
+      otherwise is selling something.
+    </p>
+  </section>
+
+  <section id="inside">
+    <h2>What I'm building there</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>1. A 30-day blockchain course</h3>
+        <p>One post a day, around 500 words each: blocks, wallets, keys, gas, hashing, consensus, smart contracts, tokens, security and scams.</p>
+      </div>
+      <div class="card">
+        <h3>2. A public learning log</h3>
+        <p>Not a highlight reel. Mistakes, confusion, and the questions readers send in — answered in the comments and in channels.</p>
+      </div>
+      <div class="card">
+        <h3>3. A channel for beginners</h3>
+        <p>A place where asking "what is a wallet?" is normal. Slow mode, real answers, no pump talk.</p>
+      </div>
+      <div class="card">
+        <h3>4. Bridges back to XpertCreation</h3>
+        <p>Profiles, CVs, digital cards and free courses on XpertCreation — the part of the journey that produces actual income.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why this project exists</h2>
+    <p>
+      Two reasons. First, most crypto content in this region is either a shill thread or a doom post;
+      almost none of it explains anything. Second, most students learn a skill and then have nowhere
+      to show it. This project sits exactly between those two gaps: teach the fundamentals honestly,
+      then point people at something they can build, publish and charge for.
+    </p>
+    <div class="box">
+      <strong>The rule I publish by:</strong> no guaranteed returns, no price predictions, no "buy now"
+      pressure. If a post cannot survive being read six months later, it does not get published.
+    </div>
+  </section>
+
+  <section>
+    <h2>Roadmap</h2>
+    <div class="road">
+      <div class="r done">
+        <strong>Phase 1 — foundations</strong>
+        <p>Profile, positioning, invite page, first long-form posts. Days 1–10 written and published.</p>
+      </div>
+      <div class="r">
+        <strong>Phase 2 — the full series</strong>
+        <p>Days 11–30: security, exchanges, stablecoins, DeFi, freelancing for beginners, and a closing recap.</p>
+      </div>
+      <div class="r">
+        <strong>Phase 3 — community</strong>
+        <p>Open a beginner channel, run the first live audio room, answer questions on a fixed weekly slot.</p>
+      </div>
+      <div class="r">
+        <strong>Phase 4 — bridge to earning</strong>
+        <p>Turn the series into a free course with a certificate on XpertCreation, plus a simple profile people can share with clients.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="binance-pay">
+    <h2>Binance Pay: how the money actually moves</h2>
+    <p>
+      The important thing to understand first: <strong>there is no "withdraw to Binance Pay" button
+      inside Drops.</strong> Rewards are claimed as DROPS — a BEP-20 token on BNB Smart Chain — to a
+      wallet you control. Binance Pay is a separate transfer that happens after your funds reach Binance.
+    </p>
+    <ol class="steps">
+      <li><strong>Verify and enable 2FA inside Drops.</strong> The claim stays locked without it, whatever the balance shows.</li>
+      <li><strong>Add your own BSC wallet address.</strong> Confirm the network reads BNB Smart Chain / BEP-20 before saving it.</li>
+      <li><strong>Claim a small test amount first</strong>, confirm it arrives, then claim the rest.</li>
+      <li><strong>Convert if needed.</strong> If your exchange does not list DROPS, swap it on a BNB Chain DEX to USDT or BNB.</li>
+      <li><strong>Deposit to Binance on BEP-20.</strong> In Binance choose Deposit, pick the token, select BNB Smart Chain (BEP-20), copy that address only.</li>
+      <li><strong>Use Binance Pay for the last step.</strong> Once the balance is on Binance, send it to any Binance user by Pay ID or QR — instant, no network fee.</li>
+    </ol>
+    <div class="box">
+      <strong>The one mistake that costs everything:</strong> sending a BEP-20 token to an address expecting a
+      different network. Those funds are usually gone for good. Read the network name on both sides before
+      every transfer, and always test with a small amount first. Keep a little BNB for gas, or you will hold
+      tokens you cannot move.
+    </div>
+    <p class="muted">
+      Educational only. Fees, thresholds and features change — confirm inside both apps before sending anything.
+    </p>
+  </section>
+
+  <section>
+    <h2>How to join</h2>
+    <ol class="steps">
+      <li><strong>Open the invite link</strong> and install the app — Android, iPhone or web.</li>
+      <li><strong>Build a real profile</strong> — name, one clear line about what you do, a photo.</li>
+      <li><strong>Enable 2FA</strong> before you look at rewards. Not after. Before.</li>
+      <li><strong>Follow the series from Day 1</strong> and post one useful thing yourself in the first week.</li>
+    </ol>
+    <p class="muted" style="margin-top:10px">
+      The invite code is <strong>yummrf</strong>, and it is added automatically through the link.
+    </p>
+  </section>
+
+  <section>
+    <h2>Honest notes</h2>
+    <ul class="muted">
+      <li>DROPS is a real token with real risk. Nothing here is investment advice.</li>
+      <li>Never share your recovery phrase — no support agent, airdrop or verification page needs it.</li>
+      <li>Never send a BEP-20 token to an address expecting another network. Test with a small amount.</li>
+      <li>Joining through an invite is free. If a platform charges you to "unlock earnings", leave.</li>
+      <li>Earn for the skills and the audience first; treat any token as a bonus, never as the plan.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Sources and official pages</h2>
+    <div class="cta">
+      <a class="btn" href="https://www.dropsocial.fun/" rel="noopener">Official site</a>
+      <a class="btn" href="https://www.dropsocial.fun/whitepaper" rel="noopener">Whitepaper</a>
+      <a class="btn" href="https://www.dropsocial.fun/terms" rel="noopener">Terms</a>
+      <a class="btn" href="https://xpertcreation.com" rel="noopener">XpertCreation</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Project page by <a href="https://xpertcreation.com" rel="noopener">XpertCreation.com</a>. Independent
+    creator project — not an official Drops page and not affiliated with Yalafi Technology or Binance.
+    Features, thresholds and fees can change; confirm inside the app.
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var b = document.getElementById("copy"), c = document.getElementById("code");
+    if (!b || !c) return;
+    b.addEventListener("click", function () {
+      var t = c.textContent.trim();
+      var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1500); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { b.textContent = "Select & copy"; });
+      else b.textContent = "Select & copy";
+    });
+  })();
+</script>
+</body>
+</html>

@@ -484,10 +484,15 @@ a{color:var(--brand);text-decoration:none}
   if (wanted && !cities.some(function(c){ return c.toLowerCase() === wanted.toLowerCase(); })){
     cities.unshift(wanted);
   }
-  if (!cities.length) cities = ["Lahore"];
-  saveCities();
-  paint();
-  cities.forEach(fetchCity);
+  function startCities(){ saveCities(); paint(); cities.forEach(fetchCity); }
+  if (!cities.length){
+    fetch(API + "/?auto=1", {credentials:"same-origin"})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(w){ cities = [(w && w.city) ? w.city : "Lahore"]; startCities(); })
+      .catch(function(){ cities = ["Lahore"]; startCities(); });
+  } else {
+    startCities();
+  }
 
 })();
 </script>
