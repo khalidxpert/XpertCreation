@@ -308,6 +308,7 @@
   function put(){
     var head = document.querySelector("header.top") || document.querySelector("header.topbar");
     if (!head || head.querySelector(".tcart")) return !!head;
+    if (!/^\/(store|cart|orders|checkout|promote|market)(\/|#|$)/.test(location.pathname)) return !!head;
     var st = document.createElement("style");
     st.textContent = ".tcart{position:relative;flex:0 0 auto;width:36px;height:36px;margin-left:6px;border-radius:11px;display:inline-grid;place-items:center;background:#FFF4ED;border:1px solid #FED7C3;color:#F85606;text-decoration:none}"
       + ".tcart:hover{background:#FFE8DA}.tcart svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}"
@@ -475,7 +476,7 @@
     var w = document.createElement("div"); w.id = "xcpins"; w.className = "xcpins";
     var h = '<div class="hd">📌 Your pins<small>' + (P.length ? "Tap the pin on any page to change" : "Pin up to " + MAX + " pages you use most") + '</small></div>';
     h += P.map(function(x, i){ return '<a href="' + esc(x.path) + '">' + icon(x.path) + esc(x.label) + '<button class="x" data-unpin="' + i + '" aria-label="Unpin">&times;</button></a>'; }).join("");
-    for (var k = P.length; k < MAX; k++) h += '<a class="add" href="#" data-pickpin>+ Pin a tool or section<br><small style="font-weight:600">tap to choose</small></a>';
+    if (P.length < MAX) h += '<a class="add" href="#" data-pickpin>+ Pin a tool or section<br><small style="font-weight:600">tap to choose</small></a>';
     w.innerHTML = h;
     anchor.parentNode.insertBefore(w, anchor);
     w.onclick = function(e){ if (e.target.closest("[data-pickpin]")){ e.preventDefault(); picker(); return; } var x = e.target.closest("[data-unpin]"); if (!x) return; e.preventDefault(); e.stopPropagation(); P.splice(+x.getAttribute("data-unpin"), 1); save(true); };
@@ -736,3 +737,20 @@
 ;/* XpertChat calls and message tones on every page (setup_calls) */
 (function(){try{if(window.XCCALL||/^\/call/.test(location.pathname)||document.querySelector('script[src^="/js/xcall-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcall-1.js?v=7";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
 (function(){try{if(window.XCAPP||document.querySelector('script[src^="/js/xcapp-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcapp-1.js?v=9";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+
+
+/* Auto-refresh on a new deploy: check for an update when the app comes back into view, and reload once
+   when a newer version takes over - so people stop seeing a stale, cached page. (setup_rev6_v1) */
+(function(){
+  if (window.XCSWUP || !("serviceWorker" in navigator)) return; window.XCSWUP = 1;
+  try {
+    navigator.serviceWorker.register("/sw.js").then(function(reg){
+      document.addEventListener("visibilitychange", function(){ if (!document.hidden){ try { reg.update(); } catch(e){} } });
+      window.addEventListener("focus", function(){ try { reg.update(); } catch(e){} });
+    }).catch(function(){});
+    if (navigator.serviceWorker.controller){
+      var done = false;
+      navigator.serviceWorker.addEventListener("controllerchange", function(){ if (done) return; done = true; location.reload(); });
+    }
+  } catch(e){}
+})();
