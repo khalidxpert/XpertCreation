@@ -67,7 +67,17 @@ def qa(request):
         slugs = {}
         try:
             from network.models import ProProfile
-            slugs = dict(ProProfile.objects.filter(user_id__in={r.user_id for r in rows}).values_list("user_id", "slug"))
+            from network.views import _get_or_make
+            _ids = {r.user_id for r in rows}
+            slugs = dict(ProProfile.objects.filter(user_id__in=_ids).values_list("user_id", "slug"))
+            _missing = [uid for uid in _ids if not slugs.get(uid)]
+            if _missing:
+                from django.contrib.auth import get_user_model
+                for _us in get_user_model().objects.filter(pk__in=_missing):
+                    try:
+                        slugs[_us.pk] = _get_or_make(_us).slug
+                    except Exception:
+                        pass
         except Exception:
             pass
         qs = [r for r in rows if r.parent_id is None]
