@@ -735,4 +735,4 @@
 
 ;/* XpertChat calls and message tones on every page (setup_calls) */
 (function(){try{if(window.XCCALL||/^\/call/.test(location.pathname)||document.querySelector('script[src^="/js/xcall-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcall-1.js?v=7";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
-(function(){try{if(window.XCAPP||document.querySelector('script[src^="/js/xcapp-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcapp-1.js?v=6";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.XCAPP||document.querySelector('script[src^="/js/xcapp-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcapp-1.js?v=7";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();

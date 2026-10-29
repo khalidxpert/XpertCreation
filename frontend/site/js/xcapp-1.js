@@ -124,6 +124,7 @@
       window.addEventListener("scroll", function(){ if (!tick){ tick = true; requestAnimationFrame(upd); } }, {passive:true}); })();
     bar.querySelector("[data-xcmenu]").addEventListener("click", function(e){
       e.preventDefault();
+      e.stopPropagation();
       var m = D.querySelector(".tmenu"); if (m && getComputedStyle(m).display !== "none"){ m.click(); window.scrollTo({top: 0, behavior: "smooth"}); return; }
       location.href = "/tools";
     });
@@ -194,6 +195,7 @@
     ".xcal-e{padding:40px 16px;text-align:center;color:#5A657C;font-size:14px;line-height:1.8}.xcal-e span{display:block;font-family:'Noto Nastaliq Urdu',serif}",
     ".xcal-s{display:block;text-align:center;padding:12px;font-size:13px;font-weight:700;color:#1B4DFF;text-decoration:none;border-top:1px solid #E4E8F2}",
     "html.xc-tabbed .xcb{bottom:calc(80px + env(safe-area-inset-bottom)) !important}",
+    "html.xc-tabbed .fab{bottom:calc(84px + env(safe-area-inset-bottom)) !important}",
     "html.xc-m .xcfoot{margin-top:18px;padding:14px 16px 18px}",
     "html.xc-m .xcfoot .xf-grid{display:none}html.xc-m .xcfoot.xcf-open .xf-grid{display:grid}",
     ".xcf-more{display:none}html.xc-m .xcf-more{display:flex;justify-content:space-between;width:100%;border:1px solid #E4E8F2;background:#fff;border-radius:12px;padding:11px 14px;font:inherit;font-size:13.5px;font-weight:700;color:#0D1424;margin-bottom:12px;cursor:pointer}",
