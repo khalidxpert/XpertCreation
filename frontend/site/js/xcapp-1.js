@@ -90,7 +90,7 @@
 
   /* ------------------------------------------------------------------ app look on phones */
   var TABS = [["Home", "/", "M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"], ["Connect", "/feed", "M16 11a4 4 0 1 0-8 0M3 20c1.5-3.5 5-5 9-5s7.5 1.5 9 5M12 3v4"],
-    ["Chat", "/chat", "M4 5h16v11H8l-4 4z"], ["Alerts", "#alerts", "M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"], ["Tools", "/tools", "M14 7l3-3 3 3-3 3M4 20l9-9M5 5h4v4H5zM15 15h4v4h-4z"], ["Menu", "#menu", "M4 7h16M4 12h16M4 17h16"]];
+    ["Chat", "/chat", "M4 5h16v11H8l-4 4z"], ["Tools", "/tools", "M14 7l3-3 3 3-3 3M4 20l9-9M5 5h4v4H5zM15 15h4v4h-4z"], ["Menu", "#menu", "M4 7h16M4 12h16M4 17h16"]];
   var NOBAR = /^\/(chat|group|groups|nearby|offline|call|cam|scan|irc|2048|chess|carrom|carrom-online|connect4|ludo|minesweeper|pool|simon|snake|sudoku|tictactoe|wordgame|arrows|login|signup)(\/|$)/;
   function phone(){ return Math.min(window.innerWidth, screen.width || 9999) <= 760; }
   function hasOwnBar(){

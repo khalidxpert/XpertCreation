@@ -40,7 +40,7 @@
     ".tamenu{display:none;position:absolute;right:10px;top:calc(100% + 6px);min-width:200px;background:var(--card,#fff);border:1px solid var(--line,#E4E8F2);border-radius:14px;box-shadow:0 14px 34px rgba(13,20,36,.16);padding:6px;z-index:81}" +
     ".tamenu.open{display:block}.tamenu b{display:block;padding:8px 12px 6px;font-size:13px;color:var(--ink-soft,#5A657C)}.tamenu b small{font-weight:600}" +
     ".tamenu a,.tamenu button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:10px;border:0;background:none;font:inherit;font-weight:600;color:var(--ink,#0D1424);text-decoration:none;cursor:pointer}" +
-    ".tamenu a:hover,.tamenu button:hover{background:var(--paper,#F6F7FB)}.tamenu .tout{color:#B91C1C;font-weight:800}" +
+    ".tamenu a:hover,.tamenu button:hover{background:var(--paper,#F6F7FB)}.tamenu .tout{color:#B91C1C;font-weight:800}.tamenu .tdiv{height:1px;background:var(--line,#E4E8F2);margin:6px 4px}" +
     ".tmore{display:none}" +
     "@media(max-width:600px){.tacct .tlbl{display:none}.tacct{padding:8px}header.topbar .gear[href='/'],header.topbar #gearBtn{display:none}" +
       "header.topbar{gap:6px}.tdrop.open .tmore{display:block;grid-column:1/-1;border-top:1px solid var(--line,#E4E8F2);margin-top:4px;padding-top:6px}" +
@@ -177,7 +177,7 @@
       acct.className = "tacct me"; acct.href = "/account"; acct.setAttribute("aria-label", "My account");
       acct.innerHTML = pic ? '<img src="' + String(pic).replace(/"/g, "") + '" alt="">' : '<span>' + nm.charAt(0).toUpperCase() + '</span>';
       menu.innerHTML = '<b>' + nm.replace(/</g, "&lt;") + (u.username ? ' <small>@' + String(u.username).replace(/</g, "") + '</small>' : '') + '</b>'
-        + '<a href="/feed?user=' + u.id + '">\uD83E\uDDF1 My wall</a><a href="/company/manage">\uD83C\uDFE2 My company</a><a href="/get-verified">\u2714\uFE0F Blue tick</a><a href="/settings">\u2699\uFE0F Settings &amp; privacy</a><a href="/me/preferences">\uD83C\uDFAF Interests</a><a href="/saved">\uD83D\uDD16 Saved posts</a>' + (window.__xcModLink ? window.__xcModLink(u) : '') + '' + ((function(){ try { return localStorage.getItem('xc_myshop') === '1'; } catch (e) { return false; } })() ? '<a href="/store#seller">\uD83C\uDFEA My shop</a>' : '') + '<a href="/whats-new">\u2728 What\u2019s new</a><button type="button" class="tout">\uD83D\uDEAA Sign out</button><a href="/me/profile">My profile</a><a href="/account">Settings</a>';
+        + '<a href="/me/profile">\uD83D\uDC64 My profile</a><a href="/company/manage">\uD83C\uDFE2 My company</a><a href="/get-verified">\u2714\uFE0F Blue tick</a><a href="/settings">\u2699\uFE0F Settings &amp; privacy</a><a href="/me/preferences">\uD83C\uDFAF Interests</a><a href="/saved">\uD83D\uDD16 Saved posts</a>' + (window.__xcModLink ? window.__xcModLink(u) : '') + '' + ((function(){ try { return localStorage.getItem('xc_myshop') === '1'; } catch (e) { return false; } })() ? '<a href="/store#seller">\uD83C\uDFEA My shop</a>' : '') + '<a href="/whats-new">\u2728 What\u2019s new</a><div class="tdiv"></div><button type="button" class="tout">\uD83D\uDEAA Sign out</button>';
       acct.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); drop.classList.remove("open"); menu.classList.toggle("open"); });
       menu.querySelector(".tout").onclick = function(){
         fetch("/api/auth/logout/", {method: "POST", credentials: "same-origin", headers: {"X-CSRFToken": ck("xc_csrf")}})
@@ -735,4 +735,4 @@
 
 ;/* XpertChat calls and message tones on every page (setup_calls) */
 (function(){try{if(window.XCCALL||/^\/call/.test(location.pathname)||document.querySelector('script[src^="/js/xcall-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcall-1.js?v=7";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
-(function(){try{if(window.XCAPP||document.querySelector('script[src^="/js/xcapp-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcapp-1.js?v=7";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
+(function(){try{if(window.XCAPP||document.querySelector('script[src^="/js/xcapp-1.js"]'))return;var s=document.createElement("script");s.src="/js/xcapp-1.js?v=8";s.async=true;(document.head||document.documentElement).appendChild(s);}catch(e){}})();
