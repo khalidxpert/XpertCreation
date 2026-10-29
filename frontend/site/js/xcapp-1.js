@@ -117,6 +117,11 @@
     var bar = D.createElement("nav"); bar.className = "xctab"; bar.setAttribute("aria-label", "Main");
     bar.innerHTML = TABS.map(function(t){ return '<a href="' + t[1] + '"' + (t[1] !== "#menu" && on(t[1]) ? ' class="on"' : "") + (t[1] === "#menu" ? ' data-xcmenu="1"' : "") + (t[1] === "#alerts" ? ' data-xcalerts="1" style="display:none"' : "") + '><svg viewBox="0 0 24 24"><path d="' + t[2] + '"/></svg><span>' + t[0] + "</span>" + (t[1] === "#alerts" ? '<em class="xcbadge"></em>' : "") + "</a>"; }).join("");
     D.body.appendChild(bar); D.documentElement.classList.add("xc-tabbed");
+    (function(){ var last = 0, tick = false;
+      function upd(){ tick = false; var y = window.pageYOffset || D.documentElement.scrollTop || 0;
+        if (y < 12 || D.documentElement.classList.contains("xcal-open")){ bar.classList.remove("xctab-down"); last = y; return; }
+        if (y > last + 8) bar.classList.add("xctab-down"); else if (y < last - 8) bar.classList.remove("xctab-down"); last = y; }
+      window.addEventListener("scroll", function(){ if (!tick){ tick = true; requestAnimationFrame(upd); } }, {passive:true}); })();
     bar.querySelector("[data-xcmenu]").addEventListener("click", function(e){
       e.preventDefault();
       var m = D.querySelector(".tmenu"); if (m && getComputedStyle(m).display !== "none"){ m.click(); window.scrollTo({top: 0, behavior: "smooth"}); return; }
@@ -174,7 +179,7 @@
     ".xcrel-g a{display:flex;align-items:center;gap:9px;padding:11px 12px;background:#fff;border:1px solid #E4E8F2;border-radius:14px;text-decoration:none;color:#0D1424;font-size:13.5px;font-weight:700;line-height:1.2;min-height:46px;box-sizing:border-box}",
     ".xcrel-g a:hover{border-color:#1B4DFF;color:#1B4DFF}.xcrel-g a i{font-style:normal;font-size:20px;flex:0 0 auto}",
     "@media(max-width:760px){.xcrel-g{display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin:0 -16px;padding-left:16px;padding-right:16px}.xcrel-g::-webkit-scrollbar{display:none}.xcrel-g a{flex:0 0 auto}}",
-    ".xctab{position:fixed;left:0;right:0;bottom:0;z-index:8990;display:flex;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid #E4E8F2;padding:4px 4px calc(4px + env(safe-area-inset-bottom));font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}",
+    ".xctab{position:fixed;left:0;right:0;bottom:0;z-index:8990;display:flex;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid #E4E8F2;padding:4px 4px calc(4px + env(safe-area-inset-bottom));font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;transition:transform .28s ease}.xctab.xctab-down{transform:translateY(120%)}",
     ".xctab a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 4px;text-decoration:none;color:#5A657C;font-size:11px;font-weight:700;border-radius:12px;-webkit-tap-highlight-color:transparent}",
     ".xctab a svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}",
     ".xctab a.on{color:#1B4DFF}.xctab a.on svg{stroke-width:2.3}.xctab a:active{background:#F1F4FA}",

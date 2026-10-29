@@ -84,10 +84,11 @@ def _url(p):
     return settings.MEDIA_URL.rstrip("/") + "/" + p
 
 
-def _out(post, u, mine_reaction=None, top=None, authors=None):
+def _out(post, u, mine_reaction=None, top=None, authors=None, reshared=False):
     a = (authors or {}).get(post.author_id) or _author(post.author)
     return {"id": post.id, "author": a, "body": post.body, "images": [_url(i) for i in post.images or []],
             "visibility": post.visibility, "reactions": post.reactions_count, "comments": post.comments_count,
+            "reshares": getattr(post, "reshares_count", 0), "reshared": reshared,
             "top": top or [], "mine": mine_reaction or "", "hidden": post.hidden,
             "can_edit": u.is_authenticated and u.pk == post.author_id, "can_moderate": _mod(u),
             "when": post.created_at.strftime("%d %b %Y, %H:%M"), "edited": bool(post.edited_at)}
@@ -142,7 +143,9 @@ def _page(posts, u):
     for p in posts:
         if p.author_id not in authors:
             authors[p.author_id] = _author(p.author)
-    return [_out(p, u, mine.get(p.id), tops.get(p.id), authors) for p in posts]
+    from .models import Reshare as _RS
+    rs = set(_RS.objects.filter(post_id__in=ids, user=u).values_list("post_id", flat=True)) if u.is_authenticated else set()
+    return [_out(p, u, mine.get(p.id), tops.get(p.id), authors, p.id in rs) for p in posts]
 
 
 @api_view(["GET", "POST"])
@@ -209,6 +212,23 @@ def posts(request):
             if isinstance(_p, dict) and _p.get("id") in _b:
                 _p["boosted"] = True
                 _p["ad"] = __import__("ads.views", fromlist=["token_for"]).token_for(_p["id"], request)
+        try:
+            shown = [p for p in rows[:PAGE] if (not u.is_authenticated or p.author_id != u.pk)]
+            if shown:
+                Post.objects.filter(id__in=[p.id for p in shown]).update(impressions=F("impressions") + 1)
+                from .models import ImpressionDay
+                d2 = timezone.localdate()
+                by = {}
+                for p in shown:
+                    by[p.author_id] = by.get(p.author_id, 0) + 1
+                for aid, n in by.items():
+                    if not ImpressionDay.objects.filter(author_id=aid, day=d2).update(count=F("count") + n):
+                        try:
+                            ImpressionDay.objects.create(author_id=aid, day=d2, count=n)
+                        except Exception:
+                            ImpressionDay.objects.filter(author_id=aid, day=d2).update(count=F("count") + n)
+        except Exception:
+            pass
         return Response({"posts": out, "more": len(rows) > PAGE})
 
     # ---- a new post ----
@@ -462,3 +482,77 @@ def _xs_comments(qs, post, u):
         return comment_filter(qs, post, u)
     except Exception:
         return qs
+
+
+# ---- XpertConnect: reshares and personal analytics (setup_xconnect_v1) ----
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def reshare(request, pk):
+    """Toggle a reshare of a post."""
+    u = request.user
+    post = Post.objects.filter(id=pk).first()
+    if not post or not _can_see(post, u):
+        return _err("This post is not available.", status.HTTP_404_NOT_FOUND)
+    from .models import Reshare
+    old = Reshare.objects.filter(post=post, user=u).first()
+    if old:
+        old.delete()
+        Post.objects.filter(id=post.id, reshares_count__gt=0).update(reshares_count=F("reshares_count") - 1)
+        mine = False
+    else:
+        Reshare.objects.create(post=post, user=u)
+        Post.objects.filter(id=post.id).update(reshares_count=F("reshares_count") + 1)
+        mine = True
+        if post.author_id != u.pk:
+            key = "feed_reshare_note:%d" % post.id
+            if not cache.get(key):
+                cache.set(key, 1, 3600)
+                try:
+                    from network.views import _name
+                    from notifications.views import notify
+                    notify(post.author, "reshare", "%s reshared your post." % _name(u), "/post/%d" % post.id)
+                except Exception:
+                    pass
+    post.refresh_from_db(fields=["reshares_count"])
+    return Response({"reshared": mine, "reshares": post.reshares_count})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def analytics(request):
+    """Totals, a 14-day impressions series and this week's activity, for the signed-in member."""
+    from datetime import timedelta
+    from django.db.models import Sum
+    from .models import Reshare, ImpressionDay
+    from network.models import Follow
+    u = request.user
+    today = timezone.localdate()
+    post_ids = list(Post.objects.filter(author=u).values_list("id", flat=True))
+    posts_n = len(post_ids)
+    impressions = Post.objects.filter(author=u).aggregate(n=Sum("impressions"))["n"] or 0
+    likes = Reaction.objects.filter(post_id__in=post_ids).count() if post_ids else 0
+    comments = Comment.objects.filter(post_id__in=post_ids).count() if post_ids else 0
+    reshares = Reshare.objects.filter(post_id__in=post_ids).count() if post_ids else 0
+    followers = Follow.objects.filter(following=u).count()
+    inter = likes + comments + reshares
+    eng = round(inter * 100.0 / impressions, 1) if impressions else 0.0
+    start = today - timedelta(days=13)
+    daily = {}
+    for r in ImpressionDay.objects.filter(author=u, day__gte=start).values("day", "count"):
+        daily[r["day"]] = r["count"]
+    series = []
+    for i in range(14):
+        d = start + timedelta(days=i)
+        series.append({"d": d.strftime("%d %b"), "n": int(daily.get(d, 0))})
+    wk = today - timedelta(days=6)
+    week = {
+        "likes": (Reaction.objects.filter(post_id__in=post_ids, created_at__date__gte=wk).count() if post_ids else 0),
+        "comments": (Comment.objects.filter(post_id__in=post_ids, created_at__date__gte=wk).count() if post_ids else 0),
+        "reshares": (Reshare.objects.filter(post_id__in=post_ids, created_at__date__gte=wk).count() if post_ids else 0),
+        "followers": Follow.objects.filter(following=u, created_at__date__gte=wk).count(),
+    }
+    return Response({
+        "totals": {"posts": posts_n, "impressions": int(impressions), "likes": likes,
+                   "comments": comments, "reshares": reshares, "followers": followers, "engagement": eng},
+        "series": series, "week": week,
+    })

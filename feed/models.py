@@ -15,6 +15,8 @@ class Post(models.Model):
     visibility = models.CharField(max_length=12, choices=VISIBILITY, default="members")
     reactions_count = models.PositiveIntegerField(default=0)
     comments_count = models.PositiveIntegerField(default=0)
+    reshares_count = models.PositiveIntegerField(default=0)
+    impressions = models.PositiveIntegerField(default=0)
     hidden = models.BooleanField(default=False, db_index=True, help_text="Hidden by a moderator")
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
     edited_at = models.DateTimeField(null=True, blank=True)
@@ -61,3 +63,23 @@ class PostReport(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class Reshare(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="reshares")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = [("post", "user")]
+        ordering = ["-id"]
+
+
+class ImpressionDay(models.Model):
+    """One row per author per day: how many times that author's posts were shown."""
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    day = models.DateField(db_index=True)
+    count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = [("author", "day")]
