@@ -89,8 +89,10 @@
   }
 
   /* ------------------------------------------------------------------ app look on phones */
-  var TABS = [["Home", "/", "M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"], ["Connect", "/feed", "M16 11a4 4 0 1 0-8 0M3 20c1.5-3.5 5-5 9-5s7.5 1.5 9 5M12 3v4"],
-    ["Chat", "/chat", "M4 5h16v11H8l-4 4z"], ["Tools", "/tools", "M14 7l3-3 3 3-3 3M4 20l9-9M5 5h4v4H5zM15 15h4v4h-4z"], ["Menu", "#menu", "M4 7h16M4 12h16M4 17h16"]];
+  var TABS = [["Home", "/", "M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"],
+    ["Connect", "/feed", {img: "/brand/xpertconnect/xc-3d-128.webp"}],
+    ["Academy", "/academy/", {img: "/brand/xpertacademy/mark-128.webp"}],
+    ["Chat", "/chat", "M4 5h16v11H8l-4 4z"], ["Menu", "#menu", "M4 7h16M4 12h16M4 17h16"]];
   var NOBAR = /^\/(chat|group|groups|nearby|offline|call|cam|scan|irc|2048|chess|carrom|carrom-online|connect4|ludo|minesweeper|pool|simon|snake|sudoku|tictactoe|wordgame|arrows|login|signup)(\/|$)/;
   function phone(){ return Math.min(window.innerWidth, screen.width || 9999) <= 760; }
   function hasOwnBar(){
@@ -115,7 +117,7 @@
     }
     if (NOBAR.test(path) || hasOwnBar() || D.querySelector(".xctab")) return;
     var bar = D.createElement("nav"); bar.className = "xctab"; bar.setAttribute("aria-label", "Main");
-    bar.innerHTML = TABS.map(function(t){ return '<a href="' + t[1] + '"' + (t[1] !== "#menu" && on(t[1]) ? ' class="on"' : "") + (t[1] === "#menu" ? ' data-xcmenu="1"' : "") + (t[1] === "#alerts" ? ' data-xcalerts="1" style="display:none"' : "") + '><svg viewBox="0 0 24 24"><path d="' + t[2] + '"/></svg><span>' + t[0] + "</span>" + (t[1] === "#alerts" ? '<em class="xcbadge"></em>' : "") + "</a>"; }).join("");
+    bar.innerHTML = TABS.map(function(t){ return '<a href="' + t[1] + '"' + (t[1] !== "#menu" && on(t[1]) ? ' class="on"' : "") + (t[1] === "#menu" ? ' data-xcmenu="1"' : "") + (t[1] === "#alerts" ? ' data-xcalerts="1" style="display:none"' : "") + '>' + (typeof t[2] === "object" ? '<img src="' + t[2].img + '" alt="" width="24" height="24" style="width:24px;height:24px;border-radius:7px;object-fit:cover">' : '<svg viewBox="0 0 24 24"><path d="' + t[2] + '"/></svg>') + '<span>' + t[0] + "</span>" + (t[1] === "#alerts" ? '<em class="xcbadge"></em>' : "") + "</a>"; }).join("");
     D.body.appendChild(bar); D.documentElement.classList.add("xc-tabbed");
     (function(){ var last = 0, tick = false;
       function upd(){ tick = false; var y = window.pageYOffset || D.documentElement.scrollTop || 0;
