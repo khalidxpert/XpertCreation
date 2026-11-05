@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Academy coupons — XpertCreation</title>
+<link rel="icon" href="/brand/icon-180.png">
+<style>
+:root{--p:#1B4DFF;--ink:#0D1424;--soft:#5A657C;--line:#E4E8F2;--bg:#F6F7FB;--ok:#16A34A;--bad:#DC2626}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:980px;margin:0 auto;padding:18px 14px 60px}h1{font-size:22px;margin:4px 0 2px}h2{font-size:17px;margin:0 0 10px}
+.muted{color:var(--soft);font-size:13.5px}.box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}
+.row .t{flex:1;min-width:220px}.row small{display:block;color:var(--soft)}
+button,.btn{border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer;background:#EEF2FF;color:var(--p)}
+button.p{background:var(--p);color:#fff}button.r{background:#FEE2E2;color:var(--bad)}button:disabled{opacity:.5}
+input,select{font:inherit;padding:9px 10px;border:1px solid #CBD5E1;border-radius:10px;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.grid label{display:block;font-size:12.5px;color:var(--soft);margin-bottom:3px}.grid input,.grid select{width:100%}
+.pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:#EEF2FF;color:var(--p)}.pill.g{background:#DCFCE7;color:var(--ok)}.pill.x{background:#F1F5F9;color:var(--soft)}
+code{background:#0D1424;color:#FEBD19;padding:3px 8px;border-radius:8px;font-size:14px;letter-spacing:.5px}
+.msg{margin-top:10px;font-size:14px}.msg.ok{color:var(--ok)}.msg.err{color:var(--bad)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button.on{background:var(--p);color:#fff}
+.ur{font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;direction:rtl;font-size:15px}
+</style>
+</head>
+<body>
+<main>
+<a href="/academy/" class="muted">← XpertAcademy</a>
+<h1>🎟 Academy coupons &amp; course payments</h1>
+<p class="muted">Super admin only. Courses cost <b id="price">…</b> each (change the price in <a href="/payments-admin">Payments admin</a> → “XpertAcademy course”). Members pay by card/wallet or JazzCash, or open a course with a coupon from you.</p>
+<div id="app"><div class="box">Loading…</div></div>
+</main>
+<script>
+(function(){
+"use strict";
+var D = null, tab = "requests";
+function $(id){ return document.getElementById(id); }
+function esc(s){ var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+function csrf(){ var m = document.cookie.match(/(?:^|; )xc_csrf=([^;]+)/); return m ? decodeURIComponent(m[1]) : ""; }
+function api(p, body){
+  return fetch("/api/tgacademy/" + p, body === undefined ? {credentials: "same-origin"} : {method: "POST", credentials: "same-origin", headers: {"Content-Type": "application/json", "X-CSRFToken": csrf()}, body: JSON.stringify(body)})
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if (!r.ok) throw new Error(j.detail || ("Error " + r.status)); return j; }); });
+}
+function when(s){ return s ? new Date(s).toLocaleString("en-GB", {day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"}) : ""; }
+function load(){ return api("team/").then(function(j){ D = j; $("price").textContent = "Rs " + Number(j.price).toLocaleString(); draw(); })
+  .catch(function(e){ $("app").innerHTML = '<div class="box">' + esc(e.message) + (/403|Super|sign|credentials/i.test(e.message) ? ' — <a href="/login?next=/academy/admin.html">sign in</a> with a super admin account.' : "") + "</div>"; }); }
+function draw(){
+  var open = D.requests.filter(function(r){ return r.status === "open"; }).length;
+  var h = '<div class="box"><div class="row"><div class="t"><b>Paid courses are ' + (D.paywall ? "ON" : "OFF") + '</b><small>' + (D.paywall ? "New learners need to pay or use a coupon. Members who started a course before this was switched on keep it free." : "Every course is free for everyone right now.") + '</small></div><button class="' + (D.paywall ? "r" : "p") + '" data-pw="' + (D.paywall ? 0 : 1) + '">' + (D.paywall ? "Switch off (make all free)" : "Switch on") + "</button></div></div>";
+  h += '<div class="tabs"><button data-tab="requests" class="' + (tab === "requests" ? "on" : "") + '">Requests' + (open ? " (" + open + ")" : "") + '</button><button data-tab="coupons" class="' + (tab === "coupons" ? "on" : "") + '">Coupons</button><button data-tab="new" class="' + (tab === "new" ? "on" : "") + '">+ New coupon</button></div>';
+  if (tab === "requests") h += '<div class="box"><h2>Coupon requests</h2><p class="muted">Members ask from a locked course. <b>Give coupon</b> makes a one-person code for that course (30 days) and sends it to them in their notifications.</p>' + (D.requests.length ? D.requests.map(function(r){
+      return '<div class="row"><div class="t"><b>' + esc(r.user) + "</b> " + (r.username ? '<span class="muted">@' + esc(r.username) + "</span>" : "") + "<small>" + esc(r.course) + " · " + when(r.created) + (r.message ? " · “" + esc(r.message) + "”" : "") + "</small></div>"
+        + (r.status === "open" ? '<button class="p" data-grant="' + r.id + '">Give coupon</button><button data-decline="' + r.id + '">Decline</button>' : '<span class="pill ' + (r.status === "granted" ? "g" : "x") + '">' + esc(r.status) + "</span>" + (r.code ? " <code>" + esc(r.code) + "</code>" : "")) + "</div>"; }).join("") : '<p class="muted">No requests yet.</p>') + "</div>";
+  if (tab === "coupons") h += '<div class="box"><h2>Coupons</h2>' + (D.coupons.length ? D.coupons.map(function(c){
+      var dead = !c.active || c.uses >= c.max_uses || (c.expires && new Date(c.expires) < new Date());
+      return '<div class="row"><div class="t"><code>' + esc(c.code) + '</code> <button data-copy="' + esc(c.code) + '">Copy</button><small>' + esc(c.course) + " · used " + c.uses + " of " + c.max_uses + (c.expires ? " · until " + when(c.expires) : " · no expiry") + (c.for ? " · only for " + esc(c.for) : "") + (c.note ? " · " + esc(c.note) : "") + "</small></div>"
+        + (dead ? '<span class="pill x">' + (c.active ? "used up / expired" : "off") + "</span>" : '<button class="r" data-off="' + c.id + '">Switch off</button>') + "</div>"; }).join("") : '<p class="muted">No coupons yet.</p>') + "</div>";
+  if (tab === "new") h += '<div class="box"><h2>New coupon</h2><div class="grid"><div><label>Course</label><select id="cC"><option value="">Any course</option>' + D.courses.map(function(c){ return '<option value="' + esc(c.slug) + '">' + esc(c.title) + "</option>"; }).join("") + '</select></div>'
+      + '<div><label>How many people can use it</label><input id="cU" type="number" min="1" value="1"></div><div><label>Valid for (days, 0 = no expiry)</label><input id="cD" type="number" min="0" value="30"></div>'
+      + '<div><label>Code (empty = random)</label><input id="cK" maxlength="24" placeholder="e.g. RAMZAN50"></div><div><label>Note (who is it for?)</label><input id="cN" maxlength="120" placeholder="e.g. Ali – student"></div></div>'
+      + '<button class="p" id="cGo" style="margin-top:12px">Create coupon</button><div class="msg" id="cMsg"></div></div>';
+  $("app").innerHTML = h;
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest("button"); if (!t || !D) return;
+  var a = function(n){ return t.getAttribute(n); }, done = function(){ return load(); }, fail = function(x){ alert(x.message); t.disabled = false; };
+  if (a("data-tab")){ tab = a("data-tab"); draw(); return; }
+  if (a("data-copy")){ navigator.clipboard && navigator.clipboard.writeText(a("data-copy")); t.textContent = "Copied ✓"; return; }
+  t.disabled = true;
+  if (a("data-pw") != null){ if (confirm(a("data-pw") === "1" ? "Switch paid courses ON?" : "Make every course free for everyone?")) api("team/paywall/", {on: a("data-pw") === "1"}).then(done, fail); else t.disabled = false; return; }
+  if (a("data-grant")) return api("team/ask/" + a("data-grant") + "/grant/", {}).then(done, fail);
+  if (a("data-decline")) return api("team/ask/" + a("data-decline") + "/decline/", {}).then(done, fail);
+  if (a("data-off")) return api("team/coupon/" + a("data-off") + "/off/", {}).then(done, fail);
+  if (t.id === "cGo") return api("team/coupon/", {course: $("cC").value, max_uses: $("cU").value, days: $("cD").value, code: $("cK").value, note: $("cN").value})
+    .then(function(c){ tab = "coupons"; return load().then(function(){ alert("Coupon " + c.code + " created."); }); }, fail);
+  t.disabled = false;
+});
+load();
+})();
+</script>
+</body>
+</html>

@@ -454,3 +454,4 @@ SOCIAL_LOGIN = {
 }
 SOCIAL_LOGIN_DONE = env("SOCIAL_LOGIN_DONE", "https://xpertcreation.com/login?social=1")
 SOCIAL_LOGIN_FAIL = env("SOCIAL_LOGIN_FAIL", "https://xpertcreation.com/login?social=error")
+INSTALLED_APPS += ["tgacademy"]  # setup_lwe_academy_v1

@@ -108,3 +108,5 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+from django.urls import include as _tg_inc, path as _tg_path  # setup_lwe_academy_v1
+urlpatterns += [_tg_path("api/tgacademy/", _tg_inc("tgacademy.urls"))]
