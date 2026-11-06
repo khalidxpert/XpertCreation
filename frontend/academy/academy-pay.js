@@ -29,6 +29,19 @@ function wall(c, name){
   var h = '<div class="xapay" data-xaslug="' + esc(slug) + '" style="--accent:' + esc(c.accent || "#1B4DFF") + '">'
     + '<div class="xa-ic">🔒</div><h2>' + esc(name || slug) + '</h2>'
     + '<p class="xa-lead">This course is <b>' + rs(A.price) + '</b> (about $15) — pay once, keep it for life, with the quiz and the certificate.</p>';
+  var pay = info.pay || null;
+  if (pay && pay.status === "pending"){
+    return '<div class="xapay" data-xaslug="' + esc(slug) + '" style="--accent:' + esc(c.accent || "#1B4DFF") + '">'
+      + '<div class="xa-ic">⏳</div><h2>' + esc(name || slug) + '</h2>'
+      + '<div class="xa-pend"><b>Your payment is being checked</b><div>JazzCash / Raast · TID <b>' + esc(pay.txn) + '</b> · sent ' + when(pay.when) + '</div>'
+      + '<p>The course opens as soon as our team approves it — you will get a 🔔 notification. Usually within a few hours.</p>'
+      + '<p class="xa-ur" lang="ur" dir="rtl">آپ کی ادائیگی چیک ہو رہی ہے۔ منظوری کے بعد کورس کھل جائے گا اور آپ کو اطلاع ملے گی۔</p></div>'
+      + '<details class="xa-cp"><summary>Wrong details? Send them again</summary><div class="xa-btns"><button class="primary" data-xa="buy">💳 Pay again / send new details</button></div><div class="xa-pay" hidden></div></details>'
+      + '<div class="xa-out"></div></div>';
+  }
+  if (pay && pay.status === "rejected"){
+    h += '<div class="xa-rej">❌ Your last payment (TID ' + esc(pay.txn) + ') was not approved' + (pay.reason ? ': ' + esc(pay.reason).replace(/\.?$/, '.') : '.') + ' Please pay again or contact support.</div>';
+  }
   if (!A.signed_in){
     h += '<button class="primary" data-act="signin">Sign in to buy or use a coupon</button>';
   } else {
@@ -43,6 +56,7 @@ function wall(c, name){
   h += '</div><div class="xa-out"></div></div>';
   return h;
 }
+function when(iso){ try { return new Date(iso).toLocaleString("en-GB", {day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"}); } catch(e){ return ""; } }
 function out(box, t, ok){ var o = box.querySelector(".xa-out"); if (o){ o.textContent = t; o.className = "xa-out " + (ok ? "ok" : "err"); } }
 
 function jazz(box, order){
@@ -80,6 +94,9 @@ document.addEventListener("click", function(e){
     f.append("txn", box.querySelector(".xa-tid").value); f.append("sender", box.querySelector(".xa-from").value); if (file) f.append("file", file);
     post("/api/payproof/orders/" + b.getAttribute("data-order") + "/", null, f).then(function(){
       box.querySelector(".xa-pay").innerHTML = '<p class="xa-ok">✓ Payment details sent. We will open the course after checking — you will get a notification 🔔</p>';
+      var tid = box.querySelector(".xa-tid"); A.courses[slug] = A.courses[slug] || {};
+      A.courses[slug].pay = {status: "pending", txn: f.get("txn"), when: new Date().toISOString()};
+      setTimeout(function(){ load(true); rerender(); }, 2500);
     }).catch(fail);
   } else if (a === "redeem"){
     post("/api/tgacademy/redeem/", {code: box.querySelector(".xa-code").value, course: slug}).then(function(){ out(box, "✓ Course opened!", true); load(true); }).catch(fail);
@@ -95,7 +112,9 @@ function after(view, app, course){
   if (!A.paywall) return;
   if (view.page === "home"){
     [].forEach.call(app.querySelectorAll("[data-course]"), function(card){
-      if (locked(card.getAttribute("data-course")) && !card.querySelector(".xa-badge")) card.insertAdjacentHTML("beforeend", '<span class="xa-badge">🔒 ' + rs(A.price) + "</span>");
+      var sl = card.getAttribute("data-course"), pi = (A.courses[sl] || {}).pay;
+      if (locked(sl) && !card.querySelector(".xa-badge")) card.insertAdjacentHTML("beforeend", pi && pi.status === "pending"
+        ? '<span class="xa-badge xa-wait">⏳ Payment pending</span>' : '<span class="xa-badge">🔒 ' + rs(A.price) + "</span>");
     });
   }
   if (view.page === "course" && locked(view.c) && !app.querySelector(".xapay")){
@@ -116,6 +135,8 @@ css.textContent = ".xapay{background:#fff;border:1px solid #E4E8F2;border-radius
   + ".xa-cp{margin-top:10px}.xa-cp summary{cursor:pointer;font-weight:600;color:var(--accent,#1B4DFF)}.xa-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.xa-row input{max-width:220px;margin:6px 0}"
   + ".xa-ask{margin-top:16px;padding-top:14px;border-top:1px dashed #E4E8F2}.xa-ask p{margin:4px 0}.xa-ur{font-family:'Noto Nastaliq Urdu',serif;font-size:17px;line-height:2}"
   + ".xa-ok{color:#047857;font-weight:600}.xa-out.ok{color:#047857;font-weight:600}.xa-out.err{color:#B91C1C}.xa-jc{text-align:left;max-width:440px;margin:10px auto;background:#F6F7FB;border-radius:14px;padding:14px;line-height:1.7}.xa-note{color:#5A657C;font-size:13px}"
+  + ".xa-pend{background:#FFF8E6;border:1px solid #F3D27A;border-radius:14px;padding:14px;margin:8px auto;max-width:460px;line-height:1.6}.xa-pend p{margin:8px 0 0;color:#5A657C}"
+  + ".xa-rej{background:#FEF2F2;border:1px solid #FCA5A5;color:#B91C1C;border-radius:12px;padding:10px 12px;margin:8px auto 12px;max-width:460px}.xa-badge.xa-wait{background:#F59E0B;color:#111}"
   + ".xa-badge{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:#0D1424;color:#FEBD19}";
 document.head.appendChild(css);
 window.XAPay = {locked: locked, wall: wall, after: after, load: load};

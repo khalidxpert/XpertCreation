@@ -69,12 +69,21 @@ def access(request):
     pw = paywall()
     u = request.user
     ids = open_ids(u, pw) if pw.on else None
-    mine = {}
+    mine, pay = {}, {}
     if u.is_authenticated:
         mine = {r.course_id: r.status for r in CouponRequest.objects.filter(user=u).order_by("id")}
+        try:   # JazzCash payments sent for a course: the latest one per course (pending / rejected)
+            from payproof.models import PayProof
+            for p in PayProof.objects.filter(user=u, order__product="course").select_related("order").order_by("id"):
+                pay[p.order.target_id] = {"status": p.status, "txn": p.txn, "when": p.created_at.isoformat(), "reason": p.reason}
+        except Exception:  # noqa: BLE001
+            pay = {}
     out = {}
     for c in Course.objects.filter(is_active=True):
-        out[c.slug] = {"open": (not pw.on) or (c.id in ids), "asked": mine.get(c.id, "")}
+        is_open = (not pw.on) or (c.id in ids)
+        out[c.slug] = {"open": is_open, "asked": mine.get(c.id, "")}
+        if not is_open and pay.get(c.id) and pay[c.id]["status"] in ("pending", "rejected"):
+            out[c.slug]["pay"] = pay[c.id]
     return Response({"paywall": pw.on, "price": _price(), "currency": "PKR", "usd": 15, "signed_in": u.is_authenticated,
                      "courses": out, "ask_text": {"en": "Can't pay? Ask the admin for a free coupon code.", "ur": URDU_ASK}})
 
