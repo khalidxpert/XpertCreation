@@ -141,7 +141,7 @@
     var ov = sheet('<div class="xpgrid">' + items.map(function(i){ return '<button class="xpgo" data-go="' + i[0] + '"><i>' + i[2] + "</i>" + i[1] + "</button>"; }).join("") + "</div>");
     ov.addEventListener("click", function(e){
       var b = e.target.closest("[data-go]"); if (!b) return; var k = b.dataset.go; ov.remove();
-      if (k === "doc"){ var f = EL.file(); if (f){ f.setAttribute("accept", ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"); f.click(); setTimeout(function(){ f.setAttribute("accept", "image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"); }, 1500); } }
+      if (k === "doc"){ pickDoc(); }
       else if (k === "gal") gallery();
       else if (k === "scan"){ if (window.XSCAN) XSCAN.open({onSend: function(f){ return sendFile(f); }, onSendText: function(t){ return sendText(t); }}); else toast("The scanner is loading, try again in a moment."); }
       else if (k === "cam") openCam();
@@ -158,6 +158,19 @@
     var go = function(){ XCVT.sheet({onText: function(t){ var ta = EL.ta(); if (!ta) return; ta.value = (ta.value ? ta.value.replace(/\s+$/, "") + " " : "") + t; ta.dispatchEvent(new Event("input", {bubbles: true})); ta.focus(); }}); };
     if (window.XCVT) return go();
     var s = D.createElement("script"); s.src = "/js/urduvoice-1.js?v=1"; s.onload = go; s.onerror = function(){ toast("Could not load voice typing. Check your internet."); }; D.head.appendChild(s);
+  }
+  /* chatdoc-v1 */
+  function pickDoc(){
+    var inp = D.createElement("input"); inp.type = "file"; inp.style.display = "none";
+    inp.accept = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,application/pdf";
+    B.appendChild(inp);
+    inp.addEventListener("change", function(){
+      var f = inp.files[0]; inp.remove(); if (!f) return;
+      if (f.size > 8 * 1048576) return toast("That file is over 8 MB. Please send a smaller file.");
+      toast("Sending " + f.name + "…");
+      sendFile(f).then(function(){ toast("Sent"); }, function(e){ toast(e.message || "Could not send it."); });
+    });
+    inp.click();
   }
   function gallery(){
     var inp = D.createElement("input"); inp.type = "file"; inp.accept = "image/*,video/*"; inp.style.display = "none"; B.appendChild(inp);
