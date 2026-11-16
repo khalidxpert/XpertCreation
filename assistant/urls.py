@@ -6,4 +6,6 @@ urlpatterns = [
     path("chat/", views.chat, name="assistant-chat"),
     path("status/", views.status, name="assistant-status"),
     path("usage/", views.usage, name="assistant-usage"),
+    path("article/", views.article, name="assistant-article"),
+    path("article/<str:job>/", views.article_job, name="assistant-article-job"),
 ]
